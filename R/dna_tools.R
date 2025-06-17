@@ -4,6 +4,7 @@ string_to_vector  <- function(string) {as.numeric(unlist(strsplit(string, split 
 vector_to_string  <- function(vector) {paste(vector, collapse = ",")}
 
 
+
 #' Reverse complement a DNA/RNA sequence
 #'
 #' This function takes a string/character representing a DNA/RNA sequence and returns
@@ -18,7 +19,7 @@ vector_to_string  <- function(vector) {paste(vector, collapse = ",")}
 #' @export
 reverse_complement <- function(sequence, output_mode = "DNA") {
     if (length(sequence) > 1) {
-        stop("Can only input one sequence at once. Try sapply(input_vector, reverse_complement) to use on more than one input.")
+        abort("Can only input one sequence at once. Try sapply(input_vector, reverse_complement) to use on more than one input.", class = "argument_length")
     }
     sequence_vector     <- strsplit(toupper(sequence), split = "")[[1]]
     reversed_vector     <- rev(sequence_vector)
@@ -31,7 +32,7 @@ reverse_complement <- function(sequence, output_mode = "DNA") {
             } else if (toupper(output_mode) == "RNA") {
                 new_sequence_vector[i] <- "U"
             } else {
-                stop("Output mode must be set to either 'DNA' (default) or 'RNA'")
+                abort("Output mode must be set to either 'DNA' (default) or 'RNA'", class = "argument_value_or_type")
             }
         } else if (reversed_vector[i] == "C") {
             new_sequence_vector[i] <- "G"
@@ -40,7 +41,7 @@ reverse_complement <- function(sequence, output_mode = "DNA") {
         } else if (reversed_vector[i] %in% c("T", "U")) {
             new_sequence_vector[i] <- "A"
         } else {
-            stop("Cannot reverse sequence for non-A/C/G/T/U")
+            abort("Cannot reverse sequence for non-A/C/G/T/U", class = "argument_value_or_type")
         }
     }
 
@@ -74,7 +75,7 @@ convert_base_to_number <- function(base) {
     } else if (base %in% c("T", "U")) {
         number <- 4
     } else {
-        stop("Base must be one of A/C/G/T/U to convert to number")
+        abort("Base must be one of A/C/G/T/U to convert to number", class = "argument_value_or_type")
     }
     return(number)
 }
@@ -96,7 +97,7 @@ convert_sequence_to_numbers <- function(sequence, length = NA) {
         length <- nchar(sequence)
     }
     if (is.numeric(length) == FALSE || length %% 1 != 0 || length < 0) {
-        stop("Length must be a non-negative integer or NA")
+        abort("Length must be a non-negative integer or NA", class = "argument_value_or_type")
     }
 
     if (length == 0) {     ## specifically not else if, to return empty num vector if length not specified but sequence length is 0

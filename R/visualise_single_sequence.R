@@ -25,31 +25,30 @@
 #' @param pixels_per_base `integer`. How large each box should be in pixels, if `save = TRUE`. Corresponds to dpi of the exported image. Large values recommended because text needs to be legible when rendered significantly smaller than a box. Defaults to `100`.
 #'
 #' @return A ggplot object containing the full visualisation, or `NULL` if `return = FALSE`. It is often more useful to use `save = TRUE` and `filename = "myfilename.png"`, because then the visualisation is exported at the correct aspect ratio.
-#' @import ggplot2
 #' @export
 visualise_single_sequence <- function(sequence, sequence_colours = c("#F8766D", "#7CAE00", "#00BFC4", "#C77CFF"), background_colour = "white",
                                       sequence_text_colour = "black", sequence_text_size = 16, index_annotation_colour = "darkred", index_annotation_size = 12.5,
                                       index_annotation_interval = 15, line_wrapping = 75, spacing = 1, return = TRUE, save = FALSE, filename = "image.png", pixels_per_base = 100) {
     ## Validate arguments
-    if (length(sequence) > 1) {stop("Can only visualise one sequence at once.")}
-    if (length(sequence_colours) != 4) {stop("Must provide exactly 4 sequence colours, in A C G T order.")}
+    if (length(sequence) > 1) {abort("Can only visualise one sequence at once.", class = "argument_length")}
+    if (length(sequence_colours) != 4) {abort("Must provide exactly 4 sequence colours, in A C G T order.", class = "argument_length")}
     for (argument in c(sequence_text_size, index_annotation_size, index_annotation_interval, spacing, pixels_per_base)) {
-        if (is.numeric(argument) == FALSE || argument < 0) {stop(paste("Argument", argument, "must be numeric and non-negative."))}
+        if (is.numeric(argument) == FALSE || argument < 0) {abort(paste("Argument", argument, "must be numeric and non-negative."), class = "argument_value_or_type")}
     }
     for (argument in c(line_wrapping, spacing, pixels_per_base)) {
-        if (argument %% 1 != 0) {stop(paste("Argument", argument, "must be an integer."))}
+        if (argument %% 1 != 0) {abort(paste("Argument", argument, "must be an integer."), class = "argument_value_or_type")}
     }
     for (argument in c(line_wrapping, pixels_per_base)) {
-        if (argument < 1) {stop(paste("Argument", argument, "must be at least 1."))}
+        if (argument < 1) {abort(paste("Argument", argument, "must be at least 1."), class = "argument_value_or_type")}
     }
     for (argument in c(return, save)) {
-        if (is.logical(argument) == FALSE) {stop(paste("Argument:", argument, "must be a logical/boolean value."))}
+        if (is.logical(argument) == FALSE) {abort(paste("Argument:", argument, "must be a logical/boolean value."), class = "argument_value_or_type")}
     }
     if (tolower(substr(filename, nchar(filename)-3, nchar(filename))) != ".png") {
-        warning("Not recommended to use non-png filetype (but may still work).")
+        warn("Not recommended to use non-png filetype (but may still work).", class = "filetype_recommendation")
     }
     if (spacing == 0 && !(index_annotation_size == 0 || index_annotation_interval == 0)) {
-        warning("Using spacing = 0 without disabling index annotation is not recommended.\n\tIt is likely to draw the annotations overlapping the sequence.\n\tRecommended to set one of index_annotation_<interval/size> = 0 to disable index annotations.")
+        warn("Using spacing = 0 without disabling index annotation is not recommended.\nIt is likely to draw the annotations overlapping the sequence.\nRecommended to set one of index_annotation_<interval/size> = 0 to disable index annotations.", class = "parameter_recommendation")
     }
 
 
@@ -99,7 +98,7 @@ visualise_single_sequence <- function(sequence, sequence_colours = c("#F8766D", 
 convert_input_seq_to_sequence_list <- function(input_seq, line_length, spacing = 1) {
     if (is.numeric(line_length) == FALSE || line_length %% 1 != 0 || line_length < 1 ||
         is.numeric(spacing) == FALSE     || spacing %% 1 != 0     || spacing < 0) {
-        stop("Line length must be a positive integer and spacing must be a non-negative integer")
+        abort("Line length must be a positive integer and spacing must be a non-negative integer", class = "argument_value_or_type")
     }
 
     sequences <- NULL
@@ -138,7 +137,7 @@ convert_input_seq_to_sequence_list <- function(input_seq, line_length, spacing =
 convert_sequences_to_annotations <- function(sequences, line_length, interval = 15) {
     if (is.numeric(line_length) == FALSE || line_length %% 1 != 0 || line_length < 1 ||
         is.numeric(interval) == FALSE    || interval %% 1 != 0    || interval < 0) {
-        stop("Line length must be a positive integer and annotation interval must be a non-negative integer")
+        abort("Line length must be a positive integer and annotation interval must be a non-negative integer", class = "argument_value_or_type")
     }
 
     x_interval <- 1 / line_length
