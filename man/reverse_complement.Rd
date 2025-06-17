@@ -7,16 +7,16 @@
 reverse_complement(sequence, output_mode = "DNA")
 }
 \arguments{
-\item{sequence}{\code{character}. A DNA/RNA sequence (A/C/G/T/U) to be reverse-complemented. No other characters allowed. Only one sequence allowed.}
+\item{sequence}{\code{character}. A DNA/RNA sequence (\code{A/C/G/T/U}) to be reverse-complemented. No other characters allowed. Only one sequence allowed.}
 
-\item{output_mode}{\code{character}. Either \code{"DNA"} (default) or \code{"RNA"}, to determine whether A should be reverse-complemented to T or to U.}
+\item{output_mode}{\code{character}. Either \code{"DNA"} (default) or \code{"RNA"}, to determine whether \code{A} should be reverse-complemented to \code{T} or to \code{U}.}
 }
 \value{
 \code{character}. The reverse-complement of the input sequence.
 }
 \description{
 This function takes a string/character representing a DNA/RNA sequence and returns
-the reverse complement. Either DNA (A/C/G/T) or RNA (A/C/G/U) input is accepted.
-By default, output is DNA (so A is reverse-complemented to T), but it can be set
-to output RNA (so A is reverse-complemented to U).
+the reverse complement. Either DNA (\code{A/C/G/T}) or RNA (\code{A/C/G/U}) input is accepted. \cr\cr
+By default, output is DNA (so \code{A} is reverse-complemented to \code{T}), but it can be set
+to output RNA (so \code{A} is reverse-complemented to \code{U}).
 }
