@@ -18,8 +18,11 @@ vector_to_string  <- function(vector) {paste(vector, collapse = ",")}
 #' @return `character`. The reverse-complement of the input sequence.
 #' @export
 reverse_complement <- function(sequence, output_mode = "DNA") {
-    if (length(sequence) > 1) {
+    if (length(sequence) != 1) {
         abort("Can only input one sequence at once. Try sapply(input_vector, reverse_complement) to use on more than one input.", class = "argument_length")
+    }
+    if (length(output_mode) != 1) {
+        abort("Output mode must be a single value (either 'DNA' or 'RNA')", class = "argument_length")
     }
     sequence_vector     <- strsplit(toupper(sequence), split = "")[[1]]
     reversed_vector     <- rev(sequence_vector)
@@ -65,6 +68,10 @@ reverse_complement <- function(sequence, output_mode = "DNA") {
 #' @return `integer`. The corresponding number.
 #' @export
 convert_base_to_number <- function(base) {
+    if (length(base) != 1) {
+        abort("Can only input one base at once", class = "argument_length")
+    }
+
     base <- toupper(base)
     if (base == "A") {
         number <- 1
@@ -93,6 +100,12 @@ convert_base_to_number <- function(base) {
 #' @export
 convert_sequence_to_numbers <- function(sequence, length = NA) {
     ## Tests to make sure length is something sensible
+    if (length(sequence) != 1) {
+        abort("Sequence must be a single character/string value", class = "argument_length")
+    }
+    if (length(length) != 1) {
+        abort("Length must be a single integer (or NA) value", class = "argument_length")
+    }
     if (is.na(length)) {
         length <- nchar(sequence)
     }
@@ -127,6 +140,10 @@ convert_sequence_to_numbers <- function(sequence, length = NA) {
 #' @return `dataframe`. Rasterised dataframe representation of the sequences, readable by ggplot.
 #' @export
 create_image_data <- function(sequences) {
+    if (is.character(sequences) == FALSE) {
+        abort("Must input a character vector of sequences", class = "argument_value_or_type")
+    }
+
     max_length <- max(nchar(sequences))
     image_matrix <- matrix(NA, nrow = length(sequences), ncol = max_length)
     for (i in 1:length(sequences)) {
