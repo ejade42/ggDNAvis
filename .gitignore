@@ -1,4 +1,6 @@
 .Rproj.user
 .DS_store
 .Rhistory
+tests/testthat/_snaps
+tests/testthat/test_plot_images
 

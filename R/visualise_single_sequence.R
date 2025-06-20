@@ -15,51 +15,66 @@
 #' @param sequence_text_colour `character`. The colour of the text within the bases (e.g. colour of "A" letter within boxes representing adenosine bases). Defaults to black.
 #' @param sequence_text_size `numeric`. The size of the text within the bases (e.g. size of "A" letter within boxes representing adenosine bases). Defaults to `16`. Set to `0` to hide sequence text (show box colours only).
 #' @param index_annotation_colour `character`. The colour of the little numbers underneath indicating base index (e.g. colour "15" label under the 15th base). Defaults to dark red.
-#' @param index_annotation_size `numeric`. The size of the little number underneath indicating base index (e.g. size of "15" label under the 15th base). Defaults to `12.5`. Set to `0` to turn off annotations (or set `index_annotation_interval = 0`).
-#' @param index_annotation_interval `integer`. The frequency at which numbers should be placed underneath indicating base index, starting counting from the leftmost base in each row. Defaults to `15` (every 15 bases along each row). Recommended to make this a factor/divisor of the line wrapping length (meaning the final base in each line is annotated), otherwise the numbering interval resetting at the beginning of each row will result in uneven intervals at each line break. Set to `0` to turn off annotations (or set `index_annotation_size = 0`).
+#' @param index_annotation_size `numeric`. The size of the little number underneath indicating base index (e.g. size of "15" label under the 15th base). Defaults to `12.5`. Can be set to `0` to turn off annotations, but it is better to do this via `index_annotation_interval = 0`.
+#' @param index_annotation_interval `integer`. The frequency at which numbers should be placed underneath indicating base index, starting counting from the leftmost base in each row. Defaults to `15` (every 15 bases along each row). Recommended to make this a factor/divisor of the line wrapping length (meaning the final base in each line is annotated), otherwise the numbering interval resetting at the beginning of each row will result in uneven intervals at each line break. Set to `0` to turn off annotations (preferable over using `index_annotation_size = 0`).
 #' @param line_wrapping `integer`. The number of bases that should be on each line before wrapping. Defaults to `75`. Recommended to make this a multiple of the repeat unit size (e.g. 3*n* for a trinucleotide repeat) if visualising a repeat sequence.
-#' @param spacing `integer`. The number of blank lines between each line of sequence. Defaults to `1`. Be careful when setting to `0` as this means annotations have no space so might render strangely. Recommended to set one of `index_annotation_<interval/size> = 0` if doing so.
+#' @param spacing `integer`. The number of blank lines between each line of sequence. Defaults to `1`. Be careful when setting to `0` as this means annotations have no space so might render strangely. Recommended to set `index_annotation_interval = 0` if doing so.
 #' @param return `logical`. Boolean specifying whether this function should return the ggplot object, otherwise it will return `NULL`. Defaults to `TRUE`.
-#' @param save `logical`. Boolean specifying whether this function should save the plot to a file. Defaults to `FALSE`.
-#' @param filename `character`. Filename to which output should be saved, if `save = TRUE`. Recommended to end with .png but might work with other extensions if they are compatible with ggsave(). Defaults to `"image.png"`.
-#' @param pixels_per_base `integer`. How large each box should be in pixels, if `save = TRUE`. Corresponds to dpi of the exported image. Large values recommended because text needs to be legible when rendered significantly smaller than a box. Defaults to `100`.
+#' @param filename `character`. Filename to which output should be saved. If set to `NA` (default), no file will be saved. Recommended to end with `".png"` but might work with other extensions if they are compatible with `ggsave()`.
+#' @param pixels_per_base `integer`. How large each box should be in pixels, if file output is turned on via setting `filename`. Corresponds to dpi of the exported image. Large values recommended because text needs to be legible when rendered significantly smaller than a box. Defaults to `100`.
 #'
 #' @return A ggplot object containing the full visualisation, or `NULL` if `return = FALSE`. It is often more useful to use `save = TRUE` and `filename = "myfilename.png"`, because then the visualisation is exported at the correct aspect ratio.
 #' @export
 visualise_single_sequence <- function(sequence, sequence_colours = c("#F8766D", "#7CAE00", "#00BFC4", "#C77CFF"), background_colour = "white",
                                       sequence_text_colour = "black", sequence_text_size = 16, index_annotation_colour = "darkred", index_annotation_size = 12.5,
-                                      index_annotation_interval = 15, line_wrapping = 75, spacing = 1, return = TRUE, save = FALSE, filename = "image.png", pixels_per_base = 100) {
+                                      index_annotation_interval = 15, line_wrapping = 75, spacing = 1, return = TRUE, filename = NA, pixels_per_base = 100) {
     ## Validate arguments
-    if (length(sequence) > 1) {abort("Can only visualise one sequence at once.", class = "argument_length")}
-    if (length(sequence_colours) != 4) {abort("Must provide exactly 4 sequence colours, in A C G T order.", class = "argument_length")}
-    for (argument in c(sequence_text_size, index_annotation_size, index_annotation_interval, spacing, pixels_per_base)) {
-        if (is.numeric(argument) == FALSE || argument < 0) {abort(paste("Argument", argument, "must be numeric and non-negative."), class = "argument_value_or_type")}
+    for (argument in list(sequence, background_colour, sequence_text_colour, sequence_text_size, index_annotation_colour, index_annotation_size, index_annotation_interval, line_wrapping, spacing, return, filename, pixels_per_base)) {
+        if (length(argument) != 1) {abort(paste("Argument", argument, "must have length 1"), class = "argument_value_or_type")}
     }
-    for (argument in c(line_wrapping, spacing, pixels_per_base)) {
+    for (argument in list(sequence, sequence_colours, background_colour, sequence_text_colour, sequence_text_size, index_annotation_colour, index_annotation_size, index_annotation_interval, line_wrapping, spacing, return, pixels_per_base)) {
+        if (mean(is.na(argument)) != 0) {abort(paste("Argument", argument, "must not be NA"), class = "argument_value_or_type")}
+    }
+    if (is.character(sequence_colours) == FALSE || length(sequence_colours) != 4) {
+        abort("Must provide exactly 4 sequence colours, in A C G T order, as a length-4 character vector.", class = "argument_value_or_type")
+    }
+    for (argument in list(sequence, background_colour, sequence_text_colour, index_annotation_colour)) {
+        if (is.character(argument) == FALSE) {abort(paste("Argument", argument, "must be a character/string value."), class = "argument_value_or_type")}
+    }
+    for (argument in list(sequence_text_size, index_annotation_size, index_annotation_interval, spacing, pixels_per_base, line_wrapping)) {
+        if (is.numeric(argument) == FALSE || is.logical(argument) == TRUE || argument < 0) {abort(paste("Argument", argument, "must be a non-negative number."), class = "argument_value_or_type")}
+    }
+    for (argument in list(line_wrapping, spacing, pixels_per_base, index_annotation_interval)) {
         if (argument %% 1 != 0) {abort(paste("Argument", argument, "must be an integer."), class = "argument_value_or_type")}
     }
-    for (argument in c(line_wrapping, pixels_per_base)) {
+    for (argument in list(line_wrapping, pixels_per_base)) {
         if (argument < 1) {abort(paste("Argument", argument, "must be at least 1."), class = "argument_value_or_type")}
     }
-    for (argument in c(return, save)) {
+    for (argument in list(return)) {
         if (is.logical(argument) == FALSE) {abort(paste("Argument:", argument, "must be a logical/boolean value."), class = "argument_value_or_type")}
     }
-    if (tolower(substr(filename, nchar(filename)-3, nchar(filename))) != ".png") {
-        warn("Not recommended to use non-png filetype (but may still work).", class = "filetype_recommendation")
-    }
     if (spacing == 0 && !(index_annotation_size == 0 || index_annotation_interval == 0)) {
-        warn("Using spacing = 0 without disabling index annotation is not recommended.\nIt is likely to draw the annotations overlapping the sequence.\nRecommended to set one of index_annotation_<interval/size> = 0 to disable index annotations.", class = "parameter_recommendation")
+        warn("Using spacing = 0 without disabling index annotation is not recommended.\nIt is likely to draw the annotations overlapping the sequence.\nRecommended to set index_annotation_interval = 0 to disable index annotations.", class = "parameter_recommendation")
+    }
+    ## If annotations are disabled via size, spacing is set to 0, but there would be an
+    ## annotation on the last line (i.e. seq_length %% line_wrapping >= index_annotation_interval)
+    ## then some grey boxes show up at the bottom. This cautions against setting parameters
+    ## in such a way that that would happen
+    if (index_annotation_size == 0 && index_annotation_interval != 0) {
+        warn("It is better to disable index annotations via index_annotation_interval = 0.\nDoing so via index_annotation_size = 0 can lead to rendering issues in some cases.", class = "parameter_recommendation")
     }
 
-
+    ## Generate data for plotting
     sequences <- convert_input_seq_to_sequence_list(sequence, line_wrapping, spacing)
     if (max(nchar(sequences)) < line_wrapping) {line_wrapping <- max(nchar(sequences))}
     annotations <- convert_sequences_to_annotations(sequences, line_wrapping, index_annotation_interval)
     image_data <- create_image_data(sequences)
 
+    ## Combine colour parameters into named colour vector
     colours <- c(background_colour, sequence_colours)
     names(colours) <- as.character(0:4)
 
+    ## Generate actual plot via plot_single_sequence then annotate
     result <- plot_single_sequence(image_data, colours) +
         geom_text(data = annotations, aes(x = x_position, y = y_position, label = annotation, col = type, size = type), fontface = "bold", inherit.aes = F) +
         scale_colour_manual(values = c("Number" = index_annotation_colour, "Sequence" = sequence_text_colour)) +
@@ -67,14 +82,31 @@ visualise_single_sequence <- function(sequence, sequence_colours = c("#F8766D", 
         guides(col = "none", size = "none") +
         theme(plot.background = element_rect(fill = background_colour, colour = NA))
 
-    if (save == TRUE) {
-        ggsave(filename, plot = result, dpi = pixels_per_base, width = max(nchar(sequences))+1, height = length(sequences)+0.5, limitsize = FALSE)
+    ## As long as the lines are spaced out, don't need a bottom margin as the blank spacer line does that
+    ## But if spacing is turned off, need to add a bottom margin
+    if (spacing == 0) {
+        result <- result + theme(plot.margin = grid::unit(c(0.5, 0.5, 0.5, 0.5), "inches"))
+        extra_height <- 1
+    } else {
+        result <- result + theme(plot.margin = grid::unit(c(0.5, 0.5, 0, 0.5), "inches"))
+        extra_height <- 0.5
     }
 
+    ## Check if filename is set and warn if not png, then export image
+    if (is.na(filename) == FALSE) {
+        if (is.character(filename) == FALSE) {
+            abort("Filename must be a character/string (or NA if no file export wanted)", class = "argument_value_or_type")
+        }
+        if (tolower(substr(filename, nchar(filename)-3, nchar(filename))) != ".png") {
+            warn("Not recommended to use non-png filetype (but may still work).", class = "filetype_recommendation")
+        }
+        ggsave(filename, plot = result, dpi = pixels_per_base, width = max(nchar(sequences))+1, height = length(sequences)+extra_height, limitsize = FALSE)
+    }
+
+    ## Return either the plot object or NULL
     if (return == TRUE) {
         return(result)
     }
-
     return(NULL)
 }
 
@@ -96,13 +128,20 @@ visualise_single_sequence <- function(sequence, sequence_colours = c("#F8766D", 
 #' @return `character vector`. The input sequence split into multiple lines, with specified spacing in between.
 #' @export
 convert_input_seq_to_sequence_list <- function(input_seq, line_length, spacing = 1) {
+    if (length(input_seq) != 1 || length(line_length) != 1 || length(spacing) != 1) {
+        abort("Input sequence, line length, and spacing must all be single values (length 1).", class = "argument_value_or_type")
+    }
     if (is.numeric(line_length) == FALSE || line_length %% 1 != 0 || line_length < 1 ||
         is.numeric(spacing) == FALSE     || spacing %% 1 != 0     || spacing < 0) {
-        abort("Line length must be a positive integer and spacing must be a non-negative integer", class = "argument_value_or_type")
+        abort("Line length must be a positive integer and spacing must be a non-negative integer.", class = "argument_value_or_type")
+    }
+    if (is.character(input_seq) == FALSE) {
+        abort("Input sequence must be a character/string.", class = "argument_value_or_type")
     }
 
     sequences <- NULL
     full_rows <- nchar(input_seq) %/% line_length
+    remainder <- nchar(input_seq) %% line_length
     if (full_rows > 0) {
         for (i in 1:full_rows) {
             start <- (i-1)*line_length + 1
@@ -111,11 +150,12 @@ convert_input_seq_to_sequence_list <- function(input_seq, line_length, spacing =
             sequences <- c(sequences, line, rep("", spacing))
         }
     }
-    start <- full_rows*line_length + 1
-    stop  <- nchar(input_seq)
-    line <- substr(input_seq, start, stop)
-    sequences <- c(sequences, line, rep("", spacing))
-
+    if (remainder > 0) {
+        start <- full_rows*line_length + 1
+        stop  <- nchar(input_seq)
+        line <- substr(input_seq, start, stop)
+        sequences <- c(sequences, line, rep("", spacing))
+    }
     return(sequences)
 }
 
@@ -135,9 +175,12 @@ convert_input_seq_to_sequence_list <- function(input_seq, line_length, spacing =
 #' @return `dataframe` Dataframe of coordinates and labels (e.g. `"A"` or `"15`), readable by geom_text.
 #' @export
 convert_sequences_to_annotations <- function(sequences, line_length, interval = 15) {
-    if (is.numeric(line_length) == FALSE || line_length %% 1 != 0 || line_length < 1 ||
-        is.numeric(interval) == FALSE    || interval %% 1 != 0    || interval < 0) {
-        abort("Line length must be a positive integer and annotation interval must be a non-negative integer", class = "argument_value_or_type")
+    if (is.numeric(line_length) == FALSE || length(line_length) != 1 || line_length %% 1 != 0 || line_length < 1 ||
+        is.numeric(interval) == FALSE    || length(interval) != 1    || interval %% 1 != 0    || interval < 0) {
+        abort("Line length must be a positive integer and annotation interval must be a single non-negative integer", class = "argument_value_or_type")
+    }
+    if (is.character(sequences) == FALSE) {
+        abort("Input sequence must be a character vector.", class = "argument_value_or_type")
     }
 
     x_interval <- 1 / line_length
@@ -189,8 +232,8 @@ convert_sequences_to_annotations <- function(sequences, line_length, interval = 
 #' Create intermediate geom_tile plot of a single sequence
 #'
 #' Takes rasterised image data from `create_image_data()` and a set of colours
-#' and returns a ggplot (via geom_tile). However, this is intermediate and is
-#' further modified e.g. by adding annotations in `visualise_single_sequence()`, so
+#' and returns a ggplot (via geom_tile). However, this plot is intermediate and is
+#' further modified (e.g. by adding annotations) in `visualise_single_sequence()`, so
 #' this function should only be used directly if you require more specific customisation.
 #'
 #' @param image_data `dataframe` Rasterised dataframe representing sequence information numerically. Output of `create_image_data()`.
@@ -203,7 +246,7 @@ plot_single_sequence <- function(image_data, colours = c("0" = "white", "1" = "#
         geom_tile() +
         scale_fill_manual(values = colours) +
         guides(x = "none", y = "none", fill = "none") +
-        theme(axis.title = element_blank(), plot.margin = grid::unit(c(0.5, 0.5, 0, 0.5), "inches")) +
+        theme(axis.title = element_blank()) +
         scale_x_continuous(expand = c(0, 0)) +
         scale_y_continuous(expand = c(0, 0))
 

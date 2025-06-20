@@ -3,6 +3,11 @@
 string_to_vector  <- function(string) {as.numeric(unlist(strsplit(string, split = ",")))}
 vector_to_string  <- function(vector) {paste(vector, collapse = ",")}
 
+## debugging - prints vector to the console as a ", "-joined string that is valid vector input
+debug_join_vector_num <- function(vector) {cat(paste(vector, collapse = ", "))}
+debug_join_vector_str <- function(vector) {cat('"', paste(vector, collapse = '", "'), '"', sep = "")}
+
+
 
 
 #' Reverse complement a DNA/RNA sequence

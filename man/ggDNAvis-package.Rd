@@ -4,12 +4,12 @@
 \name{ggDNAvis-package}
 \alias{ggDNAvis}
 \alias{ggDNAvis-package}
-\title{ggDNAvis: What the Package Does (One Line, Title Case)}
+\title{ggDNAvis: ggplot2-Based Tools For Visualising DNA Sequences And Modifications}
 \description{
 What the package does (one paragraph).
 }
 \author{
-\strong{Maintainer}: First Last \email{first.last@example.com}
+\strong{Maintainer}: Evelyn Jade \email{evelynjade42@gmail.com}
 
 }
 \keyword{internal}

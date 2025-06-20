@@ -20,7 +20,7 @@ plot_single_sequence(
 }
 \description{
 Takes rasterised image data from \code{create_image_data()} and a set of colours
-and returns a ggplot (via geom_tile). However, this is intermediate and is
-further modified e.g. by adding annotations in \code{visualise_single_sequence()}, so
+and returns a ggplot (via geom_tile). However, this plot is intermediate and is
+further modified (e.g. by adding annotations) in \code{visualise_single_sequence()}, so
 this function should only be used directly if you require more specific customisation.
 }
