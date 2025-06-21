@@ -4,14 +4,21 @@
 \alias{convert_input_seq_to_sequence_list}
 \title{Split a single input sequence into a vector of "lines" for visualisation}
 \usage{
-convert_input_seq_to_sequence_list(input_seq, line_length, spacing = 1)
+convert_input_seq_to_sequence_list(
+  input_seq,
+  line_length,
+  spacing = 1,
+  spaces_on_top = FALSE
+)
 }
 \arguments{
 \item{input_seq}{\code{character}. A DNA/RNA sequence (or for the purposes of this function, any string, though only DNA/RNA will work with later functions) to be split up.}
 
 \item{line_length}{\code{integer}. How long each line (split-up section) should be.}
 
-\item{spacing}{\code{integer}. How many blank lines to leave after each line of sequence. Defaults to \code{0}.}
+\item{spacing}{\code{integer}. How many blank lines to leave before/after each line of sequence. Defaults to \code{0}.}
+
+\item{spaces_on_top}{\code{logical}. Whether blank lines should come before (\code{TRUE}) or after (\code{FALSE}, default) each line of sequence.}
 }
 \value{
 \verb{character vector}. The input sequence split into multiple lines, with specified spacing in between.

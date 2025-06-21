@@ -15,6 +15,7 @@ visualise_single_sequence(
   index_annotation_interval = 15,
   line_wrapping = 75,
   spacing = 1,
+  annotations_on_top = FALSE,
   return = TRUE,
   filename = NA,
   pixels_per_base = 100
@@ -40,6 +41,8 @@ visualise_single_sequence(
 \item{line_wrapping}{\code{integer}. The number of bases that should be on each line before wrapping. Defaults to \code{75}. Recommended to make this a multiple of the repeat unit size (e.g. 3\emph{n} for a trinucleotide repeat) if visualising a repeat sequence.}
 
 \item{spacing}{\code{integer}. The number of blank lines between each line of sequence. Defaults to \code{1}. Be careful when setting to \code{0} as this means annotations have no space so might render strangely. Recommended to set \code{index_annotation_interval = 0} if doing so.}
+
+\item{annotations_on_top}{\code{logical}. Whether index annotations should go above (\code{TRUE}) or below (\code{FALSE}, default) each line of sequence.}
 
 \item{return}{\code{logical}. Boolean specifying whether this function should return the ggplot object, otherwise it will return \code{NULL}. Defaults to \code{TRUE}.}
 

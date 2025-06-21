@@ -4,7 +4,12 @@
 \alias{convert_sequences_to_annotations}
 \title{Convert a vector of sequences to a dataframe for plotting sequence contents and index annotations}
 \usage{
-convert_sequences_to_annotations(sequences, line_length, interval = 15)
+convert_sequences_to_annotations(
+  sequences,
+  line_length,
+  interval = 15,
+  annotations_on_top = FALSE
+)
 }
 \arguments{
 \item{sequences}{\verb{character vector}. Sequence to be plotted, split into lines and optionally including blank spacer lines. Output of \code{convert_input_seq_to_sequence_list()}.}
@@ -12,6 +17,8 @@ convert_sequences_to_annotations(sequences, line_length, interval = 15)
 \item{line_length}{\code{integer}. How long each line should be.}
 
 \item{interval}{\code{integer}. How frequently bases should be annotated with their index. Defaults to \code{15}.}
+
+\item{annotations_on_top}{\code{logical}. Whether annotations should go above (\code{TRUE}) or below (\code{FALSE}, default) each line of sequence.}
 }
 \value{
 \code{dataframe} Dataframe of coordinates and labels (e.g. \code{"A"} or \verb{"15}), readable by geom_text.
