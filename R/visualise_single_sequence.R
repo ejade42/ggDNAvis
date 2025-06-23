@@ -10,32 +10,33 @@
 #' interval, and pixels per square when exported are configurable.
 #'
 #' @param sequence `character`. A DNA or RNA sequence to visualise e.g. `"AAATGCTGC"`.
-#' @param sequence_colours `character vector`, length 4. A vector indicating which colours should be used for each base. In order: `c(A_colour, C_colour, G_colour, TU_colour)`. Defaults to red, green, blue, purple (in the default shades produced by ggplot with 4 colours).
+#' @param sequence_colours `character vector`, length 4. A vector indicating which colours should be used for each base. In order: `c(A_colour, C_colour, G_colour, T/U_colour)`.\cr\cr Defaults to red, green, blue, purple in the default shades produced by ggplot with 4 colours, i.e. `c("#F8766D", "#7CAE00", "#00BFC4", "#C77CFF")`, accessed via `sequence_colour_palettes$ggplot_style`.
 #' @param background_colour `character`. The colour of the background. Defaults to white.
 #' @param line_wrapping `integer`. The number of bases that should be on each line before wrapping. Defaults to `75`. Recommended to make this a multiple of the repeat unit size (e.g. 3*n* for a trinucleotide repeat) if visualising a repeat sequence.
 #' @param spacing `integer`. The number of blank lines between each line of sequence. Defaults to `1`. Be careful when setting to `0` as this means annotations have no space so might render strangely. Recommended to set `index_annotation_interval = 0` if doing so to disable annotations entirely.
+#' @param margin `numeric`. The size of the margin relative to the size of each base square. Defaults to `0.5` (half the side length of each base square).\cr\cr Note that if index annotations are on (i.e. `index_annotation_interval` is not `0`), the top/bottom margin (depending on `index_annotations_above`) will always be at least 1 to leave space for them.
 #' @param sequence_text_colour `character`. The colour of the text within the bases (e.g. colour of "A" letter within boxes representing adenosine bases). Defaults to black.
 #' @param sequence_text_size `numeric`. The size of the text within the bases (e.g. size of "A" letter within boxes representing adenosine bases). Defaults to `16`. Set to `0` to hide sequence text (show box colours only).
 #' @param index_annotation_colour `character`. The colour of the little numbers underneath indicating base index (e.g. colour "15" label under the 15th base). Defaults to dark red.
-#' @param index_annotation_size `numeric`. The size of the little number underneath indicating base index (e.g. size of "15" label under the 15th base). Defaults to `12.5`. Can be set to `0` to turn off annotations, but it is better to do this via `index_annotation_interval = 0`.
-#' @param index_annotation_interval `integer`. The frequency at which numbers should be placed underneath indicating base index, starting counting from the leftmost base in each row. Defaults to `15` (every 15 bases along each row). Recommended to make this a factor/divisor of the line wrapping length (meaning the final base in each line is annotated), otherwise the numbering interval resetting at the beginning of each row will result in uneven intervals at each line break. Set to `0` to turn off annotations (preferable over using `index_annotation_size = 0`).
+#' @param index_annotation_size `numeric`. The size of the little number underneath indicating base index (e.g. size of "15" label under the 15th base). Defaults to `12.5`.\cr\cr Can sometimes be set to `0` to turn off annotations, but it is better/more reliable to do this via `index_annotation_interval = 0`.
+#' @param index_annotation_interval `integer`. The frequency at which numbers should be placed underneath indicating base index, starting counting from the leftmost base in each row. Defaults to `15` (every 15 bases along each row).\cr\cr Recommended to make this a factor/divisor of the line wrapping length (meaning the final base in each line is annotated), otherwise the numbering interval resetting at the beginning of each row will result in uneven intervals at each line break.\cr\cr Set to `0` to turn off annotations (preferable over using `index_annotation_size = 0`).
 #' @param index_annotations_above `logical`. Whether index annotations should go above (`TRUE`, default) or below (`FALSE`) each line of sequence.
-#' @param index_annotation_vertical_position `numeric`. How far annotation numbers should be rendered above (if `index_annotations_above = TRUE`) or below (if `index_annotations_above = FALSE`) each base. Defaults to `1/3`. Not recommended to change at all. Strongly discouraged to set below 0 or above 1.
+#' @param index_annotation_vertical_position `numeric`. How far annotation numbers should be rendered above (if `index_annotations_above = TRUE`) or below (if `index_annotations_above = FALSE`) each base. Defaults to `1/3`.\cr\cr Not recommended to change at all. Strongly discouraged to set below 0 or above 1.
 #' @param return `logical`. Boolean specifying whether this function should return the ggplot object, otherwise it will return `NULL`. Defaults to `TRUE`.
 #' @param filename `character`. Filename to which output should be saved. If set to `NA` (default), no file will be saved. Recommended to end with `".png"` but might work with other extensions if they are compatible with `ggsave()`.
 #' @param pixels_per_base `integer`. How large each box should be in pixels, if file output is turned on via setting `filename`. Corresponds to dpi of the exported image. Large values recommended because text needs to be legible when rendered significantly smaller than a box. Defaults to `100`.
 #'
-#' @return A ggplot object containing the full visualisation, or `NULL` if `return = FALSE`. It is often more useful to use `save = TRUE` and `filename = "myfilename.png"`, because then the visualisation is exported at the correct aspect ratio.
+#' @return A ggplot object containing the full visualisation, or `NULL` if `return = FALSE`. It is often more useful to use `filename = "myfilename.png"`, because then the visualisation is exported at the correct aspect ratio.
 #' @export
-visualise_single_sequence <- function(sequence, sequence_colours = c("#F8766D", "#7CAE00", "#00BFC4", "#C77CFF"), background_colour = "white",
-                                      line_wrapping = 75, spacing = 1, sequence_text_colour = "black", sequence_text_size = 16,
+visualise_single_sequence <- function(sequence, sequence_colours = sequence_colour_palettes$ggplot_style, background_colour = "white",
+                                      line_wrapping = 75, spacing = 1, margin = 0.5, sequence_text_colour = "black", sequence_text_size = 16,
                                       index_annotation_colour = "darkred", index_annotation_size = 12.5, index_annotation_interval = 15,
                                       index_annotations_above = TRUE, index_annotation_vertical_position = 1/3, return = TRUE, filename = NA, pixels_per_base = 100) {
     ## Validate arguments
-    for (argument in list(sequence, background_colour, line_wrapping, spacing, sequence_text_colour, sequence_text_size, index_annotation_colour, index_annotation_size, index_annotation_interval, index_annotations_above, index_annotation_vertical_position, return, filename, pixels_per_base)) {
+    for (argument in list(sequence, background_colour, line_wrapping, spacing, sequence_text_colour, sequence_text_size, index_annotation_colour, index_annotation_size, index_annotation_interval, index_annotations_above, index_annotation_vertical_position, return, filename, pixels_per_base, margin)) {
         if (length(argument) != 1) {abort(paste("Argument", argument, "must have length 1"), class = "argument_value_or_type")}
     }
-    for (argument in list(sequence, sequence_colours, background_colour, sequence_text_colour, sequence_text_size, index_annotation_colour, index_annotation_size, index_annotation_interval, index_annotations_above, index_annotation_vertical_position, line_wrapping, spacing, return, pixels_per_base)) {
+    for (argument in list(sequence, sequence_colours, background_colour, sequence_text_colour, sequence_text_size, index_annotation_colour, index_annotation_size, index_annotation_interval, index_annotations_above, index_annotation_vertical_position, line_wrapping, spacing, return, pixels_per_base, margin)) {
         if (mean(is.na(argument)) != 0) {abort(paste("Argument", argument, "must not be NA"), class = "argument_value_or_type")}
     }
     if (is.character(sequence_colours) == FALSE || length(sequence_colours) != 4) {
@@ -50,7 +51,7 @@ visualise_single_sequence <- function(sequence, sequence_colours = c("#F8766D", 
     if (index_annotation_vertical_position < 0 || index_annotation_vertical_position > 1) {
         warn("Not recommended to set index annotation vertical position outside range 0-1.", class = "parameter_recommendation")
     }
-    for (argument in list(sequence_text_size, index_annotation_size, index_annotation_interval, spacing, pixels_per_base, line_wrapping)) {
+    for (argument in list(sequence_text_size, index_annotation_size, index_annotation_interval, spacing, pixels_per_base, line_wrapping, margin)) {
         if (is.numeric(argument) == FALSE || is.logical(argument) == TRUE || argument < 0) {abort(paste("Argument", argument, "must be a non-negative number."), class = "argument_value_or_type")}
     }
     for (argument in list(line_wrapping, spacing, pixels_per_base, index_annotation_interval)) {
@@ -108,14 +109,14 @@ visualise_single_sequence <- function(sequence, sequence_colours = c("#F8766D", 
     ## As long as the lines are spaced out, don't need a bottom margin as the blank spacer line does that
     ## But if spacing is turned off, need to add a bottom margin
     if (spacing == 0) {
-        result <- result + theme(plot.margin = grid::unit(c(0.5, 0.5, 0.5, 0.5), "inches"))
-        extra_height <- 1
+        result <- result + theme(plot.margin = grid::unit(c(margin, margin, margin, margin), "inches"))
+        extra_height <- 2 * margin
     } else if (index_annotations_above == TRUE) {
-        result <- result + theme(plot.margin = grid::unit(c(0, 0.5, 0.5, 0.5), "inches"))
-        extra_height <- 0.5
+        result <- result + theme(plot.margin = grid::unit(c(max(margin-1, 0), margin, margin, margin), "inches"))
+        extra_height <- margin + max(margin-1, 0)
     } else if (index_annotations_above == FALSE) {
-        result <- result + theme(plot.margin = grid::unit(c(0.5, 0.5, 0, 0.5), "inches"))
-        extra_height <- 0.5
+        result <- result + theme(plot.margin = grid::unit(c(margin, margin, max(margin-1, 0), margin), "inches"))
+        extra_height <- margin + max(margin-1, 0)
     } else {
         abort("Unexpected value of spacing and/or index_annotations_above. Should have been caught by previous test. Please report.")
     }
@@ -128,7 +129,7 @@ visualise_single_sequence <- function(sequence, sequence_colours = c("#F8766D", 
         if (tolower(substr(filename, nchar(filename)-3, nchar(filename))) != ".png") {
             warn("Not recommended to use non-png filetype (but may still work).", class = "filetype_recommendation")
         }
-        ggsave(filename, plot = result, dpi = pixels_per_base, width = max(nchar(sequences))+1, height = length(sequences)+extra_height, limitsize = FALSE)
+        ggsave(filename, plot = result, dpi = pixels_per_base, width = max(nchar(sequences))+(2*margin), height = length(sequences)+extra_height, limitsize = FALSE)
     }
 
     ## Return either the plot object or NULL

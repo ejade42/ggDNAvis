@@ -8,7 +8,7 @@ convert_input_seq_to_sequence_list(
   input_seq,
   line_length,
   spacing = 1,
-  spaces_on_top = FALSE
+  spaces_first = TRUE
 )
 }
 \arguments{
@@ -18,7 +18,7 @@ convert_input_seq_to_sequence_list(
 
 \item{spacing}{\code{integer}. How many blank lines to leave before/after each line of sequence. Defaults to \code{0}.}
 
-\item{spaces_on_top}{\code{logical}. Whether blank lines should come before (\code{TRUE}) or after (\code{FALSE}, default) each line of sequence.}
+\item{spaces_first}{\code{logical}. Whether blank lines should come before (\code{TRUE}, default) or after (\code{FALSE}) each line of sequence.}
 }
 \value{
 \verb{character vector}. The input sequence split into multiple lines, with specified spacing in between.

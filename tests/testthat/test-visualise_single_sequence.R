@@ -179,9 +179,57 @@ test_that("single sequence visualisation works with annotations halfway through,
 test_that("single sequence visualisation works with annotations halfway through, below", {
     filename <- "sone_2019_f1_1_expanded_test_20"
     expect_doppelganger(filename, visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), line_wrapping = 60, index_annotation_vertical_position = 0.5, index_annotations_above = FALSE, filename = paste0(root, filename, ".png")))
-    #expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
-    #                                   image_read(paste0(reference, filename, ".png")),
-    #                                   metric = "MAE"))$distortion, acceptable_distortion)
+    expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
+                                       image_read(paste0(reference, filename, ".png")),
+                                       metric = "MAE"))$distortion, acceptable_distortion)
+})
+
+test_that("single sequence visualisation works with no margin", {
+    filename <- "sone_2019_f1_1_expanded_test_21"
+    expect_doppelganger(filename, visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), line_wrapping = 60, pixels_per_base = 30, margin = 0, filename = paste0(root, filename, ".png")))
+    expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
+                                       image_read(paste0(reference, filename, ".png")),
+                                       metric = "MAE"))$distortion, acceptable_distortion)
+})
+
+test_that("single sequence visualisation works with margin 1", {
+    filename <- "sone_2019_f1_1_expanded_test_22"
+    expect_doppelganger(filename, visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), line_wrapping = 60, pixels_per_base = 30, margin = 1, filename = paste0(root, filename, ".png")))
+    expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
+                                       image_read(paste0(reference, filename, ".png")),
+                                       metric = "MAE"))$distortion, acceptable_distortion)
+})
+
+test_that("single sequence visualisation works with margin 2", {
+    filename <- "sone_2019_f1_1_expanded_test_23"
+    expect_doppelganger(filename, visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), line_wrapping = 60, pixels_per_base = 30, margin = 2, filename = paste0(root, filename, ".png")))
+    expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
+                                       image_read(paste0(reference, filename, ".png")),
+                                       metric = "MAE"))$distortion, acceptable_distortion)
+})
+
+test_that("single sequence visualisation works with no margin, below", {
+    filename <- "sone_2019_f1_1_expanded_test_24"
+    expect_doppelganger(filename, visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), line_wrapping = 60, pixels_per_base = 30, margin = 0, index_annotations_above = FALSE, filename = paste0(root, filename, ".png")))
+    expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
+                                       image_read(paste0(reference, filename, ".png")),
+                                       metric = "MAE"))$distortion, acceptable_distortion)
+})
+
+test_that("single sequence visualisation works with margin 1, below", {
+    filename <- "sone_2019_f1_1_expanded_test_25"
+    expect_doppelganger(filename, visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), line_wrapping = 60, pixels_per_base = 30, margin = 1, index_annotations_above = FALSE, filename = paste0(root, filename, ".png")))
+    expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
+                                       image_read(paste0(reference, filename, ".png")),
+                                       metric = "MAE"))$distortion, acceptable_distortion)
+})
+
+test_that("single sequence visualisation works with margin 2, below", {
+    filename <- "sone_2019_f1_1_expanded_test_26"
+    expect_doppelganger(filename, visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), line_wrapping = 60, pixels_per_base = 30, margin = 2, index_annotations_above = FALSE, filename = paste0(root, filename, ".png")))
+    expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
+                                       image_read(paste0(reference, filename, ".png")),
+                                       metric = "MAE"))$distortion, acceptable_distortion)
 })
 
 
@@ -191,6 +239,7 @@ test_that("single sequence visualisation fails when arguments are invalid", {
     for (param in bad_param_value_for_non_negative_num) {
         expect_error(visualise_single_sequence(sone_2019_f1_1_expanded, sequence_text_size = param), class = "argument_value_or_type")
         expect_error(visualise_single_sequence(sone_2019_f1_1_expanded, index_annotation_size = param), class = "argument_value_or_type")
+        expect_error(visualise_single_sequence(sone_2019_f1_1_expanded, margin = param), class = "argument_value_or_type")
     }
 
     bad_param_value_for_non_negative_int <- list("hi", -1, TRUE, c(1, 2), NA, 1.5, sqrt(5))

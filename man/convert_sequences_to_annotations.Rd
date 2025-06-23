@@ -8,7 +8,8 @@ convert_sequences_to_annotations(
   sequences,
   line_length,
   interval = 15,
-  annotations_on_top = FALSE
+  annotations_above = TRUE,
+  annotation_vertical_position = 1/3
 )
 }
 \arguments{
@@ -18,7 +19,9 @@ convert_sequences_to_annotations(
 
 \item{interval}{\code{integer}. How frequently bases should be annotated with their index. Defaults to \code{15}.}
 
-\item{annotations_on_top}{\code{logical}. Whether annotations should go above (\code{TRUE}) or below (\code{FALSE}, default) each line of sequence.}
+\item{annotations_above}{\code{logical}. Whether annotations should go above (\code{TRUE}, default) or below (\code{FALSE}) each line of sequence.}
+
+\item{annotation_vertical_position}{\code{numeric}. How far annotation numbers should be rendered above (if \code{index_annotations_above = TRUE}) or below (if \code{index_annotations_above = FALSE}) each base. Defaults to \code{1/3}. Not recommended to change at all. Strongly discouraged to set below 0 or above 1.}
 }
 \value{
 \code{dataframe} Dataframe of coordinates and labels (e.g. \code{"A"} or \verb{"15}), readable by geom_text.
