@@ -25,17 +25,25 @@ visualise_many_sequences <- function(sequences_vector, sequence_colours = sequen
                                      margin = 0.5, sequence_text_colour = "black", sequence_text_size = 16,
                                      return = TRUE, filename = NA, pixels_per_base = 100) {
     ## Validate arguments
-    for (argument in list(background_colour, return, filename, pixels_per_base)) {
+    for (argument in list(sequences_vector, sequence_colours, background_colour, margin, sequence_text_colour, sequence_text_size, return, filename, pixels_per_base)) {
+        if (mean(is.null(argument)) != 0) {abort(paste("Argument", argument, "must not be null."), class = "argument_value_or_type")}
+    }
+    for (argument in list(background_colour, margin, sequence_text_colour, sequence_text_size, return, filename, pixels_per_base)) {
         if (length(argument) != 1) {abort(paste("Argument", argument, "must have length 1"), class = "argument_value_or_type")}
     }
-    for (argument in list(sequences_vector, sequence_colours, background_colour, return, pixels_per_base)) {
+    for (argument in list(sequences_vector, sequence_colours, background_colour, margin, sequence_text_colour, sequence_text_size, return, pixels_per_base)) {
         if (mean(is.na(argument)) != 0) {abort(paste("Argument", argument, "must not be NA"), class = "argument_value_or_type")}
     }
     if (is.character(sequence_colours) == FALSE || length(sequence_colours) != 4) {
         abort("Must provide exactly 4 sequence colours, in A C G T order, as a length-4 character vector.", class = "argument_value_or_type")
     }
-    for (argument in list(sequences_vector, background_colour)) {
-        if (is.character(argument) == FALSE) {abort(paste("Argument", argument, "must be a character/string value."), class = "argument_value_or_type")}
+    for (argument in list(sequences_vector, background_colour, sequence_text_colour)) {
+        if (is.character(argument) == FALSE) {abort(paste("Argument", argument, "must be a character/string."), class = "argument_value_or_type")}
+    }
+    for (argument in list(margin, sequence_text_size)) {
+        if (is.numeric(argument) == FALSE || argument < 0) {
+            abort(paste("Argument", argument, "must be a non-negative number"), class = "argument_value_or_type")
+        }
     }
     for (argument in list(pixels_per_base)) {
         if (is.numeric(argument) == FALSE || argument %% 1 != 0 || argument < 1) {
@@ -104,15 +112,54 @@ visualise_many_sequences <- function(sequences_vector, sequence_colours = sequen
 #'
 #' @param sequence_dataframe `dataframe`. A dataframe containing the sequence information and all required meta-data. See `?example_many_sequences` for an example of a compatible dataframe.
 #' @param sequence_variable `character`. The name of the column within the dataframe containing the sequence information to be output. Defaults to `"sequence"`.
-#' @param grouping_levels `named character vector`. What variables should be used to define the groups/chunks, and how large a gap should be left between groups at that level. Set to `NA` to turn off grouping.\cr\cr Defaults to `c("family" = 8, "individual" = 2)`, meaning the highest-level groups are defined by the `family` column, and there is a gap of 8 between each family. Likewise the second-level groups (within each family) are defined by the `individual` column, and there is a gap of 2 between each individual.\cr\cr Any number of grouping variables and gaps can be given, as long as each grouping variable is a column within the dataframe.\cr\cr To change the order of groups within a level, make that column a factor with the order specified e.g. `example_many_sequences$family <- factor(example_many_sequences$family, levels = c("Family 2", "Family 3", "Family 1"))` to change the order to Family 2, Family 3, Family 1.
+#' @param grouping_levels `named character vector`. What variables should be used to define the groups/chunks, and how large a gap should be left between groups at that level. Set to `NA` to turn off grouping.\cr\cr Defaults to `c("family" = 8, "individual" = 2)`, meaning the highest-level groups are defined by the `family` column, and there is a gap of 8 between each family. Likewise the second-level groups (within each family) are defined by the `individual` column, and there is a gap of 2 between each individual.\cr\cr Any number of grouping variables and gaps can be given, as long as each grouping variable is a column within the dataframe. It is recommended that lower-level groups are more granular and subdivide higher-level groups (e.g. first divide into families, then into individuals within families). \cr\cr To change the order of groups within a level, make that column a factor with the order specified e.g. `example_many_sequences$family <- factor(example_many_sequences$family, levels = c("Family 2", "Family 3", "Family 1"))` to change the order to Family 2, Family 3, Family 1.
 #' @param sort_by `character`. The name of the column within the dataframe that should be used to sort/order the rows within each lowest-level group. Set to `NA` to turn off sorting within groups.\cr\cr Recommended to be the length of the sequence information, as is the case for the default `"sequence_length"` which was generated via `example_many_sequences$sequence_legnth <- nchar(example_many_sequences$sequence)`.
 #' @param desc_sort `logical`. Boolean specifying whether rows within groups should be sorted by the `sort_by` variable descending (`TRUE`, default) or ascending (`FALSE`).
 #'
 #' @return `character vector`. The sequences ordered and grouped as specified, with blank sequences (`""`) inserted as spacers as specified.
 #' @export
-sort_and_add_breaks_to_sequences <- function(sequence_dataframe, sequence_variable = "sequence",
-                                             grouping_levels = c("family" = 8, "individual" = 2),
-                                             sort_by = "sequence_length", desc_sort = TRUE) {
+extract_and_sort_sequences <- function(sequence_dataframe, sequence_variable = "sequence",
+                                       grouping_levels = c("family" = 8, "individual" = 2),
+                                       sort_by = "sequence_length", desc_sort = TRUE) {
+    ## Validate arguments
+    for (argument in list(sequence_dataframe, sequence_variable, grouping_levels, sort_by, desc_sort)) {
+        if (mean(is.null(argument)) != 0) {abort(paste("Argument", argument, "must not be null."), class = "argument_value_or_type")}
+    }
+    if (mean(is.na(grouping_levels)) == 0 && mean(is.null(names(grouping_levels))) != 0) {
+        abort("grouping_levels must be a named vector", class = "argument_value_or_type")
+    }
+    for (argument in list(sequence_variable, sort_by, desc_sort)) {
+        if (length(argument) != 1) {abort(paste("Argument", argument, "must have length 1"), class = "argument_value_or_type")}
+    }
+    for (argument in list(sequence_variable, desc_sort)) {
+        if (mean(is.na(argument)) != 0) {abort(paste("Argument", argument, "must not be NA"), class = "argument_value_or_type")}
+    }
+    if (mean(is.na(grouping_levels) == 0)) {
+        for (level in names(grouping_levels)) {
+            if (level %in% colnames(sequence_dataframe) == FALSE  || is.character(level) == FALSE) {
+                abort(paste0("grouping_levels must be a named numeric vector where all the names are columns in sequence_dataframe.\nCurrently '", level, "' is given as a grouping level name but is not a column in sequence_dataframe."), class = "argument_value_or_type")
+            }
+        }
+        if (is.numeric(grouping_levels) == FALSE) {
+            abort("grouping_levels must be a named numeric vector. Currently the values are not numeric", class = "argument_value_or_type")
+        }
+    }
+    if (mean(is.na(grouping_levels)) != 0 && length(grouping_levels) > 1) {
+        abort("if setting grouping_levels to NA, must provide a single NA rather than a vector of multiple values including NA.")
+    }
+    for (argument in list(sequence_variable, sort_by)) {
+        if (is.na(argument) == FALSE && (argument %in% colnames(sequence_dataframe) == FALSE || is.character(argument) == FALSE)) {
+            abort(paste("Argument", argument, "must be a single character value and the name of a column within sequence_dataframe."), class = "argument_value_or_type")
+        }
+    }
+    for (argument in list(desc_sort)) {
+        if (is.logical(argument) == FALSE) {
+            abort("desc_sort must be a logical/boolean value.", class = "argument_value_or_type")
+        }
+    }
+
+
+
     ## Initialise
     sequence_dataframe <- as.data.frame(sequence_dataframe)
     sequence_variable  <- sym(sequence_variable)

@@ -235,37 +235,37 @@ test_that("single sequence visualisation works with margin 2, below", {
 
 ## Test fail cases/invalid arguments to main single sequence visualisation function
 test_that("single sequence visualisation fails when arguments are invalid", {
-    bad_param_value_for_non_negative_num <- list("hi", -1, TRUE, c(1, 2), NA)
+    bad_param_value_for_non_negative_num <- list("hi", -1, TRUE, c(1, 2), NA, NULL)
     for (param in bad_param_value_for_non_negative_num) {
         expect_error(visualise_single_sequence(sone_2019_f1_1_expanded, sequence_text_size = param), class = "argument_value_or_type")
         expect_error(visualise_single_sequence(sone_2019_f1_1_expanded, index_annotation_size = param), class = "argument_value_or_type")
         expect_error(visualise_single_sequence(sone_2019_f1_1_expanded, margin = param), class = "argument_value_or_type")
     }
 
-    bad_param_value_for_non_negative_int <- list("hi", -1, TRUE, c(1, 2), NA, 1.5, sqrt(5))
+    bad_param_value_for_non_negative_int <- list("hi", -1, TRUE, c(1, 2), NA, 1.5, sqrt(5), NULL)
     for (param in bad_param_value_for_non_negative_int) {
         expect_error(visualise_single_sequence(sone_2019_f1_1_expanded, index_annotation_interval = param), class = "argument_value_or_type")
         expect_error(visualise_single_sequence(sone_2019_f1_1_expanded, spacing = param), class = "argument_value_or_type")
     }
 
-    bad_param_value_for_positive_int <- list("hi", -1, TRUE, c(1, 2), NA, 1.5, sqrt(5), 0)
+    bad_param_value_for_positive_int <- list("hi", -1, TRUE, c(1, 2), NA, 1.5, sqrt(5), 0, NULL)
     for (param in bad_param_value_for_positive_int) {
         expect_error(visualise_single_sequence(sone_2019_f1_1_expanded, line_wrapping = param), class = "argument_value_or_type")
         expect_error(visualise_single_sequence(sone_2019_f1_1_expanded, pixels_per_base = param), class = "argument_value_or_type")
     }
 
-    bad_param_value_for_num <- list("hi", TRUE, c(1, 2), NA)
+    bad_param_value_for_num <- list("hi", TRUE, c(1, 2), NA, NULL)
     for (param in bad_param_value_for_num) {
         expect_error(visualise_single_sequence(sone_2019_f1_1_expanded, index_annotation_vertical_position = param), class = "argument_value_or_type")
     }
 
-    bad_param_value_for_logical <- list(1, 1.5, -1, "hi", c(TRUE, FALSE), NA)
+    bad_param_value_for_logical <- list(1, 1.5, -1, "hi", c(TRUE, FALSE), NA, NULL)
     for (param in bad_param_value_for_logical) {
         expect_error(visualise_single_sequence(sone_2019_f1_1_expanded, index_annotations_above = param), class = "argument_value_or_type")
         expect_error(visualise_single_sequence(sone_2019_f1_1_expanded, return = param), class = "argument_value_or_type")
     }
 
-    bad_param_value_for_single_character <- list(c("hi", "bye"), 1, TRUE, -1, 0, 1.5, -1.5, c("A", "B", "C", "D"), NA, c(NA, NA))
+    bad_param_value_for_single_character <- list(c("hi", "bye"), 1, TRUE, -1, 0, 1.5, -1.5, c("A", "B", "C", "D"), NA, c(NA, NA), NULL)
     for (param in bad_param_value_for_single_character) {
         expect_error(visualise_single_sequence(sone_2019_f1_1_expanded, sequence = param), class = "argument_value_or_type")
         expect_error(visualise_single_sequence(sone_2019_f1_1_expanded, background_colour = param), class = "argument_value_or_type")
@@ -273,12 +273,12 @@ test_that("single sequence visualisation fails when arguments are invalid", {
         expect_error(visualise_single_sequence(sone_2019_f1_1_expanded, index_annotation_colour = param), class = "argument_value_or_type")
     }
 
-    bad_param_value_for_sequence_colours <- list("orange", 1, c("orange", "pink", "red", NA), NA, -1, 0, TRUE, FALSE, c("orange", "red", "green", "blue", "white"))
+    bad_param_value_for_sequence_colours <- list("orange", 1, c("orange", "pink", "red", NA), NA, -1, 0, TRUE, FALSE, c("orange", "red", "green", "blue", "white"), NULL)
     for (param in bad_param_value_for_sequence_colours) {
         expect_error(visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = param), class = "argument_value_or_type")
     }
 
-    bad_param_value_for_filename <- list(c("hi", "bye"), 1, TRUE, -1, 0, 1.5, -1.5, c("A", "B", "C", "D"), c(NA, NA))
+    bad_param_value_for_filename <- list(c("hi", "bye"), 1, TRUE, -1, 0, 1.5, -1.5, c("A", "B", "C", "D"), c(NA, NA), NULL)
     for (param in bad_param_value_for_filename) {
         expect_error(visualise_single_sequence(sone_2019_f1_1_expanded, filename = param), class = "argument_value_or_type")
     }
@@ -318,6 +318,10 @@ test_that("converting single sequence to sequences list fails when expected to",
     expect_error(convert_input_seq_to_sequence_list("GGCGGCGGC", "x", 1), class = "argument_value_or_type")
     expect_error(convert_input_seq_to_sequence_list("GGCGGCGGC", 6, 1, "x"), class = "argument_value_or_type")
     expect_error(convert_input_seq_to_sequence_list("GGCGGCGGC", 6, 1.5, 1), class = "argument_value_or_type")
+    expect_error(convert_input_seq_to_sequence_list(NULL, 3, 2, TRUE), class = "argument_value_or_type")
+    expect_error(convert_input_seq_to_sequence_list("GGCGGCGGC", NULL, 2, TRUE), class = "argument_value_or_type")
+    expect_error(convert_input_seq_to_sequence_list("GGCGGCGGC", 3, NULL, TRUE), class = "argument_value_or_type")
+    expect_error(convert_input_seq_to_sequence_list("GGCGGCGGC", 3, 2, NULL), class = "argument_value_or_type")
 })
 
 
@@ -343,21 +347,26 @@ test_that("converting sequences to annotation dataframe works", {
 })
 
 test_that("converting sequences to annotation dataframe fails when expected to", {
-    expect_error(convert_sequences_to_annotations(c("GGCGGCAA", "", "GGCA", ""), 0, 4))
-    expect_error(convert_sequences_to_annotations(c("GGCGGCAA", "", "GGCA", ""), c(2, 3), 4))
-    expect_error(convert_sequences_to_annotations(c("GGCGGCAA", "", "GGCA", ""), 4, c(2, 3)))
-    expect_error(convert_sequences_to_annotations(c("GGCGGCAA", "", "GGCA", ""), 1, -1))
-    expect_error(convert_sequences_to_annotations(1, 8, 0))
-    expect_error(convert_sequences_to_annotations(c("GGCGGCAA", "", "GGCA", ""), 8, 4, "x"))
-    expect_error(convert_sequences_to_annotations(c("GGCGGCAA", "", "GGCA", ""), 8, "x"))
-    expect_error(convert_sequences_to_annotations(c("GGCGGCAA", "", "GGCA", ""), "x", 4))
-    expect_error(convert_sequences_to_annotations(c("GGCGGCAA", "", "GGCA", ""), 8, 4, c(TRUE, FALSE)))
-    expect_error(convert_sequences_to_annotations(c("GGCGGCAA", "", "GGCA", ""), 8, 4, FALSE, "x"))
-    expect_error(convert_sequences_to_annotations(c("GGCGGCAA", "", "GGCA", ""), 8, 4, FALSE, c(0.5, 0.3)))
+    expect_error(convert_sequences_to_annotations(c("GGCGGCAA", "", "GGCA", ""), 0, 4), class = "argument_value_or_type")
+    expect_error(convert_sequences_to_annotations(c("GGCGGCAA", "", "GGCA", ""), c(2, 3), 4), class = "argument_value_or_type")
+    expect_error(convert_sequences_to_annotations(c("GGCGGCAA", "", "GGCA", ""), 4, c(2, 3)), class = "argument_value_or_type")
+    expect_error(convert_sequences_to_annotations(c("GGCGGCAA", "", "GGCA", ""), 1, -1), class = "argument_value_or_type")
+    expect_error(convert_sequences_to_annotations(1, 8, 0), class = "argument_value_or_type")
+    expect_error(convert_sequences_to_annotations(c("GGCGGCAA", "", "GGCA", ""), 8, 4, "x"), class = "argument_value_or_type")
+    expect_error(convert_sequences_to_annotations(c("GGCGGCAA", "", "GGCA", ""), 8, "x"), class = "argument_value_or_type")
+    expect_error(convert_sequences_to_annotations(c("GGCGGCAA", "", "GGCA", ""), "x", 4), class = "argument_value_or_type")
+    expect_error(convert_sequences_to_annotations(c("GGCGGCAA", "", "GGCA", ""), 8, 4, c(TRUE, FALSE)), class = "argument_value_or_type")
+    expect_error(convert_sequences_to_annotations(c("GGCGGCAA", "", "GGCA", ""), 8, 4, FALSE, "x"), class = "argument_value_or_type")
+    expect_error(convert_sequences_to_annotations(c("GGCGGCAA", "", "GGCA", ""), 8, 4, FALSE, c(0.5, 0.3)), class = "argument_value_or_type")
     expect_warning(convert_sequences_to_annotations(c("GGCGGCAA", "", "GGCA", ""), 8, 4, FALSE, 1.5),
                    class = "parameter_recommendation")
     expect_warning(convert_sequences_to_annotations(c("GGCGGCAA", "", "GGCA", ""), 8, 4, FALSE, -1),
                    class = "parameter_recommendation")
+    expect_error(convert_sequences_to_annotations(NULL, 8, 0, FALSE), class = "argument_value_or_type")
+    expect_error(convert_sequences_to_annotations(c("GGCGGCAA", "", "GGCA", ""), NULL, 0, FALSE), class = "argument_value_or_type")
+    expect_error(convert_sequences_to_annotations(c("GGCGGCAA", "", "GGCA", ""), 8, NULL, FALSE), class = "argument_value_or_type")
+    expect_error(convert_sequences_to_annotations(c("GGCGGCAA", "", "GGCA", ""), 8, 0, NULL), class = "argument_value_or_type")
+    expect_error(convert_sequences_to_annotations(c("GGCGGCAA", "", "GGCA", ""), 8, 0, FALSE, NULL), class = "argument_value_or_type")
 })
 
 

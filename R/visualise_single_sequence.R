@@ -33,6 +33,9 @@ visualise_single_sequence <- function(sequence, sequence_colours = sequence_colo
                                       index_annotation_colour = "darkred", index_annotation_size = 12.5, index_annotation_interval = 15,
                                       index_annotations_above = TRUE, index_annotation_vertical_position = 1/3, return = TRUE, filename = NA, pixels_per_base = 100) {
     ## Validate arguments
+    for (argument in list(sequence, sequence_colours, background_colour, line_wrapping, spacing, margin, sequence_text_colour, sequence_text_size, index_annotation_colour, index_annotation_size, index_annotation_interval, index_annotations_above, index_annotation_vertical_position, return, filename, pixels_per_base)) {
+        if (mean(is.null(argument)) != 0) {abort(paste("Argument", argument, "must not be null."), class = "argument_value_or_type")}
+    }
     for (argument in list(sequence, background_colour, line_wrapping, spacing, sequence_text_colour, sequence_text_size, index_annotation_colour, index_annotation_size, index_annotation_interval, index_annotations_above, index_annotation_vertical_position, return, filename, pixels_per_base, margin)) {
         if (length(argument) != 1) {abort(paste("Argument", argument, "must have length 1"), class = "argument_value_or_type")}
     }
@@ -158,6 +161,9 @@ visualise_single_sequence <- function(sequence, sequence_colours = sequence_colo
 #' @return `character vector`. The input sequence split into multiple lines, with specified spacing in between.
 #' @export
 convert_input_seq_to_sequence_list <- function(input_seq, line_length, spacing = 1, spaces_first = TRUE) {
+    for (argument in list(input_seq, line_length, spacing, spaces_first)) {
+        if (mean(is.null(argument)) != 0 || mean(is.na(argument)) != 0) {abort(paste("Argument", argument, "must not be null or NA."), class = "argument_value_or_type")}
+    }
     if (length(input_seq) != 1 || length(line_length) != 1 || length(spacing) != 1 || length(spaces_first) != 1) {
         abort("Input sequence, line length, spacing, and top/bottom spaces setting must all be single values (length 1).", class = "argument_value_or_type")
     }
@@ -222,6 +228,9 @@ convert_input_seq_to_sequence_list <- function(input_seq, line_length, spacing =
 #' @return `dataframe` Dataframe of coordinates and labels (e.g. `"A"` or `"15`), readable by geom_text.
 #' @export
 convert_sequences_to_annotations <- function(sequences, line_length, interval = 15, annotations_above = TRUE, annotation_vertical_position = 1/3) {
+    for (argument in list(sequences, line_length, interval, annotations_above, annotation_vertical_position)) {
+        if (mean(is.null(argument)) != 0 || mean(is.na(argument)) != 0) {abort(paste("Argument", argument, "must not be null or NA."), class = "argument_value_or_type")}
+    }
     if (is.numeric(line_length) == FALSE || length(line_length) != 1 || line_length %% 1 != 0 || line_length < 1 ||
         is.numeric(interval) == FALSE    || length(interval) != 1    || interval %% 1 != 0    || interval < 0) {
         abort("Line length must be a positive integer and annotation interval must be a single non-negative integer", class = "argument_value_or_type")
