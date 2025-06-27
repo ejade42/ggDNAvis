@@ -11,6 +11,7 @@ visualise_methylation_colour_scale(
   high_clamp = 255,
   full_range = c(0, 255),
   precision = 10^3,
+  background_colour = "white",
   x_axis_title = NULL,
   do_x_ticks = TRUE,
   do_side_scale = FALSE,
@@ -30,13 +31,15 @@ visualise_methylation_colour_scale(
 
 \item{precision}{\code{numeric}. How many different shades should be rendered. Larger values give a smoother gradient. Defaults to \code{10^3} i.e. \code{1000}, which looks smooth to my eyes and isn't too intensive to calculate.}
 
+\item{background_colour}{\code{character}. The colour the background should be drawn (defaults to white).}
+
 \item{x_axis_title}{\code{character}. The desired x-axis title. Defaults to \code{NULL}.}
 
 \item{do_x_ticks}{\code{logical}. Boolean specifying whether x axis ticks should be enabled (\code{TRUE}, default) or disabled (\code{FALSE}).}
 
 \item{do_side_scale}{\code{logical}. Boolean specifying whether a smaller scalebar should be rendered on the right. Defaults to \code{FALSE}.\cr\cr I think it is unlikely anyone would want to use this, but the option is here. One potential usecase is that this scalebar shows the raw probability values (e.g. 0 to 255), whereas the x-axis is normalised to 0-1.}
 
-\item{side_scale_title}{\code{character}. The desired title for the right-hand scalebar, if turned on.}
+\item{side_scale_title}{\code{character}. The desired title for the right-hand scalebar, if turned on. Defaults to \code{NULL}.}
 }
 \value{
 ggplot of the scalebar.\cr\cr Unlike the other \verb{visualise_<>} functions in this package, does not directly export a png. This is because there are no squares that need to be rendered at a precise aspect ratio in this function. It can just be saved normally with \code{\link[=ggsave]{ggsave()}} with any sensible combination of height and width.
@@ -45,8 +48,8 @@ ggplot of the scalebar.\cr\cr Unlike the other \verb{visualise_<>} functions in 
 This function creates a scalebar showing the colouring scheme based on methylation
 probability that is used in \code{\link[=visualise_methylation]{visualise_methylation()}}. Showing this is particularly
 important when the colour range is clamped via \code{low_clamp} and \code{high_clamp} (e.g.
-setting that all values below 100 are fully blue #0000FF, all values above 200 are
-fully red #FF0000, and colour interpolation occurs only in the range 100-200, rather
+setting that all values below 100 are fully blue (\verb{#0000FF}), all values above 200 are
+fully red (\verb{#FF0000}), and colour interpolation occurs only in the range 100-200, rather
 than across the whole range 0-255). If clamping is off (default), then 0 is fully blue,
 255 is fully read, and all values are linearly interpolated. NB: colours are configurable
 but default to blue = low modification probability and red = high modification probability.

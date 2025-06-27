@@ -35,7 +35,7 @@ visualise_methylation(
 
 \item{high_colour}{\code{character}. The colour that should be used to represent maximum probability of methylation/modification (defaults to red).}
 
-\item{low_clamp}{\code{integer}. The minimum probability below which all values are coloured \code{low_colour}. Defaults to \code{0} (i.e. no clamping).}
+\item{low_clamp}{\code{integer}. The minimum probability below which all values are coloured \code{low_colour}. Defaults to \code{0} (i.e. no clamping). To specify a proportion probability in 8-bit form, multiply by 255 e.g. to low-clamp at 30\% probability, set this to \code{0.3*255}.}
 
 \item{high_clamp}{\code{integer}. The maximum probability above which all values are coloured \code{high_colour}. Defaults to \code{255} (i.e. no clamping, assuming Nanopore > SAM style modification calling where probabilities are 8-bit integers from 0 to 255).}
 
@@ -63,8 +63,8 @@ background (including after the end of the sequence) as \code{background_colour}
 bases on a linear scale from \code{low_colour} to \code{high_colour}.\cr\cr
 Clamping means that the endpoints of the colour gradient can be set some distance into the probability
 space e.g. with Nanopore > SAM probability values from 0-255, the default is to render 0 as fully blue
-(#0000FF), 255 as fully red (#FF0000), and values in-between linear interpolated. However, clamping with
-\code{low_clamp = 100} and \code{high_clamp = 200} would set \emph{all probabilites up to 100} as fully blue,
+(\verb{#0000FF}), 255 as fully red (\verb{#FF0000}), and values in-between linearly interpolated. However, clamping with
+\code{low_clamp = 100} and \code{high_clamp = 200} would set \emph{all probabilities up to 100} as fully blue,
 \emph{all probabilities 200 and above} as fully red, and linearly interpolate only over the \code{100-200} range.\cr\cr
 A separate scalebar plot showing the colours corresponding to each probability, with any/no clamping values,
 can be produced via \code{\link[=visualise_methylation_colour_scale]{visualise_methylation_colour_scale()}}.

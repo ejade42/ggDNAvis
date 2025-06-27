@@ -12,8 +12,8 @@
 #' bases on a linear scale from `low_colour` to `high_colour`.\cr\cr
 #' Clamping means that the endpoints of the colour gradient can be set some distance into the probability
 #' space e.g. with Nanopore > SAM probability values from 0-255, the default is to render 0 as fully blue
-#' (#0000FF), 255 as fully red (#FF0000), and values in-between linear interpolated. However, clamping with
-#' `low_clamp = 100` and `high_clamp = 200` would set *all probabilites up to 100* as fully blue,
+#' (`#0000FF`), 255 as fully red (`#FF0000`), and values in-between linearly interpolated. However, clamping with
+#' `low_clamp = 100` and `high_clamp = 200` would set *all probabilities up to 100* as fully blue,
 #' *all probabilities 200 and above* as fully red, and linearly interpolate only over the `100-200` range.\cr\cr
 #' A separate scalebar plot showing the colours corresponding to each probability, with any/no clamping values,
 #' can be produced via [visualise_methylation_colour_scale()].
@@ -25,7 +25,7 @@
 #' @param other_bases_colour `character`. The colour non-assessed (e.g. non-CpG) bases should be drawn (defaults to grey).
 #' @param low_colour `character`. The colour that should be used to represent minimum probability of methylation/modification (defaults to blue).
 #' @param high_colour `character`. The colour that should be used to represent maximum probability of methylation/modification (defaults to red).
-#' @param low_clamp `integer`. The minimum probability below which all values are coloured `low_colour`. Defaults to `0` (i.e. no clamping).
+#' @param low_clamp `integer`. The minimum probability below which all values are coloured `low_colour`. Defaults to `0` (i.e. no clamping). To specify a proportion probability in 8-bit form, multiply by 255 e.g. to low-clamp at 30% probability, set this to `0.3*255`.
 #' @param high_clamp `integer`. The maximum probability above which all values are coloured `high_colour`. Defaults to `255` (i.e. no clamping, assuming Nanopore > SAM style modification calling where probabilities are 8-bit integers from 0 to 255).
 #' @param margin `numeric`. The size of the margin relative to the size of each base square. Defaults to `0.5` (half the side length of each base square).
 #' @param return `logical`. Boolean specifying whether this function should return the ggplot object, otherwise it will return `NULL`. Defaults to `TRUE`.
@@ -37,6 +37,37 @@
 visualise_methylation <- function(modification_locations_col, modification_probabilities_col, sequence_lengths,
                                   background_colour = "white", other_bases_colour = "grey", low_colour = "blue", high_colour = "red", low_clamp = 0, high_clamp = 255,
                                   margin = 0.5, return = TRUE, filename = NA, pixels_per_base = 10) {
+    ## Validate arguments
+    for (argument in list(modification_locations_col, modification_probabilities_col, sequence_lengths, background_colour, other_bases_colour, low_colour, high_colour, low_clamp, high_clamp, margin, return, filename, pixels_per_base)) {
+        if (mean(is.null(argument)) != 0) {abort(paste("Argument", argument, "must not be null."), class = "argument_value_or_type")}
+    }
+    for (argument in list(modification_locations_col, modification_probabilities_col, sequence_lengths, background_colour, other_bases_colour, low_colour, high_colour, low_clamp, high_clamp, margin, return, pixels_per_base)) {
+        if (mean(is.na(argument)) != 0) {abort(paste("Argument", argument, "must not be NA."), class = "argument_value_or_type")}
+    }
+    for (argument in list(background_colour, other_bases_colour, low_colour, high_colour)) {
+        if (is.character(argument) == FALSE || length(argument) != 1) {abort(paste("All colours must be single character values.", argument, "is not valid."), class = "argument_value_or_type")}
+    }
+    for (argument in list(low_clamp, high_clamp, margin, pixels_per_base)) {
+        if (is.numeric(argument) == FALSE || length(argument) != 1) {abort(paste("Argument", argument, "must be a single numeric value."), class = "argument_value_or_type")}
+    }
+    for (argument in list(pixels_per_base)) {
+        if (argument %% 1 != 0 || argument < 1) {abort(paste("Argument", argument, "must be a positive integer."), class = "argument_value_or_type")}
+    }
+    for (argument in list(return)) {
+        if (is.logical(argument) == FALSE || length(argument) != 1) {abort(paste("Argument", argument, "must be a single logical/boolean value."), class = "argument_value_or_type")}
+    }
+    if (length(modification_locations_col) != length(modification_probabilities_col) ||
+        length(modification_locations_col) != length(sequence_lengths) ||
+        length(modification_probabilities_col) != length(sequence_lengths)) {
+        abort("Modification locations, modification probabilities, and sequence lengths must all be the same length", class = "argument_value_or_type")
+    }
+    for (argument in list(modification_locations_col, modification_probabilities_col)) {
+        if (is.character(argument) == FALSE) {abort("Modification locations and probabilities must both be character vectors.", class = "argument value or type.")}
+        if (mean(is.na(string_to_vector(argument))) != 0) {abort("Modification locations and probabilities must both expand to numeric vectors via string_to_vector(). Check that the values within these inputs are comma-separated numbers e.g. '1,2,3,4'.", class = "argument_value_or_type")}
+    }
+    for (argument in list(sequence_lengths)) {
+        if (is.numeric(argument) == FALSE) {abort("Sequence lengths vector must be numeric.", class = "argument_value_or_type")}
+    }
 
 
     ## Generate rasterised dataframes of methylation and masking layer
@@ -56,6 +87,7 @@ visualise_methylation <- function(modification_locations_col, modification_proba
     ## Transform image data if clamping limits are set
     image_data$clamped_layer <- pmin(pmax(image_data$layer, low_clamp), high_clamp)
 
+
     ## Make methylation visualisation plot
     result <- ggplot(mapping = aes(x = x, y = y)) +
         geom_tile(data = image_data, aes(fill = clamped_layer)) +
@@ -68,6 +100,7 @@ visualise_methylation <- function(modification_locations_col, modification_proba
         guides(x = "none", y = "none", fill = "none") +
         theme(plot.background = element_rect(fill = background_colour, colour = NA),
               axis.title = element_blank(), plot.margin = grid::unit(c(margin, margin, margin, margin), "inches"))
+
 
     ## Validate filename and export image
     if (is.na(filename) == FALSE) {
@@ -94,8 +127,8 @@ visualise_methylation <- function(modification_locations_col, modification_proba
 #' This function creates a scalebar showing the colouring scheme based on methylation
 #' probability that is used in [visualise_methylation()]. Showing this is particularly
 #' important when the colour range is clamped via `low_clamp` and `high_clamp` (e.g.
-#' setting that all values below 100 are fully blue #0000FF, all values above 200 are
-#' fully red #FF0000, and colour interpolation occurs only in the range 100-200, rather
+#' setting that all values below 100 are fully blue (`#0000FF`), all values above 200 are
+#' fully red (`#FF0000`), and colour interpolation occurs only in the range 100-200, rather
 #' than across the whole range 0-255). If clamping is off (default), then 0 is fully blue,
 #' 255 is fully read, and all values are linearly interpolated. NB: colours are configurable
 #' but default to blue = low modification probability and red = high modification probability.
@@ -106,20 +139,47 @@ visualise_methylation <- function(modification_locations_col, modification_proba
 #' @param high_clamp `integer`. The maximum probability above which all values are coloured `high_colour`. Defaults to `255` (i.e. no clamping, assuming Nanopore > SAM style modification calling where probabilities are 8-bit integers from 0 to 255).
 #' @param full_range `integer vector`, length 2. The total range of possible probabilities. Defaults to `c(0, 255)`, which is appropriate for Nanopore > SAM style modification calling where probabilities are 8-bit integers from 0 to 255.\cr\cr May need to be set to `c(0, 1)` if probabilites are instead stored as decimals. Setting any other value is advanced use and should be done for a good reason.
 #' @param precision `numeric`. How many different shades should be rendered. Larger values give a smoother gradient. Defaults to `10^3` i.e. `1000`, which looks smooth to my eyes and isn't too intensive to calculate.
+#' @param background_colour `character`. The colour the background should be drawn (defaults to white).
 #' @param x_axis_title `character`. The desired x-axis title. Defaults to `NULL`.
 #' @param do_x_ticks `logical`. Boolean specifying whether x axis ticks should be enabled (`TRUE`, default) or disabled (`FALSE`).
 #' @param do_side_scale `logical`. Boolean specifying whether a smaller scalebar should be rendered on the right. Defaults to `FALSE`.\cr\cr I think it is unlikely anyone would want to use this, but the option is here. One potential usecase is that this scalebar shows the raw probability values (e.g. 0 to 255), whereas the x-axis is normalised to 0-1.
-#' @param side_scale_title `character`. The desired title for the right-hand scalebar, if turned on.
+#' @param side_scale_title `character`. The desired title for the right-hand scalebar, if turned on. Defaults to `NULL`.
 #'
 #' @return ggplot of the scalebar.\cr\cr Unlike the other `visualise_<>` functions in this package, does not directly export a png. This is because there are no squares that need to be rendered at a precise aspect ratio in this function. It can just be saved normally with [ggsave()] with any sensible combination of height and width.
 #' @export
 visualise_methylation_colour_scale <- function(low_colour = "blue", high_colour = "red", low_clamp = 0, high_clamp = 255, full_range = c(0, 255), precision = 10^3,
-                                               x_axis_title = NULL, do_x_ticks = TRUE, do_side_scale = FALSE, side_scale_title = NULL) {
+                                               background_colour = "white", x_axis_title = NULL, do_x_ticks = TRUE, do_side_scale = FALSE, side_scale_title = NULL) {
+    ## Validate arguments
+    for (argument in list(low_colour, high_colour, low_clamp, high_clamp, full_range, precision, background_colour, do_x_ticks, do_side_scale)) {
+        if (mean(is.null(argument)) != 0 || mean(is.na(argument)) != 0) {abort(paste("Argument", argument, "must not be null or NA."), class = "argument_value_or_type")}
+    }
+    for (argument in list(low_colour, high_colour, low_clamp, high_clamp, precision, background_colour, x_axis_title, do_x_ticks, do_side_scale, side_scale_title)) {
+        if (mean(is.null(argument)) == 0 && length(argument) != 1) {abort(paste("Argument", argument, "must have length 1"), class = "argument_value_or_type")}
+    }
+    for (argument in list(background_colour, low_colour, high_colour)) {
+        if (is.character(argument) == FALSE || length(argument) != 1) {abort(paste("All colours must be single character values.", argument, "is not valid."), class = "argument_value_or_type")}
+    }
+    for (argument in list(low_clamp, high_clamp, full_range, precision)) {
+        if (is.numeric(argument) == FALSE) {abort(paste("Argument", argument, "must be numeric."), class = "argument_value_or_type")}
+    }
+    for (argument in list(do_x_ticks, do_side_scale)) {
+        if (is.logical(argument) == FALSE) {abort(paste("Argument", argument, "must be logical/boolean"), class = "argument_value_or_type")}
+    }
+    if (length(full_range) != 2) {abort("Must provide two numeric values e.g. c(0, 255) as the full probability range", class = "argument_value_or_type")}
+    if (mean(full_range == c(0, 255)) != 1 && mean(full_range == c(0, 1)) != 1) {
+        warn("It is unusual to set full probabality range to something other than 0-255 or 0-1. Make sure you know what you're doing.", class = "parameter_recommendation")
+    }
+
+    ## Accept NA as meaning NULL for titles
+    if (mean(is.null(x_axis_title)) == 0 && mean(is.na(x_axis_title)) != 0) {x_axis_title <- NULL}
+    if (mean(is.null(side_scale_title)) == 0 && mean(is.na(side_scale_title)) != 0) {side_scale_title <- NULL}
+
+
     ## Use arguments to calculate scales and evaluate at specified intervals
     x_scale <- seq(0, 1-1/precision, 1/precision)
     full_data_span <- full_range[2] - full_range[1]
     col_scale <- seq(0, 1, 1/(precision-1)) * full_data_span
-    col_scale_clamped <- pmin(pmax(col_scale, low_limit), high_limit)
+    col_scale_clamped <- pmin(pmax(col_scale, low_clamp), high_clamp)
 
     ## Combine into dataframe
     scale_data <- data.frame(xmin = x_scale, xmax = x_scale + 1/precision, col_scale = col_scale, col_scale_clamped = col_scale_clamped)
@@ -127,11 +187,12 @@ visualise_methylation_colour_scale <- function(low_colour = "blue", high_colour 
     ## Plot
     result <- ggplot(scale_data) +
         geom_rect(aes(xmin = xmin, xmax = xmax, ymin = 0, ymax = 1, fill = col_scale_clamped)) +
-        scale_fill_gradient(low = low_colour, high = high_colour, limits = c(low_limit, high_limit)) +
+        scale_fill_gradient(low = low_colour, high = high_colour, limits = c(low_clamp, high_clamp)) +
         coord_cartesian(expand = F) +
         theme(axis.ticks.y = element_blank(), axis.text.y = element_blank()) +
-        labs(x = x_axis_title, fill = scale_title) + guides(fill = "none") +
-        theme(plot.margin = grid::unit(c(0.05, 0.15, 0.05, 0.15), "inches"))
+        labs(x = x_axis_title, fill = side_scale_title) + guides(fill = "none") +
+        theme(plot.background = element_rect(fill = background_colour, colour = NA),
+              plot.margin = grid::unit(c(0.05, 0.15, 0.05, 0.15), "inches"))
 
     ## Alter plot according to arguments
     if (do_x_ticks == FALSE) {
@@ -182,11 +243,11 @@ extract_methylation_from_dataframe <- function(modification_data,
                                                sort_by = "sequence_length", desc_sort = TRUE) {
     ## Doesn't need specific argument validation as extract_and_sort_sequences() handles that.
 
-    locations <- extract_and_sort_sequences(example_many_sequences, sequence_variable = locations_colname,
+    locations <- extract_and_sort_sequences(modification_data, sequence_variable = locations_colname,
                                             grouping_levels = grouping_levels, sort_by = sort_by, desc_sort = desc_sort)
-    probabilities <- extract_and_sort_sequences(example_many_sequences, sequence_variable = probabilities_colname,
+    probabilities <- extract_and_sort_sequences(modification_data, sequence_variable = probabilities_colname,
                                                 grouping_levels = grouping_levels, sort_by = sort_by, desc_sort = desc_sort)
-    lengths <- extract_and_sort_sequences(example_many_sequences, sequence_variable = lengths_colname,
+    lengths <- extract_and_sort_sequences(modification_data, sequence_variable = lengths_colname,
                                           grouping_levels = grouping_levels, sort_by = sort_by, desc_sort = desc_sort) %>%
         as.numeric() %>% replace_na(0)
 
@@ -216,9 +277,25 @@ extract_methylation_from_dataframe <- function(modification_data,
 #' @return `numeric vector`. A vector of length `max_length` indicating the probability of methylation at each index along the read - 0 where methylation was not assessed, and probability from 0-255 where methylation was assessed.
 #' @export
 convert_modification_to_number_vector <- function(modification_locations_str, modification_probabilities_str, max_length) {
-    locations <- string_to_vector(modification_locations_str)
+    ## Validate arguments
+    for (argument in list(modification_locations_str, modification_probabilities_str, max_length)) {
+        if (mean(is.null(argument)) != 0 || mean(is.na(argument)) != 0 || length(argument) != 1) {
+            abort("Argument", argument, "must be a single value, and not NULL or NA", class = "argument_value_or_type")
+        }
+    }
+    for (argument in list(modification_locations_str, modification_probabilities_str)) {
+        if (is.character(argument) == FALSE) {abort("Modification locations and probabilities must both be character vectors.", class = "argument value or type.")}
+        if (argument != "" && mean(is.na(string_to_vector(argument))) != 0) {abort("Modification locations and probabilities must both expand to numeric vectors via string_to_vector(). Check that the values within these inputs are comma-separated numbers e.g. '1,2,3,4'.", class = "argument_value_or_type")}
+    }
+    for (argument in list(max_length)) {
+        if (is.numeric(argument) == FALSE || argument %% 1 != 0 || argument < 1) {abort("Max length must be a positive integer.", class = "argument_value_or_type")}
+    }
+
+    ## Convert input strings to vectors
+    locations     <- string_to_vector(modification_locations_str)
     probabilities <- string_to_vector(modification_probabilities_str)
 
+    ## Calculate output vector
     output_vector <- rep(0, max_length)
     for (i in 1:max_length) {
         if (i %in% locations) {
@@ -226,6 +303,7 @@ convert_modification_to_number_vector <- function(modification_locations_str, mo
         }
     }
 
+    ## Return output vector
     return(output_vector)
 }
 
@@ -250,7 +328,25 @@ convert_modification_to_number_vector <- function(modification_locations_str, mo
 #' @return `numeric vector`. Vector of length `max_length` containing `1`s for non-assessed bases (e.g. non-CpG), `2`s for assessed bases (e.g. CpG), and `0` for squares that aren't bases (i.e. past the end of the sequence when `max_length > sequence_length`).
 #' @export
 create_plot_masks <- function(modification_locations_str, modification_probabilities_str, max_length, sequence_length) {
-    locations <- string_to_vector(modification_locations_str)
+    ## Validate arguments
+    for (argument in list(modification_locations_str, modification_probabilities_str, max_length, sequence_length)) {
+        if (mean(is.null(argument)) != 0 || mean(is.na(argument)) != 0 || length(argument) != 1) {
+            abort("Argument", argument, "must be a single value, and not NULL or NA", class = "argument_value_or_type")
+        }
+    }
+    for (argument in list(modification_locations_str, modification_probabilities_str)) {
+        if (is.character(argument) == FALSE) {abort("Modification locations and probabilities must both be character vectors.", class = "argument value or type.")}
+        if (argument != "" && mean(is.na(string_to_vector(argument))) != 0) {abort("Modification locations and probabilities must both expand to numeric vectors via string_to_vector(). Check that the values within these inputs are comma-separated numbers e.g. '1,2,3,4'.", class = "argument_value_or_type")}
+    }
+    for (argument in list(max_length)) {
+        if (is.numeric(argument) == FALSE || argument %% 1 != 0 || argument < 1) {abort("Max length must be a positive integer.", class = "argument_value_or_type")}
+    }
+    for (argument in list(sequence_length)) {
+        if (is.numeric(argument) == FALSE || argument %% 1 != 0 || argument < 0) {abort("Sequence length must both be a non-negative integer.", class = "argument_value_or_type")}
+    }
+
+    ## Convert input strings to vectors
+    locations     <- string_to_vector(modification_locations_str)
     probabilities <- string_to_vector(modification_probabilities_str)
 
     ## 0 = background
