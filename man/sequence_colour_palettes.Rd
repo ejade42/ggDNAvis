@@ -19,8 +19,8 @@ A list of 3 length-4 character vectors
 sequence_colour_palettes
 }
 \description{
-A collection of colour palettes for use with \code{visualise_single_sequence()}
-and \code{visualise_many_sequences()}.\cr\cr Each is a character vector of 4 colours,
+A collection of colour palettes for use with \code{\link[=visualise_single_sequence]{visualise_single_sequence()}}
+and \code{\link[=visualise_many_sequences]{visualise_many_sequences()}}.\cr\cr Each is a character vector of 4 colours,
 corresponding to A, C, G, and T/U in that order.\cr\cr To use inside the visualisation
 functions, set \verb{sequence_colours = sequence_colour_palettes$<palette_name>}
 }

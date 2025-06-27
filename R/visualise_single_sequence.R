@@ -1,7 +1,3 @@
-## MAIN FUCNTION FOR VISUALISING ONE DNA/RNA
-## SEQUENCE SPLIT ACROSS MULTIPLE LINES
-
-
 #' Visualise a single DNA/RNA sequence
 #'
 #' This function takes a DNA/RNA sequence and returns a ggplot
@@ -10,7 +6,7 @@
 #' interval, and pixels per square when exported are configurable.
 #'
 #' @param sequence `character`. A DNA or RNA sequence to visualise e.g. `"AAATGCTGC"`.
-#' @param sequence_colours `character vector`, length 4. A vector indicating which colours should be used for each base. In order: `c(A_colour, C_colour, G_colour, T/U_colour)`.\cr\cr Defaults to red, green, blue, purple in the default shades produced by ggplot with 4 colours, i.e. `c("#F8766D", "#7CAE00", "#00BFC4", "#C77CFF")`, accessed via `sequence_colour_palettes$ggplot_style`.
+#' @param sequence_colours `character vector`, length 4. A vector indicating which colours should be used for each base. In order: `c(A_colour, C_colour, G_colour, T/U_colour)`.\cr\cr Defaults to red, green, blue, purple in the default shades produced by ggplot with 4 colours, i.e. `c("#F8766D", "#7CAE00", "#00BFC4", "#C77CFF")`, accessed via [sequence_colour_palettes]`$ggplot_style`.
 #' @param background_colour `character`. The colour of the background. Defaults to white.
 #' @param line_wrapping `integer`. The number of bases that should be on each line before wrapping. Defaults to `75`. Recommended to make this a multiple of the repeat unit size (e.g. 3*n* for a trinucleotide repeat) if visualising a repeat sequence.
 #' @param spacing `integer`. The number of blank lines between each line of sequence. Defaults to `1`. Be careful when setting to `0` as this means annotations have no space so might render strangely. Recommended to set `index_annotation_interval = 0` if doing so to disable annotations entirely.
@@ -23,7 +19,7 @@
 #' @param index_annotations_above `logical`. Whether index annotations should go above (`TRUE`, default) or below (`FALSE`) each line of sequence.
 #' @param index_annotation_vertical_position `numeric`. How far annotation numbers should be rendered above (if `index_annotations_above = TRUE`) or below (if `index_annotations_above = FALSE`) each base. Defaults to `1/3`.\cr\cr Not recommended to change at all. Strongly discouraged to set below 0 or above 1.
 #' @param return `logical`. Boolean specifying whether this function should return the ggplot object, otherwise it will return `NULL`. Defaults to `TRUE`.
-#' @param filename `character`. Filename to which output should be saved. If set to `NA` (default), no file will be saved. Recommended to end with `".png"` but might work with other extensions if they are compatible with `ggsave()`.
+#' @param filename `character`. Filename to which output should be saved. If set to `NA` (default), no file will be saved. Recommended to end with `".png"` but might work with other extensions if they are compatible with [ggsave()].
 #' @param pixels_per_base `integer`. How large each box should be in pixels, if file output is turned on via setting `filename`. Corresponds to dpi of the exported image. Large values recommended because text needs to be legible when rendered significantly smaller than a box. Defaults to `100`.
 #'
 #' @return A ggplot object containing the full visualisation, or `NULL` if `return = FALSE`. It is often more useful to use `filename = "myfilename.png"`, because then the visualisation is exported at the correct aspect ratio.
@@ -147,7 +143,7 @@ visualise_single_sequence <- function(sequence, sequence_colours = sequence_colo
 ## "Missing" functions are likely in dna_tools.R as they are common to multiple visualisations
 
 
-#' Split a single input sequence into a vector of "lines" for visualisation
+#' Split a single input sequence into a vector of "lines" for visualisation ([visualise_single_sequence] helper)
 #'
 #' Takes a single input sequence and an integer line length, and splits the input
 #' sequence into lines of that length (with the last line potentially being shorter). \cr\cr
@@ -212,14 +208,14 @@ convert_input_seq_to_sequence_list <- function(input_seq, line_length, spacing =
 
 
 
-#' Convert a vector of sequences to a dataframe for plotting sequence contents and index annotations
+#' Convert a vector of sequences to a dataframe for plotting sequence contents and index annotations ([visualise_single_sequence] helper)
 #'
-#' Takes the sequence list output from `convert_input_seq_to_sequence_list()` and creates a dataframe
+#' Takes the sequence list output from [convert_input_seq_to_sequence_list()] and creates a dataframe
 #' specifying x and y coordinates and the character to plot at each coordinate. This applies to both
 #' the sequence itself (e.g. determining where on the plot to place an `"A"`) and the periodicit
 #' annotations of index number (e.g. determining where on the plot to annotate base number `15`).
 #'
-#' @param sequences `character vector`. Sequence to be plotted, split into lines and optionally including blank spacer lines. Output of `convert_input_seq_to_sequence_list()`.
+#' @param sequences `character vector`. Sequence to be plotted, split into lines and optionally including blank spacer lines. Output of [convert_input_seq_to_sequence_list()].
 #' @param line_length `integer`. How long each line should be.
 #' @param interval `integer`. How frequently bases should be annotated with their index. Defaults to `15`.
 #' @param annotations_above `logical`. Whether annotations should go above (`TRUE`, default) or below (`FALSE`) each line of sequence.
@@ -302,17 +298,17 @@ convert_sequences_to_annotations <- function(sequences, line_length, interval = 
 
 
 
-#' Create intermediate geom_tile plot of a single sequence
+#' Create intermediate geom_tile plot of a single sequence ([visualise_single_sequence()] helper)
 #'
-#' Takes rasterised image data from `create_image_data()` and a set of colours
+#' Takes rasterised image data from [create_image_data()] and a set of colours
 #' and returns a ggplot (via geom_tile). However, this plot is intermediate and is
-#' further modified (e.g. by adding annotations) in `visualise_single_sequence()`, so
+#' further modified (e.g. by adding annotations) in [visualise_single_sequence()], so
 #' this function should only be used directly if you require more specific customisation.
 #'
-#' @param image_data `dataframe` Rasterised dataframe representing sequence information numerically. Output of `create_image_data()`.
-#' @param colours `character vector`, length 5. Expects a named vector specifying colour for background, A, C, G, T/U in that order. Easier to customise in `visualise_single_sequence()` as formatting requirements are less strict.
+#' @param image_data `dataframe` Rasterised dataframe representing sequence information numerically. Output of [create_image_data()].
+#' @param colours `character vector`, length 5. Expects a named vector specifying colour for background, A, C, G, T/U in that order. Easier to customise in [visualise_single_sequence()] as formatting requirements are less strict.
 #'
-#' @return `ggplot` ggplot via geom_tile, of the single sequence split across multiple lines. Formatting will be better if accessed via `visualise_single_sequence()`, but this function is made available for use cases where greater flexibility is required.
+#' @return `ggplot` ggplot via geom_tile, of the single sequence split across multiple lines. Formatting will be better if accessed via [visualise_single_sequence()], but this function is made available for use cases where greater flexibility is required.
 #' @export
 plot_single_sequence <- function(image_data, colours = c("0" = "white", "1" = "#F8766D", "2" = "#7CAE00", "3" = "#00BFC4", "4" = "#C77CFF")) {
     plot <- ggplot(image_data, aes(x = x, y = y, fill = as.character(layer))) +

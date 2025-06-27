@@ -19,7 +19,7 @@ visualise_many_sequences(
 \arguments{
 \item{sequences_vector}{\verb{character vector}.}
 
-\item{sequence_colours}{\verb{character vector}, length 4. A vector indicating which colours should be used for each base. In order: \code{c(A_colour, C_colour, G_colour, T/U_colour)}.\cr\cr Defaults to red, green, blue, purple in the default shades produced by ggplot with 4 colours, i.e. \code{c("#F8766D", "#7CAE00", "#00BFC4", "#C77CFF")}, accessed via \code{sequence_colour_palettes$ggplot_style}.}
+\item{sequence_colours}{\verb{character vector}, length 4. A vector indicating which colours should be used for each base. In order: \code{c(A_colour, C_colour, G_colour, T/U_colour)}.\cr\cr Defaults to red, green, blue, purple in the default shades produced by ggplot with 4 colours, i.e. \code{c("#F8766D", "#7CAE00", "#00BFC4", "#C77CFF")}, accessed via \link{sequence_colour_palettes}\verb{$ggplot_style}.}
 
 \item{background_colour}{\code{character}. The colour of the background. Defaults to white.}
 
@@ -31,7 +31,7 @@ visualise_many_sequences(
 
 \item{return}{\code{logical}. Boolean specifying whether this function should return the ggplot object, otherwise it will return \code{NULL}. Defaults to \code{TRUE}.}
 
-\item{filename}{\code{character}. Filename to which output should be saved. If set to \code{NA} (default), no file will be saved. Recommended to end with \code{".png"} but might work with other extensions if they are compatible with \code{ggsave()}.}
+\item{filename}{\code{character}. Filename to which output should be saved. If set to \code{NA} (default), no file will be saved. Recommended to end with \code{".png"} but might work with other extensions if they are compatible with \code{\link[=ggsave]{ggsave()}}.}
 
 \item{pixels_per_base}{\code{integer}. How large each box should be in pixels, if file output is turned on via setting \code{filename}. Corresponds to dpi of the exported image.\cr\cr If text is shown (i.e. \code{sequence_text_size} is not 0), needs to be fairly large otherwise text is blurry. Defaults to \code{100}.}
 }

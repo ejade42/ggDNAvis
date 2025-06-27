@@ -2,7 +2,7 @@
 % Please edit documentation in R/visualise_single_sequence.R
 \name{plot_single_sequence}
 \alias{plot_single_sequence}
-\title{Create intermediate geom_tile plot of a single sequence}
+\title{Create intermediate geom_tile plot of a single sequence (\code{\link[=visualise_single_sequence]{visualise_single_sequence()}} helper)}
 \usage{
 plot_single_sequence(
   image_data,
@@ -11,16 +11,16 @@ plot_single_sequence(
 )
 }
 \arguments{
-\item{image_data}{\code{dataframe} Rasterised dataframe representing sequence information numerically. Output of \code{create_image_data()}.}
+\item{image_data}{\code{dataframe} Rasterised dataframe representing sequence information numerically. Output of \code{\link[=create_image_data]{create_image_data()}}.}
 
-\item{colours}{\verb{character vector}, length 5. Expects a named vector specifying colour for background, A, C, G, T/U in that order. Easier to customise in \code{visualise_single_sequence()} as formatting requirements are less strict.}
+\item{colours}{\verb{character vector}, length 5. Expects a named vector specifying colour for background, A, C, G, T/U in that order. Easier to customise in \code{\link[=visualise_single_sequence]{visualise_single_sequence()}} as formatting requirements are less strict.}
 }
 \value{
-\code{ggplot} ggplot via geom_tile, of the single sequence split across multiple lines. Formatting will be better if accessed via \code{visualise_single_sequence()}, but this function is made available for use cases where greater flexibility is required.
+\code{ggplot} ggplot via geom_tile, of the single sequence split across multiple lines. Formatting will be better if accessed via \code{\link[=visualise_single_sequence]{visualise_single_sequence()}}, but this function is made available for use cases where greater flexibility is required.
 }
 \description{
-Takes rasterised image data from \code{create_image_data()} and a set of colours
+Takes rasterised image data from \code{\link[=create_image_data]{create_image_data()}} and a set of colours
 and returns a ggplot (via geom_tile). However, this plot is intermediate and is
-further modified (e.g. by adding annotations) in \code{visualise_single_sequence()}, so
+further modified (e.g. by adding annotations) in \code{\link[=visualise_single_sequence]{visualise_single_sequence()}}, so
 this function should only be used directly if you require more specific customisation.
 }

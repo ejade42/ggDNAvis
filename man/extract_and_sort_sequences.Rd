@@ -13,7 +13,7 @@ extract_and_sort_sequences(
 )
 }
 \arguments{
-\item{sequence_dataframe}{\code{dataframe}. A dataframe containing the sequence information and all required meta-data. See \code{?example_many_sequences} for an example of a compatible dataframe.}
+\item{sequence_dataframe}{\code{dataframe}. A dataframe containing the sequence information and all required meta-data. See \link{example_many_sequences} for an example of a compatible dataframe.}
 
 \item{sequence_variable}{\code{character}. The name of the column within the dataframe containing the sequence information to be output. Defaults to \code{"sequence"}.}
 
@@ -32,6 +32,7 @@ recursively splits it into multiple levels of groups defined by \code{grouping_l
 and adds breaks between each level of group as defined by \code{grouping_levels}.
 Within each lowest-level group, reads are sorted by \code{sort_by}, with order determined
 by \code{desc_sort}. \cr\cr Default values are set up to work with the included dataset
-\code{example_many_sequences}. \cr\cr The returned sequences vector is ideal input for
-\code{visualise_many_sequences()}.
+\link{example_many_sequences}. \cr\cr The returned sequences vector is ideal input for
+\code{\link[=visualise_many_sequences]{visualise_many_sequences()}}.\cr\cr Also called by \code{\link[=extract_methylation_from_dataframe]{extract_methylation_from_dataframe()}}
+to produce input for \code{\link[=visualise_methylation]{visualise_methylation()}}.
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/dna_tools.R
 \name{convert_base_to_number}
 \alias{convert_base_to_number}
-\title{Map a single base to the corresponding number}
+\title{Map a single base to the corresponding number (generic \code{ggDNAvis} helper)}
 \usage{
 convert_base_to_number(base)
 }
@@ -14,6 +14,6 @@ convert_base_to_number(base)
 }
 \description{
 This function takes a single base and numerically
-encodes it for visualisation via \code{raster::raster()}. \cr\cr
+encodes it for visualisation via \code{\link[raster:raster]{raster::raster()}}. \cr\cr
 Encoding: \code{A = 1}, \code{C = 2}, \code{G = 3}, \code{T/U = 4}.
 }

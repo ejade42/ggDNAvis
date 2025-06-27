@@ -2,7 +2,7 @@
 % Please edit documentation in R/dna_tools.R
 \name{convert_sequence_to_numbers}
 \alias{convert_sequence_to_numbers}
-\title{Map a sequence to a vector of numbers}
+\title{Map a sequence to a vector of numbers (generic \code{ggDNAvis} helper)}
 \usage{
 convert_sequence_to_numbers(sequence, length = NA)
 }
@@ -16,6 +16,6 @@ convert_sequence_to_numbers(sequence, length = NA)
 }
 \description{
 This function takes a sequence and encodes it as a vector
-of numbers for visualisation via \code{raster::raster()}. \cr\cr
+of numbers for visualisation via \code{\link[raster:raster]{raster::raster()}}. \cr\cr
 Encoding: \code{A = 1}, \code{C = 2}, \code{G = 3}, \code{T/U = 4}.
 }

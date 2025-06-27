@@ -2,7 +2,7 @@
 % Please edit documentation in R/visualise_single_sequence.R
 \name{convert_input_seq_to_sequence_list}
 \alias{convert_input_seq_to_sequence_list}
-\title{Split a single input sequence into a vector of "lines" for visualisation}
+\title{Split a single input sequence into a vector of "lines" for visualisation (\link{visualise_single_sequence} helper)}
 \usage{
 convert_input_seq_to_sequence_list(
   input_seq,

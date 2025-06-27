@@ -2,7 +2,7 @@
 % Please edit documentation in R/dna_tools.R
 \name{create_image_data}
 \alias{create_image_data}
-\title{Rasterise a vector of sequences into a numerical dataframe for ggplotting}
+\title{Rasterise a vector of sequences into a numerical dataframe for ggplotting (generic \code{ggDNAvis} helper)}
 \usage{
 create_image_data(sequences)
 }
@@ -10,7 +10,7 @@ create_image_data(sequences)
 \item{sequences}{\verb{character vector}. A vector of sequences for plotting, e.g. \code{c("ATCG", "", "GGCGGC", "")}. Each sequence will be plotted left-aligned on a new line.}
 }
 \value{
-\code{dataframe}. Rasterised dataframe representation of the sequences, readable by ggplot.
+\code{dataframe}. Rasterised dataframe representation of the sequences, readable by \link{ggplot}.
 }
 \description{
 Takes a character vector of sequences (which are allowed to be empty \code{""} to

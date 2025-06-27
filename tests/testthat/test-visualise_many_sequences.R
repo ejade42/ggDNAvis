@@ -3,7 +3,7 @@ root <- "test_plot_images/"
 reference <- "reference_images/"
 acceptable_distortion <- 0.001
 sequence_vector_1 <- c("GGCGGCGGCGGCGGAGGAGGCGGCGGAGGAGGCGGC",
-                       "GGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGC",
+                       "GGCGGCGGCGGCGGTGGUGGCGGCGGTGGTGGCGGC",
                        "",
                        "GGCGGCGGCGGCGGAGGC",
                        "GGCGGCGGCGGCGGCGGC")

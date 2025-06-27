@@ -1,5 +1,3 @@
-
-
 #' Visualise many DNA/RNA sequences
 #'
 #' This function takes a vector of DNA/RNA sequences (each sequence can be
@@ -10,13 +8,13 @@
 #' lines. Colours and pixels per square when exported are configurable.
 #'
 #' @param sequences_vector `character vector`.
-#' @param sequence_colours `character vector`, length 4. A vector indicating which colours should be used for each base. In order: `c(A_colour, C_colour, G_colour, T/U_colour)`.\cr\cr Defaults to red, green, blue, purple in the default shades produced by ggplot with 4 colours, i.e. `c("#F8766D", "#7CAE00", "#00BFC4", "#C77CFF")`, accessed via `sequence_colour_palettes$ggplot_style`.
+#' @param sequence_colours `character vector`, length 4. A vector indicating which colours should be used for each base. In order: `c(A_colour, C_colour, G_colour, T/U_colour)`.\cr\cr Defaults to red, green, blue, purple in the default shades produced by ggplot with 4 colours, i.e. `c("#F8766D", "#7CAE00", "#00BFC4", "#C77CFF")`, accessed via [sequence_colour_palettes]`$ggplot_style`.
 #' @param background_colour `character`. The colour of the background. Defaults to white.
 #' @param margin `numeric`. The size of the margin relative to the size of each base square. Defaults to `0.5` (half the side length of each base square).
 #' @param sequence_text_colour `character`. The colour of the text within the bases (e.g. colour of "A" letter within boxes representing adenosine bases). Defaults to black.
 #' @param sequence_text_size `numeric`. The size of the text within the bases (e.g. size of "A" letter within boxes representing adenosine bases). Defaults to `16`. Set to `0` to hide sequence text (show box colours only).
 #' @param return `logical`. Boolean specifying whether this function should return the ggplot object, otherwise it will return `NULL`. Defaults to `TRUE`.
-#' @param filename `character`. Filename to which output should be saved. If set to `NA` (default), no file will be saved. Recommended to end with `".png"` but might work with other extensions if they are compatible with `ggsave()`.
+#' @param filename `character`. Filename to which output should be saved. If set to `NA` (default), no file will be saved. Recommended to end with `".png"` but might work with other extensions if they are compatible with [ggsave()].
 #' @param pixels_per_base `integer`. How large each box should be in pixels, if file output is turned on via setting `filename`. Corresponds to dpi of the exported image.\cr\cr If text is shown (i.e. `sequence_text_size` is not 0), needs to be fairly large otherwise text is blurry. Defaults to `100`.
 #'
 #' @return A ggplot object containing the full visualisation, or `NULL` if `return = FALSE`. It is often more useful to use `filename = "myfilename.png"`, because then the visualisation is exported at the correct aspect ratio.
@@ -107,10 +105,11 @@ visualise_many_sequences <- function(sequences_vector, sequence_colours = sequen
 #' and adds breaks between each level of group as defined by `grouping_levels`.
 #' Within each lowest-level group, reads are sorted by `sort_by`, with order determined
 #' by `desc_sort`. \cr\cr Default values are set up to work with the included dataset
-#' `example_many_sequences`. \cr\cr The returned sequences vector is ideal input for
-#' `visualise_many_sequences()`.
+#' [example_many_sequences]. \cr\cr The returned sequences vector is ideal input for
+#' [visualise_many_sequences()].\cr\cr Also called by [extract_methylation_from_dataframe()]
+#' to produce input for [visualise_methylation()].
 #'
-#' @param sequence_dataframe `dataframe`. A dataframe containing the sequence information and all required meta-data. See `?example_many_sequences` for an example of a compatible dataframe.
+#' @param sequence_dataframe `dataframe`. A dataframe containing the sequence information and all required meta-data. See [example_many_sequences] for an example of a compatible dataframe.
 #' @param sequence_variable `character`. The name of the column within the dataframe containing the sequence information to be output. Defaults to `"sequence"`.
 #' @param grouping_levels `named character vector`. What variables should be used to define the groups/chunks, and how large a gap should be left between groups at that level. Set to `NA` to turn off grouping.\cr\cr Defaults to `c("family" = 8, "individual" = 2)`, meaning the highest-level groups are defined by the `family` column, and there is a gap of 8 between each family. Likewise the second-level groups (within each family) are defined by the `individual` column, and there is a gap of 2 between each individual.\cr\cr Any number of grouping variables and gaps can be given, as long as each grouping variable is a column within the dataframe. It is recommended that lower-level groups are more granular and subdivide higher-level groups (e.g. first divide into families, then into individuals within families). \cr\cr To change the order of groups within a level, make that column a factor with the order specified e.g. `example_many_sequences$family <- factor(example_many_sequences$family, levels = c("Family 2", "Family 3", "Family 1"))` to change the order to Family 2, Family 3, Family 1.
 #' @param sort_by `character`. The name of the column within the dataframe that should be used to sort/order the rows within each lowest-level group. Set to `NA` to turn off sorting within groups.\cr\cr Recommended to be the length of the sequence information, as is the case for the default `"sequence_length"` which was generated via `example_many_sequences$sequence_legnth <- nchar(example_many_sequences$sequence)`.
@@ -137,7 +136,7 @@ extract_and_sort_sequences <- function(sequence_dataframe, sequence_variable = "
     if (mean(is.na(grouping_levels) == 0)) {
         for (level in names(grouping_levels)) {
             if (level %in% colnames(sequence_dataframe) == FALSE  || is.character(level) == FALSE) {
-                abort(paste0("grouping_levels must be a named numeric vector where all the names are columns in sequence_dataframe.\nCurrently '", level, "' is given as a grouping level name but is not a column in sequence_dataframe."), class = "argument_value_or_type")
+                abort(paste0("grouping_levels must be a named numeric vector where all the names are columns in the input dataframe.\nCurrently '", level, "' is given as a grouping level name but is not a column in sequence_dataframe."), class = "argument_value_or_type")
             }
         }
         if (is.numeric(grouping_levels) == FALSE) {

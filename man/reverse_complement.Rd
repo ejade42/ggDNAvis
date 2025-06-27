@@ -2,7 +2,7 @@
 % Please edit documentation in R/dna_tools.R
 \name{reverse_complement}
 \alias{reverse_complement}
-\title{Reverse complement a DNA/RNA sequence}
+\title{Reverse complement a DNA/RNA sequence (generic \code{ggDNAvis} helper)}
 \usage{
 reverse_complement(sequence, output_mode = "DNA")
 }
