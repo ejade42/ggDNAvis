@@ -10,7 +10,7 @@ create_image_data(sequences)
 \item{sequences}{\verb{character vector}. A vector of sequences for plotting, e.g. \code{c("ATCG", "", "GGCGGC", "")}. Each sequence will be plotted left-aligned on a new line.}
 }
 \value{
-\code{dataframe}. Rasterised dataframe representation of the sequences, readable by \link{ggplot}.
+\code{dataframe}. Rasterised dataframe representation of the sequences, readable by \link[ggplot2:ggplot]{ggplot2::ggplot}.
 }
 \description{
 Takes a character vector of sequences (which are allowed to be empty \code{""} to

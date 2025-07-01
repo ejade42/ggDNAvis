@@ -189,7 +189,7 @@ convert_sequence_to_numbers <- function(sequence, length = NA) {
 #' act as a spacing line) and rasterises it into a dataframe that ggplot can read.
 #'
 #' @param sequences `character vector`. A vector of sequences for plotting, e.g. `c("ATCG", "", "GGCGGC", "")`. Each sequence will be plotted left-aligned on a new line.
-#' @return `dataframe`. Rasterised dataframe representation of the sequences, readable by [ggplot].
+#' @return `dataframe`. Rasterised dataframe representation of the sequences, readable by [ggplot2::ggplot].
 #' @export
 create_image_data <- function(sequences) {
     if (is.character(sequences) == FALSE) {

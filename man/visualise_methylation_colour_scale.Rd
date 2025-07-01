@@ -42,7 +42,7 @@ visualise_methylation_colour_scale(
 \item{side_scale_title}{\code{character}. The desired title for the right-hand scalebar, if turned on. Defaults to \code{NULL}.}
 }
 \value{
-ggplot of the scalebar.\cr\cr Unlike the other \verb{visualise_<>} functions in this package, does not directly export a png. This is because there are no squares that need to be rendered at a precise aspect ratio in this function. It can just be saved normally with \code{\link[=ggsave]{ggsave()}} with any sensible combination of height and width.
+ggplot of the scalebar.\cr\cr Unlike the other \verb{visualise_<>} functions in this package, does not directly export a png. This is because there are no squares that need to be rendered at a precise aspect ratio in this function. It can just be saved normally with \code{\link[ggplot2:ggsave]{ggplot2::ggsave()}} with any sensible combination of height and width.
 }
 \description{
 This function creates a scalebar showing the colouring scheme based on methylation

@@ -31,7 +31,7 @@ visualise_many_sequences(
 
 \item{return}{\code{logical}. Boolean specifying whether this function should return the ggplot object, otherwise it will return \code{NULL}. Defaults to \code{TRUE}.}
 
-\item{filename}{\code{character}. Filename to which output should be saved. If set to \code{NA} (default), no file will be saved. Recommended to end with \code{".png"} but might work with other extensions if they are compatible with \code{\link[=ggsave]{ggsave()}}.}
+\item{filename}{\code{character}. Filename to which output should be saved. If set to \code{NA} (default), no file will be saved. Recommended to end with \code{".png"} but might work with other extensions if they are compatible with \code{\link[ggplot2:ggsave]{ggplot2::ggsave()}}.}
 
 \item{pixels_per_base}{\code{integer}. How large each box should be in pixels, if file output is turned on via setting \code{filename}. Corresponds to dpi of the exported image.\cr\cr If text is shown (i.e. \code{sequence_text_size} is not 0), needs to be fairly large otherwise text is blurry. Defaults to \code{100}.}
 }

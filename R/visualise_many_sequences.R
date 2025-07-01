@@ -14,7 +14,7 @@
 #' @param sequence_text_colour `character`. The colour of the text within the bases (e.g. colour of "A" letter within boxes representing adenosine bases). Defaults to black.
 #' @param sequence_text_size `numeric`. The size of the text within the bases (e.g. size of "A" letter within boxes representing adenosine bases). Defaults to `16`. Set to `0` to hide sequence text (show box colours only).
 #' @param return `logical`. Boolean specifying whether this function should return the ggplot object, otherwise it will return `NULL`. Defaults to `TRUE`.
-#' @param filename `character`. Filename to which output should be saved. If set to `NA` (default), no file will be saved. Recommended to end with `".png"` but might work with other extensions if they are compatible with [ggsave()].
+#' @param filename `character`. Filename to which output should be saved. If set to `NA` (default), no file will be saved. Recommended to end with `".png"` but might work with other extensions if they are compatible with [ggplot2::ggsave()].
 #' @param pixels_per_base `integer`. How large each box should be in pixels, if file output is turned on via setting `filename`. Corresponds to dpi of the exported image.\cr\cr If text is shown (i.e. `sequence_text_size` is not 0), needs to be fairly large otherwise text is blurry. Defaults to `100`.
 #'
 #' @return A ggplot object containing the full visualisation, or `NULL` if `return = FALSE`. It is often more useful to use `filename = "myfilename.png"`, because then the visualisation is exported at the correct aspect ratio.

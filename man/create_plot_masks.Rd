@@ -14,11 +14,11 @@ create_plot_masks(
 \arguments{
 \item{modification_locations_str}{\code{character}. A comma-separated string representing a condensed numerical vector (e.g. \code{"3,6,9,12"}, produced via \code{\link[=vector_to_string]{vector_to_string()}}) of the indices along the read at which modification was assessed. Indexing starts at 1.}
 
+\item{modification_probabilities_str}{\code{character}. A comma-separated string representing a condensed numerical vector (e.g. \code{"2,212,128,64"}, produced via \code{\link[=vector_to_string]{vector_to_string()}}) of the probability of modification as an 8-bit (0-255) integer for each base where modification was assessed.}
+
 \item{max_length}{\code{integer}. How long the output vector should be.}
 
 \item{sequence_length}{\code{integer}. How long the sequence itself is. If smaller than max_length, the remaining spaces will be filled with \code{0}s i.e. set to the background colour in \code{\link[=visualise_methylation]{visualise_methylation()}}.}
-
-\item{modification_probabilites_str}{\code{character}. A comma-separated string representing a condensed numerical vector (e.g. \code{"2,212,128,64"}, produced via \code{\link[=vector_to_string]{vector_to_string()}}) of the probability of modification as an 8-bit (0-255) integer for each base where modification was assessed.}
 }
 \value{
 \verb{numeric vector}. Vector of length \code{max_length} containing \code{1}s for non-assessed bases (e.g. non-CpG), \code{2}s for assessed bases (e.g. CpG), and \code{0} for squares that aren't bases (i.e. past the end of the sequence when \code{max_length > sequence_length}).

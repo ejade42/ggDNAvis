@@ -12,7 +12,7 @@
 #' bases on a linear scale from `low_colour` to `high_colour`.\cr\cr
 #' Clamping means that the endpoints of the colour gradient can be set some distance into the probability
 #' space e.g. with Nanopore > SAM probability values from 0-255, the default is to render 0 as fully blue
-#' (`#0000FF`), 255 as fully red (`#FF0000`), and values in-between linearly interpolated. However, clamping with
+#' (`#0000FF`), 255 as fully red (`#FF0000`), and values in between linearly interpolated. However, clamping with
 #' `low_clamp = 100` and `high_clamp = 200` would set *all probabilities up to 100* as fully blue,
 #' *all probabilities 200 and above* as fully red, and linearly interpolate only over the `100-200` range.\cr\cr
 #' A separate scalebar plot showing the colours corresponding to each probability, with any/no clamping values,
@@ -29,7 +29,7 @@
 #' @param high_clamp `integer`. The maximum probability above which all values are coloured `high_colour`. Defaults to `255` (i.e. no clamping, assuming Nanopore > SAM style modification calling where probabilities are 8-bit integers from 0 to 255).
 #' @param margin `numeric`. The size of the margin relative to the size of each base square. Defaults to `0.5` (half the side length of each base square).
 #' @param return `logical`. Boolean specifying whether this function should return the ggplot object, otherwise it will return `NULL`. Defaults to `TRUE`.
-#' @param filename `character`. Filename to which output should be saved. If set to `NA` (default), no file will be saved. Recommended to end with `".png"` but might work with other extensions if they are compatible with [ggsave()].
+#' @param filename `character`. Filename to which output should be saved. If set to `NA` (default), no file will be saved. Recommended to end with `".png"` but might work with other extensions if they are compatible with [ggplot2::ggsave()].
 #' @param pixels_per_base `integer`. How large each box should be in pixels, if file output is turned on via setting `filename`. Corresponds to dpi of the exported image. Defaults to `10`. Low values acceptable as currently this function does not write any text.
 #'
 #' @return A ggplot object containing the full visualisation, or `NULL` if `return = FALSE`. It is often more useful to use `filename = "myfilename.png"`, because then the visualisation is exported at the correct aspect ratio.
@@ -40,6 +40,9 @@ visualise_methylation <- function(modification_locations_col, modification_proba
     ## Validate arguments
     for (argument in list(modification_locations_col, modification_probabilities_col, sequence_lengths, background_colour, other_bases_colour, low_colour, high_colour, low_clamp, high_clamp, margin, return, filename, pixels_per_base)) {
         if (mean(is.null(argument)) != 0) {abort(paste("Argument", argument, "must not be null."), class = "argument_value_or_type")}
+    }
+    for (argument in list(background_colour, other_bases_colour, low_colour, high_colour, low_clamp, high_clamp, margin, return, filename, pixels_per_base)) {
+        if (length(argument) != 1) {abort(paste("Argument", argument, "must have length 1."), class = "argument_value_or_type")}
     }
     for (argument in list(modification_locations_col, modification_probabilities_col, sequence_lengths, background_colour, other_bases_colour, low_colour, high_colour, low_clamp, high_clamp, margin, return, pixels_per_base)) {
         if (mean(is.na(argument)) != 0) {abort(paste("Argument", argument, "must not be NA."), class = "argument_value_or_type")}
@@ -145,7 +148,7 @@ visualise_methylation <- function(modification_locations_col, modification_proba
 #' @param do_side_scale `logical`. Boolean specifying whether a smaller scalebar should be rendered on the right. Defaults to `FALSE`.\cr\cr I think it is unlikely anyone would want to use this, but the option is here. One potential usecase is that this scalebar shows the raw probability values (e.g. 0 to 255), whereas the x-axis is normalised to 0-1.
 #' @param side_scale_title `character`. The desired title for the right-hand scalebar, if turned on. Defaults to `NULL`.
 #'
-#' @return ggplot of the scalebar.\cr\cr Unlike the other `visualise_<>` functions in this package, does not directly export a png. This is because there are no squares that need to be rendered at a precise aspect ratio in this function. It can just be saved normally with [ggsave()] with any sensible combination of height and width.
+#' @return ggplot of the scalebar.\cr\cr Unlike the other `visualise_<>` functions in this package, does not directly export a png. This is because there are no squares that need to be rendered at a precise aspect ratio in this function. It can just be saved normally with [ggplot2::ggsave()] with any sensible combination of height and width.
 #' @export
 visualise_methylation_colour_scale <- function(low_colour = "blue", high_colour = "red", low_clamp = 0, high_clamp = 255, full_range = c(0, 255), precision = 10^3,
                                                background_colour = "white", x_axis_title = NULL, do_x_ticks = TRUE, do_side_scale = FALSE, side_scale_title = NULL) {
@@ -164,6 +167,11 @@ visualise_methylation_colour_scale <- function(low_colour = "blue", high_colour 
     }
     for (argument in list(do_x_ticks, do_side_scale)) {
         if (is.logical(argument) == FALSE) {abort(paste("Argument", argument, "must be logical/boolean"), class = "argument_value_or_type")}
+    }
+    for (argument in list(x_axis_title, side_scale_title)) {
+        if (mean(is.null(argument)) == 0 && mean(is.na(argument)) == 0) {
+            if (is.character(argument) == FALSE) {abort(paste("Argument", argument, "must be a character value, or NA/NULL."), class = "argument_value_or_type")}
+        }
     }
     if (length(full_range) != 2) {abort("Must provide two numeric values e.g. c(0, 255) as the full probability range", class = "argument_value_or_type")}
     if (mean(full_range == c(0, 255)) != 1 && mean(full_range == c(0, 1)) != 1) {
@@ -271,7 +279,7 @@ extract_methylation_from_dataframe <- function(modification_data,
 #' where modification was assessed.
 #'
 #' @param modification_locations_str `character`. A comma-separated string representing a condensed numerical vector (e.g. `"3,6,9,12"`, produced via [vector_to_string()]) of the indices along the read at which modification was assessed. Indexing starts at 1.
-#' @param modification_probabilites_str `character`. A comma-separated string representing a condensed numerical vector (e.g. `"2,212,128,64"`, produced via [vector_to_string()]) of the probability of modification as an 8-bit (0-255) integer for each base where modification was assessed.
+#' @param modification_probabilities_str `character`. A comma-separated string representing a condensed numerical vector (e.g. `"2,212,128,64"`, produced via [vector_to_string()]) of the probability of modification as an 8-bit (0-255) integer for each base where modification was assessed.
 #' @param max_length `integer`. How long the output vector should be.
 #'
 #' @return `numeric vector`. A vector of length `max_length` indicating the probability of methylation at each index along the read - 0 where methylation was not assessed, and probability from 0-255 where methylation was assessed.
@@ -321,7 +329,7 @@ convert_modification_to_number_vector <- function(modification_locations_str, mo
 #' (e.g. CpG). This allows controlling the appearance of these categories independently.
 #'
 #' @param modification_locations_str `character`. A comma-separated string representing a condensed numerical vector (e.g. `"3,6,9,12"`, produced via [vector_to_string()]) of the indices along the read at which modification was assessed. Indexing starts at 1.
-#' @param modification_probabilites_str `character`. A comma-separated string representing a condensed numerical vector (e.g. `"2,212,128,64"`, produced via [vector_to_string()]) of the probability of modification as an 8-bit (0-255) integer for each base where modification was assessed.
+#' @param modification_probabilities_str `character`. A comma-separated string representing a condensed numerical vector (e.g. `"2,212,128,64"`, produced via [vector_to_string()]) of the probability of modification as an 8-bit (0-255) integer for each base where modification was assessed.
 #' @param max_length `integer`. How long the output vector should be.
 #' @param sequence_length `integer`. How long the sequence itself is. If smaller than max_length, the remaining spaces will be filled with `0`s i.e. set to the background colour in [visualise_methylation()].
 #'

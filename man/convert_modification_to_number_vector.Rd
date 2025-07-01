@@ -13,9 +13,9 @@ convert_modification_to_number_vector(
 \arguments{
 \item{modification_locations_str}{\code{character}. A comma-separated string representing a condensed numerical vector (e.g. \code{"3,6,9,12"}, produced via \code{\link[=vector_to_string]{vector_to_string()}}) of the indices along the read at which modification was assessed. Indexing starts at 1.}
 
-\item{max_length}{\code{integer}. How long the output vector should be.}
+\item{modification_probabilities_str}{\code{character}. A comma-separated string representing a condensed numerical vector (e.g. \code{"2,212,128,64"}, produced via \code{\link[=vector_to_string]{vector_to_string()}}) of the probability of modification as an 8-bit (0-255) integer for each base where modification was assessed.}
 
-\item{modification_probabilites_str}{\code{character}. A comma-separated string representing a condensed numerical vector (e.g. \code{"2,212,128,64"}, produced via \code{\link[=vector_to_string]{vector_to_string()}}) of the probability of modification as an 8-bit (0-255) integer for each base where modification was assessed.}
+\item{max_length}{\code{integer}. How long the output vector should be.}
 }
 \value{
 \verb{numeric vector}. A vector of length \code{max_length} indicating the probability of methylation at each index along the read - 0 where methylation was not assessed, and probability from 0-255 where methylation was assessed.
