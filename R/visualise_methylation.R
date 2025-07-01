@@ -28,11 +28,11 @@
 #' @param low_clamp `integer`. The minimum probability below which all values are coloured `low_colour`. Defaults to `0` (i.e. no clamping). To specify a proportion probability in 8-bit form, multiply by 255 e.g. to low-clamp at 30% probability, set this to `0.3*255`.
 #' @param high_clamp `integer`. The maximum probability above which all values are coloured `high_colour`. Defaults to `255` (i.e. no clamping, assuming Nanopore > SAM style modification calling where probabilities are 8-bit integers from 0 to 255).
 #' @param margin `numeric`. The size of the margin relative to the size of each base square. Defaults to `0.5` (half the side length of each base square).
-#' @param return `logical`. Boolean specifying whether this function should return the ggplot object, otherwise it will return `NULL`. Defaults to `TRUE`.
+#' @param return `logical`. Boolean specifying whether this function should return the ggplot object, otherwise it will return `invisible(NULL)`. Defaults to `TRUE`.
 #' @param filename `character`. Filename to which output should be saved. If set to `NA` (default), no file will be saved. Recommended to end with `".png"` but might work with other extensions if they are compatible with [ggplot2::ggsave()].
 #' @param pixels_per_base `integer`. How large each box should be in pixels, if file output is turned on via setting `filename`. Corresponds to dpi of the exported image. Defaults to `10`. Low values acceptable as currently this function does not write any text.
 #'
-#' @return A ggplot object containing the full visualisation, or `NULL` if `return = FALSE`. It is often more useful to use `filename = "myfilename.png"`, because then the visualisation is exported at the correct aspect ratio.
+#' @return A ggplot object containing the full visualisation, or `invisible(NULL)` if `return = FALSE`. It is often more useful to use `filename = "myfilename.png"`, because then the visualisation is exported at the correct aspect ratio.
 #' @export
 visualise_methylation <- function(modification_locations_col, modification_probabilities_col, sequence_lengths,
                                   background_colour = "white", other_bases_colour = "grey", low_colour = "blue", high_colour = "red", low_clamp = 0, high_clamp = 255,
@@ -120,7 +120,7 @@ visualise_methylation <- function(modification_locations_col, modification_proba
     if (return == TRUE) {
         return(result)
     }
-    return(NULL)
+    return(invisible(NULL))
 }
 
 
@@ -268,7 +268,7 @@ extract_methylation_from_dataframe <- function(modification_data,
 
 
 
-#' Convert string-ified modification probabilities and locations to a single vector of probabilities ([visualise_methylation] helper)
+#' Convert string-ified modification probabilities and locations to a single vector of probabilities ([visualise_methylation()] helper)
 #'
 #' Takes modification locations (indices along the read signifying bases at which
 #' modification probability was assessed) and modification probabilities (the probability
@@ -316,7 +316,7 @@ convert_modification_to_number_vector <- function(modification_locations_str, mo
 }
 
 
-#' Create a masking layer for methylation visualisation ([visualise_methylation] helper)
+#' Create a masking layer for methylation visualisation ([visualise_methylation()] helper)
 #'
 #' Takes modification locations (indices along the read signifying bases at which
 #' modification probability was assessed) and modification probabilities (the probability

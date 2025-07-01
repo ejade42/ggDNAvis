@@ -2,7 +2,7 @@
 % Please edit documentation in R/visualise_single_sequence.R
 \name{convert_sequences_to_annotations}
 \alias{convert_sequences_to_annotations}
-\title{Convert a vector of sequences to a dataframe for plotting sequence contents and index annotations (\link{visualise_single_sequence} helper)}
+\title{Convert a vector of sequences to a dataframe for plotting sequence contents and index annotations (\code{\link[=visualise_single_sequence]{visualise_single_sequence()}} helper)}
 \usage{
 convert_sequences_to_annotations(
   sequences,

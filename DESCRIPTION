@@ -9,6 +9,7 @@ Imports:
     ggnewscale,
     dplyr,
     tidyr,
+    stringr,
     raster,
     rlang,
     magick

@@ -22,6 +22,7 @@ sequence_colour_palettes
 A collection of colour palettes for use with \code{\link[=visualise_single_sequence]{visualise_single_sequence()}}
 and \code{\link[=visualise_many_sequences]{visualise_many_sequences()}}.\cr\cr Each is a character vector of 4 colours,
 corresponding to A, C, G, and T/U in that order.\cr\cr To use inside the visualisation
-functions, set \verb{sequence_colours = sequence_colour_palettes$<palette_name>}
+functions, set \verb{sequence_colours = sequence_colour_palettes$<palette_name>}\cr\cr
+Generation code is available at \code{data-raw/sequence_colour_palettes.R}
 }
 \keyword{datasets}

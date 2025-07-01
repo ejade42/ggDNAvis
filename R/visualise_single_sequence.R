@@ -18,11 +18,11 @@
 #' @param index_annotation_interval `integer`. The frequency at which numbers should be placed underneath indicating base index, starting counting from the leftmost base in each row. Defaults to `15` (every 15 bases along each row).\cr\cr Recommended to make this a factor/divisor of the line wrapping length (meaning the final base in each line is annotated), otherwise the numbering interval resetting at the beginning of each row will result in uneven intervals at each line break.\cr\cr Set to `0` to turn off annotations (preferable over using `index_annotation_size = 0`).
 #' @param index_annotations_above `logical`. Whether index annotations should go above (`TRUE`, default) or below (`FALSE`) each line of sequence.
 #' @param index_annotation_vertical_position `numeric`. How far annotation numbers should be rendered above (if `index_annotations_above = TRUE`) or below (if `index_annotations_above = FALSE`) each base. Defaults to `1/3`.\cr\cr Not recommended to change at all. Strongly discouraged to set below 0 or above 1.
-#' @param return `logical`. Boolean specifying whether this function should return the ggplot object, otherwise it will return `NULL`. Defaults to `TRUE`.
+#' @param return `logical`. Boolean specifying whether this function should return the ggplot object, otherwise it will return `invisible(NULL)`. Defaults to `TRUE`.
 #' @param filename `character`. Filename to which output should be saved. If set to `NA` (default), no file will be saved. Recommended to end with `".png"` but might work with other extensions if they are compatible with [ggplot2::ggsave()].
 #' @param pixels_per_base `integer`. How large each box should be in pixels, if file output is turned on via setting `filename`. Corresponds to dpi of the exported image. Large values recommended because text needs to be legible when rendered significantly smaller than a box. Defaults to `100`.
 #'
-#' @return A ggplot object containing the full visualisation, or `NULL` if `return = FALSE`. It is often more useful to use `filename = "myfilename.png"`, because then the visualisation is exported at the correct aspect ratio.
+#' @return A ggplot object containing the full visualisation, or `invisible(NULL)` if `return = FALSE`. It is often more useful to use `filename = "myfilename.png"`, because then the visualisation is exported at the correct aspect ratio.
 #' @export
 visualise_single_sequence <- function(sequence, sequence_colours = sequence_colour_palettes$ggplot_style, background_colour = "white",
                                       line_wrapping = 75, spacing = 1, margin = 0.5, sequence_text_colour = "black", sequence_text_size = 16,
@@ -135,7 +135,7 @@ visualise_single_sequence <- function(sequence, sequence_colours = sequence_colo
     if (return == TRUE) {
         return(result)
     }
-    return(NULL)
+    return(invisible(NULL))
 }
 
 
@@ -143,7 +143,7 @@ visualise_single_sequence <- function(sequence, sequence_colours = sequence_colo
 ## "Missing" functions are likely in dna_tools.R as they are common to multiple visualisations
 
 
-#' Split a single input sequence into a vector of "lines" for visualisation ([visualise_single_sequence] helper)
+#' Split a single input sequence into a vector of "lines" for visualisation ([visualise_single_sequence()] helper)
 #'
 #' Takes a single input sequence and an integer line length, and splits the input
 #' sequence into lines of that length (with the last line potentially being shorter). \cr\cr
@@ -208,7 +208,7 @@ convert_input_seq_to_sequence_list <- function(input_seq, line_length, spacing =
 
 
 
-#' Convert a vector of sequences to a dataframe for plotting sequence contents and index annotations ([visualise_single_sequence] helper)
+#' Convert a vector of sequences to a dataframe for plotting sequence contents and index annotations ([visualise_single_sequence()] helper)
 #'
 #' Takes the sequence list output from [convert_input_seq_to_sequence_list()] and creates a dataframe
 #' specifying x and y coordinates and the character to plot at each coordinate. This applies to both

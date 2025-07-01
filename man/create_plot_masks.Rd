@@ -2,7 +2,7 @@
 % Please edit documentation in R/visualise_methylation.R
 \name{create_plot_masks}
 \alias{create_plot_masks}
-\title{Create a masking layer for methylation visualisation (\link{visualise_methylation} helper)}
+\title{Create a masking layer for methylation visualisation (\code{\link[=visualise_methylation]{visualise_methylation()}} helper)}
 \usage{
 create_plot_masks(
   modification_locations_str,

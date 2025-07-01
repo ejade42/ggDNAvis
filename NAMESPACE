@@ -2,6 +2,7 @@
 
 export(convert_base_to_number)
 export(convert_input_seq_to_sequence_list)
+export(convert_locations_to_MM_vector)
 export(convert_modification_to_number_vector)
 export(convert_sequence_to_numbers)
 export(convert_sequences_to_annotations)
@@ -26,4 +27,5 @@ importFrom(magick,image_compare)
 importFrom(magick,image_read)
 importFrom(rlang,abort)
 importFrom(rlang,warn)
+importFrom(stringr,str_locate_all)
 importFrom(tidyr,replace_na)

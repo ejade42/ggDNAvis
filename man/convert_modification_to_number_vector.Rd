@@ -2,7 +2,7 @@
 % Please edit documentation in R/visualise_methylation.R
 \name{convert_modification_to_number_vector}
 \alias{convert_modification_to_number_vector}
-\title{Convert string-ified modification probabilities and locations to a single vector of probabilities (\link{visualise_methylation} helper)}
+\title{Convert string-ified modification probabilities and locations to a single vector of probabilities (\code{\link[=visualise_methylation]{visualise_methylation()}} helper)}
 \usage{
 convert_modification_to_number_vector(
   modification_locations_str,

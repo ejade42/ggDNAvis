@@ -1,20 +1,3 @@
-## Code to randomly generate methylation probabilities for example data
-if (FALSE) {
-    e <- example_many_sequences
-    set.seed(1234)
-    for (i in 1:nrow(e)) {
-        locations <- numeric()
-        for (j in 1:nchar(e[i, "sequence"])) {
-            if (substr(e[i, "sequence"], j, j) == "C") {
-                locations <- c(locations, j)
-            }
-        }
-        e[i, "methylation_locations"] <- vector_to_string(locations)
-        e[i, "methylation_probabilities"] <- vector_to_string(round(runif(length(locations), min = 0, max = 255)))
-    }
-}
-
-
 root <- "test_plot_images/"
 reference <- "reference_images/"
 acceptable_distortion <- 0.001

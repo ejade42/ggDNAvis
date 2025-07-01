@@ -1,0 +1,39 @@
+## Set up basic dataframe
+example_many_sequences <- data.frame(
+    family = c("Family 1", "Family 1", "Family 1", "Family 1", "Family 1", "Family 1", "Family 1", "Family 1", "Family 1", "Family 1", "Family 2", "Family 2", "Family 2", "Family 2", "Family 3", "Family 3", "Family 3", "Family 3", "Family 3", "Family 3", "Family 3", "Family 3", "Family 3"),
+    individual = c("F1-1", "F1-1", "F1-1", "F1-1", "F1-1", "F1-2", "F1-2", "F1-3", "F1-3", "F1-3", "F2-1", "F2-2", "F2-2", "F2-2", "F3-1", "F3-1", "F3-2", "F3-2", "F3-2", "F3-3", "F3-4", "F3-4", "F3-4"),
+    read = c("F1-1a", "F1-1b", "F1-1c", "F1-1d", "F1-1e", "F1-2a", "F1-2b", "F1-3a", "F1-3b", "F1-3c", "F2-1a", "F2-2a", "F2-2b", "F2-2c", "F3-1a", "F3-1b", "F3-2a", "F3-2b", "F3-2c", "F3-3a", "F3-4a", "F3-4b", "F3-4c"),
+    sequence = c("GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGC", "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGC", "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGC", "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGC", "GGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGC", "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGAGGCGGCGGAGGAGGAGGCGGC", "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGAGGCGGCGGAGGAGGAGGCGGC", "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGC", "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGC", "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGAGGAGGCGGC", "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGC", "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGC", "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGC", "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGC", "GGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGC", "GGCGGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGC", "GGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGC", "GGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGC", "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGCGGC", "GGCGGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGC", "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGC", "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGCGGC", "GGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGC"),
+    sequence_length = c(99, 60, 84, 78, 90, 60, 66, 84, 78, 81, 90, 81, 84, 87, 93, 93, 90, 87, 84, 93, 93, 78, 87)
+)
+
+## Randomly generate methylation information
+set.seed(1234)
+for (i in 1:nrow(example_many_sequences)) {
+    locations <- numeric()
+    for (j in 1:nchar(example_many_sequences[i, "sequence"])) {
+        if (substr(example_many_sequences[i, "sequence"], j, j) == "C") {
+            locations <- c(locations, j)
+        }
+    }
+    example_many_sequences[i, "methylation_locations"] <- vector_to_string(locations)
+    example_many_sequences[i, "methylation_probabilities"] <- vector_to_string(round(runif(length(locations), min = 0, max = 255)))
+}
+
+## Randomly generate hydroxymethylation information, such that
+## methylation + hydroxymethylation is never greater than 100% (255)
+set.seed(1234)
+example_many_sequences$hydroxymethylation_locations <- example_many_sequences$methylation_locations
+for (i in 1:nrow(example_many_sequences)) {
+    locations <- string_to_vector(example_many_sequences[i, "hydroxymethylation_locations"])
+    probabilities <- numeric()
+    for (j in 1:length(locations)) {
+        remaining_probability <- 255 - string_to_vector(example_many_sequences[i, "methylation_probabilities"])[j]
+        print(remaining_probability)
+        probabilities <- c(probabilities, round(runif(1, min = 0, max = remaining_probability)))
+    }
+    example_many_sequences[i, "hydroxymethylation_probabilities"] <- vector_to_string(probabilities)
+}
+
+usethis::use_data(example_many_sequences, overwrite = TRUE)
+
