@@ -29,11 +29,21 @@ for (i in 1:nrow(example_many_sequences)) {
     probabilities <- numeric()
     for (j in 1:length(locations)) {
         remaining_probability <- 255 - string_to_vector(example_many_sequences[i, "methylation_probabilities"])[j]
-        print(remaining_probability)
         probabilities <- c(probabilities, round(runif(1, min = 0, max = remaining_probability)))
     }
     example_many_sequences[i, "hydroxymethylation_probabilities"] <- vector_to_string(probabilities)
 }
 
-usethis::use_data(example_many_sequences, overwrite = TRUE)
+## Randomly generate quality scores
+set.seed(1234)
+for (i in 1:nrow(example_many_sequences)) {
+    sequence  <- example_many_sequences[i, "sequence"]
+    qualities <- pmin(pmax(round(rnorm(nchar(sequence), mean = 20, sd = 10)), 0), 40)
+    q_scores  <- fastq_quality_scores[(qualities+1)]
+    example_many_sequences[i, "quality"] <- paste(q_scores, collapse = "")
+}
 
+## Reorder columns
+example_many_sequences <- example_many_sequences[,c("family", "individual", "read", "sequence", "sequence_length", "quality", "methylation_locations", "methylation_probabilities", "hydroxymethylation_locations", "hydroxymethylation_probabilities")]
+
+usethis::use_data(example_many_sequences, overwrite = TRUE)

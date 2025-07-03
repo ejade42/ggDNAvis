@@ -7,17 +7,18 @@
 \format{
 \subsection{\code{example_many_sequences}}{
 
-A dataframe with 23 rows and 9 columns:
+A dataframe with 23 rows and 10 columns:
 \describe{
 \item{family}{Participant family}
 \item{individual}{Participant ID}
 \item{read}{Unique read ID}
 \item{sequence}{DNA sequence of the read}
 \item{sequence_length}{Length (nucleotides) of the read}
+\item{quality}{FASTQ quality scores for the read. Each character represents a score from 0 to 40 - see \code{\link{fastq_quality_scores}}.\cr\cr These values are made up via \code{pmin(pmax(round(rnorm(n, mean = 20, sd = 10)), 0), 40)} i.e. sampled from a normal distribution with mean 20 and standard deviation 10, then rounded to integers between 0 and 40 (inclusive) - see \code{example_many_sequences.R}}
 \item{methylation_locations}{Indices along the read (starting at 1) at which methylation probability was assessed i.e. CpG sites. Stored as a single character value per read, condensed from a numeric vector via \code{\link[=vector_to_string]{vector_to_string()}}.}
-\item{methylation_probabilities}{Probability of methylation (8-bit integer i.e. 0-255) for each assessed base. Stored as a single character value per read, condensed from a numeric vector via \code{\link[=vector_to_string]{vector_to_string()}}. These values are made up via \code{round(runif(n, min = 0, max = 255))} - see \code{example_many_sequences.R}}
+\item{methylation_probabilities}{Probability of methylation (8-bit integer i.e. 0-255) for each assessed base. Stored as a single character value per read, condensed from a numeric vector via \code{\link[=vector_to_string]{vector_to_string()}}.\cr\cr These values are made up via \code{round(runif(n, min = 0, max = 255))} - see \code{example_many_sequences.R}}
 \item{hydroxymethylation_locations}{Indices along the read (starting at 1) at which hydroxymethylation probability was assessed i.e. CpG sites. Stored as a single character value per read, condensed from a numeric vector via \code{\link[=vector_to_string]{vector_to_string()}}.}
-\item{hydroxymethylation_probabilities}{Probability of hydroxymethylation (8-bit integer i.e. 0-255) for each assessed base. Stored as a single character value per read, condensed from a numeric vector via \code{\link[=vector_to_string]{vector_to_string()}}. These values are made up via \code{round(runif(n, min = 0, max = 255))} - see \code{example_many_sequences.R}}
+\item{hydroxymethylation_probabilities}{Probability of hydroxymethylation (8-bit integer i.e. 0-255) for each assessed base. Stored as a single character value per read, condensed from a numeric vector via \code{\link[=vector_to_string]{vector_to_string()}}.\cr\cr These values are made up via \code{round(runif(n, min = 0, max = 255 - this_base_methylation_probability))} such that the summed methylation and hydroxymethylation probability never exceeds 255 (100\%) - see \code{example_many_sequences.R}}
 }
 }
 }

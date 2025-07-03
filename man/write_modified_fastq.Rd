@@ -9,7 +9,7 @@ write_modified_fastq(
   filename = NA,
   read_id_colname = "read",
   sequence_colname = "sequence",
-  quality_colname = NA,
+  quality_colname = "quality",
   locations_colnames = c("hydroxymethylation_locations", "methylation_locations"),
   probabilities_colnames = c("hydroxymethylation_probabilities",
     "methylation_probabilities"),
@@ -26,7 +26,7 @@ write_modified_fastq(
 
 \item{sequence_colname}{\code{character}. The name of the column within the dataframe that contains the DNA sequence for each read. Defaults to \code{"sequence"}.\cr\cr The values within this column must be DNA sequences e.g. \code{"GGCGGC"}.}
 
-\item{quality_colname}{\code{character}. The name of the column within the dataframe that contains the FASTQ quality scores. If scores are not known, can be set to \code{NA} (default) to fill in quality with \code{"B"}.\cr\cr If not \code{NA}, must correspond to a column where the values are the FASTQ quality scores e.g. \code{"105;<<;:998+***,044.-"}.}
+\item{quality_colname}{\code{character}. The name of the column within the dataframe that contains the FASTQ quality scores for each read. Defaults to \code{"quality"}. If scores are not known, can be set to \code{NA} to fill in quality with \code{"B"}.\cr\cr If not \code{NA}, must correspond to a column where the values are the FASTQ quality scores e.g. \verb{"$12\\">/2C;4:9F8:816E,6C3*,"}.}
 
 \item{locations_colnames}{\verb{character vector}. Vector of the names of all columns within the dataframe that contain modification locations. Defaults to \code{c("hydroxymethylation_locations", "methylation_locations")}.\cr\cr The values within these columns must be comma-separated strings of indices at which modification was assessed, as produced by \code{\link[=vector_to_string]{vector_to_string()}}, e.g. \code{"3,6,9,12"}.}
 
@@ -41,7 +41,7 @@ write_modified_fastq(
 }
 \description{
 This function takes a dataframe containing DNA modification information
-(e.g. produced by \code{\link[=insert_function_here]{insert_function_here()}}) and writes it back to modified
+(e.g. produced by \code{\link[=read_modified_fastq]{read_modified_fastq()}}) and writes it back to modified
 FASTQ, equivalent to what would be produced via \verb{samtools fastq -T MM,ML}.\cr\cr
 Arguments give the names of columns within the dataframe from which to read.\cr\cr
 If multiple types of modification have been assessed (e.g. both methylation
@@ -53,5 +53,5 @@ the \code{quality} argument can be set to \code{NA} to fill in quality scores wi
 is the same behaviour as SAMtools v1.21 when converting FASTA to SAM/BAM then FASTQ.
 I don't really know why SAMtools decided the default quality should be "B" but there
 was probably a reason so I have stuck with that.\cr\cr
-Default arguments are set up to work with the included \code{example_many_sequences} data.
+Default arguments are set up to work with the included \code{\link{example_many_sequences}} data.
 }

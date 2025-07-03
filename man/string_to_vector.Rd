@@ -2,16 +2,18 @@
 % Please edit documentation in R/dna_tools.R
 \name{string_to_vector}
 \alias{string_to_vector}
-\title{Split a \code{","}-joined string back to a numerical vector (generic \code{ggDNAvis} helper)}
+\title{Split a \code{","}-joined string back to a vector (generic \code{ggDNAvis} helper)}
 \usage{
-string_to_vector(string)
+string_to_vector(string, type = "numeric")
 }
 \arguments{
-\item{string}{\code{character}. A comma-separated string (e.g. \code{"1,2,3"}) to convert back to a numeric vector.}
+\item{string}{\code{character}. A comma-separated string (e.g. \code{"1,2,3"}) to convert back to a vector.}
+
+\item{type}{\code{character}. The type of the vector to be returned i.e. \code{"numeric"} (default), \code{"character"}, or \code{"logical"}.}
 }
 \value{
-\verb{numeric vector}. The same numbers but as a numeric vector (e.g. \code{c(1,2,3)}).
+\verb{<type> vector}. The resulting vector (e.g. \code{c(1,2,3)}).
 }
 \description{
-Takes a string (character) produced by \code{\link[=vector_to_string]{vector_to_string()}} and recreates the numeric vector
+Takes a string (character) produced by \code{\link[=vector_to_string]{vector_to_string()}} and recreates the vector
 }

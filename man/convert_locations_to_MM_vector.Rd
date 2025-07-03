@@ -24,5 +24,6 @@ in the format of the SAM/BAM MM tags. The MM tag defines a particular target bas
 \code{C} for methylation), and then stores the number of skipped instances of that base
 between sites where modification was assessed. In practice, this often means counting the
 number of non-CpG \code{C}s in between CpG \code{C}s. In a \code{GGC} repeat, this should be a bunch of \code{0}s
-as every \code{C} is in a CpG, but unique sequence will have many non-CpG \code{C}s.
+as every \code{C} is in a CpG, but unique sequence will have many non-CpG \code{C}s.\cr\cr
+This function is reversed by \code{\link[=convert_MM_vector_to_locations]{convert_MM_vector_to_locations()}}.
 }

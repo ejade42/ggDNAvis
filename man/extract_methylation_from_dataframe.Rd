@@ -15,7 +15,7 @@ extract_methylation_from_dataframe(
 )
 }
 \arguments{
-\item{modification_data}{\code{dataframe}. A dataframe that must contain columns for methylation locations, methylation probabilities, and sequence length for each read. The former two should be condensed strings as produced by \code{\link[=vector_to_string]{vector_to_string()}} e.g. \code{"1,2,3,4"}. The latter should be integer.\cr\cr See \link{example_many_sequences} for an example of a compatible dataframe.}
+\item{modification_data}{\code{dataframe}. A dataframe that must contain columns for methylation locations, methylation probabilities, and sequence length for each read. The former two should be condensed strings as produced by \code{\link[=vector_to_string]{vector_to_string()}} e.g. \code{"1,2,3,4"}. The latter should be integer.\cr\cr See \code{\link{example_many_sequences}} for an example of a compatible dataframe.}
 
 \item{locations_colname}{\code{character}. The name of the column within the input dataframe that contains methylation/modification location information. Defaults to \code{"methylation_locations"}.\cr\cr Values within this column must be a comma-separated string representing a condensed numerical vector (e.g. \code{"3,6,9,12"}, produced via \code{\link[=vector_to_string]{vector_to_string()}}) of the indices along the read at which modification was assessed. Indexing starts at 1.}
 
@@ -44,5 +44,5 @@ a character vector of such strings (e.g. \code{c("3,6,9,12", "1,2,3,4")}).\cr\cr
 This function calls \code{\link[=extract_and_sort_sequences]{extract_and_sort_sequences()}} on each of these three columns and returns
 a list of vectors stored in \verb{$locations}, \verb{$probabilities}, and \verb{$lengths}.
 These can then be used as input for \code{\link[=visualise_methylation]{visualise_methylation()}}. \cr\cr
-Default arguments are set up to work with the included \link{example_many_sequences} data.
+Default arguments are set up to work with the included \code{\link{example_many_sequences}} data.
 }

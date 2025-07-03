@@ -2,11 +2,65 @@ root <- "test_output_data/"
 reference <- "reference_output_data/"
 
 
+## READING FROM FASTQ
+## -------------------------------------------------------------------------------------
+test_that("helper function for interpreting MM vector works", {
+    expect_equal(convert_MM_vector_to_locations("GGCGGCGGCGGC", c(0, 0, 1), "C"),
+                 c(3, 6, 12))
+    expect_equal(convert_MM_vector_to_locations("GGCGGCGGCGGC", c(0, 1, 0), "C"),
+                 c(3, 9, 12))
+    expect_equal(convert_MM_vector_to_locations("GGCGGCGGCGGC", c(0, 0, 0, 0), "C"),
+                 c(3, 6, 9, 12))
+    expect_equal(convert_MM_vector_to_locations("GGCGGCGGCGGC", c(0, 0, 0, 0, 0, 0, 0, 0), "G"),
+                 c(1, 2, 4, 5, 7, 8, 10, 11))
+    expect_equal(convert_MM_vector_to_locations("GGCGGCGGCGGC", numeric(), "A"),
+                 numeric())
+    expect_equal(convert_MM_vector_to_locations("GGCGGCGGCGGC", numeric(), "C"),
+                 numeric())
+    expect_warning(expect_equal(convert_MM_vector_to_locations("GGCGGCGGCGGC", c(0, 0, 0, 0, 0, 0, 0, 0), "Q"),
+                                as.numeric(c(NA, NA, NA, NA, NA, NA, NA, NA))), class = "will_produce_NA")
+    expect_warning(expect_equal(convert_MM_vector_to_locations("GGCGGCGGCGGC", c(0, 0, 0, 0, 0, 0, 0, 0), "A"),
+                                as.numeric(c(NA, NA, NA, NA, NA, NA, NA, NA))), class = "will_produce_NA")
+    expect_warning(expect_equal(convert_MM_vector_to_locations("GGCGGCGGCGGC", c(0), "A"),
+                                as.numeric(c(NA))), class = "will_produce_NA")
+    expect_warning(expect_equal(convert_MM_vector_to_locations("GGCGGCGGCGGC", c(0, 0, 0, 0, 0), "C"),
+                   c(3, 6, 9, 12, NA)), class = "will_produce_NA")
+    expect_warning(expect_equal(convert_MM_vector_to_locations("GGCGGCGGCGGC", c(0, 2, 0), "C"),
+                   c(3, 12, NA)), class = "will_produce_NA")
+    expect_warning(expect_equal(convert_MM_vector_to_locations("GGCGGC", c(0, 0, 0), "C"),
+                                c(3, 6, NA)), class = "will_produce_NA")
+    expect_equal(convert_MM_vector_to_locations("GGCGGC", c(0, 0, 0), "G"),
+                 c(1, 2, 4))
+    expect_warning(expect_equal(convert_MM_vector_to_locations("GGC", c(0, 0, 0), "C"),
+                                c(3, NA, NA)), class = "will_produce_NA")
+    expect_warning(expect_equal(convert_MM_vector_to_locations("GGC", c(0, 0, 0), "A"),
+                                as.numeric(c(NA, NA, NA))), class = "will_produce_NA")
+    expect_warning(expect_equal(convert_MM_vector_to_locations("GGC", c(0, 0, 0), "G"),
+                                c(1, 2, NA)), class = "will_produce_NA")
+    expect_warning(expect_equal(convert_MM_vector_to_locations("GGCGGCGGC", c(5), "C"),
+                                as.numeric(c(NA))), class = "will_produce_NA")
+    expect_warning(expect_equal(convert_MM_vector_to_locations("GGCGGCGGC", c(5, 0), "C"),
+                                as.numeric(c(NA, NA))), class = "will_produce_NA")
+})
+
+
+## -------------------------------------------------------------------------------------
+
+
+
+
+
+
+
 ## WRITING TO FASTQ
 ## -------------------------------------------------------------------------------------
 test_that("writing modification info to fastq works", {
     filename <- "example_many_sequences.fastq"
     write_modified_fastq(example_many_sequences, paste0(root, filename))
+    expect_equal(readLines(paste0(root, filename)), readLines(paste0(reference, filename)))
+
+    filename <- "example_many_sequences_no_quality.fastq"
+    write_modified_fastq(example_many_sequences, paste0(root, filename), quality_colname = NA)
     expect_equal(readLines(paste0(root, filename)), readLines(paste0(reference, filename)))
 })
 

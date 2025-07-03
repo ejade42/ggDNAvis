@@ -2,17 +2,17 @@
 % Please edit documentation in R/dna_tools.R
 \name{vector_to_string}
 \alias{vector_to_string}
-\title{Join a numeric vector into a comma-separated string (generic \code{ggDNAvis} helper)}
+\title{Join a vector into a comma-separated string (generic \code{ggDNAvis} helper)}
 \usage{
 vector_to_string(vector)
 }
 \arguments{
-\item{vector}{\verb{numeric vector}. A numeric vector (e.g. \code{c(1,2,3)}) to convert to a string.}
+\item{vector}{\code{vector}. A vector (e.g. \code{c(1,2,3)}) to convert to a string.}
 }
 \value{
 \code{character}. The same vector but as a comma-separated string (e.g. \code{"1,2,3"}).
 }
 \description{
-Takes a numeric vector and condenses it into a single string by joining items with \code{","}.
+Takes a vector and condenses it into a single string by joining items with \code{","}.
 Reversed by \code{\link[=string_to_vector]{string_to_vector()}}.
 }
