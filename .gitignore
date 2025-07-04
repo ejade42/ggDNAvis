@@ -4,3 +4,4 @@
 tests/testthat/_snaps
 tests/testthat/test_plot_images
 tests/testthat/test_output_data
+tests/testthat/reference_images_original

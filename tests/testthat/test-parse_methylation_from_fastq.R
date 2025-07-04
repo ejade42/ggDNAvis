@@ -15,7 +15,7 @@ test_that("reading modification information from FASTQ works", {
 })
 
 test_that("reading modification information from FASTQ works with altered types", {
-    filename <- "example_many_sequences_altered_modification_types.fastq"
+    filename <- "example_many_sequences_altered_modification.fastq"
     test_02  <- read_modified_fastq(paste0(reference, filename))
     expect_equal(colnames(test_02), c("read", "sequence", "sequence_length", "quality", "modification_types", "C+h?_locations", "C+h?_probabilities", "C+m?_locations", "C+m?_probabilities", "C+x?_locations", "C+x?_probabilities", "C+y?_locations", "C+y?_probabilities"))
     expect_equal(nrow(test_02), 23)

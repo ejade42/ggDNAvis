@@ -2,3 +2,9 @@
 ^\.Rproj\.user$
 ^LICENSE\.md$
 ^data-raw$
+^tests/testthat/reference_images_original$
+^tests/testthat/test_plot_images/*.png$
+^tests/testthat/test_plot_images/*.pNg$
+^tests/testthat/test_plot_images/*.PNG$
+^tests/testthat/test_plot_images/*.jpg$
+^tests/testthat/test_output_data/*.fastq$
