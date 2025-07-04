@@ -7,7 +7,52 @@
 ## READING FROM FASTQ
 ## -------------------------------------------------------------------------------------
 
+#' Read modification information from modified FASTQ
+#'
+#' This function reads a modified FASTQ file (e.g. created by `samtools fastq -T MM,ML`
+#' from a BAM basecalled with a modification-capable model in Dorado or Guppy) to a dataframe.\cr\cr
+#' By default, the dataframe contains columns for unique read id (`read`), sequence (`sequence`),
+#' sequence length (`sequence_length`), quality (`quality`), comma-separated (via [vector_to_string()])
+#' modification types present in each read (`modification_types`), and for each modification type,
+#' a column of comma-separated modification locations (`<type>_locations`) and
+#' a column of comma-separated modification probabilities (`<type>_probabilities`).\cr\cr
+#' Modification locations are the indices along the read at which modification was assessed
+#' e.g. a 3 indicates that the third base in the read was assessed for modifications of the given type.
+#' Modification probabilities are the probability that the given modification is present, given as
+#' an integer from 0-255 where integer \eqn{N} represents the probability space from \eqn{\frac{N}{256}}
+#' to \eqn{\frac{N+1}{256}}.\cr\cr
+#' To extract the numbers from these columns as numeric vectors to analyse, use [`string_to_vector()`] e.g.
+#' ``list_of_locations <- lapply(test_01$`C+h?_locations`, string_to_vector)``. Be aware that the SAM
+#' modification types often contain special characters, meaning the colname may need to be enclosed in
+#' backticks as in this example. Alternatively, use [extract_methylation_from_dataframe()] to
+#' create a list of locations, probabilities, and lengths ready for visualisation in
+#' [visualise_methylation()]. This works with any modification type extracted in this function,
+#' just provide the relevant colname when calling [extract_methylation_from_dataframe()].\cr\cr
+#' Optionally (by specifying `debug = TRUE`), the dataframe will also contain columns of
+#' the raw MM and ML tags (`<MM/ML>_raw`) and of the same tags with the initial label
+#' trimmed out (`<MM/ML>_tags`). This is not recommended in most situations but may help
+#' with debugging unexpected issues as it contains the raw data exactly from the FASTQ.\cr\cr
+#' Dataframes produced by this function can be written back to modified FASTQ via [write_modified_fastq()].
+#'
+#' @param filename `character`. The file to be read. Defaults to [file.choose()] to select a file interactively.
+#' @param debug `logical`. Boolean value for whether the extra `<MM/ML>_tags` and `<MM/ML>_raw` columns should be added to the dataframe. Defaults to `FALSE` as I can't imagine this is often helpful, but the option is provided to assist with debugging.
+#'
+#' @return `dataframe`. Dataframe of modification information, as described above.\cr\cr Sequences can be visualised with [visualise_many_sequences()] and modification information can be visualised with [visualise_methylation()] (despite the name, any type of information can be visualised as long as it has locations and probabilities columns).\cr\cr Can be written back to FASTQ via [write_modified_fastq()].
+#' @export
 read_modified_fastq <- function(filename = file.choose(), debug = FALSE) {
+    ## Validate arguments
+    for (argument in list(filename, debug)) {
+        if (length(argument) != 1 || mean(is.na(argument)) != 0 || mean(is.null(argument)) != 0) {
+            abort(paste("Argument", argument, "must be a single value and not NA or NULL."), class = "argument_value_or_type")
+        }
+    }
+    if (is.character(filename) == FALSE) {
+        abort("Filename must be a character/string value.", class = "argument_value_or_type")
+    }
+    if (is.logical(debug) == FALSE) {
+        abort("debug must be a logical/boolean value.", class = "argument_value_or_type")
+    }
+
 
     ## Parse FASTQ header - would be difficult to use alone as it requires
     ## specifically formatted headers. So defined within scope of master function.
@@ -27,8 +72,21 @@ read_modified_fastq <- function(filename = file.choose(), debug = FALSE) {
         ## WORKING ON MM:
         ## Extract MM tag into vectors of skipped bases numbers
         modification_skips_raw <- strsplit(MM_tags, split = ";")
-        modification_types <- lapply(modification_skips_raw, function(x) substr(x, 1, 4))  ## Extract 4-digit modification types
-        modification_skips <- lapply(modification_skips_raw, function(x) substr(x, 6, nchar(x))) ## Extract numerical modification locations
+
+        # this old version assumed the modification types were always 4 characters long
+        #modification_types <- lapply(modification_skips_raw, function(x) substr(x, 1, 4))  ## Extract 4-digit modification types
+        #modification_skips <- lapply(modification_skips_raw, function(x) substr(x, 6, nchar(x))) ## Extract numerical modification locations
+
+        # this new version should work regardless of length
+        modification_types <- lapply(modification_skips_raw, function(x) sapply(strsplit(x, ","), function(y) y[1]))
+        modification_skips <- lapply(modification_skips_raw, function(x) sapply(strsplit(x, ","), function(y) {
+                if (length(y) > 1) {
+                    return(vector_to_string(y[2:length(y)]))
+                } else {
+                    return("")
+                }
+            }))
+
 
         ## Convert MM tags into absolute vectors of
         modification_locations <- list()
@@ -61,9 +119,13 @@ read_modified_fastq <- function(filename = file.choose(), debug = FALSE) {
             for (length in modification_lengths[[i]]) {
                 end <- end + length
 
-                this_type_probabilities <- string_to_vector(ML_tags[i])[start:end]
-                read_probabilities <- c(read_probabilities, vector_to_string(this_type_probabilities))
+                if (length != 0) {
+                    this_type_probabilities <- string_to_vector(ML_tags[i])[start:end]
+                } else {
+                    this_type_probabilities <- ""
+                }
 
+                read_probabilities <- c(read_probabilities, vector_to_string(this_type_probabilities))
                 start <- start + length
             }
 
@@ -108,6 +170,7 @@ read_modified_fastq <- function(filename = file.choose(), debug = FALSE) {
     header_info <- parse_fastq_header(headers, sequences, debug)
     modification_data <- data.frame(read = header_info$read_id,
                                     sequence = sequences,
+                                    sequence_length = nchar(sequences),
                                     quality = qualities,
                                     modification_types = sapply(header_info$modification_types, vector_to_string))
 
@@ -180,18 +243,19 @@ read_modified_fastq <- function(filename = file.choose(), debug = FALSE) {
 #' @export
 convert_MM_vector_to_locations <- function(sequence, skips, target_base = "C") {
     ## Validate arguments
-    for (argument in list(sequence, skips, target_base)) {
+    for (argument in list(sequence, target_base)) {
         if (mean(is.null(argument)) != 0 || (length(argument) > 0 && mean(is.na(argument)) != 0)) {abort(paste("Argument", argument, "must not be NULL or NA."), class = "argument_value_or_type")}
     }
     for (argument in list(sequence, target_base)) {
         if (is.character(argument) == FALSE || length(argument) != 1) {abort(paste("Argument", argument, "must be a single character/string value."), class = "argument_value_or_type")}
     }
-    if (is.numeric(skips) == FALSE || (length(skips) > 0 && (mean(skips >= 0) != 1 || mean(skips %% 1 == 0) != 1))) {
-        abort("Locations vector must be contain only non-negative integers", class = "argument_value_or_type")
-    }
-    if (length(skips) == 0) {
+    if (length(skips) == 0 || mean(is.na(skips)) != 0 || mean(is.null(skips)) != 0) {
         return(numeric())
     }
+    if (is.numeric(skips) == FALSE || mean(skips >= 0) != 1 || mean(skips %% 1 == 0) != 1) {
+        abort("Skips vector must be contain only non-negative integers", class = "argument_value_or_type")
+    }
+
 
     ## This took a bit to wrap my head around.
     ## As an example, imagine "GGCGGCGGCGGC" where we are interested in "C".
@@ -234,7 +298,9 @@ convert_MM_vector_to_locations <- function(sequence, skips, target_base = "C") {
 #' If multiple types of modification have been assessed (e.g. both methylation
 #' and hydroxymethylation), then multiple colnames must be provided for locations
 #' and probabilites, and multiple prefixes (e.g. `"C+h?"`) must be provided.
-#' These three vectors must all be the same length.\cr\cr
+#' **IMPORTANT:** These three vectors must all be the same length, and the modification
+#' types must be in a consistent order (e.g. if writing hydroxymethylation and methylation
+#' in that order, must do H then M in all three vectors and never vice versa).\cr\cr
 #' If quality isn't known (e.g. there was a FASTA step at some point in the pipeline),
 #' the `quality` argument can be set to `NA` to fill in quality scores with `"B"`. This
 #' is the same behaviour as SAMtools v1.21 when converting FASTA to SAM/BAM then FASTQ.
@@ -250,25 +316,26 @@ convert_MM_vector_to_locations <- function(sequence, skips, target_base = "C") {
 #' @param locations_colnames `character vector`. Vector of the names of all columns within the dataframe that contain modification locations. Defaults to `c("hydroxymethylation_locations", "methylation_locations")`.\cr\cr The values within these columns must be comma-separated strings of indices at which modification was assessed, as produced by [vector_to_string()], e.g. `"3,6,9,12"`.
 #' @param probabilities_colnames `character vector`. Vector of the names of all columns within the dataframe that contain modification probabilities. Defaults to `c("hydroxymethylation_probabilities", "methylation_probabilities")`.\cr\cr The values within the columns must be comma-separated strings of modification probabilities, as produced by [vector_to_string()], e.g. `"0,255,128,78"`.
 #' @param modification_prefixes `character vector`. Vector of the prefixes to be used for the MM tags specifying modification type. These are usually generated by Dorado/Guppy based on the original modified basecalling settings, and more details can be found in the SAM optional tag specifications. Defaults to `c("C+h?", "C+m?")`.\cr\cr `locations_colnames`, `probabilities_colnames`, and `modification_prefixes` must all have the same length e.g. 2 if there were 2 modification types assessed.
-#' @param return `logical`. Boolean specifying whether this function should return the FASTQ (as a character vector of each line in the FASTQ), otherwise it will return `invisible(NULL)`. Defaults to `TRUE`.
+#' @param include_blank_tags `logical`. Boolean specifying what to do if a particular read has no assessed locations for a given modification type from `modification_prefixes`.\cr\cr If `TRUE` (default), blank tags will be written e.g. `"C+h?;"` (whereas a normal, non-blank tag looks like `"C+h?,0,0,0,0;"`). If `FALSE`, tags with no assessed locations in that read will not be written at all.
+#' @param return `logical`. Boolean specifying whether this function should return the FASTQ (as a character vector of each line in the FASTQ), otherwise it will return `invisible(NULL)`. Defaults to `FALSE`.
 #'
-#' @return `character vector`. The resulting modified FASTQ file as a character vector of its constituent lines (or `invisible(NULL)` if `return` is `FALSE`). This is probably mostly useful for debugging, as setting `filename` within this function directly writes to FASTQ via [writeLines()].
+#' @return `character vector`. The resulting modified FASTQ file as a character vector of its constituent lines (or `invisible(NULL)` if `return` is `FALSE`). This is probably mostly useful for debugging, as setting `filename` within this function directly writes to FASTQ via [writeLines()]. Therefore, defaults to returning `invisible(NULL)`.
 #' @export
-write_modified_fastq <- function(dataframe, filename = NA, read_id_colname = "read", sequence_colname = "sequence", quality_colname = "quality", locations_colnames = c("hydroxymethylation_locations", "methylation_locations"), probabilities_colnames = c("hydroxymethylation_probabilities", "methylation_probabilities"), modification_prefixes = c("C+h?", "C+m?"), return = TRUE) {
+write_modified_fastq <- function(dataframe, filename = NA, read_id_colname = "read", sequence_colname = "sequence", quality_colname = "quality", locations_colnames = c("hydroxymethylation_locations", "methylation_locations"), probabilities_colnames = c("hydroxymethylation_probabilities", "methylation_probabilities"), modification_prefixes = c("C+h?", "C+m?"), include_blank_tags = TRUE, return = FALSE) {
     ## Validate arguments
-    for (argument in list(dataframe, filename, read_id_colname, sequence_colname, quality_colname, locations_colnames, probabilities_colnames, modification_prefixes, return)) {
+    for (argument in list(dataframe, filename, read_id_colname, sequence_colname, quality_colname, locations_colnames, probabilities_colnames, modification_prefixes, include_blank_tags, return)) {
         if (mean(is.null(argument)) != 0) {abort(paste("Argument", argument, "must not be NULL."), class = "argument_value_or_type")}
     }
-    for (argument in list(filename, read_id_colname, sequence_colname, quality_colname, return)) {
+    for (argument in list(filename, read_id_colname, sequence_colname, quality_colname, include_blank_tags, return)) {
         if (length(argument) != 1) {abort(paste("Argument", argument, "must have length 1."), class = "argument_value_or_type")}
     }
     for (argument in list(locations_colnames, probabilities_colnames, modification_prefixes)) {
         if (length(argument) < 1) {abort(paste("Argument", argument, "must have length of at least 1."), class = "argument_value_or_type")}
     }
-    for (argument in list(read_id_colname, sequence_colname, locations_colnames, probabilities_colnames, modification_prefixes, return)) {
+    for (argument in list(read_id_colname, sequence_colname, locations_colnames, probabilities_colnames, modification_prefixes, include_blank_tags, return)) {
         if (mean(is.na(argument)) != 0) {abort(paste("Argument", argument, "must not be NA."), class = "argument_value_or_type")}
     }
-    for (argument in list(return)) {
+    for (argument in list(include_blank_tags, return)) {
         if (is.logical(argument) == FALSE) {abort("return must be a logical/boolean value.", class = "argument_value_or_type")}
     }
     for (argument in list(filename, read_id_colname, sequence_colname, quality_colname, locations_colnames, probabilities_colnames, modification_prefixes)) {
@@ -287,7 +354,7 @@ write_modified_fastq <- function(dataframe, filename = NA, read_id_colname = "re
     ## This function would be difficult to use, and I can't imagine many use
     ## cases for it outside of the main function. So it is defined within
     ## it and not exported.
-    construct_header <- function(read_id, sequence, locations_list, probabilities_list, modification_prefixes) {
+    construct_header <- function(read_id, sequence, locations_list, probabilities_list, modification_prefixes, include_blank_tags) {
         MM <- "MM:Z:"
         ML <- "ML:B:C"
         for (i in 1:length(modification_prefixes)) {
@@ -295,11 +362,26 @@ write_modified_fastq <- function(dataframe, filename = NA, read_id_colname = "re
             locations         <- string_to_vector(locations_list[[i]])
             target_base       <- substr(modification_type, 1, 1)
 
-            this_MM <- paste0(modification_type, ",", vector_to_string(convert_locations_to_MM_vector(sequence, locations, target_base)), ";")
+            ## Empty tags are allowed but must not have the intervening comma
+            this_MM_vector <- convert_locations_to_MM_vector(sequence, locations, target_base)
+            if (length(this_MM_vector) == 0) {
+                if (include_blank_tags == TRUE) {
+                    this_MM <- paste0(modification_type, ";")
+                } else {
+                    this_MM <- NULL
+                }
+            } else {
+                this_MM <- paste0(modification_type, ",", vector_to_string(this_MM_vector), ";")
+            }
             MM <- paste0(MM, this_MM)
 
-            this_ML <- vector_to_string(probabilities_list[[i]])
-            ML <- paste0(ML, ",", this_ML)
+
+            ## If probabilities list is missing, skip ML
+            if (!is.na(probabilities_list[[i]]) && probabilities_list[[i]] != "") {
+                #this_ML <- vector_to_string(probabilities_list[[i]])
+                this_ML <- probabilities_list[[i]]
+                ML <- paste0(ML, ",", this_ML)
+            }
         }
 
         header <- paste(read_id, MM, ML, sep = "\t")
@@ -313,7 +395,7 @@ write_modified_fastq <- function(dataframe, filename = NA, read_id_colname = "re
 
         read_id  <- dataframe[i, read_id_colname]
         sequence <- dataframe[i, sequence_colname]
-        header   <- construct_header(read_id, sequence, dataframe[i, locations_colnames], dataframe[i, probabilities_colnames], modification_prefixes)
+        header   <- construct_header(read_id, sequence, dataframe[i, locations_colnames], dataframe[i, probabilities_colnames], modification_prefixes, include_blank_tags)
         spacer   <- "+"
         if (is.na(quality_colname)) {
             ## This matches the behaviour of SAMtools v1.21 when given FASTA input
@@ -368,19 +450,21 @@ write_modified_fastq <- function(dataframe, filename = NA, read_id_colname = "re
 #' @export
 convert_locations_to_MM_vector <- function(sequence, locations, target_base = "C") {
     ## Validate arguments
-    for (argument in list(sequence, locations, target_base)) {
+    for (argument in list(sequence, target_base)) {
         if (mean(is.null(argument)) != 0 || (length(argument) > 0 && mean(is.na(argument)) != 0)) {abort(paste("Argument", argument, "must not be NULL or NA."), class = "argument_value_or_type")}
     }
     for (argument in list(sequence, target_base)) {
         if (is.character(argument) == FALSE || length(argument) != 1) {abort(paste("Argument", argument, "must be a single character/string value."), class = "argument_value_or_type")}
     }
-    if (is.numeric(locations) == FALSE || (length(locations) > 0 && (mean(locations > 0) != 1 || mean(locations %% 1 == 0) != 1))) {
+    if (length(locations) == 0 || mean(is.na(locations)) != 0 || mean(is.null(locations)) != 0) {
+        return(numeric())
+    }
+    if (is.numeric(locations) == 0 || mean(locations > 0) != 1 || mean(locations %% 1 == 0) != 1) {
         abort("Locations vector must be contain only positive integers", class = "argument_value_or_type")
     }
 
-
     all_possible_locations <- unname(str_locate_all(sequence, target_base)[[1]][,1])
-    if (length(locations) > 0 && mean(locations %in% all_possible_locations) != 1) {
+    if (mean(locations %in% all_possible_locations) != 1) {
         abort("All locations provided must be indices where the target base occurs in the sequence\n(e.g. must all correspond to 'C' in the sequence if target_base is 'C').", class = "argument_value_or_type")
     }
 
