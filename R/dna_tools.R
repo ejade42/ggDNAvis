@@ -3,11 +3,15 @@
 
 #' Split a `","`-joined string back to a vector (generic `ggDNAvis` helper)
 #'
-#' Takes a string (character) produced by [vector_to_string()] and recreates the vector
+#' Takes a string (character) produced by [vector_to_string()] and recreates the vector.\cr\cr
+#' Note that if a vector of multiple strings is input (e.g. `c("1,2,3", "9,8,7"`)) the output
+#' will be a single concatenated vector (e.g. `c(1, 2, 3, 9, 8, 7)`).\cr\cr
+#' If the desired output is a list of vectors, try [lapply()] e.g.
+#' `lapply(c("1,2,3", "9,8,7"), string_to_vector)` returns `list(c(1, 2, 3), c(9, 8, 7))`.
 #'
 #' @param string `character`. A comma-separated string (e.g. `"1,2,3"`) to convert back to a vector.
 #' @param type `character`. The type of the vector to be returned i.e. `"numeric"` (default), `"character"`, or `"logical"`.
-#' @return `<type> vector`. The resulting vector (e.g. `c(1,2,3)`).
+#' @return `<type> vector`. The resulting vector (e.g. `c(1, 2, 3)`).
 #' @export
 string_to_vector <- function(string, type = "numeric") {
     if (tolower(type) == "numeric") {
@@ -80,11 +84,22 @@ debug_join_vector_str <- function(vector) {cat('"', paste(vector, collapse = '",
 #' @return `character`. The reverse-complement of the input sequence.
 #' @export
 reverse_complement <- function(sequence, output_mode = "DNA") {
+    for (argument in list(sequence, output_mode)) {
+        if (any(is.null(argument)) == TRUE || any(is.na(argument)) == TRUE) {
+            abort(paste("Argument", argument, "must not be NULL or NA"), class = "argument_value_or_type")
+        }
+    }
     if (length(sequence) != 1) {
         abort("Can only input one sequence at once. Try sapply(input_vector, reverse_complement) to use on more than one input.", class = "argument_length")
     }
     if (length(output_mode) != 1) {
         abort("Output mode must be a single value (either 'DNA' or 'RNA')", class = "argument_length")
+    }
+    if (is.character(sequence) == FALSE || is.character(output_mode) == FALSE) {
+        abort("Sequence and output mode must both be character/string values.", class = "argument_value_or_type")
+    }
+    if (nchar(sequence) == 0) {
+        return("")
     }
     sequence_vector     <- strsplit(toupper(sequence), split = "")[[1]]
     reversed_vector     <- rev(sequence_vector)

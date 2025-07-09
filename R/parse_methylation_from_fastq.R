@@ -286,6 +286,8 @@ convert_MM_vector_to_locations <- function(sequence, skips, target_base = "C") {
 
 
 
+
+
 ## WRITING TO FASTQ
 ## -------------------------------------------------------------------------------------
 

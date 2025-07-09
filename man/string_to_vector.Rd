@@ -12,8 +12,12 @@ string_to_vector(string, type = "numeric")
 \item{type}{\code{character}. The type of the vector to be returned i.e. \code{"numeric"} (default), \code{"character"}, or \code{"logical"}.}
 }
 \value{
-\verb{<type> vector}. The resulting vector (e.g. \code{c(1,2,3)}).
+\verb{<type> vector}. The resulting vector (e.g. \code{c(1, 2, 3)}).
 }
 \description{
-Takes a string (character) produced by \code{\link[=vector_to_string]{vector_to_string()}} and recreates the vector
+Takes a string (character) produced by \code{\link[=vector_to_string]{vector_to_string()}} and recreates the vector.\cr\cr
+Note that if a vector of multiple strings is input (e.g. \verb{c("1,2,3", "9,8,7"})) the output
+will be a single concatenated vector (e.g. \code{c(1, 2, 3, 9, 8, 7)}).\cr\cr
+If the desired output is a list of vectors, try \code{\link[=lapply]{lapply()}} e.g.
+\code{lapply(c("1,2,3", "9,8,7"), string_to_vector)} returns \code{list(c(1, 2, 3), c(9, 8, 7))}.
 }
