@@ -1,3 +1,92 @@
+#' Merge methylation with metadata
+#'
+#' Merge a dataframe of methylation/modification data (as produced by
+#' [read_modified_fastq()]) with a dataframe of metadata, reversing
+#' sequence and modification information if required such that all information
+#' is now in the forward direction.\cr\cr
+#' Methylation/modification dataframe must contain columns of `"read"` (unique read ID),
+#' `"sequence"` (DNA sequence), `"sequence_length"` (read length),
+#' `"modification_types"` (a comma-separated string of SAMtools modification
+#' headers produced via [vector_to_string()] e.g. `"C+h?,C+m?"`), and,
+#' for each modification type, a column of comma-separated strings of modification
+#' locations (e.g. `"3,6,9,12"`) and a column of comma-separated strings of
+#' modification probabilities (e.g. `"255,0,64,128"`). See [read_modified_fastq()]
+#' for more information on how this dataframe is formatted and produced.
+#' Other columns are allowed but not required, and will be preserved unaltered
+#' in the merged data.\cr\cr
+#' Metadata dataframe must contain `"read"` (unique read ID) and `"direction"`
+#' (read direction, either `"forward"` or `"reverse"` for each read) columns,
+#' and can contain any other columns with arbitrary information for each read.
+#' Columns that might be useful include participant ID and family designations
+#' so that each read can be associated with its participant and family.\cr\cr
+#' **Important:** A key feature of this function is that it uses the direction
+#' column from the metadata to identify which rows are reverse reads. These reverse
+#' reads will then be reversed-complemented and have modification information reversed
+#' such that all reads are in the forward direction, ideal for consistent analysis or
+#' visualisation. The output columns are `"forward_sequence"`,
+#' `"forward_<modification_type>_locations"`, and `"forward_<modification_type>_probabilities"`.\cr\cr
+#' Calls [reverse_sequence_if_needed()], [reverse_locations_if_needed()], and
+#' [reverse_probabilities_if_needed()] to implement the reversing - see documentation
+#' for these functions for more details.
+#'
+#' @param methylation_data `dataframe`. A dataframe contaning methylation/modification data, as produced by [read_modified_fastq()].\cr\cr Must contain a read id column (must be called `"read"`), a sequence column (`"sequence"`), a sequence length column (`"sequence_length"`), a modification types column (`"modification_types"`), and, for each modification type listed in `modification_types`, a column of locations (`"<modification_type>_locations"`) and a column of probabilities (`"<modification_type>_probabilities"`). Additional columns are fine and will simply be included unaltered in the merged dataframe. \cr\cr See [read_modified_fastq()] documentation for more details about the expected dataframe format.
+#' @param metadata `dataframe`. A dataframe containing metadata for each read in `methylation_data`.\cr\cr Must contain a `"read"` column identical to the column of the same name in `methylation_data`, containing unique read IDs (this is used to merge the dataframes). Must also contain a `"direction"` column of `"forward"` and `"reverse"` (e.g. `c("forward", "forward", "reverse")`) indicating the direction of each read.\cr\cr **Important:** Reverse reads will have their sequence, modification locations, and modification probabilities reversed such that every output read is now forward. These will be stored in columns called `"forward_sequence"`, `"forward_<modification_type>_locations"`, and `"forward_<modification_type>_probabilities"`. If multiple modification types are present, multiple locations and probabilities columns will be created.\cr\cr See [reverse_sequence_if_needed()], [reverse_locations_if_needed()], and [reverse_probabilities_if_needed()] documentation for details of how the reversing is implemented.
+#' @param reversed_location_offset `integer`. How much modification locations should be shifted by. Defaults to `0`. This is important because if a CpG is assessed for methylation at the C, then reverse complementing it will give a methylation score at the G on the reverse-complemented strand. This is the most biologically accurate, but for visualising methylation it may be desired to shift the locations by 1 i.e. to correspond with the C in the reverse-complemented CpG rather than the G, which allows for consistent visualisation between forward and reverse strands. Setting (integer) values other than 0 or 1 will work, but may be biologically misleading so it is not recommended.\cr\cr **Highly recommended:** if considering using this option, read the [reverse_locations_if_needed()] documentation to fully understand how it works.
+#' @param reverse_complement_mode `character`. Whether reverse-complemented sequences should be converted to DNA (i.e. A complements to T) or RNA (i.e. A complements to U). Must be either `"DNA"` or `"RNA"`. *Only affects reverse-complemented sequences. Sequences that were forward to begin with are not altered.*
+#'
+#' @return A merged dataframe containing all columns from the input dataframes, as well as forward versions of sequences, modification locations, and modification probabilities (with separate locations and probabilities columns created for each modification type in the modification data).
+#' @export
+merge_methylation_with_metadata <- function(methylation_data, metadata, reversed_location_offset = 0, reverse_complement_mode = "DNA") {
+    ## Validate arguments
+    if (length(reversed_location_offset) != 1 || is.na(reversed_location_offset) || !is.numeric(reversed_location_offset) || reversed_location_offset %% 1 != 0) {
+        abort("Reverse location offset must be a single integer value", class = "argument_value_or_type")
+    }
+    if (length(reverse_complement_mode) != 1 || is.na(reverse_complement_mode) || !is.character(reverse_complement_mode) || !(reverse_complement_mode %in% c("DNA", "RNA"))) {
+        abort("Reverse complement mode must be a single character value, either 'DNA' or 'RNA'", class = "argument_value_or_type")
+    }
+    if (nrow(metadata) != nrow(methylation_data)) {
+        abort("Methylation and metadata dataframes must have the same number of rows, one row per read.", class = "argument_value_or_type")
+    }
+    if (!("read" %in% colnames(methylation_data))) {
+        abort(paste0("Methylation dataframe must contain a 'read' column. This error should not occur if data was read via read_modified_fastq(), please contact the package maintainers."), class = "argument_value_or_type")
+    }
+    if (!("sequence" %in% colnames(methylation_data))) {
+        abort(paste0("Methylation dataframe must contain a 'sequence' column. This error should not occur if data was read via read_modified_fastq(), please contact the package maintainers."), class = "argument_value_or_type")
+    }
+    if (!("sequence_length" %in% colnames(methylation_data))) {
+        abort(paste0("Methylation dataframe must contain a 'sequence_length' column. This error should not occur if data was read via read_modified_fastq(), please contact the package maintainers."), class = "argument_value_or_type")
+    }
+    if (!("read" %in% colnames(metadata))) {
+        abort(paste0("Metadata must contain a 'read' column. Please make sure there is a column of unique read IDs in the metadata and that it is called 'read'."), class = "argument_value_or_type")
+    }
+    if (!("direction" %in% colnames(metadata))) {
+        abort(paste0("Metadata must contain a 'direction' column."), class = "argument_value_or_type")
+    }
+
+    ## Main function
+    merged_data <- merge(metadata, methylation_data, by = "read")
+    merged_data$forward_sequence <- reverse_sequence_if_needed(merged_data$sequence, merged_data$direction, reverse_complement_mode)
+
+    for (modification_type in unique(string_to_vector(merged_data$modification_types, "character"))) {
+        if (!(paste0(modification_type, "_locations")) %in% colnames(merged_data)) {
+            abort(paste0("Modification type '", modification_type, "' is present in modification_types but there is no '", modification_type, "_locations' column."), class = "argument_value_or_type")
+        }
+        if (!(paste0(modification_type, "_probabilities")) %in% colnames(merged_data)) {
+            abort(paste0("Modification type '", modification_type, "' is present in modification_types but there is no '", modification_type, "_probabilities' column."), class = "argument_value_or_type")
+        }
+
+        merged_data[, paste0("forward_", modification_type, "_locations")] <- reverse_locations_if_needed(pull(merged_data, paste0(modification_type, "_locations")), merged_data$direction, merged_data$sequence_length, reversed_location_offset)
+        merged_data[, paste0("forward_", modification_type, "_probabilities")] <- reverse_probabilities_if_needed(pull(merged_data, paste0(modification_type, "_probabilities")), merged_data$direction)
+    }
+
+    return(merged_data)
+}
+
+
+
+## REVERSING HELPER FUNCTIONS
+## ----------------------------------------------------------------------------------------
+
 #' Reverse sequences if needed ([merge_methylation_with_metadata()] helper)
 #'
 #' This function takes a vector of DNA/RNA sequences and a vector of directions
@@ -213,3 +302,5 @@ reverse_probabilities_if_needed <- function(probabilities_vector, direction_vect
     }
     return(new_probabilities_vector)
 }
+
+## ----------------------------------------------------------------------------------------

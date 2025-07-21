@@ -1,3 +1,13 @@
+
+test_that("merging methylation and metadata rejects bad arguments", {
+    metadata <- read.csv("reference_output_data/example_many_sequences_metadata.csv")
+    methylation_data <- read_modified_fastq("reference_output_data/example_many_sequences_altered_modification.fastq")
+    merged_data <- merge_methylation_with_metadata(methylation_data, metadata)
+    expect_error()
+})
+
+
+
 test_that("reversing sequences works", {
     expect_equal(reverse_sequence_if_needed(c("GGCGGC", "GCCGCC"), c("forward", "ReVeRSe")),
                c("GGCGGC", "GGCGGC"))

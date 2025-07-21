@@ -1,0 +1,24 @@
+family,individual,read,direction
+Family 1,F1-1,F1-1a,forward
+Family 1,F1-1,F1-1b,forward
+Family 1,F1-1,F1-1c,reverse
+Family 1,F1-1,F1-1d,forward
+Family 1,F1-1,F1-1e,reverse
+Family 1,F1-2,F1-2a,reverse
+Family 1,F1-2,F1-2b,forward
+Family 1,F1-3,F1-3a,forward
+Family 1,F1-3,F1-3b,forward
+Family 1,F1-3,F1-3c,reverse
+Family 2,F2-1,F2-1a,forward
+Family 2,F2-2,F2-2a,reverse
+Family 2,F2-2,F2-2b,forward
+Family 2,F2-2,F2-2c,reverse
+Family 3,F3-1,F3-1a,reverse
+Family 3,F3-1,F3-1b,reverse
+Family 3,F3-2,F3-2a,forward
+Family 3,F3-2,F3-2b,forward
+Family 3,F3-2,F3-2c,reverse
+Family 3,F3-3,F3-3a,forward
+Family 3,F3-4,F3-4a,reverse
+Family 3,F3-4,F3-4b,forward
+Family 3,F3-4,F3-4c,forward
