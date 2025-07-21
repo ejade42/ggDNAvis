@@ -28,5 +28,5 @@ Sequences in the vector that were forward to begin with are unchanged,
 while sequences that were reverse are reverse-complemented via \code{\link[=reverse_complement]{reverse_complement()}}
 to produce the forward sequence.\cr\cr
 Called by \code{\link[=merge_methylation_with_metadata]{merge_methylation_with_metadata()}} to create a forward dataset, alongside
-\code{\link[=reverse_locations_if_needed]{reverse_locations_if_needed()}} and \code{\link[=reverse_probabilities_if_needed]{reverse_probabilities_if_needed()}}.
+\code{\link[=reverse_quality_if_needed]{reverse_quality_if_needed()}}, \code{\link[=reverse_locations_if_needed]{reverse_locations_if_needed()}} and \code{\link[=reverse_probabilities_if_needed]{reverse_probabilities_if_needed()}}.
 }

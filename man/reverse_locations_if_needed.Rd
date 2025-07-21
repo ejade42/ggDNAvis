@@ -41,7 +41,7 @@ with each CpG site always be located at the C, but may be misleading for quantit
 Setting the offset to anything other than \code{0} or \code{1} should work but may be biologically misleading,
 so produces a warning.\cr\cr
 Called by \code{\link[=merge_methylation_with_metadata]{merge_methylation_with_metadata()}} to create a forward dataset, alongside
-\code{\link[=reverse_sequence_if_needed]{reverse_sequence_if_needed()}} and \code{\link[=reverse_probabilities_if_needed]{reverse_probabilities_if_needed()}}.\cr\cr
+\code{\link[=reverse_sequence_if_needed]{reverse_sequence_if_needed()}}, \code{\link[=reverse_quality_if_needed]{reverse_quality_if_needed()}}, and \code{\link[=reverse_probabilities_if_needed]{reverse_probabilities_if_needed()}}.\cr\cr
 \strong{Example:}\cr\cr
 Forward sequence, with indices of Cs in CpGs numbered:\cr
 \preformatted{
@@ -71,5 +71,10 @@ the forward sequence.
 at which each modification was assessed, but changes the base to its complement.}\cr\cr
 In general, new locations are calculated as \verb{(<length> + 1 - <offset>) - <index>}.
 Of course, output locations are reversed before returning so that they all
-return in ascending order, as is standard for all location vectors/strings.
+return in ascending order, as is standard for all location vectors/strings.\cr\cr
+If wanting to write reversed sequences to FASTQ via \code{write_modified_fastq()}, locations
+must be symmetric (e.g. CpG) and offset must be set to 1. Asymmetric locations are impossible
+to write to modified FASTQ once reversed because then e.g. cytosine methylation will be assessed
+at guanines, which SAMtools can't account for. Symmetrically reversing CpGs via \code{offset = 1} is
+the only way to fix this.
 }

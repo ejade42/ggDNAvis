@@ -1,3 +1,7 @@
+## FOR FUTURE - possibly add in overlaying sequence and/or numbers
+## onto methylation visualisation?
+
+
 #' Visualise methylation probabilities for many DNA sequences
 #'
 #' This function takes vectors of modifications locations, modification probabilities,

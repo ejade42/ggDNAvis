@@ -52,7 +52,7 @@ NULL
 #' A list of 3 length-4 character vectors
 #' \describe{
 #'  \item{ggplot_style}{The shades of red, green, blue, and purple that [ggplot2::ggplot()] uses by default for a 4-way discrete colour scheme.\cr\cr Values: `c("#F8766D", "#7CAE00", "#00BFC4", "#C77CFF")`}
-#'  \item{bright_pale}{Bright yellow, green, blue, and red in lighter pastel-like tones.\cr\cr Values: `c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E")`}
+#'  \item{bright_pale}{Bright yellow, green, blue, and red in lighter pastel-like tones.\cr\cr Values: `c("#FFDD00", "#40C000", "#00A0FF", "#FF4E4E")`}
 #'  \item{bright_deep}{Bright orange, green, blue, and red in darker, richer tones.\cr\cr Values: `c("#FFAA00", "#00BC00", "#0000DC", "#FF1E1E")`}
 #' }
 "sequence_colour_palettes"

@@ -12,16 +12,16 @@ merge_methylation_with_metadata(
 )
 }
 \arguments{
-\item{methylation_data}{\code{dataframe}. A dataframe contaning methylation/modification data, as produced by \code{\link[=read_modified_fastq]{read_modified_fastq()}}.\cr\cr Must contain a read id column (must be called \code{"read"}), a sequence column (\code{"sequence"}), a sequence length column (\code{"sequence_length"}), a modification types column (\code{"modification_types"}), and, for each modification type listed in \code{modification_types}, a column of locations (\code{"<modification_type>_locations"}) and a column of probabilities (\code{"<modification_type>_probabilities"}). Additional columns are fine and will simply be included unaltered in the merged dataframe. \cr\cr See \code{\link[=read_modified_fastq]{read_modified_fastq()}} documentation for more details about the expected dataframe format.}
+\item{methylation_data}{\code{dataframe}. A dataframe contaning methylation/modification data, as produced by \code{\link[=read_modified_fastq]{read_modified_fastq()}}.\cr\cr Must contain a read id column (must be called \code{"read"}), a sequence column (\code{"sequence"}), a quality column (\code{"quality"}), a sequence length column (\code{"sequence_length"}), a modification types column (\code{"modification_types"}), and, for each modification type listed in \code{modification_types}, a column of locations (\code{"<modification_type>_locations"}) and a column of probabilities (\code{"<modification_type>_probabilities"}). Additional columns are fine and will simply be included unaltered in the merged dataframe. \cr\cr See \code{\link[=read_modified_fastq]{read_modified_fastq()}} documentation for more details about the expected dataframe format.}
 
-\item{metadata}{\code{dataframe}. A dataframe containing metadata for each read in \code{methylation_data}.\cr\cr Must contain a \code{"read"} column identical to the column of the same name in \code{methylation_data}, containing unique read IDs (this is used to merge the dataframes). Must also contain a \code{"direction"} column of \code{"forward"} and \code{"reverse"} (e.g. \code{c("forward", "forward", "reverse")}) indicating the direction of each read.\cr\cr \strong{Important:} Reverse reads will have their sequence, modification locations, and modification probabilities reversed such that every output read is now forward. These will be stored in columns called \code{"forward_sequence"}, \code{"forward_<modification_type>_locations"}, and \code{"forward_<modification_type>_probabilities"}. If multiple modification types are present, multiple locations and probabilities columns will be created.\cr\cr See \code{\link[=reverse_sequence_if_needed]{reverse_sequence_if_needed()}}, \code{\link[=reverse_locations_if_needed]{reverse_locations_if_needed()}}, and \code{\link[=reverse_probabilities_if_needed]{reverse_probabilities_if_needed()}} documentation for details of how the reversing is implemented.}
+\item{metadata}{\code{dataframe}. A dataframe containing metadata for each read in \code{methylation_data}.\cr\cr Must contain a \code{"read"} column identical to the column of the same name in \code{methylation_data}, containing unique read IDs (this is used to merge the dataframes). Must also contain a \code{"direction"} column of \code{"forward"} and \code{"reverse"} (e.g. \code{c("forward", "forward", "reverse")}) indicating the direction of each read.\cr\cr \strong{Important:} Reverse reads will have their sequence, quality scores, modification locations, and modification probabilities reversed such that every output read is now forward. These will be stored in columns called \code{"forward_sequence"}, \code{"forward_quality"}, \code{"forward_<modification_type>_locations"}, and \code{"forward_<modification_type>_probabilities"}. If multiple modification types are present, multiple locations and probabilities columns will be created.\cr\cr See \code{\link[=reverse_sequence_if_needed]{reverse_sequence_if_needed()}}, \code{\link[=reverse_quality_if_needed]{reverse_quality_if_needed()}}, \code{\link[=reverse_locations_if_needed]{reverse_locations_if_needed()}}, and \code{\link[=reverse_probabilities_if_needed]{reverse_probabilities_if_needed()}} documentation for details of how the reversing is implemented.}
 
 \item{reversed_location_offset}{\code{integer}. How much modification locations should be shifted by. Defaults to \code{0}. This is important because if a CpG is assessed for methylation at the C, then reverse complementing it will give a methylation score at the G on the reverse-complemented strand. This is the most biologically accurate, but for visualising methylation it may be desired to shift the locations by 1 i.e. to correspond with the C in the reverse-complemented CpG rather than the G, which allows for consistent visualisation between forward and reverse strands. Setting (integer) values other than 0 or 1 will work, but may be biologically misleading so it is not recommended.\cr\cr \strong{Highly recommended:} if considering using this option, read the \code{\link[=reverse_locations_if_needed]{reverse_locations_if_needed()}} documentation to fully understand how it works.}
 
-\item{reverse_complement_mode}{\code{character}. Whether reverse-complemented sequences should be converted to DNA (i.e. A complements to T) or RNA (i.e. A complements to U). Must be either \code{"DNA"} or \code{"RNA"}. \emph{Only affects reverse-complemented sequences. Sequences that were forward to begin with are not altered.}}
+\item{reverse_complement_mode}{\code{character}. Whether reverse-complemented sequences should be converted to DNA (i.e. A complements to T) or RNA (i.e. A complements to U). Must be either \code{"DNA"} or \code{"RNA"}. \emph{Only affects reverse-complemented sequences. Sequences that were forward to begin with are not altered.}\cr\cr Uses \code{\link[=reverse_complement]{reverse_complement()}} via \code{\link[=reverse_sequence_if_needed]{reverse_sequence_if_needed()}}.}
 }
 \value{
-A merged dataframe containing all columns from the input dataframes, as well as forward versions of sequences, modification locations, and modification probabilities (with separate locations and probabilities columns created for each modification type in the modification data).
+A merged dataframe containing all columns from the input dataframes, as well as forward versions of sequences, qualities, modification locations, and modification probabilities (with separate locations and probabilities columns created for each modification type in the modification data).
 }
 \description{
 Merge a dataframe of methylation/modification data (as produced by
@@ -29,8 +29,8 @@ Merge a dataframe of methylation/modification data (as produced by
 sequence and modification information if required such that all information
 is now in the forward direction.\cr\cr
 Methylation/modification dataframe must contain columns of \code{"read"} (unique read ID),
-\code{"sequence"} (DNA sequence), \code{"sequence_length"} (read length),
-\code{"modification_types"} (a comma-separated string of SAMtools modification
+\code{"sequence"} (DNA sequence), \code{"quality"} (FASTQ quality score), \code{"sequence_length"}
+(read length), \code{"modification_types"} (a comma-separated string of SAMtools modification
 headers produced via \code{\link[=vector_to_string]{vector_to_string()}} e.g. \code{"C+h?,C+m?"}), and,
 for each modification type, a column of comma-separated strings of modification
 locations (e.g. \code{"3,6,9,12"}) and a column of comma-separated strings of
@@ -47,9 +47,14 @@ so that each read can be associated with its participant and family.\cr\cr
 column from the metadata to identify which rows are reverse reads. These reverse
 reads will then be reversed-complemented and have modification information reversed
 such that all reads are in the forward direction, ideal for consistent analysis or
-visualisation. The output columns are \code{"forward_sequence"},
+visualisation. The output columns are \code{"forward_sequence"}, \code{"forward_quality"},
 \code{"forward_<modification_type>_locations"}, and \code{"forward_<modification_type>_probabilities"}.\cr\cr
-Calls \code{\link[=reverse_sequence_if_needed]{reverse_sequence_if_needed()}}, \code{\link[=reverse_locations_if_needed]{reverse_locations_if_needed()}}, and
-\code{\link[=reverse_probabilities_if_needed]{reverse_probabilities_if_needed()}} to implement the reversing - see documentation
-for these functions for more details.
+Calls \code{\link[=reverse_sequence_if_needed]{reverse_sequence_if_needed()}}, \code{\link[=reverse_quality_if_needed]{reverse_quality_if_needed()}},
+\code{\link[=reverse_locations_if_needed]{reverse_locations_if_needed()}}, and \code{\link[=reverse_probabilities_if_needed]{reverse_probabilities_if_needed()}}
+to implement the reversing - see documentation for these functions for more details.
+If wanting to write reversed sequences to FASTQ via \code{write_modified_fastq()}, locations
+must be symmetric (e.g. CpG) and offset must be set to 1. Asymmetric locations are impossible
+to write to modified FASTQ once reversed because then e.g. cytosine methylation will be assessed
+at guanines, which SAMtools can't account for. Symmetrically reversing CpGs via
+\code{reversed_location_offset = 1} is the only way to fix this.
 }
