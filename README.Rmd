@@ -1,0 +1,73 @@
+---
+title: "ggDNAvis README"
+author: Evelyn Jade
+date: 2025
+output: github_document
+---
+
+# ggDNAvis
+
+ggDNAvis is an R package that uses ggplot2 to visualise genetic data of three main types:
+
+(1) a single DNA/RNA sequence split across multiple lines,
+
+(2) multiple DNA/RNA sequences, each occupying a whole line, or
+
+(3) base modifications such as DNA methylation called by modified-bases models in Dorado or Guppy.
+
+This is accomplished through main functions `visualise_single_sequence()`, `visualise_many_sequences()`, and `visualise_methylation()` respectively. Each of these has helper sequences for streamlined data processing, as detailed later in the section for each visualisation type.
+
+Additionally, ggDNAvis contains a built-in example dataset (`example_many_sequences`) and a set of colour palettes for DNA visualisation (`sequence_colour_palettes`).
+
+Note that all spellings are the British English version (e.g. "colour", "visualise"). Aliases have not been defined, meaning American spellings will not work.
+
+Throughout this manual, only ggDNAvis and its dependencies are loaded. This includes ggplot2 and dplyr, whose namespaces are loaded in full.
+
+```{r}
+library(ggDNAvis)
+```
+
+# Loading data
+
+## Introduction to `example_many_sequences`
+ggDNAvis comes with example dataset `example_many_sequences`. In this data, each row/observation represents one read. Reads are associated with metadata such as the participant and family to which they belong, and with sequence data such as the DNA sequence, FASTQ quality scores, and modification information retrieved from the MM and ML tags in a SAM/BAM file.
+
+```{r}
+## View the first 4 rows of the table
+knitr::kable(head(as.data.frame(example_many_sequences), 4))
+```
+
+The DNA sequence in column `sequence` is the information used for visualising single/multiple sequences. For visualising DNA modification, this data contains information on both 5-cytosine-methylation and 5-cytosine-hydroxymethylation. For a given modification type (e.g. methylation), visualisation requires a column of locations and a column of probabilities. 
+
+Locations are stored as a comma-condensed string of integers for each read, produced via `vector_to_string()`, and indicate the indices along the read at which the probability of modification was assessed. For example, methylation might be assessed at each CpG site, which in the read `"GGCGGCGGAGGCGGCGGA"` would be the third, sixth, twelfth, and fifteenth bases, thus the location string would be `"3,6,12,15"` for that read.
+
+Probabilities are also a comma-condensed string of integers produced via `vector_to_string()`, but here each integer represents the probability that the corresponding base is modified. Probabilities are stored as 8-bit integers (0-255) where a score of \eqn{N} represents the probability space from \eqn{\frac{N}{256}} to \eqn{\frac{N+1}{256}}. For the read above, a probability string of `"250,3,50,127"` would indicate that the third base is almost certainly methylated (97.66%-98.05%), the sixth base is almost certainly not methylated (1.17%-1.56%), the twelfth base is most likely not methylated (19.53%-19.92%), and the fifteenth base may or may not be methylated (49.61%-50.00%)
+
+```{r}
+## Function to convert integer scores to corresponding percentages
+convert_8bit_to_decimal_prob <- function(x) {
+    return(c(  x   / 256, 
+             (x+1) / 256))
+}
+
+## Convert comma-condensed string back to numerical vector
+probabilities <- string_to_vector("250,3,50,127")
+
+## For each probability, print 8-bit score then percentage range
+for (probability in probabilities) {
+    percentages <- round(convert_8bit_to_decimal_prob(probability), 4) * 100
+    cat("8-bit probability: ", probability, "\n", sep = "")
+    cat("Decimal probability: ", percentages[1], "% - ", percentages[2], "%", "\n\n", sep = "")
+}
+```
+
+
+
+## Loading from FASTQ and metadata file
+
+I need to add a way to read/write unmodified FASTQ
+
+
+# Visualising a single DNA/RNA sequence
+
+ggDNAvis can be used to visualise a single DNA sequence via `visualise_single_sequence`
