@@ -2,6 +2,7 @@
 ^\.Rproj\.user$
 ^LICENSE\.md$
 ^data-raw$
+^README.md$
 ^tests/testthat/reference_images_original$
 ^tests/testthat/reference_output_data_original$
 ^tests/testthat/test_plot_images/*.png$

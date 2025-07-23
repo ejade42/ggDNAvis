@@ -1,6 +1,53 @@
 ## READING FROM FASTQ
 ## -------------------------------------------------------------------------------------
 
+#' Read sequence and quality information from FASTQ
+#'
+#' This function simply reads a FASTQ file into a dataframe containing
+#' columns for read ID, sequence, and quality scores.
+#' Optionally also contains a column of sequence lengths.\cr\cr
+#' See [`fastq_quality_scores`] for an explanation of quality.\cr\cr
+#' Resulting dataframe can be written back to FASTQ via [write_fastq()].
+#' To read/write a modified FASTQ containing modification information
+#' (SAM/BAM MM and ML tags) in the header lines, use
+#' [read_modified_fastq()] and [write_modified_fastq()].
+#'
+#' @param filename `character`. The file to be read. Defaults to [file.choose()] to select a file interactively.
+#' @param calculate_length `logical`. Whether or not `sequence_length` column should be calculated and included.
+#'
+#' @return `dataframe`. A dataframe with `read`, `sequence`, `quality`, and optionally `sequence_length` columns.
+#' @export
+read_fastq <- function(filename = file.choose(), calculate_length = TRUE) {
+    ## Validate arguments
+    for (argument in list(filename, calculate_length)) {
+        if (length(argument) != 1 || mean(is.na(argument)) != 0 || mean(is.null(argument)) != 0) {
+            abort(paste("Argument", argument, "must be a single value and not NA or NULL."), class = "argument_value_or_type")
+        }
+    }
+    if (is.character(filename) == FALSE) {
+        abort("Filename must be a character/string value.", class = "argument_value_or_type")
+    }
+    if (is.logical(calculate_length) == FALSE) {
+        abort("calculate_length must be a logical/boolean value.", class = "argument_value_or_type")
+    }
+
+    ## Read and parse FASTQ
+    input_fastq <- readLines(filename)
+
+    headers   <- input_fastq[1:length(input_fastq) %% 4 == 1]
+    sequences <- input_fastq[1:length(input_fastq) %% 4 == 2]
+    qualities <- input_fastq[1:length(input_fastq) %% 4 == 0]
+
+    ## Create dataframe
+    output_data <- data.frame(read = headers, sequence = sequences, quality = qualities)
+    if (calculate_length) {
+        output_data$sequence_length <- nchar(output_data$sequence)
+    }
+
+    return(output_data)
+}
+
+
 #' Read modification information from modified FASTQ
 #'
 #' This function reads a modified FASTQ file (e.g. created by `samtools fastq -T MM,ML`
@@ -74,12 +121,12 @@ read_modified_fastq <- function(filename = file.choose(), debug = FALSE) {
         # this new version should work regardless of length
         modification_types <- lapply(modification_skips_raw, function(x) sapply(strsplit(x, ","), function(y) y[1]))
         modification_skips <- lapply(modification_skips_raw, function(x) sapply(strsplit(x, ","), function(y) {
-                if (length(y) > 1) {
-                    return(vector_to_string(y[2:length(y)]))
-                } else {
-                    return("")
-                }
-            }))
+            if (length(y) > 1) {
+                return(vector_to_string(y[2:length(y)]))
+            } else {
+                return("")
+            }
+        }))
 
 
         ## Convert MM tags into absolute vectors of
@@ -285,6 +332,84 @@ convert_MM_vector_to_locations <- function(sequence, skips, target_base = "C") {
 ## WRITING TO FASTQ
 ## -------------------------------------------------------------------------------------
 
+#' Write sequence and quality information to FASTQ
+#'
+#' This function simply writes a FASTQ file from a dataframe containing
+#' columns for read ID, sequence, and quality scores.\cr\cr
+#' See [`fastq_quality_scores`] for an explanation of quality.\cr\cr
+#' Said dataframe can be produced from FASTQ via [read_fastq()].
+#' To read/write a modified FASTQ containing modification information
+#' (SAM/BAM MM and ML tags) in the header lines, use
+#' [read_modified_fastq()] and [write_modified_fastq()].
+#'
+#' @param dataframe. Dataframe containing modification information to write back to modified FASTQ. Must have columns for unique read ID and DNA sequence. Should also have a column for quality, unless wanting to fill in qualities with `"B"`.
+#' @param filename `character`. File to write the FASTQ to. Recommended to end with `.fastq` (warns but works if not). If set to `NA` (default), no file will be output, which may be useful for testing/debugging.
+#' @param read_id_colname `character`. The name of the column within the dataframe that contains the unique ID for each read. Defaults to `"read"`.
+#' @param sequence_colname `character`. The name of the column within the dataframe that contains the DNA sequence for each read. Defaults to `"sequence"`.\cr\cr The values within this column must be DNA sequences e.g. `"GGCGGC"`.
+#' @param quality_colname `character`. The name of the column within the dataframe that contains the FASTQ quality scores for each read. Defaults to `"quality"`. If scores are not known, can be set to `NA` to fill in quality with `"B"`.\cr\cr If not `NA`, must correspond to a column where the values are the FASTQ quality scores e.g. `"$12\">/2C;4:9F8:816E,6C3*,"` - see [`fastq_quality_scores`].
+#' @param return `logical`. Boolean specifying whether this function should return the FASTQ (as a character vector of each line in the FASTQ), otherwise it will return `invisible(NULL)`. Defaults to `FALSE`.
+#'
+#' @return `character vector`. The resulting FASTQ file as a character vector of its constituent lines (or `invisible(NULL)` if `return` is `FALSE`). This is probably mostly useful for debugging, as setting `filename` within this function directly writes to FASTQ via [writeLines()]. Therefore, defaults to returning `invisible(NULL)`.
+write_fastq <- function(dataframe, filename = NA, read_id_colname = "read", sequence_colname = "sequence", quality_colname = "quality", return = FALSE) {
+    ## Validate arguments
+    for (argument in list(dataframe, filename, read_id_colname, sequence_colname, quality_colname, return)) {
+        if (mean(is.null(argument)) != 0) {abort(paste("Argument", argument, "must not be NULL."), class = "argument_value_or_type")}
+    }
+    for (argument in list(filename, read_id_colname, sequence_colname, quality_colname, return)) {
+        if (length(argument) != 1) {abort(paste("Argument", argument, "must have length 1."), class = "argument_value_or_type")}
+    }
+    for (argument in list(read_id_colname, sequence_colname, return)) {
+        if (mean(is.na(argument)) != 0) {abort(paste("Argument", argument, "must not be NA."), class = "argument_value_or_type")}
+    }
+    for (argument in list(return)) {
+        if (is.logical(argument) == FALSE) {abort("return must be a logical/boolean value.", class = "argument_value_or_type")}
+    }
+    for (argument in list(filename, read_id_colname, sequence_colname, quality_colname)) {
+        if (mean(is.na(argument)) == 0 && is.character(argument) == FALSE) {abort(paste("Argument", argument, "must be of type character."), class = "argument_value_or_type")}
+    }
+    for (colname in c(read_id_colname, sequence_colname, quality_colname)) {
+        if (is.na(colname) == FALSE && colname %in% colnames(dataframe) == FALSE) {abort(paste0("There is no column called '", colname, "' in the dataframe."), class = "argument_value_or_type")}
+    }
+
+
+    ## Main function body
+    output <- character()
+    for (i in 1:nrow(dataframe)) {
+
+        read_id  <- dataframe[i, read_id_colname]
+        sequence <- dataframe[i, sequence_colname]
+        spacer   <- "+"
+        if (is.na(quality_colname)) {
+            ## This matches the behaviour of SAMtools v1.21 when given FASTA input
+            ## then converted to FASTQ via SAM/BAM. Quality gets filled in as "B".
+            quality <- paste(rep("B", nchar(sequence)), collapse = "")
+        } else {
+            quality <- dataframe[i, quality_colname]
+        }
+
+        output <- c(output, read_id, sequence, spacer, quality)
+    }
+
+    ## Check if filename is set and warn if not fastq, then export file
+    if (is.na(filename) == FALSE) {
+        if (is.character(filename) == FALSE) {
+            abort("Filename must be a character/string (or NA if no file export wanted)", class = "argument_value_or_type")
+        }
+        if (tolower(substr(filename, nchar(filename)-5, nchar(filename))) != ".fastq") {
+            warn("Output will be formatted as FASTQ even if file extension is different.", class = "filetype_recommendation")
+        }
+        writeLines(output, filename)
+    }
+
+    ## Return either the plot object or NULL
+    if (return == TRUE) {
+        return(output)
+    }
+    return(invisible(NULL))
+}
+
+
+
 #' Write modification information stored in dataframe back to modified FASTQ
 #'
 #' This function takes a dataframe containing DNA modification information
@@ -308,7 +433,7 @@ convert_MM_vector_to_locations <- function(sequence, skips, target_base = "C") {
 #' @param filename `character`. File to write the modified FASTQ to. Recommended to end with `.fastq` (warns but works if not). If set to `NA` (default), no file will be output, which may be useful for testing/debugging.
 #' @param read_id_colname `character`. The name of the column within the dataframe that contains the unique ID for each read. Defaults to `"read"`.
 #' @param sequence_colname `character`. The name of the column within the dataframe that contains the DNA sequence for each read. Defaults to `"sequence"`.\cr\cr The values within this column must be DNA sequences e.g. `"GGCGGC"`.
-#' @param quality_colname `character`. The name of the column within the dataframe that contains the FASTQ quality scores for each read. Defaults to `"quality"`. If scores are not known, can be set to `NA` to fill in quality with `"B"`.\cr\cr If not `NA`, must correspond to a column where the values are the FASTQ quality scores e.g. `"$12\">/2C;4:9F8:816E,6C3*,"`.
+#' @param quality_colname `character`. The name of the column within the dataframe that contains the FASTQ quality scores for each read. Defaults to `"quality"`. If scores are not known, can be set to `NA` to fill in quality with `"B"`.\cr\cr If not `NA`, must correspond to a column where the values are the FASTQ quality scores e.g. `"$12\">/2C;4:9F8:816E,6C3*,"` - see [`fastq_quality_scores`].
 #' @param locations_colnames `character vector`. Vector of the names of all columns within the dataframe that contain modification locations. Defaults to `c("hydroxymethylation_locations", "methylation_locations")`.\cr\cr The values within these columns must be comma-separated strings of indices at which modification was assessed, as produced by [vector_to_string()], e.g. `"3,6,9,12"`.\cr\cr Will fail if these locations are not instances of the target base (e.g. `"C"` for `"C+m?"`), as the SAMtools tag system does not work otherwise. One consequence of this is that if sequences have been reversed via [merge_methylation_with_metadata()] or helpers, they cannot be written to FASTQ *unless* modification locations are symmetric e.g. CpG *and* offset was set to `1` when reversing (see [reverse_locations_if_needed()]).
 #' @param probabilities_colnames `character vector`. Vector of the names of all columns within the dataframe that contain modification probabilities. Defaults to `c("hydroxymethylation_probabilities", "methylation_probabilities")`.\cr\cr The values within the columns must be comma-separated strings of modification probabilities, as produced by [vector_to_string()], e.g. `"0,255,128,78"`.
 #' @param modification_prefixes `character vector`. Vector of the prefixes to be used for the MM tags specifying modification type. These are usually generated by Dorado/Guppy based on the original modified basecalling settings, and more details can be found in the SAM optional tag specifications. Defaults to `c("C+h?", "C+m?")`.\cr\cr `locations_colnames`, `probabilities_colnames`, and `modification_prefixes` must all have the same length e.g. 2 if there were 2 modification types assessed.
@@ -405,7 +530,7 @@ write_modified_fastq <- function(dataframe, filename = NA, read_id_colname = "re
     }
 
 
-    ## Check if filename is set and warn if not fastq, then export image
+    ## Check if filename is set and warn if not fastq, then export file
     if (is.na(filename) == FALSE) {
         if (is.character(filename) == FALSE) {
             abort("Filename must be a character/string (or NA if no file export wanted)", class = "argument_value_or_type")

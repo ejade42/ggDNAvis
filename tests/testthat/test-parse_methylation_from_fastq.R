@@ -44,16 +44,37 @@ test_that("reading modification information from FASTQ works when tags are diffe
     expect_equal(readLines(paste0(root, filename)), readLines(paste0(reference, filename)))
 })
 
+test_that("reading sequence from FASTQ works", {
+    filename <- "example_many_sequences_unmodified.fastq"
+    test_05 <- read_fastq(paste0(reference, filename))
+    expect_equal(colnames(test_05), c("read", "sequence", "quality", "sequence_length"))
+    expect_equal(nrow(test_05), 23)
+
+    write_fastq(test_05, paste0(root, filename))
+    expect_equal(readLines(paste0(root, filename)), readLines(paste0(reference, filename)))
+
+    filename <- "example_many_sequences_unmodified_no_quality.fastq"
+    test_06 <- read_fastq(paste0(reference, filename), calculate_length = F)
+    expect_equal(colnames(test_06), c("read", "sequence", "quality"))
+    expect_equal(nrow(test_06), 23)
+
+    write_fastq(test_06, paste0(root, filename))
+    expect_equal(readLines(paste0(root, filename)), readLines(paste0(reference, filename)))
+})
+
 
 test_that("reading modification information fails", {
     bad_param_value_for_filename <- list(c("x", "y"), NA, NULL, TRUE, FALSE, 1, -1, 0.5)
     for (param in bad_param_value_for_filename) {
         expect_error(read_modified_fastq(param), class = "argument_value_or_type")
+        expect_error(read_fastq(param), class = "argument_value_or_type")
     }
 
     bad_param_value_for_logical <- list("X", c(TRUE, FALSE), NA, NULL, 1, -1, 0.5)
     for (param in bad_param_value_for_logical) {
         expect_error(read_modified_fastq(filename = paste0(reference, "example_many_sequences.fastq"), debug = param),
+                     class = "argument_value_or_type")
+        expect_error(read_fastq(filename = paste0(reference, "example_many_sequences.fastq"), calculate_length = param),
                      class = "argument_value_or_type")
     }
 })
@@ -137,20 +158,32 @@ test_that("writing modification info to fastq works", {
     filename <- "example_many_sequences_no_quality.fastq"
     write_modified_fastq(example_many_sequences, paste0(root, filename), quality_colname = NA)
     expect_equal(readLines(paste0(root, filename)), readLines(paste0(reference, filename)))
+
+
+    filename <- "example_many_sequences_unmodified.fastq"
+    write_fastq(example_many_sequences, paste0(root, filename))
+    expect_equal(readLines(paste0(root, filename)), readLines(paste0(reference, filename)))
+
+    filename <- "example_many_sequences_unmodified_no_quality.fastq"
+    write_fastq(example_many_sequences, paste0(root, filename), quality_colname = NA)
+    expect_equal(readLines(paste0(root, filename)), readLines(paste0(reference, filename)))
 })
 
 
-test_that("writing modification info to fastq rejects bad arguments", {
+test_that("writing modification info or sequence info to fastq rejects bad arguments", {
     # "x" is a bad value because there isn't a colname called that
     bad_param_value_for_single_colname <- list(NULL, NA, c("sequence", "read"), 1, TRUE, -1, 0, 2.5, "x", character())
     for (param in bad_param_value_for_single_colname) {
         expect_error(write_modified_fastq(example_many_sequences, read_id_colname = param), class = "argument_value_or_type")
         expect_error(write_modified_fastq(example_many_sequences, sequence_colname = param), class = "argument_value_or_type")
+        expect_error(write_fastq(example_many_sequences, read_id_colname = param), class = "argument_value_or_type")
+        expect_error(write_fastq(example_many_sequences, sequence_colname = param), class = "argument_value_or_type")
     }
 
     bad_param_value_for_single_colname_NA_allowed <- list(NULL, c("sequence", "read"), 1, TRUE, -1, 0, 2.5, "x", character())
     for (param in bad_param_value_for_single_colname_NA_allowed) {
         expect_error(write_modified_fastq(example_many_sequences, quality_colname = param), class = "argument_value_or_type")
+        expect_error(write_fastq(example_many_sequences, quality_colname = param), class = "argument_value_or_type")
     }
 
     bad_param_value_for_multiple_colname <- list(NULL, NA, c("y", "read"), 1, TRUE, -1, 0, 2.5, "x", character(), c(1, 0))
@@ -167,11 +200,13 @@ test_that("writing modification info to fastq rejects bad arguments", {
     bad_param_value_for_filename <- list(NULL, 1, TRUE, -1, 0, 2.5, c(1, 0), character())
     for (param in bad_param_value_for_filename) {
         expect_error(write_modified_fastq(example_many_sequences, filename = param), class = "argument_value_or_type")
+        expect_error(write_fastq(example_many_sequences, filename = param), class = "argument_value_or_type")
     }
 
     bad_param_value_for_logical <- list("X", c(TRUE, FALSE), NA, NULL, 1, -1, 0.5)
     for (param in bad_param_value_for_logical) {
         expect_error(write_modified_fastq(example_many_sequences, return = param), class = "argument_value_or_type")
+        expect_error(write_fastq(example_many_sequences, return = param), class = "argument_value_or_type")
         expect_error(write_modified_fastq(example_many_sequences, include_blank_tags = param), class = "argument_value_or_type")
     }
 
