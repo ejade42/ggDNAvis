@@ -1,11 +1,13 @@
 
-- [1 ggDNAvis](#1-ggdnavis)
+- [1 ggDNAvis](#intro)
 - [2 Loading data](#2-loading-data)
   - [2.1 Introduction to
-    `example_many_sequences`](#21-introduction-to-example_many_sequences)
-  - [2.2 Loading from FASTQ and metadata
-    file](#22-loading-from-fastq-and-metadata-file)
-    - [2.2.1 Standard FASTQ](#221-standard-fastq)
+    `example_many_sequences`](#example-many-sequences)
+  - [2.2 Introduction to `string_to_vector()` and
+    `vector_to_string()`](#vector-string-processing)
+  - [2.3 Loading from FASTQ and metadata file](#loading-from-fastq)
+    - [2.3.1 Standard FASTQ](#231-standard-fastq)
+    - [2.3.2 Modified FASTQ (e.g. methylation)](#modified_fastq)
 - [3 Visualising a single DNA/RNA
   sequence](#3-visualising-a-single-dnarna-sequence)
 
@@ -35,24 +37,14 @@ Note that all spellings are the British English version (e.g. “colour”,
 “visualise”). Aliases have not been defined, meaning American spellings
 will not work.
 
-Throughout this manual, only ggDNAvis and its dependecies (including the
-full namespaces of dplyr and ggplot2) are loaded:
+Throughout this manual, only ggDNAvis and its dependencies dplyr and
+ggplot2 are loaded:
 
 ``` r
 library(ggDNAvis)
 library(dplyr)
+library(ggplot2)
 ```
-
-    ## 
-    ## Attaching package: 'dplyr'
-
-    ## The following objects are masked from 'package:stats':
-    ## 
-    ##     filter, lag
-
-    ## The following objects are masked from 'package:base':
-    ## 
-    ##     intersect, setdiff, setequal, union
 
 # 2 Loading data
 
@@ -137,14 +129,110 @@ for (probability in probabilities) {
     ## 8-bit probability: 127
     ## Decimal probability: 49.61% - 50%
 
-## 2.2 Loading from FASTQ and metadata file
+## 2.2 Introduction to `string_to_vector()` and `vector_to_string()`
 
-### 2.2.1 Standard FASTQ
+Lots of the data used in ggDNAvis requires a series of multiple values
+to be stored within a single observation in a dataframe. The solution
+used here is condensing vectors to a single string (character value) for
+simple storage, then reconstituting the original vectors when needed.
+These functions are basic wrappers around `strsplit()` and
+`paste(, collapse = ",")` but are easy to use and readable.
+
+Additionally, these can be used when reading SAM/BAM MM and ML tags,
+which are stored as comma-separated lists within modified FASTQ files,
+so can also be processed using these functions.
+
+``` r
+vector_to_string(c(1, 2, 3, 4))
+```
+
+    ## [1] "1,2,3,4"
+
+``` r
+string_to_vector("1,2,3,4") # the default vector type is numeric
+```
+
+    ## [1] 1 2 3 4
+
+``` r
+vector_to_string(c("these", "are", "some", "words"))
+```
+
+    ## [1] "these,are,some,words"
+
+``` r
+string_to_vector("these,are,some,words", type = "character")
+```
+
+    ## [1] "these" "are"   "some"  "words"
+
+``` r
+vector_to_string(c(TRUE, FALSE, TRUE))
+```
+
+    ## [1] "TRUE,FALSE,TRUE"
+
+``` r
+string_to_vector("TRUE,FALSE,TRUE", type = "logical")
+```
+
+    ## [1]  TRUE FALSE  TRUE
+
+If multiple strings (i.e. a character vector) are input to
+`string_to_vector()`, it will concatenate them and produce a single
+output vector. This is intended, useful behaviour to help with some of
+the visualisation code in this package. If a list of separate vectors
+for each input value is desired, `lapply()` can be used.
+
+``` r
+string_to_vector(c("1,2,3", "4,5,6"))
+```
+
+    ## [1] 1 2 3 4 5 6
+
+``` r
+lapply(c("1,2,3", "4,5,6"), string_to_vector)
+```
+
+    ## [[1]]
+    ## [1] 1 2 3
+    ## 
+    ## [[2]]
+    ## [1] 4 5 6
+
+## 2.3 Loading from FASTQ and metadata file
+
+### 2.3.1 Standard FASTQ
 
 To read in a normal FASTQ file (containing a read ID/header, sequence,
 and quality scores for each read), the function `read_fastq()` can be
 used. The example data file for this is
 `inst/extdata/example_many_sequences_raw.fastq`
+
+``` r
+## Look at first 16 lines of FASTQ
+fastq_raw <- readLines("inst/extdata/example_many_sequences_raw.fastq")
+for (i in 1:16) {
+    cat(fastq_raw[i], "\n")
+}
+```
+
+    ## F1-1a 
+    ## GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA 
+    ## + 
+    ## )8@!9:/0/,0+-6?40,-I601:.';+5,@0.0%)!(20C*,2++*(00#/*+3;E-E)<I5.5G*CB8501;I3'.8233'3><:13)48F?09*>?I90 
+    ## F1-1b 
+    ## GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA 
+    ## + 
+    ## 60-7,7943/*=5=)7<53-I=G6/&/7?8)<$12">/2C;4:9F8:816E,6C3*,1-2139 
+    ## F1-1c 
+    ## TCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCGCCGCCGCCGCCGCCGCC 
+    ## + 
+    ## @9889C8<<*96;52!*86,227.<I.8AI<>;2/391%D19*5@G=8<7<:!7+;:I:-!03<0AI>9?4!57I*-C#25FD24F; 
+    ## F1-1d 
+    ## GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA 
+    ## + 
+    ## :<*1D)89?27#8.3)9<2G<>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8>0
 
 ``` r
 ## Load data from FASTQ
@@ -162,10 +250,10 @@ knitr::kable(head(fastq_data, 4))
 | F1-1d | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | :\<\*1D)89?27#8.3)9\<2G\<\>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8\>0 | 81 |
 
 Using the basic `read_fastq()` function returns a dataframe with read
-ID, sequence, and quality columns. Optionally, a sequence_length column
-can be generated by setting `calculate_length = TRUE`. However, we can
-see that some of the sequences e.g. F1-1c are reversed. This occurs when
-the read is of the - strand at the biochemical level.
+ID, sequence, and quality columns. Optionally, a `sequence_length`
+column can be generated by setting `calculate_length = TRUE`. However,
+we can see that some of the sequences (e.g. F1-1c) are reversed. This
+occurs when the read is of the - strand at the biochemical level.
 
 To convert reverse reads to their forward equivalents, and incorporate
 additional data such as the participant and family to which each read
@@ -296,8 +384,336 @@ methylation/modification information) via `read_fastq()` and
 FASTQ using `write_fastq()`:
 
 ``` r
-output_fastq <- write_fastq()
+## Use write_fastq with filename = NA and return = TRUE to create the FASTQ, 
+## but return it as a character vector rather than writing to file.
+output_fastq <- write_fastq(merged_fastq_data, 
+                            filename = NA, return = TRUE,
+                            read_id_colname = "read", 
+                            sequence_colname = "sequence",
+                            quality_colname = "quality")
+## View first 16 lines
+for (i in 1:16) {
+    cat(output_fastq[i], "\n")
+}
 ```
+
+    ## F1-1a 
+    ## GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA 
+    ## + 
+    ## )8@!9:/0/,0+-6?40,-I601:.';+5,@0.0%)!(20C*,2++*(00#/*+3;E-E)<I5.5G*CB8501;I3'.8233'3><:13)48F?09*>?I90 
+    ## F1-1b 
+    ## GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA 
+    ## + 
+    ## 60-7,7943/*=5=)7<53-I=G6/&/7?8)<$12">/2C;4:9F8:816E,6C3*,1-2139 
+    ## F1-1c 
+    ## GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA 
+    ## + 
+    ## ;F42DF52#C-*I75!4?9>IA0<30!-:I:;+7!:<7<8=G@5*91D%193/2;><IA8.I<.722,68*!25;69*<<8C9889@ 
+    ## F1-1d 
+    ## GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA 
+    ## + 
+    ## :<*1D)89?27#8.3)9<2G<>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8>0
+
+### 2.3.2 Modified FASTQ (e.g. methylation)
+
+FASTQ files can be extended to include DNA modification (most often
+5-cytosine-methylation) information within the header rows. Most often,
+this information comes from Nanopore long-read sequencing being
+basecalled with a modification-capable model in Guppy or Dorado,
+resulting in SAM or BAM files. In SAM/BAM files, modification
+information is stored in the MM and ML tags. These can be copied to the
+header rows of a FASTQ file via
+
+``` bash
+samtools fastq -T MM,ML ${input_bam_file} > "modified_fastq_file.fastq"
+```
+
+ggDNAvis then contains tools for reading from, processing, and writing
+to these modified FASTQ files. The example data file for this is
+`inst/extdata/example_many_sequences_raw_modified.fastq`
+
+``` r
+## Look at first 16 lines of FASTQ
+modified_fastq_raw <- readLines("inst/extdata/example_many_sequences_raw_modified.fastq")
+for (i in 1:16) {
+    cat(modified_fastq_raw[i], "\n")
+}
+```
+
+    ## F1-1a    MM:Z:C+h?,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0;C+m?,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0; ML:B:C,26,60,61,60,30,59,2,46,57,64,54,63,52,18,53,34,52,50,39,46,55,54,34,29,159,155,159,220,163,2,59,170,131,177,139,72,235,75,214,73,68,48,59,81,77,41 
+    ## GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA 
+    ## + 
+    ## )8@!9:/0/,0+-6?40,-I601:.';+5,@0.0%)!(20C*,2++*(00#/*+3;E-E)<I5.5G*CB8501;I3'.8233'3><:13)48F?09*>?I90 
+    ## F1-1b    MM:Z:C+h?,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0;C+m?,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0; ML:B:C,10,44,39,64,20,36,11,63,50,54,64,38,46,41,49,2,10,56,207,134,233,212,12,116,68,78,129,46,194,51,66,253 
+    ## GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA 
+    ## + 
+    ## 60-7,7943/*=5=)7<53-I=G6/&/7?8)<$12">/2C;4:9F8:816E,6C3*,1-2139 
+    ## F1-1c    MM:Z:C+h?,1,1,5,1,1,5,1,1,5,1,1,5,1,1,1,1,1,1,1,1;C+m?,1,1,5,1,1,5,1,1,5,1,1,5,1,1,1,1,1,1,1,1; ML:B:C,37,47,64,63,33,64,52,55,17,46,47,64,56,64,56,60,55,58,63,40,45,192,126,129,39,129,183,79,19,195,62,124,173,128,84,159,80,165,141,206 
+    ## TCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCGCCGCCGCCGCCGCCGCC 
+    ## + 
+    ## @9889C8<<*96;52!*86,227.<I.8AI<>;2/391%D19*5@G=8<7<:!7+;:I:-!03<0AI>9?4!57I*-C#25FD24F; 
+    ## F1-1d    MM:Z:C+h?,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0;C+m?,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0; ML:B:C,33,29,10,55,3,46,53,54,64,12,63,27,24,4,43,21,64,60,17,55,216,221,11,81,4,61,180,79,130,13,144,31,228,4,200,23,132,98,18,82 
+    ## GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA 
+    ## + 
+    ## :<*1D)89?27#8.3)9<2G<>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8>0
+
+This file is identical to the standard FASTQ seen in
+<a href="#standard-fastq">2.3.1</a> in the sequence and quality lines,
+but has the MM and ML tags stored in the header. See the [SAM tags
+specification](https://samtools.github.io/hts-specs/SAMtags.pdf) or the
+documentation for `read_modified_fastq()`,
+`merge_methylation_with_metadata()`, and `reverse_locations_if_needed()`
+for a comprehensive explanation of how these store
+methylation/modification information.
+
+The modification information stored in these FASTQ header lines can be
+parsed with `read_modified_fastq()`. This converts the locations from
+the SAM/BAM MM format to simply being the indices along the read at
+which modification was assessed (starting indexing at 1). For example,
+in F1-1a, the `C+m?` (methylation) locations start `"3,6,9,12"`,
+indicating that the third, sixth, ninth, and twelfth bases in the read
+were assessed for probability of methylation. Checking the sequence, we
+see that all of these are CpG sites (CG dinucleotides), which are the
+main DNA methylation sites in the genome. For each assessed site, the
+modification probability is given as an 8-bit integer (0-255), where 0
+represents ~0% modification probability and 255 represents ~100%
+modification probability (this is fully explained in
+<a href="#example-many-sequences">2.1</a>).
+
+``` r
+## Load data from FASTQ
+methylation_data <- read_modified_fastq("inst/extdata/example_many_sequences_raw_modified.fastq")
+
+## View first 4 rows
+knitr::kable(head(methylation_data, 4))
+```
+
+| read | sequence | sequence_length | quality | modification_types | C+h?\_locations | C+h?\_probabilities | C+m?\_locations | C+m?\_probabilities |
+|:---|:---|---:|:---|:---|:---|:---|:---|:---|
+| F1-1a | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | 102 | )8@!9:/0/,0+-6?40,-I601:.’;+5,@0.0%)!(20C*,2++*(00#/*+3;E-E)\<I5.5G*CB8501;I3’.8233’3\>\<:13)48F?09\*\>?I90 | C+h?,C+m? | 3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99 | 26,60,61,60,30,59,2,46,57,64,54,63,52,18,53,34,52,50,39,46,55,54,34 | 3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99 | 29,159,155,159,220,163,2,59,170,131,177,139,72,235,75,214,73,68,48,59,81,77,41 |
+| F1-1b | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | 63 | 60-7,7943/*=5=)7\<53-I=G6/&/7?8)\<\$12”\>/2C;4:9F8:816E,6C3*,1-2139 | C+h?,C+m? | 3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60 | 10,44,39,64,20,36,11,63,50,54,64,38,46,41,49,2 | 3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60 | 10,56,207,134,233,212,12,116,68,78,129,46,194,51,66,253 |
+| F1-1c | TCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCGCCGCCGCCGCCGCCGCC | 87 | @9889C8\<\<*96;52!*86,227.\<I.8AI\<\>;<2/391%D19*5@G>=8\<7\<:!7+;:I:-!03\<0AI\>9?4!57I\*-C#25FD24F; | C+h?,C+m? | 3,6,15,18,21,30,33,36,45,48,51,60,63,66,69,72,75,78,81,84 | 37,47,64,63,33,64,52,55,17,46,47,64,56,64,56,60,55,58,63,40 | 3,6,15,18,21,30,33,36,45,48,51,60,63,66,69,72,75,78,81,84 | 45,192,126,129,39,129,183,79,19,195,62,124,173,128,84,159,80,165,141,206 |
+| F1-1d | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | 81 | :\<\*1D)89?27#8.3)9\<2G\<\>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8\>0 | C+h?,C+m? | 3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78 | 33,29,10,55,3,46,53,54,64,12,63,27,24,4,43,21,64,60,17,55 | 3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78 | 216,221,11,81,4,61,180,79,130,13,144,31,228,4,200,23,132,98,18,82 |
+
+Ultimately, `read_modified_fastq()` outputs a dataframe with the
+standard read information (ID, sequence, length, quality), a column
+stating which modification types were assessed for each read
+(e.g. `"C+h?"` for hydroxymethylation or `"C+m?"` for methylation -
+refer to the [SAM tags
+specification](https://samtools.github.io/hts-specs/SAMtags.pdf)), and
+for each modification type, a column of assessed locations (indices
+along the read) and a column of modification probabilities (as 8-bit
+integers).
+
+Modification types, locations, and probabilities are all stored as
+comma-condensed strings produced from vectors via `vector_to_string()`.
+These can be converted back to vectors via `string_to_vector()` - see
+<a href="#vector-string-processing">2.2</a>.
+
+As with the standard FASTQ, some of the reads in the modified FASTQ are
+reverse. However, as the assessed modification locations are indices
+along the read and the probabilities correspond to locations in
+sequence, the modification information needs to be reversed in addition
+to reverse complementing the DNA sequence. Analogous to before, this is
+achieved via the `merge_methylation_with_metadata()` function.
+
+``` r
+## Load metadata from CSV
+metadata <- read.csv("inst/extdata/example_many_sequences_metadata.csv")
+
+## View first 4 rows
+knitr::kable(head(metadata, 4))
+```
+
+| family   | individual | read  | direction |
+|:---------|:-----------|:------|:----------|
+| Family 1 | F1-1       | F1-1a | forward   |
+| Family 1 | F1-1       | F1-1b | forward   |
+| Family 1 | F1-1       | F1-1c | reverse   |
+| Family 1 | F1-1       | F1-1d | forward   |
+
+The metadata is identical to previously
+(<a href="#standard-fastq">2.3.1</a>).
+
+``` r
+## Merge fastq data with metadata
+## This function reverse-complements reverse reads to get all forward versions
+## And correctly flips location and probability information
+## See ?merged_methylation_data and ?reverse_locations_if_needed for details
+merged_methylation_data <- merge_methylation_with_metadata(methylation_data, metadata)
+
+## View first 4 rows
+knitr::kable(head(merged_methylation_data, 4))
+```
+
+| read | family | individual | direction | sequence | sequence_length | quality | modification_types | C+h?\_locations | C+h?\_probabilities | C+m?\_locations | C+m?\_probabilities | forward_sequence | forward_quality | forward_C+h?\_locations | forward_C+h?\_probabilities | forward_C+m?\_locations | forward_C+m?\_probabilities |
+|:---|:---|:---|:---|:---|---:|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|
+| F1-1a | Family 1 | F1-1 | forward | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | 102 | )8@!9:/0/,0+-6?40,-I601:.’;+5,@0.0%)!(20C*,2++*(00#/*+3;E-E)\<I5.5G*CB8501;I3’.8233’3\>\<:13)48F?09\*\>?I90 | C+h?,C+m? | 3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99 | 26,60,61,60,30,59,2,46,57,64,54,63,52,18,53,34,52,50,39,46,55,54,34 | 3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99 | 29,159,155,159,220,163,2,59,170,131,177,139,72,235,75,214,73,68,48,59,81,77,41 | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | )8@!9:/0/,0+-6?40,-I601:.’;+5,@0.0%)!(20C*,2++*(00#/*+3;E-E)\<I5.5G*CB8501;I3’.8233’3\>\<:13)48F?09\*\>?I90 | 3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99 | 26,60,61,60,30,59,2,46,57,64,54,63,52,18,53,34,52,50,39,46,55,54,34 | 3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99 | 29,159,155,159,220,163,2,59,170,131,177,139,72,235,75,214,73,68,48,59,81,77,41 |
+| F1-1b | Family 1 | F1-1 | forward | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | 63 | 60-7,7943/*=5=)7\<53-I=G6/&/7?8)\<\$12”\>/2C;4:9F8:816E,6C3*,1-2139 | C+h?,C+m? | 3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60 | 10,44,39,64,20,36,11,63,50,54,64,38,46,41,49,2 | 3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60 | 10,56,207,134,233,212,12,116,68,78,129,46,194,51,66,253 | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | 60-7,7943/*=5=)7\<53-I=G6/&/7?8)\<\$12”\>/2C;4:9F8:816E,6C3*,1-2139 | 3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60 | 10,44,39,64,20,36,11,63,50,54,64,38,46,41,49,2 | 3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60 | 10,56,207,134,233,212,12,116,68,78,129,46,194,51,66,253 |
+| F1-1c | Family 1 | F1-1 | reverse | TCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCGCCGCCGCCGCCGCCGCC | 87 | @9889C8\<\<*96;52!*86,227.\<I.8AI\<\>;<2/391%D19*5@G>=8\<7\<:!7+;:I:-!03\<0AI\>9?4!57I\*-C#25FD24F; | C+h?,C+m? | 3,6,15,18,21,30,33,36,45,48,51,60,63,66,69,72,75,78,81,84 | 37,47,64,63,33,64,52,55,17,46,47,64,56,64,56,60,55,58,63,40 | 3,6,15,18,21,30,33,36,45,48,51,60,63,66,69,72,75,78,81,84 | 45,192,126,129,39,129,183,79,19,195,62,124,173,128,84,159,80,165,141,206 | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | ;F42DF52#C-*I75!4?9\>IA0\<30!-:I:;+7!:\<7<8=G@5*91D%193/2;>\<IA8.I\<.722,68*!25;69\*\<\<8C9889@ | 4,7,10,13,16,19,22,25,28,37,40,43,52,55,58,67,70,73,82,85 | 40,63,58,55,60,56,64,56,64,47,46,17,55,52,64,33,63,64,47,37 | 4,7,10,13,16,19,22,25,28,37,40,43,52,55,58,67,70,73,82,85 | 206,141,165,80,159,84,128,173,124,62,195,19,79,183,129,39,129,126,192,45 |
+| F1-1d | Family 1 | F1-1 | forward | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | 81 | :\<\*1D)89?27#8.3)9\<2G\<\>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8\>0 | C+h?,C+m? | 3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78 | 33,29,10,55,3,46,53,54,64,12,63,27,24,4,43,21,64,60,17,55 | 3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78 | 216,221,11,81,4,61,180,79,130,13,144,31,228,4,200,23,132,98,18,82 | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | :\<\*1D)89?27#8.3)9\<2G\<\>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8\>0 | 3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78 | 33,29,10,55,3,46,53,54,64,12,63,27,24,4,43,21,64,60,17,55 | 3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78 | 216,221,11,81,4,61,180,79,130,13,144,31,228,4,200,23,132,98,18,82 |
+
+The merged methylation data contains `forward_` rows for sequence and
+quality, as before, but also for hydroxymethylation and methylation
+locations and probabilities. However, looking at the modification
+locations columns (scroll right on the table), we can see that the
+indices assessed for modification are 4, 7, 10 etc for sequence
+`"GGCGGCGGCGGC..."`. This is because the actual biochemical modification
+was on the Cs on the reverse strand, corresponding to Gs on the forward
+strand according to Watson-Crick base pairing. For many purposes, it may
+be desirable to keep these positions to indicate that in reality, the
+modification occurred at exactly that location on the other strand. This
+is accomplished by setting `offset = 0` (the default) inside
+`merge_methylation_with_metadata()`.
+
+However, there is also the option to offset the modification locations
+by 1. For symmetrical modification sites such as CGs, this means that
+when the C on the reverse strand is modified, that gets attributed to
+the *C* on the forward strand even though the direct complementary base
+is the G. The advantage of this is that it means CG sites
+(i.e. potential methylation sites) always have 5-methylcytosine
+modifications associated with the C of each CG, regardless of which
+strand the information came from. This is also often useful, as it
+ensures the information is consistent and (provided locations are
+palindromic when reverse-complemented) modifications are always attached
+to the correct base e.g. C-methylation to C. This is accomplished by
+setting `offset = 1` inside `merge_methylation_with_metadata()`.
+
+***Either of these options can be valid and useful, but make sure you
+think about it!***
+
+    ## Here the stars represent the true biochemical modifications on the reverse strand:
+    ## 
+    ## 
+    ## GGCGGCGGCGGCGGC
+    ## CCGCCGCCGCCGCCG
+    ##  *  *  *  *  *
+
+    ## If we take the complementary locations on the forward strand,
+    ## the modification locations correspond to Gs rather than Cs,
+    ## but are in the exact same locations:
+    ## 
+    ##  o  o  o  o  o 
+    ## GGCGGCGGCGGCGGC
+    ## CCGCCGCCGCCGCCG
+    ##  *  *  *  *  *
+
+    ## If we offset the locations by 1 on the forward strand,
+    ## the modifications are always associated with the C of a CG,
+    ## but the locations are moved slightly:
+    ## 
+    ##   o  o  o  o  o
+    ## GGCGGCGGCGGCGGC
+    ## CCGCCGCCGCCGCCG
+    ##  *  *  *  *  *
+
+We will proceed with `offset = 1` so that the forward versions match up
+with `example_many_sequences`.
+
+``` r
+## Merge fastq data with metadata, offsetting reversed locations by 1
+merged_methylation_data <- merge_methylation_with_metadata(methylation_data, 
+                                                           metadata, 
+                                                           reversed_location_offset = 1)
+
+## View first 4 rows
+knitr::kable(head(merged_methylation_data, 4))
+```
+
+| read | family | individual | direction | sequence | sequence_length | quality | modification_types | C+h?\_locations | C+h?\_probabilities | C+m?\_locations | C+m?\_probabilities | forward_sequence | forward_quality | forward_C+h?\_locations | forward_C+h?\_probabilities | forward_C+m?\_locations | forward_C+m?\_probabilities |
+|:---|:---|:---|:---|:---|---:|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|
+| F1-1a | Family 1 | F1-1 | forward | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | 102 | )8@!9:/0/,0+-6?40,-I601:.’;+5,@0.0%)!(20C*,2++*(00#/*+3;E-E)\<I5.5G*CB8501;I3’.8233’3\>\<:13)48F?09\*\>?I90 | C+h?,C+m? | 3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99 | 26,60,61,60,30,59,2,46,57,64,54,63,52,18,53,34,52,50,39,46,55,54,34 | 3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99 | 29,159,155,159,220,163,2,59,170,131,177,139,72,235,75,214,73,68,48,59,81,77,41 | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | )8@!9:/0/,0+-6?40,-I601:.’;+5,@0.0%)!(20C*,2++*(00#/*+3;E-E)\<I5.5G*CB8501;I3’.8233’3\>\<:13)48F?09\*\>?I90 | 3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99 | 26,60,61,60,30,59,2,46,57,64,54,63,52,18,53,34,52,50,39,46,55,54,34 | 3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99 | 29,159,155,159,220,163,2,59,170,131,177,139,72,235,75,214,73,68,48,59,81,77,41 |
+| F1-1b | Family 1 | F1-1 | forward | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | 63 | 60-7,7943/*=5=)7\<53-I=G6/&/7?8)\<\$12”\>/2C;4:9F8:816E,6C3*,1-2139 | C+h?,C+m? | 3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60 | 10,44,39,64,20,36,11,63,50,54,64,38,46,41,49,2 | 3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60 | 10,56,207,134,233,212,12,116,68,78,129,46,194,51,66,253 | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | 60-7,7943/*=5=)7\<53-I=G6/&/7?8)\<\$12”\>/2C;4:9F8:816E,6C3*,1-2139 | 3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60 | 10,44,39,64,20,36,11,63,50,54,64,38,46,41,49,2 | 3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60 | 10,56,207,134,233,212,12,116,68,78,129,46,194,51,66,253 |
+| F1-1c | Family 1 | F1-1 | reverse | TCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCGCCGCCGCCGCCGCCGCC | 87 | @9889C8\<\<*96;52!*86,227.\<I.8AI\<\>;<2/391%D19*5@G>=8\<7\<:!7+;:I:-!03\<0AI\>9?4!57I\*-C#25FD24F; | C+h?,C+m? | 3,6,15,18,21,30,33,36,45,48,51,60,63,66,69,72,75,78,81,84 | 37,47,64,63,33,64,52,55,17,46,47,64,56,64,56,60,55,58,63,40 | 3,6,15,18,21,30,33,36,45,48,51,60,63,66,69,72,75,78,81,84 | 45,192,126,129,39,129,183,79,19,195,62,124,173,128,84,159,80,165,141,206 | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | ;F42DF52#C-*I75!4?9\>IA0\<30!-:I:;+7!:\<7<8=G@5*91D%193/2;>\<IA8.I\<.722,68*!25;69\*\<\<8C9889@ | 3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84 | 40,63,58,55,60,56,64,56,64,47,46,17,55,52,64,33,63,64,47,37 | 3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84 | 206,141,165,80,159,84,128,173,124,62,195,19,79,183,129,39,129,126,192,45 |
+| F1-1d | Family 1 | F1-1 | forward | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | 81 | :\<\*1D)89?27#8.3)9\<2G\<\>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8\>0 | C+h?,C+m? | 3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78 | 33,29,10,55,3,46,53,54,64,12,63,27,24,4,43,21,64,60,17,55 | 3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78 | 216,221,11,81,4,61,180,79,130,13,144,31,228,4,200,23,132,98,18,82 | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | :\<\*1D)89?27#8.3)9\<2G\<\>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8\>0 | 3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78 | 33,29,10,55,3,46,53,54,64,12,63,27,24,4,43,21,64,60,17,55 | 3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78 | 216,221,11,81,4,61,180,79,130,13,144,31,228,4,200,23,132,98,18,82 |
+
+Now, looking at the methylation and hydroxymethylation locations we see
+that the forward-version locations are 3, 6, 9, 12…, corresponding to
+the Cs of CGs. This makes the reversed reverse read consistent with the
+forward reads.
+
+We can now extract the relevant columns and demonstrate that this new
+dataframe read from modified FASTQ and metadata CSV is exactly the same
+as `example_many_sequences`.
+
+``` r
+## Subset to only the columns present in example_many_sequences
+merged_methylation_data <- merged_methylation_data[, c("family", "individual", "read", "forward_sequence", "sequence_length", "forward_quality", "forward_C+m?_locations", "forward_C+m?_probabilities", "forward_C+h?_locations", "forward_C+h?_probabilities")]
+
+## Rename "forward_sequence" to "sequence" and same for quality
+colnames(merged_methylation_data)[c(4,6:10)] <- c("sequence", "quality", "methylation_locations", "methylation_probabilities", "hydroxymethylation_locations", "hydroxymethylation_probabilities")
+
+## View first 4 rows of data produced from files
+knitr::kable(head(merged_methylation_data, 4))
+```
+
+| family | individual | read | sequence | sequence_length | quality | methylation_locations | methylation_probabilities | hydroxymethylation_locations | hydroxymethylation_probabilities |
+|:---|:---|:---|:---|---:|:---|:---|:---|:---|:---|
+| Family 1 | F1-1 | F1-1a | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | 102 | )8@!9:/0/,0+-6?40,-I601:.’;+5,@0.0%)!(20C*,2++*(00#/*+3;E-E)\<I5.5G*CB8501;I3’.8233’3\>\<:13)48F?09\*\>?I90 | 3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99 | 29,159,155,159,220,163,2,59,170,131,177,139,72,235,75,214,73,68,48,59,81,77,41 | 3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99 | 26,60,61,60,30,59,2,46,57,64,54,63,52,18,53,34,52,50,39,46,55,54,34 |
+| Family 1 | F1-1 | F1-1b | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | 63 | 60-7,7943/*=5=)7\<53-I=G6/&/7?8)\<\$12”\>/2C;4:9F8:816E,6C3*,1-2139 | 3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60 | 10,56,207,134,233,212,12,116,68,78,129,46,194,51,66,253 | 3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60 | 10,44,39,64,20,36,11,63,50,54,64,38,46,41,49,2 |
+| Family 1 | F1-1 | F1-1c | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | 87 | ;F42DF52#C-*I75!4?9\>IA0\<30!-:I:;+7!:\<7<8=G@5*91D%193/2;>\<IA8.I\<.722,68*!25;69\*\<\<8C9889@ | 3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84 | 206,141,165,80,159,84,128,173,124,62,195,19,79,183,129,39,129,126,192,45 | 3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84 | 40,63,58,55,60,56,64,56,64,47,46,17,55,52,64,33,63,64,47,37 |
+| Family 1 | F1-1 | F1-1d | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | 81 | :\<\*1D)89?27#8.3)9\<2G\<\>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8\>0 | 3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78 | 216,221,11,81,4,61,180,79,130,13,144,31,228,4,200,23,132,98,18,82 | 3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78 | 33,29,10,55,3,46,53,54,64,12,63,27,24,4,43,21,64,60,17,55 |
+
+``` r
+## View first 4 rows of example_many_sequences
+knitr::kable(head(example_many_sequences, 4))
+```
+
+| family | individual | read | sequence | sequence_length | quality | methylation_locations | methylation_probabilities | hydroxymethylation_locations | hydroxymethylation_probabilities |
+|:---|:---|:---|:---|---:|:---|:---|:---|:---|:---|
+| Family 1 | F1-1 | F1-1a | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | 102 | )8@!9:/0/,0+-6?40,-I601:.’;+5,@0.0%)!(20C*,2++*(00#/*+3;E-E)\<I5.5G*CB8501;I3’.8233’3\>\<:13)48F?09\*\>?I90 | 3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99 | 29,159,155,159,220,163,2,59,170,131,177,139,72,235,75,214,73,68,48,59,81,77,41 | 3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99 | 26,60,61,60,30,59,2,46,57,64,54,63,52,18,53,34,52,50,39,46,55,54,34 |
+| Family 1 | F1-1 | F1-1b | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | 63 | 60-7,7943/*=5=)7\<53-I=G6/&/7?8)\<\$12”\>/2C;4:9F8:816E,6C3*,1-2139 | 3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60 | 10,56,207,134,233,212,12,116,68,78,129,46,194,51,66,253 | 3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60 | 10,44,39,64,20,36,11,63,50,54,64,38,46,41,49,2 |
+| Family 1 | F1-1 | F1-1c | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | 87 | ;F42DF52#C-*I75!4?9\>IA0\<30!-:I:;+7!:\<7<8=G@5*91D%193/2;>\<IA8.I\<.722,68*!25;69\*\<\<8C9889@ | 3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84 | 206,141,165,80,159,84,128,173,124,62,195,19,79,183,129,39,129,126,192,45 | 3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84 | 40,63,58,55,60,56,64,56,64,47,46,17,55,52,64,33,63,64,47,37 |
+| Family 1 | F1-1 | F1-1d | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | 81 | :\<\*1D)89?27#8.3)9\<2G\<\>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8\>0 | 3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78 | 216,221,11,81,4,61,180,79,130,13,144,31,228,4,200,23,132,98,18,82 | 3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78 | 33,29,10,55,3,46,53,54,64,12,63,27,24,4,43,21,64,60,17,55 |
+
+``` r
+## Check if equal
+identical(merged_methylation_data, example_many_sequences)
+```
+
+    ## [1] TRUE
+
+So, from a modified FASTQ file and the metadata CSV we have successfully
+reproduced the example_many_sequences data *including*
+methylation/modification information via `read_modified_fastq()` and
+`merge_methylation_with_metadata()`. And similarly to before, we can
+write back to a modified FASTQ file via `write_modified_fastq()`.
+
+``` r
+## Use write_modified_fastq with filename = NA and return = TRUE to create 
+## the FASTQ, but return it as a character vector rather than writing to file.
+output_fastq <- write_modified_fastq(merged_methylation_data, 
+                                     filename = NA, return = TRUE,
+                                     read_id_colname = "read", 
+                                     sequence_colname = "sequence",
+                                     quality_colname = "quality",
+                                     locations_colnames = c("hydroxymethylation_locations",
+                                                            "methylation_locations"),
+                                     probabilities_colnames = c("hydroxymethylation_probabilities",
+                                                                "methylation_probabilities"),
+                                     modification_prefixes = c("C+h?", "C+m?"))
+## View first 16 lines
+for (i in 1:16) {
+    cat(output_fastq[i], "\n")
+}
+```
+
+    ## F1-1a    MM:Z:C+h?,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0;C+m?,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0; ML:B:C,26,60,61,60,30,59,2,46,57,64,54,63,52,18,53,34,52,50,39,46,55,54,34,29,159,155,159,220,163,2,59,170,131,177,139,72,235,75,214,73,68,48,59,81,77,41 
+    ## GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA 
+    ## + 
+    ## )8@!9:/0/,0+-6?40,-I601:.';+5,@0.0%)!(20C*,2++*(00#/*+3;E-E)<I5.5G*CB8501;I3'.8233'3><:13)48F?09*>?I90 
+    ## F1-1b    MM:Z:C+h?,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0;C+m?,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0; ML:B:C,10,44,39,64,20,36,11,63,50,54,64,38,46,41,49,2,10,56,207,134,233,212,12,116,68,78,129,46,194,51,66,253 
+    ## GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA 
+    ## + 
+    ## 60-7,7943/*=5=)7<53-I=G6/&/7?8)<$12">/2C;4:9F8:816E,6C3*,1-2139 
+    ## F1-1c    MM:Z:C+h?,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0;C+m?,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0; ML:B:C,40,63,58,55,60,56,64,56,64,47,46,17,55,52,64,33,63,64,47,37,206,141,165,80,159,84,128,173,124,62,195,19,79,183,129,39,129,126,192,45 
+    ## GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA 
+    ## + 
+    ## ;F42DF52#C-*I75!4?9>IA0<30!-:I:;+7!:<7<8=G@5*91D%193/2;><IA8.I<.722,68*!25;69*<<8C9889@ 
+    ## F1-1d    MM:Z:C+h?,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0;C+m?,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0; ML:B:C,33,29,10,55,3,46,53,54,64,12,63,27,24,4,43,21,64,60,17,55,216,221,11,81,4,61,180,79,130,13,144,31,228,4,200,23,132,98,18,82 
+    ## GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA 
+    ## + 
+    ## :<*1D)89?27#8.3)9<2G<>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8>0
 
 # 3 Visualising a single DNA/RNA sequence
 
