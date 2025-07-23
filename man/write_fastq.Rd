@@ -31,7 +31,7 @@ write_fastq(
 }
 \description{
 This function simply writes a FASTQ file from a dataframe containing
-columns for read ID, sequence, and quality scores.
+columns for read ID, sequence, and quality scores.\cr\cr
 See \code{\link{fastq_quality_scores}} for an explanation of quality.\cr\cr
 Said dataframe can be produced from FASTQ via \code{\link[=read_fastq]{read_fastq()}}.
 To read/write a modified FASTQ containing modification information

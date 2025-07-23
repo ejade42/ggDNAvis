@@ -1,6 +1,25 @@
 root <- "test_output_data/"
 reference <- "reference_output_data/"
 
+test_that("merging fastq and metadata works", {
+    metadata <- read.csv(paste0(reference, "example_many_sequences_metadata.csv"))
+    fastq_data <- read_fastq(paste0(reference, "example_many_sequences_unmodified.fastq"))
+    merged_data <- merge_fastq_with_metadata(fastq_data, metadata)
+    expect_equal(nrow(merged_data), 23)
+    expect_equal(colnames(merged_data), c("read", "family", "individual", "direction", "sequence", "quality", "sequence_length","forward_sequence", "forward_quality"))
+
+    filename <- "example_many_sequences_unmodified_directional.fastq"
+    write_fastq(merged_data, paste0(root, filename), sequence_colname = "forward_sequence", quality_colname = "forward_quality")
+    expect_equal(readLines(paste0(root, filename)), readLines(paste0(reference, filename)))
+
+    ## Check whether reading the directional FASTQ in and changing the colnames gives exactly example_many_sequences
+    double_reversed <- merge_fastq_with_metadata(read_fastq(paste0(reference, filename)), metadata)
+    double_reversed_extracted <- select(double_reversed, c(family, individual, read, forward_sequence, sequence_length, forward_quality))
+    colnames(double_reversed_extracted)[c(4,6)] <- c("sequence", "quality")
+    expect_equal(double_reversed_extracted, example_many_sequences[,1:6])
+})
+
+
 test_that("merging methylation and metadata works", {
     metadata <- read.csv(paste0(reference, "example_many_sequences_metadata.csv"))
     methylation_data <- read_modified_fastq(paste0(reference, "example_many_sequences.fastq"))

@@ -1,9 +1,75 @@
+#' Merge FASTQ data with metadata
+#'
+#' Merge a dataframe of sequence and quality data (as produced by
+#' [read_fastq()] from an unmodified FASTQ file) with a dataframe of
+#' metadata, reverse-complementing sequences if required such that all
+#' reads are now in the forward direction.
+#' [merge_methylation_with_metadata()] is the equivalent function for
+#' working with FASTQs that contain DNA modification information.\cr\cr
+#' FASTQ dataframe must contain columns of `"read"` (unique read ID),
+#' `"sequence"` (DNA sequence), and `"quality"` (FASTQ quality score).
+#' Other columns are allowed but not required, and will be preserved unaltered
+#' in the merged data.\cr\cr
+#' Metadata dataframe must contain `"read"` (unique read ID) and `"direction"`
+#' (read direction, either `"forward"` or `"reverse"` for each read) columns,
+#' and can contain any other columns with arbitrary information for each read.
+#' Columns that might be useful include participant ID and family designations
+#' so that each read can be associated with its participant and family.\cr\cr
+#' **Important:** A key feature of this function is that it uses the direction
+#' column from the metadata to identify which rows are reverse reads. These reverse
+#' reads will then be reversed-complemented and have quality scores reversed
+#' such that all reads are in the forward direction, ideal for consistent analysis or
+#' visualisation. The output columns are `"forward_sequence"` and `"forward_quality"`.
+#' Calls [reverse_sequence_if_needed()] and [reverse_quality_if_needed()]
+#' to implement the reversing - see documentation for these functions for more details.
+#'
+#' @param fastq_data `dataframe`. A dataframe contaning sequence and quality data, as produced by [read_fastq()].\cr\cr Must contain a read id column (must be called `"read"`), a sequence column (`"sequence"`), and a quality column (`"quality"`). Additional columns are fine and will simply be included unaltered in the merged dataframe.
+#' @param metadata `dataframe`. A dataframe containing metadata for each read in `fastq_data`.\cr\cr Must contain a `"read"` column identical to the column of the same name in `fastq_data`, containing unique read IDs (this is used to merge the dataframes). Must also contain a `"direction"` column of `"forward"` and `"reverse"` (e.g. `c("forward", "forward", "reverse")`) indicating the direction of each read.\cr\cr **Important:** Reverse reads will have their sequence and quality scores reversed such that every output read is now forward. These will be stored in columns called `"forward_sequence"` and `"forward_quality"`.\cr\cr See [reverse_sequence_if_needed()] and [reverse_quality_if_needed()] documentation for details of how the reversing is implemented.
+#' @param reverse_complement_mode `character`. Whether reverse-complemented sequences should be converted to DNA (i.e. A complements to T) or RNA (i.e. A complements to U). Must be either `"DNA"` or `"RNA"`. *Only affects reverse-complemented sequences. Sequences that were forward to begin with are not altered.*\cr\cr Uses [reverse_complement()] via [reverse_sequence_if_needed()].
+#'
+#' @return `dataframe`. A merged dataframe containing all columns from the input dataframes, as well as forward versions of sequences and qualities.
+#' @export
+merge_fastq_with_metadata <- function(fastq_data, metadata, reverse_complement_mode = "DNA") {
+    ## Validate arguments
+    if (length(reverse_complement_mode) != 1 || is.na(reverse_complement_mode) || !is.character(reverse_complement_mode) || !(reverse_complement_mode %in% c("DNA", "RNA"))) {
+        abort("Reverse complement mode must be a single character value, either 'DNA' or 'RNA'", class = "argument_value_or_type")
+    }
+    if (nrow(metadata) != nrow(fastq_data)) {
+        abort("FASTQ and metadata dataframes must have the same number of rows, one row per read.", class = "argument_value_or_type")
+    }
+    for (column in c("read", "sequence", "quality")) {
+        if (!(column %in% colnames(fastq_data))) {
+            abort(paste0("FASTQ dataframe must contain a '", column, "' column. This error should not occur if data was read via read_modified_fastq(), please contact the package maintainers."), class = "argument_value_or_type")
+        }
+    }
+    if (!("read" %in% colnames(metadata))) {
+        abort(paste0("Metadata must contain a 'read' column. Please make sure there is a column of unique read IDs in the metadata and that it is called 'read'."), class = "argument_value_or_type")
+    }
+    if (!("direction" %in% colnames(metadata))) {
+        abort(paste0("Metadata must contain a 'direction' column. Please make sure there is a column of forward/reverse read directions in the metadata and that it is called 'direction'."), class = "argument_value_or_type")
+    }
+
+
+    ## Main function
+    merged_data <- merge(metadata, fastq_data, by = "read")
+    merged_data$forward_sequence <- reverse_sequence_if_needed(merged_data$sequence, merged_data$direction, reverse_complement_mode)
+    merged_data$forward_quality  <- reverse_quality_if_needed(merged_data$quality, merged_data$direction)
+
+    return(merged_data)
+}
+
+
+
+
+
 #' Merge methylation with metadata
 #'
 #' Merge a dataframe of methylation/modification data (as produced by
 #' [read_modified_fastq()]) with a dataframe of metadata, reversing
 #' sequence and modification information if required such that all information
-#' is now in the forward direction.\cr\cr
+#' is now in the forward direction.
+#' [merge_fastq_with_metadata()] is the equivalent function for working with
+#' unmodified FASTQs (sequence and quality only).\cr\cr
 #' Methylation/modification dataframe must contain columns of `"read"` (unique read ID),
 #' `"sequence"` (DNA sequence), `"quality"` (FASTQ quality score), `"sequence_length"`
 #' (read length), `"modification_types"` (a comma-separated string of SAMtools modification
@@ -39,7 +105,7 @@
 #' @param reversed_location_offset `integer`. How much modification locations should be shifted by. Defaults to `0`. This is important because if a CpG is assessed for methylation at the C, then reverse complementing it will give a methylation score at the G on the reverse-complemented strand. This is the most biologically accurate, but for visualising methylation it may be desired to shift the locations by 1 i.e. to correspond with the C in the reverse-complemented CpG rather than the G, which allows for consistent visualisation between forward and reverse strands. Setting (integer) values other than 0 or 1 will work, but may be biologically misleading so it is not recommended.\cr\cr **Highly recommended:** if considering using this option, read the [reverse_locations_if_needed()] documentation to fully understand how it works.
 #' @param reverse_complement_mode `character`. Whether reverse-complemented sequences should be converted to DNA (i.e. A complements to T) or RNA (i.e. A complements to U). Must be either `"DNA"` or `"RNA"`. *Only affects reverse-complemented sequences. Sequences that were forward to begin with are not altered.*\cr\cr Uses [reverse_complement()] via [reverse_sequence_if_needed()].
 #'
-#' @return A merged dataframe containing all columns from the input dataframes, as well as forward versions of sequences, qualities, modification locations, and modification probabilities (with separate locations and probabilities columns created for each modification type in the modification data).
+#' @return `dataframe`. A merged dataframe containing all columns from the input dataframes, as well as forward versions of sequences, qualities, modification locations, and modification probabilities (with separate locations and probabilities columns created for each modification type in the modification data).
 #' @export
 merge_methylation_with_metadata <- function(methylation_data, metadata, reversed_location_offset = 0, reverse_complement_mode = "DNA") {
     ## Validate arguments

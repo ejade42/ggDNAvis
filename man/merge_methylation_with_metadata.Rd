@@ -21,13 +21,15 @@ merge_methylation_with_metadata(
 \item{reverse_complement_mode}{\code{character}. Whether reverse-complemented sequences should be converted to DNA (i.e. A complements to T) or RNA (i.e. A complements to U). Must be either \code{"DNA"} or \code{"RNA"}. \emph{Only affects reverse-complemented sequences. Sequences that were forward to begin with are not altered.}\cr\cr Uses \code{\link[=reverse_complement]{reverse_complement()}} via \code{\link[=reverse_sequence_if_needed]{reverse_sequence_if_needed()}}.}
 }
 \value{
-A merged dataframe containing all columns from the input dataframes, as well as forward versions of sequences, qualities, modification locations, and modification probabilities (with separate locations and probabilities columns created for each modification type in the modification data).
+\code{dataframe}. A merged dataframe containing all columns from the input dataframes, as well as forward versions of sequences, qualities, modification locations, and modification probabilities (with separate locations and probabilities columns created for each modification type in the modification data).
 }
 \description{
 Merge a dataframe of methylation/modification data (as produced by
 \code{\link[=read_modified_fastq]{read_modified_fastq()}}) with a dataframe of metadata, reversing
 sequence and modification information if required such that all information
-is now in the forward direction.\cr\cr
+is now in the forward direction.
+\code{\link[=merge_fastq_with_metadata]{merge_fastq_with_metadata()}} is the equivalent function for working with
+unmodified FASTQs (sequence and quality only).\cr\cr
 Methylation/modification dataframe must contain columns of \code{"read"} (unique read ID),
 \code{"sequence"} (DNA sequence), \code{"quality"} (FASTQ quality score), \code{"sequence_length"}
 (read length), \code{"modification_types"} (a comma-separated string of SAMtools modification
