@@ -350,6 +350,7 @@ convert_MM_vector_to_locations <- function(sequence, skips, target_base = "C") {
 #' @param return `logical`. Boolean specifying whether this function should return the FASTQ (as a character vector of each line in the FASTQ), otherwise it will return `invisible(NULL)`. Defaults to `FALSE`.
 #'
 #' @return `character vector`. The resulting FASTQ file as a character vector of its constituent lines (or `invisible(NULL)` if `return` is `FALSE`). This is probably mostly useful for debugging, as setting `filename` within this function directly writes to FASTQ via [writeLines()]. Therefore, defaults to returning `invisible(NULL)`.
+#' @export
 write_fastq <- function(dataframe, filename = NA, read_id_colname = "read", sequence_colname = "sequence", quality_colname = "quality", return = FALSE) {
     ## Validate arguments
     for (argument in list(dataframe, filename, read_id_colname, sequence_colname, quality_colname, return)) {
