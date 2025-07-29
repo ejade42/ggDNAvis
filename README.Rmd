@@ -4,9 +4,11 @@ output:
         number_sections: true
         toc: true
         toc_depth: 3
+bibliography: README_files/2025-07-28 notch2nlc papers.bib
+csl: README_files/apa.csl
 ---
 
-# ggDNAvis {#intro}
+# ggDNAvis IMPORTANT NEED TO REMOVE THESE SECTION NAMES THEY DONT WORK{#intro} 
 
 ggDNAvis is an R package that uses ggplot2 to visualise genetic data of three main types:
 
@@ -130,18 +132,18 @@ Note: the `direction` column can be produced manually. However, for large data v
 ## See the samtools flag documentation for more details on why
 ## -F 16 selects forward reads and -F 16 selects reverse reads
 samtools view -F 16 ${input_bam_file} | \
-awk '{print $1}'  > "forward_reads.fastq"
+awk '{print $1}'  > "forward_reads.txt"
 
 samtools view -f 16 ${input_bam_file} | \
-awk '{print $1}'  > "reverse_reads.fastq"
+awk '{print $1}'  > "reverse_reads.txt"
 ```
 
 Then simply read the lines from each file and use that to assign directions:
 
 ```{r, eval = FALSE}
 ## Use files from last step to construct vectors of forward and reverse IDs
-forward_reads <- readLines("forward_reads.fastq")
-reverse_reads <- readLines("reverse_reads.fastq")
+forward_reads <- readLines("forward_reads.txt")
+reverse_reads <- readLines("reverse_reads.txt")
 
 ## Use rep() to add a direction column
 constructed_metadata <- data.frame(
@@ -356,4 +358,24 @@ rm(list = ls())
 
 # Visualising a single DNA/RNA sequence
 
-ggDNAvis can be used to visualise a single DNA sequence via `visualise_single_sequence`
+ggDNAvis can be used to visualise a single DNA sequence via `visualise_single_sequence()`. This function is extremely simple, just taking a DNA sequence as input. We will use the *NOTCH2NLC* repeat expansion sequence of F1-1 from Figure 1 of @sone_long-read_2019.
+
+```{r}
+## Define sequence variable
+sone_2019_f1_1_expanded <- "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGAGGCGGCGGCGGAGGAGGAGGCGGCGGAGGAGGAGGCGGCGGAGGAGGAGGCGGCGGAGGAGGAGGCGGCGGAGGAGGAGGCGGCGGAGGAGGAGGCGGCGGAGGAGGAGGCGGCGGCGGCGGCGGCGGC"
+
+## Use all default settings
+visualise_single_sequence(sone_2019_f1_1_expanded)
+```
+
+By default, `visualise_single_sequence()` will return a ggplot object. It can be useful to view this for instant debugging. However, it is not usually rendered at a sensible scale or aspect ratio. Therefore, it is preferable to set a `filename = <file_to_write_to.png>` for export, as the function has built-in logic for scaling correctly (with resolution configurable via the `pixels_per_base` argument). We don't have a use for interactive debugging, so we will also set `return = FALSE`.
+
+```{r}
+## Create image
+visualise_single_sequence(sone_2019_f1_1_expanded, 
+                          filename = "README_files/output/single_sequence_01.png", 
+                          return = FALSE)
+
+## View image
+knitr::include_graphics("README_files/output/single_sequence_01.png")
+```
