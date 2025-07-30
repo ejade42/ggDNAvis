@@ -36,7 +36,10 @@ library(ggplot2)
 
 ## Function for viewing tables throughout this document
 github_table <- function(data) {
-    quoted <- as.data.frame(lapply(data, function(x) {paste0("`", x, "`")}))
+    quoted <- as.data.frame(
+        lapply(data, function(x) {paste0("`", x, "`")}),
+        check.names = FALSE
+    )
     kable_output <- knitr::kable(quoted)
     return(kable_output)
 }
