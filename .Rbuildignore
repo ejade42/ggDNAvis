@@ -6,8 +6,9 @@
 ^README_files/*$
 ^tests/testthat/reference_images_original$
 ^tests/testthat/reference_output_data_original$
-^tests/testthat/test_plot_images/*.png$
-^tests/testthat/test_plot_images/*.pNg$
-^tests/testthat/test_plot_images/*.PNG$
-^tests/testthat/test_plot_images/*.jpg$
-^tests/testthat/test_output_data/*.fastq$
+^tests/testthat/test_plot_images/*\.png$
+^tests/testthat/test_plot_images/*\.pNg$
+^tests/testthat/test_plot_images/*\.PNG$
+^tests/testthat/test_plot_images/*\.jpg$
+^tests/testthat/test_output_data/*\.fastq$
+^README_files/Exported Items\.bib$

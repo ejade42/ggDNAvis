@@ -1,18 +1,19 @@
 
-- [1 ggDNAvis IMPORTANT NEED TO REMOVE THESE SECTION NAMES THEY DONT
-  WORK](#intro)
+- [1 ggDNAvis](#1-ggdnavis)
 - [2 Loading data](#2-loading-data)
   - [2.1 Introduction to
-    `example_many_sequences`](#example-many-sequences)
+    `example_many_sequences`](#21-introduction-to-example_many_sequences)
   - [2.2 Introduction to `string_to_vector()` and
-    `vector_to_string()`](#vector-string-processing)
-  - [2.3 Loading from FASTQ and metadata file](#loading-from-fastq)
+    `vector_to_string()`](#22-introduction-to-string_to_vector-and-vector_to_string)
+  - [2.3 Loading from FASTQ and metadata
+    file](#23-loading-from-fastq-and-metadata-file)
     - [2.3.1 Standard FASTQ](#231-standard-fastq)
-    - [2.3.2 Modified FASTQ (e.g. methylation)](#modified_fastq)
+    - [2.3.2 Modified FASTQ
+      (e.g. methylation)](#232-modified-fastq-eg-methylation)
 - [3 Visualising a single DNA/RNA
   sequence](#3-visualising-a-single-dnarna-sequence)
 
-# 1 ggDNAvis IMPORTANT NEED TO REMOVE THESE SECTION NAMES THEY DONT WORK
+# 1 ggDNAvis
 
 ggDNAvis is an R package that uses ggplot2 to visualise genetic data of
 three main types:
@@ -42,9 +43,19 @@ Throughout this manual, only ggDNAvis and its dependencies dplyr and
 ggplot2 are loaded:
 
 ``` r
+## Load this package
 library(ggDNAvis)
+
+## Load dependencies
 library(dplyr)
 library(ggplot2)
+
+## Function for viewing tables throughout this document
+github_table <- function(data) {
+    quoted <- as.data.frame(lapply(data, function(x) {paste0("`", x, "`")}))
+    kable_output <- knitr::kable(quoted)
+    return(kable_output)
+}
 ```
 
 # 2 Loading data
@@ -60,15 +71,15 @@ SAM/BAM file.
 
 ``` r
 ## View the first 4 rows of example_many_sequences data
-knitr::kable(head(example_many_sequences, 4))
+github_table(head(example_many_sequences, 4))
 ```
 
 | family | individual | read | sequence | sequence_length | quality | methylation_locations | methylation_probabilities | hydroxymethylation_locations | hydroxymethylation_probabilities |
-|:---|:---|:---|:---|---:|:---|:---|:---|:---|:---|
-| Family 1 | F1-1 | F1-1a | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | 102 | )8@!9:/0/,0+-6?40,-I601:.’;+5,(**0.0?**)%)!(20C*,2++*(00#/*+3;E-E)\<I5.5G*CB8501;I3’.8233’3\>\<:13)48F?09\*\>?I90 | 3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99 | 29,159,155,159,220,163,2,59,170,131,177,139,72,235,75,214,73,68,48,59,81,77,41 | 3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99 | 26,60,61,60,30,59,2,46,57,64,54,63,52,18,53,34,52,50,39,46,55,54,34 |
-| Family 1 | F1-1 | F1-1b | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | 63 | 60-7,7943/*=5=)7\<53-I=G6/&/7?8)\<\$12”\>/2C;4:9F8:816E,6C3*,1-2139 | 3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60 | 10,56,207,134,233,212,12,116,68,78,129,46,194,51,66,253 | 3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60 | 10,44,39,64,20,36,11,63,50,54,64,38,46,41,49,2 |
-| Family 1 | F1-1 | F1-1c | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | 87 | ;F42DF52#C-*I75!4?9\>IA0\<30!-:I:;+7!:\<7<8=G@5*91D%193/2;>\<IA8.I\<.722,68*!25;69\*\<\<8C9889@ | 3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84 | 206,141,165,80,159,84,128,173,124,62,195,19,79,183,129,39,129,126,192,45 | 3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84 | 40,63,58,55,60,56,64,56,64,47,46,17,55,52,64,33,63,64,47,37 |
-| Family 1 | F1-1 | F1-1d | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | 81 | :\<\*1D)89?27#8.3)9\<2G\<\>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8\>0 | 3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78 | 216,221,11,81,4,61,180,79,130,13,144,31,228,4,200,23,132,98,18,82 | 3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78 | 33,29,10,55,3,46,53,54,64,12,63,27,24,4,43,21,64,60,17,55 |
+|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|
+| `Family 1` | `F1-1` | `F1-1a` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `102` | `)8@!9:/0/,0+-6?40,-I601:.';+5,@0.0%)!(20C*,2++*(00#/*+3;E-E)<I5.5G*CB8501;I3'.8233'3><:13)48F?09*>?I90` | `3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99` | `29,159,155,159,220,163,2,59,170,131,177,139,72,235,75,214,73,68,48,59,81,77,41` | `3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99` | `26,60,61,60,30,59,2,46,57,64,54,63,52,18,53,34,52,50,39,46,55,54,34` |
+| `Family 1` | `F1-1` | `F1-1b` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `63` | `60-7,7943/*=5=)7<53-I=G6/&/7?8)<$12">/2C;4:9F8:816E,6C3*,1-2139` | `3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60` | `10,56,207,134,233,212,12,116,68,78,129,46,194,51,66,253` | `3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60` | `10,44,39,64,20,36,11,63,50,54,64,38,46,41,49,2` |
+| `Family 1` | `F1-1` | `F1-1c` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `87` | `;F42DF52#C-*I75!4?9>IA0<30!-:I:;+7!:<7<8=G@5*91D%193/2;><IA8.I<.722,68*!25;69*<<8C9889@` | `3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84` | `206,141,165,80,159,84,128,173,124,62,195,19,79,183,129,39,129,126,192,45` | `3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84` | `40,63,58,55,60,56,64,56,64,47,46,17,55,52,64,33,63,64,47,37` |
+| `Family 1` | `F1-1` | `F1-1d` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `81` | `:<*1D)89?27#8.3)9<2G<>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8>0` | `3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78` | `216,221,11,81,4,61,180,79,130,13,144,31,228,4,200,23,132,98,18,82` | `3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78` | `33,29,10,55,3,46,53,54,64,12,63,27,24,4,43,21,64,60,17,55` |
 
 The DNA sequence in column `sequence` is the information used for
 visualising single/multiple sequences. For visualising DNA modification,
@@ -240,15 +251,15 @@ for (i in 1:16) {
 fastq_data <- read_fastq("inst/extdata/example_many_sequences_raw.fastq", calculate_length = TRUE)
 
 ## View first 4 rows
-knitr::kable(head(fastq_data, 4))
+github_table(head(fastq_data, 4))
 ```
 
 | read | sequence | quality | sequence_length |
-|:---|:---|:---|---:|
-| F1-1a | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | )8@!9:/0/,0+-6?40,-I601:.’;+5,(**0.0?**)%)!(20C*,2++*(00#/*+3;E-E)\<I5.5G*CB8501;I3’.8233’3\>\<:13)48F?09\*\>?I90 | 102 |
-| F1-1b | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | 60-7,7943/*=5=)7\<53-I=G6/&/7?8)\<\$12”\>/2C;4:9F8:816E,6C3*,1-2139 | 63 |
-| F1-1c | TCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCGCCGCCGCCGCCGCCGCC | (**9889C8?**)\<\<*96;52!*86,227.\<I.8AI\<\>;<2/391%D19*5@G>=8\<7\<:!7+;:I:-!03\<0AI\>9?4!57I\*-C#25FD24F; | 87 |
-| F1-1d | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | :\<\*1D)89?27#8.3)9\<2G\<\>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8\>0 | 81 |
+|:---|:---|:---|:---|
+| `F1-1a` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `)8@!9:/0/,0+-6?40,-I601:.';+5,@0.0%)!(20C*,2++*(00#/*+3;E-E)<I5.5G*CB8501;I3'.8233'3><:13)48F?09*>?I90` | `102` |
+| `F1-1b` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `60-7,7943/*=5=)7<53-I=G6/&/7?8)<$12">/2C;4:9F8:816E,6C3*,1-2139` | `63` |
+| `F1-1c` | `TCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCGCCGCCGCCGCCGCCGCC` | `@9889C8<<*96;52!*86,227.<I.8AI<>;2/391%D19*5@G=8<7<:!7+;:I:-!03<0AI>9?4!57I*-C#25FD24F;` | `87` |
+| `F1-1d` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `:<*1D)89?27#8.3)9<2G<>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8>0` | `81` |
 
 Using the basic `read_fastq()` function returns a dataframe with read
 ID, sequence, and quality columns. Optionally, a `sequence_length`
@@ -266,15 +277,15 @@ belongs, we will make use of a metadata file located at
 metadata <- read.csv("inst/extdata/example_many_sequences_metadata.csv")
 
 ## View first 4 rows
-knitr::kable(head(metadata, 4))
+github_table(head(metadata, 4))
 ```
 
-| family   | individual | read  | direction |
-|:---------|:-----------|:------|:----------|
-| Family 1 | F1-1       | F1-1a | forward   |
-| Family 1 | F1-1       | F1-1b | forward   |
-| Family 1 | F1-1       | F1-1c | reverse   |
-| Family 1 | F1-1       | F1-1d | forward   |
+| family     | individual | read    | direction |
+|:-----------|:-----------|:--------|:----------|
+| `Family 1` | `F1-1`     | `F1-1a` | `forward` |
+| `Family 1` | `F1-1`     | `F1-1b` | `forward` |
+| `Family 1` | `F1-1`     | `F1-1c` | `reverse` |
+| `Family 1` | `F1-1`     | `F1-1d` | `forward` |
 
 We see that this metadata file contains the same `read` column with the
 same unique read IDs and a `direction` column specifying whether each
@@ -327,15 +338,15 @@ containing the forward version of all reads:
 merged_fastq_data <- merge_fastq_with_metadata(fastq_data, metadata)
 
 ## View first 4 rows
-knitr::kable(head(merged_fastq_data, 4))
+github_table(head(merged_fastq_data, 4))
 ```
 
 | read | family | individual | direction | sequence | quality | sequence_length | forward_sequence | forward_quality |
-|:---|:---|:---|:---|:---|:---|---:|:---|:---|
-| F1-1a | Family 1 | F1-1 | forward | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | )8@!9:/0/,0+-6?40,-I601:.’;+5,(**0.0?**)%)!(20C*,2++*(00#/*+3;E-E)\<I5.5G*CB8501;I3’.8233’3\>\<:13)48F?09\*\>?I90 | 102 | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | )8@!9:/0/,0+-6?40,-I601:.’;+5,(**0.0?**)%)!(20C*,2++*(00#/*+3;E-E)\<I5.5G*CB8501;I3’.8233’3\>\<:13)48F?09\*\>?I90 |
-| F1-1b | Family 1 | F1-1 | forward | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | 60-7,7943/*=5=)7\<53-I=G6/&/7?8)\<\$12”\>/2C;4:9F8:816E,6C3*,1-2139 | 63 | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | 60-7,7943/*=5=)7\<53-I=G6/&/7?8)\<\$12”\>/2C;4:9F8:816E,6C3*,1-2139 |
-| F1-1c | Family 1 | F1-1 | reverse | TCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCGCCGCCGCCGCCGCCGCC | (**9889C8?**)\<\<*96;52!*86,227.\<I.8AI\<\>;<2/391%D19*5@G>=8\<7\<:!7+;:I:-!03\<0AI\>9?4!57I\*-C#25FD24F; | 87 | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | ;F42DF52#C-*I75!4?9\>IA0\<30!-:I:;+7!:\<7<8=G@5*91D%193/2;>\<IA8.I\<.722,68*!25;69\*\<\<8C9889@ |
-| F1-1d | Family 1 | F1-1 | forward | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | :\<\*1D)89?27#8.3)9\<2G\<\>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8\>0 | 81 | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | :\<\*1D)89?27#8.3)9\<2G\<\>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8\>0 |
+|:---|:---|:---|:---|:---|:---|:---|:---|:---|
+| `F1-1a` | `Family 1` | `F1-1` | `forward` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `)8@!9:/0/,0+-6?40,-I601:.';+5,@0.0%)!(20C*,2++*(00#/*+3;E-E)<I5.5G*CB8501;I3'.8233'3><:13)48F?09*>?I90` | `102` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `)8@!9:/0/,0+-6?40,-I601:.';+5,@0.0%)!(20C*,2++*(00#/*+3;E-E)<I5.5G*CB8501;I3'.8233'3><:13)48F?09*>?I90` |
+| `F1-1b` | `Family 1` | `F1-1` | `forward` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `60-7,7943/*=5=)7<53-I=G6/&/7?8)<$12">/2C;4:9F8:816E,6C3*,1-2139` | `63` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `60-7,7943/*=5=)7<53-I=G6/&/7?8)<$12">/2C;4:9F8:816E,6C3*,1-2139` |
+| `F1-1c` | `Family 1` | `F1-1` | `reverse` | `TCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCGCCGCCGCCGCCGCCGCC` | `@9889C8<<*96;52!*86,227.<I.8AI<>;2/391%D19*5@G=8<7<:!7+;:I:-!03<0AI>9?4!57I*-C#25FD24F;` | `87` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `;F42DF52#C-*I75!4?9>IA0<30!-:I:;+7!:<7<8=G@5*91D%193/2;><IA8.I<.722,68*!25;69*<<8C9889@` |
+| `F1-1d` | `Family 1` | `F1-1` | `forward` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `:<*1D)89?27#8.3)9<2G<>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8>0` | `81` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `:<*1D)89?27#8.3)9<2G<>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8>0` |
 
 Now we have a `forward_sequence` column (scroll to the right if you
 can’t see it!). We can now reformat this data to be exactly the same as
@@ -349,27 +360,27 @@ merged_fastq_data <- merged_fastq_data[, c("family", "individual", "read", "forw
 colnames(merged_fastq_data)[c(4,6)] <- c("sequence", "quality")
 
 ## View first 4 rows of data produced from files
-knitr::kable(head(merged_fastq_data, 4))
+github_table(head(merged_fastq_data, 4))
 ```
 
 | family | individual | read | sequence | sequence_length | quality |
-|:---|:---|:---|:---|---:|:---|
-| Family 1 | F1-1 | F1-1a | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | 102 | )8@!9:/0/,0+-6?40,-I601:.’;+5,(**0.0?**)%)!(20C*,2++*(00#/*+3;E-E)\<I5.5G*CB8501;I3’.8233’3\>\<:13)48F?09\*\>?I90 |
-| Family 1 | F1-1 | F1-1b | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | 63 | 60-7,7943/*=5=)7\<53-I=G6/&/7?8)\<\$12”\>/2C;4:9F8:816E,6C3*,1-2139 |
-| Family 1 | F1-1 | F1-1c | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | 87 | ;F42DF52#C-*I75!4?9\>IA0\<30!-:I:;+7!:\<7<8=G@5*91D%193/2;>\<IA8.I\<.722,68*!25;69\*\<\<8C9889@ |
-| Family 1 | F1-1 | F1-1d | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | 81 | :\<\*1D)89?27#8.3)9\<2G\<\>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8\>0 |
+|:---|:---|:---|:---|:---|:---|
+| `Family 1` | `F1-1` | `F1-1a` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `102` | `)8@!9:/0/,0+-6?40,-I601:.';+5,@0.0%)!(20C*,2++*(00#/*+3;E-E)<I5.5G*CB8501;I3'.8233'3><:13)48F?09*>?I90` |
+| `Family 1` | `F1-1` | `F1-1b` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `63` | `60-7,7943/*=5=)7<53-I=G6/&/7?8)<$12">/2C;4:9F8:816E,6C3*,1-2139` |
+| `Family 1` | `F1-1` | `F1-1c` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `87` | `;F42DF52#C-*I75!4?9>IA0<30!-:I:;+7!:<7<8=G@5*91D%193/2;><IA8.I<.722,68*!25;69*<<8C9889@` |
+| `Family 1` | `F1-1` | `F1-1d` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `81` | `:<*1D)89?27#8.3)9<2G<>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8>0` |
 
 ``` r
 ## View first 4 rows of example_many_sequences (with modification columns excluded)
-knitr::kable(head(example_many_sequences[, 1:6], 4))
+github_table(head(example_many_sequences[, 1:6], 4))
 ```
 
 | family | individual | read | sequence | sequence_length | quality |
-|:---|:---|:---|:---|---:|:---|
-| Family 1 | F1-1 | F1-1a | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | 102 | )8@!9:/0/,0+-6?40,-I601:.’;+5,(**0.0?**)%)!(20C*,2++*(00#/*+3;E-E)\<I5.5G*CB8501;I3’.8233’3\>\<:13)48F?09\*\>?I90 |
-| Family 1 | F1-1 | F1-1b | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | 63 | 60-7,7943/*=5=)7\<53-I=G6/&/7?8)\<\$12”\>/2C;4:9F8:816E,6C3*,1-2139 |
-| Family 1 | F1-1 | F1-1c | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | 87 | ;F42DF52#C-*I75!4?9\>IA0\<30!-:I:;+7!:\<7<8=G@5*91D%193/2;>\<IA8.I\<.722,68*!25;69\*\<\<8C9889@ |
-| Family 1 | F1-1 | F1-1d | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | 81 | :\<\*1D)89?27#8.3)9\<2G\<\>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8\>0 |
+|:---|:---|:---|:---|:---|:---|
+| `Family 1` | `F1-1` | `F1-1a` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `102` | `)8@!9:/0/,0+-6?40,-I601:.';+5,@0.0%)!(20C*,2++*(00#/*+3;E-E)<I5.5G*CB8501;I3'.8233'3><:13)48F?09*>?I90` |
+| `Family 1` | `F1-1` | `F1-1b` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `63` | `60-7,7943/*=5=)7<53-I=G6/&/7?8)<$12">/2C;4:9F8:816E,6C3*,1-2139` |
+| `Family 1` | `F1-1` | `F1-1c` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `87` | `;F42DF52#C-*I75!4?9>IA0<30!-:I:;+7!:<7<8=G@5*91D%193/2;><IA8.I<.722,68*!25;69*<<8C9889@` |
+| `Family 1` | `F1-1` | `F1-1d` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `81` | `:<*1D)89?27#8.3)9<2G<>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8>0` |
 
 ``` r
 ## Check if equal
@@ -479,22 +490,22 @@ main DNA methylation sites in the genome. For each assessed site, the
 modification probability is given as an 8-bit integer (0-255), where 0
 represents ~0% modification probability and 255 represents ~100%
 modification probability (this is fully explained in
-<a href="#example-many-sequences">2.1</a>).
+@ref(introduction-to-example_many_sequences)).
 
 ``` r
 ## Load data from FASTQ
 methylation_data <- read_modified_fastq("inst/extdata/example_many_sequences_raw_modified.fastq")
 
 ## View first 4 rows
-knitr::kable(head(methylation_data, 4))
+github_table(head(methylation_data, 4))
 ```
 
-| read | sequence | sequence_length | quality | modification_types | C+h?\_locations | C+h?\_probabilities | C+m?\_locations | C+m?\_probabilities |
-|:---|:---|---:|:---|:---|:---|:---|:---|:---|
-| F1-1a | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | 102 | )8@!9:/0/,0+-6?40,-I601:.’;+5,(**0.0?**)%)!(20C*,2++*(00#/*+3;E-E)\<I5.5G*CB8501;I3’.8233’3\>\<:13)48F?09\*\>?I90 | C+h?,C+m? | 3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99 | 26,60,61,60,30,59,2,46,57,64,54,63,52,18,53,34,52,50,39,46,55,54,34 | 3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99 | 29,159,155,159,220,163,2,59,170,131,177,139,72,235,75,214,73,68,48,59,81,77,41 |
-| F1-1b | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | 63 | 60-7,7943/*=5=)7\<53-I=G6/&/7?8)\<\$12”\>/2C;4:9F8:816E,6C3*,1-2139 | C+h?,C+m? | 3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60 | 10,44,39,64,20,36,11,63,50,54,64,38,46,41,49,2 | 3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60 | 10,56,207,134,233,212,12,116,68,78,129,46,194,51,66,253 |
-| F1-1c | TCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCGCCGCCGCCGCCGCCGCC | 87 | (**9889C8?**)\<\<*96;52!*86,227.\<I.8AI\<\>;<2/391%D19*5@G>=8\<7\<:!7+;:I:-!03\<0AI\>9?4!57I\*-C#25FD24F; | C+h?,C+m? | 3,6,15,18,21,30,33,36,45,48,51,60,63,66,69,72,75,78,81,84 | 37,47,64,63,33,64,52,55,17,46,47,64,56,64,56,60,55,58,63,40 | 3,6,15,18,21,30,33,36,45,48,51,60,63,66,69,72,75,78,81,84 | 45,192,126,129,39,129,183,79,19,195,62,124,173,128,84,159,80,165,141,206 |
-| F1-1d | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | 81 | :\<\*1D)89?27#8.3)9\<2G\<\>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8\>0 | C+h?,C+m? | 3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78 | 33,29,10,55,3,46,53,54,64,12,63,27,24,4,43,21,64,60,17,55 | 3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78 | 216,221,11,81,4,61,180,79,130,13,144,31,228,4,200,23,132,98,18,82 |
+| read | sequence | sequence_length | quality | modification_types | C.h.\_locations | C.h.\_probabilities | C.m.\_locations | C.m.\_probabilities |
+|:---|:---|:---|:---|:---|:---|:---|:---|:---|
+| `F1-1a` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `102` | `)8@!9:/0/,0+-6?40,-I601:.';+5,@0.0%)!(20C*,2++*(00#/*+3;E-E)<I5.5G*CB8501;I3'.8233'3><:13)48F?09*>?I90` | `C+h?,C+m?` | `3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99` | `26,60,61,60,30,59,2,46,57,64,54,63,52,18,53,34,52,50,39,46,55,54,34` | `3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99` | `29,159,155,159,220,163,2,59,170,131,177,139,72,235,75,214,73,68,48,59,81,77,41` |
+| `F1-1b` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `63` | `60-7,7943/*=5=)7<53-I=G6/&/7?8)<$12">/2C;4:9F8:816E,6C3*,1-2139` | `C+h?,C+m?` | `3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60` | `10,44,39,64,20,36,11,63,50,54,64,38,46,41,49,2` | `3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60` | `10,56,207,134,233,212,12,116,68,78,129,46,194,51,66,253` |
+| `F1-1c` | `TCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCGCCGCCGCCGCCGCCGCC` | `87` | `@9889C8<<*96;52!*86,227.<I.8AI<>;2/391%D19*5@G=8<7<:!7+;:I:-!03<0AI>9?4!57I*-C#25FD24F;` | `C+h?,C+m?` | `3,6,15,18,21,30,33,36,45,48,51,60,63,66,69,72,75,78,81,84` | `37,47,64,63,33,64,52,55,17,46,47,64,56,64,56,60,55,58,63,40` | `3,6,15,18,21,30,33,36,45,48,51,60,63,66,69,72,75,78,81,84` | `45,192,126,129,39,129,183,79,19,195,62,124,173,128,84,159,80,165,141,206` |
+| `F1-1d` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `81` | `:<*1D)89?27#8.3)9<2G<>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8>0` | `C+h?,C+m?` | `3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78` | `33,29,10,55,3,46,53,54,64,12,63,27,24,4,43,21,64,60,17,55` | `3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78` | `216,221,11,81,4,61,180,79,130,13,144,31,228,4,200,23,132,98,18,82` |
 
 Ultimately, `read_modified_fastq()` outputs a dataframe with the
 standard read information (ID, sequence, length, quality), a column
@@ -509,7 +520,7 @@ integers).
 Modification types, locations, and probabilities are all stored as
 comma-condensed strings produced from vectors via `vector_to_string()`.
 These can be converted back to vectors via `string_to_vector()` - see
-<a href="#vector-string-processing">2.2</a>.
+@ref(introduction-to-string_to_vector-and-vector_to_string).
 
 As with the standard FASTQ, some of the reads in the modified FASTQ are
 reverse. However, as the assessed modification locations are indices
@@ -523,15 +534,15 @@ achieved via the `merge_methylation_with_metadata()` function.
 metadata <- read.csv("inst/extdata/example_many_sequences_metadata.csv")
 
 ## View first 4 rows
-knitr::kable(head(metadata, 4))
+github_table(head(metadata, 4))
 ```
 
-| family   | individual | read  | direction |
-|:---------|:-----------|:------|:----------|
-| Family 1 | F1-1       | F1-1a | forward   |
-| Family 1 | F1-1       | F1-1b | forward   |
-| Family 1 | F1-1       | F1-1c | reverse   |
-| Family 1 | F1-1       | F1-1d | forward   |
+| family     | individual | read    | direction |
+|:-----------|:-----------|:--------|:----------|
+| `Family 1` | `F1-1`     | `F1-1a` | `forward` |
+| `Family 1` | `F1-1`     | `F1-1b` | `forward` |
+| `Family 1` | `F1-1`     | `F1-1c` | `reverse` |
+| `Family 1` | `F1-1`     | `F1-1d` | `forward` |
 
 The metadata is identical to previously
 (<a href="#standard-fastq">2.3.1</a>).
@@ -544,15 +555,15 @@ The metadata is identical to previously
 merged_methylation_data <- merge_methylation_with_metadata(methylation_data, metadata)
 
 ## View first 4 rows
-knitr::kable(head(merged_methylation_data, 4))
+github_table(head(merged_methylation_data, 4))
 ```
 
-| read | family | individual | direction | sequence | sequence_length | quality | modification_types | C+h?\_locations | C+h?\_probabilities | C+m?\_locations | C+m?\_probabilities | forward_sequence | forward_quality | forward_C+h?\_locations | forward_C+h?\_probabilities | forward_C+m?\_locations | forward_C+m?\_probabilities |
-|:---|:---|:---|:---|:---|---:|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|
-| F1-1a | Family 1 | F1-1 | forward | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | 102 | )8@!9:/0/,0+-6?40,-I601:.’;+5,(**0.0?**)%)!(20C*,2++*(00#/*+3;E-E)\<I5.5G*CB8501;I3’.8233’3\>\<:13)48F?09\*\>?I90 | C+h?,C+m? | 3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99 | 26,60,61,60,30,59,2,46,57,64,54,63,52,18,53,34,52,50,39,46,55,54,34 | 3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99 | 29,159,155,159,220,163,2,59,170,131,177,139,72,235,75,214,73,68,48,59,81,77,41 | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | )8@!9:/0/,0+-6?40,-I601:.’;+5,(**0.0?**)%)!(20C*,2++*(00#/*+3;E-E)\<I5.5G*CB8501;I3’.8233’3\>\<:13)48F?09\*\>?I90 | 3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99 | 26,60,61,60,30,59,2,46,57,64,54,63,52,18,53,34,52,50,39,46,55,54,34 | 3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99 | 29,159,155,159,220,163,2,59,170,131,177,139,72,235,75,214,73,68,48,59,81,77,41 |
-| F1-1b | Family 1 | F1-1 | forward | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | 63 | 60-7,7943/*=5=)7\<53-I=G6/&/7?8)\<\$12”\>/2C;4:9F8:816E,6C3*,1-2139 | C+h?,C+m? | 3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60 | 10,44,39,64,20,36,11,63,50,54,64,38,46,41,49,2 | 3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60 | 10,56,207,134,233,212,12,116,68,78,129,46,194,51,66,253 | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | 60-7,7943/*=5=)7\<53-I=G6/&/7?8)\<\$12”\>/2C;4:9F8:816E,6C3*,1-2139 | 3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60 | 10,44,39,64,20,36,11,63,50,54,64,38,46,41,49,2 | 3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60 | 10,56,207,134,233,212,12,116,68,78,129,46,194,51,66,253 |
-| F1-1c | Family 1 | F1-1 | reverse | TCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCGCCGCCGCCGCCGCCGCC | 87 | (**9889C8?**)\<\<*96;52!*86,227.\<I.8AI\<\>;<2/391%D19*5@G>=8\<7\<:!7+;:I:-!03\<0AI\>9?4!57I\*-C#25FD24F; | C+h?,C+m? | 3,6,15,18,21,30,33,36,45,48,51,60,63,66,69,72,75,78,81,84 | 37,47,64,63,33,64,52,55,17,46,47,64,56,64,56,60,55,58,63,40 | 3,6,15,18,21,30,33,36,45,48,51,60,63,66,69,72,75,78,81,84 | 45,192,126,129,39,129,183,79,19,195,62,124,173,128,84,159,80,165,141,206 | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | ;F42DF52#C-*I75!4?9\>IA0\<30!-:I:;+7!:\<7<8=G@5*91D%193/2;>\<IA8.I\<.722,68*!25;69\*\<\<8C9889@ | 4,7,10,13,16,19,22,25,28,37,40,43,52,55,58,67,70,73,82,85 | 40,63,58,55,60,56,64,56,64,47,46,17,55,52,64,33,63,64,47,37 | 4,7,10,13,16,19,22,25,28,37,40,43,52,55,58,67,70,73,82,85 | 206,141,165,80,159,84,128,173,124,62,195,19,79,183,129,39,129,126,192,45 |
-| F1-1d | Family 1 | F1-1 | forward | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | 81 | :\<\*1D)89?27#8.3)9\<2G\<\>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8\>0 | C+h?,C+m? | 3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78 | 33,29,10,55,3,46,53,54,64,12,63,27,24,4,43,21,64,60,17,55 | 3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78 | 216,221,11,81,4,61,180,79,130,13,144,31,228,4,200,23,132,98,18,82 | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | :\<\*1D)89?27#8.3)9\<2G\<\>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8\>0 | 3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78 | 33,29,10,55,3,46,53,54,64,12,63,27,24,4,43,21,64,60,17,55 | 3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78 | 216,221,11,81,4,61,180,79,130,13,144,31,228,4,200,23,132,98,18,82 |
+| read | family | individual | direction | sequence | sequence_length | quality | modification_types | C.h.\_locations | C.h.\_probabilities | C.m.\_locations | C.m.\_probabilities | forward_sequence | forward_quality | forward_C.h.\_locations | forward_C.h.\_probabilities | forward_C.m.\_locations | forward_C.m.\_probabilities |
+|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|
+| `F1-1a` | `Family 1` | `F1-1` | `forward` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `102` | `)8@!9:/0/,0+-6?40,-I601:.';+5,@0.0%)!(20C*,2++*(00#/*+3;E-E)<I5.5G*CB8501;I3'.8233'3><:13)48F?09*>?I90` | `C+h?,C+m?` | `3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99` | `26,60,61,60,30,59,2,46,57,64,54,63,52,18,53,34,52,50,39,46,55,54,34` | `3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99` | `29,159,155,159,220,163,2,59,170,131,177,139,72,235,75,214,73,68,48,59,81,77,41` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `)8@!9:/0/,0+-6?40,-I601:.';+5,@0.0%)!(20C*,2++*(00#/*+3;E-E)<I5.5G*CB8501;I3'.8233'3><:13)48F?09*>?I90` | `3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99` | `26,60,61,60,30,59,2,46,57,64,54,63,52,18,53,34,52,50,39,46,55,54,34` | `3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99` | `29,159,155,159,220,163,2,59,170,131,177,139,72,235,75,214,73,68,48,59,81,77,41` |
+| `F1-1b` | `Family 1` | `F1-1` | `forward` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `63` | `60-7,7943/*=5=)7<53-I=G6/&/7?8)<$12">/2C;4:9F8:816E,6C3*,1-2139` | `C+h?,C+m?` | `3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60` | `10,44,39,64,20,36,11,63,50,54,64,38,46,41,49,2` | `3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60` | `10,56,207,134,233,212,12,116,68,78,129,46,194,51,66,253` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `60-7,7943/*=5=)7<53-I=G6/&/7?8)<$12">/2C;4:9F8:816E,6C3*,1-2139` | `3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60` | `10,44,39,64,20,36,11,63,50,54,64,38,46,41,49,2` | `3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60` | `10,56,207,134,233,212,12,116,68,78,129,46,194,51,66,253` |
+| `F1-1c` | `Family 1` | `F1-1` | `reverse` | `TCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCGCCGCCGCCGCCGCCGCC` | `87` | `@9889C8<<*96;52!*86,227.<I.8AI<>;2/391%D19*5@G=8<7<:!7+;:I:-!03<0AI>9?4!57I*-C#25FD24F;` | `C+h?,C+m?` | `3,6,15,18,21,30,33,36,45,48,51,60,63,66,69,72,75,78,81,84` | `37,47,64,63,33,64,52,55,17,46,47,64,56,64,56,60,55,58,63,40` | `3,6,15,18,21,30,33,36,45,48,51,60,63,66,69,72,75,78,81,84` | `45,192,126,129,39,129,183,79,19,195,62,124,173,128,84,159,80,165,141,206` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `;F42DF52#C-*I75!4?9>IA0<30!-:I:;+7!:<7<8=G@5*91D%193/2;><IA8.I<.722,68*!25;69*<<8C9889@` | `4,7,10,13,16,19,22,25,28,37,40,43,52,55,58,67,70,73,82,85` | `40,63,58,55,60,56,64,56,64,47,46,17,55,52,64,33,63,64,47,37` | `4,7,10,13,16,19,22,25,28,37,40,43,52,55,58,67,70,73,82,85` | `206,141,165,80,159,84,128,173,124,62,195,19,79,183,129,39,129,126,192,45` |
+| `F1-1d` | `Family 1` | `F1-1` | `forward` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `81` | `:<*1D)89?27#8.3)9<2G<>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8>0` | `C+h?,C+m?` | `3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78` | `33,29,10,55,3,46,53,54,64,12,63,27,24,4,43,21,64,60,17,55` | `3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78` | `216,221,11,81,4,61,180,79,130,13,144,31,228,4,200,23,132,98,18,82` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `:<*1D)89?27#8.3)9<2G<>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8>0` | `3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78` | `33,29,10,55,3,46,53,54,64,12,63,27,24,4,43,21,64,60,17,55` | `3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78` | `216,221,11,81,4,61,180,79,130,13,144,31,228,4,200,23,132,98,18,82` |
 
 The merged methylation data contains `forward_` rows for sequence and
 quality, as before, but also for hydroxymethylation and methylation
@@ -586,27 +597,27 @@ think about it!***
     ## Here the stars represent the true biochemical modifications on the reverse strand:
     ## 
     ## 
-    ## GGCGGCGGCGGCGGC
-    ## CCGCCGCCGCCGCCG
-    ##  *  *  *  *  *
+    ## GGCGGCGGCGGCGGCGGA
+    ## CCGCCGCCGCCGCCGCCT
+    ##    *  *  *  *  *
 
     ## If we take the complementary locations on the forward strand,
     ## the modification locations correspond to Gs rather than Cs,
     ## but are in the exact same locations:
     ## 
-    ##  o  o  o  o  o 
-    ## GGCGGCGGCGGCGGC
-    ## CCGCCGCCGCCGCCG
-    ##  *  *  *  *  *
+    ##    o  o  o  o  o  
+    ## GGCGGCGGCGGCGGCGGA
+    ## CCGCCGCCGCCGCCGCCT
+    ##    *  *  *  *  *
 
     ## If we offset the locations by 1 on the forward strand,
     ## the modifications are always associated with the C of a CG,
     ## but the locations are moved slightly:
     ## 
-    ##   o  o  o  o  o
-    ## GGCGGCGGCGGCGGC
-    ## CCGCCGCCGCCGCCG
-    ##  *  *  *  *  *
+    ##   o  o  o  o  o   
+    ## GGCGGCGGCGGCGGCGGA
+    ## CCGCCGCCGCCGCCGCCT
+    ##    *  *  *  *  *
 
 We will proceed with `offset = 1` so that the forward versions match up
 with `example_many_sequences`.
@@ -618,15 +629,15 @@ merged_methylation_data <- merge_methylation_with_metadata(methylation_data,
                                                            reversed_location_offset = 1)
 
 ## View first 4 rows
-knitr::kable(head(merged_methylation_data, 4))
+github_table(head(merged_methylation_data, 4))
 ```
 
-| read | family | individual | direction | sequence | sequence_length | quality | modification_types | C+h?\_locations | C+h?\_probabilities | C+m?\_locations | C+m?\_probabilities | forward_sequence | forward_quality | forward_C+h?\_locations | forward_C+h?\_probabilities | forward_C+m?\_locations | forward_C+m?\_probabilities |
-|:---|:---|:---|:---|:---|---:|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|
-| F1-1a | Family 1 | F1-1 | forward | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | 102 | )8@!9:/0/,0+-6?40,-I601:.’;+5,(**0.0?**)%)!(20C*,2++*(00#/*+3;E-E)\<I5.5G*CB8501;I3’.8233’3\>\<:13)48F?09\*\>?I90 | C+h?,C+m? | 3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99 | 26,60,61,60,30,59,2,46,57,64,54,63,52,18,53,34,52,50,39,46,55,54,34 | 3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99 | 29,159,155,159,220,163,2,59,170,131,177,139,72,235,75,214,73,68,48,59,81,77,41 | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | )8@!9:/0/,0+-6?40,-I601:.’;+5,(**0.0?**)%)!(20C*,2++*(00#/*+3;E-E)\<I5.5G*CB8501;I3’.8233’3\>\<:13)48F?09\*\>?I90 | 3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99 | 26,60,61,60,30,59,2,46,57,64,54,63,52,18,53,34,52,50,39,46,55,54,34 | 3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99 | 29,159,155,159,220,163,2,59,170,131,177,139,72,235,75,214,73,68,48,59,81,77,41 |
-| F1-1b | Family 1 | F1-1 | forward | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | 63 | 60-7,7943/*=5=)7\<53-I=G6/&/7?8)\<\$12”\>/2C;4:9F8:816E,6C3*,1-2139 | C+h?,C+m? | 3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60 | 10,44,39,64,20,36,11,63,50,54,64,38,46,41,49,2 | 3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60 | 10,56,207,134,233,212,12,116,68,78,129,46,194,51,66,253 | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | 60-7,7943/*=5=)7\<53-I=G6/&/7?8)\<\$12”\>/2C;4:9F8:816E,6C3*,1-2139 | 3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60 | 10,44,39,64,20,36,11,63,50,54,64,38,46,41,49,2 | 3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60 | 10,56,207,134,233,212,12,116,68,78,129,46,194,51,66,253 |
-| F1-1c | Family 1 | F1-1 | reverse | TCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCGCCGCCGCCGCCGCCGCC | 87 | (**9889C8?**)\<\<*96;52!*86,227.\<I.8AI\<\>;<2/391%D19*5@G>=8\<7\<:!7+;:I:-!03\<0AI\>9?4!57I\*-C#25FD24F; | C+h?,C+m? | 3,6,15,18,21,30,33,36,45,48,51,60,63,66,69,72,75,78,81,84 | 37,47,64,63,33,64,52,55,17,46,47,64,56,64,56,60,55,58,63,40 | 3,6,15,18,21,30,33,36,45,48,51,60,63,66,69,72,75,78,81,84 | 45,192,126,129,39,129,183,79,19,195,62,124,173,128,84,159,80,165,141,206 | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | ;F42DF52#C-*I75!4?9\>IA0\<30!-:I:;+7!:\<7<8=G@5*91D%193/2;>\<IA8.I\<.722,68*!25;69\*\<\<8C9889@ | 3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84 | 40,63,58,55,60,56,64,56,64,47,46,17,55,52,64,33,63,64,47,37 | 3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84 | 206,141,165,80,159,84,128,173,124,62,195,19,79,183,129,39,129,126,192,45 |
-| F1-1d | Family 1 | F1-1 | forward | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | 81 | :\<\*1D)89?27#8.3)9\<2G\<\>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8\>0 | C+h?,C+m? | 3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78 | 33,29,10,55,3,46,53,54,64,12,63,27,24,4,43,21,64,60,17,55 | 3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78 | 216,221,11,81,4,61,180,79,130,13,144,31,228,4,200,23,132,98,18,82 | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | :\<\*1D)89?27#8.3)9\<2G\<\>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8\>0 | 3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78 | 33,29,10,55,3,46,53,54,64,12,63,27,24,4,43,21,64,60,17,55 | 3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78 | 216,221,11,81,4,61,180,79,130,13,144,31,228,4,200,23,132,98,18,82 |
+| read | family | individual | direction | sequence | sequence_length | quality | modification_types | C.h.\_locations | C.h.\_probabilities | C.m.\_locations | C.m.\_probabilities | forward_sequence | forward_quality | forward_C.h.\_locations | forward_C.h.\_probabilities | forward_C.m.\_locations | forward_C.m.\_probabilities |
+|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|
+| `F1-1a` | `Family 1` | `F1-1` | `forward` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `102` | `)8@!9:/0/,0+-6?40,-I601:.';+5,@0.0%)!(20C*,2++*(00#/*+3;E-E)<I5.5G*CB8501;I3'.8233'3><:13)48F?09*>?I90` | `C+h?,C+m?` | `3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99` | `26,60,61,60,30,59,2,46,57,64,54,63,52,18,53,34,52,50,39,46,55,54,34` | `3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99` | `29,159,155,159,220,163,2,59,170,131,177,139,72,235,75,214,73,68,48,59,81,77,41` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `)8@!9:/0/,0+-6?40,-I601:.';+5,@0.0%)!(20C*,2++*(00#/*+3;E-E)<I5.5G*CB8501;I3'.8233'3><:13)48F?09*>?I90` | `3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99` | `26,60,61,60,30,59,2,46,57,64,54,63,52,18,53,34,52,50,39,46,55,54,34` | `3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99` | `29,159,155,159,220,163,2,59,170,131,177,139,72,235,75,214,73,68,48,59,81,77,41` |
+| `F1-1b` | `Family 1` | `F1-1` | `forward` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `63` | `60-7,7943/*=5=)7<53-I=G6/&/7?8)<$12">/2C;4:9F8:816E,6C3*,1-2139` | `C+h?,C+m?` | `3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60` | `10,44,39,64,20,36,11,63,50,54,64,38,46,41,49,2` | `3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60` | `10,56,207,134,233,212,12,116,68,78,129,46,194,51,66,253` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `60-7,7943/*=5=)7<53-I=G6/&/7?8)<$12">/2C;4:9F8:816E,6C3*,1-2139` | `3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60` | `10,44,39,64,20,36,11,63,50,54,64,38,46,41,49,2` | `3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60` | `10,56,207,134,233,212,12,116,68,78,129,46,194,51,66,253` |
+| `F1-1c` | `Family 1` | `F1-1` | `reverse` | `TCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCGCCGCCGCCGCCGCCGCC` | `87` | `@9889C8<<*96;52!*86,227.<I.8AI<>;2/391%D19*5@G=8<7<:!7+;:I:-!03<0AI>9?4!57I*-C#25FD24F;` | `C+h?,C+m?` | `3,6,15,18,21,30,33,36,45,48,51,60,63,66,69,72,75,78,81,84` | `37,47,64,63,33,64,52,55,17,46,47,64,56,64,56,60,55,58,63,40` | `3,6,15,18,21,30,33,36,45,48,51,60,63,66,69,72,75,78,81,84` | `45,192,126,129,39,129,183,79,19,195,62,124,173,128,84,159,80,165,141,206` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `;F42DF52#C-*I75!4?9>IA0<30!-:I:;+7!:<7<8=G@5*91D%193/2;><IA8.I<.722,68*!25;69*<<8C9889@` | `3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84` | `40,63,58,55,60,56,64,56,64,47,46,17,55,52,64,33,63,64,47,37` | `3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84` | `206,141,165,80,159,84,128,173,124,62,195,19,79,183,129,39,129,126,192,45` |
+| `F1-1d` | `Family 1` | `F1-1` | `forward` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `81` | `:<*1D)89?27#8.3)9<2G<>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8>0` | `C+h?,C+m?` | `3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78` | `33,29,10,55,3,46,53,54,64,12,63,27,24,4,43,21,64,60,17,55` | `3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78` | `216,221,11,81,4,61,180,79,130,13,144,31,228,4,200,23,132,98,18,82` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `:<*1D)89?27#8.3)9<2G<>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8>0` | `3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78` | `33,29,10,55,3,46,53,54,64,12,63,27,24,4,43,21,64,60,17,55` | `3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78` | `216,221,11,81,4,61,180,79,130,13,144,31,228,4,200,23,132,98,18,82` |
 
 Now, looking at the methylation and hydroxymethylation locations we see
 that the forward-version locations are 3, 6, 9, 12…, corresponding to
@@ -645,27 +656,27 @@ merged_methylation_data <- merged_methylation_data[, c("family", "individual", "
 colnames(merged_methylation_data)[c(4,6:10)] <- c("sequence", "quality", "methylation_locations", "methylation_probabilities", "hydroxymethylation_locations", "hydroxymethylation_probabilities")
 
 ## View first 4 rows of data produced from files
-knitr::kable(head(merged_methylation_data, 4))
+github_table(head(merged_methylation_data, 4))
 ```
 
 | family | individual | read | sequence | sequence_length | quality | methylation_locations | methylation_probabilities | hydroxymethylation_locations | hydroxymethylation_probabilities |
-|:---|:---|:---|:---|---:|:---|:---|:---|:---|:---|
-| Family 1 | F1-1 | F1-1a | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | 102 | )8@!9:/0/,0+-6?40,-I601:.’;+5,(**0.0?**)%)!(20C*,2++*(00#/*+3;E-E)\<I5.5G*CB8501;I3’.8233’3\>\<:13)48F?09\*\>?I90 | 3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99 | 29,159,155,159,220,163,2,59,170,131,177,139,72,235,75,214,73,68,48,59,81,77,41 | 3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99 | 26,60,61,60,30,59,2,46,57,64,54,63,52,18,53,34,52,50,39,46,55,54,34 |
-| Family 1 | F1-1 | F1-1b | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | 63 | 60-7,7943/*=5=)7\<53-I=G6/&/7?8)\<\$12”\>/2C;4:9F8:816E,6C3*,1-2139 | 3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60 | 10,56,207,134,233,212,12,116,68,78,129,46,194,51,66,253 | 3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60 | 10,44,39,64,20,36,11,63,50,54,64,38,46,41,49,2 |
-| Family 1 | F1-1 | F1-1c | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | 87 | ;F42DF52#C-*I75!4?9\>IA0\<30!-:I:;+7!:\<7<8=G@5*91D%193/2;>\<IA8.I\<.722,68*!25;69\*\<\<8C9889@ | 3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84 | 206,141,165,80,159,84,128,173,124,62,195,19,79,183,129,39,129,126,192,45 | 3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84 | 40,63,58,55,60,56,64,56,64,47,46,17,55,52,64,33,63,64,47,37 |
-| Family 1 | F1-1 | F1-1d | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | 81 | :\<\*1D)89?27#8.3)9\<2G\<\>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8\>0 | 3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78 | 216,221,11,81,4,61,180,79,130,13,144,31,228,4,200,23,132,98,18,82 | 3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78 | 33,29,10,55,3,46,53,54,64,12,63,27,24,4,43,21,64,60,17,55 |
+|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|
+| `Family 1` | `F1-1` | `F1-1a` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `102` | `)8@!9:/0/,0+-6?40,-I601:.';+5,@0.0%)!(20C*,2++*(00#/*+3;E-E)<I5.5G*CB8501;I3'.8233'3><:13)48F?09*>?I90` | `3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99` | `29,159,155,159,220,163,2,59,170,131,177,139,72,235,75,214,73,68,48,59,81,77,41` | `3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99` | `26,60,61,60,30,59,2,46,57,64,54,63,52,18,53,34,52,50,39,46,55,54,34` |
+| `Family 1` | `F1-1` | `F1-1b` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `63` | `60-7,7943/*=5=)7<53-I=G6/&/7?8)<$12">/2C;4:9F8:816E,6C3*,1-2139` | `3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60` | `10,56,207,134,233,212,12,116,68,78,129,46,194,51,66,253` | `3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60` | `10,44,39,64,20,36,11,63,50,54,64,38,46,41,49,2` |
+| `Family 1` | `F1-1` | `F1-1c` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `87` | `;F42DF52#C-*I75!4?9>IA0<30!-:I:;+7!:<7<8=G@5*91D%193/2;><IA8.I<.722,68*!25;69*<<8C9889@` | `3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84` | `206,141,165,80,159,84,128,173,124,62,195,19,79,183,129,39,129,126,192,45` | `3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84` | `40,63,58,55,60,56,64,56,64,47,46,17,55,52,64,33,63,64,47,37` |
+| `Family 1` | `F1-1` | `F1-1d` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `81` | `:<*1D)89?27#8.3)9<2G<>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8>0` | `3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78` | `216,221,11,81,4,61,180,79,130,13,144,31,228,4,200,23,132,98,18,82` | `3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78` | `33,29,10,55,3,46,53,54,64,12,63,27,24,4,43,21,64,60,17,55` |
 
 ``` r
 ## View first 4 rows of example_many_sequences
-knitr::kable(head(example_many_sequences, 4))
+github_table(head(example_many_sequences, 4))
 ```
 
 | family | individual | read | sequence | sequence_length | quality | methylation_locations | methylation_probabilities | hydroxymethylation_locations | hydroxymethylation_probabilities |
-|:---|:---|:---|:---|---:|:---|:---|:---|:---|:---|
-| Family 1 | F1-1 | F1-1a | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | 102 | )8@!9:/0/,0+-6?40,-I601:.’;+5,(**0.0?**)%)!(20C*,2++*(00#/*+3;E-E)\<I5.5G*CB8501;I3’.8233’3\>\<:13)48F?09\*\>?I90 | 3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99 | 29,159,155,159,220,163,2,59,170,131,177,139,72,235,75,214,73,68,48,59,81,77,41 | 3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99 | 26,60,61,60,30,59,2,46,57,64,54,63,52,18,53,34,52,50,39,46,55,54,34 |
-| Family 1 | F1-1 | F1-1b | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | 63 | 60-7,7943/*=5=)7\<53-I=G6/&/7?8)\<\$12”\>/2C;4:9F8:816E,6C3*,1-2139 | 3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60 | 10,56,207,134,233,212,12,116,68,78,129,46,194,51,66,253 | 3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60 | 10,44,39,64,20,36,11,63,50,54,64,38,46,41,49,2 |
-| Family 1 | F1-1 | F1-1c | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | 87 | ;F42DF52#C-*I75!4?9\>IA0\<30!-:I:;+7!:\<7<8=G@5*91D%193/2;>\<IA8.I\<.722,68*!25;69\*\<\<8C9889@ | 3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84 | 206,141,165,80,159,84,128,173,124,62,195,19,79,183,129,39,129,126,192,45 | 3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84 | 40,63,58,55,60,56,64,56,64,47,46,17,55,52,64,33,63,64,47,37 |
-| Family 1 | F1-1 | F1-1d | GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA | 81 | :\<\*1D)89?27#8.3)9\<2G\<\>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8\>0 | 3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78 | 216,221,11,81,4,61,180,79,130,13,144,31,228,4,200,23,132,98,18,82 | 3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78 | 33,29,10,55,3,46,53,54,64,12,63,27,24,4,43,21,64,60,17,55 |
+|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|
+| `Family 1` | `F1-1` | `F1-1a` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `102` | `)8@!9:/0/,0+-6?40,-I601:.';+5,@0.0%)!(20C*,2++*(00#/*+3;E-E)<I5.5G*CB8501;I3'.8233'3><:13)48F?09*>?I90` | `3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99` | `29,159,155,159,220,163,2,59,170,131,177,139,72,235,75,214,73,68,48,59,81,77,41` | `3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99` | `26,60,61,60,30,59,2,46,57,64,54,63,52,18,53,34,52,50,39,46,55,54,34` |
+| `Family 1` | `F1-1` | `F1-1b` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `63` | `60-7,7943/*=5=)7<53-I=G6/&/7?8)<$12">/2C;4:9F8:816E,6C3*,1-2139` | `3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60` | `10,56,207,134,233,212,12,116,68,78,129,46,194,51,66,253` | `3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60` | `10,44,39,64,20,36,11,63,50,54,64,38,46,41,49,2` |
+| `Family 1` | `F1-1` | `F1-1c` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `87` | `;F42DF52#C-*I75!4?9>IA0<30!-:I:;+7!:<7<8=G@5*91D%193/2;><IA8.I<.722,68*!25;69*<<8C9889@` | `3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84` | `206,141,165,80,159,84,128,173,124,62,195,19,79,183,129,39,129,126,192,45` | `3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84` | `40,63,58,55,60,56,64,56,64,47,46,17,55,52,64,33,63,64,47,37` |
+| `Family 1` | `F1-1` | `F1-1d` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `81` | `:<*1D)89?27#8.3)9<2G<>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8>0` | `3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78` | `216,221,11,81,4,61,180,79,130,13,144,31,228,4,200,23,132,98,18,82` | `3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78` | `33,29,10,55,3,46,53,54,64,12,63,27,24,4,43,21,64,60,17,55` |
 
 ``` r
 ## Check if equal
@@ -731,7 +742,7 @@ sone_2019_f1_1_expanded <- "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCG
 visualise_single_sequence(sone_2019_f1_1_expanded)
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-26-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-25-1.png)<!-- -->
 
 By default, `visualise_single_sequence()` will return a ggplot object.
 It can be useful to view this for instant debugging. However, it is not

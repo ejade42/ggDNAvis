@@ -1,6 +1,7 @@
 .Rproj.user
 .DS_store
 .Rhistory
+README_files/Exported\ Items.bib
 tests/testthat/_snaps
 tests/testthat/test_plot_images
 tests/testthat/test_output_data
