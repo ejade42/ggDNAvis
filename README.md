@@ -595,29 +595,30 @@ setting `offset = 1` inside `merge_methylation_with_metadata()`.
 think about it!***
 
     ## Here the stars represent the true biochemical modifications on the reverse strand:
+    ## (occurring at the Cs of CGs in the 5'-3' direction)
     ## 
     ## 
-    ## GGCGGCGGCGGCGGCGGA
-    ## CCGCCGCCGCCGCCGCCT
-    ##    *  *  *  *  *
+    ## 5'  GGCGGCGGCGGCGGCGGA  3'
+    ## 3'  CCGCCGCCGCCGCCGCCT  5'
+    ##        *  *  *  *  *
 
     ## If we take the complementary locations on the forward strand,
     ## the modification locations correspond to Gs rather than Cs,
     ## but are in the exact same locations:
     ## 
-    ##    o  o  o  o  o  
-    ## GGCGGCGGCGGCGGCGGA
-    ## CCGCCGCCGCCGCCGCCT
-    ##    *  *  *  *  *
+    ##        o  o  o  o  o      
+    ## 5'  GGCGGCGGCGGCGGCGGA  3'
+    ## 3'  CCGCCGCCGCCGCCGCCT  5'
+    ##        *  *  *  *  *
 
     ## If we offset the locations by 1 on the forward strand,
     ## the modifications are always associated with the C of a CG,
     ## but the locations are moved slightly:
     ## 
-    ##   o  o  o  o  o   
-    ## GGCGGCGGCGGCGGCGGA
-    ## CCGCCGCCGCCGCCGCCT
-    ##    *  *  *  *  *
+    ##       o  o  o  o  o       
+    ## 5'  GGCGGCGGCGGCGGCGGA  3'
+    ## 3'  CCGCCGCCGCCGCCGCCT  5'
+    ##        *  *  *  *  *
 
 We will proceed with `offset = 1` so that the forward versions match up
 with `example_many_sequences`.

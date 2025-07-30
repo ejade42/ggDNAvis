@@ -274,10 +274,11 @@ However, there is also the option to offset the modification locations by 1. For
 
 ```{r, echo = FALSE}
 {
-cat("Here the stars represent the true biochemical modifications on the reverse strand:\n\n\n")
-cat("GGCGGCGGCGGCGGCGGA\n")
-cat("CCGCCGCCGCCGCCGCCT\n")
-cat("   *  *  *  *  *  \n")
+cat("Here the stars represent the true biochemical modifications on the reverse strand:
+(occurring at the Cs of CGs in the 5'-3' direction)\n\n\n")
+cat("5'  GGCGGCGGCGGCGGCGGA  3'\n")
+cat("3'  CCGCCGCCGCCGCCGCCT  5'\n")
+cat("       *  *  *  *  *      \n")
 }
 ```
 
@@ -286,10 +287,10 @@ cat("   *  *  *  *  *  \n")
 cat("If we take the complementary locations on the forward strand,
 the modification locations correspond to Gs rather than Cs,
 but are in the exact same locations:\n\n")
-cat("   o  o  o  o  o  \n")
-cat("GGCGGCGGCGGCGGCGGA\n")
-cat("CCGCCGCCGCCGCCGCCT\n")
-cat("   *  *  *  *  *  \n")
+cat("       o  o  o  o  o      \n")
+cat("5'  GGCGGCGGCGGCGGCGGA  3'\n")
+cat("3'  CCGCCGCCGCCGCCGCCT  5'\n")
+cat("       *  *  *  *  *      \n")
 }
 ```
 
@@ -298,10 +299,10 @@ cat("   *  *  *  *  *  \n")
 cat("If we offset the locations by 1 on the forward strand,
 the modifications are always associated with the C of a CG,
 but the locations are moved slightly:\n\n")
-cat("  o  o  o  o  o   \n")
-cat("GGCGGCGGCGGCGGCGGA\n")
-cat("CCGCCGCCGCCGCCGCCT\n")
-cat("   *  *  *  *  *  \n")
+cat("      o  o  o  o  o       \n")
+cat("5'  GGCGGCGGCGGCGGCGGA  3'\n")
+cat("3'  CCGCCGCCGCCGCCGCCT  5'\n")
+cat("       *  *  *  *  *      \n")
 }
 ```
 
