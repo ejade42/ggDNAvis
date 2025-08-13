@@ -8,8 +8,8 @@
   - [2.3 Loading from FASTQ and metadata
     file](#23-loading-from-fastq-and-metadata-file)
     - [2.3.1 Standard FASTQ](#231-standard-fastq)
-    - [2.3.2 Modified FASTQ
-      (e.g. methylation)](#232-modified-fastq-eg-methylation)
+    - [2.3.2 Modified FASTQ -
+      e.g. methylation](#232-modified-fastq---eg-methylation)
 - [3 Visualising a single DNA/RNA
   sequence](#3-visualising-a-single-dnarna-sequence)
   - [3.1 Basic visualisation](#31-basic-visualisation)
@@ -22,7 +22,9 @@
     customisation](#42-sequence-arrangement-customisation)
   - [4.3 Colour and layout
     customisation](#43-colour-and-layout-customisation)
-- [5 References](#5-references)
+- [5 Visualising DNA
+  methylation/modification](#5-visualising-dna-methylationmodification)
+- [6 References](#6-references)
 
 # 1 ggDNAvis
 
@@ -440,7 +442,7 @@ for (i in 1:16) {
     ## + 
     ## :<*1D)89?27#8.3)9<2G<>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8>0
 
-### 2.3.2 Modified FASTQ (e.g. methylation)
+### 2.3.2 Modified FASTQ - e.g. methylation
 
 FASTQ files can be extended to include DNA modification (most often
 5-cytosine-methylation) information within the header rows. Most often,
@@ -484,8 +486,9 @@ for (i in 1:16) {
     ## :<*1D)89?27#8.3)9<2G<>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8>0
 
 This file is identical to the standard FASTQ seen in
-<a href="#standard-fastq">2.3.1</a> in the sequence and quality lines,
-but has the MM and ML tags stored in the header. See the [SAM tags
+<a href="#231-standard-fastq"><strong>??</strong></a> in the sequence
+and quality lines, but has the MM and ML tags stored in the header. See
+the [SAM tags
 specification](https://samtools.github.io/hts-specs/SAMtags.pdf) or the
 documentation for `read_modified_fastq()`,
 `merge_methylation_with_metadata()`, and `reverse_locations_if_needed()`
@@ -1475,7 +1478,25 @@ knitr::include_graphics("README_files/output/many_sequences_09.png")
 
 <img src="README_files/output/many_sequences_09.png" width="2040" />
 
-# 5 References
+# 5 Visualising DNA methylation/modification
+
+When basecalling Oxford Nanopore sequencing data in Guppy or Dorado,
+modified basecalling can be enabled. This means the resulting BAM file
+contains information on DNA modifications as well as the sequence
+information. Most commonly, the modification assessed is
+5-cytosine-methylation at CpG sites (5’-CG-3’ dinucleotides).
+
+The modification information is stored in the MM and ML tags of the BAM
+file. It can then be written to the header row of a FASTQ file via:
+
+``` bash
+samtools fastq -T MM,ML ${input_bam_file} > "modified_fastq_file.fastq"
+```
+
+This is all discussed in more detail in
+<a href="#232-modified-fastq-eg-methylation"><strong>??</strong></a>
+
+# 6 References
 
 <div id="refs" class="references csl-bib-body hanging-indent"
 entry-spacing="0" line-spacing="2">
