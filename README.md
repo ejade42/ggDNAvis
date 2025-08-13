@@ -15,7 +15,14 @@
   - [3.1 Basic visualisation](#31-basic-visualisation)
   - [3.2 Colour customisation](#32-colour-customisation)
   - [3.3 Layout customisation](#33-layout-customisation)
-- [4 References](#4-references)
+- [4 Visualising many DNA/RNA
+  sequences](#4-visualising-many-dnarna-sequences)
+  - [4.1 Basic visualisation](#41-basic-visualisation)
+  - [4.2 Sequence arrangement
+    customisation](#42-sequence-arrangement-customisation)
+  - [4.3 Colour and layout
+    customisation](#43-colour-and-layout-customisation)
+- [5 References](#5-references)
 
 # 1 ggDNAvis
 
@@ -753,7 +760,7 @@ sone_2019_f1_1_expanded_ggt_added <- "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGC
 visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added)
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-25-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-24-1.png)<!-- -->
 
 By default, `visualise_single_sequence()` will return a ggplot object.
 It can be useful to view this for instant debugging. However, it is not
@@ -906,6 +913,9 @@ Many aspects of the sequence layout are also customisable via arguments:
 
 - `line_wrapping`: The length/number of bases in each line.
 - `spacing`: The number of blank lines in between each line of sequence.
+  Must be an integer - this is a fundamental consequence of how the
+  images are rasterised and the whole visualisation logic would need to
+  be re-implemented to allow non-integer spacing values.
 - `margin`: The margin around the image in terms of the size of base
   boxes (e.g. the default value of 0.5 adds a margin half the size of
   the base boxes, which is 50 px with the default
@@ -915,18 +925,21 @@ Many aspects of the sequence layout are also customisable via arguments:
   margin is set to less than this then it will be increased to 1 in the
   relevant direction.
 - `sequence_text_size`: The size of the text inside the boxes. Can be
-  set to 0 to disable text inside boxes.
+  set to 0 to disable text inside boxes. Defaults to 16.
 - `index_annotation_size`: The size of the index numbers above/below the
   boxes. Should not be set to 0 to disable; instead disable via
-  `index_annotation_interval = 0`.
+  `index_annotation_interval = 0`. Defaults to 12.5.
 - `index_annotation_interval`: The frequency at which index numbers
   should be listed. Can be set to 0 to disable index annotations.
+  Defaults to 15.
 - `index_annotations_above`: Boolean specifying whether index
   annotations should be drawn above or below each line of sequence.
+  Defaults to `TRUE` (above).
 - `index_annotation_vertical_position`: How far annotation numbers
-  should be rendered above (if index_annotations_above = TRUE) or below
-  (if index_annotations_above = FALSE) each base. Defaults to 1/3, not
-  recommended to change.
+  should be rendered above (if `index_annotations_above = TRUE`) or
+  below (if `index_annotations_above = FALSE`) each base. Defaults to
+  1/3, not recommended to change generally. If spacing is much larger
+  than 1, setting this to a slightly higher value might be appropriate.
 
 A sensible example of how these might be changed is as follows:
 
@@ -1026,7 +1039,443 @@ knitr::include_graphics("README_files/output/single_sequence_11.png")
 
 <img src="README_files/output/single_sequence_11.png" width="7600" />
 
-# 4 References
+# 4 Visualising many DNA/RNA sequences
+
+## 4.1 Basic visualisation
+
+ggDNAvis can be used to visualise multiple DNA sequences via
+`visualise_many_sequences()`. This function takes a vector of sequences
+as its primary input, which do not all have to be the same length and
+can be blank for spacing lines. This can be constructed manually
+e.g. `c("GGCGGCGGC", "", "TTATTA")`, but is more easily produced by
+`extract_and_sort_sequences()`.
+
+Here is an example of how that could be accomplished with the
+`example_many_sequences` data:
+
+``` r
+## Reminder of how to load data from file
+fastq_data <- read_fastq("inst/extdata/example_many_sequences_raw.fastq", calculate_length = TRUE)
+metadata   <- read.csv("inst/extdata/example_many_sequences_metadata.csv")
+merged_fastq_data <- merge_fastq_with_metadata(fastq_data, metadata)
+
+## Subset and change colnames to make it match example_many_sequences
+merged_fastq_data <- merged_fastq_data[, c("family", "individual", "read", "forward_sequence", "sequence_length", "forward_quality")]
+colnames(merged_fastq_data)[c(4,6)] <- c("sequence", "quality")
+
+## Prove equivalance to example_many_sequences
+identical(merged_fastq_data, example_many_sequences[, 1:6])
+```
+
+    ## [1] TRUE
+
+``` r
+## Look at first 4 rows of the data as a reminder
+github_table(head(merged_fastq_data, 4))
+```
+
+| family | individual | read | sequence | sequence_length | quality |
+|:---|:---|:---|:---|:---|:---|
+| `Family 1` | `F1-1` | `F1-1a` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `102` | `)8@!9:/0/,0+-6?40,-I601:.';+5,@0.0%)!(20C*,2++*(00#/*+3;E-E)<I5.5G*CB8501;I3'.8233'3><:13)48F?09*>?I90` |
+| `Family 1` | `F1-1` | `F1-1b` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `63` | `60-7,7943/*=5=)7<53-I=G6/&/7?8)<$12">/2C;4:9F8:816E,6C3*,1-2139` |
+| `Family 1` | `F1-1` | `F1-1c` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `87` | `;F42DF52#C-*I75!4?9>IA0<30!-:I:;+7!:<7<8=G@5*91D%193/2;><IA8.I<.722,68*!25;69*<<8C9889@` |
+| `Family 1` | `F1-1` | `F1-1d` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `81` | `:<*1D)89?27#8.3)9<2G<>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8>0` |
+
+``` r
+## Extract sequences to a character vector
+sequences_for_visualisation <- extract_and_sort_sequences(merged_fastq_data)
+
+## View the character vector
+sequences_for_visualisation
+```
+
+    ##  [1] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA"
+    ##  [2] "GGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA"         
+    ##  [3] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA"               
+    ##  [4] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA"                     
+    ##  [5] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA"                                       
+    ##  [6] ""                                                                                                      
+    ##  [7] ""                                                                                                      
+    ##  [8] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGAGGCGGCGGAGGAGGAGGCGGCGGA"                                 
+    ##  [9] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGAGGCGGCGGAGGAGGAGGCGGCGGA"                                       
+    ## [10] ""                                                                                                      
+    ## [11] ""                                                                                                      
+    ## [12] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA"               
+    ## [13] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGA"                  
+    ## [14] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGCGGA"                     
+    ## [15] ""                                                                                                      
+    ## [16] ""                                                                                                      
+    ## [17] ""                                                                                                      
+    ## [18] ""                                                                                                      
+    ## [19] ""                                                                                                      
+    ## [20] ""                                                                                                      
+    ## [21] ""                                                                                                      
+    ## [22] ""                                                                                                      
+    ## [23] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGA"         
+    ## [24] ""                                                                                                      
+    ## [25] ""                                                                                                      
+    ## [26] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGA"            
+    ## [27] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGA"               
+    ## [28] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGA"                  
+    ## [29] ""                                                                                                      
+    ## [30] ""                                                                                                      
+    ## [31] ""                                                                                                      
+    ## [32] ""                                                                                                      
+    ## [33] ""                                                                                                      
+    ## [34] ""                                                                                                      
+    ## [35] ""                                                                                                      
+    ## [36] ""                                                                                                      
+    ## [37] "GGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGA"      
+    ## [38] "GGCGGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGA"      
+    ## [39] ""                                                                                                      
+    ## [40] ""                                                                                                      
+    ## [41] "GGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGA"         
+    ## [42] "GGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGA"            
+    ## [43] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGCGGCGGA"               
+    ## [44] ""                                                                                                      
+    ## [45] ""                                                                                                      
+    ## [46] "GGCGGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGA"      
+    ## [47] ""                                                                                                      
+    ## [48] ""                                                                                                      
+    ## [49] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGA"      
+    ## [50] "GGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGCGGA"            
+    ## [51] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGCGGCGGA"
+
+``` r
+## Use the character vector to make the image
+visualise_many_sequences(sequences_for_visualisation,
+                         filename = "README_files/output/many_sequences_01.png",
+                         return = FALSE)
+
+## View image
+knitr::include_graphics("README_files/output/many_sequences_01.png")
+```
+
+<img src="README_files/output/many_sequences_01.png" width="10300" />
+
+## 4.2 Sequence arrangement customisation
+
+The `extract_and_sort_sequences()` function is highly configurable to
+change the arrangement and spacing of the sequences.
+
+It takes the following arguments:
+
+- `sequence_dataframe`: The data to be processed
+- `sequence_variable`: The name of the column we are extracting. This
+  doesn’t actually have to be a sequence, it could be any information
+  that we want to convert into a sorted vector spaced out with empty
+  strings.
+- `grouping_levels`: How the data should be grouped. This is a named
+  numerical vector stating which variables/columns should be used to
+  group the data, and how many lines should be left between groups at
+  each level. For example, the default
+  `c("family" = 8, "individual" = 2)` means the top-level grouping is
+  done by categories in the `"family"` column and there are 8 blank
+  lines between each family, and the second-level gropuing is done by
+  the `"individual"` column and there are 2 blank lines between
+  individuals within the same family. This is implemented recursively,
+  so any number of grouping variables can be used (or this can be set to
+  `NA` to turn off grouping entirely).
+- `sort_by`: The name of the column used to sort sequences within the
+  lowest-level groups. This is generally the sequence length (but
+  doesn’t have to be).
+- `desc_sort`: Whether the sequences should be sorted by the `sort_by`
+  variable descending (`desc_sort = TRUE`) or (`desc_sort = FALSE`).
+
+The image above used all the default values, which are set up to work
+with the columns present in `example_many_sequences` and use the
+families-separated-by-8, individuals-separated-by-2 grouping and
+arranged sequences in descending length order.
+
+Here is the same image but with the default arguments explicitly stated:
+
+``` r
+## Extract sequences to a character vector
+## Remember that example_many_sequences is identical to the data 
+## read from FASTQ and metadata CSV in the previous code section
+sequences_for_visualisation <- extract_and_sort_sequences(example_many_sequences,
+                                                          sequence_variable = "sequence",
+                                                          grouping_levels = c("family" = 8,
+                                                                              "individual" = 2),
+                                                          sort_by = "sequence_length",
+                                                          desc_sort = TRUE)
+
+## We will not view the character vector in the interests of avoiding clutter.
+
+## Use the character vector to make the image
+visualise_many_sequences(sequences_for_visualisation,
+                         filename = "README_files/output/many_sequences_02.png",
+                         return = FALSE)
+
+## View image
+knitr::include_graphics("README_files/output/many_sequences_02.png")
+```
+
+<img src="README_files/output/many_sequences_02.png" width="10300" />
+
+Here the top large cluster is Family 1, containing individuals F1-1,
+F1-2, and F-3. These individuals contain 5, 2, and 3 reads respectively,
+and are separated from each other by 2 blank lines. After Family 1,
+there is there 8 blank lines before Family 2. Family 2 contains F2-1 and
+F2-2 with 1 and 3 reads (individuals separated by 2 blank lines), then
+there are 8 blank lines before Family 3. Family 3 contains F3-1, F3-2,
+F3-3, and F3-4 with 2, 3, 1, and 3 reads.
+
+If we wanted to group only by individual without showing the family
+structure, and present reads in ascending length order for each
+individual, we could do the following:
+
+``` r
+## Extract sequences to a character vector
+sequences_for_visualisation <- extract_and_sort_sequences(example_many_sequences,
+                                                          sequence_variable = "sequence",
+                                                          grouping_levels = c("individual" = 1),
+                                                          sort_by = "sequence_length",
+                                                          desc_sort = FALSE)
+
+## Use the character vector to make the image
+visualise_many_sequences(sequences_for_visualisation,
+                         filename = "README_files/output/many_sequences_03.png",
+                         return = FALSE)
+
+## View image
+knitr::include_graphics("README_files/output/many_sequences_03.png")
+```
+
+<img src="README_files/output/many_sequences_03.png" width="10300" />
+
+Now we have a group for each individual, with sequences in ascending
+length order per individual, and one blank line between individuals.
+
+We could also turn off grouping entirely to just visualise all of the
+reads in length order, via `grouping_levels = NA`:
+
+``` r
+## Extract sequences to a character vector
+sequences_for_visualisation <- extract_and_sort_sequences(example_many_sequences,
+                                                          sequence_variable = "sequence",
+                                                          grouping_levels = NA,
+                                                          sort_by = "sequence_length",
+                                                          desc_sort = TRUE)
+
+## Use the character vector to make the image
+visualise_many_sequences(sequences_for_visualisation,
+                         filename = "README_files/output/many_sequences_04.png",
+                         return = FALSE)
+
+## View image
+knitr::include_graphics("README_files/output/many_sequences_04.png")
+```
+
+<img src="README_files/output/many_sequences_04.png" width="10300" />
+
+We can also turn off sorting entirely (keeping grouping off) with
+`sort_by = NA` to simply show all the reads in the order in which they
+appear in the dataframe:
+
+NB: if `sort_by = NA` is used, then `desc_sort` does nothing so it
+doesn’t matter what it is set to.
+
+``` r
+## Extract sequences to a character vector
+sequences_for_visualisation <- extract_and_sort_sequences(example_many_sequences,
+                                                          sequence_variable = "sequence",
+                                                          grouping_levels = NA,
+                                                          sort_by = NA)
+
+## Use the character vector to make the image
+visualise_many_sequences(sequences_for_visualisation,
+                         filename = "README_files/output/many_sequences_05.png",
+                         return = FALSE)
+
+## View image
+knitr::include_graphics("README_files/output/many_sequences_05.png")
+```
+
+<img src="README_files/output/many_sequences_05.png" width="10300" />
+
+It is also possible to keep grouping on while turning sorting off if
+desired:
+
+``` r
+## Extract sequences to a character vector
+sequences_for_visualisation <- extract_and_sort_sequences(example_many_sequences,
+                                                          sequence_variable = "sequence",
+                                                          grouping_levels = c("family" = 2,
+                                                                              "individual" = 1),
+                                                          sort_by = NA)
+
+## Use the character vector to make the image
+visualise_many_sequences(sequences_for_visualisation,
+                         filename = "README_files/output/many_sequences_06.png",
+                         return = FALSE)
+
+## View image
+knitr::include_graphics("README_files/output/many_sequences_06.png")
+```
+
+<img src="README_files/output/many_sequences_06.png" width="10300" />
+
+The grouping spacers can be set to 0 to sort within groups without
+visually separating them (but negative values don’t work - they produce
+an error in `rep()` as the blank line can’t be repeated a negative
+number of times). Additionally, the order of the groups/levels within a
+grouping variable can be changed in standard R fashion with
+`factor(x, levels = ...)`:
+
+``` r
+## Reorder families
+example_many_sequences_reordered <- example_many_sequences
+example_many_sequences_reordered$family_reordered <- factor(example_many_sequences_reordered$family,
+                                                            levels = c("Family 2", 
+                                                                       "Family 3", 
+                                                                       "Family 1"))
+
+## Extract sequences to a character vector
+sequences_for_visualisation <- extract_and_sort_sequences(example_many_sequences_reordered,
+                                                          sequence_variable = "sequence",
+                                                          grouping_levels = c("family_reordered" = 0),
+                                                          sort_by = "sequence_length")
+
+## Use the character vector to make the image
+visualise_many_sequences(sequences_for_visualisation,
+                         filename = "README_files/output/many_sequences_07.png",
+                         return = FALSE)
+
+## View image
+knitr::include_graphics("README_files/output/many_sequences_07.png")
+```
+
+<img src="README_files/output/many_sequences_07.png" width="10300" />
+
+Finally, all the same grouping and sorting logic can be used to extract
+any other column as a character vector, though of course if it isn’t DNA
+sequence then the resulting vector is not valid input to
+`visualise_many_sequences()`. The column for extraction is specified by
+`sequence_variable`, and the column for sorting is `sort_by`. If the
+`sort_by` column is non-numeric then it will be sorted alphabetically,
+just like using `sort()` on a character vector.
+
+``` r
+## Extract qualities to character vector,
+## sorted alphabetically by quality string
+extracted_and_sorted_qualities <- extract_and_sort_sequences(example_many_sequences,
+                                                             sequence_variable = "quality",
+                                                             grouping_levels = c("family" = 2),
+                                                             sort_by = "quality",
+                                                             desc_sort = FALSE)
+
+## View character vector
+print(extracted_and_sorted_qualities, quote = F)
+```
+
+    ##  [1] )8@!9:/0/,0+-6?40,-I601:.';+5,@0.0%)!(20C*,2++*(00#/*+3;E-E)<I5.5G*CB8501;I3'.8233'3><:13)48F?09*>?I90
+    ##  [2] *46.5//3:37?24:(:0*#.))E)?:,/172=2!4">.*/;"8+5<;D6.I2=>:C3)108,<)GC161)!55E!.>86/                     
+    ##  [3] 60-7,7943/*=5=)7<53-I=G6/&/7?8)<$12">/2C;4:9F8:816E,6C3*,1-2139                                       
+    ##  [4] 736/A@B121C269<2I,'5G66>46A6-9*&4*;4-E4C429?I+3@83(234E0%:43;!/3;2+956A0)(+'5G4=*3;1                  
+    ##  [5] :<*1D)89?27#8.3)9<2G<>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8>0                     
+    ##  [6] ;4*2E3-48?@6A-!00!;-3%:H,4H>H530C(85I/&75-62.:2#!/D=A?8&7E!-@:=::5,)51,97D*04'2.!20@/;6)947<6         
+    ##  [7] ;F42DF52#C-*I75!4?9>IA0<30!-:I:;+7!:<7<8=G@5*91D%193/2;><IA8.I<.722,68*!25;69*<<8C9889@               
+    ##  [8] ?;.*26<C-8B,3#8/,-9!1++:94:/!A317=9>502=-+8;$=53@D*?/6:6&0D7-.@8,5;F,1?0D?$9'&665B8.604               
+    ##  [9] E6(<)"-./EE<(5:47,(C818I9CC1=.&)4G6-7<(*"(,2C>8/5:0@@).A$97I!-<                                       
+    ## [10] F='I#*5I:<F?)<4G3&:95*-5?1,!:9BD4B5.-27577<2E9)2:189B.5/*#7;;'**.7;-!                                 
+    ## [11]                                                                                                       
+    ## [12]                                                                                                       
+    ## [13] 7?38,EC#3::=1)8&;<">3.9BE)1661!2)5-4.11B<3)?')-+,B4.<7)/:IE=5$.3:66G9216-C20,>(0848(1$-               
+    ## [14] ;1>:5417*<1.2H#260197.;7<(-3?0+=:)ID'I$6*128*!4.7-=5;+384F!=5>4!93+.6I7+H1-).H><68;7                  
+    ## [15] =</-I354/,*>+<CA40*537/;<@I7/4%6192'5'>#4:&C,072+90:0+4;74"D5,38&<7A?00+1>G>#=?;,@<<1=64D=!1&         
+    ## [16] @86,/+6=8/;9=1)48E494IB3456/6.*=</B32+5469>8?@!1;*+81$>-99D7<@1$6B'?462?CE+=1+95=G?.6CA%>2            
+    ## [17]                                                                                                       
+    ## [18]                                                                                                       
+    ## [19] $<,5"7+!$';8<0794*@FI>34224!57+#1!F<+53$,?)-.A3;=1*71C02<.5:1)82!86$03/;%+1C3+D3;@9B-E#+/70;9<D'      
+    ## [20] .85$#;!1F$8E:B+;7CI6@11/'65<3,4G:8@GF1413:0)3CH1=44.%G=#2E67=?;9DF7358.;(I!74:1I4                     
+    ## [21] /*2<C643?*8?@9)-.'5A!=3-=;6,.%H3-!10'I>&@?;96;+/+36;:C;B@/=:6,;61>?>!,>.97@.48B38(;7;1F464=-7;)7      
+    ## [22] /C<$>7/1(9%4:6>6I,D%*,&D?C/6@@;7)83.E.7:@9I906<!4536!850!164/8,<=?=15A;8B/5B364A66.1%9=(9876E8C:      
+    ## [23] 0/2>@/6+-/(!=9-?G!AA70*,/!/?-E46:,-1G94*491,,38?(-!6<8A;/C9;,3)4C06=%',86A)1!E@/24G59<<               
+    ## [24] 5@<733';9+3BB)=69,3!.2B*86'8E>@3?!(36:<002/4>:1.43A!+;<.3G*G8?0*991,B(C/"I9*1-86)8.;;5-0+=            
+    ## [25] 9>124!752+@06I/.72097*';-+A60=B?+/8'15477>4-435D;G@G'./21:(0/1/A=7'I>A"3=9;;12,@"2=3D=,458            
+    ## [26] :0I4099<,4E01;/@96%2I2<,%<C&=81F+4<*@4A5.('4!%I3CE657<=!5;37>4D:%3;7'"4<.9;?;7%0>:,84B512,B7/         
+    ## [27] ?2-#-2"1:(5(4>!I)>I,.?-+EG3IH4-.C:;570@2I;?D5#/;A7=>?<3?080::459*?8:3"<2;I)C1400)6:3%19./);.I?35
+
+This extracted the `quality` column, with families separated by 2 blank
+strings, and sorted alphabetically by quality string within each family.
+
+## 4.3 Colour and layout customisation
+
+As with `visualise_single_sequence()`, colours in
+`visualise_many_sequences()` are highly customisable and can use the
+various palettes from `sequence_colour_palettes`. Additionally, margin,
+resolution, and text size are customisable (including turning text off
+by setting size to 0).
+
+Colour-related arguments:
+
+- `sequence_colours`: A length-4 vector of the colours used for the
+  boxes of A, C, G, and T respectively.
+- `sequence_text_colour`: The colour used for the A, C, G, and T
+  lettering inside the boxes.
+- `background_colour`: The colour used for the background.
+
+Layout-related arguments:
+
+- `margin`: The margin around the image in terms of the size of base
+  boxes (e.g. the default value of 0.5 adds a margin half the size of
+  the base boxes, which is 50 px with the default
+  `pixels_per_base = 100`).
+- `sequence_text_size`: The size of the text inside the boxes. Can be
+  set to 0 to disable text inside boxes. Defaults to 16.
+- `pixels_per_base`: Resolution, as determined by number of pixels in
+  the side length of one DNA base square. Everything else is scaled
+  proportionally.
+
+For example, a layout with increased margins, enlarged text, and crazy
+colours might be:
+
+``` r
+## Extract sequences to a character vector
+sequences_for_visualisation <- extract_and_sort_sequences(example_many_sequences)
+
+## Use the character vector to make the image
+visualise_many_sequences(sequences_for_visualisation,
+                         filename = "README_files/output/many_sequences_08.png",
+                         return = FALSE,
+                         sequence_colours = c("orange", "#00FF00", "magenta", "black"),
+                         sequence_text_colour = "cyan",
+                         background_colour = "yellow",
+                         sequence_text_size = 40,
+                         margin = 5)
+
+## View image
+knitr::include_graphics("README_files/output/many_sequences_08.png")
+```
+
+<img src="README_files/output/many_sequences_08.png" width="11200" />
+
+As with `visualise_single_sequence()`, text can be turned off, in which
+case it is sensible to reduce the resolution:
+
+``` r
+## Extract sequences to a character vector
+sequences_for_visualisation <- extract_and_sort_sequences(example_many_sequences,
+                                                          grouping_levels = c("family" = 4,
+                                                                              "individual" = 1))
+
+## Use the character vector to make the image
+visualise_many_sequences(sequences_for_visualisation,
+                         filename = "README_files/output/many_sequences_09.png",
+                         return = FALSE,
+                         sequence_colours = sequence_colour_palettes$bright_pale,
+                         sequence_text_size = 0,
+                         margin = 0,
+                         pixels_per_base = 20)
+
+## View image
+knitr::include_graphics("README_files/output/many_sequences_09.png")
+```
+
+<img src="README_files/output/many_sequences_09.png" width="2040" />
+
+# 5 References
 
 <div id="refs" class="references csl-bib-body hanging-indent"
 entry-spacing="0" line-spacing="2">

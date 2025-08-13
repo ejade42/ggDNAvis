@@ -342,7 +342,7 @@ convert_MM_vector_to_locations <- function(sequence, skips, target_base = "C") {
 #' (SAM/BAM MM and ML tags) in the header lines, use
 #' [read_modified_fastq()] and [write_modified_fastq()].
 #'
-#' @param dataframe. Dataframe containing modification information to write back to modified FASTQ. Must have columns for unique read ID and DNA sequence. Should also have a column for quality, unless wanting to fill in qualities with `"B"`.
+#' @param dataframe `dataframe`. Dataframe containing modification information to write back to modified FASTQ. Must have columns for unique read ID and DNA sequence. Should also have a column for quality, unless wanting to fill in qualities with `"B"`.
 #' @param filename `character`. File to write the FASTQ to. Recommended to end with `.fastq` (warns but works if not). If set to `NA` (default), no file will be output, which may be useful for testing/debugging.
 #' @param read_id_colname `character`. The name of the column within the dataframe that contains the unique ID for each read. Defaults to `"read"`.
 #' @param sequence_colname `character`. The name of the column within the dataframe that contains the DNA sequence for each read. Defaults to `"sequence"`.\cr\cr The values within this column must be DNA sequences e.g. `"GGCGGC"`.

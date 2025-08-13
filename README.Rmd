@@ -362,11 +362,6 @@ for (i in 1:16) {
 }
 ```
 
-```{r, include = FALSE}
-rm(list = ls())
-```
-
-
 
 
 
@@ -493,13 +488,13 @@ knitr::include_graphics("README_files/output/single_sequence_07.png")
 Many aspects of the sequence layout are also customisable via arguments:
 
 - `line_wrapping`: The length/number of bases in each line.
-- `spacing`: The number of blank lines in between each line of sequence.
+- `spacing`: The number of blank lines in between each line of sequence. Must be an integer - this is a fundamental consequence of how the images are rasterised and the whole visualisation logic would need to be re-implemented to allow non-integer spacing values.
 - `margin`: The margin around the image in terms of the size of base boxes (e.g. the default value of 0.5 adds a margin half the size of the base boxes, which is 50 px with the default `pixels_per_base = 100`). Note that if index annotations are on, there is a minimum margin of 1 above (if annotations are above) of below (if annotations are below) to allow space to render the annotations, so if margin is set to less than this then it will be increased to 1 in the relevant direction.
-- `sequence_text_size`: The size of the text inside the boxes. Can be set to 0 to disable text inside boxes.
-- `index_annotation_size`: The size of the index numbers above/below the boxes. Should not be set to 0 to disable; instead disable via `index_annotation_interval = 0`.
-- `index_annotation_interval`: The frequency at which index numbers should be listed. Can be set to 0 to disable index annotations.
-- `index_annotations_above`: Boolean specifying whether index annotations should be drawn above or below each line of sequence.
-- `index_annotation_vertical_position`: How far annotation numbers should be rendered above (if index_annotations_above = TRUE) or below (if index_annotations_above = FALSE) each base. Defaults to 1/3, not recommended to change.
+- `sequence_text_size`: The size of the text inside the boxes. Can be set to 0 to disable text inside boxes. Defaults to 16.
+- `index_annotation_size`: The size of the index numbers above/below the boxes. Should not be set to 0 to disable; instead disable via `index_annotation_interval = 0`. Defaults to 12.5.
+- `index_annotation_interval`: The frequency at which index numbers should be listed. Can be set to 0 to disable index annotations. Defaults to 15.
+- `index_annotations_above`: Boolean specifying whether index annotations should be drawn above or below each line of sequence. Defaults to `TRUE` (above).
+- `index_annotation_vertical_position`: How far annotation numbers should be rendered above (if `index_annotations_above = TRUE`) or below (if `index_annotations_above = FALSE`) each base. Defaults to 1/3, not recommended to change generally. If spacing is much larger than 1, setting this to a slightly higher value might be appropriate.
 
 A sensible example of how these might be changed is as follows:
 ```{r}
@@ -571,5 +566,263 @@ knitr::include_graphics("README_files/output/single_sequence_11.png")
 
 
 
+
+# Visualising many DNA/RNA sequences
+## Basic visualisation
+ggDNAvis can be used to visualise multiple DNA sequences via `visualise_many_sequences()`. This function takes a vector of sequences as its primary input, which do not all have to be the same length and can be blank for spacing lines. This can be constructed manually e.g. `c("GGCGGCGGC", "", "TTATTA")`, but is more easily produced by `extract_and_sort_sequences()`.
+
+Here is an example of how that could be accomplished with the `example_many_sequences` data:
+
+```{r}
+## Reminder of how to load data from file
+fastq_data <- read_fastq("inst/extdata/example_many_sequences_raw.fastq", calculate_length = TRUE)
+metadata   <- read.csv("inst/extdata/example_many_sequences_metadata.csv")
+merged_fastq_data <- merge_fastq_with_metadata(fastq_data, metadata)
+
+## Subset and change colnames to make it match example_many_sequences
+merged_fastq_data <- merged_fastq_data[, c("family", "individual", "read", "forward_sequence", "sequence_length", "forward_quality")]
+colnames(merged_fastq_data)[c(4,6)] <- c("sequence", "quality")
+
+## Prove equivalance to example_many_sequences
+identical(merged_fastq_data, example_many_sequences[, 1:6])
+
+
+
+## Look at first 4 rows of the data as a reminder
+github_table(head(merged_fastq_data, 4))
+
+## Extract sequences to a character vector
+sequences_for_visualisation <- extract_and_sort_sequences(merged_fastq_data)
+
+## View the character vector
+sequences_for_visualisation
+
+## Use the character vector to make the image
+visualise_many_sequences(sequences_for_visualisation,
+                         filename = "README_files/output/many_sequences_01.png",
+                         return = FALSE)
+
+## View image
+knitr::include_graphics("README_files/output/many_sequences_01.png")
+```
+
+## Sequence arrangement customisation
+The `extract_and_sort_sequences()` function is highly configurable to change the arrangement and spacing of the sequences.
+
+It takes the following arguments:
+
+- `sequence_dataframe`: The data to be processed
+- `sequence_variable`: The name of the column we are extracting. This doesn't actually have to be a sequence, it could be any information that we want to convert into a sorted vector spaced out with empty strings.
+- `grouping_levels`: How the data should be grouped. This is a named numerical vector stating which variables/columns should be used to group the data, and how many lines should be left between groups at each level. For example, the default `c("family" = 8, "individual" = 2)` means the top-level grouping is done by categories in the `"family"` column and there are 8 blank lines between each family, and the second-level gropuing is done by the `"individual"` column and there are 2 blank lines between individuals within the same family. This is implemented recursively, so any number of grouping variables can be used (or this can be set to `NA` to turn off grouping entirely).
+- `sort_by`: The name of the column used to sort sequences within the lowest-level groups. This is generally the sequence length (but doesn't have to be).
+- `desc_sort`: Whether the sequences should be sorted by the `sort_by` variable descending (`desc_sort = TRUE`) or (`desc_sort = FALSE`).
+
+The image above used all the default values, which are set up to work with the columns present in `example_many_sequences` and use the families-separated-by-8, individuals-separated-by-2 grouping and arranged sequences in descending length order.
+
+Here is the same image but with the default arguments explicitly stated:
+
+```{r}
+## Extract sequences to a character vector
+## Remember that example_many_sequences is identical to the data 
+## read from FASTQ and metadata CSV in the previous code section
+sequences_for_visualisation <- extract_and_sort_sequences(example_many_sequences,
+                                                          sequence_variable = "sequence",
+                                                          grouping_levels = c("family" = 8,
+                                                                              "individual" = 2),
+                                                          sort_by = "sequence_length",
+                                                          desc_sort = TRUE)
+
+## We will not view the character vector in the interests of avoiding clutter.
+
+## Use the character vector to make the image
+visualise_many_sequences(sequences_for_visualisation,
+                         filename = "README_files/output/many_sequences_02.png",
+                         return = FALSE)
+
+## View image
+knitr::include_graphics("README_files/output/many_sequences_02.png")
+```
+
+Here the top large cluster is Family 1, containing individuals F1-1, F1-2, and F-3. These individuals contain 5, 2, and 3 reads respectively, and are separated from each other by 2 blank lines. After Family 1, there is there 8 blank lines before Family 2. Family 2 contains F2-1 and F2-2 with 1 and 3 reads (individuals separated by 2 blank lines), then there are 8 blank lines before Family 3. Family 3 contains F3-1, F3-2, F3-3, and F3-4 with 2, 3, 1, and 3 reads.
+
+If we wanted to group only by individual without showing the family structure, and present reads in ascending length order for each individual, we could do the following:
+
+```{r}
+## Extract sequences to a character vector
+sequences_for_visualisation <- extract_and_sort_sequences(example_many_sequences,
+                                                          sequence_variable = "sequence",
+                                                          grouping_levels = c("individual" = 1),
+                                                          sort_by = "sequence_length",
+                                                          desc_sort = FALSE)
+
+## Use the character vector to make the image
+visualise_many_sequences(sequences_for_visualisation,
+                         filename = "README_files/output/many_sequences_03.png",
+                         return = FALSE)
+
+## View image
+knitr::include_graphics("README_files/output/many_sequences_03.png")
+```
+
+Now we have a group for each individual, with sequences in ascending length order per individual, and one blank line between individuals.
+
+We could also turn off grouping entirely to just visualise all of the reads in length order, via `grouping_levels = NA`:
+
+```{r}
+## Extract sequences to a character vector
+sequences_for_visualisation <- extract_and_sort_sequences(example_many_sequences,
+                                                          sequence_variable = "sequence",
+                                                          grouping_levels = NA,
+                                                          sort_by = "sequence_length",
+                                                          desc_sort = TRUE)
+
+## Use the character vector to make the image
+visualise_many_sequences(sequences_for_visualisation,
+                         filename = "README_files/output/many_sequences_04.png",
+                         return = FALSE)
+
+## View image
+knitr::include_graphics("README_files/output/many_sequences_04.png")
+```
+
+We can also turn off sorting entirely (keeping grouping off) with `sort_by = NA` to simply show all the reads in the order in which they appear in the dataframe:
+
+NB: if `sort_by = NA` is used, then `desc_sort` does nothing so it doesn't matter what it is set to.
+
+```{r}
+## Extract sequences to a character vector
+sequences_for_visualisation <- extract_and_sort_sequences(example_many_sequences,
+                                                          sequence_variable = "sequence",
+                                                          grouping_levels = NA,
+                                                          sort_by = NA)
+
+## Use the character vector to make the image
+visualise_many_sequences(sequences_for_visualisation,
+                         filename = "README_files/output/many_sequences_05.png",
+                         return = FALSE)
+
+## View image
+knitr::include_graphics("README_files/output/many_sequences_05.png")
+```
+
+It is also possible to keep grouping on while turning sorting off if desired:
+
+```{r}
+## Extract sequences to a character vector
+sequences_for_visualisation <- extract_and_sort_sequences(example_many_sequences,
+                                                          sequence_variable = "sequence",
+                                                          grouping_levels = c("family" = 2,
+                                                                              "individual" = 1),
+                                                          sort_by = NA)
+
+## Use the character vector to make the image
+visualise_many_sequences(sequences_for_visualisation,
+                         filename = "README_files/output/many_sequences_06.png",
+                         return = FALSE)
+
+## View image
+knitr::include_graphics("README_files/output/many_sequences_06.png")
+```
+
+The grouping spacers can be set to 0 to sort within groups without visually separating them (but negative values don't work - they produce an error in `rep()` as the blank line can't be repeated a negative number of times). Additionally, the order of the groups/levels within a grouping variable can be changed in standard R fashion with `factor(x, levels = ...)`:
+
+```{r}
+## Reorder families
+example_many_sequences_reordered <- example_many_sequences
+example_many_sequences_reordered$family_reordered <- factor(example_many_sequences_reordered$family,
+                                                            levels = c("Family 2", 
+                                                                       "Family 3", 
+                                                                       "Family 1"))
+
+## Extract sequences to a character vector
+sequences_for_visualisation <- extract_and_sort_sequences(example_many_sequences_reordered,
+                                                          sequence_variable = "sequence",
+                                                          grouping_levels = c("family_reordered" = 0),
+                                                          sort_by = "sequence_length")
+
+## Use the character vector to make the image
+visualise_many_sequences(sequences_for_visualisation,
+                         filename = "README_files/output/many_sequences_07.png",
+                         return = FALSE)
+
+## View image
+knitr::include_graphics("README_files/output/many_sequences_07.png")
+
+```
+
+Finally, all the same grouping and sorting logic can be used to extract any other column as a character vector, though of course if it isn't DNA sequence then the resulting vector is not valid input to `visualise_many_sequences()`. The column for extraction is specified by `sequence_variable`, and the column for sorting is `sort_by`. If the `sort_by` column is non-numeric then it will be sorted alphabetically, just like using `sort()` on a character vector.
+
+```{r}
+## Extract qualities to character vector,
+## sorted alphabetically by quality string
+extracted_and_sorted_qualities <- extract_and_sort_sequences(example_many_sequences,
+                                                             sequence_variable = "quality",
+                                                             grouping_levels = c("family" = 2),
+                                                             sort_by = "quality",
+                                                             desc_sort = FALSE)
+
+## View character vector
+print(extracted_and_sorted_qualities, quote = F)
+```
+
+This extracted the `quality` column, with families separated by 2 blank strings, and sorted alphabetically by quality string within each family.
+
+
+
+
+## Colour and layout customisation
+As with `visualise_single_sequence()`, colours in `visualise_many_sequences()` are highly customisable and can use the various palettes from `sequence_colour_palettes`. Additionally, margin, resolution, and text size are customisable (including turning text off by setting size to 0).
+
+Colour-related arguments:
+
+- `sequence_colours`: A length-4 vector of the colours used for the boxes of A, C, G, and T respectively.
+- `sequence_text_colour`: The colour used for the A, C, G, and T lettering inside the boxes.
+- `background_colour`: The colour used for the background.
+
+Layout-related arguments:
+
+- `margin`: The margin around the image in terms of the size of base boxes (e.g. the default value of 0.5 adds a margin half the size of the base boxes, which is 50 px with the default `pixels_per_base = 100`).
+- `sequence_text_size`: The size of the text inside the boxes. Can be set to 0 to disable text inside boxes. Defaults to 16.
+- `pixels_per_base`: Resolution, as determined by number of pixels in the side length of one DNA base square. Everything else is scaled proportionally.
+
+For example, a layout with increased margins, enlarged text, and crazy colours might be:
+```{r}
+## Extract sequences to a character vector
+sequences_for_visualisation <- extract_and_sort_sequences(example_many_sequences)
+
+## Use the character vector to make the image
+visualise_many_sequences(sequences_for_visualisation,
+                         filename = "README_files/output/many_sequences_08.png",
+                         return = FALSE,
+                         sequence_colours = c("orange", "#00FF00", "magenta", "black"),
+                         sequence_text_colour = "cyan",
+                         background_colour = "yellow",
+                         sequence_text_size = 40,
+                         margin = 5)
+
+## View image
+knitr::include_graphics("README_files/output/many_sequences_08.png")
+```
+
+As with `visualise_single_sequence()`, text can be turned off, in which case it is sensible to reduce the resolution:
+
+```{r}
+## Extract sequences to a character vector
+sequences_for_visualisation <- extract_and_sort_sequences(example_many_sequences,
+                                                          grouping_levels = c("family" = 4,
+                                                                              "individual" = 1))
+
+## Use the character vector to make the image
+visualise_many_sequences(sequences_for_visualisation,
+                         filename = "README_files/output/many_sequences_09.png",
+                         return = FALSE,
+                         sequence_colours = sequence_colour_palettes$bright_pale,
+                         sequence_text_size = 0,
+                         margin = 0,
+                         pixels_per_base = 20)
+
+## View image
+knitr::include_graphics("README_files/output/many_sequences_09.png")
+```
 
 # References

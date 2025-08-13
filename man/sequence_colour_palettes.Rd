@@ -7,7 +7,7 @@
 \format{
 \subsection{\code{sequence_colour_palettes}}{
 
-A list of 3 length-4 character vectors
+A list of 4 length-4 character vectors
 \describe{
 \item{ggplot_style}{The shades of red, green, blue, and purple that \code{\link[ggplot2:ggplot]{ggplot2::ggplot()}} uses by default for a 4-way discrete colour scheme.\cr\cr Values: \code{c("#F8766D", "#7CAE00", "#00BFC4", "#C77CFF")}}
 \item{bright_pale}{Bright yellow, green, blue, and red in lighter pastel-like tones.\cr\cr Values: \code{c("#FFDD00", "#40C000", "#00A0FF", "#FF4E4E")}}
