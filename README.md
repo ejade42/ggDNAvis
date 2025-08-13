@@ -8,8 +8,8 @@
   - [2.3 Loading from FASTQ and metadata
     file](#23-loading-from-fastq-and-metadata-file)
     - [2.3.1 Standard FASTQ](#231-standard-fastq)
-    - [2.3.2 Modified FASTQ
-      e.g. methylation](#232-modified-fastq-eg-methylation)
+    - [2.3.2 Modified FASTQ (eg
+      methylation)](#232-modified-fastq-eg-methylation)
 - [3 Visualising a single DNA/RNA
   sequence](#3-visualising-a-single-dnarna-sequence)
   - [3.1 Basic visualisation](#31-basic-visualisation)
@@ -442,7 +442,7 @@ for (i in 1:16) {
     ## + 
     ## :<*1D)89?27#8.3)9<2G<>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8>0
 
-### 2.3.2 Modified FASTQ e.g. methylation
+### 2.3.2 Modified FASTQ (eg methylation)
 
 FASTQ files can be extended to include DNA modification (most often
 5-cytosine-methylation) information within the header rows. Most often,

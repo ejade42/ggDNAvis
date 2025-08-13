@@ -218,7 +218,7 @@ for (i in 1:16) {
 }
 ```
 
-### Modified FASTQ e.g. methylation
+### Modified FASTQ (eg methylation)
 
 FASTQ files can be extended to include DNA modification (most often 5-cytosine-methylation) information within the header rows. Most often, this information comes from Nanopore long-read sequencing being basecalled with a modification-capable model in Guppy or Dorado, resulting in SAM or BAM files. In SAM/BAM files, modification information is stored in the MM and ML tags. These can be copied to the header rows of a FASTQ file via 
 
