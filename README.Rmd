@@ -218,7 +218,7 @@ for (i in 1:16) {
 }
 ```
 
-### Modified FASTQ - e.g. methylation
+### Modified FASTQ e.g. methylation
 
 FASTQ files can be extended to include DNA modification (most often 5-cytosine-methylation) information within the header rows. Most often, this information comes from Nanopore long-read sequencing being basecalled with a modification-capable model in Guppy or Dorado, resulting in SAM or BAM files. In SAM/BAM files, modification information is stored in the MM and ML tags. These can be copied to the header rows of a FASTQ file via 
 
@@ -262,7 +262,7 @@ metadata <- read.csv("inst/extdata/example_many_sequences_metadata.csv")
 github_table(head(metadata, 4))
 ```
 
-The metadata is identical to previously (\@ref(standard-fastq)).
+The metadata is identical to its previous use in the [reading from standard FASTQ](#231-standard-fastq) section.
 
 ```{r}
 ## Merge fastq data with metadata
@@ -573,11 +573,13 @@ knitr::include_graphics("README_files/output/single_sequence_11.png")
 
 
 
+
+
 # Visualising many DNA/RNA sequences
 ## Basic visualisation
 ggDNAvis can be used to visualise multiple DNA sequences via `visualise_many_sequences()`. This function takes a vector of sequences as its primary input, which do not all have to be the same length and can be blank for spacing lines. This can be constructed manually e.g. `c("GGCGGCGGC", "", "TTATTA")`, but is more easily produced by `extract_and_sort_sequences()`.
 
-Here is an example of how that could be accomplished with the `example_many_sequences` data:
+Here is an example of how that could be accomplished with the `example_many_sequences` data, with a reminder of how to load sequence/quality data from FASTQ and merge with metadata (as fully explained in the [reading standard FASTQ](#231-standard-fastq) section):
 
 ```{r}
 ## Reminder of how to load data from file
@@ -843,7 +845,7 @@ The modification information is stored in the MM and ML tags of the BAM file. It
 samtools fastq -T MM,ML ${input_bam_file} > "modified_fastq_file.fastq"
 ```
 
-This is all discussed in more detail in \@ref(232-modified-fastq-eg-methylation)
+This is all discussed in more detail in the [reading from modified FASTQ](#232-modified-fastq-eg-methylation) section.
 
 
 

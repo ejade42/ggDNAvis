@@ -8,8 +8,8 @@
   - [2.3 Loading from FASTQ and metadata
     file](#23-loading-from-fastq-and-metadata-file)
     - [2.3.1 Standard FASTQ](#231-standard-fastq)
-    - [2.3.2 Modified FASTQ -
-      e.g. methylation](#232-modified-fastq---eg-methylation)
+    - [2.3.2 Modified FASTQ
+      e.g. methylation](#232-modified-fastq-eg-methylation)
 - [3 Visualising a single DNA/RNA
   sequence](#3-visualising-a-single-dnarna-sequence)
   - [3.1 Basic visualisation](#31-basic-visualisation)
@@ -442,7 +442,7 @@ for (i in 1:16) {
     ## + 
     ## :<*1D)89?27#8.3)9<2G<>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8>0
 
-### 2.3.2 Modified FASTQ - e.g. methylation
+### 2.3.2 Modified FASTQ e.g. methylation
 
 FASTQ files can be extended to include DNA modification (most often
 5-cytosine-methylation) information within the header rows. Most often,
@@ -561,8 +561,8 @@ github_table(head(metadata, 4))
 | `Family 1` | `F1-1`     | `F1-1c` | `reverse` |
 | `Family 1` | `F1-1`     | `F1-1d` | `forward` |
 
-The metadata is identical to previously
-(<a href="#standard-fastq">2.3.1</a>).
+The metadata is identical to its previous use in the [reading from
+standard FASTQ](#231-standard-fastq) section.
 
 ``` r
 ## Merge fastq data with metadata
@@ -1054,7 +1054,9 @@ e.g. `c("GGCGGCGGC", "", "TTATTA")`, but is more easily produced by
 `extract_and_sort_sequences()`.
 
 Here is an example of how that could be accomplished with the
-`example_many_sequences` data:
+`example_many_sequences` data, with a reminder of how to load
+sequence/quality data from FASTQ and merge with metadata (as fully
+explained in the [reading standard FASTQ](#231-standard-fastq) section):
 
 ``` r
 ## Reminder of how to load data from file
@@ -1493,8 +1495,8 @@ file. It can then be written to the header row of a FASTQ file via:
 samtools fastq -T MM,ML ${input_bam_file} > "modified_fastq_file.fastq"
 ```
 
-This is all discussed in more detail in
-<a href="#232-modified-fastq-eg-methylation"><strong>??</strong></a>
+This is all discussed in more detail in the [reading from modified
+FASTQ](#232-modified-fastq-eg-methylation) section.
 
 # 6 References
 
