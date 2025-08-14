@@ -24,15 +24,16 @@
 #'
 #' @return A ggplot object containing the full visualisation, or `invisible(NULL)` if `return = FALSE`. It is often more useful to use `filename = "myfilename.png"`, because then the visualisation is exported at the correct aspect ratio.
 #' @export
-visualise_single_sequence <- function(sequence, sequence_colours = sequence_colour_palettes$ggplot_style, background_colour = "white", outline_colour = NA,
+visualise_single_sequence <- function(sequence, sequence_colours = sequence_colour_palettes$ggplot_style, background_colour = "white",
                                       line_wrapping = 75, spacing = 1, margin = 0.5, sequence_text_colour = "black", sequence_text_size = 16,
                                       index_annotation_colour = "darkred", index_annotation_size = 12.5, index_annotation_interval = 15,
-                                      index_annotations_above = TRUE, index_annotation_vertical_position = 1/3, return = TRUE, filename = NA, pixels_per_base = 100) {
+                                      index_annotations_above = TRUE, index_annotation_vertical_position = 1/3,
+                                      outline_colour = NA, outline_weight = 4, return = TRUE, filename = NA, pixels_per_base = 100) {
     ## Validate arguments
-    for (argument in list(sequence, sequence_colours, background_colour, line_wrapping, spacing, margin, sequence_text_colour, sequence_text_size, index_annotation_colour, index_annotation_size, index_annotation_interval, index_annotations_above, index_annotation_vertical_position, return, filename, pixels_per_base)) {
+    for (argument in list(sequence, sequence_colours, background_colour, outline_colour, line_wrapping, spacing, margin, sequence_text_colour, sequence_text_size, index_annotation_colour, index_annotation_size, index_annotation_interval, index_annotations_above, index_annotation_vertical_position, return, filename, pixels_per_base)) {
         if (mean(is.null(argument)) != 0) {abort(paste("Argument", argument, "must not be null."), class = "argument_value_or_type")}
     }
-    for (argument in list(sequence, background_colour, line_wrapping, spacing, sequence_text_colour, sequence_text_size, index_annotation_colour, index_annotation_size, index_annotation_interval, index_annotations_above, index_annotation_vertical_position, return, filename, pixels_per_base, margin)) {
+    for (argument in list(sequence, background_colour, outline_colour, line_wrapping, spacing, sequence_text_colour, sequence_text_size, index_annotation_colour, index_annotation_size, index_annotation_interval, index_annotations_above, index_annotation_vertical_position, return, filename, pixels_per_base, margin)) {
         if (length(argument) != 1) {abort(paste("Argument", argument, "must have length 1"), class = "argument_value_or_type")}
     }
     for (argument in list(sequence, sequence_colours, background_colour, sequence_text_colour, sequence_text_size, index_annotation_colour, index_annotation_size, index_annotation_interval, index_annotations_above, index_annotation_vertical_position, line_wrapping, spacing, return, pixels_per_base, margin)) {
@@ -45,7 +46,7 @@ visualise_single_sequence <- function(sequence, sequence_colours = sequence_colo
         if (is.character(argument) == FALSE) {abort(paste("Argument", argument, "must be a character/string value."), class = "argument_value_or_type")}
     }
     if (is.numeric(index_annotation_vertical_position) == FALSE) {
-        abort("Index nnotation vertical position must be a numeric value", class = "argument_value_or_type")
+        abort("Index annotation vertical position must be a numeric value", class = "argument_value_or_type")
     }
     if (index_annotation_vertical_position < 0 || index_annotation_vertical_position > 1) {
         warn("Not recommended to set index annotation vertical position outside range 0-1.", class = "parameter_recommendation")
@@ -96,13 +97,22 @@ visualise_single_sequence <- function(sequence, sequence_colours = sequence_colo
     colours <- c(background_colour, sequence_colours)
     names(colours) <- as.character(0:4)
 
+    ## Create colour vector for tile outlines
+    if (is.na(outline_colour)) {
+        image_data$outline_colour <- NA
+    } else {
+        image_data$outline_colour <- ifelse(image_data$layer == 0, NA, outline_colour)
+    }
+
     ## Generate plot
     result <- ggplot(image_data, aes(x = x, y = y, fill = as.character(layer))) +
-        geom_tile() +
-        geom_text(data = annotations, aes(x = x_position, y = y_position, label = annotation, col = type, size = type), fontface = "bold", inherit.aes = F) +
+        geom_tile(aes(colour = outline_colour), linewidth = outline_weight, linejoin = "bevel") +
         scale_fill_manual(values = colours) +
+        scale_colour_identity() +
         scale_x_continuous(expand = c(0, 0)) +
         scale_y_continuous(expand = c(0, 0)) +
+        new_scale_colour() +
+        geom_text(data = annotations, aes(x = x_position, y = y_position, label = annotation, col = type, size = type), fontface = "bold", inherit.aes = F) +
         scale_colour_manual(values = c("Number" = index_annotation_colour, "Sequence" = sequence_text_colour)) +
         scale_discrete_manual("size", values = c("Number" = index_annotation_size, "Sequence" = sequence_text_size)) +
         guides(x = "none", y = "none", fill = "none", col = "none", size = "none") +

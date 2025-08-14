@@ -225,6 +225,22 @@ test_that("single sequence visualisation works with margin 2, below", {
                                        metric = "MAE"))$distortion, acceptable_distortion)
 })
 
+test_that("single_sequence_visualisation works with outlines", {
+    filename <- "sone_2019_f1_1_expanded_test_27"
+    visualise_single_sequence(sone_2019_f1_1_expanded, line_wrapping = 60, pixels_per_base = 100, outline_colour = "black", filename = paste0(root, filename, ".png"))
+    expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
+                                       image_read(paste0(reference, filename, ".png")),
+                                       metric = "MAE"))$distortion, acceptable_distortion)
+})
+
+test_that("single_sequence_visualisation works with outlines, no spacing", {
+    filename <- "sone_2019_f1_1_expanded_test_28"
+    visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = sequence_colour_palettes$bright_pale, sequence_text_size = 0, line_wrapping = 60, pixels_per_base = 100, spacing = 0, index_annotation_interval = 0, outline_colour = "black", filename = paste0(root, filename, ".png"))
+    expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
+                                       image_read(paste0(reference, filename, ".png")),
+                                       metric = "MAE"))$distortion, acceptable_distortion)
+})
+
 
 ## Test fail cases/invalid arguments to main single sequence visualisation function
 test_that("single sequence visualisation fails when arguments are invalid", {
