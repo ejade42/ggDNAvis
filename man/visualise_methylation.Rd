@@ -5,8 +5,8 @@
 \title{Visualise methylation probabilities for many DNA sequences}
 \usage{
 visualise_methylation(
-  modification_locations_col,
-  modification_probabilities_col,
+  modification_locations,
+  modification_probabilities,
   sequence_lengths,
   background_colour = "white",
   other_bases_colour = "grey",
@@ -21,9 +21,9 @@ visualise_methylation(
 )
 }
 \arguments{
-\item{modification_locations_col}{\verb{character vector}. One character value for each sequence, storing a condensed string (e.g. \code{"3,6,9,12"}, produced via \code{\link[=vector_to_string]{vector_to_string()}}) of the indices along the read at which modification was assessed. Indexing starts at 1.}
+\item{modification_locations}{\verb{character vector}. One character value for each sequence, storing a condensed string (e.g. \code{"3,6,9,12"}, produced via \code{\link[=vector_to_string]{vector_to_string()}}) of the indices along the read at which modification was assessed. Indexing starts at 1.}
 
-\item{modification_probabilities_col}{\verb{character vector}. One character value for each sequence, storing a condensed string (e.g. \code{"0,128,255,15"}, produced via \code{\link[=vector_to_string]{vector_to_string()}}) of the probability of methylation/modification at each assessed base.\cr\cr Assumed to be Nanopore > SAM style modification stored as an 8-bit integer from 0 to 255, but changing other arguments could make this work on other scales.}
+\item{modification_probabilities}{\verb{character vector}. One character value for each sequence, storing a condensed string (e.g. \code{"0,128,255,15"}, produced via \code{\link[=vector_to_string]{vector_to_string()}}) of the probability of methylation/modification at each assessed base.\cr\cr Assumed to be Nanopore > SAM style modification stored as an 8-bit integer from 0 to 255, but changing other arguments could make this work on other scales.}
 
 \item{sequence_lengths}{\verb{numeric vector}. The length of each sequence.}
 

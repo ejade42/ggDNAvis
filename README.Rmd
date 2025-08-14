@@ -218,6 +218,10 @@ for (i in 1:16) {
 }
 ```
 
+Note that this is not quite identical to the original. That's because we wrote from the forward-sequence and forward-quality columns (after renaming), so the new FASTQ contains all forward versions. If we wanted the original FASTQ we would just provide colnames for the original sequence and quality rather than the forward versions.
+
+Do be careful that either both sequence and quality are the forward versions or neither are. If they are mismatched then the new FASTQ will be wrong.
+
 ### Modified FASTQ (eg methylation)
 
 FASTQ files can be extended to include DNA modification (most often 5-cytosine-methylation) information within the header rows. Most often, this information comes from Nanopore long-read sequencing being basecalled with a modification-capable model in Guppy or Dorado, resulting in SAM or BAM files. In SAM/BAM files, modification information is stored in the MM and ML tags. These can be copied to the header rows of a FASTQ file via:
@@ -368,6 +372,9 @@ for (i in 1:16) {
 }
 ```
 
+As with the standard FASTQ, this is not quite identical to the original. That's because we wrote from the forward-sequence, forward-quality, forward-locations, and forward-probabilities columns (after renaming), so the new FASTQ contains all forward versions. If we wanted the original FASTQ we would just provide colnames for the original sequence, quality, locations, and probabilities rather than the forward versions.
+
+Do be careful that either all of sequence, quality, locations, and probabilities are the forward versions or none are. If they are mismatched then the new FASTQ will be wrong.
 
 
 
@@ -907,5 +914,119 @@ hydroxymethylation_data_for_visualisation
 ```
 The hydroxymethylation locations are the same as the methylation locations (as they have both been assessed at all CpG sites), but the probabilites are different. This should work for any modification type in the MM and ML tags, though it has only been tested for `C+m?` CG methylation and `C+h?` CG hydroxymethylation.
 
+This list of locations, probabilities, and lengths can then be used as input for `visualise_methylation()`.
+
+```{r}
+## Use saved methylation data for visualisation to make image
+visualise_methylation(methylation_data_for_visualisation$locations,
+                      methylation_data_for_visualisation$probabilities,
+                      methylation_data_for_visualisation$lengths,
+                      filename = "README_files/output/methylation_01.png",
+                      return = FALSE)
+
+## View image
+knitr::include_graphics("README_files/output/methylation_01.png")
+```
+
+Here all the modification-assessed bases (Cs of CG dinucleotides) are coloured blue for low methylation probability and red for high methylation probability and linearly interpolated for intermediate probabilites. Non-modification-assessed bases are coloured grey, and the background is white.
+
+`ggDNAvis` also contains a function for making a scalebar for the methylation probabilities: `visualise_methylation_colour_scale()`. Unlike the main `visualise_` functions, this one will work at any scale and aspect resolution, so it always returns a ggplot object that can be exported manually via `ggsave()`.
+
+<div align="center">
+```{r, out.width="50%"}
+## Create scalebar and save to object
+scalebar <- visualise_methylation_colour_scale(x_axis_title = "Methylation probability")
+
+## Write png from object
+ggsave("README_files/output/methylation_01_scalebar.png", scalebar, dpi = 300, width = 5, height = 1.25)
+
+## View image
+knitr::include_graphics("README_files/output/methylation_01_scalebar.png")
+```
+</div>
+
+## Sequence arrangement customisation
+`extract_methylation_from_dataframe()` is customisable in all the same ways as `extract_and_sort_sequences()`, as discussed in detail in the [many sequences arrangement customisation](#42-sequence-arrangement-customisation) section. This section will provide a brief reminder, but follow that link for a full explanation.
+
+`extract_methylation_from_dataframe()` arguments:
+
+- `modification_data`: The data to be processed
+- `locations_colname`: The column locations should be extracted from.
+- `probabilities_colname`: The column probabilities should be extracted from.
+- `lengths_colname`: The column sequence lengths should be extracted from. All three of these just call `extract_and_sort_sequences()` to extract these columns, so they can technically be used to extract any three columns regardless of what they contain. However, if you are trying to extract and sort a non-DNA-information column, it would probably be more sensible to do that directly via `extract_and_sort_sequences()`.
+- `grouping_levels`: How the data should be grouped. This is a named numerical vector stating which variables/columns should be used to group the data, and how many lines should be left between groups at each level. For example, the default `c("family" = 8, "individual" = 2)` means the top-level grouping is done by categories in the `"family"` column and there are 8 blank lines between each family, and the second-level gropuing is done by the `"individual"` column and there are 2 blank lines between individuals within the same family. This is implemented recursively, so any number of grouping variables can be used (or this can be set to `NA` to turn off grouping entirely).
+- `sort_by`: The name of the column used to sort sequences within the lowest-level groups. This is generally the sequence length (but doesn't have to be).
+- `desc_sort`: Whether the sequences should be sorted by the `sort_by` variable descending (`desc_sort = TRUE`) or (`desc_sort = FALSE`).
+
+A single example of how the arrangement might be customised:
+
+```{r}
+## Extract information to list of character vectors
+methylation_data_for_visualisation <- extract_methylation_from_dataframe(
+    example_many_sequences,
+    locations_colname = "methylation_locations",
+    probabilities_colname = "methylation_probabilities",
+    lengths_colname = "sequence_length",
+    grouping_levels = c("individual" = 3),
+    sort_by = "sequence_length",
+    desc_sort = FALSE
+)
+
+## Use saved methylation data for visualisation to make image
+visualise_methylation(methylation_data_for_visualisation$locations,
+                      methylation_data_for_visualisation$probabilities,
+                      methylation_data_for_visualisation$lengths,
+                      filename = "README_files/output/methylation_02.png",
+                      return = FALSE)
+
+## View image
+knitr::include_graphics("README_files/output/methylation_02.png")
+```
+
+Here there is no grouping by family, 3 blank lines between each participant, and sequences are sorted in ascending length order within each participant.
+
+## Colour and layout customisation
+
+Colours in `visualise_methylation()` are controlled by setting the low and high end points of the modification colour mapping scale, as well as the colour to use for non-modification-assessed bases and the background. As before, margin and resolution are customisable. There is not currently support for having text rendered as well to avoid visual clutter, so the resolution defaults to a much lower 20 pixels per base.
+
+Colour-related arguments:
+
+- `low_colour`: The colour to use at the bottom end of the modification probability scale.
+- `high_colour`: The colour to use at the top end of the modification probability scale.
+- `other_bases_colour`: The colour to use for non-modification-assessed bases. Defaults to grey and generally should be fairly neutral (though this is not enforced in any way).
+- `background_colour`: The colour to use for the background.
+
+Layout-related arguments:
+
+- `margin`: The margin around the image in terms of the size of base boxes (e.g. the default value of 0.5 adds a margin half the size of the base boxes, which is 50 px with the default `pixels_per_base = 100`).
+- `pixels_per_base`: Resolution, as determined by number of pixels in the side length of one DNA base square. Everything else is scaled proportionally.
+
+Here is an example with wild colours:
+
+```{r}
+## Extract information to list of character vectors
+methylation_data_for_visualisation <- extract_methylation_from_dataframe(
+    example_many_sequences,
+    locations_colname = "methylation_locations",
+    probabilities_colname = "methylation_probabilities",
+    lengths_colname = "sequence_length",
+    grouping_levels = c("family" = 5, 
+                        "individual" = 2),
+    sort_by = "sequence_length",
+    desc_sort = FALSE
+)
+
+## Use saved methylation data for visualisation to make image
+visualise_methylation(methylation_data_for_visualisation$locations,
+                      methylation_data_for_visualisation$probabilities,
+                      methylation_data_for_visualisation$lengths,
+                      filename = "README_files/output/methylation_03.png",
+                      return = FALSE)
+
+## View image
+knitr::include_graphics("README_files/output/methylation_03.png")
+```
+
+## Colour mapping customisation
 
 # References

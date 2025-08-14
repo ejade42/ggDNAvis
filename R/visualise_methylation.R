@@ -22,8 +22,8 @@
 #' A separate scalebar plot showing the colours corresponding to each probability, with any/no clamping values,
 #' can be produced via [visualise_methylation_colour_scale()].
 #'
-#' @param modification_locations_col `character vector`. One character value for each sequence, storing a condensed string (e.g. `"3,6,9,12"`, produced via [vector_to_string()]) of the indices along the read at which modification was assessed. Indexing starts at 1.
-#' @param modification_probabilities_col `character vector`. One character value for each sequence, storing a condensed string (e.g. `"0,128,255,15"`, produced via [vector_to_string()]) of the probability of methylation/modification at each assessed base.\cr\cr Assumed to be Nanopore > SAM style modification stored as an 8-bit integer from 0 to 255, but changing other arguments could make this work on other scales.
+#' @param modification_locations `character vector`. One character value for each sequence, storing a condensed string (e.g. `"3,6,9,12"`, produced via [vector_to_string()]) of the indices along the read at which modification was assessed. Indexing starts at 1.
+#' @param modification_probabilities `character vector`. One character value for each sequence, storing a condensed string (e.g. `"0,128,255,15"`, produced via [vector_to_string()]) of the probability of methylation/modification at each assessed base.\cr\cr Assumed to be Nanopore > SAM style modification stored as an 8-bit integer from 0 to 255, but changing other arguments could make this work on other scales.
 #' @param sequence_lengths `numeric vector`. The length of each sequence.
 #' @param background_colour `character`. The colour the background should be drawn (defaults to white).
 #' @param other_bases_colour `character`. The colour non-assessed (e.g. non-CpG) bases should be drawn (defaults to grey).
@@ -38,17 +38,17 @@
 #'
 #' @return A ggplot object containing the full visualisation, or `invisible(NULL)` if `return = FALSE`. It is often more useful to use `filename = "myfilename.png"`, because then the visualisation is exported at the correct aspect ratio.
 #' @export
-visualise_methylation <- function(modification_locations_col, modification_probabilities_col, sequence_lengths,
+visualise_methylation <- function(modification_locations, modification_probabilities, sequence_lengths,
                                   background_colour = "white", other_bases_colour = "grey", low_colour = "blue", high_colour = "red", low_clamp = 0, high_clamp = 255,
                                   margin = 0.5, return = TRUE, filename = NA, pixels_per_base = 10) {
     ## Validate arguments
-    for (argument in list(modification_locations_col, modification_probabilities_col, sequence_lengths, background_colour, other_bases_colour, low_colour, high_colour, low_clamp, high_clamp, margin, return, filename, pixels_per_base)) {
+    for (argument in list(modification_locations, modification_probabilities, sequence_lengths, background_colour, other_bases_colour, low_colour, high_colour, low_clamp, high_clamp, margin, return, filename, pixels_per_base)) {
         if (mean(is.null(argument)) != 0) {abort(paste("Argument", argument, "must not be null."), class = "argument_value_or_type")}
     }
     for (argument in list(background_colour, other_bases_colour, low_colour, high_colour, low_clamp, high_clamp, margin, return, filename, pixels_per_base)) {
         if (length(argument) != 1) {abort(paste("Argument", argument, "must have length 1."), class = "argument_value_or_type")}
     }
-    for (argument in list(modification_locations_col, modification_probabilities_col, sequence_lengths, background_colour, other_bases_colour, low_colour, high_colour, low_clamp, high_clamp, margin, return, pixels_per_base)) {
+    for (argument in list(modification_locations, modification_probabilities, sequence_lengths, background_colour, other_bases_colour, low_colour, high_colour, low_clamp, high_clamp, margin, return, pixels_per_base)) {
         if (mean(is.na(argument)) != 0) {abort(paste("Argument", argument, "must not be NA."), class = "argument_value_or_type")}
     }
     for (argument in list(background_colour, other_bases_colour, low_colour, high_colour)) {
@@ -63,12 +63,12 @@ visualise_methylation <- function(modification_locations_col, modification_proba
     for (argument in list(return)) {
         if (is.logical(argument) == FALSE || length(argument) != 1) {abort(paste("Argument", argument, "must be a single logical/boolean value."), class = "argument_value_or_type")}
     }
-    if (length(modification_locations_col) != length(modification_probabilities_col) ||
-        length(modification_locations_col) != length(sequence_lengths) ||
-        length(modification_probabilities_col) != length(sequence_lengths)) {
+    if (length(modification_locations) != length(modification_probabilities) ||
+        length(modification_locations) != length(sequence_lengths) ||
+        length(modification_probabilities) != length(sequence_lengths)) {
         abort("Modification locations, modification probabilities, and sequence lengths must all be the same length", class = "argument_value_or_type")
     }
-    for (argument in list(modification_locations_col, modification_probabilities_col)) {
+    for (argument in list(modification_locations, modification_probabilities)) {
         if (is.character(argument) == FALSE) {abort("Modification locations and probabilities must both be character vectors.", class = "argument value or type.")}
         if (mean(is.na(string_to_vector(argument))) != 0) {abort("Modification locations and probabilities must both expand to numeric vectors via string_to_vector(). Check that the values within these inputs are comma-separated numbers e.g. '1,2,3,4'.", class = "argument_value_or_type")}
     }
@@ -79,13 +79,13 @@ visualise_methylation <- function(modification_locations_col, modification_proba
 
     ## Generate rasterised dataframes of methylation and masking layer
     max_length <- max(sequence_lengths)
-    image_matrix <- matrix(NA, nrow = length(modification_locations_col), ncol = max_length)
-    mask_matrix  <- matrix(NA, nrow = length(modification_locations_col), ncol = max_length)
-    for (i in 1:length(modification_locations_col)) {
-        numeric_sequence_representation <- convert_modification_to_number_vector(modification_locations_col[i], modification_probabilities_col[i], max_length)
+    image_matrix <- matrix(NA, nrow = length(modification_locations), ncol = max_length)
+    mask_matrix  <- matrix(NA, nrow = length(modification_locations), ncol = max_length)
+    for (i in 1:length(modification_locations)) {
+        numeric_sequence_representation <- convert_modification_to_number_vector(modification_locations[i], modification_probabilities[i], max_length)
         image_matrix[i, ] <- numeric_sequence_representation
 
-        mask <- create_plot_masks(modification_locations_col[i], modification_probabilities_col[i], max_length, sequence_lengths[i])
+        mask <- create_plot_masks(modification_locations[i], modification_probabilities[i], max_length, sequence_lengths[i])
         mask_matrix[i, ] <- mask
     }
     image_data <- raster::as.data.frame(raster::raster(image_matrix), xy = TRUE)
