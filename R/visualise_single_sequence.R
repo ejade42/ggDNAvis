@@ -24,7 +24,7 @@
 #'
 #' @return A ggplot object containing the full visualisation, or `invisible(NULL)` if `return = FALSE`. It is often more useful to use `filename = "myfilename.png"`, because then the visualisation is exported at the correct aspect ratio.
 #' @export
-visualise_single_sequence <- function(sequence, sequence_colours = sequence_colour_palettes$ggplot_style, background_colour = "white",
+visualise_single_sequence <- function(sequence, sequence_colours = sequence_colour_palettes$ggplot_style, background_colour = "white", outline_colour = NA,
                                       line_wrapping = 75, spacing = 1, margin = 0.5, sequence_text_colour = "black", sequence_text_size = 16,
                                       index_annotation_colour = "darkred", index_annotation_size = 12.5, index_annotation_interval = 15,
                                       index_annotations_above = TRUE, index_annotation_vertical_position = 1/3, return = TRUE, filename = NA, pixels_per_base = 100) {
@@ -96,13 +96,18 @@ visualise_single_sequence <- function(sequence, sequence_colours = sequence_colo
     colours <- c(background_colour, sequence_colours)
     names(colours) <- as.character(0:4)
 
-    ## Generate actual plot via plot_single_sequence then annotate
-    result <- plot_single_sequence(image_data, colours) +
+    ## Generate plot
+    result <- ggplot(image_data, aes(x = x, y = y, fill = as.character(layer))) +
+        geom_tile() +
         geom_text(data = annotations, aes(x = x_position, y = y_position, label = annotation, col = type, size = type), fontface = "bold", inherit.aes = F) +
+        scale_fill_manual(values = colours) +
+        scale_x_continuous(expand = c(0, 0)) +
+        scale_y_continuous(expand = c(0, 0)) +
         scale_colour_manual(values = c("Number" = index_annotation_colour, "Sequence" = sequence_text_colour)) +
         scale_discrete_manual("size", values = c("Number" = index_annotation_size, "Sequence" = sequence_text_size)) +
-        guides(col = "none", size = "none") +
-        theme(plot.background = element_rect(fill = background_colour, colour = NA))
+        guides(x = "none", y = "none", fill = "none", col = "none", size = "none") +
+        theme(axis.title = element_blank(),
+              plot.background = element_rect(fill = background_colour, colour = NA))
 
 
     ## As long as the lines are spaced out, don't need a bottom margin as the blank spacer line does that
@@ -288,36 +293,4 @@ convert_sequences_to_annotations <- function(sequences, line_length, interval = 
     annotation_data$x_position <- as.numeric(annotation_data$x_position)
     annotation_data$y_position <- as.numeric(annotation_data$y_position)
     return(annotation_data)
-}
-
-
-
-## Uses numerical encoding of sequence to produce image data via raster::raster()
-## Then plots this in ggplot2, using user-specified colours
-## 0 is background, 1 is A, 2 is C, 3 is G, and 4 is T
-
-
-
-#' Create intermediate geom_tile plot of a single sequence ([visualise_single_sequence()] helper)
-#'
-#' Takes rasterised image data from [create_image_data()] and a set of colours
-#' and returns a ggplot (via geom_tile). However, this plot is intermediate and is
-#' further modified (e.g. by adding annotations) in [visualise_single_sequence()], so
-#' this function should only be used directly if you require more specific customisation.
-#'
-#' @param image_data `dataframe` Rasterised dataframe representing sequence information numerically. Output of [create_image_data()].
-#' @param colours `character vector`, length 5. Expects a named vector specifying colour for background, A, C, G, T/U in that order. Easier to customise in [visualise_single_sequence()] as formatting requirements are less strict.
-#'
-#' @return `ggplot` ggplot via geom_tile, of the single sequence split across multiple lines. Formatting will be better if accessed via [visualise_single_sequence()], but this function is made available for use cases where greater flexibility is required.
-#' @export
-plot_single_sequence <- function(image_data, colours = c("0" = "white", "1" = "#F8766D", "2" = "#7CAE00", "3" = "#00BFC4", "4" = "#C77CFF")) {
-    plot <- ggplot(image_data, aes(x = x, y = y, fill = as.character(layer))) +
-        geom_tile() +
-        scale_fill_manual(values = colours) +
-        guides(x = "none", y = "none", fill = "none") +
-        theme(axis.title = element_blank()) +
-        scale_x_continuous(expand = c(0, 0)) +
-        scale_y_continuous(expand = c(0, 0))
-
-    return(plot)
 }

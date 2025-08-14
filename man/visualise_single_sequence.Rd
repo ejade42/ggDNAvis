@@ -8,6 +8,7 @@ visualise_single_sequence(
   sequence,
   sequence_colours = sequence_colour_palettes$ggplot_style,
   background_colour = "white",
+  outline_colour = NA,
   line_wrapping = 75,
   spacing = 1,
   margin = 0.5,
