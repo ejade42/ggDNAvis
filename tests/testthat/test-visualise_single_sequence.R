@@ -6,7 +6,7 @@ acceptable_distortion <- 0.001
 
 test_that("single sequence visualisation works with standard conditions", {
     filename <- "sone_2019_f1_1_expanded_test_01"
-    visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), pixels_per_base = 30, index_annotations_above = FALSE, filename = paste0(root, filename, ".png"))
+    visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), outline_weight = 0, pixels_per_base = 30, index_annotations_above = FALSE, filename = paste0(root, filename, ".png"))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -14,7 +14,7 @@ test_that("single sequence visualisation works with standard conditions", {
 
 test_that("single sequence visualisation works with funky colours", {
     filename <- "sone_2019_f1_1_expanded_test_02"
-    visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("pink", "green", "orange", "yellow"), background_colour = "magenta", sequence_text_colour = "red", index_annotation_colour = "blue", pixels_per_base = 30, index_annotations_above = FALSE, filename = paste0(root, filename, ".png"))
+    visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("pink", "green", "orange", "yellow"), outline_weight = 0, background_colour = "magenta", sequence_text_colour = "red", index_annotation_colour = "blue", pixels_per_base = 30, index_annotations_above = FALSE, filename = paste0(root, filename, ".png"))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -22,7 +22,7 @@ test_that("single sequence visualisation works with funky colours", {
 
 test_that("single sequence visualisation works with no text, via index_annotation_size", {
     filename <- "sone_2019_f1_1_expanded_test_03"
-    expect_warning(visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), sequence_text_size = 0, index_annotation_size = 0, pixels_per_base = 30, index_annotations_above = FALSE, filename = paste0(root, filename, ".png")),
+    expect_warning(visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), outline_weight = 0, sequence_text_size = 0, index_annotation_size = 0, pixels_per_base = 30, index_annotations_above = FALSE, filename = paste0(root, filename, ".png")),
                    class = "parameter_recommendation")
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
@@ -31,7 +31,7 @@ test_that("single sequence visualisation works with no text, via index_annotatio
 
 test_that("single sequence visualisation works with no text, via index_annotation_interval", {
     filename <- "sone_2019_f1_1_expanded_test_04"
-    visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), sequence_text_size = 0, index_annotation_interval = 0, pixels_per_base = 30, index_annotations_above = FALSE, filename = paste0(root, filename, ".png"))
+    visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), outline_weight = 0, sequence_text_size = 0, index_annotation_interval = 0, pixels_per_base = 30, index_annotations_above = FALSE, filename = paste0(root, filename, ".png"))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -39,7 +39,7 @@ test_that("single sequence visualisation works with no text, via index_annotatio
 
 test_that("single sequence visualisation works with atypical interval", {
     filename <- "sone_2019_f1_1_expanded_test_05"
-    visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), line_wrapping = 55, index_annotation_interval = 12, pixels_per_base = 30, index_annotations_above = FALSE, filename = paste0(root, filename, ".png"))
+    visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), outline_weight = 0, line_wrapping = 55, index_annotation_interval = 12, pixels_per_base = 30, index_annotations_above = FALSE, filename = paste0(root, filename, ".png"))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -47,7 +47,7 @@ test_that("single sequence visualisation works with atypical interval", {
 
 test_that("single sequence visualisation works with giant fonts", {
     filename <- "sone_2019_f1_1_expanded_test_06"
-    visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), line_wrapping = 35, index_annotation_interval = 15, sequence_text_size = 20, index_annotation_size = 5, pixels_per_base = 30, index_annotations_above = FALSE, filename = paste0(root, filename, ".png"))
+    visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), outline_weight = 0, line_wrapping = 35, index_annotation_interval = 15, sequence_text_size = 20, index_annotation_size = 5, pixels_per_base = 30, index_annotations_above = FALSE, filename = paste0(root, filename, ".png"))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -55,7 +55,7 @@ test_that("single sequence visualisation works with giant fonts", {
 
 test_that("single sequence visualisation works with extra spacing", {
     filename <- "sone_2019_f1_1_expanded_test_07"
-    visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), spacing = 5, pixels_per_base = 30, index_annotations_above = FALSE, filename = paste0(root, filename, ".pNg"))
+    visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), outline_weight = 0, spacing = 5, pixels_per_base = 30, index_annotations_above = FALSE, filename = paste0(root, filename, ".pNg"))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".pNg")),
                                        image_read(paste0(reference, filename, ".pNg")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -63,7 +63,7 @@ test_that("single sequence visualisation works with extra spacing", {
 
 test_that("single sequence visualisation works with reduced spacing, and gives warning", {
     filename <- "sone_2019_f1_1_expanded_test_08"
-    expect_warning(visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), spacing = 0, pixels_per_base = 30, index_annotations_above = FALSE, filename = paste0(root, filename, ".png")),
+    expect_warning(visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), outline_weight = 0, spacing = 0, pixels_per_base = 30, index_annotations_above = FALSE, filename = paste0(root, filename, ".png")),
                    class = "parameter_recommendation")
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
@@ -72,7 +72,7 @@ test_that("single sequence visualisation works with reduced spacing, and gives w
 
 test_that("single sequence visualisation works exporting to jpg", {
     filename <- "sone_2019_f1_1_expanded_test_09"
-    expect_warning(visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), pixels_per_base = 30, index_annotations_above = FALSE, filename = paste0(root, filename, ".jpg")),
+    expect_warning(visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), outline_weight = 0, pixels_per_base = 30, index_annotations_above = FALSE, filename = paste0(root, filename, ".jpg")),
                    class = "filetype_recommendation")
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".jpg")),
                                        image_read(paste0(reference, filename, ".jpg")),
@@ -82,7 +82,7 @@ test_that("single sequence visualisation works exporting to jpg", {
 
 test_that("single sequence visualisation works with spacing text clash and jpg warnings", {
     filename <- "sone_2019_f1_1_expanded_test_10"
-    expect_warning(expect_warning(visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), spacing = 0, pixels_per_base = 30, index_annotations_above = FALSE, filename = paste0(root, filename, ".jpg")),
+    expect_warning(expect_warning(visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), outline_weight = 0, spacing = 0, pixels_per_base = 30, index_annotations_above = FALSE, filename = paste0(root, filename, ".jpg")),
                                   class = "filetype_recommendation"), class = "parameter_recommendation")
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".jpg")),
                                        image_read(paste0(reference, filename, ".jpg")),
@@ -91,7 +91,7 @@ test_that("single sequence visualisation works with spacing text clash and jpg w
 
 test_that("single sequence visualisation works with no spacing but annotations off, via index_annotation_interval", {
     filename <- "sone_2019_f1_1_expanded_test_11"
-    visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), spacing = 0, index_annotation_interval = 0, pixels_per_base = 30, index_annotations_above = FALSE, filename = paste0(root, filename, ".PNG"))
+    visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), outline_weight = 0, spacing = 0, index_annotation_interval = 0, pixels_per_base = 30, index_annotations_above = FALSE, filename = paste0(root, filename, ".PNG"))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".PNG")),
                                        image_read(paste0(reference, filename, ".PNG")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -100,7 +100,7 @@ test_that("single sequence visualisation works with no spacing but annotations o
 ## This one is fine because seq_length %% line_wrapping < annotation_interval)
 test_that("single sequence visualisation works with no spacing but annotations off, via index_annotation_size", {
     filename <- "sone_2019_f1_1_expanded_test_12"
-    expect_warning(visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), spacing = 0, index_annotation_size = 0, pixels_per_base = 30, index_annotations_above = FALSE, filename = paste0(root, filename, ".PNG")),
+    expect_warning(visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), outline_weight = 0, spacing = 0, index_annotation_size = 0, pixels_per_base = 30, index_annotations_above = FALSE, filename = paste0(root, filename, ".PNG")),
                    class = "parameter_recommendation")
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".PNG")),
                                        image_read(paste0(reference, filename, ".PNG")),
@@ -109,7 +109,7 @@ test_that("single sequence visualisation works with no spacing but annotations o
 
 test_that("single sequence visualisation grey bottom bug: working case of spacing off, annotations off via interval", {
     filename <- "sone_2019_f1_1_expanded_test_13"
-    visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), spacing = 0, index_annotation_interval = 0, line_wrapping = 60, pixels_per_base = 30, index_annotations_above = FALSE, filename = paste0(root, filename, ".PNG"))
+    visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), outline_weight = 0, spacing = 0, index_annotation_interval = 0, line_wrapping = 60, pixels_per_base = 30, index_annotations_above = FALSE, filename = paste0(root, filename, ".PNG"))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".PNG")),
                                        image_read(paste0(reference, filename, ".PNG")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -121,7 +121,7 @@ test_that("single sequence visualisation grey bottom bug: working case of spacin
 ## And giving a warning if done the other way.
 test_that("single sequence visualisation grey bottom bug: bug case of spacing off, annotations off via size", {
     filename <- "sone_2019_f1_1_expanded_test_14"
-    expect_warning(visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), spacing = 0, index_annotation_size = 0, line_wrapping = 60, pixels_per_base = 30, index_annotations_above = FALSE, filename = paste0(root, filename, ".PNG")),
+    expect_warning(visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), outline_weight = 0, spacing = 0, index_annotation_size = 0, line_wrapping = 60, pixels_per_base = 30, index_annotations_above = FALSE, filename = paste0(root, filename, ".PNG")),
                    class = "parameter_recommendation")
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".PNG")),
                                        image_read(paste0(reference, filename, ".PNG")),
@@ -130,7 +130,7 @@ test_that("single sequence visualisation grey bottom bug: bug case of spacing of
 
 test_that("single sequence visualisation works with standard conditions, annotations on top", {
     filename <- "sone_2019_f1_1_expanded_test_15"
-    visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), pixels_per_base = 30, index_annotations_above = TRUE, filename = paste0(root, filename, ".png"))
+    visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), outline_weight = 0, pixels_per_base = 30, index_annotations_above = TRUE, filename = paste0(root, filename, ".png"))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -138,7 +138,7 @@ test_that("single sequence visualisation works with standard conditions, annotat
 
 test_that("single sequence visualisation works with extra spacing, annotations on top", {
     filename <- "sone_2019_f1_1_expanded_test_16"
-    visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), pixels_per_base = 30, spacing = 3, line_wrapping = 60, filename = paste0(root, filename, ".png"))
+    visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), outline_weight = 0, pixels_per_base = 30, spacing = 3, line_wrapping = 60, filename = paste0(root, filename, ".png"))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -146,7 +146,7 @@ test_that("single sequence visualisation works with extra spacing, annotations o
 
 test_that("single sequence visualisation works with no spacing, annotations on top", {
     filename <- "sone_2019_f1_1_expanded_test_17"
-    visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), pixels_per_base = 30, spacing = 0, index_annotation_interval = 0, filename = paste0(root, filename, ".png"))
+    visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), outline_weight = 0, pixels_per_base = 30, spacing = 0, index_annotation_interval = 0, filename = paste0(root, filename, ".png"))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -154,7 +154,7 @@ test_that("single sequence visualisation works with no spacing, annotations on t
 
 test_that("single sequence visualisation warns with no spacing/annotations on top/annotations on", {
     filename <- "sone_2019_f1_1_expanded_test_18"
-    expect_warning(visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), pixels_per_base = 30, spacing = 0, filename = paste0(root, filename, ".png")),
+    expect_warning(visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), outline_weight = 0, pixels_per_base = 30, spacing = 0, filename = paste0(root, filename, ".png")),
                    class = "parameter_recommendation")
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
@@ -163,7 +163,7 @@ test_that("single sequence visualisation warns with no spacing/annotations on to
 
 test_that("single sequence visualisation works with annotations halfway through, above", {
     filename <- "sone_2019_f1_1_expanded_test_19"
-    visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), pixels_per_base = 30, line_wrapping = 60, index_annotation_vertical_position = 0.5, filename = paste0(root, filename, ".png"))
+    visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), outline_weight = 0, pixels_per_base = 30, line_wrapping = 60, index_annotation_vertical_position = 0.5, filename = paste0(root, filename, ".png"))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -171,7 +171,7 @@ test_that("single sequence visualisation works with annotations halfway through,
 
 test_that("single sequence visualisation works with annotations halfway through, below", {
     filename <- "sone_2019_f1_1_expanded_test_20"
-    visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), pixels_per_base = 30, line_wrapping = 60, index_annotation_vertical_position = 0.5, index_annotations_above = FALSE, filename = paste0(root, filename, ".png"))
+    visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), outline_weight = 0, pixels_per_base = 30, line_wrapping = 60, index_annotation_vertical_position = 0.5, index_annotations_above = FALSE, filename = paste0(root, filename, ".png"))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -179,7 +179,7 @@ test_that("single sequence visualisation works with annotations halfway through,
 
 test_that("single sequence visualisation works with no margin", {
     filename <- "sone_2019_f1_1_expanded_test_21"
-    visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), line_wrapping = 60, pixels_per_base = 30, margin = 0, filename = paste0(root, filename, ".png"))
+    visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), outline_weight = 0, line_wrapping = 60, pixels_per_base = 30, margin = 0, filename = paste0(root, filename, ".png"))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -187,7 +187,7 @@ test_that("single sequence visualisation works with no margin", {
 
 test_that("single sequence visualisation works with margin 1", {
     filename <- "sone_2019_f1_1_expanded_test_22"
-    visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), line_wrapping = 60, pixels_per_base = 30, margin = 1, filename = paste0(root, filename, ".png"))
+    visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), outline_weight = 0, line_wrapping = 60, pixels_per_base = 30, margin = 1, filename = paste0(root, filename, ".png"))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -195,7 +195,7 @@ test_that("single sequence visualisation works with margin 1", {
 
 test_that("single sequence visualisation works with margin 2", {
     filename <- "sone_2019_f1_1_expanded_test_23"
-    visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), line_wrapping = 60, pixels_per_base = 30, margin = 2, filename = paste0(root, filename, ".png"))
+    visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), outline_weight = 0, line_wrapping = 60, pixels_per_base = 30, margin = 2, filename = paste0(root, filename, ".png"))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -203,7 +203,7 @@ test_that("single sequence visualisation works with margin 2", {
 
 test_that("single sequence visualisation works with no margin, below", {
     filename <- "sone_2019_f1_1_expanded_test_24"
-    visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), line_wrapping = 60, pixels_per_base = 30, margin = 0, index_annotations_above = FALSE, filename = paste0(root, filename, ".png"))
+    visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), outline_weight = 0, line_wrapping = 60, pixels_per_base = 30, margin = 0, index_annotations_above = FALSE, filename = paste0(root, filename, ".png"))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -211,7 +211,7 @@ test_that("single sequence visualisation works with no margin, below", {
 
 test_that("single sequence visualisation works with margin 1, below", {
     filename <- "sone_2019_f1_1_expanded_test_25"
-    visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), line_wrapping = 60, pixels_per_base = 30, margin = 1, index_annotations_above = FALSE, filename = paste0(root, filename, ".png"))
+    visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), outline_weight = 0, line_wrapping = 60, pixels_per_base = 30, margin = 1, index_annotations_above = FALSE, filename = paste0(root, filename, ".png"))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -219,7 +219,7 @@ test_that("single sequence visualisation works with margin 1, below", {
 
 test_that("single sequence visualisation works with margin 2, below", {
     filename <- "sone_2019_f1_1_expanded_test_26"
-    visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), line_wrapping = 60, pixels_per_base = 30, margin = 2, index_annotations_above = FALSE, filename = paste0(root, filename, ".png"))
+    visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), outline_weight = 0, line_wrapping = 60, pixels_per_base = 30, margin = 2, index_annotations_above = FALSE, filename = paste0(root, filename, ".png"))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -227,7 +227,7 @@ test_that("single sequence visualisation works with margin 2, below", {
 
 test_that("single_sequence_visualisation works with outlines", {
     filename <- "sone_2019_f1_1_expanded_test_27"
-    visualise_single_sequence(sone_2019_f1_1_expanded, line_wrapping = 60, pixels_per_base = 100, outline_colour = "black", filename = paste0(root, filename, ".png"))
+    visualise_single_sequence(sone_2019_f1_1_expanded, line_wrapping = 60, pixels_per_base = 30, filename = paste0(root, filename, ".png"))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -235,7 +235,8 @@ test_that("single_sequence_visualisation works with outlines", {
 
 test_that("single_sequence_visualisation works with outlines, no spacing", {
     filename <- "sone_2019_f1_1_expanded_test_28"
-    visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = sequence_colour_palettes$bright_pale, sequence_text_size = 0, line_wrapping = 60, pixels_per_base = 100, spacing = 0, index_annotation_interval = 0, outline_colour = "black", filename = paste0(root, filename, ".png"))
+    expect_warning(visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = sequence_colour_palettes$bright_pale, sequence_text_size = 0, margin = 0, line_wrapping = 60, pixels_per_base = 30, spacing = 0, index_annotation_interval = 0, outline_weight = 10, filename = paste0(root, filename, ".png")),
+                   class = "parameter_recommendation")
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -249,6 +250,7 @@ test_that("single sequence visualisation fails when arguments are invalid", {
         expect_error(visualise_single_sequence(sone_2019_f1_1_expanded, sequence_text_size = param), class = "argument_value_or_type")
         expect_error(visualise_single_sequence(sone_2019_f1_1_expanded, index_annotation_size = param), class = "argument_value_or_type")
         expect_error(visualise_single_sequence(sone_2019_f1_1_expanded, margin = param), class = "argument_value_or_type")
+        expect_error(visualise_single_sequence(sone_2019_f1_1_expanded, outline_weight = param), class = "argument_value_or_type")
     }
 
     bad_param_value_for_non_negative_int <- list("hi", -1, TRUE, c(1, 2), NA, 1.5, sqrt(5), NULL)
@@ -280,6 +282,8 @@ test_that("single sequence visualisation fails when arguments are invalid", {
         expect_error(visualise_single_sequence(sone_2019_f1_1_expanded, background_colour = param), class = "argument_value_or_type")
         expect_error(visualise_single_sequence(sone_2019_f1_1_expanded, sequence_text_colour = param), class = "argument_value_or_type")
         expect_error(visualise_single_sequence(sone_2019_f1_1_expanded, index_annotation_colour = param), class = "argument_value_or_type")
+        expect_error(visualise_single_sequence(sone_2019_f1_1_expanded, outline_join = param), class = "argument_value_or_type")
+        expect_error(visualise_single_sequence(sone_2019_f1_1_expanded, outline_colour = param), class = "argument_value_or_type")
     }
 
     bad_param_value_for_sequence_colours <- list("orange", 1, c("orange", "pink", "red", NA), NA, -1, 0, TRUE, FALSE, c("orange", "red", "green", "blue", "white"), NULL)

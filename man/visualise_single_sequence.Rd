@@ -8,7 +8,6 @@ visualise_single_sequence(
   sequence,
   sequence_colours = sequence_colour_palettes$ggplot_style,
   background_colour = "white",
-  outline_colour = NA,
   line_wrapping = 75,
   spacing = 1,
   margin = 0.5,
@@ -19,6 +18,9 @@ visualise_single_sequence(
   index_annotation_interval = 15,
   index_annotations_above = TRUE,
   index_annotation_vertical_position = 1/3,
+  outline_colour = "black",
+  outline_weight = 3,
+  outline_join = "mitre",
   return = TRUE,
   filename = NA,
   pixels_per_base = 100
@@ -31,9 +33,9 @@ visualise_single_sequence(
 
 \item{background_colour}{\code{character}. The colour of the background. Defaults to white.}
 
-\item{line_wrapping}{\code{integer}. The number of bases that should be on each line before wrapping. Defaults to \code{75}. Recommended to make this a multiple of the repeat unit size (e.g. 3\emph{n} for a trinucleotide repeat) if visualising a repeat sequence.}
+\item{line_wrapping}{\code{integer}. The number of bases that should be on each line before wrapping. Defaults to \code{75}. Recommended to make this a multiple of the repeat unit size (e.g. 3\emph{n} for a trinucleotide repeat) if visualising a repeat sequence.\cr\cr Likewise, very small margins (≤0.25) may cause thick outlines to be cut off at the edges of the plot. Recommended to either use a wider margin or a smaller outline_weight.}
 
-\item{spacing}{\code{integer}. The number of blank lines between each line of sequence. Defaults to \code{1}. Be careful when setting to \code{0} as this means annotations have no space so might render strangely. Recommended to set \code{index_annotation_interval = 0} if doing so to disable annotations entirely.}
+\item{spacing}{\code{integer}. The number of blank lines between each line of sequence. Defaults to \code{1}.\cr\cr Be careful when setting to \code{0} as this means annotations have no space so might render strangely. Recommended to set \code{index_annotation_interval = 0} if doing so to disable annotations entirely.}
 
 \item{margin}{\code{numeric}. The size of the margin relative to the size of each base square. Defaults to \code{0.5} (half the side length of each base square).\cr\cr Note that if index annotations are on (i.e. \code{index_annotation_interval} is not \code{0}), the top/bottom margin (depending on \code{index_annotations_above}) will always be at least 1 to leave space for them.}
 
@@ -50,6 +52,12 @@ visualise_single_sequence(
 \item{index_annotations_above}{\code{logical}. Whether index annotations should go above (\code{TRUE}, default) or below (\code{FALSE}) each line of sequence.}
 
 \item{index_annotation_vertical_position}{\code{numeric}. How far annotation numbers should be rendered above (if \code{index_annotations_above = TRUE}) or below (if \code{index_annotations_above = FALSE}) each base. Defaults to \code{1/3}.\cr\cr Not recommended to change at all. Strongly discouraged to set below 0 or above 1.}
+
+\item{outline_colour}{\code{character}. The colour of the box outlines. Defaults to black.}
+
+\item{outline_weight}{\code{numeric}. The linewidth of the box outlines. Defaults to \code{3}. Set to \code{0} to disable box outlines.}
+
+\item{outline_join}{\code{character}. One of \code{"mitre"}, \code{"round"}, or \code{"bevel"} specifying how outlines should be joined at the corners of boxes. Defaults to \code{"mitre"}. It would be unusual to need to change this.}
 
 \item{return}{\code{logical}. Boolean specifying whether this function should return the ggplot object, otherwise it will return \code{invisible(NULL)}. Defaults to \code{TRUE}.}
 
