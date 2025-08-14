@@ -35,9 +35,9 @@ visualise_methylation(
 
 \item{high_colour}{\code{character}. The colour that should be used to represent maximum probability of methylation/modification (defaults to red).}
 
-\item{low_clamp}{\code{integer}. The minimum probability below which all values are coloured \code{low_colour}. Defaults to \code{0} (i.e. no clamping). To specify a proportion probability in 8-bit form, multiply by 255 e.g. to low-clamp at 30\% probability, set this to \code{0.3*255}.}
+\item{low_clamp}{\code{numeric}. The minimum probability below which all values are coloured \code{low_colour}. Defaults to \code{0} (i.e. no clamping). To specify a proportion probability in 8-bit form, multiply by 255 e.g. to low-clamp at 30\% probability, set this to \code{0.3*255}.}
 
-\item{high_clamp}{\code{integer}. The maximum probability above which all values are coloured \code{high_colour}. Defaults to \code{255} (i.e. no clamping, assuming Nanopore > SAM style modification calling where probabilities are 8-bit integers from 0 to 255).}
+\item{high_clamp}{\code{numeric}. The maximum probability above which all values are coloured \code{high_colour}. Defaults to \code{255} (i.e. no clamping, assuming Nanopore > SAM style modification calling where probabilities are 8-bit integers from 0 to 255).}
 
 \item{margin}{\code{numeric}. The size of the margin relative to the size of each base square. Defaults to \code{0.5} (half the side length of each base square).}
 

@@ -918,32 +918,36 @@ This list of locations, probabilities, and lengths can then be used as input for
 
 ```{r}
 ## Use saved methylation data for visualisation to make image
-visualise_methylation(methylation_data_for_visualisation$locations,
-                      methylation_data_for_visualisation$probabilities,
-                      methylation_data_for_visualisation$lengths,
-                      filename = "README_files/output/methylation_01.png",
+visualise_methylation(modification_locations     = methylation_data_for_visualisation$locations,
+                      modification_probabilities = methylation_data_for_visualisation$probabilities,
+                      sequence_lengths           = methylation_data_for_visualisation$lengths,
+                      filename = "README_files/output/modification_01.png",
                       return = FALSE)
 
 ## View image
-knitr::include_graphics("README_files/output/methylation_01.png")
+knitr::include_graphics("README_files/output/modification_01.png")
 ```
 
 Here all the modification-assessed bases (Cs of CG dinucleotides) are coloured blue for low methylation probability and red for high methylation probability and linearly interpolated for intermediate probabilites. Non-modification-assessed bases are coloured grey, and the background is white.
 
 `ggDNAvis` also contains a function for making a scalebar for the methylation probabilities: `visualise_methylation_colour_scale()`. Unlike the main `visualise_` functions, this one will work at any scale and aspect resolution, so it always returns a ggplot object that can be exported manually via `ggsave()`.
 
-<div align="center">
-```{r, out.width="50%"}
+```{r}
 ## Create scalebar and save to object
 scalebar <- visualise_methylation_colour_scale(x_axis_title = "Methylation probability")
 
 ## Write png from object
-ggsave("README_files/output/methylation_01_scalebar.png", scalebar, dpi = 300, width = 5, height = 1.25)
+ggsave("README_files/output/modification_01_scalebar.png", scalebar, dpi = 300, width = 5, height = 1.25)
 
-## View image
-knitr::include_graphics("README_files/output/methylation_01_scalebar.png")
+## Image viewed in separate HTML after to allow partial width
 ```
+
+<div align="center">
+<img src="README_files/output/modification_01_scalebar.png" width="50%">
 </div>
+
+
+
 
 ## Sequence arrangement customisation
 `extract_methylation_from_dataframe()` is customisable in all the same ways as `extract_and_sort_sequences()`, as discussed in detail in the [many sequences arrangement customisation](#42-sequence-arrangement-customisation) section. This section will provide a brief reminder, but follow that link for a full explanation.
@@ -973,14 +977,14 @@ methylation_data_for_visualisation <- extract_methylation_from_dataframe(
 )
 
 ## Use saved methylation data for visualisation to make image
-visualise_methylation(methylation_data_for_visualisation$locations,
-                      methylation_data_for_visualisation$probabilities,
-                      methylation_data_for_visualisation$lengths,
-                      filename = "README_files/output/methylation_02.png",
+visualise_methylation(modification_locations     = methylation_data_for_visualisation$locations,
+                      modification_probabilities = methylation_data_for_visualisation$probabilities,
+                      sequence_lengths           = methylation_data_for_visualisation$lengths,
+                      filename = "README_files/output/modification_02.png",
                       return = FALSE)
 
 ## View image
-knitr::include_graphics("README_files/output/methylation_02.png")
+knitr::include_graphics("README_files/output/modification_02.png")
 ```
 
 Here there is no grouping by family, 3 blank lines between each participant, and sequences are sorted in ascending length order within each participant.
@@ -991,10 +995,10 @@ Colours in `visualise_methylation()` are controlled by setting the low and high 
 
 Colour-related arguments:
 
-- `low_colour`: The colour to use at the bottom end of the modification probability scale.
-- `high_colour`: The colour to use at the top end of the modification probability scale.
+- `low_colour`: The colour to use at the bottom end of the modification probability scale. Defaults to blue (`#0000FF`).
+- `high_colour`: The colour to use at the top end of the modification probability scale. Defaults to red (`#FF0000`).
 - `other_bases_colour`: The colour to use for non-modification-assessed bases. Defaults to grey and generally should be fairly neutral (though this is not enforced in any way).
-- `background_colour`: The colour to use for the background.
+- `background_colour`: The colour to use for the background. Defaults to white.
 
 Layout-related arguments:
 
@@ -1010,23 +1014,612 @@ methylation_data_for_visualisation <- extract_methylation_from_dataframe(
     locations_colname = "methylation_locations",
     probabilities_colname = "methylation_probabilities",
     lengths_colname = "sequence_length",
-    grouping_levels = c("family" = 5, 
+    grouping_levels = c("family" = 6, 
                         "individual" = 2),
     sort_by = "sequence_length",
     desc_sort = FALSE
 )
 
 ## Use saved methylation data for visualisation to make image
-visualise_methylation(methylation_data_for_visualisation$locations,
-                      methylation_data_for_visualisation$probabilities,
-                      methylation_data_for_visualisation$lengths,
-                      filename = "README_files/output/methylation_03.png",
+visualise_methylation(modification_locations     = methylation_data_for_visualisation$locations,
+                      modification_probabilities = methylation_data_for_visualisation$probabilities,
+                      sequence_lengths           = methylation_data_for_visualisation$lengths,
+                      filename = "README_files/output/modification_03.png",
+                      return = FALSE,
+                      margin = 4, 
+                      low_colour = "#00FF00",
+                      high_colour = "blue",
+                      other_bases_colour = "white",
+                      background_colour = "red")
+
+## View image
+knitr::include_graphics("README_files/output/modification_03.png")
+
+## Create scalebar and save to object
+## Text colour doesn't have an argument within the function
+## but can be modified by adding to the ggplot object like normal
+scalebar <- visualise_methylation_colour_scale(x_axis_title = "Methylation probability",
+                                               low_colour = "green",
+                                               high_colour = "#0000FF",
+                                               background_colour = "#FF0000") +
+    theme(axis.title = element_text(colour = "white"),
+          axis.text  = element_text(colour = "white"))
+
+## Write png from object
+ggsave("README_files/output/modification_03_scalebar.png", scalebar, dpi = 300, width = 5, height = 1.25)
+
+## Image viewed in separate HTML after to allow partial width
+```
+
+<div align="center">
+<img src="README_files/output/modification_03_scalebar.png" width="50%">
+</div>
+
+
+One way this might be used in practice is for making a graphic in the "lollipop" style where methylated/modified CGs are black and unmodified CGs are white:
+
+```{r}
+## Extract information to list of character vectors
+methylation_data_for_visualisation <- extract_methylation_from_dataframe(
+    example_many_sequences,
+    locations_colname = "methylation_locations",
+    probabilities_colname = "methylation_probabilities",
+    lengths_colname = "sequence_length",
+    grouping_levels = c("family" = 6, 
+                        "individual" = 2),
+    sort_by = "sequence_length",
+    desc_sort = FALSE
+)
+
+## Use saved methylation data for visualisation to make image
+visualise_methylation(modification_locations     = methylation_data_for_visualisation$locations,
+                      modification_probabilities = methylation_data_for_visualisation$probabilities,
+                      sequence_lengths           = methylation_data_for_visualisation$lengths,
+                      filename = "README_files/output/modification_04.png",
+                      return = FALSE,
+                      margin = 0, 
+                      low_colour = "white",
+                      high_colour = "black",
+                      other_bases_colour = "lightblue1",
+                      background_colour = "white")
+
+## View image
+knitr::include_graphics("README_files/output/modification_04.png")
+
+## Create scalebar and save to object
+scalebar <- visualise_methylation_colour_scale(x_axis_title = "Methylation probability",
+                                               low_colour = "white",
+                                               high_colour = "black",
+                                               background_colour = "lightblue1")
+
+## Write png from object
+ggsave("README_files/output/modification_04_scalebar.png", scalebar, dpi = 300, width = 5, height = 1.25)
+
+## Image viewed in separate HTML after to allow partial width
+```
+
+<div align="center">
+<img src="README_files/output/modification_04_scalebar.png" width="50%">
+</div>
+
+## Colour mapping customisation
+A very useful feature in `visualise_methylation()` is the ability to "clamp" the scale. This means all probabilities below the `low_clamp` value will be set to the low colour, all probabilities above the `high_clamp` value will be set to the high colour, and linear colour interpolation will occur only in between the clamp values.
+
+Clamping arguments:
+
+- `low_clamp`: The probability score at and below which all values will be represented as `low_colour`.
+- `high_clamp`: The probability score at and above which all values will be represented as `high_colour`.
+
+The clamp values need to be on the same scale as the probability input i.e. 0-255 for standard MM/ML tags from Dorado/Guppy modified basecalling. It would be possible to input decimal probabilities e.g. `"0.1,0.5,0.9,0.23"`, in which case the default high clamp of 255 will not be appropriate and must be set to a sensible value ≤ 1.
+
+Here is the lollipop scale but with `low_clamp = 127` and `high_clamp = 128` to make all values binary white/black depending on whether they are below or above the equivalent of 0.5 methylation probability:
+
+```{r}
+## Extract information to list of character vectors
+methylation_data_for_visualisation <- extract_methylation_from_dataframe(
+    example_many_sequences,
+    locations_colname = "methylation_locations",
+    probabilities_colname = "methylation_probabilities",
+    lengths_colname = "sequence_length",
+    grouping_levels = c("family" = 6, 
+                        "individual" = 2),
+    sort_by = "sequence_length",
+    desc_sort = FALSE
+)
+
+## Use saved methylation data for visualisation to make image
+visualise_methylation(modification_locations     = methylation_data_for_visualisation$locations,
+                      modification_probabilities = methylation_data_for_visualisation$probabilities,
+                      sequence_lengths           = methylation_data_for_visualisation$lengths,
+                      filename = "README_files/output/modification_05.png",
+                      return = FALSE,
+                      margin = 0, 
+                      low_colour = "white",
+                      low_clamp = 127,
+                      high_colour = "black",
+                      high_clamp = 128,
+                      other_bases_colour = "lightblue1",
+                      background_colour = "white")
+
+## View image
+knitr::include_graphics("README_files/output/modification_05.png")
+
+## Create scalebar and save to object
+scalebar <- visualise_methylation_colour_scale(x_axis_title = "Methylation probability",
+                                               low_colour = "white",
+                                               low_clamp = 127,
+                                               high_colour = "black",
+                                               high_clamp = 128,
+                                               background_colour = "lightblue1")
+
+## Write png from object
+ggsave("README_files/output/modification_05_scalebar.png", scalebar, dpi = 300, width = 5, height = 1.25)
+```
+
+<div align="center">
+<img src="README_files/output/modification_05_scalebar.png" width="50%">
+</div>
+
+The clamping arguments do not have to be integers. Clamping is implemented with `pmin()` and `pmax()` and relies on their default behaviour for `pm<in/ax>(vector, clamping_value)`, which is to clamp to a fraction when the clamping value is fractional. For example, `pmin(c(1,2,3,4,5), 3.5)` produces `c(1.0, 2.0, 3.0, 3.5, 3.5)` i.e. the values above `3.5` were clamped down to `3.5`. Therefore, clamping with fractional values will clamp extreme probabilities to said fractional value, but this is not visible and does not interfere with plotting logic.
+
+This means one approach is to define clamping values as `proportion*255`, as that can be easier than working out which integer to use. Using the standard blue/red colour scheme with the hydroxymethylation data but clamping at 30% and 70% probability gives the following:
+
+```{r}
+## Extract information to list of character vectors
+methylation_data_for_visualisation <- extract_methylation_from_dataframe(
+    example_many_sequences,
+    locations_colname = "methylation_locations",
+    probabilities_colname = "methylation_probabilities",
+    lengths_colname = "sequence_length",
+    grouping_levels = c("family" = 6, 
+                        "individual" = 2),
+    sort_by = "sequence_length",
+    desc_sort = FALSE
+)
+
+## Use saved methylation data for visualisation to make image
+visualise_methylation(modification_locations     = methylation_data_for_visualisation$locations,
+                      modification_probabilities = methylation_data_for_visualisation$probabilities,
+                      sequence_lengths           = methylation_data_for_visualisation$lengths,
+                      filename = "README_files/output/modification_06.png",
+                      return = FALSE,
+                      low_clamp = 0.3*255,
+                      high_clamp = 0.7*255)
+
+## View image
+knitr::include_graphics("README_files/output/modification_06.png")
+
+## Create scalebar and save to object
+scalebar <- visualise_methylation_colour_scale(x_axis_title = "Methylation probability",
+                                               low_clamp = 0.3*255,
+                                               high_clamp = 0.7*255)
+
+## Write png from object
+ggsave("README_files/output/modification_06_scalebar.png", scalebar, dpi = 300, width = 5, height = 1.25)
+```
+
+<div align="center">
+<img src="README_files/output/modification_06_scalebar.png" width="50%">
+</div>
+
+The clamping does not need to be symmetrical. One use for this is if the data is skewed. For example, the methylation scores were randomly generated from `0` to `255` for each CpG in `example_many_sequences`, but the hydroxymethylation scores were generated from `0` to `(255 - methylation score)` for each CpG to avoid >100% total modification probability, so they tend to be lower. Here is the hydroxymethylation data visualised with clamping at 10% and 50%:
+
+```{r}
+## Extract information to list of character vectors
+hydroxymethylation_data_for_visualisation <- extract_methylation_from_dataframe(
+    example_many_sequences,
+    locations_colname = "hydroxymethylation_locations",
+    probabilities_colname = "hydroxymethylation_probabilities",
+    lengths_colname = "sequence_length",
+    grouping_levels = c("family" = 6, 
+                        "individual" = 2),
+    sort_by = "sequence_length",
+    desc_sort = FALSE
+)
+
+## Use saved methylation data for visualisation to make image
+visualise_methylation(modification_locations     = hydroxymethylation_data_for_visualisation$locations,
+                      modification_probabilities = hydroxymethylation_data_for_visualisation$probabilities,
+                      sequence_lengths           = hydroxymethylation_data_for_visualisation$lengths,
+                      filename = "README_files/output/modification_07.png",
+                      return = FALSE,
+                      low_clamp = 0.1*255,
+                      high_clamp = 0.5*255)
+
+## View image
+knitr::include_graphics("README_files/output/modification_07.png")
+
+## Create scalebar and save to object
+scalebar <- visualise_methylation_colour_scale(x_axis_title = "Hydroxymethylation probability",
+                                               low_clamp = 0.1*255,
+                                               high_clamp = 0.5*255)
+
+## Write png from object
+ggsave("README_files/output/modification_07_scalebar.png", scalebar, dpi = 300, width = 5, height = 1.25)
+```
+
+<div align="center">
+<img src="README_files/output/modification_07_scalebar.png" width="50%">
+</div>
+
+***IMPORTANT:** make sure that you provide the scalebar when presenting data, especially if clamping is used, otherwise the colours could be misleading or academically dishonest.*
+
+## Scalebar customisation
+The scalebar produced by `visualise_methylation_colour_scale()` is, like the rest of the visualisations, highly customisable. The colours, clamping, precision, and presence of various plot elements are all customisable via the following arguments:
+
+Colour arguments:
+
+- `low_colour`: The colour to use at the bottom end of the modification probability scale. Defaults to blue (`#0000FF`).
+- `high_colour`: The colour to use at the top end of the modification probability scale. Defaults to red (`#FF0000`).
+- `background_colour`: The colour to use for the background. Defaults to white.
+
+Clamping arguments:
+
+- `low_clamp`: The probability score at and below which all values will be represented as `low_colour`. Defaults to `0`.
+- `high_clamp`: The probability score at and above which all values will be represented as `high_colour`. Defaults to `255`.
+- `full_range`: Length-2 numeric vector specifying the range of possible probability values. Defaults to `c(0, 255)` but `c(0, 1)` would also be sensible depending on the data.
+- `precision`: How many different shades should be rendered. Larger values give a smoother gradient. Defaults to `10^3` i.e. `1000`, which looks smooth to my eyes and isn't too intensive to calculate.
+
+Layout arguments:
+
+- `x_axis_title`: The desired x-axis title. Defaults to `NULL` (no title).
+- `do_x_ticks`: Boolean specifying whether ticks on the x axis should be enabled. Defaults to `TRUE`.
+- `do_side_scale`: Boolean specifying whether a smaller scalebar should be rendered on the right. Defaults to FALSE. I think it is unlikely anyone would want to use this, but the option is here. One potential usecase is that this side scalebar shows the raw probability values (e.g. 0 to 255), whereas the x-axis is normalised to 0-1.
+- `side_scale_title`: The desired title for the right-hand scalebar, if turned on. Defaults to `NULL`.
+
+
+
+Using all defaults but with lower precision gives the following:
+
+```{r}
+## Create scalebar and save to object
+scalebar <- visualise_methylation_colour_scale(precision = 10)
+
+## Write png from object
+ggsave("README_files/output/modification_scalebar_alone_01.png", scalebar, dpi = 300, width = 5, height = 1.25)
+
+## Image viewed in separate HTML after to allow partial width
+```
+
+<div align="center">
+<img src="README_files/output/modification_scalebar_alone_01.png" width="50%">
+</div>
+
+Disabling x axis ticks with intermediate precision gives the following:
+
+```{r}
+## Create scalebar and save to object
+scalebar <- visualise_methylation_colour_scale(precision = 50,
+                                               do_x_ticks = FALSE)
+
+## Write png from object
+ggsave("README_files/output/modification_scalebar_alone_02.png", scalebar, dpi = 300, width = 5, height = 1.25)
+```
+
+<div align="center">
+<img src="README_files/output/modification_scalebar_alone_02.png" width="50%">
+</div>
+
+If ticks are left on, they can be customised with `scale_x_continuous()` as per usual for a ggplot. Here is an example with the side scalebar turned on and ticks customised:
+
+```{r}
+## Create scalebar and save to object
+scalebar <- visualise_methylation_colour_scale(high_colour = "green",
+                                               low_colour = "yellow",
+                                               high_clamp = 0.8,
+                                               low_clamp = 0.5, 
+                                               full_range = c(0,1),
+                                               precision = 100,
+                                               do_x_ticks = TRUE,
+                                               x_axis_title = "some kind of title",
+                                               do_side_scale = TRUE,
+                                               side_scale_title = "some other title") +
+    scale_x_continuous(breaks = seq(0, 1, 0.1))
+
+## Write png from object
+ggsave("README_files/output/modification_scalebar_alone_03.png", scalebar, dpi = 300, width = 5, height = 2)
+```
+
+<div align="center">
+<img src="README_files/output/modification_scalebar_alone_03.png" width="60%">
+</div>
+
+And here is an example of a more sensible scalebar but with the side scale turned on:
+
+```{r}
+## Create scalebar and save to object
+scalebar <- visualise_methylation_colour_scale(low_clamp = 0.1*255,
+                                               high_clamp  = 0.9*255,
+                                               x_axis_title = "Methylation probability",
+                                               do_side_scale = TRUE,
+                                               side_scale_title = "Raw\nprobability\nscore")
+
+## Write png from object
+ggsave("README_files/output/modification_scalebar_alone_04.png", scalebar, dpi = 300, width = 5, height = 2)
+```
+
+<div align="center">
+<img src="README_files/output/modification_scalebar_alone_04.png" width="60%">
+</div>
+
+## Think about the offset!
+When merging modification data read from FASTQ, the positional offset when reversing can be changed (as discussed in detail in the [reading from modified FASTQ](#232-modified-fastq-eg-methylation) section).
+
+A summary of the sensible offset options (i.e. 0 or 1) copied from that section is as follows:
+
+```{r, echo = FALSE}
+{
+cat("Here the stars represent the true biochemical modifications on the reverse strand:
+(occurring at the Cs of CGs in the 5'-3' direction)\n\n\n")
+cat("5'  GGCGGCGGCGGCGGCGGA  3'\n")
+cat("3'  CCGCCGCCGCCGCCGCCT  5'\n")
+cat("       *  *  *  *  *      \n")
+}
+```
+
+```{r, echo = FALSE}
+{
+cat("If we take the complementary locations on the forward strand,
+the modification locations correspond to Gs rather than Cs,
+but are in the exact same locations:\n\n")
+cat("       o  o  o  o  o      \n")
+cat("5'  GGCGGCGGCGGCGGCGGA  3'\n")
+cat("3'  CCGCCGCCGCCGCCGCCT  5'\n")
+cat("       *  *  *  *  *      \n")
+}
+```
+
+```{r, echo = FALSE}
+{
+cat("If we offset the locations by 1 on the forward strand,
+the modifications are always associated with the C of a CG,
+but the locations are moved slightly:\n\n")
+cat("      o  o  o  o  o       \n")
+cat("5'  GGCGGCGGCGGCGGCGGA  3'\n")
+cat("3'  CCGCCGCCGCCGCCGCCT  5'\n")
+cat("       *  *  *  *  *      \n")
+}
+```
+
+The visualisations thus far in this section have all used `offset = 1` so that methylated Cs in CGs on the reverse strand are mapped to Cs of CGs in the forward strand when reverse complemented, ensuring consistency with reads that were forward to begin with. If we used `offset = 0` to show the true biochemical locations of the modifications, we would get the following:
+
+```{r}
+modified_fastq_data <- read_modified_fastq("inst/extdata/example_many_sequences_raw_modified.fastq")
+metadata            <- read.csv("inst/extdata/example_many_sequences_metadata.csv")
+
+## Merge with offset = 0 (map C to G of palindromic CG sites when reversing)
+## See the reading from modified FASTQ section for a full discussion
+merged_modification_data <- merge_methylation_with_metadata(modified_fastq_data, metadata,
+                                                            reversed_location_offset = 0)
+
+## Extract information to list of character vectors
+## Note that this time we read from merged_modification_data,
+## rather than example_many_sequences
+methylation_data_for_visualisation <- extract_methylation_from_dataframe(
+    merged_modification_data,
+    locations_colname = "forward_C+m?_locations",
+    probabilities_colname = "forward_C+m?_probabilities",
+    lengths_colname = "sequence_length",
+    grouping_levels = c("family" = 6, 
+                        "individual" = 2),
+    sort_by = "sequence_length",
+    desc_sort = FALSE
+)
+
+## Use saved methylation data for visualisation to make image
+visualise_methylation(modification_locations     = methylation_data_for_visualisation$locations,
+                      modification_probabilities = methylation_data_for_visualisation$probabilities,
+                      sequence_lengths           = methylation_data_for_visualisation$lengths,
+                      filename = "README_files/output/modification_08.png",
                       return = FALSE)
 
 ## View image
-knitr::include_graphics("README_files/output/methylation_03.png")
+knitr::include_graphics("README_files/output/modification_08.png")
+```
+We can see here that some methylation-assessed sites are now offset by 1, as the location is now assigned to the G of each CG site rather than the C. This is perhaps more biochemically accurate, as these Gs are complementary to the Cs on the reverse strands where the modification actually occurred.
+
+Other offset values are theoretically possible, e.g. -2 here:
+```{r}
+modified_fastq_data <- read_modified_fastq("inst/extdata/example_many_sequences_raw_modified.fastq")
+metadata            <- read.csv("inst/extdata/example_many_sequences_metadata.csv")
+
+## Merge with offset = -1 (not recommended)
+merged_modification_data <- merge_methylation_with_metadata(modified_fastq_data, metadata,
+                                                            reversed_location_offset = -1)
+
+## Extract information to list of character vectors
+methylation_data_for_visualisation <- extract_methylation_from_dataframe(
+    merged_modification_data,
+    locations_colname = "forward_C+m?_locations",
+    probabilities_colname = "forward_C+m?_probabilities",
+    lengths_colname = "sequence_length",
+    grouping_levels = c("family" = 6, 
+                        "individual" = 2),
+    sort_by = "sequence_length",
+    desc_sort = FALSE
+)
+
+## Use saved methylation data for visualisation to make image
+visualise_methylation(modification_locations     = methylation_data_for_visualisation$locations,
+                      modification_probabilities = methylation_data_for_visualisation$probabilities,
+                      sequence_lengths           = methylation_data_for_visualisation$lengths,
+                      filename = "README_files/output/modification_09.png",
+                      return = FALSE)
+
+## View image
+knitr::include_graphics("README_files/output/modification_09.png")
+```
+However, this is **strongly discouraged** and produces a warning. Offset values other than 0 and 1 have not been tested so results may be unpredictable and aspects of the visualisation may break.
+
+Finally, it is of course possible to read from the columns that weren't reversed/forward-ified. However, this is *likely to be misleading* as it implies positional equivalence between bases at opposite ends of the region but on opposite strands. This is not recommended either, but there is no way to identify that you are doing this so no warning is produced.
+
+```{r}
+modified_fastq_data <- read_modified_fastq("inst/extdata/example_many_sequences_raw_modified.fastq")
+metadata            <- read.csv("inst/extdata/example_many_sequences_metadata.csv")
+
+## Merge with offset = 0 (but we aren't using the forward-ified information anyway)
+merged_modification_data <- merge_methylation_with_metadata(modified_fastq_data, metadata,
+                                                            reversed_location_offset = 0)
+
+## Extract information to list of character vectors
+methylation_data_for_visualisation <- extract_methylation_from_dataframe(
+    merged_modification_data,
+    locations_colname = "C+m?_locations",
+    probabilities_colname = "C+m?_probabilities",
+    lengths_colname = "sequence_length",
+    grouping_levels = c("family" = 6, 
+                        "individual" = 2),
+    sort_by = "sequence_length",
+    desc_sort = FALSE
+)
+
+## Use saved methylation data for visualisation to make image
+visualise_methylation(modification_locations     = methylation_data_for_visualisation$locations,
+                      modification_probabilities = methylation_data_for_visualisation$probabilities,
+                      sequence_lengths           = methylation_data_for_visualisation$lengths,
+                      filename = "README_files/output/modification_10.png",
+                      return = FALSE)
+
+## View image
+knitr::include_graphics("README_files/output/modification_10.png")
 ```
 
-## Colour mapping customisation
+
+
+# Summary/quickstart
+This section contains one example for each type of visualisation. See the relevant full sections for more details and customisation options.
+
+## Single sequence
+```{r}
+## Create input sequence. This can be any DNA/RNA string
+sequence <- paste(c(rep("GGC", 72), rep("GGAGGAGGCGGC", 15)), collapse = "")
+
+## Create visualisation
+## This lists out all arguments
+## Usually it's fine to leave most of these as defaults
+visualise_single_sequence(
+    sequence = sequence,
+    sequence_colours = sequence_colour_palettes$bright_pale,
+    background_colour = "white",
+    line_wrapping = 60,
+    spacing = 1,
+    margin = 0.5,
+    sequence_text_colour = "black",
+    sequence_text_size = 16,
+    index_annotation_colour = "darkred",
+    index_annotation_size = 12.5,
+    index_annotation_interval = 15,
+    index_annotations_above = TRUE,
+    index_annotation_vertical_position = 1/3,
+    return = FALSE,
+    filename = "README_files/output/summary_single_sequence.png",
+    pixels_per_base = 100
+)
+
+## View image
+knitr::include_graphics("README_files/output/summary_single_sequence.png")
+```
+
+## Many sequences
+```{r}
+## Read and merge data
+fastq_data <- read_fastq("inst/extdata/example_many_sequences_raw.fastq", calculate_length = TRUE)
+metadata   <- read.csv("inst/extdata/example_many_sequences_metadata.csv")
+merged_fastq_data <- merge_fastq_with_metadata(fastq_data, metadata)
+
+## Extract character vector
+## These arguments should all be considered, as they are highly specific to your data
+sequences_for_visualisation <- extract_and_sort_sequences(
+    sequence_dataframe = merged_fastq_data,
+    sequence_variable = "forward_sequence",
+    grouping_levels = c("family" = 8, "individual" = 2),
+    sort_by = "sequence_length",
+    desc_sort = TRUE
+)
+
+## Create visualisation
+## Usually it's fine to leave most of these as defaults
+visualise_many_sequences(
+    sequences_vector = sequences_for_visualisation,
+    sequence_colours = sequence_colour_palettes$ggplot_style,
+    background_colour = "white",
+    margin = 0.5,
+    sequence_text_colour = "black",
+    sequence_text_size = 16,
+    return = FALSE,
+    filename = "README_files/output/summary_many_sequences.png",
+    pixels_per_base = 100
+)
+
+## View image
+knitr::include_graphics("README_files/output/summary_many_sequences.png")
+```
+
+## Methylation/modification
+```{r}
+## Read and merge data
+modification_data <- read_modified_fastq("inst/extdata/example_many_sequences_raw_modified.fastq")
+metadata          <- read.csv("inst/extdata/example_many_sequences_metadata.csv")
+merged_modification_data <- merge_methylation_with_metadata(modification_data, metadata,
+                                                            reversed_location_offset = 1)
+
+## Extract list of character vectors
+## These arguments should all be considered, as they are highly specific to your data
+methylation_for_visualisation <- extract_methylation_from_dataframe(
+    modification_data = merged_modification_data,
+    locations_colname = "forward_C+m?_locations",
+    probabilities_colname = "forward_C+m?_probabilities",
+    lengths_colname = "sequence_length",
+    grouping_levels = c("family" = 8, "individual" = 2),
+    sort_by = "sequence_length",
+    desc_sort = TRUE
+)
+
+## Create visualisation
+## Usually it's fine to leave most of these as defaults
+visualise_methylation(
+    modification_locations     = methylation_for_visualisation$locations,
+    modification_probabilities = methylation_for_visualisation$probabilities,
+    sequence_lengths           = methylation_for_visualisation$lengths,
+    background_colour = "white",
+    other_bases_colour = "grey",
+    low_colour = "blue",
+    high_colour = "red",
+    low_clamp = 0.1*255,
+    high_clamp = 0.9*255,
+    margin = 0.5,
+    return = FALSE,
+    filename = "README_files/output/summary_methylation.png",
+    pixels_per_base = 10
+)
+
+## View image
+knitr::include_graphics("README_files/output/summary_methylation.png")
+
+## Create scalebar and save to ggplot object
+## Usually it's fine to leave most of these as defaults
+scalebar <- visualise_methylation_colour_scale(
+    low_colour = "blue",
+    high_colour = "red",
+    low_clamp = 0.1*255,
+    high_clamp = 0.9*255,
+    full_range = c(0, 255),
+    precision = 10^3,
+    background_colour = "white",
+    x_axis_title = "Methylation probability",
+    do_x_ticks = TRUE,
+    do_side_scale = FALSE,
+    side_scale_title = NULL
+)
+
+## Write png from object (the object is just a standard ggplot)
+ggsave("README_files/output/summary_methylation_scalebar.png", scalebar, dpi = 300, width = 5, height = 1.25)
+
+## Image viewed in separate HTML after to allow partial width
+```
+
+<div align="center">
+<img src="README_files/output/summary_methylation_scalebar.png" width="50%">
+</div>
 
 # References

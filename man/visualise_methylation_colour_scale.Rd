@@ -23,13 +23,13 @@ visualise_methylation_colour_scale(
 
 \item{high_colour}{\code{character}. The colour that should be used to represent maximum probability of methylation/modification (defaults to red).}
 
-\item{low_clamp}{\code{integer}. The minimum probability below which all values are coloured \code{low_colour}. Defaults to \code{0} (i.e. no clamping).}
+\item{low_clamp}{\code{numeric}. The minimum probability below which all values are coloured \code{low_colour}. Defaults to \code{0} (i.e. no clamping).}
 
-\item{high_clamp}{\code{integer}. The maximum probability above which all values are coloured \code{high_colour}. Defaults to \code{255} (i.e. no clamping, assuming Nanopore > SAM style modification calling where probabilities are 8-bit integers from 0 to 255).}
+\item{high_clamp}{\code{numeric}. The maximum probability above which all values are coloured \code{high_colour}. Defaults to \code{255} (i.e. no clamping, assuming Nanopore > SAM style modification calling where probabilities are 8-bit integers from 0 to 255).}
 
-\item{full_range}{\verb{integer vector}, length 2. The total range of possible probabilities. Defaults to \code{c(0, 255)}, which is appropriate for Nanopore > SAM style modification calling where probabilities are 8-bit integers from 0 to 255.\cr\cr May need to be set to \code{c(0, 1)} if probabilites are instead stored as decimals. Setting any other value is advanced use and should be done for a good reason.}
+\item{full_range}{\verb{numeric vector}, length 2. The total range of possible probabilities. Defaults to \code{c(0, 255)}, which is appropriate for Nanopore > SAM style modification calling where probabilities are 8-bit integers from 0 to 255.\cr\cr May need to be set to \code{c(0, 1)} if probabilites are instead stored as decimals. Setting any other value is advanced use and should be done for a good reason.}
 
-\item{precision}{\code{numeric}. How many different shades should be rendered. Larger values give a smoother gradient. Defaults to \code{10^3} i.e. \code{1000}, which looks smooth to my eyes and isn't too intensive to calculate.}
+\item{precision}{\code{integer}. How many different shades should be rendered. Larger values give a smoother gradient. Defaults to \code{10^3} i.e. \code{1000}, which looks smooth to my eyes and isn't too intensive to calculate.}
 
 \item{background_colour}{\code{character}. The colour the background should be drawn (defaults to white).}
 
