@@ -7,7 +7,8 @@
 convert_modification_to_number_vector(
   modification_locations_str,
   modification_probabilities_str,
-  max_length
+  max_length,
+  sequence_length
 )
 }
 \arguments{
@@ -16,6 +17,8 @@ convert_modification_to_number_vector(
 \item{modification_probabilities_str}{\code{character}. A comma-separated string representing a condensed numerical vector (e.g. \code{"2,212,128,64"}, produced via \code{\link[=vector_to_string]{vector_to_string()}}) of the probability of modification as an 8-bit (0-255) integer for each base where modification was assessed.}
 
 \item{max_length}{\code{integer}. How long the output vector should be.}
+
+\item{sequence_length}{\code{integer}. How long the sequence itself is. If smaller than \code{max_length}, the remaining spaces will be filled with \code{-2}s i.e. set to the background colour in \code{\link[=visualise_methylation]{visualise_methylation()}}.}
 }
 \value{
 \verb{numeric vector}. A vector of length \code{max_length} indicating the probability of methylation at each index along the read - 0 where methylation was not assessed, and probability from 0-255 where methylation was assessed.
@@ -25,7 +28,7 @@ Takes modification locations (indices along the read signifying bases at which
 modification probability was assessed) and modification probabilities (the probability
 of modification at each assessed location, as an integer from 0 to 255), as comma-separated
 strings (e.g. \code{"1,5,25"}) produced from numerical vectors via \code{\link[=vector_to_string]{vector_to_string()}}.
-Outputs a numerical vector of the modification probability for each base along the read
-i.e. 0 for bases where modification was not assessed, and probability from 0-255 for bases
-where modification was assessed.
+Outputs a numerical vector of the modification probability for each base along the read.
+i.e. -2 for indices outside sequences, -1 for bases where modification was not assessed,
+and probability from 0-255 for bases where modification was assessed.
 }

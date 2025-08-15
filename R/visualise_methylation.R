@@ -25,12 +25,21 @@
 #' @param modification_locations `character vector`. One character value for each sequence, storing a condensed string (e.g. `"3,6,9,12"`, produced via [vector_to_string()]) of the indices along the read at which modification was assessed. Indexing starts at 1.
 #' @param modification_probabilities `character vector`. One character value for each sequence, storing a condensed string (e.g. `"0,128,255,15"`, produced via [vector_to_string()]) of the probability of methylation/modification at each assessed base.\cr\cr Assumed to be Nanopore > SAM style modification stored as an 8-bit integer from 0 to 255, but changing other arguments could make this work on other scales.
 #' @param sequence_lengths `numeric vector`. The length of each sequence.
-#' @param background_colour `character`. The colour the background should be drawn (defaults to white).
-#' @param other_bases_colour `character`. The colour non-assessed (e.g. non-CpG) bases should be drawn (defaults to grey).
 #' @param low_colour `character`. The colour that should be used to represent minimum probability of methylation/modification (defaults to blue).
 #' @param high_colour `character`. The colour that should be used to represent maximum probability of methylation/modification (defaults to red).
 #' @param low_clamp `numeric`. The minimum probability below which all values are coloured `low_colour`. Defaults to `0` (i.e. no clamping). To specify a proportion probability in 8-bit form, multiply by 255 e.g. to low-clamp at 30% probability, set this to `0.3*255`.
 #' @param high_clamp `numeric`. The maximum probability above which all values are coloured `high_colour`. Defaults to `255` (i.e. no clamping, assuming Nanopore > SAM style modification calling where probabilities are 8-bit integers from 0 to 255).
+#' @param background_colour `character`. The colour the background should be drawn (defaults to white).
+#' @param other_bases_colour `character`. The colour non-assessed (e.g. non-CpG) bases should be drawn (defaults to grey).
+#' @param outline_colour `character`. The colour of the box outlines. Defaults to black.
+#' @param outline_linewidth `numeric`. The linewidth of the box outlines. Defaults to `3`. Set to `0` to disable box outlines.
+#' @param outline_join `character`. One of `"mitre"`, `"round"`, or `"bevel"` specifying how outlines should be joined at the corners of boxes. Defaults to `"mitre"`. It would be unusual to need to change this.
+#' @param modified_bases_outline_colour `character`. If `NA` (default), inherits from `outline_colour`. If not `NA`, overrides `outline_colour` for modification-assessed bases only.
+#' @param modified_bases_outline_linewidth `numeric`. If `NA` (default), inherits from `outline_linewidth`. If not `NA`, overrides `outline_linewidth` for modification-assessed bases only.
+#' @param modified_bases_outline_join `character`. If `NA` (default), inherits from `outline_join`. If not `NA`, overrides `outline_join` for modification-assessed bases only.
+#' @param other_bases_outline_colour `character`. If `NA` (default), inherits from `outline_colour`. If not `NA`, overrides `outline_colour` for non-modification-assessed bases only.
+#' @param other_bases_outline_linewidth `numeric`. If `NA` (default), inherits from `outline_linewidth`. If not `NA`, overrides `outline_linewidth` for non-modification-assessed bases only.
+#' @param other_bases_outline_join `character`. If `NA` (default), inherits from `outline_join`. If not `NA`, overrides `outline_join` for non-modification-assessed bases only.
 #' @param margin `numeric`. The size of the margin relative to the size of each base square. Defaults to `0.5` (half the side length of each base square).
 #' @param return `logical`. Boolean specifying whether this function should return the ggplot object, otherwise it will return `invisible(NULL)`. Defaults to `TRUE`.
 #' @param filename `character`. Filename to which output should be saved. If set to `NA` (default), no file will be saved. Recommended to end with `".png"` but might work with other extensions if they are compatible with [ggplot2::ggsave()].
@@ -39,23 +48,27 @@
 #' @return A ggplot object containing the full visualisation, or `invisible(NULL)` if `return = FALSE`. It is often more useful to use `filename = "myfilename.png"`, because then the visualisation is exported at the correct aspect ratio.
 #' @export
 visualise_methylation <- function(modification_locations, modification_probabilities, sequence_lengths,
-                                  background_colour = "white", other_bases_colour = "grey", low_colour = "blue", high_colour = "red", low_clamp = 0, high_clamp = 255,
+                                  low_colour = "blue", high_colour = "red", low_clamp = 0, high_clamp = 255,
+                                  background_colour = "white", other_bases_colour = "grey",
+                                  outline_colour = "black", outline_linewidth = 3, outline_join = "mitre",
+                                  modified_bases_outline_colour = NA, modified_bases_outline_linewidth = NA, modified_bases_outline_join = NA,
+                                  other_bases_outline_colour = NA, other_bases_outline_linewidth = NA, other_bases_outline_join = NA,
                                   margin = 0.5, return = TRUE, filename = NA, pixels_per_base = 10) {
     ## Validate arguments
-    for (argument in list(modification_locations, modification_probabilities, sequence_lengths, background_colour, other_bases_colour, low_colour, high_colour, low_clamp, high_clamp, margin, return, filename, pixels_per_base)) {
+    for (argument in list(modification_locations, modification_probabilities, sequence_lengths, background_colour, other_bases_colour, low_colour, high_colour, low_clamp, high_clamp, outline_linewidth, outline_colour, outline_join, modified_bases_outline_linewidth, modified_bases_outline_colour, modified_bases_outline_join, other_bases_outline_linewidth, other_bases_outline_colour, other_bases_outline_join, margin, return, filename, pixels_per_base)) {
         if (mean(is.null(argument)) != 0) {abort(paste("Argument", argument, "must not be null."), class = "argument_value_or_type")}
     }
-    for (argument in list(background_colour, other_bases_colour, low_colour, high_colour, low_clamp, high_clamp, margin, return, filename, pixels_per_base)) {
+    for (argument in list(background_colour, other_bases_colour, low_colour, high_colour, low_clamp, high_clamp, outline_linewidth, outline_colour, outline_join, modified_bases_outline_linewidth, modified_bases_outline_colour, modified_bases_outline_join, other_bases_outline_linewidth, other_bases_outline_colour, other_bases_outline_join, margin, return, filename, pixels_per_base)) {
         if (length(argument) != 1) {abort(paste("Argument", argument, "must have length 1."), class = "argument_value_or_type")}
     }
     for (argument in list(modification_locations, modification_probabilities, sequence_lengths, background_colour, other_bases_colour, low_colour, high_colour, low_clamp, high_clamp, margin, return, pixels_per_base)) {
         if (mean(is.na(argument)) != 0) {abort(paste("Argument", argument, "must not be NA."), class = "argument_value_or_type")}
     }
-    for (argument in list(background_colour, other_bases_colour, low_colour, high_colour)) {
-        if (is.character(argument) == FALSE || length(argument) != 1) {abort(paste("All colours must be single character values.", argument, "is not valid."), class = "argument_value_or_type")}
+    for (argument in list(background_colour, other_bases_colour, low_colour, high_colour, outline_colour, modified_bases_outline_colour, other_bases_outline_colour)) {
+        if (is.na(argument) == FALSE && (is.character(argument) == FALSE || length(argument) != 1)) {abort(paste("All colours must be single character values.", argument, "is not valid."), class = "argument_value_or_type")}
     }
-    for (argument in list(low_clamp, high_clamp, margin, pixels_per_base)) {
-        if (is.numeric(argument) == FALSE || length(argument) != 1) {abort(paste("Argument", argument, "must be a single numeric value."), class = "argument_value_or_type")}
+    for (argument in list(low_clamp, high_clamp, margin, pixels_per_base, outline_linewidth, modified_bases_outline_linewidth, other_bases_outline_linewidth)) {
+        if (is.na(argument) == FALSE && (is.numeric(argument) == FALSE || length(argument) != 1)) {abort(paste("Argument", argument, "must be a single numeric value."), class = "argument_value_or_type")}
     }
     for (argument in list(pixels_per_base)) {
         if (argument %% 1 != 0 || argument < 1) {abort(paste("Argument", argument, "must be a positive integer."), class = "argument_value_or_type")}
@@ -75,35 +88,58 @@ visualise_methylation <- function(modification_locations, modification_probabili
     for (argument in list(sequence_lengths)) {
         if (is.numeric(argument) == FALSE) {abort("Sequence lengths vector must be numeric.", class = "argument_value_or_type")}
     }
+    ## Overwrite outline parameters if needed
+    if (is.na(modified_bases_outline_colour))    {modified_bases_outline_colour    <- outline_colour}
+    if (is.na(modified_bases_outline_linewidth)) {modified_bases_outline_linewidth <- outline_linewidth}
+    if (is.na(modified_bases_outline_join))      {modified_bases_outline_join      <- outline_join}
+    if (is.na(other_bases_outline_colour))       {other_bases_outline_colour       <- outline_colour}
+    if (is.na(other_bases_outline_linewidth))    {other_bases_outline_linewidth    <- outline_linewidth}
+    if (is.na(other_bases_outline_join))         {other_bases_outline_join         <- outline_join}
+    ## Check colour, linewidth, and join are specified for both
+    for (argument in list(modified_bases_outline_linewidth, modified_bases_outline_colour, modified_bases_outline_join, other_bases_outline_linewidth, other_bases_outline_colour, other_bases_outline_join)) {
+        if (is.na(argument)) {abort("Outline colour, linewidth, and join must all be specified generally (via outline_colour etc) or for both modified bases and other bases (via both modified_bases_outline_colour and other_bases_outline_colour etc). Currently there is an NA.", class = "argument_value_or_type")}
+    }
+    ## Check join is valid
+    for (argument in list(modified_bases_outline_join, other_bases_outline_join)) {
+        if (!(tolower(argument) %in% c("mitre", "round", "bevel"))) {
+            abort("All outline join arguments must be one of 'mitre', 'round', or 'bevel'.", class = "argument_value_or_type")
+        }
+    }
+
 
 
     ## Generate rasterised dataframes of methylation and masking layer
     max_length <- max(sequence_lengths)
     image_matrix <- matrix(NA, nrow = length(modification_locations), ncol = max_length)
-    mask_matrix  <- matrix(NA, nrow = length(modification_locations), ncol = max_length)
     for (i in 1:length(modification_locations)) {
-        numeric_sequence_representation <- convert_modification_to_number_vector(modification_locations[i], modification_probabilities[i], max_length)
+        numeric_sequence_representation <- convert_modification_to_number_vector(modification_locations[i], modification_probabilities[i], max_length, sequence_lengths[i])
         image_matrix[i, ] <- numeric_sequence_representation
-
-        mask <- create_plot_masks(modification_locations[i], modification_probabilities[i], max_length, sequence_lengths[i])
-        mask_matrix[i, ] <- mask
     }
     image_data <- raster::as.data.frame(raster::raster(image_matrix), xy = TRUE)
-    mask_data  <- raster::as.data.frame(raster::raster(mask_matrix), xy = TRUE)
 
     ## Transform image data if clamping limits are set
     image_data$clamped_layer <- pmin(pmax(image_data$layer, low_clamp), high_clamp)
 
+    tile_width  <- 1/max(sequence_lengths)
+    tile_height <- 1/length(sequence_lengths)
+
 
     ## Make methylation visualisation plot
     result <- ggplot(mapping = aes(x = x, y = y)) +
-        geom_tile(data = image_data, aes(fill = clamped_layer)) +
+        ## Background
+        geom_tile(data = filter(image_data, layer == -2), fill = background_colour, width = tile_width, height = tile_height) +
+
+        ## Non-assessed bases
+        geom_tile(data = filter(image_data, layer == -1), fill = other_bases_colour, width = tile_width, height = tile_height,
+                  col = other_bases_outline_colour, linewidth = other_bases_outline_linewidth, linejoin = tolower(other_bases_outline_join)) +
+
+        ## Modification-assessed bases
+        geom_tile(data = filter(image_data, layer >= 0), aes(fill = clamped_layer), width = tile_width, height = tile_height,
+                  col = modified_bases_outline_colour, linewidth = modified_bases_outline_linewidth, linejoin = tolower(modified_bases_outline_join)) +
         scale_fill_gradient(low = low_colour, high = high_colour, limits = c(low_clamp, high_clamp)) +
-        guides(fill = "none") +
-        new_scale_fill() +
-        geom_tile(data = mask_data, aes(fill = as.character(layer))) +
-        scale_fill_manual(values = c("0" = background_colour, "1" = other_bases_colour, "2" = alpha("white", 0))) +
-        coord_cartesian(expand = FALSE) +
+
+        ## General plot setup
+        coord_cartesian(expand = FALSE, clip = "off") +
         guides(x = "none", y = "none", fill = "none") +
         theme(plot.background = element_rect(fill = background_colour, colour = NA),
               axis.title = element_blank(), plot.margin = grid::unit(c(margin, margin, margin, margin), "inches"))
@@ -151,22 +187,25 @@ visualise_methylation <- function(modification_locations, modification_probabili
 #' @param do_x_ticks `logical`. Boolean specifying whether x axis ticks should be enabled (`TRUE`, default) or disabled (`FALSE`).
 #' @param do_side_scale `logical`. Boolean specifying whether a smaller scalebar should be rendered on the right. Defaults to `FALSE`.\cr\cr I think it is unlikely anyone would want to use this, but the option is here. One potential usecase is that this scalebar shows the raw probability values (e.g. 0 to 255), whereas the x-axis is normalised to 0-1.
 #' @param side_scale_title `character`. The desired title for the right-hand scalebar, if turned on. Defaults to `NULL`.
+#' @param outline_colour `character`. The colour of the scalebar outline. Defaults to black.
+#' @param outline_linewidth `numeric`. The linewidth of the scalebar outline. Defaults to `1`. Set to `0` to disable scalebar outline.
 #'
 #' @return ggplot of the scalebar.\cr\cr Unlike the other `visualise_<>` functions in this package, does not directly export a png. This is because there are no squares that need to be rendered at a precise aspect ratio in this function. It can just be saved normally with [ggplot2::ggsave()] with any sensible combination of height and width.
 #' @export
 visualise_methylation_colour_scale <- function(low_colour = "blue", high_colour = "red", low_clamp = 0, high_clamp = 255, full_range = c(0, 255), precision = 10^3,
-                                               background_colour = "white", x_axis_title = NULL, do_x_ticks = TRUE, do_side_scale = FALSE, side_scale_title = NULL) {
+                                               background_colour = "white", x_axis_title = NULL, do_x_ticks = TRUE, do_side_scale = FALSE, side_scale_title = NULL,
+                                               outline_colour = "black", outline_linewidth = 1) {
     ## Validate arguments
-    for (argument in list(low_colour, high_colour, low_clamp, high_clamp, full_range, precision, background_colour, do_x_ticks, do_side_scale)) {
+    for (argument in list(low_colour, high_colour, low_clamp, high_clamp, full_range, precision, background_colour, do_x_ticks, do_side_scale, outline_colour, outline_linewidth)) {
         if (mean(is.null(argument)) != 0 || mean(is.na(argument)) != 0) {abort(paste("Argument", argument, "must not be null or NA."), class = "argument_value_or_type")}
     }
-    for (argument in list(low_colour, high_colour, low_clamp, high_clamp, precision, background_colour, x_axis_title, do_x_ticks, do_side_scale, side_scale_title)) {
+    for (argument in list(low_colour, high_colour, low_clamp, high_clamp, precision, background_colour, x_axis_title, do_x_ticks, do_side_scale, side_scale_title, outline_colour, outline_linewidth)) {
         if (mean(is.null(argument)) == 0 && length(argument) != 1) {abort(paste("Argument", argument, "must have length 1"), class = "argument_value_or_type")}
     }
-    for (argument in list(background_colour, low_colour, high_colour)) {
+    for (argument in list(background_colour, low_colour, high_colour, outline_colour)) {
         if (is.character(argument) == FALSE || length(argument) != 1) {abort(paste("All colours must be single character values.", argument, "is not valid."), class = "argument_value_or_type")}
     }
-    for (argument in list(low_clamp, high_clamp, full_range, precision)) {
+    for (argument in list(low_clamp, high_clamp, full_range, precision, outline_linewidth)) {
         if (is.numeric(argument) == FALSE) {abort(paste("Argument", argument, "must be numeric."), class = "argument_value_or_type")}
     }
     for (argument in list(do_x_ticks, do_side_scale)) {
@@ -204,6 +243,7 @@ visualise_methylation_colour_scale <- function(low_colour = "blue", high_colour 
         theme(axis.ticks.y = element_blank(), axis.text.y = element_blank()) +
         labs(x = x_axis_title, fill = side_scale_title) + guides(fill = "none") +
         theme(plot.background = element_rect(fill = background_colour, colour = NA),
+              panel.border = element_rect(fill = NA, colour = outline_colour, linewidth = outline_linewidth),
               plot.margin = grid::unit(c(0.05, 0.15, 0.05, 0.15), "inches"))
 
     ## Alter plot according to arguments
@@ -278,68 +318,18 @@ extract_methylation_from_dataframe <- function(modification_data,
 #' modification probability was assessed) and modification probabilities (the probability
 #' of modification at each assessed location, as an integer from 0 to 255), as comma-separated
 #' strings (e.g. `"1,5,25"`) produced from numerical vectors via [vector_to_string()].
-#' Outputs a numerical vector of the modification probability for each base along the read
-#' i.e. 0 for bases where modification was not assessed, and probability from 0-255 for bases
-#' where modification was assessed.
+#' Outputs a numerical vector of the modification probability for each base along the read.
+#' i.e. -2 for indices outside sequences, -1 for bases where modification was not assessed,
+#' and probability from 0-255 for bases where modification was assessed.
 #'
 #' @param modification_locations_str `character`. A comma-separated string representing a condensed numerical vector (e.g. `"3,6,9,12"`, produced via [vector_to_string()]) of the indices along the read at which modification was assessed. Indexing starts at 1.
 #' @param modification_probabilities_str `character`. A comma-separated string representing a condensed numerical vector (e.g. `"2,212,128,64"`, produced via [vector_to_string()]) of the probability of modification as an 8-bit (0-255) integer for each base where modification was assessed.
 #' @param max_length `integer`. How long the output vector should be.
+#' @param sequence_length `integer`. How long the sequence itself is. If smaller than `max_length`, the remaining spaces will be filled with `-2`s i.e. set to the background colour in [visualise_methylation()].
 #'
 #' @return `numeric vector`. A vector of length `max_length` indicating the probability of methylation at each index along the read - 0 where methylation was not assessed, and probability from 0-255 where methylation was assessed.
 #' @export
-convert_modification_to_number_vector <- function(modification_locations_str, modification_probabilities_str, max_length) {
-    ## Validate arguments
-    for (argument in list(modification_locations_str, modification_probabilities_str, max_length)) {
-        if (mean(is.null(argument)) != 0 || mean(is.na(argument)) != 0 || length(argument) != 1) {
-            abort("Argument", argument, "must be a single value, and not NULL or NA", class = "argument_value_or_type")
-        }
-    }
-    for (argument in list(modification_locations_str, modification_probabilities_str)) {
-        if (is.character(argument) == FALSE) {abort("Modification locations and probabilities must both be character vectors.", class = "argument value or type.")}
-        if (argument != "" && mean(is.na(string_to_vector(argument))) != 0) {abort("Modification locations and probabilities must both expand to numeric vectors via string_to_vector(). Check that the values within these inputs are comma-separated numbers e.g. '1,2,3,4'.", class = "argument_value_or_type")}
-    }
-    for (argument in list(max_length)) {
-        if (is.numeric(argument) == FALSE || argument %% 1 != 0 || argument < 1) {abort("Max length must be a positive integer.", class = "argument_value_or_type")}
-    }
-
-    ## Convert input strings to vectors
-    locations     <- string_to_vector(modification_locations_str)
-    probabilities <- string_to_vector(modification_probabilities_str)
-
-    ## Calculate output vector
-    output_vector <- rep(0, max_length)
-    for (i in 1:max_length) {
-        if (i %in% locations) {
-            output_vector[i] <- probabilities[which(locations == i)]
-        }
-    }
-
-    ## Return output vector
-    return(output_vector)
-}
-
-
-#' Create a masking layer for methylation visualisation ([visualise_methylation()] helper)
-#'
-#' Takes modification locations (indices along the read signifying bases at which
-#' modification probability was assessed) and modification probabilities (the probability
-#' of modification at each assessed location, as an integer from 0 to 255), as comma-separated
-#' strings (e.g. `"1,5,25"`) produced from numerical vectors via [vector_to_string()]. \cr\cr
-#' Also takes the length of this particular sequence, and the maximum length of sequences in the
-#' collection being methylation-visualised.\cr\cr
-#' Returns a numeric vector with value `0` for background bases (past the end of the sequence),
-#' `1` for non-assessed bases (e.g. non-CpG for most methylation callers), and `2` for assessed bases
-#' (e.g. CpG). This allows controlling the appearance of these categories independently.
-#'
-#' @param modification_locations_str `character`. A comma-separated string representing a condensed numerical vector (e.g. `"3,6,9,12"`, produced via [vector_to_string()]) of the indices along the read at which modification was assessed. Indexing starts at 1.
-#' @param modification_probabilities_str `character`. A comma-separated string representing a condensed numerical vector (e.g. `"2,212,128,64"`, produced via [vector_to_string()]) of the probability of modification as an 8-bit (0-255) integer for each base where modification was assessed.
-#' @param max_length `integer`. How long the output vector should be.
-#' @param sequence_length `integer`. How long the sequence itself is. If smaller than max_length, the remaining spaces will be filled with `0`s i.e. set to the background colour in [visualise_methylation()].
-#'
-#' @return `numeric vector`. Vector of length `max_length` containing `1`s for non-assessed bases (e.g. non-CpG), `2`s for assessed bases (e.g. CpG), and `0` for squares that aren't bases (i.e. past the end of the sequence when `max_length > sequence_length`).
-#' @export
-create_plot_masks <- function(modification_locations_str, modification_probabilities_str, max_length, sequence_length) {
+convert_modification_to_number_vector <- function(modification_locations_str, modification_probabilities_str, max_length, sequence_length) {
     ## Validate arguments
     for (argument in list(modification_locations_str, modification_probabilities_str, max_length, sequence_length)) {
         if (mean(is.null(argument)) != 0 || mean(is.na(argument)) != 0 || length(argument) != 1) {
@@ -350,28 +340,30 @@ create_plot_masks <- function(modification_locations_str, modification_probabili
         if (is.character(argument) == FALSE) {abort("Modification locations and probabilities must both be character vectors.", class = "argument value or type.")}
         if (argument != "" && mean(is.na(string_to_vector(argument))) != 0) {abort("Modification locations and probabilities must both expand to numeric vectors via string_to_vector(). Check that the values within these inputs are comma-separated numbers e.g. '1,2,3,4'.", class = "argument_value_or_type")}
     }
+    for (argument in list(max_length, sequence_length)) {
+        if (is.numeric(argument) == FALSE || argument %% 1 != 0 || argument < 0) {abort(paste("Argument", argument, "must be a non-negative integer."), class = "argument_value_or_type")}
+    }
     for (argument in list(max_length)) {
         if (is.numeric(argument) == FALSE || argument %% 1 != 0 || argument < 1) {abort("Max length must be a positive integer.", class = "argument_value_or_type")}
-    }
-    for (argument in list(sequence_length)) {
-        if (is.numeric(argument) == FALSE || argument %% 1 != 0 || argument < 0) {abort("Sequence length must both be a non-negative integer.", class = "argument_value_or_type")}
     }
 
     ## Convert input strings to vectors
     locations     <- string_to_vector(modification_locations_str)
     probabilities <- string_to_vector(modification_probabilities_str)
 
-    ## 0 = background
-    ## 1 = non-CpG
-    ## 2 = CpG
-    output_vector <- rep(0, max_length)
+    ## Calculate output vector
+    ## If there is no base at all at a position, value is -2
+    ## If there is a non-modification-assessed base, value is -1
+    ## If there is a modification-assessed base, value is the modification probability
+    output_vector <- rep(-2, max_length)
     for (i in 1:max_length) {
         if (i %in% locations) {
-            output_vector[i] <- 2
+            output_vector[i] <- probabilities[which(locations == i)]
         } else if (i <= sequence_length) {
-            output_vector[i] <- 1
+            output_vector[i] <- -1
         }
     }
 
+    ## Return output vector
     return(output_vector)
 }

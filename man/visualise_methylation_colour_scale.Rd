@@ -15,7 +15,9 @@ visualise_methylation_colour_scale(
   x_axis_title = NULL,
   do_x_ticks = TRUE,
   do_side_scale = FALSE,
-  side_scale_title = NULL
+  side_scale_title = NULL,
+  outline_colour = "black",
+  outline_linewidth = 1
 )
 }
 \arguments{
@@ -40,6 +42,10 @@ visualise_methylation_colour_scale(
 \item{do_side_scale}{\code{logical}. Boolean specifying whether a smaller scalebar should be rendered on the right. Defaults to \code{FALSE}.\cr\cr I think it is unlikely anyone would want to use this, but the option is here. One potential usecase is that this scalebar shows the raw probability values (e.g. 0 to 255), whereas the x-axis is normalised to 0-1.}
 
 \item{side_scale_title}{\code{character}. The desired title for the right-hand scalebar, if turned on. Defaults to \code{NULL}.}
+
+\item{outline_colour}{\code{character}. The colour of the scalebar outline. Defaults to black.}
+
+\item{outline_linewidth}{\code{numeric}. The linewidth of the scalebar outline. Defaults to \code{1}. Set to \code{0} to disable scalebar outline.}
 }
 \value{
 ggplot of the scalebar.\cr\cr Unlike the other \verb{visualise_<>} functions in this package, does not directly export a png. This is because there are no squares that need to be rendered at a precise aspect ratio in this function. It can just be saved normally with \code{\link[ggplot2:ggsave]{ggplot2::ggsave()}} with any sensible combination of height and width.

@@ -8,12 +8,21 @@ visualise_methylation(
   modification_locations,
   modification_probabilities,
   sequence_lengths,
-  background_colour = "white",
-  other_bases_colour = "grey",
   low_colour = "blue",
   high_colour = "red",
   low_clamp = 0,
   high_clamp = 255,
+  background_colour = "white",
+  other_bases_colour = "grey",
+  outline_colour = "black",
+  outline_linewidth = 3,
+  outline_join = "mitre",
+  modified_bases_outline_colour = NA,
+  modified_bases_outline_linewidth = NA,
+  modified_bases_outline_join = NA,
+  other_bases_outline_colour = NA,
+  other_bases_outline_linewidth = NA,
+  other_bases_outline_join = NA,
   margin = 0.5,
   return = TRUE,
   filename = NA,
@@ -27,10 +36,6 @@ visualise_methylation(
 
 \item{sequence_lengths}{\verb{numeric vector}. The length of each sequence.}
 
-\item{background_colour}{\code{character}. The colour the background should be drawn (defaults to white).}
-
-\item{other_bases_colour}{\code{character}. The colour non-assessed (e.g. non-CpG) bases should be drawn (defaults to grey).}
-
 \item{low_colour}{\code{character}. The colour that should be used to represent minimum probability of methylation/modification (defaults to blue).}
 
 \item{high_colour}{\code{character}. The colour that should be used to represent maximum probability of methylation/modification (defaults to red).}
@@ -38,6 +43,28 @@ visualise_methylation(
 \item{low_clamp}{\code{numeric}. The minimum probability below which all values are coloured \code{low_colour}. Defaults to \code{0} (i.e. no clamping). To specify a proportion probability in 8-bit form, multiply by 255 e.g. to low-clamp at 30\% probability, set this to \code{0.3*255}.}
 
 \item{high_clamp}{\code{numeric}. The maximum probability above which all values are coloured \code{high_colour}. Defaults to \code{255} (i.e. no clamping, assuming Nanopore > SAM style modification calling where probabilities are 8-bit integers from 0 to 255).}
+
+\item{background_colour}{\code{character}. The colour the background should be drawn (defaults to white).}
+
+\item{other_bases_colour}{\code{character}. The colour non-assessed (e.g. non-CpG) bases should be drawn (defaults to grey).}
+
+\item{outline_colour}{\code{character}. The colour of the box outlines. Defaults to black.}
+
+\item{outline_linewidth}{\code{numeric}. The linewidth of the box outlines. Defaults to \code{3}. Set to \code{0} to disable box outlines.}
+
+\item{outline_join}{\code{character}. One of \code{"mitre"}, \code{"round"}, or \code{"bevel"} specifying how outlines should be joined at the corners of boxes. Defaults to \code{"mitre"}. It would be unusual to need to change this.}
+
+\item{modified_bases_outline_colour}{\code{character}. If \code{NA} (default), inherits from \code{outline_colour}. If not \code{NA}, overrides \code{outline_colour} for modification-assessed bases only.}
+
+\item{modified_bases_outline_linewidth}{\code{numeric}. If \code{NA} (default), inherits from \code{outline_linewidth}. If not \code{NA}, overrides \code{outline_linewidth} for modification-assessed bases only.}
+
+\item{modified_bases_outline_join}{\code{character}. If \code{NA} (default), inherits from \code{outline_join}. If not \code{NA}, overrides \code{outline_join} for modification-assessed bases only.}
+
+\item{other_bases_outline_colour}{\code{character}. If \code{NA} (default), inherits from \code{outline_colour}. If not \code{NA}, overrides \code{outline_colour} for non-modification-assessed bases only.}
+
+\item{other_bases_outline_linewidth}{\code{numeric}. If \code{NA} (default), inherits from \code{outline_linewidth}. If not \code{NA}, overrides \code{outline_linewidth} for non-modification-assessed bases only.}
+
+\item{other_bases_outline_join}{\code{character}. If \code{NA} (default), inherits from \code{outline_join}. If not \code{NA}, overrides \code{outline_join} for non-modification-assessed bases only.}
 
 \item{margin}{\code{numeric}. The size of the margin relative to the size of each base square. Defaults to \code{0.5} (half the side length of each base square).}
 

@@ -76,16 +76,21 @@ visualise_many_sequences <- function(sequences_vector, sequence_colours = sequen
 
     ## Generate actual plot
     result <- ggplot(image_data, aes(x = x, y = y)) +
+        ## Background
         geom_tile(data = filter(image_data, layer == 0), width = tile_width, height = tile_height, fill = background_colour) +
+
+        ## Base boxes
         geom_tile(data = filter(image_data, layer != 0), width = tile_width, height = tile_height, aes(fill = as.character(layer)),
                   col = outline_colour, linewidth = outline_linewidth, linejoin = tolower(outline_join)) +
         scale_fill_manual(values = sequence_colours) +
+
+        ## General plot
         guides(x = "none", y = "none", fill = "none") +
         coord_cartesian(expand = FALSE, clip = "off") +
         theme(plot.background = element_rect(fill = background_colour, colour = NA),
               axis.title = element_blank(), plot.margin = grid::unit(c(margin, margin, margin, margin), "inches"))
 
-    ## Add annotations if desired
+    ## Add sequence text if desired
     if (sequence_text_size != 0) {
         result <- result +
             geom_text(data = annotations, aes(x = x_position, y = y_position, label = annotation), col = sequence_text_colour, size = sequence_text_size, fontface = "bold", inherit.aes = F) +

@@ -3,10 +3,9 @@ Title: ggplot2-Based Tools For Visualising DNA Sequences And Modifications
 Version: 0.1.1
 Authors@R: 
     person("Evelyn", "Jade", , "evelynjade42@gmail.com", role = c("aut", "cre"))
-Description: Uses ggplot2 to visualise either (a) a single DNA/RNA sequence split across multiple lines, (b) multiple DNA/RNA sequences, each occupying a whole line, or (c) base modifications such as DNA methylation called by modified bases models in Dorado or Guppy. Functions starting with `visualise_<something>()` are the main plotting functions, and functions starting with `extract_<something>()` are key helper functions for reading files and reformatting data. A full manual is available at https://github.com/ejade42/ggDNAvis
+Description: Uses ggplot2 to visualise either (a) a single DNA/RNA sequence split across multiple lines, (b) multiple DNA/RNA sequences, each occupying a whole line, or (c) base modifications such as DNA methylation called by modified bases models in Dorado or Guppy. Functions starting with `visualise_<something>()` are the main plotting functions, and functions starting with `extract_<something>()` are key helper functions for reading files and reformatting data. A full manual is available at https://github.com/ejade42/ggDNAvis.
 Imports:
     ggplot2,
-    ggnewscale,
     dplyr,
     tidyr,
     stringr,
