@@ -443,7 +443,7 @@ visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
 knitr::include_graphics("README_files/output/single_sequence_03.png")
 ```
 
-Included in `ggDNAvis` are a set of colour palettes for sequence colours that can often be helpful. The default is `sequence_colour_palettes$ggplot_style`, as seen in the first example above. The other palettes are `$bright_pale`, `$bright_deep`, and `$sanger`:
+Included in `ggDNAvis` are a set of colour palettes for sequence colours that can often be helpful. The default is `sequence_colour_palettes$ggplot_style`, as seen in the first example above. The other palettes are `$bright_pale`, `$bright_pale2`, `$bright_deep`, and `$sanger`:
 
 The `bright_pale` palette works well with either white or black text, depending on how much the text is desired to "pop":
 ```{r}
@@ -470,31 +470,44 @@ visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
 knitr::include_graphics("README_files/output/single_sequence_05.png")
 ```
 
+`bright_pale2` is the same but with a slightly lighter shade of green:
 
-The `bright_deep` palette works best with white text:
 ```{r}
 ## Create image
 visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
                           filename = "README_files/output/single_sequence_06.png", 
                           return = FALSE,
+                          sequence_colours = sequence_colour_palettes$bright_pale2,
+                          sequence_text_colour = "black")
+
+## View image
+knitr::include_graphics("README_files/output/single_sequence_06.png")
+```
+
+The `bright_deep` palette works best with white text:
+```{r}
+## Create image
+visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
+                          filename = "README_files/output/single_sequence_07.png", 
+                          return = FALSE,
                           sequence_colours = sequence_colour_palettes$bright_deep,
                           sequence_text_colour = "white")
 
 ## View image
-knitr::include_graphics("README_files/output/single_sequence_06.png")
+knitr::include_graphics("README_files/output/single_sequence_07.png")
 ```
 
 The `sanger` palette is inspired by old-school Sanger sequencing readouts and works best with white text:
 ```{r}
 ## Create image
 visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
-                          filename = "README_files/output/single_sequence_07.png", 
+                          filename = "README_files/output/single_sequence_08.png", 
                           return = FALSE,
                           sequence_colours = sequence_colour_palettes$sanger,
                           sequence_text_colour = "white")
 
 ## View image
-knitr::include_graphics("README_files/output/single_sequence_07.png")
+knitr::include_graphics("README_files/output/single_sequence_08.png")
 ```
 
 ## Layout customisation
@@ -513,7 +526,7 @@ A sensible example of how these might be changed is as follows:
 ```{r}
 ## Create image
 visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
-                          filename = "README_files/output/single_sequence_08.png", 
+                          filename = "README_files/output/single_sequence_09.png", 
                           return = FALSE,
                           sequence_colours = sequence_colour_palettes$ggplot_style,
                           margin = 2,
@@ -524,14 +537,14 @@ visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
                           index_annotation_vertical_position = 1/2)
 
 ## View image
-knitr::include_graphics("README_files/output/single_sequence_08.png")
+knitr::include_graphics("README_files/output/single_sequence_09.png")
 ```
 
 Setting spacing, margin, sequence text size, and index annotation interval all to 0 produces a no-frills visualisation of the sequence only. If doing so, `pixels_per_base` can be set low as there is no text that would be rendered poorly at low resolutions:
 ```{r}
 ## Create image
 visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
-                          filename = "README_files/output/single_sequence_09.png", 
+                          filename = "README_files/output/single_sequence_10.png", 
                           return = FALSE,
                           sequence_colours = sequence_colour_palettes$bright_pale,
                           margin = 0,
@@ -542,7 +555,7 @@ visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
                           pixels_per_base = 20)
 
 ## View image
-knitr::include_graphics("README_files/output/single_sequence_09.png")
+knitr::include_graphics("README_files/output/single_sequence_10.png")
 ```
 
 When changing line wrapping and annotation interval, divisibility is important. It is generally recommended to make the line wrapping length a multiple of the motif length when visualising repeats (e.g. a multiple of 3 for a trinucleotide repeat), and to make the index annotation interval a factor of the line wrapping length. If the annotation interval is not a factor of the line length, then there will be uneven gaps between annotations as the interval is counted *from the start of each line*.
@@ -551,7 +564,7 @@ Here is an example where these guidelines are not followed:
 ```{r}
 ## Create image
 visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
-                          filename = "README_files/output/single_sequence_10.png", 
+                          filename = "README_files/output/single_sequence_11.png", 
                           return = FALSE,
                           sequence_colours = sequence_colour_palettes$bright_deep,
                           sequence_text_colour = "white",
@@ -559,14 +572,14 @@ visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
                           index_annotation_interval = 15)
 
 ## View image
-knitr::include_graphics("README_files/output/single_sequence_10.png")
+knitr::include_graphics("README_files/output/single_sequence_11.png")
 ```
 
 When setting spacing to 0, it is highly recommended to disable index annotations via `index_annotation_interval = 0`, otherwise there is nowhere for them to render:
 ```{r}
 ## Create image
 visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
-                          filename = "README_files/output/single_sequence_11.png", 
+                          filename = "README_files/output/single_sequence_12.png", 
                           return = FALSE,
                           sequence_colours = sequence_colour_palettes$sanger,
                           sequence_text_colour = "white",
@@ -574,7 +587,7 @@ visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
                           spacing = 0)
 
 ## View image
-knitr::include_graphics("README_files/output/single_sequence_11.png")
+knitr::include_graphics("README_files/output/single_sequence_12.png")
 ```
 
 

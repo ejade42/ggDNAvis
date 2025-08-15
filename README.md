@@ -1014,7 +1014,13 @@ visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
                           sequence_text_size = 0,
                           index_annotation_interval = 0,
                           pixels_per_base = 20)
+```
 
+    ## Warning: If margin is small and outlines are on (outline_linewidth > 0),
+    ## outlines may be cut off at the edges of the plot. Check if this is happening
+    ## and consider using a bigger margin.
+
+``` r
 ## View image
 knitr::include_graphics("README_files/output/single_sequence_09.png")
 ```
@@ -1505,7 +1511,13 @@ visualise_many_sequences(sequences_for_visualisation,
                          sequence_text_size = 0,
                          margin = 0,
                          pixels_per_base = 20)
+```
 
+    ## Warning: If margin is small and outlines are on (outline_linewidth > 0),
+    ## outlines may be cut off at the edges of the plot. Check if this is happening
+    ## and consider using a bigger margin.
+
+``` r
 ## View image
 knitr::include_graphics("README_files/output/many_sequences_09.png")
 ```
@@ -2545,14 +2557,14 @@ knitr::include_graphics("README_files/output/modification_09.png")
 ```
 
 <img src="README_files/output/modification_09.png" width="1030" />
-However, this is **strongly discouraged** and produces a warning. Offset
+However, this is strongly discouraged and produces a warning. Offset
 values other than 0 and 1 have not been tested so results may be
 unpredictable and aspects of the visualisation may break.
 
 Finally, it is of course possible to read from the columns that weren’t
-reversed/forward-ified. However, this is *likely to be misleading* as it
-implies positional equivalence between bases at opposite ends of the
-region but on opposite strands. This is not recommended either, but
+reversed/forward-ified. However, ***this is likely to be misleading***
+as it implies positional equivalence between bases at opposite ends of
+the region but on opposite strands. This is not recommended either, but
 there is no way to identify that you are doing this so no warning is
 produced.
 
