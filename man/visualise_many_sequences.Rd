@@ -11,6 +11,9 @@ visualise_many_sequences(
   margin = 0.5,
   sequence_text_colour = "black",
   sequence_text_size = 16,
+  outline_colour = "black",
+  outline_linewidth = 3,
+  outline_join = "mitre",
   return = TRUE,
   filename = NA,
   pixels_per_base = 100
@@ -23,11 +26,17 @@ visualise_many_sequences(
 
 \item{background_colour}{\code{character}. The colour of the background. Defaults to white.}
 
-\item{margin}{\code{numeric}. The size of the margin relative to the size of each base square. Defaults to \code{0.5} (half the side length of each base square).}
+\item{margin}{\code{numeric}. The size of the margin relative to the size of each base square. Defaults to \code{0.5} (half the side length of each base square).\cr\cr Very small margins (≤0.25) may cause thick outlines to be cut off at the edges of the plot. Recommended to either use a wider margin or a smaller \code{outline_linewidth}.}
 
 \item{sequence_text_colour}{\code{character}. The colour of the text within the bases (e.g. colour of "A" letter within boxes representing adenosine bases). Defaults to black.}
 
 \item{sequence_text_size}{\code{numeric}. The size of the text within the bases (e.g. size of "A" letter within boxes representing adenosine bases). Defaults to \code{16}. Set to \code{0} to hide sequence text (show box colours only).}
+
+\item{outline_colour}{\code{character}. The colour of the box outlines. Defaults to black.}
+
+\item{outline_linewidth}{\code{numeric}. The linewidth of the box outlines. Defaults to \code{3}. Set to \code{0} to disable box outlines.}
+
+\item{outline_join}{\code{character}. One of \code{"mitre"}, \code{"round"}, or \code{"bevel"} specifying how outlines should be joined at the corners of boxes. Defaults to \code{"mitre"}. It would be unusual to need to change this.}
 
 \item{return}{\code{logical}. Boolean specifying whether this function should return the ggplot object, otherwise it will return \code{invisible(NULL)}. Defaults to \code{TRUE}.}
 

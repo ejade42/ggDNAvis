@@ -10,7 +10,7 @@ sequence_vector_1 <- c("GGCGGCGGCGGCGGAGGAGGCGGCGGAGGAGGCGGC",
 
 test_that("main plotting function works in basic case", {
     filename <- "visualise_many_sequences_test_01"
-    visualise_many_sequences(sequence_vector_1, margin = 0, sequence_text_size = 0, pixels_per_base = 10, filename = paste0(root, filename, ".png"))
+    visualise_many_sequences(sequence_vector_1, outline_linewidth = 0, margin = 0, sequence_text_size = 0, pixels_per_base = 10, filename = paste0(root, filename, ".png"))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -18,7 +18,7 @@ test_that("main plotting function works in basic case", {
 
 test_that("main plotting function works with margin", {
     filename <- "visualise_many_sequences_test_02"
-    visualise_many_sequences(sequence_vector_1, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), sequence_text_size = 0, pixels_per_base = 10, filename = paste0(root, filename, ".png"))
+    visualise_many_sequences(sequence_vector_1, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), outline_linewidth = 0, sequence_text_size = 0, pixels_per_base = 10, filename = paste0(root, filename, ".png"))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -26,7 +26,7 @@ test_that("main plotting function works with margin", {
 
 test_that("main plotting function works with double margin", {
     filename <- "visualise_many_sequences_test_03"
-    visualise_many_sequences(sequence_vector_1, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), margin = 2, sequence_text_size = 0, pixels_per_base = 10, filename = paste0(root, filename, ".png"))
+    visualise_many_sequences(sequence_vector_1, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), outline_linewidth = 0, margin = 2, sequence_text_size = 0, pixels_per_base = 10, filename = paste0(root, filename, ".png"))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -34,7 +34,7 @@ test_that("main plotting function works with double margin", {
 
 test_that("main plotting function works with text turned on", {
     filename <- "visualise_many_sequences_test_04"
-    visualise_many_sequences(sequence_vector_1, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), pixels_per_base = 30, filename = paste0(root, filename, ".png"))
+    visualise_many_sequences(sequence_vector_1, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), outline_linewidth = 0, pixels_per_base = 30, filename = paste0(root, filename, ".png"))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -42,7 +42,7 @@ test_that("main plotting function works with text turned on", {
 
 test_that("main plotting function works with family data, unsorted/unseparated, no margin + text off", {
     filename <- "visualise_many_sequences_test_05"
-    visualise_many_sequences(example_many_sequences$sequence, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), pixels_per_base = 10, margin = 0, sequence_text_size = 0, filename = paste0(root, filename, ".png"))
+    visualise_many_sequences(example_many_sequences$sequence, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), outline_linewidth = 0, pixels_per_base = 10, margin = 0, sequence_text_size = 0, filename = paste0(root, filename, ".png"))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -50,7 +50,7 @@ test_that("main plotting function works with family data, unsorted/unseparated, 
 
 test_that("main plotting function works with family data, unsorted/unseparated, 0.5 margin + text on", {
     filename <- "visualise_many_sequences_test_06"
-    visualise_many_sequences(example_many_sequences$sequence, sequence_colours = sequence_colour_palettes$bright_pale, pixels_per_base = 30, filename = paste0(root, filename, ".png"))
+    visualise_many_sequences(example_many_sequences$sequence, sequence_colours = sequence_colour_palettes$bright_pale, pixels_per_base = 30, outline_linewidth = 0, filename = paste0(root, filename, ".png"))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -59,7 +59,7 @@ test_that("main plotting function works with family data, unsorted/unseparated, 
 test_that("main plotting function works with grouped family data, boxes only", {
     filename <- "visualise_many_sequences_test_07"
     sequences <- extract_and_sort_sequences(example_many_sequences)
-    visualise_many_sequences(sequences, sequence_colours = c("#FFAA00", "#00BC00", "#0000DC", "#FF1E1E"), sequence_text_size = 0, margin = 0, pixels_per_base = 10, filename = paste0(root, filename, ".png"))
+    visualise_many_sequences(sequences, sequence_colours = c("#FFAA00", "#00BC00", "#0000DC", "#FF1E1E"), outline_linewidth = 0, sequence_text_size = 0, margin = 0, pixels_per_base = 10, filename = paste0(root, filename, ".png"))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -68,7 +68,7 @@ test_that("main plotting function works with grouped family data, boxes only", {
 test_that("main plotting function works with grouped family data, boxes only, ascending", {
     filename <- "visualise_many_sequences_test_08"
     sequences <- extract_and_sort_sequences(example_many_sequences, grouping_levels = c("family" = 7, "individual" = 2), desc_sort = FALSE)
-    visualise_many_sequences(sequences, sequence_colours = c("#FFAA00", "#00BC00", "#0000DC", "#FF1E1E"), sequence_text_size = 0, margin = 0, pixels_per_base = 10, filename = paste0(root, filename, ".png"))
+    visualise_many_sequences(sequences, sequence_colours = c("#FFAA00", "#00BC00", "#0000DC", "#FF1E1E"), outline_linewidth = 0, sequence_text_size = 0, margin = 0, pixels_per_base = 10, filename = paste0(root, filename, ".png"))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -77,7 +77,7 @@ test_that("main plotting function works with grouped family data, boxes only, as
 test_that("main plotting function works with grouped family data, boxes & text", {
     filename <- "visualise_many_sequences_test_09"
     sequences <- extract_and_sort_sequences(example_many_sequences, grouping_levels = c("family" = 1, "individual" = 0))
-    visualise_many_sequences(sequences, sequence_colours = c("#FFAA00", "#00BC00", "#0000DC", "#FF1E1E"), margin = 0.5, pixels_per_base = 30, sequence_text_colour = "pink", background_colour = "black", filename = paste0(root, filename, ".png"))
+    visualise_many_sequences(sequences, sequence_colours = c("#FFAA00", "#00BC00", "#0000DC", "#FF1E1E"), outline_linewidth = 0, margin = 0.5, pixels_per_base = 30, sequence_text_colour = "pink", background_colour = "black", filename = paste0(root, filename, ".png"))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -86,7 +86,7 @@ test_that("main plotting function works with grouped family data, boxes & text",
 test_that("main plotting function works with grouped family data, boxes only, no grouping", {
     filename <- "visualise_many_sequences_test_10"
     sequences <- extract_and_sort_sequences(example_many_sequences, grouping_levels = NA)
-    visualise_many_sequences(sequences, sequence_colours = c("#FFAA00", "#00BC00", "#0000DC", "#FF1E1E"), sequence_text_size = 0, margin = 0, pixels_per_base = 10, filename = paste0(root, filename, ".png"))
+    visualise_many_sequences(sequences, sequence_colours = c("#FFAA00", "#00BC00", "#0000DC", "#FF1E1E"), outline_linewidth = 0, sequence_text_size = 0, margin = 0, pixels_per_base = 10, filename = paste0(root, filename, ".png"))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -95,7 +95,7 @@ test_that("main plotting function works with grouped family data, boxes only, no
 test_that("main plotting function works with grouped family data, boxes only, no sorting", {
     filename <- "visualise_many_sequences_test_11"
     sequences <- extract_and_sort_sequences(example_many_sequences, sort_by = NA)
-    visualise_many_sequences(sequences, sequence_colours = c("#FFAA00", "#00BC00", "#0000DC", "#FF1E1E"), sequence_text_size = 0, margin = 0, pixels_per_base = 10, filename = paste0(root, filename, ".png"))
+    visualise_many_sequences(sequences, sequence_colours = c("#FFAA00", "#00BC00", "#0000DC", "#FF1E1E"), outline_linewidth = 0, sequence_text_size = 0, margin = 0, pixels_per_base = 10, filename = paste0(root, filename, ".png"))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -104,7 +104,7 @@ test_that("main plotting function works with grouped family data, boxes only, no
 test_that("main plotting function works with grouped family data, boxes only, no sorting or grouping", {
     filename <- "visualise_many_sequences_test_12"
     sequences <- extract_and_sort_sequences(example_many_sequences, grouping_levels = NA, sort_by = NA)
-    visualise_many_sequences(sequences, sequence_colours = c("#FFAA00", "#00BC00", "#0000DC", "#FF1E1E"), sequence_text_size = 0, margin = 0, pixels_per_base = 10, filename = paste0(root, filename, ".png"))
+    visualise_many_sequences(sequences, sequence_colours = c("#FFAA00", "#00BC00", "#0000DC", "#FF1E1E"), outline_linewidth = 0, sequence_text_size = 0, margin = 0, pixels_per_base = 10, filename = paste0(root, filename, ".png"))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -113,7 +113,26 @@ test_that("main plotting function works with grouped family data, boxes only, no
 test_that("main plotting function works with grouped family data, boxes & text", {
     filename <- "visualise_many_sequences_test_13"
     sequences <- extract_and_sort_sequences(example_many_sequences, grouping_levels = c("family" = 4))
-    visualise_many_sequences(sequences, sequence_colours = sequence_colour_palettes$bright_deep, margin = 0.5, pixels_per_base = 30, sequence_text_colour = "brown", filename = paste0(root, filename, ".png"))
+    visualise_many_sequences(sequences, sequence_colours = sequence_colour_palettes$bright_deep, margin = 0.5, outline_linewidth = 0, pixels_per_base = 30, sequence_text_colour = "brown", filename = paste0(root, filename, ".png"))
+    expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
+                                       image_read(paste0(reference, filename, ".png")),
+                                       metric = "MAE"))$distortion, acceptable_distortion)
+})
+
+test_that("main plotting function works with outlines", {
+    filename <- "visualise_many_sequences_test_14"
+    sequences <- extract_and_sort_sequences(example_many_sequences)
+    visualise_many_sequences(sequences, sequence_colours = sequence_colour_palettes$bright_pale, margin = 0.5, outline_join = "RoUnD", pixels_per_base = 30, sequence_text_colour = "black", filename = paste0(root, filename, ".png"))
+    expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
+                                       image_read(paste0(reference, filename, ".png")),
+                                       metric = "MAE"))$distortion, acceptable_distortion)
+})
+
+test_that("main plotting function works with outlines", {
+    filename <- "visualise_many_sequences_test_15"
+    sequences <- extract_and_sort_sequences(example_many_sequences, grouping_levels = NA)
+    expect_warning(visualise_many_sequences(sequences, sequence_colours = sequence_colour_palettes$sanger, margin = 0, outline_linewidth = 5, outline_colour = "magenta", pixels_per_base = 30, sequence_text_colour = "white", filename = paste0(root, filename, ".png")),
+                   class = "parameter_recommendation")
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -126,6 +145,7 @@ test_that("single sequence visualisation fails when arguments are invalid", {
     for (param in bad_param_value_for_non_negative_num) {
         expect_error(visualise_many_sequences(sequence_vector_1, sequence_text_size = param), class = "argument_value_or_type")
         expect_error(visualise_many_sequences(sequence_vector_1, margin = param), class = "argument_value_or_type")
+        expect_error(visualise_many_sequences(sequence_vector_1, outline_linewidth = param), class = "argument_value_or_type")
     }
 
     bad_param_value_for_positive_int <- list("hi", -1, TRUE, c(1, 2), NA, 1.5, sqrt(5), 0)
@@ -142,6 +162,8 @@ test_that("single sequence visualisation fails when arguments are invalid", {
     for (param in bad_param_value_for_single_character) {
         expect_error(visualise_many_sequences(sequence_vector_1, background_colour = param), class = "argument_value_or_type")
         expect_error(visualise_many_sequences(sequence_vector_1, sequence_text_colour = param), class = "argument_value_or_type")
+        expect_error(visualise_many_sequences(sequence_vector_1, outline_colour = param), class = "argument_value_or_type")
+        expect_error(visualise_many_sequences(sequence_vector_1, outline_join = param), class = "argument_value_or_type")
     }
 
     bad_param_value_for_sequence_colours <- list("orange", 1, c("orange", "pink", "red", NA), NA, -1, 0, TRUE, FALSE, c("orange", "red", "green", "blue", "white"))

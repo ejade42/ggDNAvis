@@ -10,9 +10,12 @@
 #' @param sequences_vector `character vector`.
 #' @param sequence_colours `character vector`, length 4. A vector indicating which colours should be used for each base. In order: `c(A_colour, C_colour, G_colour, T/U_colour)`.\cr\cr Defaults to red, green, blue, purple in the default shades produced by ggplot with 4 colours, i.e. `c("#F8766D", "#7CAE00", "#00BFC4", "#C77CFF")`, accessed via [`sequence_colour_palettes`]`$ggplot_style`.
 #' @param background_colour `character`. The colour of the background. Defaults to white.
-#' @param margin `numeric`. The size of the margin relative to the size of each base square. Defaults to `0.5` (half the side length of each base square).
+#' @param margin `numeric`. The size of the margin relative to the size of each base square. Defaults to `0.5` (half the side length of each base square).\cr\cr Very small margins (≤0.25) may cause thick outlines to be cut off at the edges of the plot. Recommended to either use a wider margin or a smaller `outline_linewidth`.
 #' @param sequence_text_colour `character`. The colour of the text within the bases (e.g. colour of "A" letter within boxes representing adenosine bases). Defaults to black.
 #' @param sequence_text_size `numeric`. The size of the text within the bases (e.g. size of "A" letter within boxes representing adenosine bases). Defaults to `16`. Set to `0` to hide sequence text (show box colours only).
+#' @param outline_colour `character`. The colour of the box outlines. Defaults to black.
+#' @param outline_linewidth `numeric`. The linewidth of the box outlines. Defaults to `3`. Set to `0` to disable box outlines.
+#' @param outline_join `character`. One of `"mitre"`, `"round"`, or `"bevel"` specifying how outlines should be joined at the corners of boxes. Defaults to `"mitre"`. It would be unusual to need to change this.
 #' @param return `logical`. Boolean specifying whether this function should return the ggplot object, otherwise it will return `invisible(NULL)`. Defaults to `TRUE`.
 #' @param filename `character`. Filename to which output should be saved. If set to `NA` (default), no file will be saved. Recommended to end with `".png"` but might work with other extensions if they are compatible with [ggplot2::ggsave()].
 #' @param pixels_per_base `integer`. How large each box should be in pixels, if file output is turned on via setting `filename`. Corresponds to dpi of the exported image.\cr\cr If text is shown (i.e. `sequence_text_size` is not 0), needs to be fairly large otherwise text is blurry. Defaults to `100`.
@@ -21,24 +24,25 @@
 #' @export
 visualise_many_sequences <- function(sequences_vector, sequence_colours = sequence_colour_palettes$ggplot_style, background_colour = "white",
                                      margin = 0.5, sequence_text_colour = "black", sequence_text_size = 16,
+                                     outline_colour = "black", outline_linewidth = 3, outline_join = "mitre",
                                      return = TRUE, filename = NA, pixels_per_base = 100) {
     ## Validate arguments
-    for (argument in list(sequences_vector, sequence_colours, background_colour, margin, sequence_text_colour, sequence_text_size, return, filename, pixels_per_base)) {
+    for (argument in list(sequences_vector, sequence_colours, background_colour, margin, sequence_text_colour, sequence_text_size, outline_colour, outline_linewidth, outline_join, return, filename, pixels_per_base)) {
         if (mean(is.null(argument)) != 0) {abort(paste("Argument", argument, "must not be null."), class = "argument_value_or_type")}
     }
-    for (argument in list(background_colour, margin, sequence_text_colour, sequence_text_size, return, filename, pixels_per_base)) {
+    for (argument in list(background_colour, margin, sequence_text_colour, sequence_text_size, outline_colour, outline_linewidth, outline_join, return, filename, pixels_per_base)) {
         if (length(argument) != 1) {abort(paste("Argument", argument, "must have length 1"), class = "argument_value_or_type")}
     }
-    for (argument in list(sequences_vector, sequence_colours, background_colour, margin, sequence_text_colour, sequence_text_size, return, pixels_per_base)) {
+    for (argument in list(sequences_vector, sequence_colours, background_colour, margin, sequence_text_colour, sequence_text_size, outline_colour, outline_linewidth, outline_join, return, pixels_per_base)) {
         if (mean(is.na(argument)) != 0) {abort(paste("Argument", argument, "must not be NA"), class = "argument_value_or_type")}
     }
     if (is.character(sequence_colours) == FALSE || length(sequence_colours) != 4) {
         abort("Must provide exactly 4 sequence colours, in A C G T order, as a length-4 character vector.", class = "argument_value_or_type")
     }
-    for (argument in list(sequences_vector, background_colour, sequence_text_colour)) {
+    for (argument in list(sequences_vector, background_colour, sequence_text_colour, outline_colour, outline_join)) {
         if (is.character(argument) == FALSE) {abort(paste("Argument", argument, "must be a character/string."), class = "argument_value_or_type")}
     }
-    for (argument in list(margin, sequence_text_size)) {
+    for (argument in list(margin, sequence_text_size, outline_linewidth)) {
         if (is.numeric(argument) == FALSE || argument < 0) {
             abort(paste("Argument", argument, "must be a non-negative number"), class = "argument_value_or_type")
         }
@@ -51,22 +55,33 @@ visualise_many_sequences <- function(sequences_vector, sequence_colours = sequen
     for (argument in list(return)) {
         if (is.logical(argument) == FALSE) {abort(paste("Argument:", argument, "must be a logical/boolean value."), class = "argument_value_or_type")}
     }
-
+    if (!(tolower(outline_join) %in% c("mitre", "round", "bevel"))) {
+        abort("outline_join must be one of 'mitre', 'round', or 'bevel'.", class = "argument_value_or_type")
+    }
+    ## Warn about outlines getting cut off
+    if (margin <= 0.25 && outline_linewidth > 0) {
+        warn("If margin is small and outlines are on (outline_linewidth > 0), outlines may be cut off at the edges of the plot. Check if this is happening and consider using a bigger margin.", class = "parameter_recommendation")
+    }
 
     ## Generate data for plotting
     image_data <- create_image_data(sequences_vector)
     annotations <- convert_sequences_to_annotations(sequences_vector, line_length = max(nchar(sequences_vector)), interval = 0)
 
-    ## Combine colour parameters into named colour vector
-    colours <- c(background_colour, sequence_colours)
-    names(colours) <- as.character(0:4)
+    ## Name the sequence colours vector
+    names(sequence_colours) <- as.character(1:4)
+
+    ## Calculate tile dimensions
+    tile_width  <- 1/max(nchar(sequences_vector))
+    tile_height <- 1/length(sequences_vector)
 
     ## Generate actual plot
-    result <- ggplot(image_data, aes(x = x, y = y, fill = as.character(layer))) +
-        geom_tile() +
-        coord_cartesian(expand = FALSE) +
-        scale_fill_manual(values = colours) +
+    result <- ggplot(image_data, aes(x = x, y = y)) +
+        geom_tile(data = filter(image_data, layer == 0), width = tile_width, height = tile_height, fill = background_colour) +
+        geom_tile(data = filter(image_data, layer != 0), width = tile_width, height = tile_height, aes(fill = as.character(layer)),
+                  col = outline_colour, linewidth = outline_linewidth, linejoin = tolower(outline_join)) +
+        scale_fill_manual(values = sequence_colours) +
         guides(x = "none", y = "none", fill = "none") +
+        coord_cartesian(expand = FALSE, clip = "off") +
         theme(plot.background = element_rect(fill = background_colour, colour = NA),
               axis.title = element_blank(), plot.margin = grid::unit(c(margin, margin, margin, margin), "inches"))
 

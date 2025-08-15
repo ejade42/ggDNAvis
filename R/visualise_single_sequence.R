@@ -8,9 +8,9 @@
 #' @param sequence `character`. A DNA or RNA sequence to visualise e.g. `"AAATGCTGC"`.
 #' @param sequence_colours `character vector`, length 4. A vector indicating which colours should be used for each base. In order: `c(A_colour, C_colour, G_colour, T/U_colour)`.\cr\cr Defaults to red, green, blue, purple in the default shades produced by ggplot with 4 colours, i.e. `c("#F8766D", "#7CAE00", "#00BFC4", "#C77CFF")`, accessed via [`sequence_colour_palettes`]`$ggplot_style`.
 #' @param background_colour `character`. The colour of the background. Defaults to white.
-#' @param line_wrapping `integer`. The number of bases that should be on each line before wrapping. Defaults to `75`. Recommended to make this a multiple of the repeat unit size (e.g. 3*n* for a trinucleotide repeat) if visualising a repeat sequence.\cr\cr Likewise, very small margins (≤0.25) may cause thick outlines to be cut off at the edges of the plot. Recommended to either use a wider margin or a smaller outline_weight.
+#' @param line_wrapping `integer`. The number of bases that should be on each line before wrapping. Defaults to `75`. Recommended to make this a multiple of the repeat unit size (e.g. 3*n* for a trinucleotide repeat) if visualising a repeat sequence.
 #' @param spacing `integer`. The number of blank lines between each line of sequence. Defaults to `1`.\cr\cr Be careful when setting to `0` as this means annotations have no space so might render strangely. Recommended to set `index_annotation_interval = 0` if doing so to disable annotations entirely.
-#' @param margin `numeric`. The size of the margin relative to the size of each base square. Defaults to `0.5` (half the side length of each base square).\cr\cr Note that if index annotations are on (i.e. `index_annotation_interval` is not `0`), the top/bottom margin (depending on `index_annotations_above`) will always be at least 1 to leave space for them.
+#' @param margin `numeric`. The size of the margin relative to the size of each base square. Defaults to `0.5` (half the side length of each base square).\cr\cr Note that if index annotations are on (i.e. `index_annotation_interval` is not `0`), the top/bottom margin (depending on `index_annotations_above`) will always be at least 1 to leave space for them.\cr\cr Likewise, very small margins (≤0.25) may cause thick outlines to be cut off at the edges of the plot. Recommended to either use a wider margin or a smaller `outline_linewidth`.
 #' @param sequence_text_colour `character`. The colour of the text within the bases (e.g. colour of "A" letter within boxes representing adenosine bases). Defaults to black.
 #' @param sequence_text_size `numeric`. The size of the text within the bases (e.g. size of "A" letter within boxes representing adenosine bases). Defaults to `16`. Set to `0` to hide sequence text (show box colours only).
 #' @param index_annotation_colour `character`. The colour of the little numbers underneath indicating base index (e.g. colour "15" label under the 15th base). Defaults to dark red.
@@ -19,7 +19,7 @@
 #' @param index_annotations_above `logical`. Whether index annotations should go above (`TRUE`, default) or below (`FALSE`) each line of sequence.
 #' @param index_annotation_vertical_position `numeric`. How far annotation numbers should be rendered above (if `index_annotations_above = TRUE`) or below (if `index_annotations_above = FALSE`) each base. Defaults to `1/3`.\cr\cr Not recommended to change at all. Strongly discouraged to set below 0 or above 1.
 #' @param outline_colour `character`. The colour of the box outlines. Defaults to black.
-#' @param outline_weight `numeric`. The linewidth of the box outlines. Defaults to `3`. Set to `0` to disable box outlines.
+#' @param outline_linewidth `numeric`. The linewidth of the box outlines. Defaults to `3`. Set to `0` to disable box outlines.
 #' @param outline_join `character`. One of `"mitre"`, `"round"`, or `"bevel"` specifying how outlines should be joined at the corners of boxes. Defaults to `"mitre"`. It would be unusual to need to change this.
 #' @param return `logical`. Boolean specifying whether this function should return the ggplot object, otherwise it will return `invisible(NULL)`. Defaults to `TRUE`.
 #' @param filename `character`. Filename to which output should be saved. If set to `NA` (default), no file will be saved. Recommended to end with `".png"` but might work with other extensions if they are compatible with [ggplot2::ggsave()].
@@ -31,15 +31,15 @@ visualise_single_sequence <- function(sequence, sequence_colours = sequence_colo
                                       line_wrapping = 75, spacing = 1, margin = 0.5, sequence_text_colour = "black", sequence_text_size = 16,
                                       index_annotation_colour = "darkred", index_annotation_size = 12.5, index_annotation_interval = 15,
                                       index_annotations_above = TRUE, index_annotation_vertical_position = 1/3,
-                                      outline_colour = "black", outline_weight = 3, outline_join = "mitre", return = TRUE, filename = NA, pixels_per_base = 100) {
+                                      outline_colour = "black", outline_linewidth = 3, outline_join = "mitre", return = TRUE, filename = NA, pixels_per_base = 100) {
     ## Validate arguments
-    for (argument in list(sequence, sequence_colours, background_colour, line_wrapping, spacing, margin, sequence_text_colour, sequence_text_size, index_annotation_colour, index_annotation_size, index_annotation_interval, index_annotations_above, index_annotation_vertical_position, outline_colour, outline_weight, outline_join, return, filename, pixels_per_base)) {
+    for (argument in list(sequence, sequence_colours, background_colour, line_wrapping, spacing, margin, sequence_text_colour, sequence_text_size, index_annotation_colour, index_annotation_size, index_annotation_interval, index_annotations_above, index_annotation_vertical_position, outline_colour, outline_linewidth, outline_join, return, filename, pixels_per_base)) {
         if (mean(is.null(argument)) != 0) {abort(paste("Argument", argument, "must not be null."), class = "argument_value_or_type")}
     }
-    for (argument in list(sequence, background_colour, outline_colour, line_wrapping, spacing, sequence_text_colour, sequence_text_size, index_annotation_colour, index_annotation_size, index_annotation_interval, index_annotations_above, index_annotation_vertical_position, outline_colour, outline_weight, outline_join, return, filename, pixels_per_base, margin)) {
+    for (argument in list(sequence, background_colour, outline_colour, line_wrapping, spacing, sequence_text_colour, sequence_text_size, index_annotation_colour, index_annotation_size, index_annotation_interval, index_annotations_above, index_annotation_vertical_position, outline_colour, outline_linewidth, outline_join, return, filename, pixels_per_base, margin)) {
         if (length(argument) != 1) {abort(paste("Argument", argument, "must have length 1"), class = "argument_value_or_type")}
     }
-    for (argument in list(sequence, sequence_colours, background_colour, sequence_text_colour, sequence_text_size, index_annotation_colour, index_annotation_size, index_annotation_interval, index_annotations_above, index_annotation_vertical_position, line_wrapping, spacing, outline_colour, outline_weight, outline_join, return, pixels_per_base, margin)) {
+    for (argument in list(sequence, sequence_colours, background_colour, sequence_text_colour, sequence_text_size, index_annotation_colour, index_annotation_size, index_annotation_interval, index_annotations_above, index_annotation_vertical_position, line_wrapping, spacing, outline_colour, outline_linewidth, outline_join, return, pixels_per_base, margin)) {
         if (mean(is.na(argument)) != 0) {abort(paste("Argument", argument, "must not be NA"), class = "argument_value_or_type")}
     }
     if (is.character(sequence_colours) == FALSE || length(sequence_colours) != 4) {
@@ -54,7 +54,7 @@ visualise_single_sequence <- function(sequence, sequence_colours = sequence_colo
     if (index_annotation_vertical_position < 0 || index_annotation_vertical_position > 1) {
         warn("Not recommended to set index annotation vertical position outside range 0-1.", class = "parameter_recommendation")
     }
-    for (argument in list(sequence_text_size, index_annotation_size, index_annotation_interval, spacing, pixels_per_base, line_wrapping, margin, outline_weight)) {
+    for (argument in list(sequence_text_size, index_annotation_size, index_annotation_interval, spacing, pixels_per_base, line_wrapping, margin, outline_linewidth)) {
         if (is.numeric(argument) == FALSE || is.logical(argument) == TRUE || argument < 0) {abort(paste("Argument", argument, "must be a non-negative number."), class = "argument_value_or_type")}
     }
     for (argument in list(line_wrapping, spacing, pixels_per_base, index_annotation_interval)) {
@@ -80,8 +80,8 @@ visualise_single_sequence <- function(sequence, sequence_colours = sequence_colo
         warn("It is better to disable index annotations via index_annotation_interval = 0.\nDoing so via index_annotation_size = 0 can lead to rendering issues in some cases.", class = "parameter_recommendation")
     }
     ## Warn about outlines getting cut off
-    if (margin <= 0.25 && outline_weight > 0) {
-        warn("If margin is small and outlines are on (outline_weight > 0), outlines may be cut off at the edges of the plot. Check if this is happening and consider using a bigger margin.", class = "parameter_recommendation")
+    if (margin <= 0.25 && outline_linewidth > 0) {
+        warn("If margin is small and outlines are on (outline_linewidth > 0), outlines may be cut off at the edges of the plot. Check if this is happening and consider using a bigger margin.", class = "parameter_recommendation")
     }
 
     ## Generate data for plotting
@@ -113,15 +113,13 @@ visualise_single_sequence <- function(sequence, sequence_colours = sequence_colo
     result <- ggplot(image_data, aes(x = x, y = y)) +
         geom_tile(data = filter(image_data, layer == 0), width = tile_width, height = tile_height, fill = background_colour) +
         geom_tile(data = filter(image_data, layer != 0), width = tile_width, height = tile_height, aes(fill = as.character(layer)),
-                  col = outline_colour, linewidth = outline_weight, linejoin = tolower(outline_join)) +
+                  col = outline_colour, linewidth = outline_linewidth, linejoin = tolower(outline_join)) +
         scale_fill_manual(values = sequence_colours) +
-        scale_x_continuous(expand = c(0, 0)) +
-        scale_y_continuous(expand = c(0, 0)) +
         geom_text(data = annotations, aes(x = x_position, y = y_position, label = annotation, col = type, size = type), fontface = "bold", inherit.aes = F) +
         scale_colour_manual(values = c("Number" = index_annotation_colour, "Sequence" = sequence_text_colour)) +
         scale_discrete_manual("size", values = c("Number" = index_annotation_size, "Sequence" = sequence_text_size)) +
         guides(x = "none", y = "none", fill = "none", col = "none", size = "none") +
-        coord_cartesian(clip = "off") +
+        coord_cartesian(expand = FALSE, clip = "off") +
         theme(axis.title = element_blank(),
               plot.background = element_rect(fill = background_colour, colour = NA))
 
