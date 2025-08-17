@@ -64,14 +64,21 @@ Note that all spellings are the British English version (e.g. “colour”,
 “visualise”). Aliases have not been defined, meaning American spellings
 will not work.
 
-Throughout this manual, only ggDNAvis and its dependencies dplyr and
-ggplot2 are loaded:
+ggDNAvis is currently available from this github page:
+
+``` r
+devtools::install_github("ejade42/ggDNAvis")
+```
+
+Throughout this manual, only `ggDNAvis`, `dplyr`, and `ggplot2` are
+loaded.
 
 ``` r
 ## Load this package
 library(ggDNAvis)
 
-## Load dependencies
+## Load useful tidyverse packages
+## These are ggDNAvis dependencies, so will always be installed when installing ggDNAvis
 library(dplyr)
 library(ggplot2)
 
@@ -795,7 +802,7 @@ sone_2019_f1_1_expanded_ggt_added <- "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGC
 visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added)
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-24-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-25-1.png)<!-- -->
 
 By default, `visualise_single_sequence()` will return a ggplot object.
 It can be useful to view this for instant debugging. However, it is not
@@ -853,6 +860,7 @@ following arguments:
 - `index_annotation_colour`: The colour used for the index numbers
   above/below the boxes.
 - `background_colour`: The colour used for the background.
+- `outline_colour`: The colour used for the box outlines.
 
 For example, we can change all of the colours in an inadvisable way:
 
@@ -864,7 +872,8 @@ visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
                           sequence_colours = c("black", "white", "#00FFFF", "#00FF00"),
                           sequence_text_colour = "magenta",
                           index_annotation_colour = "yellow",
-                          background_colour = "red")
+                          background_colour = "red",
+                          outline_colour = "orange")
 
 ## View image
 knitr::include_graphics("README_files/output/single_sequence_03.png")
@@ -875,8 +884,8 @@ knitr::include_graphics("README_files/output/single_sequence_03.png")
 Included in `ggDNAvis` are a set of colour palettes for sequence colours
 that can often be helpful. The default is
 `sequence_colour_palettes$ggplot_style`, as seen in the first example
-above. The other palettes are `$bright_pale`, `$bright_deep`, and
-`$sanger`:
+above. The other palettes are `$bright_pale`, `$bright_pale2`,
+`$bright_deep`, and `$sanger`:
 
 The `bright_pale` palette works well with either white or black text,
 depending on how much the text is desired to “pop”:
@@ -909,15 +918,15 @@ knitr::include_graphics("README_files/output/single_sequence_05.png")
 
 <img src="README_files/output/single_sequence_05.png" width="7600" />
 
-The `bright_deep` palette works best with white text:
+`bright_pale2` is the same but with a slightly lighter shade of green:
 
 ``` r
 ## Create image
 visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
                           filename = "README_files/output/single_sequence_06.png", 
                           return = FALSE,
-                          sequence_colours = sequence_colour_palettes$bright_deep,
-                          sequence_text_colour = "white")
+                          sequence_colours = sequence_colour_palettes$bright_pale2,
+                          sequence_text_colour = "black")
 
 ## View image
 knitr::include_graphics("README_files/output/single_sequence_06.png")
@@ -925,15 +934,14 @@ knitr::include_graphics("README_files/output/single_sequence_06.png")
 
 <img src="README_files/output/single_sequence_06.png" width="7600" />
 
-The `sanger` palette is inspired by old-school Sanger sequencing
-readouts and works best with white text:
+The `bright_deep` palette works best with white text:
 
 ``` r
 ## Create image
 visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
                           filename = "README_files/output/single_sequence_07.png", 
                           return = FALSE,
-                          sequence_colours = sequence_colour_palettes$sanger,
+                          sequence_colours = sequence_colour_palettes$bright_deep,
                           sequence_text_colour = "white")
 
 ## View image
@@ -941,6 +949,24 @@ knitr::include_graphics("README_files/output/single_sequence_07.png")
 ```
 
 <img src="README_files/output/single_sequence_07.png" width="7600" />
+
+The `sanger` palette is inspired by old-school Sanger sequencing
+readouts and works best with white text:
+
+``` r
+## Create image
+visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
+                          filename = "README_files/output/single_sequence_08.png", 
+                          return = FALSE,
+                          sequence_colours = sequence_colour_palettes$sanger,
+                          sequence_text_colour = "white",
+                          outline_colour = "darkgrey")
+
+## View image
+knitr::include_graphics("README_files/output/single_sequence_08.png")
+```
+
+<img src="README_files/output/single_sequence_08.png" width="7600" />
 
 ## 3.3 Layout customisation
 
@@ -958,7 +984,11 @@ Many aspects of the sequence layout are also customisable via arguments:
   is a minimum margin of 1 above (if annotations are above) of below (if
   annotations are below) to allow space to render the annotations, so if
   margin is set to less than this then it will be increased to 1 in the
-  relevant direction.
+  relevant direction. Also note that if the margin is very narrow it can
+  clip the box outlines, as they are rendered centred on the actual edge
+  of the boxes (i.e. they “spill over” a little to each side if outline
+  linewidth is non-zero), so placing the margin exactly at the box edges
+  will cut half the outlines.
 - `sequence_text_size`: The size of the text inside the boxes. Can be
   set to 0 to disable text inside boxes. Defaults to 16.
 - `index_annotation_size`: The size of the index numbers above/below the
@@ -975,13 +1005,18 @@ Many aspects of the sequence layout are also customisable via arguments:
   below (if `index_annotations_above = FALSE`) each base. Defaults to
   1/3, not recommended to change generally. If spacing is much larger
   than 1, setting this to a slightly higher value might be appropriate.
+- `outline_linewidth`: The thickness of the box outlines. Can be set to
+  0 to disable box outlines. Defaults to 3.
+- `outline_join`: Changes how the corners of the box outlines are
+  handled. Must be one of `"mitre"`, `"bevel"`, or `"round"`. Defaults
+  to `"mitre"`. It is unlikely that you would ever need to change this.
 
 A sensible example of how these might be changed is as follows:
 
 ``` r
 ## Create image
 visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
-                          filename = "README_files/output/single_sequence_08.png", 
+                          filename = "README_files/output/single_sequence_09.png", 
                           return = FALSE,
                           sequence_colours = sequence_colour_palettes$ggplot_style,
                           margin = 2,
@@ -989,13 +1024,14 @@ visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
                           line_wrapping = 60,
                           index_annotation_interval = 20,
                           index_annotations_above = FALSE,
-                          index_annotation_vertical_position = 1/2)
+                          index_annotation_vertical_position = 1/2,
+                          outline_linewidth = 0)
 
 ## View image
-knitr::include_graphics("README_files/output/single_sequence_08.png")
+knitr::include_graphics("README_files/output/single_sequence_09.png")
 ```
 
-<img src="README_files/output/single_sequence_08.png" width="6400" />
+<img src="README_files/output/single_sequence_09.png" width="6400" />
 
 Setting spacing, margin, sequence text size, and index annotation
 interval all to 0 produces a no-frills visualisation of the sequence
@@ -1005,7 +1041,7 @@ that would be rendered poorly at low resolutions:
 ``` r
 ## Create image
 visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
-                          filename = "README_files/output/single_sequence_09.png", 
+                          filename = "README_files/output/single_sequence_10.png", 
                           return = FALSE,
                           sequence_colours = sequence_colour_palettes$bright_pale,
                           margin = 0,
@@ -1013,7 +1049,8 @@ visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
                           line_wrapping = 45,
                           sequence_text_size = 0,
                           index_annotation_interval = 0,
-                          pixels_per_base = 20)
+                          pixels_per_base = 20,
+                          outline_linewidth = 5)
 ```
 
     ## Warning: If margin is small and outlines are on (outline_linewidth > 0),
@@ -1022,10 +1059,55 @@ visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
 
 ``` r
 ## View image
-knitr::include_graphics("README_files/output/single_sequence_09.png")
+knitr::include_graphics("README_files/output/single_sequence_10.png")
 ```
 
-<img src="README_files/output/single_sequence_09.png" width="900" />
+<img src="README_files/output/single_sequence_10.png" width="900" />
+This produced a warning message as setting the margin to 0 clipped off
+the outlines of the outermost boxes. Either a slightly larger margin can
+be used:
+
+``` r
+## Create image
+visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
+                          filename = "README_files/output/single_sequence_11.png", 
+                          return = FALSE,
+                          sequence_colours = sequence_colour_palettes$bright_pale,
+                          margin = 0.3,
+                          spacing = 0,
+                          line_wrapping = 45,
+                          sequence_text_size = 0,
+                          index_annotation_interval = 0,
+                          pixels_per_base = 20,
+                          outline_linewidth = 3)
+
+## View image
+knitr::include_graphics("README_files/output/single_sequence_11.png")
+```
+
+<img src="README_files/output/single_sequence_11.png" width="912" />
+
+Or the outlines can be turned off:
+
+``` r
+## Create image
+visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
+                          filename = "README_files/output/single_sequence_12.png", 
+                          return = FALSE,
+                          sequence_colours = sequence_colour_palettes$bright_pale,
+                          margin = 0,
+                          spacing = 0,
+                          line_wrapping = 45,
+                          sequence_text_size = 0,
+                          index_annotation_interval = 0,
+                          pixels_per_base = 20,
+                          outline_linewidth = 0)
+
+## View image
+knitr::include_graphics("README_files/output/single_sequence_12.png")
+```
+
+<img src="README_files/output/single_sequence_12.png" width="900" />
 
 When changing line wrapping and annotation interval, divisibility is
 important. It is generally recommended to make the line wrapping length
@@ -1041,7 +1123,7 @@ Here is an example where these guidelines are not followed:
 ``` r
 ## Create image
 visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
-                          filename = "README_files/output/single_sequence_10.png", 
+                          filename = "README_files/output/single_sequence_13.png", 
                           return = FALSE,
                           sequence_colours = sequence_colour_palettes$bright_deep,
                           sequence_text_colour = "white",
@@ -1049,10 +1131,10 @@ visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
                           index_annotation_interval = 15)
 
 ## View image
-knitr::include_graphics("README_files/output/single_sequence_10.png")
+knitr::include_graphics("README_files/output/single_sequence_13.png")
 ```
 
-<img src="README_files/output/single_sequence_10.png" width="6600" />
+<img src="README_files/output/single_sequence_13.png" width="6600" />
 
 When setting spacing to 0, it is highly recommended to disable index
 annotations via `index_annotation_interval = 0`, otherwise there is
@@ -1061,12 +1143,13 @@ nowhere for them to render:
 ``` r
 ## Create image
 visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
-                          filename = "README_files/output/single_sequence_11.png", 
+                          filename = "README_files/output/single_sequence_14.png", 
                           return = FALSE,
                           sequence_colours = sequence_colour_palettes$sanger,
                           sequence_text_colour = "white",
                           index_annotation_colour = "magenta",
-                          spacing = 0)
+                          spacing = 0,
+                          outline_colour = "magenta")
 ```
 
     ## Warning: Using spacing = 0 without disabling index annotation is not recommended.
@@ -1075,10 +1158,10 @@ visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
 
 ``` r
 ## View image
-knitr::include_graphics("README_files/output/single_sequence_11.png")
+knitr::include_graphics("README_files/output/single_sequence_14.png")
 ```
 
-<img src="README_files/output/single_sequence_11.png" width="7600" />
+<img src="README_files/output/single_sequence_14.png" width="7600" />
 
 # 4 Visualising many DNA/RNA sequences
 
@@ -1458,6 +1541,7 @@ Colour-related arguments:
 - `sequence_text_colour`: The colour used for the A, C, G, and T
   lettering inside the boxes.
 - `background_colour`: The colour used for the background.
+- `outline_colour`: The colour used for the box outlines.
 
 Layout-related arguments:
 
@@ -1467,9 +1551,15 @@ Layout-related arguments:
   `pixels_per_base = 100`).
 - `sequence_text_size`: The size of the text inside the boxes. Can be
   set to 0 to disable text inside boxes. Defaults to 16.
+- `outline_linewidth`: The thickness of the box outlines. Can be set to
+  0 to disable box outlines. Defaults to 3.
+- `outline_join`: Changes how the corners of the box outlines are
+  handled. Must be one of `"mitre"`, `"bevel"`, or `"round"`. Defaults
+  to `"mitre"`. It is unlikely that you would ever need to change this.
 - `pixels_per_base`: Resolution, as determined by number of pixels in
   the side length of one DNA base square. Everything else is scaled
-  proportionally.
+  proportionally. Defaults to 100 (sensible for text, but can be set
+  lower e.g. 10 or 20 if text is turned off).
 
 For example, a layout with increased margins, enlarged text, and crazy
 colours might be:
@@ -1485,6 +1575,9 @@ visualise_many_sequences(sequences_for_visualisation,
                          sequence_colours = c("orange", "#00FF00", "magenta", "black"),
                          sequence_text_colour = "cyan",
                          background_colour = "yellow",
+                         outline_colour = "red",
+                         outline_join = "round",
+                         outline_linewidth = 15,
                          sequence_text_size = 40,
                          margin = 5)
 
@@ -1509,8 +1602,9 @@ visualise_many_sequences(sequences_for_visualisation,
                          return = FALSE,
                          sequence_colours = sequence_colour_palettes$bright_pale,
                          sequence_text_size = 0,
-                         margin = 0,
-                         pixels_per_base = 20)
+                         margin = 0.1,
+                         pixels_per_base = 20,
+                         outline_join = "round")
 ```
 
     ## Warning: If margin is small and outlines are on (outline_linewidth > 0),
@@ -1522,7 +1616,14 @@ visualise_many_sequences(sequences_for_visualisation,
 knitr::include_graphics("README_files/output/many_sequences_09.png")
 ```
 
-<img src="README_files/output/many_sequences_09.png" width="2040" />
+<img src="README_files/output/many_sequences_09.png" width="2044" />
+Note that the margin/outline warning is produced whenever the margin is
+≤0.25 and the outline linewidth is \>0. Getting the warning does not
+necessarily mean that the outlines are getting cut off (as this only
+happens if the half of the outline that falls outside the boxes is
+thicker than the margin), but if you get the warning you should check.
+In this case it’s fine and the outlines are not getting cut off with 0.1
+margin.
 
 # 5 Visualising DNA methylation/modification
 
@@ -1982,6 +2083,21 @@ background. As before, margin and resolution are customisable. There is
 not currently support for having text rendered as well to avoid visual
 clutter, so the resolution defaults to a much lower 20 pixels per base.
 
+One important feature to note is that the box outlines can be controlled
+separately for modification-assessed (e.g. C of CpG) and
+non-modification assessed bases. The same global `outline_colour`,
+`outline_linewidth`, and `outline_join` parameters are available as for
+the single sequence and multiple sequences functions. However, there are
+also `modified_bases_outline_<parameter>` and
+`other_bases_outline_<parameter>` arguments that can be used to override
+the global setting, or set to `NA` to inherit the global setting.
+
+One use of this might be to draw outlines only for modification-assessed
+bases (using the default black/3/mitre settings). This could be
+accomplished by setting `other_bases_outline_linewidth = 0` to disable
+outlines for non-modification-assessed bases, while allowing
+modification-assessed bases to inherit the global default outlines.
+
 Colour-related arguments:
 
 - `low_colour`: The colour to use at the bottom end of the modification
@@ -1993,6 +2109,19 @@ Colour-related arguments:
   this is not enforced in any way).
 - `background_colour`: The colour to use for the background. Defaults to
   white.
+- `outline_colour`: The colour to use for the box outlines. Defaults to
+  white.
+- `modified_bases_outline_colour`: The colour to use for the box
+  outlines of modification-assessed bases specifically. Can be set to
+  `NA` (default), in which case the value from `outline_colour` is used.
+  If `outline_colour` and `modified_bases_outline_colour` are set to
+  different values, the value from `modified_bases_outline_colour` is
+  prioritised.
+- `other_bases_outline_colour`: The colour to use for the box outlines
+  of non-modification-assessed bases specifically. Can be set to `NA`
+  (default), in which case the value from `outline_colour` is used. If
+  `outline_colour` and `other_bases_outline_colour` are set to different
+  values, the value from `other_bases_outline_colour` is prioritised.
 
 Layout-related arguments:
 
@@ -2000,9 +2129,34 @@ Layout-related arguments:
   boxes (e.g. the default value of 0.5 adds a margin half the size of
   the base boxes, which is 50 px with the default
   `pixels_per_base = 100`).
+- `outline_linewidth`: The thickness of the box outlines. Can be set to
+  0 to disable box outlines. Defaults to 3.
+- `modified_bases_outline_linewidth`: The thickness of the box outlines
+  for modification-assessed bases specifically. Can be set to `NA`
+  (default) to inherit the value from `outline_linewidth`, or 0 to
+  disable box outlines specifically for modification-assessed bases. If
+  `outline_linewidth` and `modified_bases_outline_linewidth` are set to
+  different values, the value from `modified_bases_outline_linewidth` is
+  prioritised.
+- `other_bases_outline_linewidth`: The thickness of the box outlines for
+  non-modification-assessed bases specifically. Can be set to `NA`
+  (default) to inherit the value from `outline_linewidth`, or 0 to
+  disable box outlines specifically for non-modification-assessed bases.
+  If `outline_linewidth` and `other_bases_outline_linewidth` are set to
+  different values, the value from `other_bases_outline_linewidth` is
+  prioritised.
+- `outline_join`: Changes how the corners of the box outlines are
+  handled. Must be one of `"mitre"`, `"bevel"`, or `"round"`. Defaults
+  to `"mitre"`. It is unlikely that you would ever need to change this.
+- `modified_bases_outline_join`: How corners are handled for
+  modification-assessed bases only. Can be set to `NA` (default) to
+  inherit from `outline_join`, otherwise overrides `outline_join`.
+- `other_bases_outline_join`: How corners are handled for
+  non-modification-assessed bases only. Can be set to `NA` (default) to
+  inherit from `outline_join`, otherwise overrides `outline_join`.
 - `pixels_per_base`: Resolution, as determined by number of pixels in
   the side length of one DNA base square. Everything else is scaled
-  proportionally.
+  proportionally. Defaults to 20.
 
 Here is an example with wild colours:
 
@@ -2028,7 +2182,11 @@ visualise_methylation(modification_locations     = methylation_data_for_visualis
                       margin = 4, 
                       low_colour = "#00FF00",
                       high_colour = "blue",
+                      modified_bases_outline_colour = "purple",
+                      modified_bases_outline_linewidth = 5,
                       other_bases_colour = "white",
+                      other_bases_outline_colour = "darkgreen",
+                      other_bases_outline_linewidth = 0.5,
                       background_colour = "red")
 
 ## View image
@@ -2087,6 +2245,8 @@ visualise_methylation(modification_locations     = methylation_data_for_visualis
                       low_colour = "white",
                       high_colour = "black",
                       other_bases_colour = "lightblue1",
+                      other_bases_outline_colour = "grey",
+                      other_bases_outline_linewidth = 1,
                       background_colour = "white")
 
 ## View image
@@ -2159,19 +2319,21 @@ visualise_methylation(modification_locations     = methylation_data_for_visualis
                       sequence_lengths           = methylation_data_for_visualisation$lengths,
                       filename = "README_files/output/modification_05.png",
                       return = FALSE,
-                      margin = 0, 
+                      margin = 0.1, 
                       low_colour = "white",
                       low_clamp = 127,
                       high_colour = "black",
                       high_clamp = 128,
                       other_bases_colour = "lightblue1",
+                      other_bases_outline_colour = "grey",
+                      other_bases_outline_linewidth = 1,
                       background_colour = "white")
 
 ## View image
 knitr::include_graphics("README_files/output/modification_05.png")
 ```
 
-<img src="README_files/output/modification_05.png" width="1020" />
+<img src="README_files/output/modification_05.png" width="1022" />
 
 ``` r
 ## Create scalebar and save to object
@@ -2228,7 +2390,8 @@ visualise_methylation(modification_locations     = methylation_data_for_visualis
                       filename = "README_files/output/modification_06.png",
                       return = FALSE,
                       low_clamp = 0.3*255,
-                      high_clamp = 0.7*255)
+                      high_clamp = 0.7*255,
+                      outline_linewidth = 0)
 
 ## View image
 knitr::include_graphics("README_files/output/modification_06.png")
@@ -2280,7 +2443,8 @@ visualise_methylation(modification_locations     = hydroxymethylation_data_for_v
                       filename = "README_files/output/modification_07.png",
                       return = FALSE,
                       low_clamp = 0.1*255,
-                      high_clamp = 0.5*255)
+                      high_clamp = 0.5*255,
+                      other_bases_outline_linewidth = 0)
 
 ## View image
 knitr::include_graphics("README_files/output/modification_07.png")
@@ -2350,6 +2514,10 @@ Layout arguments:
   (e.g. 0 to 255), whereas the x-axis is normalised to 0-1.
 - `side_scale_title`: The desired title for the right-hand scalebar, if
   turned on. Defaults to `NULL`.
+- `outline_colour`: The colour of the outline around the whole scalebar.
+  Defaults to black.
+- `outline_linewidth`: The width of the outline around the whole
+  scalebar. Can be set to 0 to remove outline. Defaults to 1.
 
 Using all defaults but with lower precision gives the following:
 
@@ -2401,7 +2569,9 @@ scalebar <- visualise_methylation_colour_scale(high_colour = "green",
                                                do_x_ticks = TRUE,
                                                x_axis_title = "some kind of title",
                                                do_side_scale = TRUE,
-                                               side_scale_title = "some other title") +
+                                               side_scale_title = "some other title",
+                                               outline_colour = "red",
+                                               outline_linewidth = 3) +
     scale_x_continuous(breaks = seq(0, 1, 0.1))
 
 ## Write png from object
@@ -2423,7 +2593,8 @@ scalebar <- visualise_methylation_colour_scale(low_clamp = 0.1*255,
                                                high_clamp  = 0.9*255,
                                                x_axis_title = "Methylation probability",
                                                do_side_scale = TRUE,
-                                               side_scale_title = "Raw\nprobability\nscore")
+                                               side_scale_title = "Raw\nprobability\nscore",
+                                               outline_linewidth = 0)
 
 ## Write png from object
 ggsave("README_files/output/modification_scalebar_alone_04.png", scalebar, dpi = 300, width = 5, height = 2)
