@@ -1,41 +1,41 @@
 
 - [1 ggDNAvis](#1-ggdnavis)
-- [2 Loading data](#2-loading-data)
-  - [2.1 Introduction to
-    `example_many_sequences`](#21-introduction-to-example_many_sequences)
-  - [2.2 Introduction to `string_to_vector()` and
-    `vector_to_string()`](#22-introduction-to-string_to_vector-and-vector_to_string)
-  - [2.3 Loading from FASTQ and metadata
-    file](#23-loading-from-fastq-and-metadata-file)
-    - [2.3.1 Standard FASTQ](#231-standard-fastq)
-    - [2.3.2 Modified FASTQ (eg
-      methylation)](#232-modified-fastq-eg-methylation)
-- [3 Visualising a single DNA/RNA
-  sequence](#3-visualising-a-single-dnarna-sequence)
-  - [3.1 Basic visualisation](#31-basic-visualisation)
-  - [3.2 Colour customisation](#32-colour-customisation)
-  - [3.3 Layout customisation](#33-layout-customisation)
-- [4 Visualising many DNA/RNA
-  sequences](#4-visualising-many-dnarna-sequences)
+- [2 Summary/quickstart](#2-summaryquickstart)
+  - [2.1 Single sequence](#21-single-sequence)
+  - [2.2 Many sequences](#22-many-sequences)
+  - [2.3 Methylation/modification](#23-methylationmodification)
+- [3 Loading data](#3-loading-data)
+  - [3.1 Introduction to
+    `example_many_sequences`](#31-introduction-to-example_many_sequences)
+  - [3.2 Introduction to `string_to_vector()` and
+    `vector_to_string()`](#32-introduction-to-string_to_vector-and-vector_to_string)
+  - [3.3 Loading from FASTQ and metadata
+    file](#33-loading-from-fastq-and-metadata-file)
+    - [3.3.1 Standard FASTQ](#331-standard-fastq)
+    - [3.3.2 Modified FASTQ (eg
+      methylation)](#332-modified-fastq-eg-methylation)
+- [4 Visualising a single DNA/RNA
+  sequence](#4-visualising-a-single-dnarna-sequence)
   - [4.1 Basic visualisation](#41-basic-visualisation)
-  - [4.2 Sequence arrangement
-    customisation](#42-sequence-arrangement-customisation)
-  - [4.3 Colour and layout
-    customisation](#43-colour-and-layout-customisation)
-- [5 Visualising DNA
-  methylation/modification](#5-visualising-dna-methylationmodification)
+  - [4.2 Colour customisation](#42-colour-customisation)
+  - [4.3 Layout customisation](#43-layout-customisation)
+- [5 Visualising many DNA/RNA
+  sequences](#5-visualising-many-dnarna-sequences)
   - [5.1 Basic visualisation](#51-basic-visualisation)
   - [5.2 Sequence arrangement
     customisation](#52-sequence-arrangement-customisation)
   - [5.3 Colour and layout
     customisation](#53-colour-and-layout-customisation)
-  - [5.4 Colour mapping customisation](#54-colour-mapping-customisation)
-  - [5.5 Scalebar customisation](#55-scalebar-customisation)
-  - [5.6 Think about the offset!](#56-think-about-the-offset)
-- [6 Summary/quickstart](#6-summaryquickstart)
-  - [6.1 Single sequence](#61-single-sequence)
-  - [6.2 Many sequences](#62-many-sequences)
-  - [6.3 Methylation/modification](#63-methylationmodification)
+- [6 Visualising DNA
+  methylation/modification](#6-visualising-dna-methylationmodification)
+  - [6.1 Basic visualisation](#61-basic-visualisation)
+  - [6.2 Sequence arrangement
+    customisation](#62-sequence-arrangement-customisation)
+  - [6.3 Colour and layout
+    customisation](#63-colour-and-layout-customisation)
+  - [6.4 Colour mapping customisation](#64-colour-mapping-customisation)
+  - [6.5 Scalebar customisation](#65-scalebar-customisation)
+  - [6.6 Think about the offset!](#66-think-about-the-offset)
 - [7 References](#7-references)
 
 # 1 ggDNAvis
@@ -93,9 +93,177 @@ github_table <- function(data) {
 }
 ```
 
-# 2 Loading data
+# 2 Summary/quickstart
 
-## 2.1 Introduction to `example_many_sequences`
+This section contains one example for each type of visualisation. See
+the relevant full sections for more details and customisation options.
+
+## 2.1 Single sequence
+
+``` r
+## Create input sequence. This can be any DNA/RNA string
+sequence <- paste(c(rep("GGC", 72), rep("GGAGGAGGCGGC", 15)), collapse = "")
+
+## Create visualisation
+## This lists out all arguments
+## Usually it's fine to leave most of these as defaults
+visualise_single_sequence(
+    sequence = sequence,
+    sequence_colours = sequence_colour_palettes$bright_pale,
+    background_colour = "white",
+    line_wrapping = 60,
+    spacing = 1,
+    margin = 0.5,
+    sequence_text_colour = "black",
+    sequence_text_size = 16,
+    index_annotation_colour = "darkred",
+    index_annotation_size = 12.5,
+    index_annotation_interval = 15,
+    index_annotations_above = TRUE,
+    index_annotation_vertical_position = 1/3,
+    outline_colour = "black",
+    outline_linewidth = 3,
+    outline_join = "mitre",
+    return = FALSE,
+    filename = "README_files/output/summary_single_sequence.png",
+    pixels_per_base = 100
+)
+
+## View image
+knitr::include_graphics("README_files/output/summary_single_sequence.png")
+```
+
+<img src="README_files/output/summary_single_sequence.png" width="6100" />
+
+## 2.2 Many sequences
+
+``` r
+## Read and merge data
+fastq_data <- read_fastq("inst/extdata/example_many_sequences_raw.fastq", calculate_length = TRUE)
+metadata   <- read.csv("inst/extdata/example_many_sequences_metadata.csv")
+merged_fastq_data <- merge_fastq_with_metadata(fastq_data, metadata)
+
+## Extract character vector
+## These arguments should all be considered, as they are highly specific to your data
+sequences_for_visualisation <- extract_and_sort_sequences(
+    sequence_dataframe = merged_fastq_data,
+    sequence_variable = "forward_sequence",
+    grouping_levels = c("family" = 8, "individual" = 2),
+    sort_by = "sequence_length",
+    desc_sort = TRUE
+)
+
+## Create visualisation
+## Usually it's fine to leave most of these as defaults
+visualise_many_sequences(
+    sequences_vector = sequences_for_visualisation,
+    sequence_colours = sequence_colour_palettes$ggplot_style,
+    background_colour = "white",
+    margin = 0.5,
+    sequence_text_colour = "black",
+    sequence_text_size = 16,
+    outline_colour = "black",
+    outline_linewidth = 3,
+    outline_join = "mitre",
+    return = FALSE,
+    filename = "README_files/output/summary_many_sequences.png",
+    pixels_per_base = 100
+)
+
+## View image
+knitr::include_graphics("README_files/output/summary_many_sequences.png")
+```
+
+<img src="README_files/output/summary_many_sequences.png" width="10300" />
+
+## 2.3 Methylation/modification
+
+``` r
+## Read and merge data
+modification_data <- read_modified_fastq("inst/extdata/example_many_sequences_raw_modified.fastq")
+metadata          <- read.csv("inst/extdata/example_many_sequences_metadata.csv")
+merged_modification_data <- merge_methylation_with_metadata(modification_data, metadata,
+                                                            reversed_location_offset = 1)
+
+## Extract list of character vectors
+## These arguments should all be considered, as they are highly specific to your data
+methylation_for_visualisation <- extract_methylation_from_dataframe(
+    modification_data = merged_modification_data,
+    locations_colname = "forward_C+m?_locations",
+    probabilities_colname = "forward_C+m?_probabilities",
+    lengths_colname = "sequence_length",
+    grouping_levels = c("family" = 8, "individual" = 2),
+    sort_by = "sequence_length",
+    desc_sort = TRUE
+)
+
+## Create visualisation
+## Usually it's fine to leave most of these as defaults
+visualise_methylation(
+    modification_locations     = methylation_for_visualisation$locations,
+    modification_probabilities = methylation_for_visualisation$probabilities,
+    sequence_lengths           = methylation_for_visualisation$lengths,
+    background_colour = "white",
+    other_bases_colour = "grey",
+    low_colour = "blue",
+    high_colour = "red",
+    low_clamp = 0.1*255,
+    high_clamp = 0.9*255,
+    outline_colour = "black",
+    outline_linewidth = 3,
+    outline_join = "mitre",
+    modified_bases_outline_colour = NA,
+    modified_bases_outline_linewidth = NA,
+    modified_bases_outline_join = NA,
+    other_bases_outline_colour = NA,
+    other_bases_outline_linewidth = NA,
+    other_bases_outline_join = NA,
+    margin = 0.5,
+    return = FALSE,
+    filename = "README_files/output/summary_methylation.png",
+    pixels_per_base = 20
+)
+
+## View image
+knitr::include_graphics("README_files/output/summary_methylation.png")
+```
+
+<img src="README_files/output/summary_methylation.png" width="2060" />
+
+``` r
+## Create scalebar and save to ggplot object
+## Usually it's fine to leave most of these as defaults
+scalebar <- visualise_methylation_colour_scale(
+    low_colour = "blue",
+    high_colour = "red",
+    low_clamp = 0.1*255,
+    high_clamp = 0.9*255,
+    full_range = c(0, 255),
+    precision = 10^3,
+    background_colour = "white",
+    x_axis_title = "Methylation probability",
+    do_x_ticks = TRUE,
+    do_side_scale = FALSE,
+    side_scale_title = NULL,
+    outline_colour = "black",
+    outline_linewidth = 1
+)
+
+## Write png from object (the object is just a standard ggplot)
+ggsave("README_files/output/summary_methylation_scalebar.png", scalebar, dpi = 300, width = 5, height = 1.25)
+
+## Image viewed in separate HTML after to allow partial width
+```
+
+<div align="center">
+
+<img src="README_files/output/summary_methylation_scalebar.png" width="50%">
+
+</div>
+
+# 3 Loading data
+
+## 3.1 Introduction to `example_many_sequences`
 
 ggDNAvis comes with example dataset `example_many_sequences`. In this
 data, each row/observation represents one read. Reads are associated
@@ -176,7 +344,7 @@ for (probability in probabilities) {
     ## 8-bit probability: 127
     ## Decimal probability: 49.61% - 50%
 
-## 2.2 Introduction to `string_to_vector()` and `vector_to_string()`
+## 3.2 Introduction to `string_to_vector()` and `vector_to_string()`
 
 Lots of the data used in ggDNAvis requires a series of multiple values
 to be stored within a single observation in a dataframe. The solution
@@ -247,9 +415,9 @@ lapply(c("1,2,3", "4,5,6"), string_to_vector)
     ## [[2]]
     ## [1] 4 5 6
 
-## 2.3 Loading from FASTQ and metadata file
+## 3.3 Loading from FASTQ and metadata file
 
-### 2.3.1 Standard FASTQ
+### 3.3.1 Standard FASTQ
 
 To read in a normal FASTQ file (containing a read ID/header, sequence,
 and quality scores for each read), the function `read_fastq()` can be
@@ -471,7 +639,7 @@ Do be careful that either both sequence and quality are the forward
 versions or neither are. If they are mismatched then the new FASTQ will
 be wrong.
 
-### 2.3.2 Modified FASTQ (eg methylation)
+### 3.3.2 Modified FASTQ (eg methylation)
 
 FASTQ files can be extended to include DNA modification (most often
 5-cytosine-methylation) information within the header rows. Most often,
@@ -515,7 +683,7 @@ for (i in 1:16) {
     ## :<*1D)89?27#8.3)9<2G<>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8>0
 
 This file is identical to the standard FASTQ seen in the [reading
-standard FASTQ](#231-standard-fastq) section in the sequence and quality
+standard FASTQ](#331-standard-fastq) section in the sequence and quality
 lines, but has the MM and ML tags stored in the header. See the [SAM
 tags specification](https://samtools.github.io/hts-specs/SAMtags.pdf) or
 the documentation for `read_modified_fastq()`,
@@ -590,7 +758,7 @@ github_table(head(metadata, 4))
 | `Family 1` | `F1-1`     | `F1-1d` | `forward` |
 
 The metadata is identical to its previous use in the [reading from
-standard FASTQ](#231-standard-fastq) section.
+standard FASTQ](#331-standard-fastq) section.
 
 ``` r
 ## Merge fastq data with metadata
@@ -784,9 +952,9 @@ Do be careful that either all of sequence, quality, locations, and
 probabilities are the forward versions or none are. If they are
 mismatched then the new FASTQ will be wrong.
 
-# 3 Visualising a single DNA/RNA sequence
+# 4 Visualising a single DNA/RNA sequence
 
-## 3.1 Basic visualisation
+## 4.1 Basic visualisation
 
 ggDNAvis can be used to visualise a single DNA sequence via
 `visualise_single_sequence()`. This function is extremely simple, just
@@ -802,7 +970,7 @@ sone_2019_f1_1_expanded_ggt_added <- "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGC
 visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added)
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-25-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-28-1.png)<!-- -->
 
 By default, `visualise_single_sequence()` will return a ggplot object.
 It can be useful to view this for instant debugging. However, it is not
@@ -848,7 +1016,7 @@ knitr::include_graphics("README_files/output/single_sequence_02.png")
 
 <img src="README_files/output/single_sequence_02.png" width="1520" />
 
-## 3.2 Colour customisation
+## 4.2 Colour customisation
 
 All of the colours used in the visualisation can be modified with the
 following arguments:
@@ -968,7 +1136,7 @@ knitr::include_graphics("README_files/output/single_sequence_08.png")
 
 <img src="README_files/output/single_sequence_08.png" width="7600" />
 
-## 3.3 Layout customisation
+## 4.3 Layout customisation
 
 Many aspects of the sequence layout are also customisable via arguments:
 
@@ -1163,9 +1331,9 @@ knitr::include_graphics("README_files/output/single_sequence_14.png")
 
 <img src="README_files/output/single_sequence_14.png" width="7600" />
 
-# 4 Visualising many DNA/RNA sequences
+# 5 Visualising many DNA/RNA sequences
 
-## 4.1 Basic visualisation
+## 5.1 Basic visualisation
 
 ggDNAvis can be used to visualise multiple DNA sequences via
 `visualise_many_sequences()`. This function takes a vector of sequences
@@ -1177,7 +1345,7 @@ e.g. `c("GGCGGCGGC", "", "TTATTA")`, but is more easily produced by
 Here is an example of how that could be accomplished with the
 `example_many_sequences` data, with a reminder of how to load
 sequence/quality data from FASTQ and merge with metadata (as fully
-explained in the [reading standard FASTQ](#231-standard-fastq) section):
+explained in the [reading standard FASTQ](#331-standard-fastq) section):
 
 ``` r
 ## Reminder of how to load data from file
@@ -1279,7 +1447,7 @@ knitr::include_graphics("README_files/output/many_sequences_01.png")
 
 <img src="README_files/output/many_sequences_01.png" width="10300" />
 
-## 4.2 Sequence arrangement customisation
+## 5.2 Sequence arrangement customisation
 
 The `extract_and_sort_sequences()` function is highly configurable to
 change the arrangement and spacing of the sequences.
@@ -1526,7 +1694,7 @@ print(extracted_and_sorted_qualities, quote = F)
 This extracted the `quality` column, with families separated by 2 blank
 strings, and sorted alphabetically by quality string within each family.
 
-## 4.3 Colour and layout customisation
+## 5.3 Colour and layout customisation
 
 As with `visualise_single_sequence()`, colours in
 `visualise_many_sequences()` are highly customisable and can use the
@@ -1625,9 +1793,9 @@ thicker than the margin), but if you get the warning you should check.
 In this case it’s fine and the outlines are not getting cut off with 0.1
 margin.
 
-# 5 Visualising DNA methylation/modification
+# 6 Visualising DNA methylation/modification
 
-## 5.1 Basic visualisation
+## 6.1 Basic visualisation
 
 When basecalling Oxford Nanopore sequencing data in Guppy or Dorado,
 modified basecalling can be enabled. This means the resulting BAM file
@@ -1643,7 +1811,7 @@ samtools fastq -T MM,ML ${input_bam_file} > "modified_fastq_file.fastq"
 ```
 
 This is all discussed in more detail in the [reading from modified
-FASTQ](#232-modified-fastq-eg-methylation) section.
+FASTQ](#332-modified-fastq-eg-methylation) section.
 
 As a reminder, methylation information can be read from FASTQ as
 follows:
@@ -1683,9 +1851,9 @@ Once we have the dataframe with all forward modification columns, we can
 extract and sort them with `extract_methylation_from_dataframe()`. This
 function works extremely similarly to `extract_and_sort_sequences()` (as
 explained with examples previously in the [many sequences arrangement
-customisation](#42-sequence-arrangement-customisation) section), but
+customisation](#52-sequence-arrangement-customisation) section), but
 instead of taking a single argument for the sequence column to extract,
-it takes three arguments for locations, probabilites, and sequence
+it takes three arguments for locations, probabilities, and sequence
 length colnames to extract:
 
 ``` r
@@ -1821,7 +1989,7 @@ modification locations are the indices (starting from 1) along each read
 at which modification was assessed, while the probabilities are 8-bit
 integers giving the probability of modification from 0 to 255. This is
 explained in more detail in the [introduction to
-`example_many_sequences`](#21-introduction-to-example_many_sequences)
+`example_many_sequences`](#31-introduction-to-example_many_sequences)
 section.
 
 To use hydroxymethylation instead of methylation, we can simply change
@@ -1955,7 +2123,7 @@ hydroxymethylation_data_for_visualisation
 
 The hydroxymethylation locations are the same as the methylation
 locations (as they have both been assessed at all CpG sites), but the
-probabilites are different. This should work for any modification type
+probabilities are different. This should work for any modification type
 in the MM and ML tags, though it has only been tested for `C+m?` CG
 methylation and `C+h?` CG hydroxymethylation.
 
@@ -1974,13 +2142,13 @@ visualise_methylation(modification_locations     = methylation_data_for_visualis
 knitr::include_graphics("README_files/output/modification_01.png")
 ```
 
-<img src="README_files/output/modification_01.png" width="1030" />
+<img src="README_files/output/modification_01.png" width="2060" />
 
 Here all the modification-assessed bases (Cs of CG dinucleotides) are
 coloured blue for low methylation probability and red for high
 methylation probability and linearly interpolated for intermediate
-probabilites. Non-modification-assessed bases are coloured grey, and the
-background is white.
+probabilities. Non-modification-assessed bases are coloured grey, and
+the background is white.
 
 `ggDNAvis` also contains a function for making a scalebar for the
 methylation probabilities: `visualise_methylation_colour_scale()`.
@@ -2004,12 +2172,12 @@ ggsave("README_files/output/modification_01_scalebar.png", scalebar, dpi = 300, 
 
 </div>
 
-## 5.2 Sequence arrangement customisation
+## 6.2 Sequence arrangement customisation
 
 `extract_methylation_from_dataframe()` is customisable in all the same
 ways as `extract_and_sort_sequences()`, as discussed in detail in the
 [many sequences arrangement
-customisation](#42-sequence-arrangement-customisation) section. This
+customisation](#52-sequence-arrangement-customisation) section. This
 section will provide a brief reminder, but follow that link for a full
 explanation.
 
@@ -2068,13 +2236,13 @@ visualise_methylation(modification_locations     = methylation_data_for_visualis
 knitr::include_graphics("README_files/output/modification_02.png")
 ```
 
-<img src="README_files/output/modification_02.png" width="1030" />
+<img src="README_files/output/modification_02.png" width="2060" />
 
 Here there is no grouping by family, 3 blank lines between each
 participant, and sequences are sorted in ascending length order within
 each participant.
 
-## 5.3 Colour and layout customisation
+## 6.3 Colour and layout customisation
 
 Colours in `visualise_methylation()` are controlled by setting the low
 and high end points of the modification colour mapping scale, as well as
@@ -2193,7 +2361,7 @@ visualise_methylation(modification_locations     = methylation_data_for_visualis
 knitr::include_graphics("README_files/output/modification_03.png")
 ```
 
-<img src="README_files/output/modification_03.png" width="1100" />
+<img src="README_files/output/modification_03.png" width="2200" />
 
 ``` r
 ## Create scalebar and save to object
@@ -2202,7 +2370,9 @@ knitr::include_graphics("README_files/output/modification_03.png")
 scalebar <- visualise_methylation_colour_scale(x_axis_title = "Methylation probability",
                                                low_colour = "green",
                                                high_colour = "#0000FF",
-                                               background_colour = "#FF0000") +
+                                               background_colour = "#FF0000",
+                                               outline_colour = "darkgreen",
+                                               outline_linewidth = 1) +
     theme(axis.title = element_text(colour = "white"),
           axis.text  = element_text(colour = "white"))
 
@@ -2241,19 +2411,25 @@ visualise_methylation(modification_locations     = methylation_data_for_visualis
                       sequence_lengths           = methylation_data_for_visualisation$lengths,
                       filename = "README_files/output/modification_04.png",
                       return = FALSE,
-                      margin = 0, 
+                      margin = 0.1, 
                       low_colour = "white",
                       high_colour = "black",
                       other_bases_colour = "lightblue1",
                       other_bases_outline_colour = "grey",
                       other_bases_outline_linewidth = 1,
                       background_colour = "white")
+```
 
+    ## Warning: If margin is small and outlines are on (outline_linewidth > 0),
+    ## outlines may be cut off at the edges of the plot. Check if this is happening
+    ## and consider using a bigger margin.
+
+``` r
 ## View image
 knitr::include_graphics("README_files/output/modification_04.png")
 ```
 
-<img src="README_files/output/modification_04.png" width="1020" />
+<img src="README_files/output/modification_04.png" width="2044" />
 
 ``` r
 ## Create scalebar and save to object
@@ -2274,7 +2450,7 @@ ggsave("README_files/output/modification_04_scalebar.png", scalebar, dpi = 300, 
 
 </div>
 
-## 5.4 Colour mapping customisation
+## 6.4 Colour mapping customisation
 
 A very useful feature in `visualise_methylation()` is the ability to
 “clamp” the scale. This means all probabilities below the `low_clamp`
@@ -2328,12 +2504,18 @@ visualise_methylation(modification_locations     = methylation_data_for_visualis
                       other_bases_outline_colour = "grey",
                       other_bases_outline_linewidth = 1,
                       background_colour = "white")
+```
 
+    ## Warning: If margin is small and outlines are on (outline_linewidth > 0),
+    ## outlines may be cut off at the edges of the plot. Check if this is happening
+    ## and consider using a bigger margin.
+
+``` r
 ## View image
 knitr::include_graphics("README_files/output/modification_05.png")
 ```
 
-<img src="README_files/output/modification_05.png" width="1022" />
+<img src="README_files/output/modification_05.png" width="2044" />
 
 ``` r
 ## Create scalebar and save to object
@@ -2397,7 +2579,7 @@ visualise_methylation(modification_locations     = methylation_data_for_visualis
 knitr::include_graphics("README_files/output/modification_06.png")
 ```
 
-<img src="README_files/output/modification_06.png" width="1030" />
+<img src="README_files/output/modification_06.png" width="2060" />
 
 ``` r
 ## Create scalebar and save to object
@@ -2450,7 +2632,7 @@ visualise_methylation(modification_locations     = hydroxymethylation_data_for_v
 knitr::include_graphics("README_files/output/modification_07.png")
 ```
 
-<img src="README_files/output/modification_07.png" width="1030" />
+<img src="README_files/output/modification_07.png" width="2060" />
 
 ``` r
 ## Create scalebar and save to object
@@ -2472,7 +2654,7 @@ ggsave("README_files/output/modification_07_scalebar.png", scalebar, dpi = 300, 
 data, especially if clamping is used, otherwise the colours could be
 misleading or academically dishonest.*
 
-## 5.5 Scalebar customisation
+## 6.5 Scalebar customisation
 
 The scalebar produced by `visualise_methylation_colour_scale()` is, like
 the rest of the visualisations, highly customisable. The colours,
@@ -2606,11 +2788,11 @@ ggsave("README_files/output/modification_scalebar_alone_04.png", scalebar, dpi =
 
 </div>
 
-## 5.6 Think about the offset!
+## 6.6 Think about the offset!
 
 When merging modification data read from FASTQ, the positional offset
 when reversing can be changed (as discussed in detail in the [reading
-from modified FASTQ](#232-modified-fastq-eg-methylation) section).
+from modified FASTQ](#332-modified-fastq-eg-methylation) section).
 
 A summary of the sensible offset options (i.e. 0 or 1) copied from that
 section is as follows:
@@ -2682,7 +2864,7 @@ visualise_methylation(modification_locations     = methylation_data_for_visualis
 knitr::include_graphics("README_files/output/modification_08.png")
 ```
 
-<img src="README_files/output/modification_08.png" width="1030" /> We
+<img src="README_files/output/modification_08.png" width="2060" /> We
 can see here that some methylation-assessed sites are now offset by 1,
 as the location is now assigned to the G of each CG site rather than the
 C. This is perhaps more biochemically accurate, as these Gs are
@@ -2727,7 +2909,7 @@ visualise_methylation(modification_locations     = methylation_data_for_visualis
 knitr::include_graphics("README_files/output/modification_09.png")
 ```
 
-<img src="README_files/output/modification_09.png" width="1030" />
+<img src="README_files/output/modification_09.png" width="2060" />
 However, this is strongly discouraged and produces a warning. Offset
 values other than 0 and 1 have not been tested so results may be
 unpredictable and aspects of the visualisation may break.
@@ -2770,158 +2952,7 @@ visualise_methylation(modification_locations     = methylation_data_for_visualis
 knitr::include_graphics("README_files/output/modification_10.png")
 ```
 
-<img src="README_files/output/modification_10.png" width="1030" />
-
-# 6 Summary/quickstart
-
-This section contains one example for each type of visualisation. See
-the relevant full sections for more details and customisation options.
-
-## 6.1 Single sequence
-
-``` r
-## Create input sequence. This can be any DNA/RNA string
-sequence <- paste(c(rep("GGC", 72), rep("GGAGGAGGCGGC", 15)), collapse = "")
-
-## Create visualisation
-## This lists out all arguments
-## Usually it's fine to leave most of these as defaults
-visualise_single_sequence(
-    sequence = sequence,
-    sequence_colours = sequence_colour_palettes$bright_pale,
-    background_colour = "white",
-    line_wrapping = 60,
-    spacing = 1,
-    margin = 0.5,
-    sequence_text_colour = "black",
-    sequence_text_size = 16,
-    index_annotation_colour = "darkred",
-    index_annotation_size = 12.5,
-    index_annotation_interval = 15,
-    index_annotations_above = TRUE,
-    index_annotation_vertical_position = 1/3,
-    return = FALSE,
-    filename = "README_files/output/summary_single_sequence.png",
-    pixels_per_base = 100
-)
-
-## View image
-knitr::include_graphics("README_files/output/summary_single_sequence.png")
-```
-
-<img src="README_files/output/summary_single_sequence.png" width="6100" />
-
-## 6.2 Many sequences
-
-``` r
-## Read and merge data
-fastq_data <- read_fastq("inst/extdata/example_many_sequences_raw.fastq", calculate_length = TRUE)
-metadata   <- read.csv("inst/extdata/example_many_sequences_metadata.csv")
-merged_fastq_data <- merge_fastq_with_metadata(fastq_data, metadata)
-
-## Extract character vector
-## These arguments should all be considered, as they are highly specific to your data
-sequences_for_visualisation <- extract_and_sort_sequences(
-    sequence_dataframe = merged_fastq_data,
-    sequence_variable = "forward_sequence",
-    grouping_levels = c("family" = 8, "individual" = 2),
-    sort_by = "sequence_length",
-    desc_sort = TRUE
-)
-
-## Create visualisation
-## Usually it's fine to leave most of these as defaults
-visualise_many_sequences(
-    sequences_vector = sequences_for_visualisation,
-    sequence_colours = sequence_colour_palettes$ggplot_style,
-    background_colour = "white",
-    margin = 0.5,
-    sequence_text_colour = "black",
-    sequence_text_size = 16,
-    return = FALSE,
-    filename = "README_files/output/summary_many_sequences.png",
-    pixels_per_base = 100
-)
-
-## View image
-knitr::include_graphics("README_files/output/summary_many_sequences.png")
-```
-
-<img src="README_files/output/summary_many_sequences.png" width="10300" />
-
-## 6.3 Methylation/modification
-
-``` r
-## Read and merge data
-modification_data <- read_modified_fastq("inst/extdata/example_many_sequences_raw_modified.fastq")
-metadata          <- read.csv("inst/extdata/example_many_sequences_metadata.csv")
-merged_modification_data <- merge_methylation_with_metadata(modification_data, metadata,
-                                                            reversed_location_offset = 1)
-
-## Extract list of character vectors
-## These arguments should all be considered, as they are highly specific to your data
-methylation_for_visualisation <- extract_methylation_from_dataframe(
-    modification_data = merged_modification_data,
-    locations_colname = "forward_C+m?_locations",
-    probabilities_colname = "forward_C+m?_probabilities",
-    lengths_colname = "sequence_length",
-    grouping_levels = c("family" = 8, "individual" = 2),
-    sort_by = "sequence_length",
-    desc_sort = TRUE
-)
-
-## Create visualisation
-## Usually it's fine to leave most of these as defaults
-visualise_methylation(
-    modification_locations     = methylation_for_visualisation$locations,
-    modification_probabilities = methylation_for_visualisation$probabilities,
-    sequence_lengths           = methylation_for_visualisation$lengths,
-    background_colour = "white",
-    other_bases_colour = "grey",
-    low_colour = "blue",
-    high_colour = "red",
-    low_clamp = 0.1*255,
-    high_clamp = 0.9*255,
-    margin = 0.5,
-    return = FALSE,
-    filename = "README_files/output/summary_methylation.png",
-    pixels_per_base = 10
-)
-
-## View image
-knitr::include_graphics("README_files/output/summary_methylation.png")
-```
-
-<img src="README_files/output/summary_methylation.png" width="1030" />
-
-``` r
-## Create scalebar and save to ggplot object
-## Usually it's fine to leave most of these as defaults
-scalebar <- visualise_methylation_colour_scale(
-    low_colour = "blue",
-    high_colour = "red",
-    low_clamp = 0.1*255,
-    high_clamp = 0.9*255,
-    full_range = c(0, 255),
-    precision = 10^3,
-    background_colour = "white",
-    x_axis_title = "Methylation probability",
-    do_x_ticks = TRUE,
-    do_side_scale = FALSE,
-    side_scale_title = NULL
-)
-
-## Write png from object (the object is just a standard ggplot)
-ggsave("README_files/output/summary_methylation_scalebar.png", scalebar, dpi = 300, width = 5, height = 1.25)
-
-## Image viewed in separate HTML after to allow partial width
-```
-
-<div align="center">
-
-<img src="README_files/output/summary_methylation_scalebar.png" width="50%">
-
-</div>
+<img src="README_files/output/modification_10.png" width="2060" />
 
 # 7 References
 
