@@ -84,7 +84,7 @@ visualise_many_sequences <- function(sequences_vector, sequence_colours = sequen
                   col = outline_colour, linewidth = outline_linewidth, linejoin = tolower(outline_join)) +
         scale_fill_manual(values = sequence_colours) +
 
-        ## General plot
+        ## General plot setup
         guides(x = "none", y = "none", fill = "none") +
         coord_cartesian(expand = FALSE, clip = "off") +
         theme(plot.background = element_rect(fill = background_colour, colour = NA),
