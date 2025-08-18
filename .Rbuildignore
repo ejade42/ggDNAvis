@@ -2,6 +2,7 @@
 ^\.Rproj\.user$
 ^LICENSE\.md$
 ^data-raw$
+^README.rmd$
 ^README.md$
 ^README_files/*$
 ^tests/testthat/reference_images_original$
@@ -12,3 +13,4 @@
 ^tests/testthat/test_plot_images/*\.jpg$
 ^tests/testthat/test_output_data/*\.fastq$
 ^README_files/Exported Items\.bib$
+^\.github$

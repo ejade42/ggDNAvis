@@ -38,6 +38,11 @@
   - [6.6 Think about the offset!](#66-think-about-the-offset)
 - [7 References](#7-references)
 
+<!-- badges: start -->
+
+[![R-CMD-check](https://github.com/ejade42/ggDNAvis/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ejade42/ggDNAvis/actions/workflows/R-CMD-check.yaml)
+<!-- badges: end -->
+
 # 1 ggDNAvis
 
 ggDNAvis is an R package that uses ggplot2 to visualise genetic data of
