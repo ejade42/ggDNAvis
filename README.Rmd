@@ -1693,7 +1693,7 @@ knitr::include_graphics("README_files/output/modification_08.png")
 ```
 We can see here that some methylation-assessed sites are now offset by 1, as the location is now assigned to the G of each CG site rather than the C. This is perhaps more biochemically accurate, as these Gs are complementary to the Cs on the reverse strands where the modification actually occurred.
 
-Other offset values are theoretically possible, e.g. -2 here:
+Other offset values are theoretically possible, e.g. -1 here:
 ```{r}
 modified_fastq_data <- read_modified_fastq("inst/extdata/example_many_sequences_raw_modified.fastq")
 metadata            <- read.csv("inst/extdata/example_many_sequences_metadata.csv")

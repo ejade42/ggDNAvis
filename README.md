@@ -2897,7 +2897,7 @@ C. This is perhaps more biochemically accurate, as these Gs are
 complementary to the Cs on the reverse strands where the modification
 actually occurred.
 
-Other offset values are theoretically possible, e.g. -2 here:
+Other offset values are theoretically possible, e.g. -1 here:
 
 ``` r
 modified_fastq_data <- read_modified_fastq("inst/extdata/example_many_sequences_raw_modified.fastq")
