@@ -5,10 +5,10 @@ Authors@R:
     person(
         "Evelyn", "Jade", 
         email = "evelynjade42@gmail.com", 
-        role = c("aut", "cre"),
+        role = c("aut", "cre", "cph"),
         comment = c(ORCID = "0009-0003-7761-5425")
     )
-Description: Uses 'ggplot2' to visualise either (a) a single DNA/RNA sequence split across multiple lines, (b) multiple DNA/RNA sequences, each occupying a whole line, or (c) base modifications such as DNA methylation called by modified bases models in Dorado or Guppy. Functions starting with `visualise_<something>()` are the main plotting functions, and functions starting with `extract_<something>()` are key helper functions for reading files and reformatting data. A full manual is available at https://github.com/ejade42/ggDNAvis.
+Description: Uses 'ggplot2' to visualise either (a) a single DNA/RNA sequence split across multiple lines, (b) multiple DNA/RNA sequences, each occupying a whole line, or (c) base modifications such as DNA methylation called by modified bases models in Dorado or Guppy. Functions starting with visualise_<something>() are the main plotting functions, and functions starting with extract_<something>() are key helper functions for reading files and reformatting data. A full manual is available at https://github.com/ejade42/ggDNAvis.
 Imports:
     ggplot2,
     dplyr,
