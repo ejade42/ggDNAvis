@@ -20,17 +20,19 @@ fetch_acceptable_distortion <- function(verbose = TRUE) {
         if (Sys.info()[["sysname"]] == "Linux") {
             if (verbose) {print("Linux detected. Setting font to 'Liberation Sans' for Arial/Helvetica metric compability.", quote = F)}
             ggplot2::theme_update(text = element_text(family = "Liberation Sans"))
-        } else if (Sys.info()[["sysname"]] == "Darwin") {
-            if (verbose) {print("MacOs (Darwin) detected. Not taking any special action.", quote = F)}
-        } else if (Sys.info()[["sysname"]] == "Windows") {
+            acceptable_distortion <- 0.05
+        }  else if (Sys.info()[["sysname"]] == "Windows") {
             if (verbose) {print("Windows detected. Not taking any special action.", quote = F)}
+            acceptable_distortion <- 0.05
+        } else if (Sys.info()[["sysname"]] == "Darwin") {
+            if (verbose) {print("MacOs (Darwin) detected. Giving a little less lenience in plot matching as Helvetica is available.", quote = F)}
+            acceptable_distortion <- 0.01
         } else {
-            abort("Operating system not Linux/Darwin/Windows. Don't know what to do. Evelyn should take a look at this.", class = "unrecognised_OS")
+            abort("Operating system not Linux/Windows/Darwin. Don't know what to do. Evelyn should take a look at this.", class = "unrecognised_OS")
         }
 
-        acceptable_distortion <- 0.01
     } else {
-        if (verbose) {print("Running locally, use strict plot matching", quote = F)}
+        if (verbose) {print("Running locally (MacOS assumed for Evelyn's development), use strict plot matching", quote = F)}
         acceptable_distortion <- 0.0001
     }
     if (verbose) {print(paste("Current acceptable distortion:", acceptable_distortion), quote = F)}
