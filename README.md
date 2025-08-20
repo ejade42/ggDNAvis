@@ -69,10 +69,15 @@ Note that all spellings are the British English version (e.g. “colour”,
 “visualise”). Aliases have not been defined, meaning American spellings
 will not work.
 
-ggDNAvis is currently available from this github page:
+ggDNAvis is currently available from this github page. Once CRAN
+submission is accepted, it will be available from CRAN:
 
 ``` r
+## Currently
 devtools::install_github("ejade42/ggDNAvis")
+
+## Soon
+install.packages("ggDNAvis")
 ```
 
 Throughout this manual, only `ggDNAvis`, `dplyr`, and `ggplot2` are
