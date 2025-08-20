@@ -85,6 +85,9 @@ visualise_single_sequence <- function(sequence, sequence_colours = sequence_colo
     if (margin <= 0.25 && outline_linewidth > 0) {
         warn("If margin is small and outlines are on (outline_linewidth > 0), outlines may be cut off at the edges of the plot. Check if this is happening and consider using a bigger margin.", class = "parameter_recommendation")
     }
+    ## Accept NA as NULL for render_device
+    if (is.atomic(render_device) && any(is.na(render_device))) {render_device <- NULL}
+
 
     ## Generate data for plotting
     sequences <- convert_input_seq_to_sequence_list(sequence, line_wrapping, spacing, index_annotations_above)

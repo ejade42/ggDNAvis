@@ -25,7 +25,7 @@ fetch_acceptable_distortion <- function(verbose = TRUE) {
             if (verbose) {print("Windows detected. Not taking any special action.", quote = F)}
             acceptable_distortion <- 0.05
         } else if (Sys.info()[["sysname"]] == "Darwin") {
-            if (verbose) {print("MacOs (Darwin) detected. Giving a little less lenience in plot matching as Helvetica is available.", quote = F)}
+            if (verbose) {print("MacOS (Darwin) detected. Giving a little less lenience in plot matching as Helvetica is available.", quote = F)}
             acceptable_distortion <- 0.01
         } else {
             abort("Operating system not Linux/Windows/Darwin. Don't know what to do. Evelyn should take a look at this.", class = "unrecognised_OS")

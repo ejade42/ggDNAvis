@@ -110,7 +110,8 @@ visualise_methylation <- function(modification_locations, modification_probabili
     if (margin <= 0.25 && (modified_bases_outline_linewidth > 0 || other_bases_outline_linewidth > 0)) {
         warn("If margin is small and outlines are on (outline_linewidth > 0), outlines may be cut off at the edges of the plot. Check if this is happening and consider using a bigger margin.", class = "parameter_recommendation")
     }
-
+    ## Accept NA as NULL for render_device
+    if (is.atomic(render_device) && any(is.na(render_device))) {render_device <- NULL}
 
 
     ## Generate rasterised dataframes of methylation and masking layer

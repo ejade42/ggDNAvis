@@ -131,6 +131,7 @@ visualise_single_sequence(
     outline_join = "mitre",
     return = FALSE,
     filename = "README_files/output/summary_single_sequence.png",
+    render_device = ragg::agg_png,
     pixels_per_base = 100
 )
 
@@ -172,6 +173,7 @@ visualise_many_sequences(
     outline_join = "mitre",
     return = FALSE,
     filename = "README_files/output/summary_many_sequences.png",
+    render_device = ragg::agg_png,
     pixels_per_base = 100
 )
 
@@ -226,6 +228,7 @@ visualise_methylation(
     margin = 0.5,
     return = FALSE,
     filename = "README_files/output/summary_methylation.png",
+    render_device = ragg::agg_png,
     pixels_per_base = 20
 )
 
@@ -255,7 +258,7 @@ scalebar <- visualise_methylation_colour_scale(
 )
 
 ## Write png from object (the object is just a standard ggplot)
-ggsave("README_files/output/summary_methylation_scalebar.png", scalebar, dpi = 300, width = 5, height = 1.25)
+ggsave("README_files/output/summary_methylation_scalebar.png", scalebar, dpi = 300, width = 5, height = 1.25, device = ragg::agg_png)
 
 ## Image viewed in separate HTML after to allow partial width
 ```
@@ -1008,6 +1011,13 @@ recommended to not go too low otherwise text can become illegible (and
 going too high obviously increases filesize). The default value of 100
 is often a happy medium.
 
+For all `visualise_` functions, the `render_device` argument can be used
+to control the rendering method. It is fed directly to
+`ggsave(device = )`, so the `ggsave` documentation fully explains its
+use. The default `ragg::agg_png` works well and ensures consistent
+graphics (though not font) rendering across platforms/operating systems,
+so you should not need to change it.
+
 ``` r
 ## Create image
 visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added, 
@@ -1733,6 +1743,9 @@ Layout-related arguments:
   the side length of one DNA base square. Everything else is scaled
   proportionally. Defaults to 100 (sensible for text, but can be set
   lower e.g. 10 or 20 if text is turned off).
+- `render_device`: The device `ggsave` should use to render the plot.
+  Defaults to `ragg::agg_png`, not recommended to change. Can be set to
+  `NULL` to infer device based on `filename` extension.
 
 For example, a layout with increased margins, enlarged text, and crazy
 colours might be:
@@ -2166,7 +2179,7 @@ exported manually via `ggsave()`.
 scalebar <- visualise_methylation_colour_scale(x_axis_title = "Methylation probability")
 
 ## Write png from object
-ggsave("README_files/output/modification_01_scalebar.png", scalebar, dpi = 300, width = 5, height = 1.25)
+ggsave("README_files/output/modification_01_scalebar.png", scalebar, dpi = 300, width = 5, height = 1.25, device = ragg::agg_png)
 
 ## Image viewed in separate HTML after to allow partial width
 ```
@@ -2330,6 +2343,9 @@ Layout-related arguments:
 - `pixels_per_base`: Resolution, as determined by number of pixels in
   the side length of one DNA base square. Everything else is scaled
   proportionally. Defaults to 20.
+- `render_device`: The device `ggsave` should use to render the plot.
+  Defaults to `ragg::agg_png`, not recommended to change. Can be set to
+  `NULL` to infer device based on `filename` extension.
 
 Here is an example with wild colours:
 
@@ -2382,7 +2398,7 @@ scalebar <- visualise_methylation_colour_scale(x_axis_title = "Methylation proba
           axis.text  = element_text(colour = "white"))
 
 ## Write png from object
-ggsave("README_files/output/modification_03_scalebar.png", scalebar, dpi = 300, width = 5, height = 1.25)
+ggsave("README_files/output/modification_03_scalebar.png", scalebar, dpi = 300, width = 5, height = 1.25, device = ragg::agg_png)
 
 ## Image viewed in separate HTML after to allow partial width
 ```
@@ -2444,7 +2460,7 @@ scalebar <- visualise_methylation_colour_scale(x_axis_title = "Methylation proba
                                                background_colour = "lightblue1")
 
 ## Write png from object
-ggsave("README_files/output/modification_04_scalebar.png", scalebar, dpi = 300, width = 5, height = 1.25)
+ggsave("README_files/output/modification_04_scalebar.png", scalebar, dpi = 300, width = 5, height = 1.25, device = ragg::agg_png)
 
 ## Image viewed in separate HTML after to allow partial width
 ```
@@ -2532,7 +2548,7 @@ scalebar <- visualise_methylation_colour_scale(x_axis_title = "Methylation proba
                                                background_colour = "lightblue1")
 
 ## Write png from object
-ggsave("README_files/output/modification_05_scalebar.png", scalebar, dpi = 300, width = 5, height = 1.25)
+ggsave("README_files/output/modification_05_scalebar.png", scalebar, dpi = 300, width = 5, height = 1.25, device = ragg::agg_png)
 ```
 
 <div align="center">
@@ -2593,7 +2609,7 @@ scalebar <- visualise_methylation_colour_scale(x_axis_title = "Methylation proba
                                                high_clamp = 0.7*255)
 
 ## Write png from object
-ggsave("README_files/output/modification_06_scalebar.png", scalebar, dpi = 300, width = 5, height = 1.25)
+ggsave("README_files/output/modification_06_scalebar.png", scalebar, dpi = 300, width = 5, height = 1.25, device = ragg::agg_png)
 ```
 
 <div align="center">
@@ -2646,7 +2662,7 @@ scalebar <- visualise_methylation_colour_scale(x_axis_title = "Hydroxymethylatio
                                                high_clamp = 0.5*255)
 
 ## Write png from object
-ggsave("README_files/output/modification_07_scalebar.png", scalebar, dpi = 300, width = 5, height = 1.25)
+ggsave("README_files/output/modification_07_scalebar.png", scalebar, dpi = 300, width = 5, height = 1.25, device = ragg::agg_png)
 ```
 
 <div align="center">
@@ -2674,6 +2690,8 @@ Colour arguments:
   probability scale. Defaults to red (`#FF0000`).
 - `background_colour`: The colour to use for the background. Defaults to
   white.
+- `outline_colour`: The colour of the outline around the whole scalebar.
+  Defaults to black.
 
 Clamping arguments:
 
@@ -2701,8 +2719,6 @@ Layout arguments:
   (e.g. 0 to 255), whereas the x-axis is normalised to 0-1.
 - `side_scale_title`: The desired title for the right-hand scalebar, if
   turned on. Defaults to `NULL`.
-- `outline_colour`: The colour of the outline around the whole scalebar.
-  Defaults to black.
 - `outline_linewidth`: The width of the outline around the whole
   scalebar. Can be set to 0 to remove outline. Defaults to 1.
 
@@ -2713,7 +2729,7 @@ Using all defaults but with lower precision gives the following:
 scalebar <- visualise_methylation_colour_scale(precision = 10)
 
 ## Write png from object
-ggsave("README_files/output/modification_scalebar_alone_01.png", scalebar, dpi = 300, width = 5, height = 1.25)
+ggsave("README_files/output/modification_scalebar_alone_01.png", scalebar, dpi = 300, width = 5, height = 1.25, device = ragg::agg_png)
 
 ## Image viewed in separate HTML after to allow partial width
 ```
@@ -2732,7 +2748,7 @@ scalebar <- visualise_methylation_colour_scale(precision = 50,
                                                do_x_ticks = FALSE)
 
 ## Write png from object
-ggsave("README_files/output/modification_scalebar_alone_02.png", scalebar, dpi = 300, width = 5, height = 1.25)
+ggsave("README_files/output/modification_scalebar_alone_02.png", scalebar, dpi = 300, width = 5, height = 1.25, device = ragg::agg_png)
 ```
 
 <div align="center">
@@ -2762,7 +2778,7 @@ scalebar <- visualise_methylation_colour_scale(high_colour = "green",
     scale_x_continuous(breaks = seq(0, 1, 0.1))
 
 ## Write png from object
-ggsave("README_files/output/modification_scalebar_alone_03.png", scalebar, dpi = 300, width = 5, height = 2)
+ggsave("README_files/output/modification_scalebar_alone_03.png", scalebar, dpi = 300, width = 5, height = 2, device = ragg::agg_png)
 ```
 
 <div align="center">
@@ -2784,7 +2800,7 @@ scalebar <- visualise_methylation_colour_scale(low_clamp = 0.1*255,
                                                outline_linewidth = 0)
 
 ## Write png from object
-ggsave("README_files/output/modification_scalebar_alone_04.png", scalebar, dpi = 300, width = 5, height = 2)
+ggsave("README_files/output/modification_scalebar_alone_04.png", scalebar, dpi = 300, width = 5, height = 2, device = ragg::agg_png)
 ```
 
 <div align="center">

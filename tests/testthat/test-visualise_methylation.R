@@ -1,6 +1,6 @@
 root <- "test_plot_images/"
 reference <- "reference_images/"
-acceptable_distortion <- fetch_acceptable_distortion()
+acceptable_distortion <- fetch_acceptable_distortion(verbose = FALSE)
 
 
 test_that("methylation visualisation works as expected, all defaults", {
