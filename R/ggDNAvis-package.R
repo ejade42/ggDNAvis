@@ -12,6 +12,27 @@
 NULL
 
 
+## Helper function for dealing with different systems when comparing images
+fetch_acceptable_distortion <- function(verbose = TRUE) {
+    if (Sys.getenv("NOT_CRAN") == "false" || Sys.getenv("GITHUB_ACTIONS") == "true") {
+        if (verbose) {print("GitHub actions/CRAN environment detected. Allowing lenience in plot matching.", quote = F)}
+
+        if (Sys.info()[["sysname"]] == "Linux") {
+            if (verbose) {print("Linux detected. Setting font to 'Liberation Sans' for Arial/Helvetica metric compability.", quote = F)}
+            ggplot2::theme_update(text = element_text(base_family = "Liberation Sans"))
+        }
+
+        acceptable_distortion <- 0.01
+    } else {
+        if (verbose) {print("Running locally, use strict plot matching", quote = F)}
+        acceptable_distortion <- 0.0001
+    }
+    if (verbose) {print(paste("Current acceptable distortion:", acceptable_distortion), quote = F)}
+
+    return(acceptable_distortion)
+}
+
+
 #' Example multiple sequences data
 #'
 #' A collection of made-up sequences in the style of long reads over a repeat region

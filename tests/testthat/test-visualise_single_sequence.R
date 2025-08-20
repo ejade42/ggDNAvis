@@ -2,15 +2,7 @@
 sone_2019_f1_1_expanded <- "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGAGGCGGCGGCGGAGGAGGAGGCGGCGGAGGAGGAGGCGGCGGAGGAGGAGGCGGCGGAGGAGGAGGCGGCGGAGGAGGAGGCGGCGGAGGAGGAGGCGGCGGAGGAGGAGGCGGCGGCGGCGGCGGCGGC"
 root <- "test_plot_images/"
 reference <- "reference_images/"
-
-if (Sys.getenv("NOT_CRAN") == "false" || Sys.getenv("GITHUB_ACTIONS") == "true") {
-    print("GitHub actions/CRAN environment detected. Allowing lenience in plot matching.", quote = F)
-    acceptable_distortion <- 0.001
-} else {
-    print("Running locally, use strict plot matching", quote = F)
-    acceptable_distortion <- 0.0001
-}
-print(paste("Current acceptabe distortion:", acceptable_distortion), quote = F)
+acceptable_distortion <- fetch_acceptable_distortion()
 
 
 test_that("single sequence visualisation works with standard conditions", {
