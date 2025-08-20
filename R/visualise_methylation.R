@@ -42,7 +42,8 @@
 #' @param other_bases_outline_join `character`. If `NA` (default), inherits from `outline_join`. If not `NA`, overrides `outline_join` for non-modification-assessed bases only.
 #' @param margin `numeric`. The size of the margin relative to the size of each base square. Defaults to `0.5` (half the side length of each base square).
 #' @param return `logical`. Boolean specifying whether this function should return the ggplot object, otherwise it will return `invisible(NULL)`. Defaults to `TRUE`.
-#' @param filename `character`. Filename to which output should be saved. If set to `NA` (default), no file will be saved. Recommended to end with `".png"` but might work with other extensions if they are compatible with [ggplot2::ggsave()].
+#' @param filename `character`. Filename to which output should be saved. If set to `NA` (default), no file will be saved. Recommended to end with `".png"`, but can change if render device is changed.
+#' @param render_device `function/character`. Device to use when rendering. See [ggplot2::ggsave()] documentation for options. Defaults to [ragg::agg_png]. Can be set to `NULL` to infer from file extension, but results may vary between systems.
 #' @param pixels_per_base `integer`. How large each box should be in pixels, if file output is turned on via setting `filename`. Corresponds to dpi of the exported image. Defaults to `20`. Low values acceptable as currently this function does not write any text.
 #'
 #' @return A ggplot object containing the full visualisation, or `invisible(NULL)` if `return = FALSE`. It is often more useful to use `filename = "myfilename.png"`, because then the visualisation is exported at the correct aspect ratio.
@@ -53,7 +54,7 @@ visualise_methylation <- function(modification_locations, modification_probabili
                                   outline_colour = "black", outline_linewidth = 3, outline_join = "mitre",
                                   modified_bases_outline_colour = NA, modified_bases_outline_linewidth = NA, modified_bases_outline_join = NA,
                                   other_bases_outline_colour = NA, other_bases_outline_linewidth = NA, other_bases_outline_join = NA,
-                                  margin = 0.5, return = TRUE, filename = NA, pixels_per_base = 20) {
+                                  margin = 0.5, return = TRUE, filename = NA, render_device = ragg::agg_png, pixels_per_base = 20) {
     ## Validate arguments
     for (argument in list(modification_locations, modification_probabilities, sequence_lengths, background_colour, other_bases_colour, low_colour, high_colour, low_clamp, high_clamp, outline_linewidth, outline_colour, outline_join, modified_bases_outline_linewidth, modified_bases_outline_colour, modified_bases_outline_join, other_bases_outline_linewidth, other_bases_outline_colour, other_bases_outline_join, margin, return, filename, pixels_per_base)) {
         if (mean(is.null(argument)) != 0) {abort(paste("Argument", argument, "must not be null."), class = "argument_value_or_type")}
@@ -157,7 +158,7 @@ visualise_methylation <- function(modification_locations, modification_probabili
         if (tolower(substr(filename, nchar(filename)-3, nchar(filename))) != ".png") {
             warn("Not recommended to use non-png filetype (but may still work).", class = "filetype_recommendation")
         }
-        ggsave(filename, plot = result, dpi = pixels_per_base, width = max(sequence_lengths)+(2*margin), height = length(sequence_lengths)+(2*margin), limitsize = FALSE)
+        ggsave(filename, plot = result, dpi = pixels_per_base, device = render_device, width = max(sequence_lengths)+(2*margin), height = length(sequence_lengths)+(2*margin), limitsize = FALSE)
     }
 
     ## Return either the plot object or NULL

@@ -22,7 +22,8 @@
 #' @param outline_linewidth `numeric`. The linewidth of the box outlines. Defaults to `3`. Set to `0` to disable box outlines.
 #' @param outline_join `character`. One of `"mitre"`, `"round"`, or `"bevel"` specifying how outlines should be joined at the corners of boxes. Defaults to `"mitre"`. It would be unusual to need to change this.
 #' @param return `logical`. Boolean specifying whether this function should return the ggplot object, otherwise it will return `invisible(NULL)`. Defaults to `TRUE`.
-#' @param filename `character`. Filename to which output should be saved. If set to `NA` (default), no file will be saved. Recommended to end with `".png"` but might work with other extensions if they are compatible with [ggplot2::ggsave()].
+#' @param filename `character`. Filename to which output should be saved. If set to `NA` (default), no file will be saved. Recommended to end with `".png"`, but can change if render device is changed.
+#' @param render_device `function/character`. Device to use when rendering. See [ggplot2::ggsave()] documentation for options. Defaults to [ragg::agg_png]. Can be set to `NULL` to infer from file extension, but results may vary between systems.
 #' @param pixels_per_base `integer`. How large each box should be in pixels, if file output is turned on via setting `filename`. Corresponds to dpi of the exported image. Large values recommended because text needs to be legible when rendered significantly smaller than a box. Defaults to `100`.
 #'
 #' @return A ggplot object containing the full visualisation, or `invisible(NULL)` if `return = FALSE`. It is often more useful to use `filename = "myfilename.png"`, because then the visualisation is exported at the correct aspect ratio.
@@ -31,7 +32,8 @@ visualise_single_sequence <- function(sequence, sequence_colours = sequence_colo
                                       line_wrapping = 75, spacing = 1, margin = 0.5, sequence_text_colour = "black", sequence_text_size = 16,
                                       index_annotation_colour = "darkred", index_annotation_size = 12.5, index_annotation_interval = 15,
                                       index_annotations_above = TRUE, index_annotation_vertical_position = 1/3,
-                                      outline_colour = "black", outline_linewidth = 3, outline_join = "mitre", return = TRUE, filename = NA, pixels_per_base = 100) {
+                                      outline_colour = "black", outline_linewidth = 3, outline_join = "mitre",
+                                      return = TRUE, filename = NA, render_device = ragg::agg_png, pixels_per_base = 100) {
     ## Validate arguments
     for (argument in list(sequence, sequence_colours, background_colour, line_wrapping, spacing, margin, sequence_text_colour, sequence_text_size, index_annotation_colour, index_annotation_size, index_annotation_interval, index_annotations_above, index_annotation_vertical_position, outline_colour, outline_linewidth, outline_join, return, filename, pixels_per_base)) {
         if (mean(is.null(argument)) != 0) {abort(paste("Argument", argument, "must not be null."), class = "argument_value_or_type")}
@@ -154,7 +156,7 @@ visualise_single_sequence <- function(sequence, sequence_colours = sequence_colo
         if (tolower(substr(filename, nchar(filename)-3, nchar(filename))) != ".png") {
             warn("Not recommended to use non-png filetype (but may still work).", class = "filetype_recommendation")
         }
-        ggsave(filename, plot = result, dpi = pixels_per_base, width = max(nchar(sequences))+(2*margin), height = length(sequences)+extra_height, limitsize = FALSE)
+        ggsave(filename, plot = result, dpi = pixels_per_base, device = render_device, width = max(nchar(sequences))+(2*margin), height = length(sequences)+extra_height, limitsize = FALSE)
     }
 
     ## Return either the plot object or NULL

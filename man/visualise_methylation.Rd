@@ -26,6 +26,7 @@ visualise_methylation(
   margin = 0.5,
   return = TRUE,
   filename = NA,
+  render_device = ragg::agg_png,
   pixels_per_base = 20
 )
 }
@@ -70,7 +71,9 @@ visualise_methylation(
 
 \item{return}{\code{logical}. Boolean specifying whether this function should return the ggplot object, otherwise it will return \code{invisible(NULL)}. Defaults to \code{TRUE}.}
 
-\item{filename}{\code{character}. Filename to which output should be saved. If set to \code{NA} (default), no file will be saved. Recommended to end with \code{".png"} but might work with other extensions if they are compatible with \code{\link[ggplot2:ggsave]{ggplot2::ggsave()}}.}
+\item{filename}{\code{character}. Filename to which output should be saved. If set to \code{NA} (default), no file will be saved. Recommended to end with \code{".png"}, but can change if render device is changed.}
+
+\item{render_device}{\verb{function/character}. Device to use when rendering. See \code{\link[ggplot2:ggsave]{ggplot2::ggsave()}} documentation for options. Defaults to \link[ragg:agg_png]{ragg::agg_png}. Can be set to \code{NULL} to infer from file extension, but results may vary between systems.}
 
 \item{pixels_per_base}{\code{integer}. How large each box should be in pixels, if file output is turned on via setting \code{filename}. Corresponds to dpi of the exported image. Defaults to \code{20}. Low values acceptable as currently this function does not write any text.}
 }

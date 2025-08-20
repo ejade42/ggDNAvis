@@ -40,7 +40,7 @@ test_that("methylation visualisation works as expected, wacky colours", {
 
     filename <- "visualise_methylation_scalebar_test_03"
     visualise_methylation_colour_scale(background_colour = "pink", low_colour = "white", high_colour = "black")
-    ggsave(paste0(root, filename, ".png"), dpi = 200, width = 6, height = 1.5)
+    ggsave(paste0(root, filename, ".png"), dpi = 200, device = ragg::agg_png, width = 6, height = 1.5)
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -56,7 +56,7 @@ test_that("methylation visualisation works as expected, hard clamping", {
 
     filename <- "visualise_methylation_scalebar_test_04"
     visualise_methylation_colour_scale(low_clamp = 108, high_clamp = 148, x_axis_title = NA, side_scale_title = NA)
-    ggsave(paste0(root, filename, ".png"), dpi = 200, width = 6, height = 1.5)
+    ggsave(paste0(root, filename, ".png"), dpi = 200, device = ragg::agg_png, width = 6, height = 1.5)
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -72,7 +72,7 @@ test_that("methylation visualisation works with all individuals merged, mild cla
 
     filename <- "visualise_methylation_scalebar_test_05"
     visualise_methylation_colour_scale(low_clamp = 50, high_clamp = 200, precision = 20, x_axis_title = "probability", do_x_ticks = FALSE, do_side_scale = TRUE, side_scale_title = "raw probability")
-    ggsave(paste0(root, filename, ".png"), dpi = 200, width = 6, height = 1.5)
+    ggsave(paste0(root, filename, ".png"), dpi = 200, device = ragg::agg_png, width = 6, height = 1.5)
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)

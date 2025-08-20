@@ -4,12 +4,20 @@
 \name{ggDNAvis-package}
 \alias{ggDNAvis}
 \alias{ggDNAvis-package}
-\title{ggDNAvis: ggplot2-Based Tools For Visualising DNA Sequences And Modifications}
+\title{ggDNAvis: 'ggplot2'-Based Tools For Visualising DNA Sequences And Modifications}
 \description{
-Uses ggplot2 to visualise either (a) a single DNA/RNA sequence split across multiple lines, (b) multiple DNA/RNA sequences, each occupying a whole line, or (c) base modifications such as DNA methylation called by modified bases models in Dorado or Guppy. Functions starting with `visualise_<something>()` are the main plotting functions, and functions starting with `extract_<something>()` are key helper functions for reading files and reformatting data. A full manual is available at https://github.com/ejade42/ggDNAvis.
+Uses 'ggplot2' to visualise either (a) a single DNA/RNA sequence split across multiple lines, (b) multiple DNA/RNA sequences, each occupying a whole line, or (c) base modifications such as DNA methylation called by modified bases models in Dorado or Guppy. Functions starting with `visualise_<something>()` are the main plotting functions, and functions starting with `extract_<something>()` are key helper functions for reading files and reformatting data. A full manual is available at https://github.com/ejade42/ggDNAvis.
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/ejade42/ggDNAvis}
+  \item Report bugs at \url{https://github.com/ejade42/ggDNAvis/issues}
+}
+
 }
 \author{
-\strong{Maintainer}: Evelyn Jade \email{evelynjade42@gmail.com}
+\strong{Maintainer}: Evelyn Jade \email{evelynjade42@gmail.com} (\href{https://orcid.org/0009-0003-7761-5425}{ORCID})
 
 }
 \keyword{internal}
