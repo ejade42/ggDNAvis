@@ -110,6 +110,10 @@ visualise_methylation <- function(modification_locations, modification_probabili
     if (margin <= 0.25 && (modified_bases_outline_linewidth > 0 || other_bases_outline_linewidth > 0)) {
         warn("If margin is small and outlines are on (outline_linewidth > 0), outlines may be cut off at the edges of the plot. Check if this is happening and consider using a bigger margin.", class = "parameter_recommendation")
     }
+    ## Check clamping values
+    if (low_clamp >= high_clamp) {
+        abort("Low clamp value must be strictly less than high clamp value", class = "argument_value_or_type")
+    }
     ## Accept NA as NULL for render_device
     if (is.atomic(render_device) && any(is.na(render_device))) {render_device <- NULL}
 
@@ -225,6 +229,10 @@ visualise_methylation_colour_scale <- function(low_colour = "blue", high_colour 
     if (length(full_range) != 2) {abort("Must provide two numeric values e.g. c(0, 255) as the full probability range", class = "argument_value_or_type")}
     if (mean(full_range == c(0, 255)) != 1 && mean(full_range == c(0, 1)) != 1) {
         warn("It is unusual to set full probabality range to something other than 0-255 or 0-1. Make sure you know what you're doing.", class = "parameter_recommendation")
+    }
+    ## Check clamping values
+    if (low_clamp >= high_clamp) {
+        abort("Low clamp value must be strictly less than high clamp value", class = "argument_value_or_type")
     }
 
     ## Accept NA as meaning NULL for titles
@@ -352,6 +360,7 @@ convert_modification_to_number_vector <- function(modification_locations_str, mo
     for (argument in list(max_length)) {
         if (is.numeric(argument) == FALSE || argument %% 1 != 0 || argument < 1) {abort("Max length must be a positive integer.", class = "argument_value_or_type")}
     }
+
 
     ## Convert input strings to vectors
     locations     <- string_to_vector(modification_locations_str)

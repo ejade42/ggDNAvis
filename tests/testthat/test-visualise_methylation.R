@@ -148,6 +148,10 @@ test_that("argument validation rejects bad arguments for methylation visualisati
     }
 
     expect_error(visualise_methylation(c("3,6,9", "3,6,9,12"), c("25,48,60"), c(30, 40)), class = "argument_value_or_type")
+    expect_error(visualise_methylation("3,6,9", "100,200,0", 12, low_clamp = 200, high_clamp = 200), class = "argument_value_or_type")
+    expect_error(visualise_methylation("3,6,9", "100,200,0", 12, low_clamp = 200, high_clamp = 190), class = "argument_value_or_type")
+    expect_error(visualise_methylation_colour_scale(low_clamp = 200, high_clamp = 200), class = "argument_value_or_type")
+    expect_error(visualise_methylation_colour_scale(low_clamp = 200, high_clamp = 190), class = "argument_value_or_type")
 })
 
 
