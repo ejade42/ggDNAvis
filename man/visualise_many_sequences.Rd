@@ -27,7 +27,7 @@ visualise_many_sequences(
 
 \item{background_colour}{\code{character}. The colour of the background. Defaults to white.}
 
-\item{margin}{\code{numeric}. The size of the margin relative to the size of each base square. Defaults to \code{0.5} (half the side length of each base square).\cr\cr Very small margins (≤0.25) may cause thick outlines to be cut off at the edges of the plot. Recommended to either use a wider margin or a smaller \code{outline_linewidth}.}
+\item{margin}{\code{numeric}. The size of the margin relative to the size of each base square. Defaults to \code{0.5} (half the side length of each base square).\cr\cr Very small margins (\eqn{\le}0.25) may cause thick outlines to be cut off at the edges of the plot. Recommended to either use a wider margin or a smaller \code{outline_linewidth}.}
 
 \item{sequence_text_colour}{\code{character}. The colour of the text within the bases (e.g. colour of "A" letter within boxes representing adenosine bases). Defaults to black.}
 

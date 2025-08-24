@@ -4,12 +4,14 @@
 \alias{string_to_vector}
 \title{Split a \code{","}-joined string back to a vector (generic \code{ggDNAvis} helper)}
 \usage{
-string_to_vector(string, type = "numeric")
+string_to_vector(string, type = "numeric", sep = ",")
 }
 \arguments{
 \item{string}{\code{character}. A comma-separated string (e.g. \code{"1,2,3"}) to convert back to a vector.}
 
 \item{type}{\code{character}. The type of the vector to be returned i.e. \code{"numeric"} (default), \code{"character"}, or \code{"logical"}.}
+
+\item{sep}{\code{character}. The character used to separate values in the string. Defaults to \code{","}. \emph{Do not set to anything that might occur within one of the values}.}
 }
 \value{
 \verb{<type> vector}. The resulting vector (e.g. \code{c(1, 2, 3)}).
@@ -20,4 +22,23 @@ Note that if a vector of multiple strings is input (e.g. \verb{c("1,2,3", "9,8,7
 will be a single concatenated vector (e.g. \code{c(1, 2, 3, 9, 8, 7)}).\cr\cr
 If the desired output is a list of vectors, try \code{\link[=lapply]{lapply()}} e.g.
 \code{lapply(c("1,2,3", "9,8,7"), string_to_vector)} returns \code{list(c(1, 2, 3), c(9, 8, 7))}.
+}
+\examples{
+## String to numeric vector (default)
+string_to_vector("1,2,3,4")
+string_to_vector("1,2,3,4", type = "numeric")
+string_to_vector("1;2;3;4", sep = ";")
+
+## String to character vector
+string_to_vector("A,B,C,D", type = "character")
+
+## String to logical vector
+string_to_vector("TRUE FALSE TRUE", type = "logical", sep = " ")
+
+## By default, vector inputs are concatenated
+string_to_vector(c("1,2,3", "4,5,6"))
+
+## To create a list of vector outputs, use lapply()
+lapply(c("1,2,3", "4,5,6"), string_to_vector)
+
 }

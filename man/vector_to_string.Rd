@@ -4,10 +4,12 @@
 \alias{vector_to_string}
 \title{Join a vector into a comma-separated string (generic \code{ggDNAvis} helper)}
 \usage{
-vector_to_string(vector)
+vector_to_string(vector, sep = ",")
 }
 \arguments{
 \item{vector}{\code{vector}. A vector (e.g. \code{c(1,2,3)}) to convert to a string.}
+
+\item{sep}{\code{character}. The character used to separate values in the string. Defaults to \code{","}. \emph{Do not set to anything that might occur within one of the values}.}
 }
 \value{
 \code{character}. The same vector but as a comma-separated string (e.g. \code{"1,2,3"}).

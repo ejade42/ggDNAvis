@@ -11,15 +11,35 @@
 #'
 #' @param string `character`. A comma-separated string (e.g. `"1,2,3"`) to convert back to a vector.
 #' @param type `character`. The type of the vector to be returned i.e. `"numeric"` (default), `"character"`, or `"logical"`.
+#' @param sep `character`. The character used to separate values in the string. Defaults to `","`. *Do not set to anything that might occur within one of the values*.
 #' @return `<type> vector`. The resulting vector (e.g. `c(1, 2, 3)`).
+#'
+#' @examples
+#' ## String to numeric vector (default)
+#' string_to_vector("1,2,3,4")
+#' string_to_vector("1,2,3,4", type = "numeric")
+#' string_to_vector("1;2;3;4", sep = ";")
+#'
+#' ## String to character vector
+#' string_to_vector("A,B,C,D", type = "character")
+#'
+#' ## String to logical vector
+#' string_to_vector("TRUE FALSE TRUE", type = "logical", sep = " ")
+#'
+#' ## By default, vector inputs are concatenated
+#' string_to_vector(c("1,2,3", "4,5,6"))
+#'
+#' ## To create a list of vector outputs, use lapply()
+#' lapply(c("1,2,3", "4,5,6"), string_to_vector)
+#'
 #' @export
-string_to_vector <- function(string, type = "numeric") {
+string_to_vector <- function(string, type = "numeric", sep  = ",") {
     if (tolower(type) == "numeric") {
-        return(as.numeric(unlist(strsplit(string, split = ","))))
+        return(as.numeric(unlist(strsplit(string, split = sep))))
     } else if (tolower(type) == "character") {
-        return(as.character(unlist(strsplit(string, split = ","))))
+        return(as.character(unlist(strsplit(string, split = sep))))
     } else if (tolower(type) == "logical") {
-        return(as.logical(unlist(strsplit(string, split = ","))))
+        return(as.logical(unlist(strsplit(string, split = sep))))
     } else {
         abort(paste("Didn't recognise vector type:", type, "\n(currently set up for numeric, character, or logical only)"), class = "argument_value_or_type")
     }
@@ -31,9 +51,10 @@ string_to_vector <- function(string, type = "numeric") {
 #' Reversed by [string_to_vector()].
 #'
 #' @param vector `vector`. A vector (e.g. `c(1,2,3)`) to convert to a string.
+#' @param sep `character`. The character used to separate values in the string. Defaults to `","`. *Do not set to anything that might occur within one of the values*.
 #' @return `character`. The same vector but as a comma-separated string (e.g. `"1,2,3"`).
 #' @export
-vector_to_string <- function(vector) {paste(vector, collapse = ",")}
+vector_to_string <- function(vector, sep = ",") {paste(vector, collapse = sep)}
 
 
 #' Print a numeric vector to console (`ggDNAvis` debug helper)
