@@ -20,3 +20,10 @@ the reverse complement. Either DNA (\code{A/C/G/T}) or RNA (\code{A/C/G/U}) inpu
 By default, output is DNA (so \code{A} is reverse-complemented to \code{T}), but it can be set
 to output RNA (so \code{A} is reverse-complemented to \code{U}).
 }
+\examples{
+reverse_complement("ATGCTAG")
+reverse_complement("UUAUUAGC", output_mode = "RNA")
+reverse_complement("AcGtU", output_mode = "DNA")
+reverse_complement("aCgTU", output_mode = "RNA")
+
+}

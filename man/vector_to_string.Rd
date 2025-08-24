@@ -18,3 +18,9 @@ vector_to_string(vector, sep = ",")
 Takes a vector and condenses it into a single string by joining items with \code{","}.
 Reversed by \code{\link[=string_to_vector]{string_to_vector()}}.
 }
+\examples{
+vector_to_string(c(1, 2, 3, 4))
+vector_to_string(c("These", "are", "some", "words"))
+vector_to_string(3:5, sep = ";")
+
+}

@@ -19,3 +19,7 @@ Printing normally via \code{print(strsplit("ABCD", split = "")[[1]])} instead pr
 \verb{[1] "A" "B" "C" "D"}, which is not valid vector input so can't be copy-pasted directly.\cr\cr
 See \code{\link[=debug_join_vector_num]{debug_join_vector_num()}} for the equivalent for numeric vectors.
 }
+\examples{
+debug_join_vector_str(c("A", "B", "C", "D"))
+
+}

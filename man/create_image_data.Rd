@@ -16,3 +16,7 @@ create_image_data(sequences)
 Takes a character vector of sequences (which are allowed to be empty \code{""} to
 act as a spacing line) and rasterises it into a dataframe that ggplot can read.
 }
+\examples{
+create_image_data(c("ATCG", "", "GGCGGC", ""))
+
+}

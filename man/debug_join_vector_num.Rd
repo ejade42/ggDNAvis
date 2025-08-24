@@ -18,3 +18,7 @@ within \code{c()} to input that vector. Printing normally via \code{print(1:5)} 
 \verb{[1] 1 2 3 4 5}, which is not valid vector input so can't be copy-pasted directly.\cr\cr
 See \code{\link[=debug_join_vector_str]{debug_join_vector_str()}} for the equivalent for character/string vectors.
 }
+\examples{
+debug_join_vector_num(1:5)
+
+}

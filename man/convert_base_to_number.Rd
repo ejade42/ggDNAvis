@@ -17,3 +17,11 @@ This function takes a single base and numerically
 encodes it for visualisation via \code{\link[raster:raster]{raster::raster()}}. \cr\cr
 Encoding: \code{A = 1}, \code{C = 2}, \code{G = 3}, \code{T/U = 4}.
 }
+\examples{
+convert_base_to_number("A")
+convert_base_to_number("c")
+convert_base_to_number("G")
+convert_base_to_number("T")
+convert_base_to_number("u")
+
+}

@@ -19,3 +19,10 @@ This function takes a sequence and encodes it as a vector
 of numbers for visualisation via \code{\link[raster:raster]{raster::raster()}}. \cr\cr
 Encoding: \code{A = 1}, \code{C = 2}, \code{G = 3}, \code{T/U = 4}.
 }
+\examples{
+convert_sequence_to_numbers("ATCGATCG")
+convert_sequence_to_numbers("ATCGATCG", length = NA)
+convert_sequence_to_numbers("ATCGATCG", length = 4)
+convert_sequence_to_numbers("ATCGATCG", length = 10)
+
+}
