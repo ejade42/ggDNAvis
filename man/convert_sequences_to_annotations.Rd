@@ -33,7 +33,18 @@ the sequence itself (e.g. determining where on the plot to place an \code{"A"}) 
 annotations of index number (e.g. determining where on the plot to annotate base number \code{15}).
 }
 \examples{
-convert_sequences_to_annotations(c("GGCGGC", "", "ATCG", ""), line_length = 6, interval = 3, annotations_above = TRUE, annotation_vertical_position = 1/3)
-convert_sequences_to_annotations(c("GGCGGC", "", "ATCG", ""), line_length = 6, interval = 0)
+convert_sequences_to_annotations(
+    c("GGCGGC", "", "ATCG", ""),
+    line_length = 6,
+    interval = 3,
+    annotations_above = TRUE,
+    annotation_vertical_position = 1/3
+)
+
+convert_sequences_to_annotations(
+    c("GGCGGC", "", "ATCG", ""),
+    line_length = 6,
+    interval = 0
+)
 
 }

@@ -229,9 +229,25 @@ visualise_single_sequence <- function(sequence, sequence_colours = sequence_colo
 #' @return `character vector`. The input sequence split into multiple lines, with specified spacing in between.
 #'
 #' @examples
-#' convert_input_seq_to_sequence_list("GGCGGCGGC", line_length = 6, spacing = 1, spaces_first = TRUE)
-#' convert_input_seq_to_sequence_list("GGCGGCGGC", line_length = 3, spacing = 2, spaces_first = FALSE)
-#' convert_input_seq_to_sequence_list("GGCGGCGGC", line_length = 6, spacing = 0)
+#' convert_input_seq_to_sequence_list(
+#'     "GGCGGCGGC",
+#'     line_length = 6,
+#'     spacing = 1,
+#'     spaces_first = TRUE
+#' )
+#'
+#' convert_input_seq_to_sequence_list(
+#'     "GGCGGCGGC",
+#'     line_length = 3,
+#'     spacing = 2,
+#'     spaces_first = FALSE
+#' )
+#'
+#' convert_input_seq_to_sequence_list(
+#'     "GGCGGCGGC",
+#'     line_length = 6,
+#'     spacing = 0
+#' )
 #'
 #' @export
 convert_input_seq_to_sequence_list <- function(input_seq, line_length, spacing = 1, spaces_first = TRUE) {
@@ -302,8 +318,19 @@ convert_input_seq_to_sequence_list <- function(input_seq, line_length, spacing =
 #' @return `dataframe` Dataframe of coordinates and labels (e.g. `"A"` or `"15`), readable by geom_text.
 #'
 #' @examples
-#' convert_sequences_to_annotations(c("GGCGGC", "", "ATCG", ""), line_length = 6, interval = 3, annotations_above = TRUE, annotation_vertical_position = 1/3)
-#' convert_sequences_to_annotations(c("GGCGGC", "", "ATCG", ""), line_length = 6, interval = 0)
+#' convert_sequences_to_annotations(
+#'     c("GGCGGC", "", "ATCG", ""),
+#'     line_length = 6,
+#'     interval = 3,
+#'     annotations_above = TRUE,
+#'     annotation_vertical_position = 1/3
+#' )
+#'
+#' convert_sequences_to_annotations(
+#'     c("GGCGGC", "", "ATCG", ""),
+#'     line_length = 6,
+#'     interval = 0
+#')
 #'
 #' @export
 convert_sequences_to_annotations <- function(sequences, line_length, interval = 15, annotations_above = TRUE, annotation_vertical_position = 1/3) {

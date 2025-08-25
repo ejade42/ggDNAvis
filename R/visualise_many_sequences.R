@@ -22,6 +22,44 @@
 #' @param pixels_per_base `integer`. How large each box should be in pixels, if file output is turned on via setting `filename`. Corresponds to dpi of the exported image.\cr\cr If text is shown (i.e. `sequence_text_size` is not 0), needs to be fairly large otherwise text is blurry. Defaults to `100`.
 #'
 #' @return A ggplot object containing the full visualisation, or `invisible(NULL)` if `return = FALSE`. It is often more useful to use `filename = "myfilename.png"`, because then the visualisation is exported at the correct aspect ratio.
+#'
+#' @examples
+#' ## Create sequences vector
+#' sequences <- extract_and_sort_sequences(example_many_sequences)
+#'
+#' ## Visualise example_many_sequences with all defaults
+#' ## This looks ugly because it isn't at the right scale/aspect ratio
+#' visualise_many_sequences(sequences)
+#'
+#' ## Export with all defaults rather than returning
+#' visualise_many_sequences(
+#'     sequences,
+#'     filename = "example_vms_01.png",
+#'     return = FALSE
+#' )
+#' ## View exported image
+#' image <- png::readPNG("example_vms_01.png")
+#' unlink("example_vms_01.png")
+#' grid::grid.newpage()
+#' grid::grid.raster(image)
+#'
+#' ## Export while customising appearance
+#' visualise_single_sequence(
+#'     sequence,
+#'     filename = "example_vms_02.png",
+#'     return = FALSE,
+#'     sequence_colours = sequence_colour_palettes$bright_pale,
+#'     sequence_text_colour = "white",
+#'     background_colour = "lightgrey",
+#'     outline_linewidth = 0,
+#'     margin = 0
+#' )
+#' ## View exported image
+#' image <- png::readPNG("example_vms_02.png")
+#' unlink("example_vms_02.png")
+#' grid::grid.newpage()
+#' grid::grid.raster(image)
+#'
 #' @export
 visualise_many_sequences <- function(sequences_vector, sequence_colours = sequence_colour_palettes$ggplot_style, background_colour = "white",
                                      margin = 0.5, sequence_text_colour = "black", sequence_text_size = 16,

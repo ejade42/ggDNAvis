@@ -58,3 +58,41 @@ export of a png image with the correct dimensions to make every base a perfect
 square. Empty strings (\code{""}) within the vector can be utilised as blank spacing
 lines. Colours and pixels per square when exported are configurable.
 }
+\examples{
+## Create sequences vector
+sequences <- extract_and_sort_sequences(example_many_sequences)
+
+## Visualise example_many_sequences with all defaults
+## This looks ugly because it isn't at the right scale/aspect ratio
+visualise_many_sequences(sequences)
+
+## Export with all defaults rather than returning
+visualise_many_sequences(
+    sequences,
+    filename = "example_vms_01.png",
+    return = FALSE
+)
+## View exported image
+image <- png::readPNG("example_vms_01.png")
+unlink("example_vms_01.png")
+grid::grid.newpage()
+grid::grid.raster(image)
+
+## Export while customising appearance
+visualise_single_sequence(
+    sequence,
+    filename = "example_vms_02.png",
+    return = FALSE,
+    sequence_colours = sequence_colour_palettes$bright_pale,
+    sequence_text_colour = "white",
+    background_colour = "lightgrey",
+    outline_linewidth = 0,
+    margin = 0
+)
+## View exported image
+image <- png::readPNG("example_vms_02.png")
+unlink("example_vms_02.png")
+grid::grid.newpage()
+grid::grid.raster(image)
+
+}
