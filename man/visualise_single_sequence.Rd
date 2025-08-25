@@ -92,7 +92,7 @@ visualise_single_sequence(
     return = FALSE
 )
 image <- png::readPNG("example_vss_01.png")
-rasterImage(image, 0, 0, dim(image)[2], dim(image)[1])
+grid::grid.raster(image)
 unlink("example_vss_01.png")
 
 }
