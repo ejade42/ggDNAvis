@@ -92,6 +92,7 @@ visualise_single_sequence(
     return = FALSE
 )
 image <- png::readPNG("example_vss_01.png")
+dev.new(width = dim(image)[2]/72, height = dim(image)[1]/72, res = 72)
 grid::grid.raster(image)
 unlink("example_vss_01.png")
 
