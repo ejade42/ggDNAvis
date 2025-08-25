@@ -17,6 +17,7 @@ Imports:
     raster,
     rlang,
     ragg,
+    png,
     magick
 License: MIT + file LICENSE
 Encoding: UTF-8
