@@ -27,3 +27,23 @@ number of non-CpG \code{C}s in between CpG \code{C}s. In a \code{GGC} repeat, th
 as every \code{C} is in a CpG, but unique sequence will have many non-CpG \code{C}s.\cr\cr
 This function is reversed by \code{\link[=convert_MM_vector_to_locations]{convert_MM_vector_to_locations()}}.
 }
+\examples{
+convert_locations_to_MM_vector(
+    "GGCGGCGGCGGC",
+    locations = c(3, 6, 9, 12),
+    target_base = "C"
+)
+
+convert_locations_to_MM_vector(
+    "GGCGGCGGCGGC",
+    locations = c(1, 4, 7, 10),
+    target_base = "G"
+)
+
+convert_locations_to_MM_vector(
+    "GGCGGCGGCGGC",
+    locations = c(1, 2, 4, 5, 7, 8, 10, 11),
+    target_base = "G"
+)
+
+}

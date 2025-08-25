@@ -48,3 +48,23 @@ Therefore, if the target base is totally absent from the sequence (e.g. target \
 If \code{skips} has length zero, it will return \code{numeric(0)}.\cr\cr
 This function is reversed by \code{\link[=convert_locations_to_MM_vector]{convert_locations_to_MM_vector()}}.
 }
+\examples{
+convert_MM_vector_to_locations(
+    "GGCGGCGGCGGC",
+    skips = c(0, 0, 0, 0),
+    target_base = "C"
+)
+
+convert_MM_vector_to_locations(
+    "GGCGGCGGCGGC",
+    skips = c(1, 1, 1, 1),
+    target_base = "G"
+)
+
+convert_MM_vector_to_locations(
+    "GGCGGCGGCGGC",
+    skips = c(0, 0, 2, 1, 0),
+    target_base = "G"
+)
+
+}

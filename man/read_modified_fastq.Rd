@@ -40,3 +40,17 @@ trimmed out (\verb{<MM/ML>_tags}). This is not recommended in most situations bu
 with debugging unexpected issues as it contains the raw data exactly from the FASTQ.\cr\cr
 Dataframes produced by this function can be written back to modified FASTQ via \code{\link[=write_modified_fastq]{write_modified_fastq()}}.
 }
+\examples{
+## Locate file
+modified_fastq_file <- system.file("extdata", "example_many_sequences_raw_modified.fastq", package = "ggDNAvis")
+
+## View file
+for (i in 1:16) {
+    cat(readLines(modified_fastq_file)[i], "\n")
+}
+
+## Read file to dataframe
+read_modified_fastq(modified_fastq_file, debug = FALSE)
+read_modified_fastq(modified_fastq_file, debug = TRUE)
+
+}

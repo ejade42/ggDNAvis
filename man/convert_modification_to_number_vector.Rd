@@ -37,7 +37,7 @@ convert_modification_to_number_vector(
     modification_locations_str = "3,6,9,12",
     modification_probabilities = "100,200,50,150",
     max_length = 15,
-    sequence_length = 12
+    sequence_length = 13
 )
 
 }

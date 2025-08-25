@@ -24,3 +24,17 @@ To read/write a modified FASTQ containing modification information
 (SAM/BAM MM and ML tags) in the header lines, use
 \code{\link[=read_modified_fastq]{read_modified_fastq()}} and \code{\link[=write_modified_fastq]{write_modified_fastq()}}.
 }
+\examples{
+## Locate file
+fastq_file <- system.file("extdata", "example_many_sequences_raw.fastq", package = "ggDNAvis")
+
+## View file
+for (i in 1:16) {
+    cat(readLines(fastq_file)[i], "\n")
+}
+
+## Read file to dataframe
+read_fastq(fastq_file, calculate_length = FALSE)
+read_fastq(fastq_file, calculate_length = TRUE)
+
+}

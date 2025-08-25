@@ -67,7 +67,7 @@ visualise_methylation_colour_scale()
 ## Use clamping and change colours
 visualise_methylation_colour_scale(
     low_colour = "white",
-    high_colour = "red",
+    high_colour = "black",
     low_clamp = 0.3*255,
     high_clamp = 0.7*255,
     full_range = c(0, 255),
@@ -77,7 +77,7 @@ visualise_methylation_colour_scale(
 
 ## Lower precision = colour banding
 visualise_methylation_colour_scale(
-    precision = 20,
+    precision = 10,
     do_x_ticks = FALSE
 )
 

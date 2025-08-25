@@ -16,6 +16,20 @@
 #' @param calculate_length `logical`. Whether or not `sequence_length` column should be calculated and included.
 #'
 #' @return `dataframe`. A dataframe with `read`, `sequence`, `quality`, and optionally `sequence_length` columns.
+#'
+#' @examples
+#' ## Locate file
+#' fastq_file <- system.file("extdata", "example_many_sequences_raw.fastq", package = "ggDNAvis")
+#'
+#' ## View file
+#' for (i in 1:16) {
+#'     cat(readLines(fastq_file)[i], "\n")
+#' }
+#'
+#' ## Read file to dataframe
+#' read_fastq(fastq_file, calculate_length = FALSE)
+#' read_fastq(fastq_file, calculate_length = TRUE)
+#'
 #' @export
 read_fastq <- function(filename = file.choose(), calculate_length = TRUE) {
     ## Validate arguments
@@ -79,6 +93,20 @@ read_fastq <- function(filename = file.choose(), calculate_length = TRUE) {
 #' @param debug `logical`. Boolean value for whether the extra `<MM/ML>_tags` and `<MM/ML>_raw` columns should be added to the dataframe. Defaults to `FALSE` as I can't imagine this is often helpful, but the option is provided to assist with debugging.
 #'
 #' @return `dataframe`. Dataframe of modification information, as described above.\cr\cr Sequences can be visualised with [visualise_many_sequences()] and modification information can be visualised with [visualise_methylation()] (despite the name, any type of information can be visualised as long as it has locations and probabilities columns).\cr\cr Can be written back to FASTQ via [write_modified_fastq()].
+#'
+#' @examples
+#' ## Locate file
+#' modified_fastq_file <- system.file("extdata", "example_many_sequences_raw_modified.fastq", package = "ggDNAvis")
+#'
+#' ## View file
+#' for (i in 1:16) {
+#'     cat(readLines(modified_fastq_file)[i], "\n")
+#' }
+#'
+#' ## Read file to dataframe
+#' read_modified_fastq(modified_fastq_file, debug = FALSE)
+#' read_modified_fastq(modified_fastq_file, debug = TRUE)
+#'
 #' @export
 read_modified_fastq <- function(filename = file.choose(), debug = FALSE) {
     ## Validate arguments
@@ -281,6 +309,26 @@ read_modified_fastq <- function(filename = file.choose(), debug = FALSE) {
 #' @param target_base `character`. The base type that has been assessed or skipped (defaults to `"C"`).
 #'
 #' @return `integer vector`. All of the base indices at which methylation/modification information was processed. Will all be instances of the target base.
+#'
+#' @examples
+#' convert_MM_vector_to_locations(
+#'     "GGCGGCGGCGGC",
+#'     skips = c(0, 0, 0, 0),
+#'     target_base = "C"
+#' )
+#'
+#' convert_MM_vector_to_locations(
+#'     "GGCGGCGGCGGC",
+#'     skips = c(1, 1, 1, 1),
+#'     target_base = "G"
+#' )
+#'
+#' convert_MM_vector_to_locations(
+#'     "GGCGGCGGCGGC",
+#'     skips = c(0, 0, 2, 1, 0),
+#'     target_base = "G"
+#' )
+#'
 #' @export
 convert_MM_vector_to_locations <- function(sequence, skips, target_base = "C") {
     ## Validate arguments
@@ -350,6 +398,29 @@ convert_MM_vector_to_locations <- function(sequence, skips, target_base = "C") {
 #' @param return `logical`. Boolean specifying whether this function should return the FASTQ (as a character vector of each line in the FASTQ), otherwise it will return `invisible(NULL)`. Defaults to `FALSE`.
 #'
 #' @return `character vector`. The resulting FASTQ file as a character vector of its constituent lines (or `invisible(NULL)` if `return` is `FALSE`). This is probably mostly useful for debugging, as setting `filename` within this function directly writes to FASTQ via [writeLines()]. Therefore, defaults to returning `invisible(NULL)`.
+#'
+#' @examples
+#' ## Write to FASTQ (using filename = NA, return = FALSE
+#' ## to view as char vector rather than writing to file)
+#' write_fastq(
+#'     example_many_sequences,
+#'     filename = NA,
+#'     read_id_colname = "read",
+#'     sequence_colname = "sequence",
+#'     quality_colname = "quality",
+#'     return = TRUE
+#' )
+#'
+#' ## quality_colname = NA fills in quality with "B"
+#' write_fastq(
+#'     example_many_sequences,
+#'     filename = NA,
+#'     read_id_colname = "read",
+#'     sequence_colname = "sequence",
+#'     quality_colname = NA,
+#'     return = TRUE
+#' )
+#'
 #' @export
 write_fastq <- function(dataframe, filename = NA, read_id_colname = "read", sequence_colname = "sequence", quality_colname = "quality", return = FALSE) {
     ## Validate arguments
@@ -442,6 +513,37 @@ write_fastq <- function(dataframe, filename = NA, read_id_colname = "read", sequ
 #' @param return `logical`. Boolean specifying whether this function should return the FASTQ (as a character vector of each line in the FASTQ), otherwise it will return `invisible(NULL)`. Defaults to `FALSE`.
 #'
 #' @return `character vector`. The resulting modified FASTQ file as a character vector of its constituent lines (or `invisible(NULL)` if `return` is `FALSE`). This is probably mostly useful for debugging, as setting `filename` within this function directly writes to FASTQ via [writeLines()]. Therefore, defaults to returning `invisible(NULL)`.
+#'
+#' @examples
+#' ## Write to FASTQ (using filename = NA, return = FALSE
+#' ## to view as char vector rather than writing to file)
+#' write_modified_fastq(
+#'     example_many_sequences,
+#'     filename = NA,
+#'     read_id_colname = "read",
+#'     sequence_colname = "sequence",
+#'     quality_colname = "quality",
+#'     locations_colnames = c("hydroxymethylation_locations",
+#'                            "methylation_locations"),
+#'     probabilities_colnames = c("hydroxymethylation_probabilities",
+#'                                "methylation_probabilities"),
+#'     modification_prefixes = c("C+h?", "C+m?"),
+#'     return = TRUE
+#' )
+#'
+#' ## Write methylation only, and fill in qualities with "B"
+#' write_modified_fastq(
+#'     example_many_sequences,
+#'     filename = NA,
+#'     read_id_colname = "read",
+#'     sequence_colname = "sequence",
+#'     quality_colname = NA,
+#'     locations_colnames = c("methylation_locations"),
+#'     probabilities_colnames = c("methylation_probabilities"),
+#'     modification_prefixes = c("C+m?"),
+#'     return = TRUE
+#' )
+#'
 #' @export
 write_modified_fastq <- function(dataframe, filename = NA, read_id_colname = "read", sequence_colname = "sequence", quality_colname = "quality", locations_colnames = c("hydroxymethylation_locations", "methylation_locations"), probabilities_colnames = c("hydroxymethylation_probabilities", "methylation_probabilities"), modification_prefixes = c("C+h?", "C+m?"), include_blank_tags = TRUE, return = FALSE) {
     ## Validate arguments
@@ -569,6 +671,26 @@ write_modified_fastq <- function(dataframe, filename = NA, read_id_colname = "re
 #' @param target_base `character`. The base type that has been assessed or skipped (defaults to `"C"`).
 #'
 #' @return `integer vector`. A component of a SAM MM tag, representing the number of skipped target bases in between each assessed base.
+#'
+#' @examples
+#' convert_locations_to_MM_vector(
+#'     "GGCGGCGGCGGC",
+#'     locations = c(3, 6, 9, 12),
+#'     target_base = "C"
+#' )
+#'
+#' convert_locations_to_MM_vector(
+#'     "GGCGGCGGCGGC",
+#'     locations = c(1, 4, 7, 10),
+#'     target_base = "G"
+#' )
+#'
+#' convert_locations_to_MM_vector(
+#'     "GGCGGCGGCGGC",
+#'     locations = c(1, 2, 4, 5, 7, 8, 10, 11),
+#'     target_base = "G"
+#' )
+#'
 #' @export
 convert_locations_to_MM_vector <- function(sequence, locations, target_base = "C") {
     ## Validate arguments

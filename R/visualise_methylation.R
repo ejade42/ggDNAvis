@@ -260,7 +260,7 @@ visualise_methylation <- function(modification_locations, modification_probabili
 #' ## Use clamping and change colours
 #' visualise_methylation_colour_scale(
 #'     low_colour = "white",
-#'     high_colour = "red",
+#'     high_colour = "black",
 #'     low_clamp = 0.3*255,
 #'     high_clamp = 0.7*255,
 #'     full_range = c(0, 255),
@@ -270,7 +270,7 @@ visualise_methylation <- function(modification_locations, modification_probabili
 #'
 #' ## Lower precision = colour banding
 #' visualise_methylation_colour_scale(
-#'     precision = 20,
+#'     precision = 10,
 #'     do_x_ticks = FALSE
 #' )
 #'
@@ -435,7 +435,7 @@ extract_methylation_from_dataframe <- function(modification_data,
 #'     modification_locations_str = "3,6,9,12",
 #'     modification_probabilities = "100,200,50,150",
 #'     max_length = 15,
-#'     sequence_length = 12
+#'     sequence_length = 13
 #' )
 #'
 #' @export

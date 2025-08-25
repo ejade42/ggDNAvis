@@ -60,3 +60,34 @@ I don't really know why SAMtools decided the default quality should be "B" but t
 was probably a reason so I have stuck with that.\cr\cr
 Default arguments are set up to work with the included \code{\link{example_many_sequences}} data.
 }
+\examples{
+## Write to FASTQ (using filename = NA, return = FALSE
+## to view as char vector rather than writing to file)
+write_modified_fastq(
+    example_many_sequences,
+    filename = NA,
+    read_id_colname = "read",
+    sequence_colname = "sequence",
+    quality_colname = "quality",
+    locations_colnames = c("hydroxymethylation_locations",
+                           "methylation_locations"),
+    probabilities_colnames = c("hydroxymethylation_probabilities",
+                               "methylation_probabilities"),
+    modification_prefixes = c("C+h?", "C+m?"),
+    return = TRUE
+)
+
+## Write methylation only, and fill in qualities with "B"
+write_modified_fastq(
+    example_many_sequences,
+    filename = NA,
+    read_id_colname = "read",
+    sequence_colname = "sequence",
+    quality_colname = NA,
+    locations_colnames = c("methylation_locations"),
+    probabilities_colnames = c("methylation_probabilities"),
+    modification_prefixes = c("C+m?"),
+    return = TRUE
+)
+
+}

@@ -38,3 +38,26 @@ To read/write a modified FASTQ containing modification information
 (SAM/BAM MM and ML tags) in the header lines, use
 \code{\link[=read_modified_fastq]{read_modified_fastq()}} and \code{\link[=write_modified_fastq]{write_modified_fastq()}}.
 }
+\examples{
+## Write to FASTQ (using filename = NA, return = FALSE
+## to view as char vector rather than writing to file)
+write_fastq(
+    example_many_sequences,
+    filename = NA,
+    read_id_colname = "read",
+    sequence_colname = "sequence",
+    quality_colname = "quality",
+    return = TRUE
+)
+
+## quality_colname = NA fills in quality with "B"
+write_fastq(
+    example_many_sequences,
+    filename = NA,
+    read_id_colname = "read",
+    sequence_colname = "sequence",
+    quality_colname = NA,
+    return = TRUE
+)
+
+}
