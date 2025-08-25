@@ -45,7 +45,7 @@
 #'
 #' ## Export while customising appearance
 #' visualise_single_sequence(
-#'     sequence,
+#'     sequences,
 #'     filename = "example_vms_02.png",
 #'     return = FALSE,
 #'     sequence_colours = sequence_colour_palettes$bright_pale,
@@ -178,6 +178,54 @@ visualise_many_sequences <- function(sequences_vector, sequence_colours = sequen
 #' @param desc_sort `logical`. Boolean specifying whether rows within groups should be sorted by the `sort_by` variable descending (`TRUE`, default) or ascending (`FALSE`).
 #'
 #' @return `character vector`. The sequences ordered and grouped as specified, with blank sequences (`""`) inserted as spacers as specified.
+#'
+#' @examples
+#' extract_and_sort_sequences(
+#'     example_many_sequences,
+#'     sequence_variable = "sequence",
+#'     grouping_levels = c("family" = 8, "individual" = 2),
+#'     sort_by = "sequence_length",
+#'     desc_sort = TRUE
+#' )
+#'
+#' extract_and_sort_sequences(
+#'     example_many_sequences,
+#'     sequence_variable = "sequence",
+#'     grouping_levels = c("family" = 3),
+#'     sort_by = "sequence_length",
+#'     desc_sort = FALSE
+#' )
+#'
+#' extract_and_sort_sequences(
+#'     example_many_sequences,
+#'     sequence_variable = "sequence",
+#'     grouping_levels = NA,
+#'     sort_by = "sequence_length",
+#'     desc_sort = TRUE
+#' )
+#'
+#' extract_and_sort_sequences(
+#'     example_many_sequences,
+#'     sequence_variable = "sequence",
+#'     grouping_levels = c("family" = 8, "individual" = 2),
+#'     sort_by = NA
+#' )
+#'
+#' extract_and_sort_sequences(
+#'     example_many_sequences,
+#'     sequence_variable = "sequence",
+#'     grouping_levels = NA,
+#'     sort_by = NA
+#' )
+#'
+#' extract_and_sort_sequences(
+#'     example_many_sequences,
+#'     sequence_variable = "quality",
+#'     grouping_levels = c("individual" = 3),
+#'     sort_by = "quality",
+#'     desc_sort = FALSE
+#' )
+#'
 #' @export
 extract_and_sort_sequences <- function(sequence_dataframe, sequence_variable = "sequence",
                                        grouping_levels = c("family" = 8, "individual" = 2),

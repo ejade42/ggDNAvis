@@ -36,3 +36,51 @@ by \code{desc_sort}. \cr\cr Default values are set up to work with the included 
 \code{\link[=visualise_many_sequences]{visualise_many_sequences()}}.\cr\cr Also called by \code{\link[=extract_methylation_from_dataframe]{extract_methylation_from_dataframe()}}
 to produce input for \code{\link[=visualise_methylation]{visualise_methylation()}}.
 }
+\examples{
+extract_and_sort_sequences(
+    example_many_sequences,
+    sequence_variable = "sequence",
+    grouping_levels = c("family" = 8, "individual" = 2),
+    sort_by = "sequence_length",
+    desc_sort = TRUE
+)
+
+extract_and_sort_sequences(
+    example_many_sequences,
+    sequence_variable = "sequence",
+    grouping_levels = c("family" = 3),
+    sort_by = "sequence_length",
+    desc_sort = FALSE
+)
+
+extract_and_sort_sequences(
+    example_many_sequences,
+    sequence_variable = "sequence",
+    grouping_levels = NA,
+    sort_by = "sequence_length",
+    desc_sort = TRUE
+)
+
+extract_and_sort_sequences(
+    example_many_sequences,
+    sequence_variable = "sequence",
+    grouping_levels = c("family" = 8, "individual" = 2),
+    sort_by = NA
+)
+
+extract_and_sort_sequences(
+    example_many_sequences,
+    sequence_variable = "sequence",
+    grouping_levels = NA,
+    sort_by = NA
+)
+
+extract_and_sort_sequences(
+    example_many_sequences,
+    sequence_variable = "quality",
+    grouping_levels = c("individual" = 3),
+    sort_by = "quality",
+    desc_sort = FALSE
+)
+
+}
