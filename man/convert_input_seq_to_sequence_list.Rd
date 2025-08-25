@@ -28,3 +28,9 @@ Takes a single input sequence and an integer line length, and splits the input
 sequence into lines of that length (with the last line potentially being shorter). \cr\cr
 Optionally inserts empty strings \code{""} after each line to space them out.
 }
+\examples{
+convert_input_seq_to_sequence_list("GGCGGCGGC", line_length = 6, spacing = 1, spaces_first = TRUE)
+convert_input_seq_to_sequence_list("GGCGGCGGC", line_length = 3, spacing = 2, spaces_first = FALSE)
+convert_input_seq_to_sequence_list("GGCGGCGGC", line_length = 6, spacing = 0)
+
+}

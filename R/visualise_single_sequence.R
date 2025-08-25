@@ -42,6 +42,7 @@
 #'     filename = "example_vss_01.png",
 #'     return = FALSE
 #' )
+#' ## View exported image
 #' image <- png::readPNG("example_vss_01.png")
 #' unlink("example_vss_01.png")
 #' grid::grid.newpage()
@@ -54,11 +55,14 @@
 #'     return = FALSE,
 #'     sequence_colours = sequence_colour_palettes$bright_pale,
 #'     sequence_text_colour = "white",
-#'     background_colour = "grey",
+#'     background_colour = "lightgrey",
 #'     line_wrapping = 60,
+#'     spacing = 2,
 #'     outline_linewidth = 0,
-#'     index_annotations_above = FALSE
+#'     index_annotations_above = FALSE,
+#'     margin = 0
 #' )
+#' ## View exported image
 #' image <- png::readPNG("example_vss_02.png")
 #' unlink("example_vss_02.png")
 #' grid::grid.newpage()
@@ -223,6 +227,12 @@ visualise_single_sequence <- function(sequence, sequence_colours = sequence_colo
 #' @param spaces_first `logical`. Whether blank lines should come before (`TRUE`, default) or after (`FALSE`) each line of sequence.
 #'
 #' @return `character vector`. The input sequence split into multiple lines, with specified spacing in between.
+#'
+#' @examples
+#' convert_input_seq_to_sequence_list("GGCGGCGGC", line_length = 6, spacing = 1, spaces_first = TRUE)
+#' convert_input_seq_to_sequence_list("GGCGGCGGC", line_length = 3, spacing = 2, spaces_first = FALSE)
+#' convert_input_seq_to_sequence_list("GGCGGCGGC", line_length = 6, spacing = 0)
+#'
 #' @export
 convert_input_seq_to_sequence_list <- function(input_seq, line_length, spacing = 1, spaces_first = TRUE) {
     for (argument in list(input_seq, line_length, spacing, spaces_first)) {
@@ -290,6 +300,11 @@ convert_input_seq_to_sequence_list <- function(input_seq, line_length, spacing =
 #' @param annotation_vertical_position `numeric`. How far annotation numbers should be rendered above (if `index_annotations_above = TRUE`) or below (if `index_annotations_above = FALSE`) each base. Defaults to `1/3`. Not recommended to change at all. Strongly discouraged to set below 0 or above 1.
 #'
 #' @return `dataframe` Dataframe of coordinates and labels (e.g. `"A"` or `"15`), readable by geom_text.
+#'
+#' @examples
+#' convert_sequences_to_annotations(c("GGCGGC", "", "ATCG", ""), line_length = 6, interval = 3, annotations_above = TRUE, annotation_vertical_position = 1/3)
+#' convert_sequences_to_annotations(c("GGCGGC", "", "ATCG", ""), line_length = 6, interval = 0)
+#'
 #' @export
 convert_sequences_to_annotations <- function(sequences, line_length, interval = 15, annotations_above = TRUE, annotation_vertical_position = 1/3) {
     for (argument in list(sequences, line_length, interval, annotations_above, annotation_vertical_position)) {

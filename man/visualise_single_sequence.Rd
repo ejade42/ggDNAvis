@@ -91,6 +91,7 @@ visualise_single_sequence(
     filename = "example_vss_01.png",
     return = FALSE
 )
+## View exported image
 image <- png::readPNG("example_vss_01.png")
 unlink("example_vss_01.png")
 grid::grid.newpage()
@@ -103,11 +104,14 @@ visualise_single_sequence(
     return = FALSE,
     sequence_colours = sequence_colour_palettes$bright_pale,
     sequence_text_colour = "white",
-    background_colour = "grey",
+    background_colour = "lightgrey",
     line_wrapping = 60,
+    spacing = 2,
     outline_linewidth = 0,
-    index_annotations_above = FALSE
+    index_annotations_above = FALSE,
+    margin = 0
 )
+## View exported image
 image <- png::readPNG("example_vss_02.png")
 unlink("example_vss_02.png")
 grid::grid.newpage()
