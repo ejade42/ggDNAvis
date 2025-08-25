@@ -43,9 +43,26 @@
 #'     return = FALSE
 #' )
 #' image <- png::readPNG("example_vss_01.png")
+#' unlink("example_vss_01.png")
 #' grid::grid.newpage()
 #' grid::grid.raster(image)
-#' unlink("example_vss_01.png")
+#'
+#' ## Export while customising appearance
+#' visualise_single_sequence(
+#'     sequence,
+#'     filename = "example_vss_02.png",
+#'     return = FALSE,
+#'     sequence_colours = sequence_colour_palettes$bright_pale,
+#'     sequence_text_colour = "white",
+#'     background_colour = "grey",
+#'     line_wrapping = 60,
+#'     outline_linewidth = 0,
+#'     index_annotations_above = FALSE
+#' )
+#' image <- png::readPNG("example_vss_02.png")
+#' unlink("example_vss_02.png")
+#' grid::grid.newpage()
+#' grid::grid.raster(image)
 #'
 #' @export
 visualise_single_sequence <- function(sequence, sequence_colours = sequence_colour_palettes$ggplot_style, background_colour = "white",
