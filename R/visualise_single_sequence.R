@@ -42,7 +42,8 @@
 #'     filename = "example_vss_01.png",
 #'     return = FALSE
 #' )
-#' rasterImage(png::readPNG("example_vss_01.png"))
+#' image <- png::readPNG("example_vss_01.png")
+#' rasterImage(image, 0, 0, dim(image)[2], dim(image)[1])
 #' unlink("example_vss_01.png")
 #'
 #' @export
