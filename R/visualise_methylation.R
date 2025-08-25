@@ -85,7 +85,7 @@
 #'     high_colour = "black",
 #'     low_clamp = 0.3*255,
 #'     high_clamp = 0.7*255,
-#'     other_bases_colour = "lightblue1"
+#'     other_bases_colour = "lightblue1",
 #'     other_bases_outline_linewidth = 1,
 #'     other_bases_outline_colour = "grey",
 #'     modified_bases_outline_linewidth = 3,
@@ -94,7 +94,7 @@
 #' )
 #' ## View exported image
 #' image <- png::readPNG("example_vm_02.png")
-#' unlink("example_vm_01.png")
+#' unlink("example_vm_02.png")
 #' grid::grid.newpage()
 #' grid::grid.raster(image)
 #'
