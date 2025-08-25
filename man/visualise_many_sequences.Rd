@@ -21,7 +21,7 @@ visualise_many_sequences(
 )
 }
 \arguments{
-\item{sequences_vector}{\verb{character vector}.}
+\item{sequences_vector}{\verb{character vector}. The sequences to visualise, often created from a dataframe via \code{\link[=extract_and_sort_sequences]{extract_and_sort_sequences()}}. E.g. \code{c("GGCGGC", "", "AGCTAGCTA")}.}
 
 \item{sequence_colours}{\verb{character vector}, length 4. A vector indicating which colours should be used for each base. In order: \code{c(A_colour, C_colour, G_colour, T/U_colour)}.\cr\cr Defaults to red, green, blue, purple in the default shades produced by ggplot with 4 colours, i.e. \code{c("#F8766D", "#7CAE00", "#00BFC4", "#C77CFF")}, accessed via \code{\link{sequence_colour_palettes}}\verb{$ggplot_style}.}
 

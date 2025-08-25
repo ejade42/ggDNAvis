@@ -7,7 +7,7 @@
 #' square. Empty strings (`""`) within the vector can be utilised as blank spacing
 #' lines. Colours and pixels per square when exported are configurable.
 #'
-#' @param sequences_vector `character vector`.
+#' @param sequences_vector `character vector`. The sequences to visualise, often created from a dataframe via [extract_and_sort_sequences()]. E.g. `c("GGCGGC", "", "AGCTAGCTA")`.
 #' @param sequence_colours `character vector`, length 4. A vector indicating which colours should be used for each base. In order: `c(A_colour, C_colour, G_colour, T/U_colour)`.\cr\cr Defaults to red, green, blue, purple in the default shades produced by ggplot with 4 colours, i.e. `c("#F8766D", "#7CAE00", "#00BFC4", "#C77CFF")`, accessed via [`sequence_colour_palettes`]`$ggplot_style`.
 #' @param background_colour `character`. The colour of the background. Defaults to white.
 #' @param margin `numeric`. The size of the margin relative to the size of each base square. Defaults to `0.5` (half the side length of each base square).\cr\cr Very small margins (\eqn{\le}0.25) may cause thick outlines to be cut off at the edges of the plot. Recommended to either use a wider margin or a smaller `outline_linewidth`.
