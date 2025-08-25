@@ -77,3 +77,21 @@ visualising it, with the option to directly export a png image
 with appropriate dimensions. Colours, line wrapping, index annotation
 interval, and pixels per square when exported are configurable.
 }
+\examples{
+## Create sequence to visualise
+sequence <- paste(c(rep("GGC", 72), rep("GGAGGAGGCGGC", 15)), collapse = "")
+
+## Visualise with all defaults
+## This looks ugly because it isn't at the right scale/aspect ratio
+visualise_single_sequence(sequence)
+
+## Export with all defaults rather than returning
+visualise_single_sequence(
+    sequence,
+    filename = "example_vss_01.png",
+    return = FALSE
+)
+rasterImage(png::readPNG("example_vss_01.png"))
+unlink("example_vss_01.png")
+
+}

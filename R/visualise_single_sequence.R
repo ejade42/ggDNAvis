@@ -27,6 +27,24 @@
 #' @param pixels_per_base `integer`. How large each box should be in pixels, if file output is turned on via setting `filename`. Corresponds to dpi of the exported image. Large values recommended because text needs to be legible when rendered significantly smaller than a box. Defaults to `100`.
 #'
 #' @return A ggplot object containing the full visualisation, or `invisible(NULL)` if `return = FALSE`. It is often more useful to use `filename = "myfilename.png"`, because then the visualisation is exported at the correct aspect ratio.
+#'
+#' @examples
+#' ## Create sequence to visualise
+#' sequence <- paste(c(rep("GGC", 72), rep("GGAGGAGGCGGC", 15)), collapse = "")
+#'
+#' ## Visualise with all defaults
+#' ## This looks ugly because it isn't at the right scale/aspect ratio
+#' visualise_single_sequence(sequence)
+#'
+#' ## Export with all defaults rather than returning
+#' visualise_single_sequence(
+#'     sequence,
+#'     filename = "example_vss_01.png",
+#'     return = FALSE
+#' )
+#' rasterImage(png::readPNG("example_vss_01.png"))
+#' unlink("example_vss_01.png")
+#'
 #' @export
 visualise_single_sequence <- function(sequence, sequence_colours = sequence_colour_palettes$ggplot_style, background_colour = "white",
                                       line_wrapping = 75, spacing = 1, margin = 0.5, sequence_text_colour = "black", sequence_text_size = 16,
