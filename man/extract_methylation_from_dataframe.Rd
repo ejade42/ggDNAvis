@@ -46,3 +46,17 @@ a list of vectors stored in \verb{$locations}, \verb{$probabilities}, and \verb{
 These can then be used as input for \code{\link[=visualise_methylation]{visualise_methylation()}}. \cr\cr
 Default arguments are set up to work with the included \code{\link{example_many_sequences}} data.
 }
+\examples{
+## See documentation for extract_and_sort_sequences()
+## for more examples of changing sorting/grouping
+extract_methylation_from_dataframe(
+    example_many_sequences,
+    locations_colname = "methylation_locations",
+    probabilities_colname = "methylation_probabilities",
+    lengths_colname = "sequence_length",
+    grouping_levels = c("family" = 8, "individual" = 2),
+    sort_by = "sequence_length",
+    desc_sort = TRUE
+)
+
+}

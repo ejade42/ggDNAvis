@@ -60,3 +60,25 @@ than across the whole range 0-255). If clamping is off (default), then 0 is full
 255 is fully read, and all values are linearly interpolated. NB: colours are configurable
 but default to blue = low modification probability and red = high modification probability.
 }
+\examples{
+## Defaults match defaults of visualise_methylation()
+visualise_methylation_colour_scale()
+
+## Use clamping and change colours
+visualise_methylation_colour_scale(
+    low_colour = "white",
+    high_colour = "red",
+    low_clamp = 0.3*255,
+    high_clamp = 0.7*255,
+    full_range = c(0, 255),
+    background_colour = "lightblue1",
+    x_axis_title = "Methylation probability"
+)
+
+## Lower precision = colour banding
+visualise_methylation_colour_scale(
+    precision = 20,
+    do_x_ticks = FALSE
+)
+
+}

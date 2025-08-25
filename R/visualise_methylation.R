@@ -90,7 +90,7 @@
 #'     other_bases_outline_colour = "grey",
 #'     modified_bases_outline_linewidth = 3,
 #'     modified_bases_outline_colour = "black",
-#'     margin = 0.1
+#'     margin = 0.3
 #' )
 #' ## View exported image
 #' image <- png::readPNG("example_vm_02.png")
@@ -252,6 +252,28 @@ visualise_methylation <- function(modification_locations, modification_probabili
 #' @param outline_linewidth `numeric`. The linewidth of the scalebar outline. Defaults to `1`. Set to `0` to disable scalebar outline.
 #'
 #' @return ggplot of the scalebar.\cr\cr Unlike the other `visualise_<>` functions in this package, does not directly export a png. This is because there are no squares that need to be rendered at a precise aspect ratio in this function. It can just be saved normally with [ggplot2::ggsave()] with any sensible combination of height and width.
+#'
+#' @examples
+#' ## Defaults match defaults of visualise_methylation()
+#' visualise_methylation_colour_scale()
+#'
+#' ## Use clamping and change colours
+#' visualise_methylation_colour_scale(
+#'     low_colour = "white",
+#'     high_colour = "red",
+#'     low_clamp = 0.3*255,
+#'     high_clamp = 0.7*255,
+#'     full_range = c(0, 255),
+#'     background_colour = "lightblue1",
+#'     x_axis_title = "Methylation probability"
+#' )
+#'
+#' ## Lower precision = colour banding
+#' visualise_methylation_colour_scale(
+#'     precision = 20,
+#'     do_x_ticks = FALSE
+#' )
+#'
 #' @export
 visualise_methylation_colour_scale <- function(low_colour = "blue", high_colour = "red", low_clamp = 0, high_clamp = 255, full_range = c(0, 255), precision = 10^3,
                                                background_colour = "white", x_axis_title = NULL, do_x_ticks = TRUE, do_side_scale = FALSE, side_scale_title = NULL,
@@ -351,6 +373,20 @@ visualise_methylation_colour_scale <- function(low_colour = "blue", high_colour 
 #' @param desc_sort `logical`. Boolean specifying whether rows within groups should be sorted by the `sort_by` variable descending (`TRUE`, default) or ascending (`FALSE`).
 #'
 #' @return `list`, containing `$locations` (`character vector`), `$probabilities` (`character vector`), and `$lengths` (`numeric vector`).
+#'
+#' @examples
+#' ## See documentation for extract_and_sort_sequences()
+#' ## for more examples of changing sorting/grouping
+#' extract_methylation_from_dataframe(
+#'     example_many_sequences,
+#'     locations_colname = "methylation_locations",
+#'     probabilities_colname = "methylation_probabilities",
+#'     lengths_colname = "sequence_length",
+#'     grouping_levels = c("family" = 8, "individual" = 2),
+#'     sort_by = "sequence_length",
+#'     desc_sort = TRUE
+#' )
+#'
 #' @export
 extract_methylation_from_dataframe <- function(modification_data,
                                                locations_colname = "methylation_locations",
@@ -393,6 +429,15 @@ extract_methylation_from_dataframe <- function(modification_data,
 #' @param sequence_length `integer`. How long the sequence itself is. If smaller than `max_length`, the remaining spaces will be filled with `-2`s i.e. set to the background colour in [visualise_methylation()].
 #'
 #' @return `numeric vector`. A vector of length `max_length` indicating the probability of methylation at each index along the read - 0 where methylation was not assessed, and probability from 0-255 where methylation was assessed.
+#'
+#' @examples
+#' convert_modification_to_number_vector(
+#'     modification_locations_str = "3,6,9,12",
+#'     modification_probabilities = "100,200,50,150",
+#'     max_length = 15,
+#'     sequence_length = 12
+#' )
+#'
 #' @export
 convert_modification_to_number_vector <- function(modification_locations_str, modification_probabilities_str, max_length, sequence_length) {
     ## Validate arguments

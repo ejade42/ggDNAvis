@@ -32,3 +32,12 @@ Outputs a numerical vector of the modification probability for each base along t
 i.e. -2 for indices outside sequences, -1 for bases where modification was not assessed,
 and probability from 0-255 for bases where modification was assessed.
 }
+\examples{
+convert_modification_to_number_vector(
+    modification_locations_str = "3,6,9,12",
+    modification_probabilities = "100,200,50,150",
+    max_length = 15,
+    sequence_length = 12
+)
+
+}

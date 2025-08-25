@@ -141,7 +141,7 @@ visualise_methylation(
     other_bases_outline_colour = "grey",
     modified_bases_outline_linewidth = 3,
     modified_bases_outline_colour = "black",
-    margin = 0.1
+    margin = 0.3
 )
 ## View exported image
 image <- png::readPNG("example_vm_02.png")
