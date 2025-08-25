@@ -44,7 +44,7 @@
 #' grid::grid.raster(image)
 #'
 #' ## Export while customising appearance
-#' visualise_single_sequence(
+#' visualise_many_sequences(
 #'     sequences,
 #'     filename = "example_vms_02.png",
 #'     return = FALSE,
