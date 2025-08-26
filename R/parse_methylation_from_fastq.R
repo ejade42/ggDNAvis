@@ -19,7 +19,9 @@
 #'
 #' @examples
 #' ## Locate file
-#' fastq_file <- system.file("extdata", "example_many_sequences_raw.fastq", package = "ggDNAvis")
+#' fastq_file <- system.file("extdata",
+#'                           "example_many_sequences_raw.fastq",
+#'                           package = "ggDNAvis")
 #'
 #' ## View file
 #' for (i in 1:16) {
@@ -96,7 +98,9 @@ read_fastq <- function(filename = file.choose(), calculate_length = TRUE) {
 #'
 #' @examples
 #' ## Locate file
-#' modified_fastq_file <- system.file("extdata", "example_many_sequences_raw_modified.fastq", package = "ggDNAvis")
+#' modified_fastq_file <- system.file("extdata",
+#'                                    "example_many_sequences_raw_modified.fastq",
+#'                                    package = "ggDNAvis")
 #'
 #' ## View file
 #' for (i in 1:16) {

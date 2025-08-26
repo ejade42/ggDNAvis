@@ -134,7 +134,7 @@ merge_fastq_with_metadata <- function(fastq_data, metadata, reverse_complement_m
 #'                              package = "ggDNAvis")
 #'
 #' ## Read files
-#' methylation_data <- read_modified_fastq(fastq_file)
+#' methylation_data <- read_modified_fastq(modified_fastq_file)
 #' metadata <- read.csv(metadata_file)
 #'
 #' ## Merge data (including reversing if needed)

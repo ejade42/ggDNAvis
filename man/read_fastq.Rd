@@ -26,7 +26,9 @@ To read/write a modified FASTQ containing modification information
 }
 \examples{
 ## Locate file
-fastq_file <- system.file("extdata", "example_many_sequences_raw.fastq", package = "ggDNAvis")
+fastq_file <- system.file("extdata",
+                          "example_many_sequences_raw.fastq",
+                          package = "ggDNAvis")
 
 ## View file
 for (i in 1:16) {

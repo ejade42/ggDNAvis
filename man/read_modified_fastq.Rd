@@ -42,7 +42,9 @@ Dataframes produced by this function can be written back to modified FASTQ via \
 }
 \examples{
 ## Locate file
-modified_fastq_file <- system.file("extdata", "example_many_sequences_raw_modified.fastq", package = "ggDNAvis")
+modified_fastq_file <- system.file("extdata",
+                                   "example_many_sequences_raw_modified.fastq",
+                                   package = "ggDNAvis")
 
 ## View file
 for (i in 1:16) {

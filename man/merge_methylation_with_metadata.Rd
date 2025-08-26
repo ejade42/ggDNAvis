@@ -70,7 +70,7 @@ metadata_file <- system.file("extdata",
                              package = "ggDNAvis")
 
 ## Read files
-methylation_data <- read_modified_fastq(fastq_file)
+methylation_data <- read_modified_fastq(modified_fastq_file)
 metadata <- read.csv(metadata_file)
 
 ## Merge data (including reversing if needed)
