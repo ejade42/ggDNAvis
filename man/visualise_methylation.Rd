@@ -73,7 +73,7 @@ visualise_methylation(
 
 \item{filename}{\code{character}. Filename to which output should be saved. If set to \code{NA} (default), no file will be saved. Recommended to end with \code{".png"}, but can change if render device is changed.}
 
-\item{render_device}{\verb{function/character}. Device to use when rendering. See \code{\link[ggplot2:ggsave]{ggplot2::ggsave()}} documentation for options. Defaults to \link[ragg:agg_png]{ragg::agg_png}. Can be set to \code{NULL} to infer from file extension, but results may vary between systems.}
+\item{render_device}{\verb{function/character}. Device to use when rendering. See \code{\link[ggplot2:ggsave]{ggplot2::ggsave()}} documentation for options. Defaults to \code{\link[ragg:agg_png]{ragg::agg_png}}. Can be set to \code{NULL} to infer from file extension, but results may vary between systems.}
 
 \item{pixels_per_base}{\code{integer}. How large each box should be in pixels, if file output is turned on via setting \code{filename}. Corresponds to dpi of the exported image. Defaults to \code{20}. Low values acceptable as currently this function does not write any text.}
 }

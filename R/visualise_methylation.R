@@ -43,7 +43,7 @@
 #' @param margin `numeric`. The size of the margin relative to the size of each base square. Defaults to `0.5` (half the side length of each base square).
 #' @param return `logical`. Boolean specifying whether this function should return the ggplot object, otherwise it will return `invisible(NULL)`. Defaults to `TRUE`.
 #' @param filename `character`. Filename to which output should be saved. If set to `NA` (default), no file will be saved. Recommended to end with `".png"`, but can change if render device is changed.
-#' @param render_device `function/character`. Device to use when rendering. See [ggplot2::ggsave()] documentation for options. Defaults to [ragg::agg_png]. Can be set to `NULL` to infer from file extension, but results may vary between systems.
+#' @param render_device `function/character`. Device to use when rendering. See [ggplot2::ggsave()] documentation for options. Defaults to [`ragg::agg_png`]. Can be set to `NULL` to infer from file extension, but results may vary between systems.
 #' @param pixels_per_base `integer`. How large each box should be in pixels, if file output is turned on via setting `filename`. Corresponds to dpi of the exported image. Defaults to `20`. Low values acceptable as currently this function does not write any text.
 #'
 #' @return A ggplot object containing the full visualisation, or `invisible(NULL)` if `return = FALSE`. It is often more useful to use `filename = "myfilename.png"`, because then the visualisation is exported at the correct aspect ratio.
@@ -381,6 +381,16 @@ visualise_methylation_colour_scale <- function(low_colour = "blue", high_colour 
 #'     example_many_sequences,
 #'     locations_colname = "methylation_locations",
 #'     probabilities_colname = "methylation_probabilities",
+#'     lengths_colname = "sequence_length",
+#'     grouping_levels = c("family" = 8, "individual" = 2),
+#'     sort_by = "sequence_length",
+#'     desc_sort = TRUE
+#' )
+#'
+#' extract_methylation_from_dataframe(
+#'     example_many_sequences,
+#'     locations_colname = "hydroxymethylation_locations",
+#'     probabilities_colname = "hydroxymethylation_probabilities",
 #'     lengths_colname = "sequence_length",
 #'     grouping_levels = c("family" = 8, "individual" = 2),
 #'     sort_by = "sequence_length",

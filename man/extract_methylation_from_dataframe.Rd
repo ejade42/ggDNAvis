@@ -59,4 +59,14 @@ extract_methylation_from_dataframe(
     desc_sort = TRUE
 )
 
+extract_methylation_from_dataframe(
+    example_many_sequences,
+    locations_colname = "hydroxymethylation_locations",
+    probabilities_colname = "hydroxymethylation_probabilities",
+    lengths_colname = "sequence_length",
+    grouping_levels = c("family" = 8, "individual" = 2),
+    sort_by = "sequence_length",
+    desc_sort = TRUE
+)
+
 }
