@@ -31,9 +31,12 @@ fetch_acceptable_distortion <- function(verbose = TRUE) {
             abort("Operating system not Linux/Windows/Darwin. Don't know what to do. Evelyn should take a look at this.", class = "unrecognised_OS")
         }
 
-    } else {
+    } else if (Sys.info()[["sysname"]] == "Darwin") {
         if (verbose) {print("Running locally (MacOS assumed for Evelyn's development), use strict plot matching", quote = F)}
         acceptable_distortion <- 0.0001
+    } else {
+        if (verbose) {print("Unknown local system detected, using lenient matching", quote = F)}
+        acceptable_distortion <- 0.05
     }
     if (verbose) {print(paste("Current acceptable distortion:", acceptable_distortion), quote = F)}
 

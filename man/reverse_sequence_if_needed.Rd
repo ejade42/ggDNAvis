@@ -32,12 +32,12 @@ Called by \code{\link[=merge_methylation_with_metadata]{merge_methylation_with_m
 }
 \examples{
 reverse_sequence_if_needed(
-    sequence_vector = c("TAAGGC", TAAGGC"),
+    sequence_vector = c("TAAGGC", "TAAGGC"),
     direction_vector = c("reverse", "forward")
 )
 
 reverse_sequence_if_needed(
-    sequence_vector = c("UAAGGC", UAAGGC"),
+    sequence_vector = c("UAAGGC", "UAAGGC"),
     direction_vector = c("reverse", "forward"),
     output_mode = "RNA"
 )
