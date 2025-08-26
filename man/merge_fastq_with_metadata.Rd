@@ -46,8 +46,12 @@ to implement the reversing - see documentation for these functions for more deta
 }
 \examples{
 ## Locate files
-fastq_file    <- system.file("extdata", "example_many_sequences_raw.fastq", package = "ggDNAvis")
-metadata_file <- system.file("extdata", "example_many_sequences_metadata", package = "ggDNAvis")
+fastq_file <- system.file("extdata",
+                          "example_many_sequences_raw.fastq",
+                          package = "ggDNAvis")
+metadata_file <- system.file("extdata",
+                             "example_many_sequences_metadata.csv",
+                             package = "ggDNAvis")
 
 ## Read files
 fastq_data <- read_fastq(fastq_file)

@@ -62,8 +62,12 @@ at guanines, which SAMtools can't account for. Symmetrically reversing CpGs via
 }
 \examples{
 ## Locate files
-modified_fastq_file <- system.file("extdata", "example_many_sequences_raw_modified.fastq", package = "ggDNAvis")
-metadata_file <- system.file("extdata", "example_many_sequences_metadata", package = "ggDNAvis")
+modified_fastq_file <- system.file("extdata",
+                                   "example_many_sequences_raw_modified.fastq",
+                                   package = "ggDNAvis")
+metadata_file <- system.file("extdata",
+                             "example_many_sequences_metadata.csv",
+                             package = "ggDNAvis")
 
 ## Read files
 methylation_data <- read_modified_fastq(fastq_file)

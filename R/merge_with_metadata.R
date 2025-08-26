@@ -31,8 +31,12 @@
 #'
 #' @examples
 #' ## Locate files
-#' fastq_file    <- system.file("extdata", "example_many_sequences_raw.fastq", package = "ggDNAvis")
-#' metadata_file <- system.file("extdata", "example_many_sequences_metadata", package = "ggDNAvis")
+#' fastq_file <- system.file("extdata",
+#'                           "example_many_sequences_raw.fastq",
+#'                           package = "ggDNAvis")
+#' metadata_file <- system.file("extdata",
+#'                              "example_many_sequences_metadata.csv",
+#'                              package = "ggDNAvis")
 #'
 #' ## Read files
 #' fastq_data <- read_fastq(fastq_file)
@@ -122,8 +126,12 @@ merge_fastq_with_metadata <- function(fastq_data, metadata, reverse_complement_m
 #'
 #' @examples
 #' ## Locate files
-#' modified_fastq_file <- system.file("extdata", "example_many_sequences_raw_modified.fastq", package = "ggDNAvis")
-#' metadata_file <- system.file("extdata", "example_many_sequences_metadata", package = "ggDNAvis")
+#' modified_fastq_file <- system.file("extdata",
+#'                                    "example_many_sequences_raw_modified.fastq",
+#'                                    package = "ggDNAvis")
+#' metadata_file <- system.file("extdata",
+#'                              "example_many_sequences_metadata.csv",
+#'                              package = "ggDNAvis")
 #'
 #' ## Read files
 #' methylation_data <- read_modified_fastq(fastq_file)
