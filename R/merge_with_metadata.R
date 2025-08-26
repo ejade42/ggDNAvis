@@ -28,6 +28,19 @@
 #' @param reverse_complement_mode `character`. Whether reverse-complemented sequences should be converted to DNA (i.e. A complements to T) or RNA (i.e. A complements to U). Must be either `"DNA"` or `"RNA"`. *Only affects reverse-complemented sequences. Sequences that were forward to begin with are not altered.*\cr\cr Uses [reverse_complement()] via [reverse_sequence_if_needed()].
 #'
 #' @return `dataframe`. A merged dataframe containing all columns from the input dataframes, as well as forward versions of sequences and qualities.
+#'
+#' @examples
+#' ## Locate files
+#' fastq_file    <- system.file("extdata", "example_many_sequences_raw.fastq", package = "ggDNAvis")
+#' metadata_file <- system.file("extdata", "example_many_sequences_metadata", package = "ggDNAvis")
+#'
+#' ## Read files
+#' fastq_data <- read_fastq(fastq_file)
+#' metadata   <- read.csv(metadata_file)
+#'
+#' ## Merge data (including reversing if needed)
+#' merge_fastq_with_metadata(fastq_data, metadata)
+#'
 #' @export
 merge_fastq_with_metadata <- function(fastq_data, metadata, reverse_complement_mode = "DNA") {
     ## Validate arguments
@@ -106,6 +119,22 @@ merge_fastq_with_metadata <- function(fastq_data, metadata, reverse_complement_m
 #' @param reverse_complement_mode `character`. Whether reverse-complemented sequences should be converted to DNA (i.e. A complements to T) or RNA (i.e. A complements to U). Must be either `"DNA"` or `"RNA"`. *Only affects reverse-complemented sequences. Sequences that were forward to begin with are not altered.*\cr\cr Uses [reverse_complement()] via [reverse_sequence_if_needed()].
 #'
 #' @return `dataframe`. A merged dataframe containing all columns from the input dataframes, as well as forward versions of sequences, qualities, modification locations, and modification probabilities (with separate locations and probabilities columns created for each modification type in the modification data).
+#'
+#' @examples
+#' ## Locate files
+#' modified_fastq_file <- system.file("extdata", "example_many_sequences_raw_modified.fastq", package = "ggDNAvis")
+#' metadata_file <- system.file("extdata", "example_many_sequences_metadata", package = "ggDNAvis")
+#'
+#' ## Read files
+#' methylation_data <- read_modified_fastq(fastq_file)
+#' metadata <- read.csv(metadata_file)
+#'
+#' ## Merge data (including reversing if needed)
+#' merge_methylation_with_metadata(methylation_data, metadata, reversed_location_offset = 0)
+#'
+#' ## Merge data with offset = 1
+#' merge_methylation_with_metadata(methylation_data, metadata, reversed_location_offset = 1)
+#'
 #' @export
 merge_methylation_with_metadata <- function(methylation_data, metadata, reversed_location_offset = 0, reverse_complement_mode = "DNA") {
     ## Validate arguments

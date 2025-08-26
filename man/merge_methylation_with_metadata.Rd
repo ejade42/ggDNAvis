@@ -60,3 +60,19 @@ to write to modified FASTQ once reversed because then e.g. cytosine methylation 
 at guanines, which SAMtools can't account for. Symmetrically reversing CpGs via
 \code{reversed_location_offset = 1} is the only way to fix this.
 }
+\examples{
+## Locate files
+modified_fastq_file <- system.file("extdata", "example_many_sequences_raw_modified.fastq", package = "ggDNAvis")
+metadata_file <- system.file("extdata", "example_many_sequences_metadata", package = "ggDNAvis")
+
+## Read files
+methylation_data <- read_modified_fastq(fastq_file)
+metadata <- read.csv(metadata_file)
+
+## Merge data (including reversing if needed)
+merge_methylation_with_metadata(methylation_data, metadata, reversed_location_offset = 0)
+
+## Merge data with offset = 1
+merge_methylation_with_metadata(methylation_data, metadata, reversed_location_offset = 1)
+
+}

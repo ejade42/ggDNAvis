@@ -44,3 +44,16 @@ visualisation. The output columns are \code{"forward_sequence"} and \code{"forwa
 Calls \code{\link[=reverse_sequence_if_needed]{reverse_sequence_if_needed()}} and \code{\link[=reverse_quality_if_needed]{reverse_quality_if_needed()}}
 to implement the reversing - see documentation for these functions for more details.
 }
+\examples{
+## Locate files
+fastq_file    <- system.file("extdata", "example_many_sequences_raw.fastq", package = "ggDNAvis")
+metadata_file <- system.file("extdata", "example_many_sequences_metadata", package = "ggDNAvis")
+
+## Read files
+fastq_data <- read_fastq(fastq_file)
+metadata   <- read.csv(metadata_file)
+
+## Merge data (including reversing if needed)
+merge_fastq_with_metadata(fastq_data, metadata)
+
+}
