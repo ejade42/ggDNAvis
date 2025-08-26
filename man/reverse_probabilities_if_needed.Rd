@@ -24,3 +24,10 @@ reverse are flipped to now be forward.\cr\cr
 Called by \code{\link[=merge_methylation_with_metadata]{merge_methylation_with_metadata()}} to create a forward dataset, alongside
 \code{\link[=reverse_sequence_if_needed]{reverse_sequence_if_needed()}}, \code{\link[=reverse_quality_if_needed]{reverse_quality_if_needed()}}, and \code{\link[=reverse_locations_if_needed]{reverse_locations_if_needed()}}.\cr\cr
 }
+\examples{
+reverse_probabilities_if_needed(
+    probabilities_vector = c("100,200,50", "100,200,50"),
+    direction_vector = c("forward", "reverse")
+)
+
+}

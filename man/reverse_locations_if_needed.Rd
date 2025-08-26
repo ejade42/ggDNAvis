@@ -78,3 +78,19 @@ to write to modified FASTQ once reversed because then e.g. cytosine methylation 
 at guanines, which SAMtools can't account for. Symmetrically reversing CpGs via \code{offset = 1} is
 the only way to fix this.
 }
+\examples{
+reverse_locations_if_needed(
+    locations_vector = c("7,10,13,17", "2,6,9,12"),
+    direction_vector = c("forward", "reverse"),
+    length_vector = c(19, 19),
+    offset = 0
+)
+
+reverse_locations_if_needed(
+    locations_vector = c("7,10,13,17", "2,6,9,12"),
+    direction_vector = c("forward", "reverse"),
+    length_vector = c(19, 19),
+    offset = 1
+)
+
+}

@@ -208,6 +208,19 @@ merge_methylation_with_metadata <- function(methylation_data, metadata, reversed
 #' @param output_mode `character`. Whether reverse-complemented sequences should be converted to DNA (i.e. A complements to T) or RNA (i.e. A complements to U). Must be either `"DNA"` or `"RNA"`. *Only affects reverse-complemented sequences. Sequences that were forward to begin with are not altered.*
 #'
 #' @return `character vector`. A vector of all forward versions of the input sequence vector.
+#'
+#' @examples
+#' reverse_sequence_if_needed(
+#'     sequence_vector = c("TAAGGC", TAAGGC"),
+#'     direction_vector = c("reverse", "forward")
+#' )
+#'
+#' reverse_sequence_if_needed(
+#'     sequence_vector = c("UAAGGC", UAAGGC"),
+#'     direction_vector = c("reverse", "forward"),
+#'     output_mode = "RNA"
+#' )
+#'
 #' @export
 reverse_sequence_if_needed <- function(sequence_vector, direction_vector, output_mode = "DNA") {
     ## Validate arguments
@@ -262,6 +275,13 @@ reverse_sequence_if_needed <- function(sequence_vector, direction_vector, output
 #' @param direction_vector `character vector`. Whether each sequence is forward or reverse. Must contain only `"forward"` and `"reverse"`, but is not case sensitive. Must be the same length as `sequence_vector`.
 #'
 #' @return `character vector`. A vector of all forward versions of the input quality vector.
+#'
+#' @examples
+#' reverse_quality_if_needed(
+#'     quality_vector = c("#^$&$*", "#^$&$*"),
+#'     direction_vector = c("reverse", "forward")
+#' )
+#'
 #' @export
 reverse_quality_if_needed <- function(quality_vector, direction_vector) {
     ## Validate arguments
@@ -359,6 +379,22 @@ reverse_quality_if_needed <- function(quality_vector, direction_vector) {
 #' @param offset `integer`. How much locations should be shifted by. Defaults to `0`. This is important because if a CpG is assessed for methylation at the C, then reverse complementing it will give a methylation score at the G on the reverse-complemented strand. This is the most biologically accurate, but for visualising methylation it may be desired to shift the locations by `1` i.e. to correspond with the C in the reverse-complemented CpG rather than the G, which allows for consistent visualisation between forward and reverse strands. Setting (integer) values other than `0` or `1` will work, but may be biologically misleading so it is not recommended.
 #'
 #' @return `character vector`. A vector of all forward versions of the input locations vector.
+#'
+#' @examples
+#' reverse_locations_if_needed(
+#'     locations_vector = c("7,10,13,17", "2,6,9,12"),
+#'     direction_vector = c("forward", "reverse"),
+#'     length_vector = c(19, 19),
+#'     offset = 0
+#' )
+#'
+#' reverse_locations_if_needed(
+#'     locations_vector = c("7,10,13,17", "2,6,9,12"),
+#'     direction_vector = c("forward", "reverse"),
+#'     length_vector = c(19, 19),
+#'     offset = 1
+#' )
+#'
 #' @export
 reverse_locations_if_needed <- function(locations_vector, direction_vector, length_vector, offset = 0) {
     ## Validate arguments
@@ -437,6 +473,13 @@ reverse_locations_if_needed <- function(locations_vector, direction_vector, leng
 #' @param direction_vector `character vector`. Whether each sequence is forward or reverse. Must contain only `"forward"` and `"reverse"`, but is not case sensitive. Must be the same length as `probabilities_vector`.
 #'
 #' @return `character vector`. A vector of all forward versions of the input probabilities vector.
+#'
+#' @examples
+#' reverse_probabilities_if_needed(
+#'     probabilities_vector = c("100,200,50", "100,200,50"),
+#'     direction_vector = c("forward", "reverse")
+#' )
+#'
 #' @export
 reverse_probabilities_if_needed <- function(probabilities_vector, direction_vector) {
     ## Validate arguments

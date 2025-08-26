@@ -25,3 +25,10 @@ Called by \code{\link[=merge_methylation_with_metadata]{merge_methylation_with_m
 alongside \code{\link[=reverse_sequence_if_needed]{reverse_sequence_if_needed()}}, \code{\link[=reverse_locations_if_needed]{reverse_locations_if_needed()}},
 and \code{\link[=reverse_probabilities_if_needed]{reverse_probabilities_if_needed()}}.
 }
+\examples{
+reverse_quality_if_needed(
+    quality_vector = c("#^$&$*", "#^$&$*"),
+    direction_vector = c("reverse", "forward")
+)
+
+}
