@@ -270,15 +270,11 @@ scalebar <- visualise_methylation_colour_scale(
 ## Write png from object (the object is just a standard ggplot)
 ggsave(paste0(output_location, "summary_methylation_scalebar.png"), scalebar, dpi = 300, width = 5, height = 1.25, device = ragg::agg_png)
 
-## Image viewed in separate HTML after to allow partial width
+## View image
+knitr::include_graphics(paste0(github_location, "summary_methylation_scalebar.png"))
 ```
 
-<div align="center">
-
-\<img src=paste0(output_location, “summary_methylation_scalebar.png”
-width=“50%”\>
-
-</div>
+<img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/summary_methylation_scalebar.png" width="60%" style="display: block; margin: auto;" />
 
 # 3 Loading data
 

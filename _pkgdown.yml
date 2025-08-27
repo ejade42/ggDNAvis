@@ -1,8 +1,9 @@
 url: https://ejade42.github.io/ggDNAvis/
 template:
   bootstrap: 5
-  assets:
-    - README_files
+  params:
+    toc:
+      float: true
 
 reference:
 - title: DNA visualisation
