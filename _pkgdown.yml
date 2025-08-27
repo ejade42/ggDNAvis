@@ -1,9 +1,8 @@
 url: https://ejade42.github.io/ggDNAvis/
 template:
   bootstrap: 5
-  light-switch: true
-  toc:
-    floating: true
+  bslib:
+    pkgdown_navbar: ~
 
 reference:
 - title: DNA visualisation
