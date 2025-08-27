@@ -101,6 +101,10 @@ github_table <- function(data) {
     kable_output <- knitr::kable(quoted)
     return(kable_output)
 }
+
+## Set up file locations
+output_location <- "README_files/output/"
+knitr::opts_chunk$set(fig.path = output_location)
 ```
 
 # 2 Summary/quickstart
@@ -135,13 +139,13 @@ visualise_single_sequence(
     outline_linewidth = 3,
     outline_join = "mitre",
     return = FALSE,
-    filename = "README_files/output/summary_single_sequence.png",
+    filename = paste0(output_location, "summary_single_sequence.png"),
     render_device = ragg::agg_png,
     pixels_per_base = 100
 )
 
 ## View image
-knitr::include_graphics("README_files/output/summary_single_sequence.png")
+knitr::include_graphics(paste0(output_location, "summary_single_sequence.png"))
 ```
 
 <img src="README_files/output/summary_single_sequence.png" width="6100" />
@@ -177,13 +181,13 @@ visualise_many_sequences(
     outline_linewidth = 3,
     outline_join = "mitre",
     return = FALSE,
-    filename = "README_files/output/summary_many_sequences.png",
+    filename = paste0(output_location, "summary_many_sequences.png"),
     render_device = ragg::agg_png,
     pixels_per_base = 100
 )
 
 ## View image
-knitr::include_graphics("README_files/output/summary_many_sequences.png")
+knitr::include_graphics(paste0(output_location, "summary_many_sequences.png"))
 ```
 
 <img src="README_files/output/summary_many_sequences.png" width="10300" />
@@ -232,13 +236,13 @@ visualise_methylation(
     other_bases_outline_join = NA,
     margin = 0.5,
     return = FALSE,
-    filename = "README_files/output/summary_methylation.png",
+    filename = paste0(output_location, "summary_methylation.png"),
     render_device = ragg::agg_png,
     pixels_per_base = 20
 )
 
 ## View image
-knitr::include_graphics("README_files/output/summary_methylation.png")
+knitr::include_graphics(paste0(output_location, "summary_methylation.png"))
 ```
 
 <img src="README_files/output/summary_methylation.png" width="2060" />
@@ -263,14 +267,15 @@ scalebar <- visualise_methylation_colour_scale(
 )
 
 ## Write png from object (the object is just a standard ggplot)
-ggsave("README_files/output/summary_methylation_scalebar.png", scalebar, dpi = 300, width = 5, height = 1.25, device = ragg::agg_png)
+ggsave(paste0(output_location, "summary_methylation_scalebar.png"), scalebar, dpi = 300, width = 5, height = 1.25, device = ragg::agg_png)
 
 ## Image viewed in separate HTML after to allow partial width
 ```
 
 <div align="center">
 
-<img src="README_files/output/summary_methylation_scalebar.png" width="50%">
+\<img src=paste0(output_location, “summary_methylation_scalebar.png”
+width=“50%”\>
 
 </div>
 
@@ -983,7 +988,7 @@ sone_2019_f1_1_expanded_ggt_added <- "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGC
 visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added)
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-28-1.png)<!-- -->
+![](README_files/output/single_sequence_default-1.png)<!-- -->
 
 By default, `visualise_single_sequence()` will return a ggplot object.
 It can be useful to view this for instant debugging. However, it is not
@@ -996,11 +1001,11 @@ for interactive debugging, so we will also set `return = FALSE`.
 ``` r
 ## Create image
 visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added, 
-                          filename = "README_files/output/single_sequence_01.png", 
+                          filename = paste0(output_location, "single_sequence_01.png"), 
                           return = FALSE)
 
 ## View image
-knitr::include_graphics("README_files/output/single_sequence_01.png")
+knitr::include_graphics(paste0(output_location, "single_sequence_01.png"))
 ```
 
 <img src="README_files/output/single_sequence_01.png" width="7600" />
@@ -1026,12 +1031,12 @@ so you should not need to change it.
 ``` r
 ## Create image
 visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added, 
-                          filename = "README_files/output/single_sequence_02.png", 
+                          filename = paste0(output_location, "single_sequence_02.png"), 
                           return = FALSE,
                           pixels_per_base = 20)
 
 ## View image
-knitr::include_graphics("README_files/output/single_sequence_02.png")
+knitr::include_graphics(paste0(output_location, "single_sequence_02.png"))
 ```
 
 <img src="README_files/output/single_sequence_02.png" width="1520" />
@@ -1055,7 +1060,7 @@ For example, we can change all of the colours in an inadvisable way:
 ``` r
 ## Create image
 visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
-                          filename = "README_files/output/single_sequence_03.png", 
+                          filename = paste0(output_location, "single_sequence_03.png"), 
                           return = FALSE,
                           sequence_colours = c("black", "white", "#00FFFF", "#00FF00"),
                           sequence_text_colour = "magenta",
@@ -1064,7 +1069,7 @@ visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
                           outline_colour = "orange")
 
 ## View image
-knitr::include_graphics("README_files/output/single_sequence_03.png")
+knitr::include_graphics(paste0(output_location, "single_sequence_03.png"))
 ```
 
 <img src="README_files/output/single_sequence_03.png" width="7600" />
@@ -1081,13 +1086,13 @@ depending on how much the text is desired to “pop”:
 ``` r
 ## Create image
 visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
-                          filename = "README_files/output/single_sequence_04.png", 
+                          filename = paste0(output_location, "single_sequence_04.png"), 
                           return = FALSE,
                           sequence_colours = sequence_colour_palettes$bright_pale,
                           sequence_text_colour = "white")
 
 ## View image
-knitr::include_graphics("README_files/output/single_sequence_04.png")
+knitr::include_graphics(paste0(output_location, "single_sequence_04.png"))
 ```
 
 <img src="README_files/output/single_sequence_04.png" width="7600" />
@@ -1095,13 +1100,13 @@ knitr::include_graphics("README_files/output/single_sequence_04.png")
 ``` r
 ## Create image
 visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
-                          filename = "README_files/output/single_sequence_05.png", 
+                          filename = paste0(output_location, "single_sequence_05.png"), 
                           return = FALSE,
                           sequence_colours = sequence_colour_palettes$bright_pale,
                           sequence_text_colour = "black")
 
 ## View image
-knitr::include_graphics("README_files/output/single_sequence_05.png")
+knitr::include_graphics(paste0(output_location, "single_sequence_05.png"))
 ```
 
 <img src="README_files/output/single_sequence_05.png" width="7600" />
@@ -1111,13 +1116,13 @@ knitr::include_graphics("README_files/output/single_sequence_05.png")
 ``` r
 ## Create image
 visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
-                          filename = "README_files/output/single_sequence_06.png", 
+                          filename = paste0(output_location, "single_sequence_06.png"), 
                           return = FALSE,
                           sequence_colours = sequence_colour_palettes$bright_pale2,
                           sequence_text_colour = "black")
 
 ## View image
-knitr::include_graphics("README_files/output/single_sequence_06.png")
+knitr::include_graphics(paste0(output_location, "single_sequence_06.png"))
 ```
 
 <img src="README_files/output/single_sequence_06.png" width="7600" />
@@ -1127,13 +1132,13 @@ The `bright_deep` palette works best with white text:
 ``` r
 ## Create image
 visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
-                          filename = "README_files/output/single_sequence_07.png", 
+                          filename = paste0(output_location, "single_sequence_07.png"), 
                           return = FALSE,
                           sequence_colours = sequence_colour_palettes$bright_deep,
                           sequence_text_colour = "white")
 
 ## View image
-knitr::include_graphics("README_files/output/single_sequence_07.png")
+knitr::include_graphics(paste0(output_location, "single_sequence_07.png"))
 ```
 
 <img src="README_files/output/single_sequence_07.png" width="7600" />
@@ -1144,14 +1149,14 @@ readouts and works best with white text:
 ``` r
 ## Create image
 visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
-                          filename = "README_files/output/single_sequence_08.png", 
+                          filename = paste0(output_location, "single_sequence_08.png"), 
                           return = FALSE,
                           sequence_colours = sequence_colour_palettes$sanger,
                           sequence_text_colour = "white",
                           outline_colour = "darkgrey")
 
 ## View image
-knitr::include_graphics("README_files/output/single_sequence_08.png")
+knitr::include_graphics(paste0(output_location, "single_sequence_08.png"))
 ```
 
 <img src="README_files/output/single_sequence_08.png" width="7600" />
@@ -1204,7 +1209,7 @@ A sensible example of how these might be changed is as follows:
 ``` r
 ## Create image
 visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
-                          filename = "README_files/output/single_sequence_09.png", 
+                          filename = paste0(output_location, "single_sequence_09.png"), 
                           return = FALSE,
                           sequence_colours = sequence_colour_palettes$ggplot_style,
                           margin = 2,
@@ -1216,7 +1221,7 @@ visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
                           outline_linewidth = 0)
 
 ## View image
-knitr::include_graphics("README_files/output/single_sequence_09.png")
+knitr::include_graphics(paste0(output_location, "single_sequence_09.png"))
 ```
 
 <img src="README_files/output/single_sequence_09.png" width="6400" />
@@ -1229,7 +1234,7 @@ that would be rendered poorly at low resolutions:
 ``` r
 ## Create image
 visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
-                          filename = "README_files/output/single_sequence_10.png", 
+                          filename = paste0(output_location, "single_sequence_10.png"), 
                           return = FALSE,
                           sequence_colours = sequence_colour_palettes$bright_pale,
                           margin = 0,
@@ -1247,7 +1252,7 @@ visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
 
 ``` r
 ## View image
-knitr::include_graphics("README_files/output/single_sequence_10.png")
+knitr::include_graphics(paste0(output_location, "single_sequence_10.png"))
 ```
 
 <img src="README_files/output/single_sequence_10.png" width="900" />
@@ -1258,7 +1263,7 @@ be used:
 ``` r
 ## Create image
 visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
-                          filename = "README_files/output/single_sequence_11.png", 
+                          filename = paste0(output_location, "single_sequence_11.png"), 
                           return = FALSE,
                           sequence_colours = sequence_colour_palettes$bright_pale,
                           margin = 0.3,
@@ -1270,7 +1275,7 @@ visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
                           outline_linewidth = 3)
 
 ## View image
-knitr::include_graphics("README_files/output/single_sequence_11.png")
+knitr::include_graphics(paste0(output_location, "single_sequence_11.png"))
 ```
 
 <img src="README_files/output/single_sequence_11.png" width="912" />
@@ -1280,7 +1285,7 @@ Or the outlines can be turned off:
 ``` r
 ## Create image
 visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
-                          filename = "README_files/output/single_sequence_12.png", 
+                          filename = paste0(output_location, "single_sequence_12.png"), 
                           return = FALSE,
                           sequence_colours = sequence_colour_palettes$bright_pale,
                           margin = 0,
@@ -1292,7 +1297,7 @@ visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
                           outline_linewidth = 0)
 
 ## View image
-knitr::include_graphics("README_files/output/single_sequence_12.png")
+knitr::include_graphics(paste0(output_location, "single_sequence_12.png"))
 ```
 
 <img src="README_files/output/single_sequence_12.png" width="900" />
@@ -1311,7 +1316,7 @@ Here is an example where these guidelines are not followed:
 ``` r
 ## Create image
 visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
-                          filename = "README_files/output/single_sequence_13.png", 
+                          filename = paste0(output_location, "single_sequence_13.png"), 
                           return = FALSE,
                           sequence_colours = sequence_colour_palettes$bright_deep,
                           sequence_text_colour = "white",
@@ -1319,7 +1324,7 @@ visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
                           index_annotation_interval = 15)
 
 ## View image
-knitr::include_graphics("README_files/output/single_sequence_13.png")
+knitr::include_graphics(paste0(output_location, "single_sequence_13.png"))
 ```
 
 <img src="README_files/output/single_sequence_13.png" width="6600" />
@@ -1331,7 +1336,7 @@ nowhere for them to render:
 ``` r
 ## Create image
 visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
-                          filename = "README_files/output/single_sequence_14.png", 
+                          filename = paste0(output_location, "single_sequence_14.png"), 
                           return = FALSE,
                           sequence_colours = sequence_colour_palettes$sanger,
                           sequence_text_colour = "white",
@@ -1346,7 +1351,7 @@ visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
 
 ``` r
 ## View image
-knitr::include_graphics("README_files/output/single_sequence_14.png")
+knitr::include_graphics(paste0(output_location, "single_sequence_14.png"))
 ```
 
 <img src="README_files/output/single_sequence_14.png" width="7600" />
@@ -1458,11 +1463,11 @@ sequences_for_visualisation
 ``` r
 ## Use the character vector to make the image
 visualise_many_sequences(sequences_for_visualisation,
-                         filename = "README_files/output/many_sequences_01.png",
+                         filename = paste0(output_location, "many_sequences_01.png"),
                          return = FALSE)
 
 ## View image
-knitr::include_graphics("README_files/output/many_sequences_01.png")
+knitr::include_graphics(paste0(output_location, "many_sequences_01.png"))
 ```
 
 <img src="README_files/output/many_sequences_01.png" width="10300" />
@@ -1518,11 +1523,11 @@ sequences_for_visualisation <- extract_and_sort_sequences(example_many_sequences
 
 ## Use the character vector to make the image
 visualise_many_sequences(sequences_for_visualisation,
-                         filename = "README_files/output/many_sequences_02.png",
+                         filename = paste0(output_location, "many_sequences_02.png"),
                          return = FALSE)
 
 ## View image
-knitr::include_graphics("README_files/output/many_sequences_02.png")
+knitr::include_graphics(paste0(output_location, "many_sequences_02.png"))
 ```
 
 <img src="README_files/output/many_sequences_02.png" width="10300" />
@@ -1549,11 +1554,11 @@ sequences_for_visualisation <- extract_and_sort_sequences(example_many_sequences
 
 ## Use the character vector to make the image
 visualise_many_sequences(sequences_for_visualisation,
-                         filename = "README_files/output/many_sequences_03.png",
+                         filename = paste0(output_location, "many_sequences_03.png"),
                          return = FALSE)
 
 ## View image
-knitr::include_graphics("README_files/output/many_sequences_03.png")
+knitr::include_graphics(paste0(output_location, "many_sequences_03.png"))
 ```
 
 <img src="README_files/output/many_sequences_03.png" width="10300" />
@@ -1574,11 +1579,11 @@ sequences_for_visualisation <- extract_and_sort_sequences(example_many_sequences
 
 ## Use the character vector to make the image
 visualise_many_sequences(sequences_for_visualisation,
-                         filename = "README_files/output/many_sequences_04.png",
+                         filename = paste0(output_location, "many_sequences_04.png"),
                          return = FALSE)
 
 ## View image
-knitr::include_graphics("README_files/output/many_sequences_04.png")
+knitr::include_graphics(paste0(output_location, "many_sequences_04.png"))
 ```
 
 <img src="README_files/output/many_sequences_04.png" width="10300" />
@@ -1599,11 +1604,11 @@ sequences_for_visualisation <- extract_and_sort_sequences(example_many_sequences
 
 ## Use the character vector to make the image
 visualise_many_sequences(sequences_for_visualisation,
-                         filename = "README_files/output/many_sequences_05.png",
+                         filename = paste0(output_location, "many_sequences_05.png"),
                          return = FALSE)
 
 ## View image
-knitr::include_graphics("README_files/output/many_sequences_05.png")
+knitr::include_graphics(paste0(output_location, "many_sequences_05.png"))
 ```
 
 <img src="README_files/output/many_sequences_05.png" width="10300" />
@@ -1621,11 +1626,11 @@ sequences_for_visualisation <- extract_and_sort_sequences(example_many_sequences
 
 ## Use the character vector to make the image
 visualise_many_sequences(sequences_for_visualisation,
-                         filename = "README_files/output/many_sequences_06.png",
+                         filename = paste0(output_location, "many_sequences_06.png"),
                          return = FALSE)
 
 ## View image
-knitr::include_graphics("README_files/output/many_sequences_06.png")
+knitr::include_graphics(paste0(output_location, "many_sequences_06.png"))
 ```
 
 <img src="README_files/output/many_sequences_06.png" width="10300" />
@@ -1653,11 +1658,11 @@ sequences_for_visualisation <- extract_and_sort_sequences(example_many_sequences
 
 ## Use the character vector to make the image
 visualise_many_sequences(sequences_for_visualisation,
-                         filename = "README_files/output/many_sequences_07.png",
+                         filename = paste0(output_location, "many_sequences_07.png"),
                          return = FALSE)
 
 ## View image
-knitr::include_graphics("README_files/output/many_sequences_07.png")
+knitr::include_graphics(paste0(output_location, "many_sequences_07.png"))
 ```
 
 <img src="README_files/output/many_sequences_07.png" width="10300" />
@@ -1761,7 +1766,7 @@ sequences_for_visualisation <- extract_and_sort_sequences(example_many_sequences
 
 ## Use the character vector to make the image
 visualise_many_sequences(sequences_for_visualisation,
-                         filename = "README_files/output/many_sequences_08.png",
+                         filename = paste0(output_location, "many_sequences_08.png"),
                          return = FALSE,
                          sequence_colours = c("orange", "#00FF00", "magenta", "black"),
                          sequence_text_colour = "cyan",
@@ -1773,7 +1778,7 @@ visualise_many_sequences(sequences_for_visualisation,
                          margin = 5)
 
 ## View image
-knitr::include_graphics("README_files/output/many_sequences_08.png")
+knitr::include_graphics(paste0(output_location, "many_sequences_08.png"))
 ```
 
 <img src="README_files/output/many_sequences_08.png" width="11200" />
@@ -1789,7 +1794,7 @@ sequences_for_visualisation <- extract_and_sort_sequences(example_many_sequences
 
 ## Use the character vector to make the image
 visualise_many_sequences(sequences_for_visualisation,
-                         filename = "README_files/output/many_sequences_09.png",
+                         filename = paste0(output_location, "many_sequences_09.png"),
                          return = FALSE,
                          sequence_colours = sequence_colour_palettes$bright_pale,
                          sequence_text_size = 0,
@@ -1804,7 +1809,7 @@ visualise_many_sequences(sequences_for_visualisation,
 
 ``` r
 ## View image
-knitr::include_graphics("README_files/output/many_sequences_09.png")
+knitr::include_graphics(paste0(output_location, "many_sequences_09.png"))
 ```
 
 <img src="README_files/output/many_sequences_09.png" width="2044" />
@@ -2158,11 +2163,11 @@ input for `visualise_methylation()`.
 visualise_methylation(modification_locations     = methylation_data_for_visualisation$locations,
                       modification_probabilities = methylation_data_for_visualisation$probabilities,
                       sequence_lengths           = methylation_data_for_visualisation$lengths,
-                      filename = "README_files/output/modification_01.png",
+                      filename = paste0(output_location, "modification_01.png"),
                       return = FALSE)
 
 ## View image
-knitr::include_graphics("README_files/output/modification_01.png")
+knitr::include_graphics(paste0(output_location, "modification_01.png"))
 ```
 
 <img src="README_files/output/modification_01.png" width="2060" />
@@ -2184,16 +2189,13 @@ exported manually via `ggsave()`.
 scalebar <- visualise_methylation_colour_scale(x_axis_title = "Methylation probability")
 
 ## Write png from object
-ggsave("README_files/output/modification_01_scalebar.png", scalebar, dpi = 300, width = 5, height = 1.25, device = ragg::agg_png)
+ggsave(paste0(output_location, "modification_01_scalebar.png"), scalebar, dpi = 300, width = 5, height = 1.25, device = ragg::agg_png)
 
-## Image viewed in separate HTML after to allow partial width
+## View image
+knitr::include_graphics(paste0(output_location, "modification_01_scalebar.png"))
 ```
 
-<div align="center">
-
-<img src="README_files/output/modification_01_scalebar.png" width="50%">
-
-</div>
+<img src="README_files/output/modification_01_scalebar.png" width="60%" style="display: block; margin: auto;" />
 
 ## 6.2 Sequence arrangement customisation
 
@@ -2252,11 +2254,11 @@ methylation_data_for_visualisation <- extract_methylation_from_dataframe(
 visualise_methylation(modification_locations     = methylation_data_for_visualisation$locations,
                       modification_probabilities = methylation_data_for_visualisation$probabilities,
                       sequence_lengths           = methylation_data_for_visualisation$lengths,
-                      filename = "README_files/output/modification_02.png",
+                      filename = paste0(output_location, "modification_02.png"),
                       return = FALSE)
 
 ## View image
-knitr::include_graphics("README_files/output/modification_02.png")
+knitr::include_graphics(paste0(output_location, "modification_02.png"))
 ```
 
 <img src="README_files/output/modification_02.png" width="2060" />
@@ -2371,7 +2373,7 @@ methylation_data_for_visualisation <- extract_methylation_from_dataframe(
 visualise_methylation(modification_locations     = methylation_data_for_visualisation$locations,
                       modification_probabilities = methylation_data_for_visualisation$probabilities,
                       sequence_lengths           = methylation_data_for_visualisation$lengths,
-                      filename = "README_files/output/modification_03.png",
+                      filename = paste0(output_location, "modification_03.png"),
                       return = FALSE,
                       margin = 4, 
                       low_colour = "#00FF00",
@@ -2384,7 +2386,7 @@ visualise_methylation(modification_locations     = methylation_data_for_visualis
                       background_colour = "red")
 
 ## View image
-knitr::include_graphics("README_files/output/modification_03.png")
+knitr::include_graphics(paste0(output_location, "modification_03.png"))
 ```
 
 <img src="README_files/output/modification_03.png" width="2200" />
@@ -2403,16 +2405,13 @@ scalebar <- visualise_methylation_colour_scale(x_axis_title = "Methylation proba
           axis.text  = element_text(colour = "white"))
 
 ## Write png from object
-ggsave("README_files/output/modification_03_scalebar.png", scalebar, dpi = 300, width = 5, height = 1.25, device = ragg::agg_png)
+ggsave(paste0(output_location, "modification_03_scalebar.png"), scalebar, dpi = 300, width = 5, height = 1.25, device = ragg::agg_png)
 
-## Image viewed in separate HTML after to allow partial width
+## View image
+knitr::include_graphics(paste0(output_location, "modification_03_scalebar.png"))
 ```
 
-<div align="center">
-
-<img src="README_files/output/modification_03_scalebar.png" width="50%">
-
-</div>
+<img src="README_files/output/modification_03_scalebar.png" width="60%" style="display: block; margin: auto;" />
 
 One way this might be used in practice is for making a graphic in the
 “lollipop” style where methylated/modified CGs are black and unmodified
@@ -2435,7 +2434,7 @@ methylation_data_for_visualisation <- extract_methylation_from_dataframe(
 visualise_methylation(modification_locations     = methylation_data_for_visualisation$locations,
                       modification_probabilities = methylation_data_for_visualisation$probabilities,
                       sequence_lengths           = methylation_data_for_visualisation$lengths,
-                      filename = "README_files/output/modification_04.png",
+                      filename = paste0(output_location, "modification_04.png"),
                       return = FALSE,
                       margin = 0.1, 
                       low_colour = "white",
@@ -2452,7 +2451,7 @@ visualise_methylation(modification_locations     = methylation_data_for_visualis
 
 ``` r
 ## View image
-knitr::include_graphics("README_files/output/modification_04.png")
+knitr::include_graphics(paste0(output_location, "modification_04.png"))
 ```
 
 <img src="README_files/output/modification_04.png" width="2044" />
@@ -2465,16 +2464,13 @@ scalebar <- visualise_methylation_colour_scale(x_axis_title = "Methylation proba
                                                background_colour = "lightblue1")
 
 ## Write png from object
-ggsave("README_files/output/modification_04_scalebar.png", scalebar, dpi = 300, width = 5, height = 1.25, device = ragg::agg_png)
+ggsave(paste0(output_location, "modification_04_scalebar.png"), scalebar, dpi = 300, width = 5, height = 1.25, device = ragg::agg_png)
 
-## Image viewed in separate HTML after to allow partial width
+## View image
+knitr::include_graphics(paste0(output_location, "modification_04_scalebar.png"))
 ```
 
-<div align="center">
-
-<img src="README_files/output/modification_04_scalebar.png" width="50%">
-
-</div>
+<img src="README_files/output/modification_04_scalebar.png" width="60%" style="display: block; margin: auto;" />
 
 ## 6.4 Colour mapping customisation
 
@@ -2519,7 +2515,7 @@ methylation_data_for_visualisation <- extract_methylation_from_dataframe(
 visualise_methylation(modification_locations     = methylation_data_for_visualisation$locations,
                       modification_probabilities = methylation_data_for_visualisation$probabilities,
                       sequence_lengths           = methylation_data_for_visualisation$lengths,
-                      filename = "README_files/output/modification_05.png",
+                      filename = paste0(output_location, "modification_05.png"),
                       return = FALSE,
                       margin = 0.1, 
                       low_colour = "white",
@@ -2538,7 +2534,7 @@ visualise_methylation(modification_locations     = methylation_data_for_visualis
 
 ``` r
 ## View image
-knitr::include_graphics("README_files/output/modification_05.png")
+knitr::include_graphics(paste0(output_location, "modification_05.png"))
 ```
 
 <img src="README_files/output/modification_05.png" width="2044" />
@@ -2553,14 +2549,13 @@ scalebar <- visualise_methylation_colour_scale(x_axis_title = "Methylation proba
                                                background_colour = "lightblue1")
 
 ## Write png from object
-ggsave("README_files/output/modification_05_scalebar.png", scalebar, dpi = 300, width = 5, height = 1.25, device = ragg::agg_png)
+ggsave(paste0(output_location, "modification_05_scalebar.png"), scalebar, dpi = 300, width = 5, height = 1.25, device = ragg::agg_png)
+
+## View image
+knitr::include_graphics(paste0(output_location, "modification_05_scalebar.png"))
 ```
 
-<div align="center">
-
-<img src="README_files/output/modification_05_scalebar.png" width="50%">
-
-</div>
+<img src="README_files/output/modification_05_scalebar.png" width="60%" style="display: block; margin: auto;" />
 
 The clamping arguments do not have to be integers. Clamping is
 implemented with `pmin()` and `pmax()` and relies on their default
@@ -2595,14 +2590,14 @@ methylation_data_for_visualisation <- extract_methylation_from_dataframe(
 visualise_methylation(modification_locations     = methylation_data_for_visualisation$locations,
                       modification_probabilities = methylation_data_for_visualisation$probabilities,
                       sequence_lengths           = methylation_data_for_visualisation$lengths,
-                      filename = "README_files/output/modification_06.png",
+                      filename = paste0(output_location, "modification_06.png"),
                       return = FALSE,
                       low_clamp = 0.3*255,
                       high_clamp = 0.7*255,
                       outline_linewidth = 0)
 
 ## View image
-knitr::include_graphics("README_files/output/modification_06.png")
+knitr::include_graphics(paste0(output_location, "modification_06.png"))
 ```
 
 <img src="README_files/output/modification_06.png" width="2060" />
@@ -2614,14 +2609,13 @@ scalebar <- visualise_methylation_colour_scale(x_axis_title = "Methylation proba
                                                high_clamp = 0.7*255)
 
 ## Write png from object
-ggsave("README_files/output/modification_06_scalebar.png", scalebar, dpi = 300, width = 5, height = 1.25, device = ragg::agg_png)
+ggsave(paste0(output_location, "modification_06_scalebar.png"), scalebar, dpi = 300, width = 5, height = 1.25, device = ragg::agg_png)
+
+## View image
+knitr::include_graphics(paste0(output_location, "modification_06_scalebar.png"))
 ```
 
-<div align="center">
-
-<img src="README_files/output/modification_06_scalebar.png" width="50%">
-
-</div>
+<img src="README_files/output/modification_06_scalebar.png" width="60%" style="display: block; margin: auto;" />
 
 The clamping does not need to be symmetrical. One use for this is if the
 data is skewed. For example, the methylation scores were randomly
@@ -2648,14 +2642,14 @@ hydroxymethylation_data_for_visualisation <- extract_methylation_from_dataframe(
 visualise_methylation(modification_locations     = hydroxymethylation_data_for_visualisation$locations,
                       modification_probabilities = hydroxymethylation_data_for_visualisation$probabilities,
                       sequence_lengths           = hydroxymethylation_data_for_visualisation$lengths,
-                      filename = "README_files/output/modification_07.png",
+                      filename = paste0(output_location, "modification_07.png"),
                       return = FALSE,
                       low_clamp = 0.1*255,
                       high_clamp = 0.5*255,
                       other_bases_outline_linewidth = 0)
 
 ## View image
-knitr::include_graphics("README_files/output/modification_07.png")
+knitr::include_graphics(paste0(output_location, "modification_07.png"))
 ```
 
 <img src="README_files/output/modification_07.png" width="2060" />
@@ -2667,14 +2661,13 @@ scalebar <- visualise_methylation_colour_scale(x_axis_title = "Hydroxymethylatio
                                                high_clamp = 0.5*255)
 
 ## Write png from object
-ggsave("README_files/output/modification_07_scalebar.png", scalebar, dpi = 300, width = 5, height = 1.25, device = ragg::agg_png)
+ggsave(paste0(output_location, "modification_07_scalebar.png"), scalebar, dpi = 300, width = 5, height = 1.25, device = ragg::agg_png)
+
+## View image
+knitr::include_graphics(paste0(output_location, "modification_07_scalebar.png"))
 ```
 
-<div align="center">
-
-<img src="README_files/output/modification_07_scalebar.png" width="50%">
-
-</div>
+<img src="README_files/output/modification_07_scalebar.png" width="60%" style="display: block; margin: auto;" />
 
 ***IMPORTANT:** make sure that you provide the scalebar when presenting
 data, especially if clamping is used, otherwise the colours could be
@@ -2734,16 +2727,13 @@ Using all defaults but with lower precision gives the following:
 scalebar <- visualise_methylation_colour_scale(precision = 10)
 
 ## Write png from object
-ggsave("README_files/output/modification_scalebar_alone_01.png", scalebar, dpi = 300, width = 5, height = 1.25, device = ragg::agg_png)
+ggsave(paste0(output_location, "modification_scalebar_alone_01.png"), scalebar, dpi = 300, width = 5, height = 1.25, device = ragg::agg_png)
 
-## Image viewed in separate HTML after to allow partial width
+## View image
+knitr::include_graphics(paste0(output_location, "modification_scalebar_alone_01.png"))
 ```
 
-<div align="center">
-
-<img src="README_files/output/modification_scalebar_alone_01.png" width="50%">
-
-</div>
+<img src="README_files/output/modification_scalebar_alone_01.png" width="60%" style="display: block; margin: auto;" />
 
 Disabling x axis ticks with intermediate precision gives the following:
 
@@ -2753,14 +2743,13 @@ scalebar <- visualise_methylation_colour_scale(precision = 50,
                                                do_x_ticks = FALSE)
 
 ## Write png from object
-ggsave("README_files/output/modification_scalebar_alone_02.png", scalebar, dpi = 300, width = 5, height = 1.25, device = ragg::agg_png)
+ggsave(paste0(output_location, "modification_scalebar_alone_02.png"), scalebar, dpi = 300, width = 5, height = 1.25, device = ragg::agg_png)
+
+## View image
+knitr::include_graphics(paste0(output_location, "modification_scalebar_alone_02.png"))
 ```
 
-<div align="center">
-
-<img src="README_files/output/modification_scalebar_alone_02.png" width="50%">
-
-</div>
+<img src="README_files/output/modification_scalebar_alone_02.png" width="60%" style="display: block; margin: auto;" />
 
 If ticks are left on, they can be customised with `scale_x_continuous()`
 as per usual for a ggplot. Here is an example with the side scalebar
@@ -2783,14 +2772,13 @@ scalebar <- visualise_methylation_colour_scale(high_colour = "green",
     scale_x_continuous(breaks = seq(0, 1, 0.1))
 
 ## Write png from object
-ggsave("README_files/output/modification_scalebar_alone_03.png", scalebar, dpi = 300, width = 5, height = 2, device = ragg::agg_png)
+ggsave(paste0(output_location, "modification_scalebar_alone_03.png"), scalebar, dpi = 300, width = 5, height = 2, device = ragg::agg_png)
+
+## View image
+knitr::include_graphics(paste0(output_location, "modification_scalebar_alone_03.png"))
 ```
 
-<div align="center">
-
-<img src="README_files/output/modification_scalebar_alone_03.png" width="60%">
-
-</div>
+<img src="README_files/output/modification_scalebar_alone_03.png" width="60%" style="display: block; margin: auto;" />
 
 And here is an example of a more sensible scalebar but with the side
 scale turned on:
@@ -2805,14 +2793,13 @@ scalebar <- visualise_methylation_colour_scale(low_clamp = 0.1*255,
                                                outline_linewidth = 0)
 
 ## Write png from object
-ggsave("README_files/output/modification_scalebar_alone_04.png", scalebar, dpi = 300, width = 5, height = 2, device = ragg::agg_png)
+ggsave(paste0(output_location, "modification_scalebar_alone_04.png"), scalebar, dpi = 300, width = 5, height = 2, device = ragg::agg_png)
+
+## View image
+knitr::include_graphics(paste0(output_location, "modification_scalebar_alone_04.png"))
 ```
 
-<div align="center">
-
-<img src="README_files/output/modification_scalebar_alone_04.png" width="60%">
-
-</div>
+<img src="README_files/output/modification_scalebar_alone_04.png" width="60%" style="display: block; margin: auto;" />
 
 ## 6.6 Think about the offset!
 
@@ -2883,11 +2870,11 @@ methylation_data_for_visualisation <- extract_methylation_from_dataframe(
 visualise_methylation(modification_locations     = methylation_data_for_visualisation$locations,
                       modification_probabilities = methylation_data_for_visualisation$probabilities,
                       sequence_lengths           = methylation_data_for_visualisation$lengths,
-                      filename = "README_files/output/modification_08.png",
+                      filename = paste0(output_location, "modification_08.png"),
                       return = FALSE)
 
 ## View image
-knitr::include_graphics("README_files/output/modification_08.png")
+knitr::include_graphics(paste0(output_location, "modification_08.png"))
 ```
 
 <img src="README_files/output/modification_08.png" width="2060" /> We
@@ -2928,11 +2915,11 @@ methylation_data_for_visualisation <- extract_methylation_from_dataframe(
 visualise_methylation(modification_locations     = methylation_data_for_visualisation$locations,
                       modification_probabilities = methylation_data_for_visualisation$probabilities,
                       sequence_lengths           = methylation_data_for_visualisation$lengths,
-                      filename = "README_files/output/modification_09.png",
+                      filename = paste0(output_location, "modification_09.png"),
                       return = FALSE)
 
 ## View image
-knitr::include_graphics("README_files/output/modification_09.png")
+knitr::include_graphics(paste0(output_location, "modification_09.png"))
 ```
 
 <img src="README_files/output/modification_09.png" width="2060" />
@@ -2971,11 +2958,11 @@ methylation_data_for_visualisation <- extract_methylation_from_dataframe(
 visualise_methylation(modification_locations     = methylation_data_for_visualisation$locations,
                       modification_probabilities = methylation_data_for_visualisation$probabilities,
                       sequence_lengths           = methylation_data_for_visualisation$lengths,
-                      filename = "README_files/output/modification_10.png",
+                      filename = paste0(output_location, "modification_10.png"),
                       return = FALSE)
 
 ## View image
-knitr::include_graphics("README_files/output/modification_10.png")
+knitr::include_graphics(paste0(output_location, "modification_10.png"))
 ```
 
 <img src="README_files/output/modification_10.png" width="2060" />
