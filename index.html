@@ -301,10 +301,9 @@
 <span><span class="co">## Write png from object (the object is just a standard ggplot)</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"summary_methylation_scalebar.png"</span><span class="op">)</span>, <span class="va">scalebar</span>, dpi <span class="op">=</span> <span class="fl">300</span>, width <span class="op">=</span> <span class="fl">5</span>, height <span class="op">=</span> <span class="fl">1.25</span>, device <span class="op">=</span> <span class="fu">ragg</span><span class="fu">::</span><span class="va"><a href="https://ragg.r-lib.org/reference/agg_png.html" class="external-link">agg_png</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">## Image viewed in separate HTML after to allow partial width</span></span></code></pre></div>
-<div align="center">
-<p>&lt;img src=paste0(output_location, “summary_methylation_scalebar.png” width=“50%”&gt;</p>
-</div>
+<span><span class="co">## View image</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"summary_methylation_scalebar.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/summary_methylation_scalebar.png" width="60%" style="display: block; margin: auto;"></p>
 </div>
 </div>
 <div class="section level1">
