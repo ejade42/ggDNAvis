@@ -1,0 +1,7 @@
+#pkgdown-sidebar nav,
+#pkgdown-sidebar .sidebar-toc {
+  position: sticky;
+  top: 70px;              /* roughly navbar height; tweak as needed */
+  max-height: calc(100vh - 70px);
+  overflow: auto;
+}
