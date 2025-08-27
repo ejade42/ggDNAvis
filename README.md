@@ -104,6 +104,7 @@ github_table <- function(data) {
 
 ## Set up file locations
 output_location <- "README_files/output/"
+github_location <- "https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/"
 knitr::opts_chunk$set(fig.path = output_location)
 ```
 
@@ -145,10 +146,10 @@ visualise_single_sequence(
 )
 
 ## View image
-knitr::include_graphics(paste0(output_location, "summary_single_sequence.png"))
+knitr::include_graphics(paste0(github_location, "summary_single_sequence.png"))
 ```
 
-<img src="README_files/output/summary_single_sequence.png" width="6100" />
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/summary_single_sequence.png)<!-- -->
 
 ## 2.2 Many sequences
 
@@ -187,10 +188,10 @@ visualise_many_sequences(
 )
 
 ## View image
-knitr::include_graphics(paste0(output_location, "summary_many_sequences.png"))
+knitr::include_graphics(paste0(github_location, "summary_many_sequences.png"))
 ```
 
-<img src="README_files/output/summary_many_sequences.png" width="10300" />
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/summary_many_sequences.png)<!-- -->
 
 ## 2.3 Methylation/modification
 
@@ -242,10 +243,10 @@ visualise_methylation(
 )
 
 ## View image
-knitr::include_graphics(paste0(output_location, "summary_methylation.png"))
+knitr::include_graphics(paste0(github_location, "summary_methylation.png"))
 ```
 
-<img src="README_files/output/summary_methylation.png" width="2060" />
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/summary_methylation.png)<!-- -->
 
 ``` r
 ## Create scalebar and save to ggplot object
@@ -1005,10 +1006,10 @@ visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
                           return = FALSE)
 
 ## View image
-knitr::include_graphics(paste0(output_location, "single_sequence_01.png"))
+knitr::include_graphics(paste0(github_location, "single_sequence_01.png"))
 ```
 
-<img src="README_files/output/single_sequence_01.png" width="7600" />
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_01.png)<!-- -->
 
 This is the typical single sequence visualisation produced by this
 package. However, almost every aspect of the visualisation is
@@ -1036,10 +1037,10 @@ visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
                           pixels_per_base = 20)
 
 ## View image
-knitr::include_graphics(paste0(output_location, "single_sequence_02.png"))
+knitr::include_graphics(paste0(github_location, "single_sequence_02.png"))
 ```
 
-<img src="README_files/output/single_sequence_02.png" width="1520" />
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_02.png)<!-- -->
 
 ## 4.2 Colour customisation
 
@@ -1069,10 +1070,10 @@ visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
                           outline_colour = "orange")
 
 ## View image
-knitr::include_graphics(paste0(output_location, "single_sequence_03.png"))
+knitr::include_graphics(paste0(github_location, "single_sequence_03.png"))
 ```
 
-<img src="README_files/output/single_sequence_03.png" width="7600" />
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_03.png)<!-- -->
 
 Included in `ggDNAvis` are a set of colour palettes for sequence colours
 that can often be helpful. The default is
@@ -1092,10 +1093,10 @@ visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
                           sequence_text_colour = "white")
 
 ## View image
-knitr::include_graphics(paste0(output_location, "single_sequence_04.png"))
+knitr::include_graphics(paste0(github_location, "single_sequence_04.png"))
 ```
 
-<img src="README_files/output/single_sequence_04.png" width="7600" />
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_04.png)<!-- -->
 
 ``` r
 ## Create image
@@ -1106,10 +1107,10 @@ visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
                           sequence_text_colour = "black")
 
 ## View image
-knitr::include_graphics(paste0(output_location, "single_sequence_05.png"))
+knitr::include_graphics(paste0(github_location, "single_sequence_05.png"))
 ```
 
-<img src="README_files/output/single_sequence_05.png" width="7600" />
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_05.png)<!-- -->
 
 `bright_pale2` is the same but with a slightly lighter shade of green:
 
@@ -1122,10 +1123,10 @@ visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
                           sequence_text_colour = "black")
 
 ## View image
-knitr::include_graphics(paste0(output_location, "single_sequence_06.png"))
+knitr::include_graphics(paste0(github_location, "single_sequence_06.png"))
 ```
 
-<img src="README_files/output/single_sequence_06.png" width="7600" />
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_06.png)<!-- -->
 
 The `bright_deep` palette works best with white text:
 
@@ -1138,10 +1139,10 @@ visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
                           sequence_text_colour = "white")
 
 ## View image
-knitr::include_graphics(paste0(output_location, "single_sequence_07.png"))
+knitr::include_graphics(paste0(github_location, "single_sequence_07.png"))
 ```
 
-<img src="README_files/output/single_sequence_07.png" width="7600" />
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_07.png)<!-- -->
 
 The `sanger` palette is inspired by old-school Sanger sequencing
 readouts and works best with white text:
@@ -1156,10 +1157,10 @@ visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
                           outline_colour = "darkgrey")
 
 ## View image
-knitr::include_graphics(paste0(output_location, "single_sequence_08.png"))
+knitr::include_graphics(paste0(github_location, "single_sequence_08.png"))
 ```
 
-<img src="README_files/output/single_sequence_08.png" width="7600" />
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_08.png)<!-- -->
 
 ## 4.3 Layout customisation
 
@@ -1221,10 +1222,10 @@ visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
                           outline_linewidth = 0)
 
 ## View image
-knitr::include_graphics(paste0(output_location, "single_sequence_09.png"))
+knitr::include_graphics(paste0(github_location, "single_sequence_09.png"))
 ```
 
-<img src="README_files/output/single_sequence_09.png" width="6400" />
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_09.png)<!-- -->
 
 Setting spacing, margin, sequence text size, and index annotation
 interval all to 0 produces a no-frills visualisation of the sequence
@@ -1252,10 +1253,10 @@ visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
 
 ``` r
 ## View image
-knitr::include_graphics(paste0(output_location, "single_sequence_10.png"))
+knitr::include_graphics(paste0(github_location, "single_sequence_10.png"))
 ```
 
-<img src="README_files/output/single_sequence_10.png" width="900" />
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_10.png)<!-- -->
 This produced a warning message as setting the margin to 0 clipped off
 the outlines of the outermost boxes. Either a slightly larger margin can
 be used:
@@ -1275,10 +1276,10 @@ visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
                           outline_linewidth = 3)
 
 ## View image
-knitr::include_graphics(paste0(output_location, "single_sequence_11.png"))
+knitr::include_graphics(paste0(github_location, "single_sequence_11.png"))
 ```
 
-<img src="README_files/output/single_sequence_11.png" width="912" />
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_11.png)<!-- -->
 
 Or the outlines can be turned off:
 
@@ -1297,10 +1298,10 @@ visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
                           outline_linewidth = 0)
 
 ## View image
-knitr::include_graphics(paste0(output_location, "single_sequence_12.png"))
+knitr::include_graphics(paste0(github_location, "single_sequence_12.png"))
 ```
 
-<img src="README_files/output/single_sequence_12.png" width="900" />
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_12.png)<!-- -->
 
 When changing line wrapping and annotation interval, divisibility is
 important. It is generally recommended to make the line wrapping length
@@ -1324,10 +1325,10 @@ visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
                           index_annotation_interval = 15)
 
 ## View image
-knitr::include_graphics(paste0(output_location, "single_sequence_13.png"))
+knitr::include_graphics(paste0(github_location, "single_sequence_13.png"))
 ```
 
-<img src="README_files/output/single_sequence_13.png" width="6600" />
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_13.png)<!-- -->
 
 When setting spacing to 0, it is highly recommended to disable index
 annotations via `index_annotation_interval = 0`, otherwise there is
@@ -1351,10 +1352,10 @@ visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
 
 ``` r
 ## View image
-knitr::include_graphics(paste0(output_location, "single_sequence_14.png"))
+knitr::include_graphics(paste0(github_location, "single_sequence_14.png"))
 ```
 
-<img src="README_files/output/single_sequence_14.png" width="7600" />
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_14.png)<!-- -->
 
 # 5 Visualising many DNA/RNA sequences
 
@@ -1467,10 +1468,10 @@ visualise_many_sequences(sequences_for_visualisation,
                          return = FALSE)
 
 ## View image
-knitr::include_graphics(paste0(output_location, "many_sequences_01.png"))
+knitr::include_graphics(paste0(github_location, "many_sequences_01.png"))
 ```
 
-<img src="README_files/output/many_sequences_01.png" width="10300" />
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_01.png)<!-- -->
 
 ## 5.2 Sequence arrangement customisation
 
@@ -1527,10 +1528,10 @@ visualise_many_sequences(sequences_for_visualisation,
                          return = FALSE)
 
 ## View image
-knitr::include_graphics(paste0(output_location, "many_sequences_02.png"))
+knitr::include_graphics(paste0(github_location, "many_sequences_02.png"))
 ```
 
-<img src="README_files/output/many_sequences_02.png" width="10300" />
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_02.png)<!-- -->
 
 Here the top large cluster is Family 1, containing individuals F1-1,
 F1-2, and F-3. These individuals contain 5, 2, and 3 reads respectively,
@@ -1558,10 +1559,10 @@ visualise_many_sequences(sequences_for_visualisation,
                          return = FALSE)
 
 ## View image
-knitr::include_graphics(paste0(output_location, "many_sequences_03.png"))
+knitr::include_graphics(paste0(github_location, "many_sequences_03.png"))
 ```
 
-<img src="README_files/output/many_sequences_03.png" width="10300" />
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_03.png)<!-- -->
 
 Now we have a group for each individual, with sequences in ascending
 length order per individual, and one blank line between individuals.
@@ -1583,10 +1584,10 @@ visualise_many_sequences(sequences_for_visualisation,
                          return = FALSE)
 
 ## View image
-knitr::include_graphics(paste0(output_location, "many_sequences_04.png"))
+knitr::include_graphics(paste0(github_location, "many_sequences_04.png"))
 ```
 
-<img src="README_files/output/many_sequences_04.png" width="10300" />
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_04.png)<!-- -->
 
 We can also turn off sorting entirely (keeping grouping off) with
 `sort_by = NA` to simply show all the reads in the order in which they
@@ -1608,10 +1609,10 @@ visualise_many_sequences(sequences_for_visualisation,
                          return = FALSE)
 
 ## View image
-knitr::include_graphics(paste0(output_location, "many_sequences_05.png"))
+knitr::include_graphics(paste0(github_location, "many_sequences_05.png"))
 ```
 
-<img src="README_files/output/many_sequences_05.png" width="10300" />
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_05.png)<!-- -->
 
 It is also possible to keep grouping on while turning sorting off if
 desired:
@@ -1630,10 +1631,10 @@ visualise_many_sequences(sequences_for_visualisation,
                          return = FALSE)
 
 ## View image
-knitr::include_graphics(paste0(output_location, "many_sequences_06.png"))
+knitr::include_graphics(paste0(github_location, "many_sequences_06.png"))
 ```
 
-<img src="README_files/output/many_sequences_06.png" width="10300" />
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_06.png)<!-- -->
 
 The grouping spacers can be set to 0 to sort within groups without
 visually separating them (but negative values don’t work - they produce
@@ -1662,10 +1663,10 @@ visualise_many_sequences(sequences_for_visualisation,
                          return = FALSE)
 
 ## View image
-knitr::include_graphics(paste0(output_location, "many_sequences_07.png"))
+knitr::include_graphics(paste0(github_location, "many_sequences_07.png"))
 ```
 
-<img src="README_files/output/many_sequences_07.png" width="10300" />
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_07.png)<!-- -->
 
 Finally, all the same grouping and sorting logic can be used to extract
 any other column as a character vector, though of course if it isn’t DNA
@@ -1778,10 +1779,10 @@ visualise_many_sequences(sequences_for_visualisation,
                          margin = 5)
 
 ## View image
-knitr::include_graphics(paste0(output_location, "many_sequences_08.png"))
+knitr::include_graphics(paste0(github_location, "many_sequences_08.png"))
 ```
 
-<img src="README_files/output/many_sequences_08.png" width="11200" />
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_08.png)<!-- -->
 
 As with `visualise_single_sequence()`, text can be turned off, in which
 case it is sensible to reduce the resolution:
@@ -1809,10 +1810,10 @@ visualise_many_sequences(sequences_for_visualisation,
 
 ``` r
 ## View image
-knitr::include_graphics(paste0(output_location, "many_sequences_09.png"))
+knitr::include_graphics(paste0(github_location, "many_sequences_09.png"))
 ```
 
-<img src="README_files/output/many_sequences_09.png" width="2044" />
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_09.png)<!-- -->
 Note that the margin/outline warning is produced whenever the margin is
 ≤0.25 and the outline linewidth is \>0. Getting the warning does not
 necessarily mean that the outlines are getting cut off (as this only
@@ -2167,10 +2168,10 @@ visualise_methylation(modification_locations     = methylation_data_for_visualis
                       return = FALSE)
 
 ## View image
-knitr::include_graphics(paste0(output_location, "modification_01.png"))
+knitr::include_graphics(paste0(github_location, "modification_01.png"))
 ```
 
-<img src="README_files/output/modification_01.png" width="2060" />
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_01.png)<!-- -->
 
 Here all the modification-assessed bases (Cs of CG dinucleotides) are
 coloured blue for low methylation probability and red for high
@@ -2192,10 +2193,10 @@ scalebar <- visualise_methylation_colour_scale(x_axis_title = "Methylation proba
 ggsave(paste0(output_location, "modification_01_scalebar.png"), scalebar, dpi = 300, width = 5, height = 1.25, device = ragg::agg_png)
 
 ## View image
-knitr::include_graphics(paste0(output_location, "modification_01_scalebar.png"))
+knitr::include_graphics(paste0(github_location, "modification_01_scalebar.png"))
 ```
 
-<img src="README_files/output/modification_01_scalebar.png" width="60%" style="display: block; margin: auto;" />
+<img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_01_scalebar.png" width="60%" style="display: block; margin: auto;" />
 
 ## 6.2 Sequence arrangement customisation
 
@@ -2258,10 +2259,10 @@ visualise_methylation(modification_locations     = methylation_data_for_visualis
                       return = FALSE)
 
 ## View image
-knitr::include_graphics(paste0(output_location, "modification_02.png"))
+knitr::include_graphics(paste0(github_location, "modification_02.png"))
 ```
 
-<img src="README_files/output/modification_02.png" width="2060" />
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_02.png)<!-- -->
 
 Here there is no grouping by family, 3 blank lines between each
 participant, and sequences are sorted in ascending length order within
@@ -2386,10 +2387,10 @@ visualise_methylation(modification_locations     = methylation_data_for_visualis
                       background_colour = "red")
 
 ## View image
-knitr::include_graphics(paste0(output_location, "modification_03.png"))
+knitr::include_graphics(paste0(github_location, "modification_03.png"))
 ```
 
-<img src="README_files/output/modification_03.png" width="2200" />
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_03.png)<!-- -->
 
 ``` r
 ## Create scalebar and save to object
@@ -2408,10 +2409,10 @@ scalebar <- visualise_methylation_colour_scale(x_axis_title = "Methylation proba
 ggsave(paste0(output_location, "modification_03_scalebar.png"), scalebar, dpi = 300, width = 5, height = 1.25, device = ragg::agg_png)
 
 ## View image
-knitr::include_graphics(paste0(output_location, "modification_03_scalebar.png"))
+knitr::include_graphics(paste0(github_location, "modification_03_scalebar.png"))
 ```
 
-<img src="README_files/output/modification_03_scalebar.png" width="60%" style="display: block; margin: auto;" />
+<img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_03_scalebar.png" width="60%" style="display: block; margin: auto;" />
 
 One way this might be used in practice is for making a graphic in the
 “lollipop” style where methylated/modified CGs are black and unmodified
@@ -2451,10 +2452,10 @@ visualise_methylation(modification_locations     = methylation_data_for_visualis
 
 ``` r
 ## View image
-knitr::include_graphics(paste0(output_location, "modification_04.png"))
+knitr::include_graphics(paste0(github_location, "modification_04.png"))
 ```
 
-<img src="README_files/output/modification_04.png" width="2044" />
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_04.png)<!-- -->
 
 ``` r
 ## Create scalebar and save to object
@@ -2467,10 +2468,10 @@ scalebar <- visualise_methylation_colour_scale(x_axis_title = "Methylation proba
 ggsave(paste0(output_location, "modification_04_scalebar.png"), scalebar, dpi = 300, width = 5, height = 1.25, device = ragg::agg_png)
 
 ## View image
-knitr::include_graphics(paste0(output_location, "modification_04_scalebar.png"))
+knitr::include_graphics(paste0(github_location, "modification_04_scalebar.png"))
 ```
 
-<img src="README_files/output/modification_04_scalebar.png" width="60%" style="display: block; margin: auto;" />
+<img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_04_scalebar.png" width="60%" style="display: block; margin: auto;" />
 
 ## 6.4 Colour mapping customisation
 
@@ -2534,10 +2535,10 @@ visualise_methylation(modification_locations     = methylation_data_for_visualis
 
 ``` r
 ## View image
-knitr::include_graphics(paste0(output_location, "modification_05.png"))
+knitr::include_graphics(paste0(github_location, "modification_05.png"))
 ```
 
-<img src="README_files/output/modification_05.png" width="2044" />
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_05.png)<!-- -->
 
 ``` r
 ## Create scalebar and save to object
@@ -2552,10 +2553,10 @@ scalebar <- visualise_methylation_colour_scale(x_axis_title = "Methylation proba
 ggsave(paste0(output_location, "modification_05_scalebar.png"), scalebar, dpi = 300, width = 5, height = 1.25, device = ragg::agg_png)
 
 ## View image
-knitr::include_graphics(paste0(output_location, "modification_05_scalebar.png"))
+knitr::include_graphics(paste0(github_location, "modification_05_scalebar.png"))
 ```
 
-<img src="README_files/output/modification_05_scalebar.png" width="60%" style="display: block; margin: auto;" />
+<img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_05_scalebar.png" width="60%" style="display: block; margin: auto;" />
 
 The clamping arguments do not have to be integers. Clamping is
 implemented with `pmin()` and `pmax()` and relies on their default
@@ -2597,10 +2598,10 @@ visualise_methylation(modification_locations     = methylation_data_for_visualis
                       outline_linewidth = 0)
 
 ## View image
-knitr::include_graphics(paste0(output_location, "modification_06.png"))
+knitr::include_graphics(paste0(github_location, "modification_06.png"))
 ```
 
-<img src="README_files/output/modification_06.png" width="2060" />
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_06.png)<!-- -->
 
 ``` r
 ## Create scalebar and save to object
@@ -2612,10 +2613,10 @@ scalebar <- visualise_methylation_colour_scale(x_axis_title = "Methylation proba
 ggsave(paste0(output_location, "modification_06_scalebar.png"), scalebar, dpi = 300, width = 5, height = 1.25, device = ragg::agg_png)
 
 ## View image
-knitr::include_graphics(paste0(output_location, "modification_06_scalebar.png"))
+knitr::include_graphics(paste0(github_location, "modification_06_scalebar.png"))
 ```
 
-<img src="README_files/output/modification_06_scalebar.png" width="60%" style="display: block; margin: auto;" />
+<img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_06_scalebar.png" width="60%" style="display: block; margin: auto;" />
 
 The clamping does not need to be symmetrical. One use for this is if the
 data is skewed. For example, the methylation scores were randomly
@@ -2649,10 +2650,10 @@ visualise_methylation(modification_locations     = hydroxymethylation_data_for_v
                       other_bases_outline_linewidth = 0)
 
 ## View image
-knitr::include_graphics(paste0(output_location, "modification_07.png"))
+knitr::include_graphics(paste0(github_location, "modification_07.png"))
 ```
 
-<img src="README_files/output/modification_07.png" width="2060" />
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_07.png)<!-- -->
 
 ``` r
 ## Create scalebar and save to object
@@ -2664,10 +2665,10 @@ scalebar <- visualise_methylation_colour_scale(x_axis_title = "Hydroxymethylatio
 ggsave(paste0(output_location, "modification_07_scalebar.png"), scalebar, dpi = 300, width = 5, height = 1.25, device = ragg::agg_png)
 
 ## View image
-knitr::include_graphics(paste0(output_location, "modification_07_scalebar.png"))
+knitr::include_graphics(paste0(github_location, "modification_07_scalebar.png"))
 ```
 
-<img src="README_files/output/modification_07_scalebar.png" width="60%" style="display: block; margin: auto;" />
+<img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_07_scalebar.png" width="60%" style="display: block; margin: auto;" />
 
 ***IMPORTANT:** make sure that you provide the scalebar when presenting
 data, especially if clamping is used, otherwise the colours could be
@@ -2730,10 +2731,10 @@ scalebar <- visualise_methylation_colour_scale(precision = 10)
 ggsave(paste0(output_location, "modification_scalebar_alone_01.png"), scalebar, dpi = 300, width = 5, height = 1.25, device = ragg::agg_png)
 
 ## View image
-knitr::include_graphics(paste0(output_location, "modification_scalebar_alone_01.png"))
+knitr::include_graphics(paste0(github_location, "modification_scalebar_alone_01.png"))
 ```
 
-<img src="README_files/output/modification_scalebar_alone_01.png" width="60%" style="display: block; margin: auto;" />
+<img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_scalebar_alone_01.png" width="60%" style="display: block; margin: auto;" />
 
 Disabling x axis ticks with intermediate precision gives the following:
 
@@ -2746,10 +2747,10 @@ scalebar <- visualise_methylation_colour_scale(precision = 50,
 ggsave(paste0(output_location, "modification_scalebar_alone_02.png"), scalebar, dpi = 300, width = 5, height = 1.25, device = ragg::agg_png)
 
 ## View image
-knitr::include_graphics(paste0(output_location, "modification_scalebar_alone_02.png"))
+knitr::include_graphics(paste0(github_location, "modification_scalebar_alone_02.png"))
 ```
 
-<img src="README_files/output/modification_scalebar_alone_02.png" width="60%" style="display: block; margin: auto;" />
+<img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_scalebar_alone_02.png" width="60%" style="display: block; margin: auto;" />
 
 If ticks are left on, they can be customised with `scale_x_continuous()`
 as per usual for a ggplot. Here is an example with the side scalebar
@@ -2775,10 +2776,10 @@ scalebar <- visualise_methylation_colour_scale(high_colour = "green",
 ggsave(paste0(output_location, "modification_scalebar_alone_03.png"), scalebar, dpi = 300, width = 5, height = 2, device = ragg::agg_png)
 
 ## View image
-knitr::include_graphics(paste0(output_location, "modification_scalebar_alone_03.png"))
+knitr::include_graphics(paste0(github_location, "modification_scalebar_alone_03.png"))
 ```
 
-<img src="README_files/output/modification_scalebar_alone_03.png" width="60%" style="display: block; margin: auto;" />
+<img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_scalebar_alone_03.png" width="60%" style="display: block; margin: auto;" />
 
 And here is an example of a more sensible scalebar but with the side
 scale turned on:
@@ -2796,10 +2797,10 @@ scalebar <- visualise_methylation_colour_scale(low_clamp = 0.1*255,
 ggsave(paste0(output_location, "modification_scalebar_alone_04.png"), scalebar, dpi = 300, width = 5, height = 2, device = ragg::agg_png)
 
 ## View image
-knitr::include_graphics(paste0(output_location, "modification_scalebar_alone_04.png"))
+knitr::include_graphics(paste0(github_location, "modification_scalebar_alone_04.png"))
 ```
 
-<img src="README_files/output/modification_scalebar_alone_04.png" width="60%" style="display: block; margin: auto;" />
+<img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_scalebar_alone_04.png" width="60%" style="display: block; margin: auto;" />
 
 ## 6.6 Think about the offset!
 
@@ -2874,13 +2875,13 @@ visualise_methylation(modification_locations     = methylation_data_for_visualis
                       return = FALSE)
 
 ## View image
-knitr::include_graphics(paste0(output_location, "modification_08.png"))
+knitr::include_graphics(paste0(github_location, "modification_08.png"))
 ```
 
-<img src="README_files/output/modification_08.png" width="2060" /> We
-can see here that some methylation-assessed sites are now offset by 1,
-as the location is now assigned to the G of each CG site rather than the
-C. This is perhaps more biochemically accurate, as these Gs are
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_08.png)<!-- -->
+We can see here that some methylation-assessed sites are now offset by
+1, as the location is now assigned to the G of each CG site rather than
+the C. This is perhaps more biochemically accurate, as these Gs are
 complementary to the Cs on the reverse strands where the modification
 actually occurred.
 
@@ -2919,10 +2920,10 @@ visualise_methylation(modification_locations     = methylation_data_for_visualis
                       return = FALSE)
 
 ## View image
-knitr::include_graphics(paste0(output_location, "modification_09.png"))
+knitr::include_graphics(paste0(github_location, "modification_09.png"))
 ```
 
-<img src="README_files/output/modification_09.png" width="2060" />
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_09.png)<!-- -->
 However, this is strongly discouraged and produces a warning. Offset
 values other than 0 and 1 have not been tested so results may be
 unpredictable and aspects of the visualisation may break.
@@ -2962,10 +2963,10 @@ visualise_methylation(modification_locations     = methylation_data_for_visualis
                       return = FALSE)
 
 ## View image
-knitr::include_graphics(paste0(output_location, "modification_10.png"))
+knitr::include_graphics(paste0(github_location, "modification_10.png"))
 ```
 
-<img src="README_files/output/modification_10.png" width="2060" />
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_10.png)<!-- -->
 
 # 7 References
 
