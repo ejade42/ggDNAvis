@@ -29,5 +29,5 @@ Config/testthat/edition: 3
 Depends: 
     R (>= 3.5)
 LazyData: true
-URL: https://github.com/ejade42/ggDNAvis
+URL: https://github.com/ejade42/ggDNAvis, https://ejade42.github.io/ggDNAvis/
 BugReports: https://github.com/ejade42/ggDNAvis/issues

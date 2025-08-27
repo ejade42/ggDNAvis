@@ -15,3 +15,8 @@
 ^README_files/Exported Items\.bib$
 ^\.github$
 ^cran-comments\.md$
+^*DS_store$
+^.DS_store$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
