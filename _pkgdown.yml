@@ -1,6 +1,7 @@
 url: https://ejade42.github.io/ggDNAvis/
 template:
   bootstrap: 5
+  light-switch: true
   toc:
     floating: true
 
@@ -49,7 +50,7 @@ reference:
 
 - subtitle: Advanced helpers
   desc: >
-    Helper functions that are mostly called by other functions; users shouldn't need to use
+    Helper functions that are mostly called by other functions; users shouldn't need these for normal use cases
   contents:
   - convert_base_to_number
   - convert_input_seq_to_sequence_list

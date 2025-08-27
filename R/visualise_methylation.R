@@ -226,7 +226,7 @@ visualise_methylation <- function(modification_locations, modification_probabili
 
 
 
-#' Visualise methylation colour scale
+#' Visualise methylation colour scalebar
 #'
 #' This function creates a scalebar showing the colouring scheme based on methylation
 #' probability that is used in [visualise_methylation()]. Showing this is particularly

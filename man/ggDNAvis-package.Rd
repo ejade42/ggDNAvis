@@ -12,6 +12,7 @@ Uses 'ggplot2' to visualise either (a) a single DNA/RNA sequence split across mu
 Useful links:
 \itemize{
   \item \url{https://github.com/ejade42/ggDNAvis}
+  \item \url{https://ejade42.github.io/ggDNAvis/}
   \item Report bugs at \url{https://github.com/ejade42/ggDNAvis/issues}
 }
 

@@ -1018,13 +1018,6 @@ recommended to not go too low otherwise text can become illegible (and
 going too high obviously increases filesize). The default value of 100
 is often a happy medium.
 
-For all `visualise_` functions, the `render_device` argument can be used
-to control the rendering method. It is fed directly to
-`ggsave(device = )`, so the `ggsave` documentation fully explains its
-use. The default `ragg::agg_png` works well and ensures consistent
-graphics (though not font) rendering across platforms/operating systems,
-so you should not need to change it.
-
 ``` r
 ## Create image
 visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added, 
@@ -1037,6 +1030,13 @@ knitr::include_graphics(paste0(github_location, "single_sequence_02.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_02.png)<!-- -->
+
+For all `visualise_` functions, the `render_device` argument can be used
+to control the rendering method. It is fed directly to
+`ggsave(device = )`, so the `ggsave` documentation fully explains its
+use. The default `ragg::agg_png` works well and ensures consistent
+graphics (though not font) rendering across platforms/operating systems,
+so you should not need to change it.
 
 ## 4.2 Colour customisation
 

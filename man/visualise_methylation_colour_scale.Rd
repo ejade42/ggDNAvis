@@ -2,7 +2,7 @@
 % Please edit documentation in R/visualise_methylation.R
 \name{visualise_methylation_colour_scale}
 \alias{visualise_methylation_colour_scale}
-\title{Visualise methylation colour scale}
+\title{Visualise methylation colour scalebar}
 \usage{
 visualise_methylation_colour_scale(
   low_colour = "blue",
