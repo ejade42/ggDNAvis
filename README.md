@@ -1,5 +1,6 @@
 
-- [1 ggDNAvis](#1-ggdnavis)
+- [1 ggDNAvis
+  <a href="https://ejade42.github.io/ggDNAvis/"><img src="man/figures/logo.png" align="right" height="139" alt="ggDNAvis website" /></a>](#1-ggdnavis-)
 - [2 Summary/quickstart](#2-summaryquickstart)
   - [2.1 Single sequence](#21-single-sequence)
   - [2.2 Many sequences](#22-many-sequences)
@@ -43,7 +44,7 @@
 [![R-CMD-check](https://github.com/ejade42/ggDNAvis/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ejade42/ggDNAvis/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-# 1 ggDNAvis
+# 1 ggDNAvis <a href="https://ejade42.github.io/ggDNAvis/"><img src="man/figures/logo.png" align="right" height="139" alt="ggDNAvis website" /></a>
 
 ggDNAvis is an R package that uses ggplot2 to visualise genetic data of
 three main types:

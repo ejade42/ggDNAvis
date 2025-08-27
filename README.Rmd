@@ -12,7 +12,7 @@ csl: README_files/apa.csl
 [![R-CMD-check](https://github.com/ejade42/ggDNAvis/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ejade42/ggDNAvis/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-# ggDNAvis
+# ggDNAvis <a href="https://ejade42.github.io/ggDNAvis/"><img src="man/figures/logo.png" align="right" height="139" alt="ggDNAvis website" /></a>
 
 ggDNAvis is an R package that uses ggplot2 to visualise genetic data of three main types:
 

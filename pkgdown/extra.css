@@ -1,7 +1,0 @@
-/* Make the pkgdown table-of-contents sidebar sticky */
-.sidebar.sidebar-toc {
-  position: sticky;
-  top: 56px;  /* height of fixed navbar */
-  max-height: calc(100vh - 56px);
-  overflow-y: auto;
-}
