@@ -16,7 +16,7 @@ csl: README_files/apa.csl
 
 <link rel="shortcut icon" href="man/figures/logo.png" />
 
-<a href="https://ejade42.github.io/ggDNAvis/"><img src="man/figures/ggDNAvis.png" align="right" height="139" alt="ggDNAvis website" /></a>
+<a href="https://ejade42.github.io/ggDNAvis/"><img src="man/figures/ggDNAvis.png" align="right" height="139" alt="ggDNAvis website" class="pkgdown-hide" /></a>
 
 ggDNAvis is an R package that uses ggplot2 to visualise genetic data of three main types:
 
