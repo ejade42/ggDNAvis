@@ -4,3 +4,62 @@ template:
   assets:
     - README_files
 
+reference:
+- title: DNA visualisation
+
+- subtitle: Main visualisation functions
+  desc: >
+    Main functions for visualising DNA/RNA/methylation information
+  contents:
+  - visualise_single_sequence
+  - visualise_many_sequences
+  - visualise_methylation
+  - visualise_methylation_colour_scale
+
+- subtitle: Key data processing functions
+  desc: >
+    Frequently used functions for importing and processing
+  contents:
+  - read_fastq
+  - read_modified_fastq
+  - write_fastq
+  - write_modified_fastq
+  - merge_fastq_with_metadata
+  - merge_methylation_with_metadata
+  - extract_and_sort_sequences
+  - extract_methylation_from_dataframe
+
+- subtitle: Included data
+  desc: >
+    Data included in ggDNAvis
+  contents:
+  - example_many_sequences
+  - sequence_colour_palettes
+  - fastq_quality_scores
+
+- subtitle: Basic helpers
+  desc: >
+    Small, widely used helper functions
+  contents:
+  - string_to_vector
+  - vector_to_string
+  - debug_join_vector_num
+  - debug_join_vector_str
+
+- subtitle: Advanced helpers
+  desc: >
+    Helper functions that are mostly called by other functions; users shouldn't need to use
+  contents:
+  - convert_base_to_number
+  - convert_input_seq_to_sequence_list
+  - convert_locations_to_MM_vector
+  - convert_MM_vector_to_locations
+  - convert_modification_to_number_vector
+  - convert_sequence_to_numbers
+  - convert_sequences_to_annotations
+  - create_image_data
+  - reverse_complement
+  - reverse_sequence_if_needed
+  - reverse_quality_if_needed
+  - reverse_locations_if_needed
+  - reverse_probabilities_if_needed
