@@ -59,6 +59,7 @@ square. Empty strings (\code{""}) within the vector can be utilised as blank spa
 lines. Colours and pixels per square when exported are configurable.
 }
 \examples{
+\donttest{
 ## Create sequences vector
 sequences <- extract_and_sort_sequences(example_many_sequences)
 
@@ -94,5 +95,6 @@ image <- png::readPNG("example_vms_02.png")
 unlink("example_vms_02.png")
 grid::grid.newpage()
 grid::grid.raster(image)
+}
 
 }
