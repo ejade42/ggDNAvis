@@ -33,10 +33,10 @@ visualise_many_sequences(
 )
 
 
-s <- sticker("many_sequences_for_sticker.svg", filename = "ggDNAvis.svg",
-             package = "ggDNAvis", p_size = 20, p_y = 1.5, p_family = "Merriweather",
+s <- sticker("many_sequences_for_sticker.svg", filename = "ggDNAvis.png",
+             package = "ggDNAvis", p_size = 80, p_y = 1.5, p_family = "Merriweather",
              s_width = 0.8, s_x = 1, s_y = 0.9,
              h_fill = fill_colour, h_color = sequence_colours[3],
-             dpi = 300)
+             dpi = 1200)
 plot(s)
 

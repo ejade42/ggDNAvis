@@ -45,9 +45,7 @@
 
 # 1 ggDNAvis
 
-<link rel="shortcut icon" href="man/figures/logo.svg" />
-
-<a href="https://ejade42.github.io/ggDNAvis/"><img src="man/figures/logo.svg" align="right" height="139" alt="ggDNAvis website" class="pkgdown-hide" /></a>
+<a href="https://ejade42.github.io/ggDNAvis/"><img src="man/figures/logo.png" align="right" height="139" alt="ggDNAvis website" class="pkgdown-hide" /></a>
 
 ggDNAvis is an R package that uses ggplot2 to visualise genetic data of
 three main types:
