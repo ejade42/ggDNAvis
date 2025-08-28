@@ -20,20 +20,20 @@ fill_colour = "#FF8500"
 sequence_colours  <- sequence_colour_palettes$bright_deep
 sequence_colours[1] <- "yellow"
 visualise_many_sequences(
-    sequences, 
+    sequences,
     sequence_colours = sequence_colours,
     sequence_text_size = 0,
     background_colour = fill_colour,
     pixels_per_base = 100,
     outline_linewidth = 0,
     margin = 0,
-    filename = "many_sequences_for_sticker.png",
+    filename = "many_sequences_for_sticker.svg",
     render_device = NULL,
     return = FALSE
 )
 
 
-s <- sticker("many_sequences_for_sticker.png", 
+s <- sticker("many_sequences_for_sticker.svg", filename = "ggDNAvis.svg",
              package = "ggDNAvis", p_size = 20, p_y = 1.5, p_family = "Merriweather",
              s_width = 0.8, s_x = 1, s_y = 0.9,
              h_fill = fill_colour, h_color = sequence_colours[3],
