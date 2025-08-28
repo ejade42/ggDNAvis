@@ -8,8 +8,6 @@ bibliography: README_files/citations.bib
 csl: README_files/apa.csl
 ---
 
-<meta name="google-site-verification" content="eH_4rW2wnIiNY8spOLRM4o3Zb434brfVUSUNn8WqLr8" />
-
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/ejade42/ggDNAvis/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ejade42/ggDNAvis/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->

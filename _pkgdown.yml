@@ -3,6 +3,8 @@ template:
   bootstrap: 5
   bslib:
     pkgdown_navbar: ~
+  includes:
+    in_header: pkgdown/google0acd00d8574ec2df.html
 
 reference:
 - title: DNA visualisation
