@@ -126,10 +126,10 @@ sequences_for_visualisation <- extract_and_sort_sequences(
 ## Usually it's fine to leave most of these as defaults
 visualise_many_sequences(
     sequences_vector = sequences_for_visualisation,
-    sequence_colours = sequence_colour_palettes$ggplot_style,
+    sequence_colours = sequence_colour_palettes$bright_deep,
     background_colour = "white",
     margin = 0.5,
-    sequence_text_colour = "black",
+    sequence_text_colour = "white",
     sequence_text_size = 16,
     outline_colour = "black",
     outline_linewidth = 3,

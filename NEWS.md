@@ -1,6 +1,6 @@
-# ggDNAvis (development version)
+# ggDNAvis 0.2.0
 
-* Initial CRAN submission.
+* Initial CRAN release
 
 * Initial functionality: 
 
