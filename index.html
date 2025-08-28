@@ -17,8 +17,8 @@
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><link href="extra.css" rel="stylesheet">
 <meta property="og:title" content="ggplot2-Based Tools For Visualising DNA Sequences And Modifications">
-<meta name="description" content="Uses ggplot2 to visualise either (a) a single DNA/RNA sequence split across multiple lines, (b) multiple DNA/RNA sequences, each occupying a whole line, or (c) base modifications such as DNA methylation called by modified bases models in Dorado or Guppy. Functions starting with visualise_&lt;something&gt;() are the main plotting functions, and functions starting with extract_&lt;something&gt;() are key helper functions for reading files and reformatting data. A full manual is available at https://github.com/ejade42/ggDNAvis.">
-<meta property="og:description" content="Uses ggplot2 to visualise either (a) a single DNA/RNA sequence split across multiple lines, (b) multiple DNA/RNA sequences, each occupying a whole line, or (c) base modifications such as DNA methylation called by modified bases models in Dorado or Guppy. Functions starting with visualise_&lt;something&gt;() are the main plotting functions, and functions starting with extract_&lt;something&gt;() are key helper functions for reading files and reformatting data. A full manual is available at https://github.com/ejade42/ggDNAvis.">
+<meta name="description" content="Uses ggplot2 to visualise either (a) a single DNA/RNA sequence split across multiple lines, (b) multiple DNA/RNA sequences, each occupying a whole line, or (c) base modifications such as DNA methylation called by modified bases models in Dorado or Guppy. Functions starting with visualise_&lt;something&gt;() are the main plotting functions, and functions starting with extract_&lt;something&gt;() are key helper functions for reading files and reformatting data. Source code is available at https://github.com/ejade42/ggDNAvis and a full non-expert user guide is available at https://ejade42.github.io/ggDNAvis/.">
+<meta property="og:description" content="Uses ggplot2 to visualise either (a) a single DNA/RNA sequence split across multiple lines, (b) multiple DNA/RNA sequences, each occupying a whole line, or (c) base modifications such as DNA methylation called by modified bases models in Dorado or Guppy. Functions starting with visualise_&lt;something&gt;() are the main plotting functions, and functions starting with extract_&lt;something&gt;() are key helper functions for reading files and reformatting data. Source code is available at https://github.com/ejade42/ggDNAvis and a full non-expert user guide is available at https://ejade42.github.io/ggDNAvis/.">
 <meta property="og:image" content="https://ejade42.github.io/ggDNAvis/logo.png">
 </head>
 <body>
@@ -132,7 +132,7 @@
 <p>Throughout this manual, only <code>ggDNAvis</code>, <code>dplyr</code>, and <code>ggplot2</code> are loaded.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Load this package</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ejade42/ggDNAvis" class="external-link">ggDNAvis</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ejade42.github.io/ggDNAvis/">ggDNAvis</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## Load useful tidyverse packages</span></span>
 <span><span class="co">## These are ggDNAvis dependencies, so will always be installed when installing ggDNAvis</span></span>
@@ -218,10 +218,10 @@
 <span><span class="co">## Usually it's fine to leave most of these as defaults</span></span>
 <span><span class="fu"><a href="reference/visualise_many_sequences.html">visualise_many_sequences</a></span><span class="op">(</span></span>
 <span>    sequences_vector <span class="op">=</span> <span class="va">sequences_for_visualisation</span>,</span>
-<span>    sequence_colours <span class="op">=</span> <span class="va">sequence_colour_palettes</span><span class="op">$</span><span class="va">ggplot_style</span>,</span>
+<span>    sequence_colours <span class="op">=</span> <span class="va">sequence_colour_palettes</span><span class="op">$</span><span class="va">bright_deep</span>,</span>
 <span>    background_colour <span class="op">=</span> <span class="st">"white"</span>,</span>
 <span>    margin <span class="op">=</span> <span class="fl">0.5</span>,</span>
-<span>    sequence_text_colour <span class="op">=</span> <span class="st">"black"</span>,</span>
+<span>    sequence_text_colour <span class="op">=</span> <span class="st">"white"</span>,</span>
 <span>    sequence_text_size <span class="op">=</span> <span class="fl">16</span>,</span>
 <span>    outline_colour <span class="op">=</span> <span class="st">"black"</span>,</span>
 <span>    outline_linewidth <span class="op">=</span> <span class="fl">3</span>,</span>
