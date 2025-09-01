@@ -166,7 +166,7 @@ visualise_single_sequence <- function(sequence, sequence_colours = sequence_colo
         scale_fill_manual(values = sequence_colours) +
 
         ## Text (sequence and annotations)
-        geom_text(data = annotations, aes(x = x_position, y = y_position, label = annotation, col = type, size = type), fontface = "bold", inherit.aes = F) +
+        geom_text(data = annotations, aes(x = .data$x_position, y = .data$y_position, label = .data$annotation, col = .data$type, size = .data$type), fontface = "bold", inherit.aes = F) +
         scale_colour_manual(values = c("Number" = index_annotation_colour, "Sequence" = sequence_text_colour)) +
         scale_discrete_manual("size", values = c("Number" = index_annotation_size, "Sequence" = sequence_text_size)) +
 

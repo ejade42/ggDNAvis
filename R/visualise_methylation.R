@@ -324,7 +324,7 @@ visualise_methylation_colour_scale <- function(low_colour = "blue", high_colour 
 
     ## Plot
     result <- ggplot(scale_data) +
-        geom_rect(aes(xmin = xmin, xmax = xmax, ymin = 0, ymax = 1, fill = col_scale_clamped)) +
+        geom_rect(aes(xmin = .data$xmin, xmax = .data$xmax, ymin = 0, ymax = 1, fill = .data$col_scale_clamped)) +
         scale_fill_gradient(low = low_colour, high = high_colour, limits = c(low_clamp, high_clamp)) +
         coord_cartesian(expand = F) +
         theme(axis.ticks.y = element_blank(), axis.text.y = element_blank()) +

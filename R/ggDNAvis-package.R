@@ -52,6 +52,8 @@ fetch_acceptable_distortion <- function(verbose = TRUE) {
 #' [visualise_methylation()], and helper functions to visualise these sequences.\cr\cr
 #' Generation code is available at `data-raw/example_many_sequences.R`
 #'
+#' @docType data
+#'
 #' @format ## `example_many_sequences`
 #' A dataframe with 23 rows and 10 columns:
 #' \describe{
@@ -78,6 +80,8 @@ fetch_acceptable_distortion <- function(verbose = TRUE) {
 #' corresponding to A, C, G, and T/U in that order.\cr\cr To use inside the visualisation
 #' functions, set `sequence_colours = sequence_colour_palettes$<palette_name>`\cr\cr
 #' Generation code is available at `data-raw/sequence_colour_palettes.R`
+#'
+#' @docType data
 #'
 #' @format ## `sequence_colour_palettes`
 #' A list of 5 length-4 character vectors
@@ -108,6 +112,8 @@ fetch_acceptable_distortion <- function(verbose = TRUE) {
 #' The full set of possible score representations, in order and presented as a single
 #' string, is `!"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHI`.\cr\cr
 #' Generation code is available at `data-raw/fastq_quality_scores.R`
+#'
+#' @docType data
 #'
 #' @format ## `fastq_quality_scores`
 #' A character vector of length 41
