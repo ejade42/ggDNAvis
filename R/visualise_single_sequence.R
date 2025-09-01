@@ -156,12 +156,12 @@ visualise_single_sequence <- function(sequence, sequence_colours = sequence_colo
     tile_height <- 1/length(sequences)
 
     ## Generate plot
-    result <- ggplot(image_data, aes(x = x, y = y)) +
+    result <- ggplot(image_data, aes(x = .data$x, y = .data$y)) +
         ## Background
         geom_tile(data = filter(image_data, layer == 0), width = tile_width, height = tile_height, fill = background_colour) +
 
         ## Base boxes
-        geom_tile(data = filter(image_data, layer != 0), width = tile_width, height = tile_height, aes(fill = as.character(layer)),
+        geom_tile(data = filter(image_data, layer != 0), width = tile_width, height = tile_height, aes(fill = as.character(.data$layer)),
                   col = outline_colour, linewidth = outline_linewidth, linejoin = tolower(outline_join)) +
         scale_fill_manual(values = sequence_colours) +
 

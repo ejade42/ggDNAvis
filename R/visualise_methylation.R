@@ -186,7 +186,7 @@ visualise_methylation <- function(modification_locations, modification_probabili
 
 
     ## Make methylation visualisation plot
-    result <- ggplot(mapping = aes(x = x, y = y)) +
+    result <- ggplot(mapping = aes(x = .data$x, y = .data$y)) +
         ## Background
         geom_tile(data = filter(image_data, layer == -2), fill = background_colour, width = tile_width, height = tile_height) +
 
@@ -195,7 +195,7 @@ visualise_methylation <- function(modification_locations, modification_probabili
                   col = other_bases_outline_colour, linewidth = other_bases_outline_linewidth, linejoin = tolower(other_bases_outline_join)) +
 
         ## Modification-assessed bases
-        geom_tile(data = filter(image_data, layer >= 0), aes(fill = clamped_layer), width = tile_width, height = tile_height,
+        geom_tile(data = filter(image_data, layer >= 0), aes(fill = .data$clamped_layer), width = tile_width, height = tile_height,
                   col = modified_bases_outline_colour, linewidth = modified_bases_outline_linewidth, linejoin = tolower(modified_bases_outline_join)) +
         scale_fill_gradient(low = low_colour, high = high_colour, limits = c(low_clamp, high_clamp)) +
 
