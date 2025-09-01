@@ -11,6 +11,10 @@
 ## usethis namespace: end
 NULL
 
+utils::globalVariables("example_many_sequences")
+utils::globalVariables("sequence_colour_palettes")
+utils::globalVariables("fastq_quality_scores")
+
 
 ## Helper function for dealing with different systems when comparing images
 fetch_acceptable_distortion <- function(verbose = TRUE) {
