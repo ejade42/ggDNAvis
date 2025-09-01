@@ -100,6 +100,7 @@ A separate scalebar plot showing the colours corresponding to each probability, 
 can be produced via \code{\link[=visualise_methylation_colour_scale]{visualise_methylation_colour_scale()}}.
 }
 \examples{
+\donttest{
 ## Extract info from dataframe
 methylation_info <- extract_methylation_from_dataframe(example_many_sequences)
 
@@ -148,5 +149,6 @@ image <- png::readPNG("example_vm_02.png")
 unlink("example_vm_02.png")
 grid::grid.newpage()
 grid::grid.raster(image)
+}
 
 }

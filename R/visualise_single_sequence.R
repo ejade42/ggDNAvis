@@ -29,6 +29,7 @@
 #' @return A ggplot object containing the full visualisation, or `invisible(NULL)` if `return = FALSE`. It is often more useful to use `filename = "myfilename.png"`, because then the visualisation is exported at the correct aspect ratio.
 #'
 #' @examples
+#' \donttest{
 #' ## Create sequence to visualise
 #' sequence <- paste(c(rep("GGC", 72), rep("GGAGGAGGCGGC", 15)), collapse = "")
 #'
@@ -67,6 +68,7 @@
 #' unlink("example_vss_02.png")
 #' grid::grid.newpage()
 #' grid::grid.raster(image)
+#' }
 #'
 #' @export
 visualise_single_sequence <- function(sequence, sequence_colours = sequence_colour_palettes$ggplot_style, background_colour = "white",

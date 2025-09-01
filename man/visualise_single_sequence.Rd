@@ -78,6 +78,7 @@ with appropriate dimensions. Colours, line wrapping, index annotation
 interval, and pixels per square when exported are configurable.
 }
 \examples{
+\donttest{
 ## Create sequence to visualise
 sequence <- paste(c(rep("GGC", 72), rep("GGAGGAGGCGGC", 15)), collapse = "")
 
@@ -116,5 +117,6 @@ image <- png::readPNG("example_vss_02.png")
 unlink("example_vss_02.png")
 grid::grid.newpage()
 grid::grid.raster(image)
+}
 
 }

@@ -49,6 +49,7 @@
 #' @return A ggplot object containing the full visualisation, or `invisible(NULL)` if `return = FALSE`. It is often more useful to use `filename = "myfilename.png"`, because then the visualisation is exported at the correct aspect ratio.
 #'
 #' @examples
+#' \donttest{
 #' ## Extract info from dataframe
 #' methylation_info <- extract_methylation_from_dataframe(example_many_sequences)
 #'
@@ -97,6 +98,7 @@
 #' unlink("example_vm_02.png")
 #' grid::grid.newpage()
 #' grid::grid.raster(image)
+#' }
 #'
 #' @export
 visualise_methylation <- function(modification_locations, modification_probabilities, sequence_lengths,
