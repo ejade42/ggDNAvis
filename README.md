@@ -521,12 +521,12 @@ files of all forward and reverse read IDs via the -F/-f 16 flags, e.g.:
 ## bash/shell code for using SAMtools on the command line:
 
 ## See the samtools flag documentation for more details on why
-## -F 16 selects forward reads and -F 16 selects reverse reads
+## -F 16 selects forward reads and -f 16 selects reverse reads
 samtools view -F 16 ${input_bam_file} | \
-awk '{print $1}'  > "forward_reads.txt"
+awk '{print $1}' > "forward_reads.txt"
 
 samtools view -f 16 ${input_bam_file} | \
-awk '{print $1}'  > "reverse_reads.txt"
+awk '{print $1}' > "reverse_reads.txt"
 ```
 
 Then simply read the lines from each file and use that to assign
@@ -542,7 +542,7 @@ constructed_metadata <- data.frame(
     read = c(forward_reads, reverse_reads),
     direction = c(rep("forward", length(forward_reads)),
                   rep("reverse", length(reverse_reads)))
-    )
+)
 ```
 
 In any case, once we have metadata with the `read` and `direction`
