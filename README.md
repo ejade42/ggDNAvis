@@ -270,7 +270,7 @@ scalebar <- visualise_methylation_colour_scale(
 )
 
 ## Write png from object (the object is just a standard ggplot)
-ggsave(paste0(output_location, "summary_methylation_scalebar.png"), scalebar, dpi = 300, width = 5, height = 1.25, device = ragg::agg_png)
+ggsave(paste0(output_location, "summary_methylation_scalebar.png"), scalebar, dpi = 300, width = 5.25, height = 1.5, device = ragg::agg_png)
 
 ## View image
 knitr::include_graphics(paste0(github_location, "summary_methylation_scalebar.png"))
@@ -2188,7 +2188,7 @@ exported manually via `ggsave()`.
 scalebar <- visualise_methylation_colour_scale(x_axis_title = "Methylation probability")
 
 ## Write png from object
-ggsave(paste0(output_location, "modification_01_scalebar.png"), scalebar, dpi = 300, width = 5, height = 1.25, device = ragg::agg_png)
+ggsave(paste0(output_location, "modification_01_scalebar.png"), scalebar, dpi = 300, width = 5.25, height = 1.5, device = ragg::agg_png)
 
 ## View image
 knitr::include_graphics(paste0(github_location, "modification_01_scalebar.png"))
@@ -2404,7 +2404,7 @@ scalebar <- visualise_methylation_colour_scale(x_axis_title = "Methylation proba
           axis.text  = element_text(colour = "white"))
 
 ## Write png from object
-ggsave(paste0(output_location, "modification_03_scalebar.png"), scalebar, dpi = 300, width = 5, height = 1.25, device = ragg::agg_png)
+ggsave(paste0(output_location, "modification_03_scalebar.png"), scalebar, dpi = 300, width = 5.25, height = 1.5, device = ragg::agg_png)
 
 ## View image
 knitr::include_graphics(paste0(github_location, "modification_03_scalebar.png"))
@@ -2463,7 +2463,7 @@ scalebar <- visualise_methylation_colour_scale(x_axis_title = "Methylation proba
                                                background_colour = "lightblue1")
 
 ## Write png from object
-ggsave(paste0(output_location, "modification_04_scalebar.png"), scalebar, dpi = 300, width = 5, height = 1.25, device = ragg::agg_png)
+ggsave(paste0(output_location, "modification_04_scalebar.png"), scalebar, dpi = 300, width = 5.25, height = 1.5, device = ragg::agg_png)
 
 ## View image
 knitr::include_graphics(paste0(github_location, "modification_04_scalebar.png"))
@@ -2548,7 +2548,7 @@ scalebar <- visualise_methylation_colour_scale(x_axis_title = "Methylation proba
                                                background_colour = "lightblue1")
 
 ## Write png from object
-ggsave(paste0(output_location, "modification_05_scalebar.png"), scalebar, dpi = 300, width = 5, height = 1.25, device = ragg::agg_png)
+ggsave(paste0(output_location, "modification_05_scalebar.png"), scalebar, dpi = 300, width = 5.25, height = 1.5, device = ragg::agg_png)
 
 ## View image
 knitr::include_graphics(paste0(github_location, "modification_05_scalebar.png"))
@@ -2608,7 +2608,7 @@ scalebar <- visualise_methylation_colour_scale(x_axis_title = "Methylation proba
                                                high_clamp = 0.7*255)
 
 ## Write png from object
-ggsave(paste0(output_location, "modification_06_scalebar.png"), scalebar, dpi = 300, width = 5, height = 1.25, device = ragg::agg_png)
+ggsave(paste0(output_location, "modification_06_scalebar.png"), scalebar, dpi = 300, width = 5.25, height = 1.5, device = ragg::agg_png)
 
 ## View image
 knitr::include_graphics(paste0(github_location, "modification_06_scalebar.png"))
@@ -2660,7 +2660,7 @@ scalebar <- visualise_methylation_colour_scale(x_axis_title = "Hydroxymethylatio
                                                high_clamp = 0.5*255)
 
 ## Write png from object
-ggsave(paste0(output_location, "modification_07_scalebar.png"), scalebar, dpi = 300, width = 5, height = 1.25, device = ragg::agg_png)
+ggsave(paste0(output_location, "modification_07_scalebar.png"), scalebar, dpi = 300, width = 5.25, height = 1.5, device = ragg::agg_png)
 
 ## View image
 knitr::include_graphics(paste0(github_location, "modification_07_scalebar.png"))
@@ -2726,7 +2726,7 @@ Using all defaults but with lower precision gives the following:
 scalebar <- visualise_methylation_colour_scale(precision = 10)
 
 ## Write png from object
-ggsave(paste0(output_location, "modification_scalebar_alone_01.png"), scalebar, dpi = 300, width = 5, height = 1.25, device = ragg::agg_png)
+ggsave(paste0(output_location, "modification_scalebar_alone_01.png"), scalebar, dpi = 300, width = 5.25, height = 1.5, device = ragg::agg_png)
 
 ## View image
 knitr::include_graphics(paste0(github_location, "modification_scalebar_alone_01.png"))
@@ -2742,7 +2742,7 @@ scalebar <- visualise_methylation_colour_scale(precision = 50,
                                                do_x_ticks = FALSE)
 
 ## Write png from object
-ggsave(paste0(output_location, "modification_scalebar_alone_02.png"), scalebar, dpi = 300, width = 5, height = 1.25, device = ragg::agg_png)
+ggsave(paste0(output_location, "modification_scalebar_alone_02.png"), scalebar, dpi = 300, width = 5.25, height = 1.5, device = ragg::agg_png)
 
 ## View image
 knitr::include_graphics(paste0(github_location, "modification_scalebar_alone_02.png"))
@@ -2771,7 +2771,7 @@ scalebar <- visualise_methylation_colour_scale(high_colour = "green",
     scale_x_continuous(breaks = seq(0, 1, 0.1))
 
 ## Write png from object
-ggsave(paste0(output_location, "modification_scalebar_alone_03.png"), scalebar, dpi = 300, width = 5, height = 2, device = ragg::agg_png)
+ggsave(paste0(output_location, "modification_scalebar_alone_03.png"), scalebar, dpi = 300, width = 5.25, height = 2, device = ragg::agg_png)
 
 ## View image
 knitr::include_graphics(paste0(github_location, "modification_scalebar_alone_03.png"))
@@ -2792,7 +2792,7 @@ scalebar <- visualise_methylation_colour_scale(low_clamp = 0.1*255,
                                                outline_linewidth = 0)
 
 ## Write png from object
-ggsave(paste0(output_location, "modification_scalebar_alone_04.png"), scalebar, dpi = 300, width = 5, height = 2, device = ragg::agg_png)
+ggsave(paste0(output_location, "modification_scalebar_alone_04.png"), scalebar, dpi = 300, width = 5.25, height = 2, device = ragg::agg_png)
 
 ## View image
 knitr::include_graphics(paste0(github_location, "modification_scalebar_alone_04.png"))
