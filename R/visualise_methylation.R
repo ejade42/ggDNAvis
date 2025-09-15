@@ -333,7 +333,7 @@ visualise_methylation_colour_scale <- function(low_colour = "blue", high_colour 
         labs(x = x_axis_title, fill = side_scale_title) + guides(fill = "none") +
         theme(plot.background = element_rect(fill = background_colour, colour = NA),
               panel.border = element_rect(fill = NA, colour = outline_colour, linewidth = outline_linewidth),
-              plot.margin = grid::unit(c(0.05, 0.15, 0.05, 0.15), "inches"))
+              plot.margin = grid::unit(c(0.05, 0.16, 0.05, 0.16), "inches"))
 
     ## Alter plot according to arguments
     if (do_x_ticks == FALSE) {
