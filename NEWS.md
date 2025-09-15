@@ -1,8 +1,12 @@
-# ggDNAvis (development version)
+# ggDNAvis 0.2.1
+
+* Documented that debug_join_vector functions do not return a value
+
+* Changed some reference images to account for ggplot updating to v4.0.0
 
 # ggDNAvis 0.2.0
 
-* Initial CRAN release
+* Initial CRAN submission
 
 * Initial functionality: 
 
