@@ -44,7 +44,7 @@
 
     <a class="navbar-brand me-2" href="index.html">ggDNAvis</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -608,12 +608,12 @@
 <div class="sourceCode" id="cb30"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb30-1"><a href="#cb30-1" tabindex="-1"></a><span class="co">## bash/shell code for using SAMtools on the command line:</span></span>
 <span id="cb30-2"><a href="#cb30-2" tabindex="-1"></a></span>
 <span id="cb30-3"><a href="#cb30-3" tabindex="-1"></a><span class="co">## See the samtools flag documentation for more details on why</span></span>
-<span id="cb30-4"><a href="#cb30-4" tabindex="-1"></a><span class="co">## -F 16 selects forward reads and -F 16 selects reverse reads</span></span>
+<span id="cb30-4"><a href="#cb30-4" tabindex="-1"></a><span class="co">## -F 16 selects forward reads and -f 16 selects reverse reads</span></span>
 <span id="cb30-5"><a href="#cb30-5" tabindex="-1"></a><span class="ex">samtools</span> view <span class="at">-F</span> 16 <span class="va">${input_bam_file}</span> <span class="kw">|</span> <span class="dt">\</span></span>
-<span id="cb30-6"><a href="#cb30-6" tabindex="-1"></a><span class="fu">awk</span> <span class="st">'{print $1}'</span>  <span class="op">&gt;</span> <span class="st">"forward_reads.txt"</span></span>
+<span id="cb30-6"><a href="#cb30-6" tabindex="-1"></a><span class="fu">awk</span> <span class="st">'{print $1}'</span> <span class="op">&gt;</span> <span class="st">"forward_reads.txt"</span></span>
 <span id="cb30-7"><a href="#cb30-7" tabindex="-1"></a></span>
 <span id="cb30-8"><a href="#cb30-8" tabindex="-1"></a><span class="ex">samtools</span> view <span class="at">-f</span> 16 <span class="va">${input_bam_file}</span> <span class="kw">|</span> <span class="dt">\</span></span>
-<span id="cb30-9"><a href="#cb30-9" tabindex="-1"></a><span class="fu">awk</span> <span class="st">'{print $1}'</span>  <span class="op">&gt;</span> <span class="st">"reverse_reads.txt"</span></span></code></pre></div>
+<span id="cb30-9"><a href="#cb30-9" tabindex="-1"></a><span class="fu">awk</span> <span class="st">'{print $1}'</span> <span class="op">&gt;</span> <span class="st">"reverse_reads.txt"</span></span></code></pre></div>
 <p>Then simply read the lines from each file and use that to assign directions:</p>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Use files from last step to construct vectors of forward and reverse IDs</span></span>
@@ -625,7 +625,7 @@
 <span>    read <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">forward_reads</span>, <span class="va">reverse_reads</span><span class="op">)</span>,</span>
 <span>    direction <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"forward"</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">forward_reads</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>                  <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"reverse"</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">reverse_reads</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span>    <span class="op">)</span></span></code></pre></div>
+<span><span class="op">)</span></span></code></pre></div>
 <p>In any case, once we have metadata with the <code>read</code> and <code>direction</code> columns, we can use <code><a href="reference/merge_fastq_with_metadata.html">merge_fastq_with_metadata()</a></code> to combine the metadata and the fastq data. Crucially, this function uses the <code>direction</code> column of the metadata to determine which reads are reverse, and reverse-complements these reverse reads only to produce a new column containing the forward version of all reads:</p>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Merge fastq data with metadata</span></span>
