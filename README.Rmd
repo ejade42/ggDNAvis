@@ -571,7 +571,7 @@ sone_2019_f1_1_expanded_ggt_added <- "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGC
 visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added)
 ```
 
-```{r single_sequence_default, echo = FALSE, fig.show = "hide", message = FALSE}
+```{r single_sequence_default, include = FALSE}
 ## Delete file from last chunk
 file.remove(paste0(output_location, "single_sequence_hidden-1.png"))
 
