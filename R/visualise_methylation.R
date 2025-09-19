@@ -178,7 +178,7 @@ visualise_methylation <- function(modification_locations, modification_probabili
         numeric_sequence_representation <- convert_modification_to_number_vector(modification_locations[i], modification_probabilities[i], max_length, sequence_lengths[i])
         image_matrix[i, ] <- numeric_sequence_representation
     }
-    image_data <- raster::as.data.frame(raster::raster(image_matrix), xy = TRUE)
+    image_data <- rasterise_matrix(image_matrix)
 
     ## Transform image data if clamping limits are set
     image_data$clamped_layer <- pmin(pmax(image_data$layer, low_clamp), high_clamp)

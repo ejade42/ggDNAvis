@@ -14,7 +14,6 @@ Imports:
     dplyr,
     tidyr,
     stringr,
-    raster,
     rlang,
     ragg,
     png,

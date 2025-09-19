@@ -175,13 +175,13 @@ reverse_complement <- function(sequence, output_mode = "DNA") {
 
 
 ## These next two functions work together to encode
-## sequence numerically for visualisation via `raster::raster()`.
+## sequence numerically for visualisation.
 ## A = 1, C = 2, G = 3, T/U = 4, blank = 0
 
 #' Map a single base to the corresponding number (generic `ggDNAvis` helper)
 #'
 #' This function takes a single base and numerically
-#' encodes it for visualisation via [raster::raster()]. \cr\cr
+#' encodes it for visualisation via [rasterise_matrix()]. \cr\cr
 #' Encoding: `A = 1`, `C = 2`, `G = 3`, `T/U = 4`.
 #'
 #' @param base `character`. A single DNA/RNA base to encode numerically (e.g. `"A"`).
@@ -218,7 +218,7 @@ convert_base_to_number <- function(base) {
 #' Map a sequence to a vector of numbers (generic `ggDNAvis` helper)
 #'
 #' This function takes a sequence and encodes it as a vector
-#' of numbers for visualisation via [raster::raster()]. \cr\cr
+#' of numbers for visualisation via [rasterise_matrix()]. \cr\cr
 #' Encoding: `A = 1`, `C = 2`, `G = 3`, `T/U = 4`.
 #'
 #' @param sequence `character`. A DNA/RNA sequence (`A/C/G/T/U`) to be encoded numerically. No other characters allowed. Only one sequence allowed.
@@ -289,6 +289,24 @@ create_image_data <- function(sequences) {
         image_matrix[i, ] <- numeric_sequence_representation
     }
 
-    image_data <- raster::as.data.frame(raster::raster(image_matrix), xy = TRUE)
+    image_data <- rasterise_matrix(image_matrix)
     return(image_data)
+}
+
+
+
+rasterise_matrix <- function(image_matrix) {
+    n <- nrow(image_matrix)
+    k <- ncol(image_matrix)
+
+    blank <- rep(0, length(image_matrix))
+    output_dataframe <- data.frame(x = blank, y = blank, layer = blank)
+    count <- 1L
+    for (i in 1:n) {
+        for (j in 1:k) {
+            output_dataframe[count, ] <- c((j-0.5)/k, 1 - (i-0.5)/n, image_matrix[i,j])
+            count <- count + 1L
+        }
+    }
+    return(output_dataframe)
 }
