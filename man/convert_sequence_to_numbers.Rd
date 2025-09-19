@@ -16,7 +16,7 @@ convert_sequence_to_numbers(sequence, length = NA)
 }
 \description{
 This function takes a sequence and encodes it as a vector
-of numbers for visualisation via \code{\link[raster:raster]{raster::raster()}}. \cr\cr
+of numbers for visualisation via \code{\link[=rasterise_matrix]{rasterise_matrix()}}. \cr\cr
 Encoding: \code{A = 1}, \code{C = 2}, \code{G = 3}, \code{T/U = 4}.
 }
 \examples{

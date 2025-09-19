@@ -294,8 +294,63 @@ create_image_data <- function(sequences) {
 }
 
 
-
+#' Rasterise a matrix to an x/y/layer dataframe (generic `ggDNAvis` helper)
+#'
+#' This function takes a matrix and rasterises it to a dataframe of x and y
+#' coordinates, such that the matrix occupies the space from (0, 0) to (1, 1) and each
+#' element of the matrix represents a rectangle with width 1/ncol(matrix) and height
+#' 1/nrow(matrix). The "layer" column of the dataframe is simply the value of each element
+#' of the matrix.
+#'
+#' @param image_matrix `matrix`. A matrix (or anything that can be coerced to a matrix via [as.matrix()]).
+#' @return `dataframe`. A dataframe containing x and y coordinates for the centre of a rectangle per element of the matrix, such that the whole matrix occupies the space from (0, 0) to (1, 1). Additionally contains a layer column storing the value of each element of the matrix.
+#'
+#' @examples
+#' ## Create numerical matrix
+#' example_matrix <- matrix(1:16, ncol = 4, nrow = 4, byrow = TRUE)
+#'
+#' ## View
+#' example_matrix
+#'
+#' ## Rasterise
+#' rasterise_matrix(example_matrix)
+#'
+#'
+#'
+#' ## Create character matrix
+#' example_matrix <- matrix(
+#'     c("A", "B", "C", "D", "E",
+#'       "F", "G", "H", "I", "J"),
+#'     nrow = 2, ncol = 5, byrow = TRUE
+#' )
+#'
+#' ## View
+#' example_matrix
+#'
+#' ## Rasterise
+#' rasterise_matrix(example_matrix)
+#'
+#'
+#'
+#' ## Create realistic DNA matrix
+#' dna_matrix <- matrix(
+#'     c(0, 0, 0, 0, 0, 0, 0, 0,
+#'       3, 3, 2, 3, 3, 2, 4, 4,
+#'       0, 0, 0, 0, 0, 0, 0, 0,
+#'       4, 1, 4, 1, 0, 0, 0, 0),
+#'     nrow = 4, ncol = 8, byrow = TRUE
+#' )
+#'
+#' ## View
+#' dna_matrix
+#'
+#' ## Rasterise
+#' rasterise_matrix(dna_matrix)
+#'
+#' @export
 rasterise_matrix <- function(image_matrix) {
+    image_matrix <- as.matrix(image_matrix)
+
     n <- nrow(image_matrix)
     k <- ncol(image_matrix)
 
@@ -304,7 +359,9 @@ rasterise_matrix <- function(image_matrix) {
     count <- 1L
     for (i in 1:n) {
         for (j in 1:k) {
-            output_dataframe[count, ] <- c((j-0.5)/k, 1 - (i-0.5)/n, image_matrix[i,j])
+            output_dataframe[count, "x"] <- (j-0.5)/k
+            output_dataframe[count, "y"] <- 1 - (i-0.5)/n
+            output_dataframe[count, "layer"] <- image_matrix[i,j]
             count <- count + 1L
         }
     }

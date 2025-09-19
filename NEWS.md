@@ -1,5 +1,9 @@
 # ggDNAvis (development version)
 
+* Removed raster::raster() dependency
+
+* Added new rasterise_matrix() function to do rasterisation
+
 # ggDNAvis 0.2.1
 
 * Documented that debug_join_vector functions do not return a value
