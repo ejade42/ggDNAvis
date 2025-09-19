@@ -987,7 +987,9 @@ sone_2019_f1_1_expanded_ggt_added <- "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGC
 visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added)
 ```
 
-![](README_files/output/single_sequence_default-1.png)<!-- -->
+    ## [1] TRUE
+
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_default-1.png)<!-- -->
 
 By default, `visualise_single_sequence()` will return a ggplot object.
 It can be useful to view this for instant debugging. However, it is not

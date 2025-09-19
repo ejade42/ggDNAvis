@@ -563,12 +563,24 @@ Do be careful that either all of sequence, quality, locations, and probabilities
 
 ggDNAvis can be used to visualise a single DNA sequence via `visualise_single_sequence()`. This function is extremely simple, just taking a DNA sequence as input. We will use the *NOTCH2NLC* repeat expansion sequence of F1-1 from Figure 1 of @sone_long-read_2019, but with some GGCs replaced with GGT so that all four nucleotides are visualised.
 
-```{r single_sequence_default}
+```{r single_sequence_hidden, fig.show = "hide"}
 ## Define sequence variable
 sone_2019_f1_1_expanded_ggt_added <- "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGTGGTGGTGGTGGTGGTGGTGGTGGTGGTGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGAGGCGGCGGCGGAGGAGGAGGCGGCGGAGGAGGAGGCGGCGGAGGAGGAGGCGGCGGAGGAGGAGGCGGCGGAGGAGGAGGCGGCGGAGGAGGAGGCGGCGGAGGAGGAGGCGGCGGCGGCGGCGGCGGC"
 
 ## Use all default settings
 visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added)
+```
+
+```{r single_sequence_default, echo = FALSE, fig.show = "hide", message = FALSE}
+## Delete file from last chunk
+file.remove(paste0(output_location, "single_sequence_hidden-1.png"))
+
+## Re-render but hidden to allow using the github location
+visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added)
+ggsave(paste0(output_location, "single_sequence_default-1.png"))
+```
+```{r, echo = FALSE}
+knitr::include_graphics(paste0(github_location, "single_sequence_default-1.png"))
 ```
 
 By default, `visualise_single_sequence()` will return a ggplot object. It can be useful to view this for instant debugging. However, it is not usually rendered at a sensible scale or aspect ratio. Therefore, it is preferable to set a `filename = <file_to_write_to.png>` for export, as the function has built-in logic for scaling correctly (with resolution configurable via the `pixels_per_base` argument). We don't have a use for interactive debugging, so we will also set `return = FALSE`.
