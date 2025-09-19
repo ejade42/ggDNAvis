@@ -7,7 +7,7 @@
 rasterise_matrix(image_matrix)
 }
 \arguments{
-\item{image_matrix}{\code{matrix}. A matrix (or anything that can be coerced to a matrix via \code{\link[=as.matrix]{as.matrix()}}).}
+\item{image_matrix}{\code{matrix}. A matrix (or anything that can be coerced to a matrix via \code{\link[base:matrix]{base::as.matrix()}}).}
 }
 \value{
 \code{dataframe}. A dataframe containing x and y coordinates for the centre of a rectangle per element of the matrix, such that the whole matrix occupies the space from (0, 0) to (1, 1). Additionally contains a layer column storing the value of each element of the matrix.

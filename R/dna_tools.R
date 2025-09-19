@@ -302,7 +302,7 @@ create_image_data <- function(sequences) {
 #' 1/nrow(matrix). The "layer" column of the dataframe is simply the value of each element
 #' of the matrix.
 #'
-#' @param image_matrix `matrix`. A matrix (or anything that can be coerced to a matrix via [as.matrix()]).
+#' @param image_matrix `matrix`. A matrix (or anything that can be coerced to a matrix via [base::as.matrix()]).
 #' @return `dataframe`. A dataframe containing x and y coordinates for the centre of a rectangle per element of the matrix, such that the whole matrix occupies the space from (0, 0) to (1, 1). Additionally contains a layer column storing the value of each element of the matrix.
 #'
 #' @examples

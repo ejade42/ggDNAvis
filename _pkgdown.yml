@@ -61,6 +61,7 @@ reference:
   - convert_sequence_to_numbers
   - convert_sequences_to_annotations
   - create_image_data
+  - rasterise_matrix
   - reverse_sequence_if_needed
   - reverse_quality_if_needed
   - reverse_locations_if_needed
