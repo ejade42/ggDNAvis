@@ -1,6 +1,7 @@
 on:
   push:
     branches: [main, master]
+  pull_request:
   release:
     types: [published]
   workflow_dispatch:
@@ -20,7 +21,10 @@ jobs:
       contents: write
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout package code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && github.event.ref || github.ref }}
 
       - uses: r-lib/actions/setup-pandoc@v2
 
