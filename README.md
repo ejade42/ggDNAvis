@@ -41,6 +41,8 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/ejade42/ggDNAvis/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ejade42/ggDNAvis/actions/workflows/R-CMD-check.yaml)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/ggDNAvis)](https://CRAN.R-project.org/package=ggDNAvis)
 <!-- badges: end -->
 
 # 1 ggDNAvis
@@ -71,15 +73,17 @@ Note that all spellings are the British English version (e.g. “colour”,
 “visualise”). Aliases have not been defined, meaning American spellings
 will not work.
 
-ggDNAvis is currently available from this github page. Once CRAN
-submission is accepted, it will be available from CRAN:
+The latest release of ggDNAvis is available from CRAN or via github
+releases. Alternatively, the latest in-development version can be
+installed directly from the github repository, but may have unexpected
+bugs.
 
 ``` r
-## Currently
-devtools::install_github("ejade42/ggDNAvis")
-
-## Soon
+## Latest release version
 install.packages("ggDNAvis")
+
+## Current development build (may have unexpected bugs!)
+devtools::install_github("ejade42/ggDNAvis")
 ```
 
 Throughout this manual, only `ggDNAvis`, `dplyr`, and `ggplot2` are
