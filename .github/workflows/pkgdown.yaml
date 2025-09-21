@@ -40,11 +40,17 @@ jobs:
       - name: Choose target folder
         id: target
         run: |
-          if [[ "${GITHUB_REF}" == refs/heads/* ]]; then
-            echo "folder=dev" >> $GITHUB_OUTPUT
-          elif [[ "${GITHUB_REF}" == refs/tags/* ]]; then
-            TAG="${GITHUB_REF#refs/tags/}"
+          REF="${GITHUB_REF}"
+          EVENT_REF="${{ github.event.ref }}"
+
+          if [[ "$EVENT_REF" == refs/tags/* ]]; then
+            TAG="${EVENT_REF#refs/tags/}"
             echo "folder=$TAG" >> $GITHUB_OUTPUT
+          elif [[ "$REF" == refs/tags/* ]]; then
+            TAG="${REF#refs/tags/}"
+            echo "folder=$TAG" >> $GITHUB_OUTPUT
+          elif [[ "$REF" == refs/heads/* ]]; then
+            echo "folder=dev" >> $GITHUB_OUTPUT
           else
             echo "folder=other" >> $GITHUB_OUTPUT
           fi
