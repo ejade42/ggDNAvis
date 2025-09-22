@@ -6,6 +6,17 @@ template:
   includes:
     in_header: pkgdown/google0acd00d8574ec2df.html
 
+navbar:
+  left:
+    - text: "Version"
+      menu:
+        - text: "Latest dev"
+          href: /dev/
+        - text: "v0.2.1"
+          href: /v0.2.1/
+        - text: "v0.2.0"
+          href: /v0.2.0/
+
 reference:
 - title: DNA visualisation
 
