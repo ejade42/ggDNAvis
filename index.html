@@ -44,7 +44,7 @@
 
     <a class="navbar-brand me-2" href="index.html">ggDNAvis</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,6 +55,15 @@
       <ul class="navbar-nav me-auto">
 <li class="nav-item"><a class="nav-link" href="reference/index.html">Reference</a></li>
 <li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-version" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Version</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-version">
+<li><a class="dropdown-item" href="https://ejade42.github.io/ggDNAvis/">Latest release</a></li>
+    <li><a class="dropdown-item" href="https://ejade42.github.io/ggDNAvis/dev/">Latest dev</a></li>
+    <li><a class="dropdown-item" href="https://ejade42.github.io/ggDNAvis/v0.2.1/">v0.2.1</a></li>
+    <li><a class="dropdown-item" href="https://ejade42.github.io/ggDNAvis/v0.2.0/">v0.2.0</a></li>
+  </ul>
+</li>
       </ul>
 <ul class="navbar-nav">
 <li class="nav-item"><form class="form-inline" role="search">
@@ -137,13 +146,16 @@
 <p>This is accomplished through main functions <code><a href="reference/visualise_single_sequence.html">visualise_single_sequence()</a></code>, <code><a href="reference/visualise_many_sequences.html">visualise_many_sequences()</a></code>, and <code><a href="reference/visualise_methylation.html">visualise_methylation()</a></code> respectively. Each of these has helper sequences for streamlined data processing, as detailed later in the section for each visualisation type.</p>
 <p>Additionally, ggDNAvis contains a built-in example dataset (<code>example_many_sequences</code>) and a set of colour palettes for DNA visualisation (<code>sequence_colour_palettes</code>).</p>
 <p>Note that all spellings are the British English version (e.g. “colour”, “visualise”). Aliases have not been defined, meaning American spellings will not work.</p>
-<p>ggDNAvis is currently available from this github page. Once CRAN submission is accepted, it will be available from CRAN:</p>
+<p>The latest release of ggDNAvis is available from CRAN or via github releases. Alternatively, the latest in-development version can be installed directly from the github repository, but may have unexpected bugs.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">## Currently</span></span>
+<code class="sourceCode R"><span><span class="co">## Latest release version</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"ggDNAvis"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## Current development build (may have unexpected bugs!)</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"ejade42/ggDNAvis"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">## Soon</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"ggDNAvis"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="co">## Specific version from github</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"ejade42/ggDNAvis"</span>, ref <span class="op">=</span> <span class="st">"v0.2.0"</span><span class="op">)</span></span></code></pre></div>
 <p>Throughout this manual, only <code>ggDNAvis</code>, <code>dplyr</code>, and <code>ggplot2</code> are loaded.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Load this package</span></span>
@@ -166,7 +178,7 @@
 <span></span>
 <span><span class="co">## Set up file locations</span></span>
 <span><span class="va">output_location</span> <span class="op">&lt;-</span> <span class="st">"README_files/output/"</span></span>
-<span><span class="va">github_location</span> <span class="op">&lt;-</span> <span class="st">"https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/"</span></span>
+<span><span class="va">github_location</span> <span class="op">&lt;-</span> <span class="st">"https://raw.githubusercontent.com/ejade42/ggDNAvis/v0.2.0/README_files/output/"</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/knitr/man/opts_chunk.html" class="external-link">opts_chunk</a></span><span class="op">$</span><span class="fu">set</span><span class="op">(</span>fig.path <span class="op">=</span> <span class="va">output_location</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level1">
@@ -208,7 +220,7 @@
 <span></span>
 <span><span class="co">## View image</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"summary_single_sequence.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/summary_single_sequence.png"><!-- --></p>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/v0.2.0/README_files/output/summary_single_sequence.png"><!-- --></p>
 </div>
 <div class="section level2">
 <h2 id="id_22-many-sequences">2.2 Many sequences<a class="anchor" aria-label="anchor" href="#id_22-many-sequences"></a>
@@ -249,7 +261,7 @@
 <span></span>
 <span><span class="co">## View image</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"summary_many_sequences.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/summary_many_sequences.png"><!-- --></p>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/v0.2.0/README_files/output/summary_many_sequences.png"><!-- --></p>
 </div>
 <div class="section level2">
 <h2 id="id_23-methylationmodification">2.3 Methylation/modification<a class="anchor" aria-label="anchor" href="#id_23-methylationmodification"></a>
@@ -303,7 +315,7 @@
 <span></span>
 <span><span class="co">## View image</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"summary_methylation.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/summary_methylation.png"><!-- --></p>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/v0.2.0/README_files/output/summary_methylation.png"><!-- --></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Create scalebar and save to ggplot object</span></span>
 <span><span class="co">## Usually it's fine to leave most of these as defaults</span></span>
@@ -324,11 +336,11 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## Write png from object (the object is just a standard ggplot)</span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"summary_methylation_scalebar.png"</span><span class="op">)</span>, <span class="va">scalebar</span>, dpi <span class="op">=</span> <span class="fl">300</span>, width <span class="op">=</span> <span class="fl">5.25</span>, height <span class="op">=</span> <span class="fl">1.5</span>, device <span class="op">=</span> <span class="fu">ragg</span><span class="fu">::</span><span class="va"><a href="https://ragg.r-lib.org/reference/agg_png.html" class="external-link">agg_png</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"summary_methylation_scalebar.png"</span><span class="op">)</span>, <span class="va">scalebar</span>, dpi <span class="op">=</span> <span class="fl">300</span>, width <span class="op">=</span> <span class="fl">5</span>, height <span class="op">=</span> <span class="fl">1.25</span>, device <span class="op">=</span> <span class="fu">ragg</span><span class="fu">::</span><span class="va"><a href="https://ragg.r-lib.org/reference/agg_png.html" class="external-link">agg_png</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"summary_methylation_scalebar.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/summary_methylation_scalebar.png" width="60%" style="display: block; margin: auto;"></p>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/v0.2.0/README_files/output/summary_methylation_scalebar.png" width="60%" style="display: block; margin: auto;"></p>
 </div>
 </div>
 <div class="section level1">
@@ -608,12 +620,12 @@
 <div class="sourceCode" id="cb30"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb30-1"><a href="#cb30-1" tabindex="-1"></a><span class="co">## bash/shell code for using SAMtools on the command line:</span></span>
 <span id="cb30-2"><a href="#cb30-2" tabindex="-1"></a></span>
 <span id="cb30-3"><a href="#cb30-3" tabindex="-1"></a><span class="co">## See the samtools flag documentation for more details on why</span></span>
-<span id="cb30-4"><a href="#cb30-4" tabindex="-1"></a><span class="co">## -F 16 selects forward reads and -f 16 selects reverse reads</span></span>
+<span id="cb30-4"><a href="#cb30-4" tabindex="-1"></a><span class="co">## -F 16 selects forward reads and -F 16 selects reverse reads</span></span>
 <span id="cb30-5"><a href="#cb30-5" tabindex="-1"></a><span class="ex">samtools</span> view <span class="at">-F</span> 16 <span class="va">${input_bam_file}</span> <span class="kw">|</span> <span class="dt">\</span></span>
-<span id="cb30-6"><a href="#cb30-6" tabindex="-1"></a><span class="fu">awk</span> <span class="st">'{print $1}'</span> <span class="op">&gt;</span> <span class="st">"forward_reads.txt"</span></span>
+<span id="cb30-6"><a href="#cb30-6" tabindex="-1"></a><span class="fu">awk</span> <span class="st">'{print $1}'</span>  <span class="op">&gt;</span> <span class="st">"forward_reads.txt"</span></span>
 <span id="cb30-7"><a href="#cb30-7" tabindex="-1"></a></span>
 <span id="cb30-8"><a href="#cb30-8" tabindex="-1"></a><span class="ex">samtools</span> view <span class="at">-f</span> 16 <span class="va">${input_bam_file}</span> <span class="kw">|</span> <span class="dt">\</span></span>
-<span id="cb30-9"><a href="#cb30-9" tabindex="-1"></a><span class="fu">awk</span> <span class="st">'{print $1}'</span> <span class="op">&gt;</span> <span class="st">"reverse_reads.txt"</span></span></code></pre></div>
+<span id="cb30-9"><a href="#cb30-9" tabindex="-1"></a><span class="fu">awk</span> <span class="st">'{print $1}'</span>  <span class="op">&gt;</span> <span class="st">"reverse_reads.txt"</span></span></code></pre></div>
 <p>Then simply read the lines from each file and use that to assign directions:</p>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Use files from last step to construct vectors of forward and reverse IDs</span></span>
@@ -625,7 +637,7 @@
 <span>    read <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">forward_reads</span>, <span class="va">reverse_reads</span><span class="op">)</span>,</span>
 <span>    direction <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"forward"</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">forward_reads</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>                  <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"reverse"</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">reverse_reads</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span>    <span class="op">)</span></span></code></pre></div>
 <p>In any case, once we have metadata with the <code>read</code> and <code>direction</code> columns, we can use <code><a href="reference/merge_fastq_with_metadata.html">merge_fastq_with_metadata()</a></code> to combine the metadata and the fastq data. Crucially, this function uses the <code>direction</code> column of the metadata to determine which reads are reverse, and reverse-complements these reverse reads only to produce a new column containing the forward version of all reads:</p>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Merge fastq data with metadata</span></span>
@@ -1533,7 +1545,7 @@
 <span></span>
 <span><span class="co">## View image</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"single_sequence_01.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_01.png"><!-- --></p>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/v0.2.0/README_files/output/single_sequence_01.png"><!-- --></p>
 <p>This is the typical single sequence visualisation produced by this package. However, almost every aspect of the visualisation is configurable via arguments to <code><a href="reference/visualise_single_sequence.html">visualise_single_sequence()</a></code> (and the resulting <code>ggplot</code> object can be further modified in standard <code>ggplot</code> manner if required).</p>
 <p>The resolution can be changed with <code>pixels_per_base</code>, but it is recommended to not go too low otherwise text can become illegible (and going too high obviously increases filesize). The default value of 100 is often a happy medium.</p>
 <div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
@@ -1545,7 +1557,7 @@
 <span></span>
 <span><span class="co">## View image</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"single_sequence_02.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_02.png"><!-- --></p>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/v0.2.0/README_files/output/single_sequence_02.png"><!-- --></p>
 <p>For all <code>visualise_</code> functions, the <code>render_device</code> argument can be used to control the rendering method. It is fed directly to <code>ggsave(device = )</code>, so the <code>ggsave</code> documentation fully explains its use. The default <code><a href="https://ragg.r-lib.org/reference/agg_png.html" class="external-link">ragg::agg_png</a></code> works well and ensures consistent graphics (though not font) rendering across platforms/operating systems, so you should not need to change it.</p>
 </div>
 <div class="section level2">
@@ -1578,7 +1590,7 @@
 <span></span>
 <span><span class="co">## View image</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"single_sequence_03.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_03.png"><!-- --></p>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/v0.2.0/README_files/output/single_sequence_03.png"><!-- --></p>
 <p>Included in <code>ggDNAvis</code> are a set of colour palettes for sequence colours that can often be helpful. The default is <code>sequence_colour_palettes$ggplot_style</code>, as seen in the first example above. The other palettes are <code>$bright_pale</code>, <code>$bright_pale2</code>, <code>$bright_deep</code>, and <code>$sanger</code>:</p>
 <p>The <code>bright_pale</code> palette works well with either white or black text, depending on how much the text is desired to “pop”:</p>
 <div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
@@ -1591,7 +1603,7 @@
 <span></span>
 <span><span class="co">## View image</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"single_sequence_04.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_04.png"><!-- --></p>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/v0.2.0/README_files/output/single_sequence_04.png"><!-- --></p>
 <div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Create image</span></span>
 <span><span class="fu"><a href="reference/visualise_single_sequence.html">visualise_single_sequence</a></span><span class="op">(</span><span class="va">sone_2019_f1_1_expanded_ggt_added</span>,</span>
@@ -1602,7 +1614,7 @@
 <span></span>
 <span><span class="co">## View image</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"single_sequence_05.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_05.png"><!-- --></p>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/v0.2.0/README_files/output/single_sequence_05.png"><!-- --></p>
 <p><code>bright_pale2</code> is the same but with a slightly lighter shade of green:</p>
 <div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Create image</span></span>
@@ -1614,7 +1626,7 @@
 <span></span>
 <span><span class="co">## View image</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"single_sequence_06.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_06.png"><!-- --></p>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/v0.2.0/README_files/output/single_sequence_06.png"><!-- --></p>
 <p>The <code>bright_deep</code> palette works best with white text:</p>
 <div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Create image</span></span>
@@ -1626,7 +1638,7 @@
 <span></span>
 <span><span class="co">## View image</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"single_sequence_07.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_07.png"><!-- --></p>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/v0.2.0/README_files/output/single_sequence_07.png"><!-- --></p>
 <p>The <code>sanger</code> palette is inspired by old-school Sanger sequencing readouts and works best with white text:</p>
 <div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Create image</span></span>
@@ -1639,7 +1651,7 @@
 <span></span>
 <span><span class="co">## View image</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"single_sequence_08.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_08.png"><!-- --></p>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/v0.2.0/README_files/output/single_sequence_08.png"><!-- --></p>
 </div>
 <div class="section level2">
 <h2 id="id_43-layout-customisation">4.3 Layout customisation<a class="anchor" aria-label="anchor" href="#id_43-layout-customisation"></a>
@@ -1684,7 +1696,7 @@
 <span></span>
 <span><span class="co">## View image</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"single_sequence_09.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_09.png"><!-- --></p>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/v0.2.0/README_files/output/single_sequence_09.png"><!-- --></p>
 <p>Setting spacing, margin, sequence text size, and index annotation interval all to 0 produces a no-frills visualisation of the sequence only. If doing so, <code>pixels_per_base</code> can be set low as there is no text that would be rendered poorly at low resolutions:</p>
 <div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Create image</span></span>
@@ -1705,7 +1717,7 @@
 <div class="sourceCode" id="cb65"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## View image</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"single_sequence_10.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_10.png"><!-- --> This produced a warning message as setting the margin to 0 clipped off the outlines of the outermost boxes. Either a slightly larger margin can be used:</p>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/v0.2.0/README_files/output/single_sequence_10.png"><!-- --> This produced a warning message as setting the margin to 0 clipped off the outlines of the outermost boxes. Either a slightly larger margin can be used:</p>
 <div class="sourceCode" id="cb66"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Create image</span></span>
 <span><span class="fu"><a href="reference/visualise_single_sequence.html">visualise_single_sequence</a></span><span class="op">(</span><span class="va">sone_2019_f1_1_expanded_ggt_added</span>,</span>
@@ -1722,7 +1734,7 @@
 <span></span>
 <span><span class="co">## View image</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"single_sequence_11.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_11.png"><!-- --></p>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/v0.2.0/README_files/output/single_sequence_11.png"><!-- --></p>
 <p>Or the outlines can be turned off:</p>
 <div class="sourceCode" id="cb67"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Create image</span></span>
@@ -1740,7 +1752,7 @@
 <span></span>
 <span><span class="co">## View image</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"single_sequence_12.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_12.png"><!-- --></p>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/v0.2.0/README_files/output/single_sequence_12.png"><!-- --></p>
 <p>When changing line wrapping and annotation interval, divisibility is important. It is generally recommended to make the line wrapping length a multiple of the motif length when visualising repeats (e.g. a multiple of 3 for a trinucleotide repeat), and to make the index annotation interval a factor of the line wrapping length. If the annotation interval is not a factor of the line length, then there will be uneven gaps between annotations as the interval is counted <em>from the start of each line</em>.</p>
 <p>Here is an example where these guidelines are not followed:</p>
 <div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
@@ -1755,7 +1767,7 @@
 <span></span>
 <span><span class="co">## View image</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"single_sequence_13.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_13.png"><!-- --></p>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/v0.2.0/README_files/output/single_sequence_13.png"><!-- --></p>
 <p>When setting spacing to 0, it is highly recommended to disable index annotations via <code>index_annotation_interval = 0</code>, otherwise there is nowhere for them to render:</p>
 <div class="sourceCode" id="cb69"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Create image</span></span>
@@ -1773,7 +1785,7 @@
 <div class="sourceCode" id="cb71"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## View image</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"single_sequence_14.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_14.png"><!-- --></p>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/v0.2.0/README_files/output/single_sequence_14.png"><!-- --></p>
 </div>
 </div>
 <div class="section level1">
@@ -1917,7 +1929,7 @@
 <span></span>
 <span><span class="co">## View image</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"many_sequences_01.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_01.png"><!-- --></p>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/v0.2.0/README_files/output/many_sequences_01.png"><!-- --></p>
 </div>
 <div class="section level2">
 <h2 id="id_52-sequence-arrangement-customisation">5.2 Sequence arrangement customisation<a class="anchor" aria-label="anchor" href="#id_52-sequence-arrangement-customisation"></a>
@@ -1958,7 +1970,7 @@
 <span></span>
 <span><span class="co">## View image</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"many_sequences_02.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_02.png"><!-- --></p>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/v0.2.0/README_files/output/many_sequences_02.png"><!-- --></p>
 <p>Here the top large cluster is Family 1, containing individuals F1-1, F1-2, and F-3. These individuals contain 5, 2, and 3 reads respectively, and are separated from each other by 2 blank lines. After Family 1, there is there 8 blank lines before Family 2. Family 2 contains F2-1 and F2-2 with 1 and 3 reads (individuals separated by 2 blank lines), then there are 8 blank lines before Family 3. Family 3 contains F3-1, F3-2, F3-3, and F3-4 with 2, 3, 1, and 3 reads.</p>
 <p>If we wanted to group only by individual without showing the family structure, and present reads in ascending length order for each individual, we could do the following:</p>
 <div class="sourceCode" id="cb79"><pre class="downlit sourceCode r">
@@ -1976,7 +1988,7 @@
 <span></span>
 <span><span class="co">## View image</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"many_sequences_03.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_03.png"><!-- --></p>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/v0.2.0/README_files/output/many_sequences_03.png"><!-- --></p>
 <p>Now we have a group for each individual, with sequences in ascending length order per individual, and one blank line between individuals.</p>
 <p>We could also turn off grouping entirely to just visualise all of the reads in length order, via <code>grouping_levels = NA</code>:</p>
 <div class="sourceCode" id="cb80"><pre class="downlit sourceCode r">
@@ -1994,7 +2006,7 @@
 <span></span>
 <span><span class="co">## View image</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"many_sequences_04.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_04.png"><!-- --></p>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/v0.2.0/README_files/output/many_sequences_04.png"><!-- --></p>
 <p>We can also turn off sorting entirely (keeping grouping off) with <code>sort_by = NA</code> to simply show all the reads in the order in which they appear in the dataframe:</p>
 <p>NB: if <code>sort_by = NA</code> is used, then <code>desc_sort</code> does nothing so it doesn’t matter what it is set to.</p>
 <div class="sourceCode" id="cb81"><pre class="downlit sourceCode r">
@@ -2011,7 +2023,7 @@
 <span></span>
 <span><span class="co">## View image</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"many_sequences_05.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_05.png"><!-- --></p>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/v0.2.0/README_files/output/many_sequences_05.png"><!-- --></p>
 <p>It is also possible to keep grouping on while turning sorting off if desired:</p>
 <div class="sourceCode" id="cb82"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Extract sequences to a character vector</span></span>
@@ -2028,7 +2040,7 @@
 <span></span>
 <span><span class="co">## View image</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"many_sequences_06.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_06.png"><!-- --></p>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/v0.2.0/README_files/output/many_sequences_06.png"><!-- --></p>
 <p>The grouping spacers can be set to 0 to sort within groups without visually separating them (but negative values don’t work - they produce an error in <code><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep()</a></code> as the blank line can’t be repeated a negative number of times). Additionally, the order of the groups/levels within a grouping variable can be changed in standard R fashion with <code>factor(x, levels = ...)</code>:</p>
 <div class="sourceCode" id="cb83"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Reorder families</span></span>
@@ -2051,7 +2063,7 @@
 <span></span>
 <span><span class="co">## View image</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"many_sequences_07.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_07.png"><!-- --></p>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/v0.2.0/README_files/output/many_sequences_07.png"><!-- --></p>
 <p>Finally, all the same grouping and sorting logic can be used to extract any other column as a character vector, though of course if it isn’t DNA sequence then the resulting vector is not valid input to <code><a href="reference/visualise_many_sequences.html">visualise_many_sequences()</a></code>. The column for extraction is specified by <code>sequence_variable</code>, and the column for sorting is <code>sort_by</code>. If the <code>sort_by</code> column is non-numeric then it will be sorted alphabetically, just like using <code><a href="https://rdrr.io/r/base/sort.html" class="external-link">sort()</a></code> on a character vector.</p>
 <div class="sourceCode" id="cb84"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Extract qualities to character vector,</span></span>
@@ -2143,7 +2155,7 @@
 <span></span>
 <span><span class="co">## View image</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"many_sequences_08.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_08.png"><!-- --></p>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/v0.2.0/README_files/output/many_sequences_08.png"><!-- --></p>
 <p>As with <code><a href="reference/visualise_single_sequence.html">visualise_single_sequence()</a></code>, text can be turned off, in which case it is sensible to reduce the resolution:</p>
 <div class="sourceCode" id="cb87"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Extract sequences to a character vector</span></span>
@@ -2166,7 +2178,7 @@
 <div class="sourceCode" id="cb89"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## View image</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"many_sequences_09.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_09.png"><!-- --> Note that the margin/outline warning is produced whenever the margin is ≤0.25 and the outline linewidth is &gt;0. Getting the warning does not necessarily mean that the outlines are getting cut off (as this only happens if the half of the outline that falls outside the boxes is thicker than the margin), but if you get the warning you should check. In this case it’s fine and the outlines are not getting cut off with 0.1 margin.</p>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/v0.2.0/README_files/output/many_sequences_09.png"><!-- --> Note that the margin/outline warning is produced whenever the margin is ≤0.25 and the outline linewidth is &gt;0. Getting the warning does not necessarily mean that the outlines are getting cut off (as this only happens if the half of the outline that falls outside the boxes is thicker than the margin), but if you get the warning you should check. In this case it’s fine and the outlines are not getting cut off with 0.1 margin.</p>
 </div>
 </div>
 <div class="section level1">
@@ -2537,7 +2549,7 @@
 <span></span>
 <span><span class="co">## View image</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"modification_01.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_01.png"><!-- --></p>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/v0.2.0/README_files/output/modification_01.png"><!-- --></p>
 <p>Here all the modification-assessed bases (Cs of CG dinucleotides) are coloured blue for low methylation probability and red for high methylation probability and linearly interpolated for intermediate probabilities. Non-modification-assessed bases are coloured grey, and the background is white.</p>
 <p><code>ggDNAvis</code> also contains a function for making a scalebar for the methylation probabilities: <code><a href="reference/visualise_methylation_colour_scale.html">visualise_methylation_colour_scale()</a></code>. Unlike the main <code>visualise_</code> functions, this one will work at any scale and aspect resolution, so it always returns a ggplot object that can be exported manually via <code><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave()</a></code>.</p>
 <div class="sourceCode" id="cb99"><pre class="downlit sourceCode r">
@@ -2545,11 +2557,11 @@
 <span><span class="va">scalebar</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/visualise_methylation_colour_scale.html">visualise_methylation_colour_scale</a></span><span class="op">(</span>x_axis_title <span class="op">=</span> <span class="st">"Methylation probability"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## Write png from object</span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_01_scalebar.png"</span><span class="op">)</span>, <span class="va">scalebar</span>, dpi <span class="op">=</span> <span class="fl">300</span>, width <span class="op">=</span> <span class="fl">5.25</span>, height <span class="op">=</span> <span class="fl">1.5</span>, device <span class="op">=</span> <span class="fu">ragg</span><span class="fu">::</span><span class="va"><a href="https://ragg.r-lib.org/reference/agg_png.html" class="external-link">agg_png</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_01_scalebar.png"</span><span class="op">)</span>, <span class="va">scalebar</span>, dpi <span class="op">=</span> <span class="fl">300</span>, width <span class="op">=</span> <span class="fl">5</span>, height <span class="op">=</span> <span class="fl">1.25</span>, device <span class="op">=</span> <span class="fu">ragg</span><span class="fu">::</span><span class="va"><a href="https://ragg.r-lib.org/reference/agg_png.html" class="external-link">agg_png</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"modification_01_scalebar.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_01_scalebar.png" width="60%" style="display: block; margin: auto;"></p>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/v0.2.0/README_files/output/modification_01_scalebar.png" width="60%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="id_62-sequence-arrangement-customisation">6.2 Sequence arrangement customisation<a class="anchor" aria-label="anchor" href="#id_62-sequence-arrangement-customisation"></a>
@@ -2594,7 +2606,7 @@
 <span></span>
 <span><span class="co">## View image</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"modification_02.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_02.png"><!-- --></p>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/v0.2.0/README_files/output/modification_02.png"><!-- --></p>
 <p>Here there is no grouping by family, 3 blank lines between each participant, and sequences are sorted in ascending length order within each participant.</p>
 </div>
 <div class="section level2">
@@ -2673,7 +2685,7 @@
 <span></span>
 <span><span class="co">## View image</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"modification_03.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_03.png"><!-- --></p>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/v0.2.0/README_files/output/modification_03.png"><!-- --></p>
 <div class="sourceCode" id="cb102"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Create scalebar and save to object</span></span>
 <span><span class="co">## Text colour doesn't have an argument within the function</span></span>
@@ -2688,11 +2700,11 @@
 <span>          axis.text  <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="st">"white"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## Write png from object</span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_03_scalebar.png"</span><span class="op">)</span>, <span class="va">scalebar</span>, dpi <span class="op">=</span> <span class="fl">300</span>, width <span class="op">=</span> <span class="fl">5.25</span>, height <span class="op">=</span> <span class="fl">1.5</span>, device <span class="op">=</span> <span class="fu">ragg</span><span class="fu">::</span><span class="va"><a href="https://ragg.r-lib.org/reference/agg_png.html" class="external-link">agg_png</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_03_scalebar.png"</span><span class="op">)</span>, <span class="va">scalebar</span>, dpi <span class="op">=</span> <span class="fl">300</span>, width <span class="op">=</span> <span class="fl">5</span>, height <span class="op">=</span> <span class="fl">1.25</span>, device <span class="op">=</span> <span class="fu">ragg</span><span class="fu">::</span><span class="va"><a href="https://ragg.r-lib.org/reference/agg_png.html" class="external-link">agg_png</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"modification_03_scalebar.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_03_scalebar.png" width="60%" style="display: block; margin: auto;"></p>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/v0.2.0/README_files/output/modification_03_scalebar.png" width="60%" style="display: block; margin: auto;"></p>
 <p>One way this might be used in practice is for making a graphic in the “lollipop” style where methylated/modified CGs are black and unmodified CGs are white:</p>
 <div class="sourceCode" id="cb103"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Extract information to list of character vectors</span></span>
@@ -2726,7 +2738,7 @@
 <div class="sourceCode" id="cb105"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## View image</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"modification_04.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_04.png"><!-- --></p>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/v0.2.0/README_files/output/modification_04.png"><!-- --></p>
 <div class="sourceCode" id="cb106"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Create scalebar and save to object</span></span>
 <span><span class="va">scalebar</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/visualise_methylation_colour_scale.html">visualise_methylation_colour_scale</a></span><span class="op">(</span>x_axis_title <span class="op">=</span> <span class="st">"Methylation probability"</span>,</span>
@@ -2735,11 +2747,11 @@
 <span>                                               background_colour <span class="op">=</span> <span class="st">"lightblue1"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## Write png from object</span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_04_scalebar.png"</span><span class="op">)</span>, <span class="va">scalebar</span>, dpi <span class="op">=</span> <span class="fl">300</span>, width <span class="op">=</span> <span class="fl">5.25</span>, height <span class="op">=</span> <span class="fl">1.5</span>, device <span class="op">=</span> <span class="fu">ragg</span><span class="fu">::</span><span class="va"><a href="https://ragg.r-lib.org/reference/agg_png.html" class="external-link">agg_png</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_04_scalebar.png"</span><span class="op">)</span>, <span class="va">scalebar</span>, dpi <span class="op">=</span> <span class="fl">300</span>, width <span class="op">=</span> <span class="fl">5</span>, height <span class="op">=</span> <span class="fl">1.25</span>, device <span class="op">=</span> <span class="fu">ragg</span><span class="fu">::</span><span class="va"><a href="https://ragg.r-lib.org/reference/agg_png.html" class="external-link">agg_png</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"modification_04_scalebar.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_04_scalebar.png" width="60%" style="display: block; margin: auto;"></p>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/v0.2.0/README_files/output/modification_04_scalebar.png" width="60%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="id_64-colour-mapping-customisation">6.4 Colour mapping customisation<a class="anchor" aria-label="anchor" href="#id_64-colour-mapping-customisation"></a>
@@ -2788,7 +2800,7 @@
 <div class="sourceCode" id="cb109"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## View image</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"modification_05.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_05.png"><!-- --></p>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/v0.2.0/README_files/output/modification_05.png"><!-- --></p>
 <div class="sourceCode" id="cb110"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Create scalebar and save to object</span></span>
 <span><span class="va">scalebar</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/visualise_methylation_colour_scale.html">visualise_methylation_colour_scale</a></span><span class="op">(</span>x_axis_title <span class="op">=</span> <span class="st">"Methylation probability"</span>,</span>
@@ -2799,11 +2811,11 @@
 <span>                                               background_colour <span class="op">=</span> <span class="st">"lightblue1"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## Write png from object</span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_05_scalebar.png"</span><span class="op">)</span>, <span class="va">scalebar</span>, dpi <span class="op">=</span> <span class="fl">300</span>, width <span class="op">=</span> <span class="fl">5.25</span>, height <span class="op">=</span> <span class="fl">1.5</span>, device <span class="op">=</span> <span class="fu">ragg</span><span class="fu">::</span><span class="va"><a href="https://ragg.r-lib.org/reference/agg_png.html" class="external-link">agg_png</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_05_scalebar.png"</span><span class="op">)</span>, <span class="va">scalebar</span>, dpi <span class="op">=</span> <span class="fl">300</span>, width <span class="op">=</span> <span class="fl">5</span>, height <span class="op">=</span> <span class="fl">1.25</span>, device <span class="op">=</span> <span class="fu">ragg</span><span class="fu">::</span><span class="va"><a href="https://ragg.r-lib.org/reference/agg_png.html" class="external-link">agg_png</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"modification_05_scalebar.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_05_scalebar.png" width="60%" style="display: block; margin: auto;"></p>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/v0.2.0/README_files/output/modification_05_scalebar.png" width="60%" style="display: block; margin: auto;"></p>
 <p>The clamping arguments do not have to be integers. Clamping is implemented with <code><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">pmin()</a></code> and <code><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">pmax()</a></code> and relies on their default behaviour for <code>pm&lt;in/ax&gt;(vector, clamping_value)</code>, which is to clamp to a fraction when the clamping value is fractional. For example, <code>pmin(c(1,2,3,4,5), 3.5)</code> produces <code>c(1.0, 2.0, 3.0, 3.5, 3.5)</code> i.e. the values above <code>3.5</code> were clamped down to <code>3.5</code>. Therefore, clamping with fractional values will clamp extreme probabilities to said fractional value, but this is not visible and does not interfere with plotting logic.</p>
 <p>This means one approach is to define clamping values as <code>proportion*255</code>, as that can be easier than working out which integer to use. Using the standard blue/red colour scheme with the hydroxymethylation data but clamping at 30% and 70% probability gives the following:</p>
 <div class="sourceCode" id="cb111"><pre class="downlit sourceCode r">
@@ -2831,7 +2843,7 @@
 <span></span>
 <span><span class="co">## View image</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"modification_06.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_06.png"><!-- --></p>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/v0.2.0/README_files/output/modification_06.png"><!-- --></p>
 <div class="sourceCode" id="cb112"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Create scalebar and save to object</span></span>
 <span><span class="va">scalebar</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/visualise_methylation_colour_scale.html">visualise_methylation_colour_scale</a></span><span class="op">(</span>x_axis_title <span class="op">=</span> <span class="st">"Methylation probability"</span>,</span>
@@ -2839,11 +2851,11 @@
 <span>                                               high_clamp <span class="op">=</span> <span class="fl">0.7</span><span class="op">*</span><span class="fl">255</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## Write png from object</span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_06_scalebar.png"</span><span class="op">)</span>, <span class="va">scalebar</span>, dpi <span class="op">=</span> <span class="fl">300</span>, width <span class="op">=</span> <span class="fl">5.25</span>, height <span class="op">=</span> <span class="fl">1.5</span>, device <span class="op">=</span> <span class="fu">ragg</span><span class="fu">::</span><span class="va"><a href="https://ragg.r-lib.org/reference/agg_png.html" class="external-link">agg_png</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_06_scalebar.png"</span><span class="op">)</span>, <span class="va">scalebar</span>, dpi <span class="op">=</span> <span class="fl">300</span>, width <span class="op">=</span> <span class="fl">5</span>, height <span class="op">=</span> <span class="fl">1.25</span>, device <span class="op">=</span> <span class="fu">ragg</span><span class="fu">::</span><span class="va"><a href="https://ragg.r-lib.org/reference/agg_png.html" class="external-link">agg_png</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"modification_06_scalebar.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_06_scalebar.png" width="60%" style="display: block; margin: auto;"></p>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/v0.2.0/README_files/output/modification_06_scalebar.png" width="60%" style="display: block; margin: auto;"></p>
 <p>The clamping does not need to be symmetrical. One use for this is if the data is skewed. For example, the methylation scores were randomly generated from <code>0</code> to <code>255</code> for each CpG in <code>example_many_sequences</code>, but the hydroxymethylation scores were generated from <code>0</code> to <code>(255 - methylation score)</code> for each CpG to avoid &gt;100% total modification probability, so they tend to be lower. Here is the hydroxymethylation data visualised with clamping at 10% and 50%:</p>
 <div class="sourceCode" id="cb113"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Extract information to list of character vectors</span></span>
@@ -2870,7 +2882,7 @@
 <span></span>
 <span><span class="co">## View image</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"modification_07.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_07.png"><!-- --></p>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/v0.2.0/README_files/output/modification_07.png"><!-- --></p>
 <div class="sourceCode" id="cb114"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Create scalebar and save to object</span></span>
 <span><span class="va">scalebar</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/visualise_methylation_colour_scale.html">visualise_methylation_colour_scale</a></span><span class="op">(</span>x_axis_title <span class="op">=</span> <span class="st">"Hydroxymethylation probability"</span>,</span>
@@ -2878,11 +2890,11 @@
 <span>                                               high_clamp <span class="op">=</span> <span class="fl">0.5</span><span class="op">*</span><span class="fl">255</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## Write png from object</span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_07_scalebar.png"</span><span class="op">)</span>, <span class="va">scalebar</span>, dpi <span class="op">=</span> <span class="fl">300</span>, width <span class="op">=</span> <span class="fl">5.25</span>, height <span class="op">=</span> <span class="fl">1.5</span>, device <span class="op">=</span> <span class="fu">ragg</span><span class="fu">::</span><span class="va"><a href="https://ragg.r-lib.org/reference/agg_png.html" class="external-link">agg_png</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_07_scalebar.png"</span><span class="op">)</span>, <span class="va">scalebar</span>, dpi <span class="op">=</span> <span class="fl">300</span>, width <span class="op">=</span> <span class="fl">5</span>, height <span class="op">=</span> <span class="fl">1.25</span>, device <span class="op">=</span> <span class="fu">ragg</span><span class="fu">::</span><span class="va"><a href="https://ragg.r-lib.org/reference/agg_png.html" class="external-link">agg_png</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"modification_07_scalebar.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_07_scalebar.png" width="60%" style="display: block; margin: auto;"></p>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/v0.2.0/README_files/output/modification_07_scalebar.png" width="60%" style="display: block; margin: auto;"></p>
 <p><em><strong>IMPORTANT:</strong> make sure that you provide the scalebar when presenting data, especially if clamping is used, otherwise the colours could be misleading or academically dishonest.</em></p>
 </div>
 <div class="section level2">
@@ -2930,11 +2942,11 @@
 <span><span class="va">scalebar</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/visualise_methylation_colour_scale.html">visualise_methylation_colour_scale</a></span><span class="op">(</span>precision <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## Write png from object</span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_scalebar_alone_01.png"</span><span class="op">)</span>, <span class="va">scalebar</span>, dpi <span class="op">=</span> <span class="fl">300</span>, width <span class="op">=</span> <span class="fl">5.25</span>, height <span class="op">=</span> <span class="fl">1.5</span>, device <span class="op">=</span> <span class="fu">ragg</span><span class="fu">::</span><span class="va"><a href="https://ragg.r-lib.org/reference/agg_png.html" class="external-link">agg_png</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_scalebar_alone_01.png"</span><span class="op">)</span>, <span class="va">scalebar</span>, dpi <span class="op">=</span> <span class="fl">300</span>, width <span class="op">=</span> <span class="fl">5</span>, height <span class="op">=</span> <span class="fl">1.25</span>, device <span class="op">=</span> <span class="fu">ragg</span><span class="fu">::</span><span class="va"><a href="https://ragg.r-lib.org/reference/agg_png.html" class="external-link">agg_png</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"modification_scalebar_alone_01.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_scalebar_alone_01.png" width="60%" style="display: block; margin: auto;"></p>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/v0.2.0/README_files/output/modification_scalebar_alone_01.png" width="60%" style="display: block; margin: auto;"></p>
 <p>Disabling x axis ticks with intermediate precision gives the following:</p>
 <div class="sourceCode" id="cb116"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Create scalebar and save to object</span></span>
@@ -2942,11 +2954,11 @@
 <span>                                               do_x_ticks <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## Write png from object</span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_scalebar_alone_02.png"</span><span class="op">)</span>, <span class="va">scalebar</span>, dpi <span class="op">=</span> <span class="fl">300</span>, width <span class="op">=</span> <span class="fl">5.25</span>, height <span class="op">=</span> <span class="fl">1.5</span>, device <span class="op">=</span> <span class="fu">ragg</span><span class="fu">::</span><span class="va"><a href="https://ragg.r-lib.org/reference/agg_png.html" class="external-link">agg_png</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_scalebar_alone_02.png"</span><span class="op">)</span>, <span class="va">scalebar</span>, dpi <span class="op">=</span> <span class="fl">300</span>, width <span class="op">=</span> <span class="fl">5</span>, height <span class="op">=</span> <span class="fl">1.25</span>, device <span class="op">=</span> <span class="fu">ragg</span><span class="fu">::</span><span class="va"><a href="https://ragg.r-lib.org/reference/agg_png.html" class="external-link">agg_png</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"modification_scalebar_alone_02.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_scalebar_alone_02.png" width="60%" style="display: block; margin: auto;"></p>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/v0.2.0/README_files/output/modification_scalebar_alone_02.png" width="60%" style="display: block; margin: auto;"></p>
 <p>If ticks are left on, they can be customised with <code><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_x_continuous()</a></code> as per usual for a ggplot. Here is an example with the side scalebar turned on and ticks customised:</p>
 <div class="sourceCode" id="cb117"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Create scalebar and save to object</span></span>
@@ -2965,11 +2977,11 @@
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_x_continuous</a></span><span class="op">(</span>breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## Write png from object</span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_scalebar_alone_03.png"</span><span class="op">)</span>, <span class="va">scalebar</span>, dpi <span class="op">=</span> <span class="fl">300</span>, width <span class="op">=</span> <span class="fl">5.25</span>, height <span class="op">=</span> <span class="fl">2</span>, device <span class="op">=</span> <span class="fu">ragg</span><span class="fu">::</span><span class="va"><a href="https://ragg.r-lib.org/reference/agg_png.html" class="external-link">agg_png</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_scalebar_alone_03.png"</span><span class="op">)</span>, <span class="va">scalebar</span>, dpi <span class="op">=</span> <span class="fl">300</span>, width <span class="op">=</span> <span class="fl">5</span>, height <span class="op">=</span> <span class="fl">2</span>, device <span class="op">=</span> <span class="fu">ragg</span><span class="fu">::</span><span class="va"><a href="https://ragg.r-lib.org/reference/agg_png.html" class="external-link">agg_png</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"modification_scalebar_alone_03.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_scalebar_alone_03.png" width="60%" style="display: block; margin: auto;"></p>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/v0.2.0/README_files/output/modification_scalebar_alone_03.png" width="60%" style="display: block; margin: auto;"></p>
 <p>And here is an example of a more sensible scalebar but with the side scale turned on:</p>
 <div class="sourceCode" id="cb118"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Create scalebar and save to object</span></span>
@@ -2981,11 +2993,11 @@
 <span>                                               outline_linewidth <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## Write png from object</span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_scalebar_alone_04.png"</span><span class="op">)</span>, <span class="va">scalebar</span>, dpi <span class="op">=</span> <span class="fl">300</span>, width <span class="op">=</span> <span class="fl">5.25</span>, height <span class="op">=</span> <span class="fl">2</span>, device <span class="op">=</span> <span class="fu">ragg</span><span class="fu">::</span><span class="va"><a href="https://ragg.r-lib.org/reference/agg_png.html" class="external-link">agg_png</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_scalebar_alone_04.png"</span><span class="op">)</span>, <span class="va">scalebar</span>, dpi <span class="op">=</span> <span class="fl">300</span>, width <span class="op">=</span> <span class="fl">5</span>, height <span class="op">=</span> <span class="fl">2</span>, device <span class="op">=</span> <span class="fu">ragg</span><span class="fu">::</span><span class="va"><a href="https://ragg.r-lib.org/reference/agg_png.html" class="external-link">agg_png</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"modification_scalebar_alone_04.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_scalebar_alone_04.png" width="60%" style="display: block; margin: auto;"></p>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/v0.2.0/README_files/output/modification_scalebar_alone_04.png" width="60%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="id_66-think-about-the-offset">6.6 Think about the offset!<a class="anchor" aria-label="anchor" href="#id_66-think-about-the-offset"></a>
@@ -3050,7 +3062,7 @@
 <span></span>
 <span><span class="co">## View image</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"modification_08.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_08.png"><!-- --> We can see here that some methylation-assessed sites are now offset by 1, as the location is now assigned to the G of each CG site rather than the C. This is perhaps more biochemically accurate, as these Gs are complementary to the Cs on the reverse strands where the modification actually occurred.</p>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/v0.2.0/README_files/output/modification_08.png"><!-- --> We can see here that some methylation-assessed sites are now offset by 1, as the location is now assigned to the G of each CG site rather than the C. This is perhaps more biochemically accurate, as these Gs are complementary to the Cs on the reverse strands where the modification actually occurred.</p>
 <p>Other offset values are theoretically possible, e.g. -1 here:</p>
 <div class="sourceCode" id="cb121"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">modified_fastq_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/read_modified_fastq.html">read_modified_fastq</a></span><span class="op">(</span><span class="st">"inst/extdata/example_many_sequences_raw_modified.fastq"</span><span class="op">)</span></span>
@@ -3083,7 +3095,7 @@
 <span></span>
 <span><span class="co">## View image</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"modification_09.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_09.png"><!-- --> However, this is strongly discouraged and produces a warning. Offset values other than 0 and 1 have not been tested so results may be unpredictable and aspects of the visualisation may break.</p>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/v0.2.0/README_files/output/modification_09.png"><!-- --> However, this is strongly discouraged and produces a warning. Offset values other than 0 and 1 have not been tested so results may be unpredictable and aspects of the visualisation may break.</p>
 <p>Finally, it is of course possible to read from the columns that weren’t reversed/forward-ified. However, <strong><em>this is likely to be misleading</em></strong> as it implies positional equivalence between bases at opposite ends of the region but on opposite strands. This is not recommended either, but there is no way to identify that you are doing this so no warning is produced.</p>
 <div class="sourceCode" id="cb124"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">modified_fastq_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/read_modified_fastq.html">read_modified_fastq</a></span><span class="op">(</span><span class="st">"inst/extdata/example_many_sequences_raw_modified.fastq"</span><span class="op">)</span></span>
@@ -3114,7 +3126,7 @@
 <span></span>
 <span><span class="co">## View image</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"modification_10.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_10.png"><!-- --></p>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/v0.2.0/README_files/output/modification_10.png"><!-- --></p>
 </div>
 </div>
 <div class="section level1">
@@ -3163,6 +3175,7 @@ Sone, J., Mitsuhashi, S., Fujita, A., Mizuguchi, T., Hamanaka, K., Mori, K., Koi
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://github.com/ejade42/ggDNAvis/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/ejade42/ggDNAvis/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://CRAN.R-project.org/package=ggDNAvis" class="external-link"><img src="https://www.r-pkg.org/badges/version/ggDNAvis" alt="CRAN status"></a></li>
 </ul>
 </div>
 
