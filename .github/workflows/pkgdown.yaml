@@ -57,9 +57,9 @@ jobs:
             echo "folder=$BRANCH" >> $GITHUB_OUTPUT
           fi
 
-      # Deploy release to its version folder
-      - name: Deploy release version
-        if: startsWith(github.ref, 'refs/tags/')
+      # Deploy all types to github pages
+      - name: Deploy to GitHub Pages 🚀
+        if: github.event_name != 'pull_request'
         uses: JamesIves/github-pages-deploy-action@v4.5.0
         with:
           clean: false
