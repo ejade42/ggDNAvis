@@ -1,6 +1,6 @@
 on:
   push:
-    branches: [main, master, tmp-v0.2.0, tmp-v0.2.1]
+    branches: [main, master, tmp-*]
   pull_request:
   release:
     types: [published]
