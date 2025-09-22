@@ -53,8 +53,14 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item"><a class="nav-link" href="reference/index.html">Reference</a></li>
-<li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-version" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Version</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-version">
+<li><a class="dropdown-item" href="/dev/">Latest dev</a></li>
+    <li><a class="dropdown-item" href="/v0.2.1/">v0.2.1</a></li>
+    <li><a class="dropdown-item" href="/v0.2.0/">v0.2.0</a></li>
+  </ul>
+</li>
       </ul>
 <ul class="navbar-nav">
 <li class="nav-item"><form class="form-inline" role="search">
@@ -143,7 +149,10 @@
 <span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"ggDNAvis"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## Current development build (may have unexpected bugs!)</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"ejade42/ggDNAvis"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"ejade42/ggDNAvis"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## Specific version from github</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"ejade42/ggDNAvis"</span>, ref <span class="op">=</span> <span class="st">"v0.2.1"</span><span class="op">)</span></span></code></pre></div>
 <p>Throughout this manual, only <code>ggDNAvis</code>, <code>dplyr</code>, and <code>ggplot2</code> are loaded.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Load this package</span></span>
