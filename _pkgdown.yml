@@ -7,15 +7,17 @@ template:
     in_header: pkgdown/google0acd00d8574ec2df.html
 
 navbar:
-  left:
+  right:
     - text: "Version"
       menu:
+        - text: "Latest release"
+          href: ggDNAvis/
         - text: "Latest dev"
-          href: /dev/
+          href: ggDNAvis/dev/
         - text: "v0.2.1"
-          href: /v0.2.1/
+          href: ggDNAvis/v0.2.1/
         - text: "v0.2.0"
-          href: /v0.2.0/
+          href: ggDNAvis/v0.2.0/
 
 reference:
 - title: DNA visualisation
