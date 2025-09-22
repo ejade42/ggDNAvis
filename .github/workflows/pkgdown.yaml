@@ -1,6 +1,6 @@
 on:
   push:
-    branches: [main, master, pages-tmp]
+    branches: [main, master, tmp-v0.2.0, tmp-v0.2.1]
   pull_request:
   release:
     types: [published]
@@ -44,25 +44,24 @@ jobs:
       - name: Choose target folder
         id: target
         run: |
-          # Prefer github.event.ref (works for workflow_dispatch and release)
-          REF="${{ github.event.ref || github.ref }}"
+          BRANCH="${GITHUB_REF#refs/heads/}"
+          echo "Branch is: $BRANCH"
 
-          echo "Evaluating ref: $REF"
-
-          if [[ "$REF" == refs/tags/* ]]; then
-            TAG="${REF#refs/tags/}"
-            echo "folder=$TAG" >> $GITHUB_OUTPUT
-          elif [[ "$REF" == refs/heads/* ]]; then
+          if [[ "$BRANCH" == "main" || "$BRANCH" == "master" ]]; then
             echo "folder=dev" >> $GITHUB_OUTPUT
+          elif [[ "$BRANCH" == tmp-* ]]; then
+            # strip the tmp- prefix so folder name matches the tag
+            TAG="${BRANCH#tmp-}"
+            echo "folder=$TAG" >> $GITHUB_OUTPUT
           else
-            echo "folder=other" >> $GITHUB_OUTPUT
+            echo "folder=$BRANCH" >> $GITHUB_OUTPUT
           fi
 
       - name: Deploy to GitHub Pages 🚀
         if: github.event_name != 'pull_request'
         uses: JamesIves/github-pages-deploy-action@v4.5.0
         with:
-          clean: false               # don’t wipe existing versions
+          clean: false
           branch: gh-pages
           folder: docs
           target-folder: ${{ steps.target.outputs.folder }}
