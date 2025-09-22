@@ -69,7 +69,9 @@ jobs:
       
       # Deploy release to root (main page)
       - name: Deploy latest release to root
-        if: startsWith(github.ref, 'refs/tags/')
+        if: |
+          startsWith(github.ref, 'refs/tags/') ||
+          startsWith(github.ref, 'refs/heads/tmp-')
         uses: JamesIves/github-pages-deploy-action@v4.5.0
         with:
           clean: false
