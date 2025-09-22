@@ -8,11 +8,12 @@ template:
 
 navbar:
   structure:
-    left: [reference, changelog, version]
-    right: [search, github]
+    left:  [intro, reference, articles, tutorials, news, version]
+    right: [search, github, lightswitch]
 
-  center:
-    - text: "Version"
+  components:
+    version:
+      text: "Version"
       menu:
         - text: "Latest release"
           href: /
