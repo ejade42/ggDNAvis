@@ -16,13 +16,13 @@ navbar:
       text: "Version"
       menu:
         - text: "Latest release"
-          href: ./
+          href: https://ejade42.github.io/ggDNAvis/
         - text: "Latest dev"
-          href: ./dev/
+          href: https://ejade42.github.io/ggDNAvis/dev/
         - text: "v0.2.1"
-          href: ./v0.2.1/
+          href: https://ejade42.github.io/ggDNAvis/v0.2.1/
         - text: "v0.2.0"
-          href: ./v0.2.0/
+          href: https://ejade42.github.io/ggDNAvis/v0.2.0/
 
 reference:
 - title: DNA visualisation
