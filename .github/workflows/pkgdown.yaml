@@ -44,13 +44,12 @@ jobs:
       - name: Choose target folder
         id: target
         run: |
-          REF="${GITHUB_REF}"
-          EVENT_REF="${{ github.event.ref }}"
+          # Prefer github.event.ref (works for workflow_dispatch and release)
+          REF="${{ github.event.ref || github.ref }}"
 
-          if [[ "$EVENT_REF" == refs/tags/* ]]; then
-            TAG="${EVENT_REF#refs/tags/}"
-            echo "folder=$TAG" >> $GITHUB_OUTPUT
-          elif [[ "$REF" == refs/tags/* ]]; then
+          echo "Evaluating ref: $REF"
+
+          if [[ "$REF" == refs/tags/* ]]; then
             TAG="${REF#refs/tags/}"
             echo "folder=$TAG" >> $GITHUB_OUTPUT
           elif [[ "$REF" == refs/heads/* ]]; then
