@@ -6,6 +6,24 @@ template:
   includes:
     in_header: pkgdown/google0acd00d8574ec2df.html
 
+navbar:
+  structure:
+    left:  [intro, reference, articles, tutorials, news, version]
+    right: [search, github, lightswitch]
+
+  components:
+    version:
+      text: "Version"
+      menu:
+        - text: "Latest release"
+          href: https://ejade42.github.io/ggDNAvis/
+        - text: "Latest dev"
+          href: https://ejade42.github.io/ggDNAvis/dev/
+        - text: "v0.2.1"
+          href: https://ejade42.github.io/ggDNAvis/v0.2.1/
+        - text: "v0.2.0"
+          href: https://ejade42.github.io/ggDNAvis/v0.2.0/
+
 reference:
 - title: DNA visualisation
 
@@ -61,6 +79,7 @@ reference:
   - convert_sequence_to_numbers
   - convert_sequences_to_annotations
   - create_image_data
+  - rasterise_matrix
   - reverse_sequence_if_needed
   - reverse_quality_if_needed
   - reverse_locations_if_needed
