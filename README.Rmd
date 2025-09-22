@@ -10,6 +10,7 @@ csl: README_files/apa.csl
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/ejade42/ggDNAvis/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ejade42/ggDNAvis/actions/workflows/R-CMD-check.yaml)
+[![CRAN status](https://www.r-pkg.org/badges/version/ggDNAvis)](https://CRAN.R-project.org/package=ggDNAvis)
 <!-- badges: end -->
 
 # ggDNAvis
@@ -30,14 +31,17 @@ Additionally, ggDNAvis contains a built-in example dataset (`example_many_sequen
 
 Note that all spellings are the British English version (e.g. "colour", "visualise"). Aliases have not been defined, meaning American spellings will not work.
 
-ggDNAvis is currently available from this github page. Once CRAN submission is accepted, it will be available from CRAN:
+The latest release of ggDNAvis is available from CRAN or via github releases. Alternatively, the latest in-development version can be installed directly from the github repository, but may have unexpected bugs.
 
 ```{r, eval = FALSE}
-## Currently
+## Latest release version
+install.packages("ggDNAvis")
+
+## Current development build (may have unexpected bugs!)
 devtools::install_github("ejade42/ggDNAvis")
 
-## Soon
-install.packages("ggDNAvis")
+## Specific version from github
+devtools::install_github("ejade42/ggDNAvis", ref = "v0.2.1")
 ```
 
 Throughout this manual, only `ggDNAvis`, `dplyr`, and `ggplot2` are loaded.
@@ -63,7 +67,7 @@ github_table <- function(data) {
 
 ## Set up file locations
 output_location <- "README_files/output/"
-github_location <- "https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/"
+github_location <- "https://raw.githubusercontent.com/ejade42/ggDNAvis/v0.2.1/README_files/output/"
 knitr::opts_chunk$set(fig.path = output_location)
 ```
 
