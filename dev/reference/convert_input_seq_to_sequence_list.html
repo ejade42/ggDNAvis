@@ -109,22 +109,32 @@ Optionally inserts empty strings <code>""</code> after each line to space them o
 <span class="r-in"><span>    <span class="st">"GGCGGCGGC"</span>,</span></span>
 <span class="r-in"><span>    line_length <span class="op">=</span> <span class="fl">6</span>,</span></span>
 <span class="r-in"><span>    spacing <span class="op">=</span> <span class="fl">1</span>,</span></span>
-<span class="r-in"><span>    spaces_first <span class="op">=</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span>    start_spaces <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>    end_spaces <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in convert_input_seq_to_sequence_list("GGCGGCGGC", line_length = 6,     spacing = 1, spaces_first = TRUE):</span> unused argument (spaces_first = TRUE)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] ""       "GGCGGC" ""       "GGC"    ""      </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">convert_input_seq_to_sequence_list</span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="st">"GGCGGCGGC"</span>,</span></span>
+<span class="r-in"><span>    line_length <span class="op">=</span> <span class="fl">3</span>,</span></span>
+<span class="r-in"><span>    spacing <span class="op">=</span> <span class="fl">2</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "GGC" ""    ""    "GGC" ""    ""    "GGC"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">convert_input_seq_to_sequence_list</span><span class="op">(</span></span></span>
 <span class="r-in"><span>    <span class="st">"GGCGGCGGC"</span>,</span></span>
 <span class="r-in"><span>    line_length <span class="op">=</span> <span class="fl">3</span>,</span></span>
 <span class="r-in"><span>    spacing <span class="op">=</span> <span class="fl">2</span>,</span></span>
-<span class="r-in"><span>    spaces_first <span class="op">=</span> <span class="cn">FALSE</span></span></span>
+<span class="r-in"><span>    end_spaces <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in convert_input_seq_to_sequence_list("GGCGGCGGC", line_length = 3,     spacing = 2, spaces_first = FALSE):</span> unused argument (spaces_first = FALSE)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "GGC" ""    ""    "GGC" ""    ""    "GGC" ""    ""   </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">convert_input_seq_to_sequence_list</span><span class="op">(</span></span></span>
 <span class="r-in"><span>    <span class="st">"GGCGGCGGC"</span>,</span></span>
 <span class="r-in"><span>    line_length <span class="op">=</span> <span class="fl">6</span>,</span></span>
-<span class="r-in"><span>    spacing <span class="op">=</span> <span class="fl">0</span></span></span>
+<span class="r-in"><span>    spacing <span class="op">=</span> <span class="fl">0</span>,</span></span>
+<span class="r-in"><span>    start_spaces <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>    end_spaces <span class="op">=</span> <span class="cn">FALSE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "GGCGGC" "GGC"   </span>
 <span class="r-in"><span></span></span>
