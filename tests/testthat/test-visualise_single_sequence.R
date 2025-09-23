@@ -243,6 +243,31 @@ test_that("single_sequence_visualisation works with outlines, no spacing", {
                                        metric = "MAE"))$distortion, acceptable_distortion)
 })
 
+test_that("extra margin works with bigger vert pos", {
+    filename <- "sone_2019_f1_1_expanded_test_29"
+    expect_warning(expect_warning(expect_warning(visualise_single_sequence(
+        sone_2019_f1_1_expanded,
+        filename = paste0(root, filename, ".png"),
+        sequence_colours = c("green", "red", "yellow", "blue"),
+        sequence_text_colour = "magenta",
+        outline_colour = "orange",
+        outline_linewidth = 10,
+        outline_join = "round",
+        background_colour = "white",
+        spacing = 3,
+        margin = 0,
+        line_wrapping = 60,
+        index_annotation_interval = 20,
+        index_annotation_colour = "purple",
+        index_annotation_vertical_position = 2,
+        index_annotation_size = 20,
+        pixels_per_base = 30
+    ))))
+    expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
+                                       image_read(paste0(reference, filename, ".png")),
+                                       metric = "MAE"))$distortion, acceptable_distortion)
+})
+
 
 ## Test fail cases/invalid arguments to main single sequence visualisation function
 test_that("single sequence visualisation fails when arguments are invalid", {
@@ -304,17 +329,20 @@ test_that("single sequence visualisation fails when arguments are invalid", {
 ## Test helper functions
 ## convert_input_seq_to_sequence_list()
 test_that("converting single sequence to sequences list works", {
-    expect_equal(convert_input_seq_to_sequence_list("GGCGGCGGC", 6, 1, FALSE), c("GGCGGC", "", "GGC", ""))
-    expect_equal(convert_input_seq_to_sequence_list("GGCGGCGGC", 6, spaces_first = FALSE), c("GGCGGC", "", "GGC", ""))
-    expect_equal(convert_input_seq_to_sequence_list("GGCGGCGGC", 6, 0, FALSE), c("GGCGGC", "GGC"))
-    expect_equal(convert_input_seq_to_sequence_list("GGCGGCGGC", 6, 3, FALSE), c("GGCGGC", "", "", "", "GGC", "", "", ""))
-    expect_equal(convert_input_seq_to_sequence_list("GGC", 6, 0, FALSE), "GGC")
-    expect_equal(convert_input_seq_to_sequence_list("GGC", 1, 0, FALSE), c("G", "G", "C"))
-    expect_equal(convert_input_seq_to_sequence_list("GGCGGCGGC", 6, 2, TRUE), c("", "", "GGCGGC", "", "", "GGC"))
+    expect_equal(convert_input_seq_to_sequence_list("GGCGGCGGC", 6, 1, FALSE, TRUE), c("GGCGGC", "", "GGC", ""))
+    expect_equal(convert_input_seq_to_sequence_list("GGCGGCGGC", 6, end_spaces = TRUE, start_spaces = FALSE), c("GGCGGC", "", "GGC", ""))
+    expect_equal(convert_input_seq_to_sequence_list("GGCGGCGGC", 6, 0, FALSE, FALSE), c("GGCGGC", "GGC"))
+    expect_equal(convert_input_seq_to_sequence_list("GGCGGCGGC", 6, 0, TRUE, TRUE), c("GGCGGC", "GGC"))
+    expect_equal(convert_input_seq_to_sequence_list("GGCGGCGGC", 6, 3, FALSE, TRUE), c("GGCGGC", "", "", "", "GGC", "", "", ""))
+    expect_equal(convert_input_seq_to_sequence_list("GGC", 6, 0, FALSE, FALSE), "GGC")
+    expect_equal(convert_input_seq_to_sequence_list("GGC", 1, 0, TRUE, TRUE), c("G", "G", "C"))
+    expect_equal(convert_input_seq_to_sequence_list("GGCGGCGGC", 6, 2, TRUE, FALSE), c("", "", "GGCGGC", "", "", "GGC"))
     expect_equal(convert_input_seq_to_sequence_list("GGCGGCGGC", 6, 0), c("GGCGGC", "GGC"))
-    expect_equal(convert_input_seq_to_sequence_list("GGCGGCGGC", 3, 0, TRUE), c("GGC", "GGC", "GGC"))
-    expect_equal(convert_input_seq_to_sequence_list("GGCGGCGGC", 3, 1, TRUE), c("", "GGC", "", "GGC", "", "GGC"))
-    expect_equal(convert_input_seq_to_sequence_list("GGCGGCGGC", 3, 2, TRUE), c("", "", "GGC", "", "", "GGC", "", "", "GGC"))
+    expect_equal(convert_input_seq_to_sequence_list("GGCGGCGGC", 3, 0, TRUE, TRUE), c("GGC", "GGC", "GGC"))
+    expect_equal(convert_input_seq_to_sequence_list("GGCGGCGGC", 3, 1, TRUE, FALSE), c("", "GGC", "", "GGC", "", "GGC"))
+    expect_equal(convert_input_seq_to_sequence_list("GGCGGCGGC", 3, 2, TRUE, FALSE), c("", "", "GGC", "", "", "GGC", "", "", "GGC"))
+    expect_equal(convert_input_seq_to_sequence_list("GGCGGCGGC", 3, 2, TRUE, TRUE), c("", "", "GGC", "", "", "GGC", "", "", "GGC", "", ""))
+
 })
 
 test_that("converting single sequence to sequences list fails when expected to", {
@@ -328,14 +356,18 @@ test_that("converting single sequence to sequences list fails when expected to",
     expect_error(convert_input_seq_to_sequence_list("GGCGGCGGC", c(6, 3)), class = "argument_value_or_type")
     expect_error(convert_input_seq_to_sequence_list("GGCGGCGGC", 1, c(6, 3)), class = "argument_value_or_type")
     expect_error(convert_input_seq_to_sequence_list("GGCGGCGGC", 3, 1, c(TRUE, FALSE)), class = "argument_value_or_type")
+    expect_error(convert_input_seq_to_sequence_list("GGCGGCGGC", 3, 1, TRUE, c(TRUE, FALSE)), class = "argument_value_or_type")
     expect_error(convert_input_seq_to_sequence_list("GGCGGCGGC", 6, "x"), class = "argument_value_or_type")
     expect_error(convert_input_seq_to_sequence_list("GGCGGCGGC", "x", 1), class = "argument_value_or_type")
     expect_error(convert_input_seq_to_sequence_list("GGCGGCGGC", 6, 1, "x"), class = "argument_value_or_type")
+    expect_error(convert_input_seq_to_sequence_list("GGCGGCGGC", 6, 1, TRUE, "X"), class = "argument_value_or_type")
     expect_error(convert_input_seq_to_sequence_list("GGCGGCGGC", 6, 1.5, 1), class = "argument_value_or_type")
     expect_error(convert_input_seq_to_sequence_list(NULL, 3, 2, TRUE), class = "argument_value_or_type")
     expect_error(convert_input_seq_to_sequence_list("GGCGGCGGC", NULL, 2, TRUE), class = "argument_value_or_type")
     expect_error(convert_input_seq_to_sequence_list("GGCGGCGGC", 3, NULL, TRUE), class = "argument_value_or_type")
     expect_error(convert_input_seq_to_sequence_list("GGCGGCGGC", 3, 2, NULL), class = "argument_value_or_type")
+    expect_error(convert_input_seq_to_sequence_list("GGCGGCGGC", 3, 2, TRUE, NULL), class = "argument_value_or_type")
+
 })
 
 

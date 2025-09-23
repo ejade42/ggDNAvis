@@ -133,14 +133,17 @@ visualise_single_sequence <- function(sequence, sequence_colours = sequence_colo
 
 
     ## Generate data for plotting
-    sequences <- convert_input_seq_to_sequence_list(sequence, line_wrapping, spacing, index_annotations_above)
+    sequences <- convert_input_seq_to_sequence_list(sequence, line_wrapping, spacing, FALSE, FALSE)
 
     ## Trim extra spacing if >1 so margins don't go crazy
-    if (spacing > 1) {
-        if (index_annotations_above == TRUE) {
-            sequences <- sequences[spacing:length(sequences)]
-        } else if (index_annotations_above == FALSE) {
-            sequences <- sequences[1:(length(sequences)-spacing+1)]
+    ## IMPORTANT - NEEDS REIMPLEMENTING WITH NEW LOGIC, BUT TRIM TO CEIL(VERT) RATHER THAN 1
+    extra_spaces <- 0
+    if (index_annotation_interval != 0) {
+        extra_spaces <- ceiling(index_annotation_vertical_position)
+        if (index_annotations_above) {
+            sequences <- c(rep("", extra_spaces), sequences)
+        } else {
+            sequences <- c(sequences, rep("", extra_spaces))
         }
     }
 
@@ -181,15 +184,15 @@ visualise_single_sequence <- function(sequence, sequence_colours = sequence_colo
 
     ## As long as the lines are spaced out, don't need a bottom margin as the blank spacer line does that
     ## But if spacing is turned off, need to add a bottom margin
-    if (spacing == 0) {
+    if (extra_spaces == 0) {
         result <- result + theme(plot.margin = grid::unit(c(margin, margin, margin, margin), "inches"))
         extra_height <- 2 * margin
     } else if (index_annotations_above == TRUE) {
-        result <- result + theme(plot.margin = grid::unit(c(max(margin-1, 0), margin, margin, margin), "inches"))
-        extra_height <- margin + max(margin-1, 0)
+        result <- result + theme(plot.margin = grid::unit(c(max(margin-extra_spaces, 0), margin, margin, margin), "inches"))
+        extra_height <- margin + max(margin-extra_spaces, 0)
     } else if (index_annotations_above == FALSE) {
-        result <- result + theme(plot.margin = grid::unit(c(margin, margin, max(margin-1, 0), margin), "inches"))
-        extra_height <- margin + max(margin-1, 0)
+        result <- result + theme(plot.margin = grid::unit(c(margin, margin, max(margin-extra_spaces, 0), margin), "inches"))
+        extra_height <- margin + max(margin-extra_spaces, 0)
     } else {
         abort("Unexpected value of spacing and/or index_annotations_above. Should have been caught by previous test. Please report.")
     }
@@ -226,7 +229,8 @@ visualise_single_sequence <- function(sequence, sequence_colours = sequence_colo
 #' @param input_seq `character`. A DNA/RNA sequence (or for the purposes of this function, any string, though only DNA/RNA will work with later functions) to be split up.
 #' @param line_length `integer`. How long each line (split-up section) should be.
 #' @param spacing `integer`. How many blank lines to leave before/after each line of sequence. Defaults to `0`.
-#' @param spaces_first `logical`. Whether blank lines should come before (`TRUE`, default) or after (`FALSE`) each line of sequence.
+#' @param start_spaces `logical`. Whether blank lines should also be present before the first line of sequence. Defaults to `FALSE`.
+#' @param end_spaces `logical`. Whether blank lines should also be present after the last line of sequence. Defaults to `FALSE`.
 #'
 #' @return `character vector`. The input sequence split into multiple lines, with specified spacing in between.
 #'
@@ -252,12 +256,12 @@ visualise_single_sequence <- function(sequence, sequence_colours = sequence_colo
 #' )
 #'
 #' @export
-convert_input_seq_to_sequence_list <- function(input_seq, line_length, spacing = 1, spaces_first = TRUE) {
-    for (argument in list(input_seq, line_length, spacing, spaces_first)) {
+convert_input_seq_to_sequence_list <- function(input_seq, line_length, spacing = 1, start_spaces = FALSE, end_spaces = FALSE) {
+    for (argument in list(input_seq, line_length, spacing, start_spaces, end_spaces)) {
         if (mean(is.null(argument)) != 0 || mean(is.na(argument)) != 0) {abort(paste("Argument", argument, "must not be null or NA."), class = "argument_value_or_type")}
     }
-    if (length(input_seq) != 1 || length(line_length) != 1 || length(spacing) != 1 || length(spaces_first) != 1) {
-        abort("Input sequence, line length, spacing, and top/bottom spaces setting must all be single values (length 1).", class = "argument_value_or_type")
+    if (length(input_seq) != 1 || length(line_length) != 1 || length(spacing) != 1 || length(start_spaces) != 1 || length(end_spaces) != 1) {
+        abort("Input sequence, line length, spacing, and start/end spaces setting must all be single values (length 1).", class = "argument_value_or_type")
     }
     if (is.numeric(line_length) == FALSE || line_length %% 1 != 0 || line_length < 1 ||
         is.numeric(spacing) == FALSE     || spacing %% 1 != 0     || spacing < 0) {
@@ -266,40 +270,28 @@ convert_input_seq_to_sequence_list <- function(input_seq, line_length, spacing =
     if (is.character(input_seq) == FALSE) {
         abort("Input sequence must be a character/string.", class = "argument_value_or_type")
     }
-    if (is.logical(spaces_first) == FALSE) {
-        abort("Spaces on top setting must be a logical/boolean value.", class = "argument_value_or_type")
+    for (argument in list(start_spaces, end_spaces))
+        if (is.logical(argument) == FALSE) {
+            abort("Spaces at start/end settings must be logical/boolean values.", class = "argument_value_or_type")
+        }
+
+    ## Split sequences into a vector, without breaks
+    starts <- seq(1, nchar(input_seq), line_length)
+    ends   <- seq(line_length, nchar(input_seq) + line_length - 1, line_length)
+    split_sequences <- substring(input_seq, starts, ends)
+
+    interleaved_sequences <- as.vector(
+        ## rbind creates matrix
+        rbind(split_sequences, matrix("", nrow = spacing, ncol = length(split_sequences)))
+    )
+    if (start_spaces) {
+        interleaved_sequences <- c(rep("", spacing), interleaved_sequences)
+    }
+    if (!end_spaces) {
+        interleaved_sequences <- interleaved_sequences[1:(length(interleaved_sequences) - spacing)]
     }
 
-    sequences <- NULL
-    full_rows <- nchar(input_seq) %/% line_length
-    remainder <- nchar(input_seq) %% line_length
-    if (full_rows > 0) {
-        for (i in 1:full_rows) {
-            start <- (i-1)*line_length + 1
-            stop  <- i*line_length
-            line <- substr(input_seq, start, stop)
-            if (spaces_first == TRUE) {
-                sequences <- c(sequences, rep("", spacing), line)
-            } else if (spaces_first == FALSE) {
-                sequences <- c(sequences, line, rep("", spacing))
-            } else {
-                abort("spaces_first must be a logical value.", class = "argument_value_or_type")
-            }
-        }
-    }
-    if (remainder > 0) {
-        start <- full_rows*line_length + 1
-        stop  <- nchar(input_seq)
-        line <- substr(input_seq, start, stop)
-        if (spaces_first == TRUE) {
-            sequences <- c(sequences, rep("", spacing), line)
-        } else if (spaces_first == FALSE) {
-            sequences <- c(sequences, line, rep("", spacing))
-        } else {
-            abort("spaces_first must be a logical value.", class = "argument_value_or_type")
-        }
-    }
-    return(sequences)
+    return(interleaved_sequences)
 }
 
 
