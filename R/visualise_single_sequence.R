@@ -239,20 +239,29 @@ visualise_single_sequence <- function(sequence, sequence_colours = sequence_colo
 #'     "GGCGGCGGC",
 #'     line_length = 6,
 #'     spacing = 1,
-#'     spaces_first = TRUE
+#'     start_spaces = TRUE,
+#'     end_spaces = TRUE
+#' )
+#'
+#' convert_input_seq_to_sequence_list(
+#'     "GGCGGCGGC",
+#'     line_length = 3,
+#'     spacing = 2
 #' )
 #'
 #' convert_input_seq_to_sequence_list(
 #'     "GGCGGCGGC",
 #'     line_length = 3,
 #'     spacing = 2,
-#'     spaces_first = FALSE
+#'     end_spaces = TRUE
 #' )
 #'
 #' convert_input_seq_to_sequence_list(
 #'     "GGCGGCGGC",
 #'     line_length = 6,
-#'     spacing = 0
+#'     spacing = 0,
+#'     start_spaces = TRUE,
+#'     end_spaces = FALSE
 #' )
 #'
 #' @export
