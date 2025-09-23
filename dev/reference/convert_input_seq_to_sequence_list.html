@@ -69,7 +69,8 @@ Optionally inserts empty strings <code>""</code> after each line to space them o
 <span>  <span class="va">input_seq</span>,</span>
 <span>  <span class="va">line_length</span>,</span>
 <span>  spacing <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  spaces_first <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  start_spaces <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  end_spaces <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -89,8 +90,12 @@ Optionally inserts empty strings <code>""</code> after each line to space them o
 <dd><p><code>integer</code>. How many blank lines to leave before/after each line of sequence. Defaults to <code>0</code>.</p></dd>
 
 
-<dt id="arg-spaces-first">spaces_first<a class="anchor" aria-label="anchor" href="#arg-spaces-first"></a></dt>
-<dd><p><code>logical</code>. Whether blank lines should come before (<code>TRUE</code>, default) or after (<code>FALSE</code>) each line of sequence.</p></dd>
+<dt id="arg-start-spaces">start_spaces<a class="anchor" aria-label="anchor" href="#arg-start-spaces"></a></dt>
+<dd><p><code>logical</code>. Whether blank lines should also be present before the first line of sequence. Defaults to <code>FALSE</code>.</p></dd>
+
+
+<dt id="arg-end-spaces">end_spaces<a class="anchor" aria-label="anchor" href="#arg-end-spaces"></a></dt>
+<dd><p><code>logical</code>. Whether blank lines should also be present after the last line of sequence. Defaults to <code>FALSE</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -106,7 +111,7 @@ Optionally inserts empty strings <code>""</code> after each line to space them o
 <span class="r-in"><span>    spacing <span class="op">=</span> <span class="fl">1</span>,</span></span>
 <span class="r-in"><span>    spaces_first <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] ""       "GGCGGC" ""       "GGC"   </span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in convert_input_seq_to_sequence_list("GGCGGCGGC", line_length = 6,     spacing = 1, spaces_first = TRUE):</span> unused argument (spaces_first = TRUE)</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">convert_input_seq_to_sequence_list</span><span class="op">(</span></span></span>
 <span class="r-in"><span>    <span class="st">"GGCGGCGGC"</span>,</span></span>
@@ -114,7 +119,7 @@ Optionally inserts empty strings <code>""</code> after each line to space them o
 <span class="r-in"><span>    spacing <span class="op">=</span> <span class="fl">2</span>,</span></span>
 <span class="r-in"><span>    spaces_first <span class="op">=</span> <span class="cn">FALSE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "GGC" ""    ""    "GGC" ""    ""    "GGC" ""    ""   </span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in convert_input_seq_to_sequence_list("GGCGGCGGC", line_length = 3,     spacing = 2, spaces_first = FALSE):</span> unused argument (spaces_first = FALSE)</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">convert_input_seq_to_sequence_list</span><span class="op">(</span></span></span>
 <span class="r-in"><span>    <span class="st">"GGCGGCGGC"</span>,</span></span>
