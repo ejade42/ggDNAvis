@@ -2,6 +2,7 @@ on:
   push:
     branches:
       - main
+      - release/*
   workflow_dispatch:
 
 name: pkgdown
@@ -9,7 +10,6 @@ name: pkgdown
 permissions: read-all
 
 jobs:
-  # 1️⃣ Discover which branches exist
   discover:
     runs-on: ubuntu-latest
     outputs:
@@ -22,21 +22,28 @@ jobs:
 
       - id: collect
         run: |
-          RELEASES=$(git for-each-ref --format='%(refname:short)' refs/heads/release/ | sed 's|refs/heads/||' | sort -V)
-          BRANCHES="main"
+          # Collect release branches (just the X.Y.Z part)
+          RELEASES=$(git for-each-ref --format='%(refname:short)' refs/heads/release/ \
+            | sed 's|refs/heads/release/||' \
+            | sort -Vr)
+
+          # Build JSON array with main + release branches
+          JSON="[\"main\""
           for R in $RELEASES; do
-            BRANCHES="$BRANCHES release/$R"
+            JSON="$JSON, \"release/$R\""
           done
-          LATEST=$(echo "$RELEASES" | tail -n1)
-          echo "branches=$BRANCHES" >> $GITHUB_OUTPUT
+          JSON="$JSON]"
+
+          # Latest release = first item (highest version)
+          LATEST=$(echo "$RELEASES" | head -n1)
+
+          echo "branches=$JSON" >> $GITHUB_OUTPUT
           echo "latest=release/$LATEST" >> $GITHUB_OUTPUT
 
-  # 2️⃣ Build/deploy each branch in parallel
   build:
     needs: discover
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: false
       matrix:
         branch: ${{ fromJSON(needs.discover.outputs.branches) }}
     env:
@@ -49,72 +56,67 @@ jobs:
           ref: ${{ matrix.branch }}
           fetch-depth: 0
 
-      # Get pkgdown config from main
-      - name: Sync _pkgdown.yml from main
+      # Always grab pkgdown config from main
+      - name: Copy pkgdown config from main
         run: git show origin/main:_pkgdown.yml > _pkgdown.yml
 
-      - uses: r-lib/actions/setup-pandoc@v2
-      - uses: r-lib/actions/setup-r@v2
+      - name: Setup pandoc
+        uses: r-lib/actions/setup-pandoc@v2
+
+      - name: Setup R
+        uses: r-lib/actions/setup-r@v2
         with:
           use-public-rspm: true
 
-      # 3️⃣ Cache R packages for speed
-      - name: Cache R packages
-        uses: actions/cache@v4
-        with:
-          path: ${{ env.R_LIBS_USER }}
-          key: ${{ runner.os }}-r-${{ hashFiles('**/DESCRIPTION') }}
-          restore-keys: |
-            ${{ runner.os }}-r-
-
-      - uses: r-lib/actions/setup-r-dependencies@v2
+      - name: Setup R dependencies
+        uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: any::pkgdown, local::.
 
-      # Inject version menu (links to dev, releases, latest)
-      - name: Inject version menu
+      - name: Inject version menu into _pkgdown.yml
         run: |
-          ALL_RELEASES=$(git for-each-ref --format='%(refname:short)' refs/heads/release/ | sed 's|refs/heads/||' | sort -V)
+          # Collect releases sorted descending
+          RELEASES=$(git for-each-ref --format='%(refname:short)' refs/heads/release/ \
+            | sed 's|refs/heads/release/||' \
+            | sort -Vr)
+
           MENU=""
-          for REL in $ALL_RELEASES; do
-            MENU="$MENU\n        - text: \"v$REL\"\n          href: /ggDNAvis/v$REL/"
+          for REL in $RELEASES; do
+            MENU="$MENU\n        - text: \"$REL\"\n          href: /$REL/"
           done
-          MENU="$MENU\n        - text: \"Latest release\"\n          href: /ggDNAvis/"
-          MENU="$MENU\n        - text: \"Latest dev\"\n          href: /ggDNAvis/dev/"
+
+          # Replace placeholder
           sed -i "s|#VERSIONS#|$MENU|" _pkgdown.yml
 
-      - name: Build pkgdown
-        run: Rscript -e "pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)"
+      - name: Build site
+        run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
+        shell: Rscript {0}
 
-      # Deploy to the right folder
-      - name: Deploy
+      - name: Choose target folder
+        id: target
         run: |
-          BR=${{ matrix.branch }}
-          LATEST=${{ needs.discover.outputs.latest }}
-
-          if [[ "$BR" == "main" ]]; then
-            TARGET="dev"
-          elif [[ "$BR" == release/* ]]; then
-            VER="v${BR#release/}"
-            TARGET="$VER"
+          BRANCH="${{ matrix.branch }}"
+          if [[ "$BRANCH" == "main" ]]; then
+            echo "folder=dev" >> $GITHUB_OUTPUT
+          elif [[ "$BRANCH" == release/* ]]; then
+            VER="${BRANCH#release/}"
+            echo "folder=$VER" >> $GITHUB_OUTPUT
           else
-            TARGET="$BR"
-          fi
+            echo "folder=$BRANCH" >> $GITHUB_OUTPUT
 
-          echo "Deploying $BR to /$TARGET"
-          npx --yes jamesives/github-pages-deploy-action@v4 \
-            --branch gh-pages \
-            --folder docs \
-            --target-folder "$TARGET" \
-            --clean false
+      - name: Deploy versioned site
+        uses: JamesIves/github-pages-deploy-action@v4.5.0
+        with:
+          clean: false
+          branch: gh-pages
+          folder: docs
+          target-folder: ${{ steps.target.outputs.folder }}
 
-          # also publish root for latest release
-          if [[ "$BR" == "$LATEST" ]]; then
-            echo "Deploying $BR to / (root)"
-            npx --yes jamesives/github-pages-deploy-action@v4 \
-              --branch gh-pages \
-              --folder docs \
-              --target-folder "" \
-              --clean false
-          fi
-          
+      - name: Deploy latest release to root
+        if: ${{ matrix.branch == needs.discover.outputs.latest }}
+        uses: JamesIves/github-pages-deploy-action@v4.5.0
+        with:
+          clean: false
+          branch: gh-pages
+          folder: docs
+          target-folder: ""
