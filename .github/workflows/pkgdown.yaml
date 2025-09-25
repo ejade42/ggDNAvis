@@ -2,7 +2,6 @@ on:
   push:
     branches:
       - main
-      - release/*
   workflow_dispatch:
 
 name: pkgdown
@@ -10,102 +9,101 @@ name: pkgdown
 permissions: read-all
 
 jobs:
-  pkgdown:
+  # 1️⃣ Collect branch list (main + release/*)
+  collect-branches:
     runs-on: ubuntu-latest
-    concurrency:
-      group: pkgdown-${{ github.ref }}
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - id: set-matrix
+        run: |
+          BRANCHES='["main"'
+          RELEASES=$(git for-each-ref --format='%(refname:short)' refs/remotes/origin/release/ | sed 's|origin/||' | sort -V)
+          for R in $RELEASES; do
+            BRANCHES="$BRANCHES, \"$R\""
+          done
+          BRANCHES="$BRANCHES]"
+          echo "matrix={\"branch\":$BRANCHES}" >> $GITHUB_OUTPUT
+
+  # 2️⃣ Build + deploy per branch (matrix)
+  build-deploy:
+    needs: collect-branches
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.collect-branches.outputs.matrix) }}
+
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     permissions:
       contents: write
 
     steps:
-      # 1️⃣ Checkout the branch being built (full history)
-      - name: Checkout package code
+      - name: Checkout branch
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.ref }}
+          ref: ${{ matrix.branch }}
           fetch-depth: 0
 
-      # 2️⃣ Copy _pkgdown.yml from main
-      - name: Copy pkgdown config from main
+      # always get _pkgdown.yml from main
+      - name: Copy config from main
         run: git show origin/main:_pkgdown.yml > _pkgdown.yml
 
-      # 3️⃣ Setup pandoc
-      - name: Setup pandoc
-        uses: r-lib/actions/setup-pandoc@v2
-
-      # 4️⃣ Setup R
-      - name: Setup R
-        uses: r-lib/actions/setup-r@v2
+      - uses: r-lib/actions/setup-pandoc@v2
+      - uses: r-lib/actions/setup-r@v2
         with:
           use-public-rspm: true
-
-      # 5️⃣ Setup dependencies
-      - name: Setup R dependencies
-        uses: r-lib/actions/setup-r-dependencies@v2
+      - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: any::pkgdown, local::.
 
-      # 6️⃣ Inject version menu into _pkgdown.yml
-      - name: Inject version menu
+      - name: Insert version menu
         run: |
-          RELEASES=$(git for-each-ref --format='%(refname:short)' refs/heads/release/ | sed 's|refs/heads/||' | sort -V)
+          BASE_URL="/ggDNAvis"
+          ALL_RELEASES=$(git for-each-ref --format='%(refname:short)' refs/remotes/origin/release/ | sed 's|origin/||' | sort -V)
+          LATEST=$(echo "$ALL_RELEASES" | tail -n1)
+
           MENU=""
-          for REL in $RELEASES; do
-            MENU="$MENU\n        - text: \"$REL\"\n          href: /$REL/"
+          for REL in $ALL_RELEASES; do
+            MENU="$MENU\n        - text: \"$REL\"\n          href: $BASE_URL/$REL/"
           done
+          MENU="$MENU\n        - text: \"Latest dev\"\n          href: $BASE_URL/dev/"
+          MENU="$MENU\n        - text: \"Latest release\"\n          href: $BASE_URL/"
           sed -i "s|#VERSIONS#|$MENU|" _pkgdown.yml
 
-      # 7️⃣ Build site
+          echo "latest=$LATEST" >> $GITHUB_ENV
+
       - name: Build site
-        run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
-        shell: Rscript {0}
+        run: Rscript -e "pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)"
 
-      # 8️⃣ Choose target folder
-      - name: Choose target folder
-        id: target
+      - name: Deploy site
         run: |
-          BRANCH="${GITHUB_REF#refs/heads/}"
-          echo "Branch: $BRANCH"
-
-          if [[ "$BRANCH" == "main" ]]; then
-            echo "folder=dev" >> $GITHUB_OUTPUT
-          elif [[ "$BRANCH" == release/* ]]; then
-            VER="${BRANCH#release/}"
-            echo "folder=$VER" >> $GITHUB_OUTPUT
+          BR="${{ matrix.branch }}"
+          if [[ "$BR" == "main" ]]; then
+            TARGET="dev"
+          elif [[ "$BR" == release/* ]]; then
+            TARGET="${BR#release/}"
           else
-            echo "folder=$BRANCH" >> $GITHUB_OUTPUT
+            TARGET="$BR"
           fi
 
-      # 9️⃣ Deploy to version-specific folder
-      - name: Deploy to GitHub Pages 🚀
-        if: github.event_name != 'pull_request'
-        uses: JamesIves/github-pages-deploy-action@v4.5.0
-        with:
-          clean: false
-          branch: gh-pages
-          folder: docs
-          target-folder: ${{ steps.target.outputs.folder }}
+          echo "Deploying $BR → /$TARGET"
+          npx --yes jamesives/github-pages-deploy-action@v4 \
+            --branch gh-pages \
+            --folder docs \
+            --target-folder "$TARGET" \
+            --clean false
 
-      # 🔟 Deploy latest release branch to root
-      - name: Check if this is the latest release
-        if: startsWith(github.ref, 'refs/heads/release/')
-        id: latest-check
-        run: |
-          LATEST=$(git for-each-ref --format='%(refname:short)' refs/heads/release/ | sed 's|refs/heads/||' | sort -V | tail -n1)
-          CURRENT="${GITHUB_REF#refs/heads/}"
-          echo "Latest: $LATEST, Current: $CURRENT"
-          if [[ "$LATEST" == "$CURRENT" ]]; then
-            echo "deploy=true" >> $GITHUB_OUTPUT
-          else
-            echo "deploy=false" >> $GITHUB_OUTPUT
-
-      - name: Deploy to root
-        if: steps.latest-check.outputs.deploy == 'true'
-        uses: JamesIves/github-pages-deploy-action@v4.5.0
-        with:
-          clean: false
-          branch: gh-pages
-          folder: docs
-          target-folder: ""
+          # latest release also goes to root
+          if [[ "$BR" == "release/$latest" ]]; then
+            echo "Deploying $BR → /"
+            npx --yes jamesives/github-pages-deploy-action@v4 \
+              --branch gh-pages \
+              --folder docs \
+              --target-folder "" \
+              --clean false
+          fi
