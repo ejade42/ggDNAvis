@@ -20,34 +20,18 @@ jobs:
       contents: write
 
     steps:
-      # Step 1: Checkout pkgdown config from main (sparse)
-      - name: Checkout _pkgdown.yml from main
-        uses: actions/checkout@v4
-        with:
-          ref: main
-          sparse-checkout: |
-            _pkgdown.yml
-          sparse-checkout-cone-mode: false
-          path: config
-
-      # Step 1b: Checkout full repo from main for branch listing
-      - name: Checkout full repo for branch listing
-        uses: actions/checkout@v4
-        with:
-          ref: main
-          fetch-depth: 0   # full history needed
-          path: repo
-
-      # Step 2: Checkout package code from triggered branch
+      # Full checkout of the branch being built
       - name: Checkout package code
         uses: actions/checkout@v4
         with:
           ref: ${{ github.ref }}
-          path: package
+          fetch-depth: 0  # full history so we can list branches
 
-      # Step 3: Copy pkgdown config from main into package
-      - name: Use pkgdown config from main
-        run: cp config/_pkgdown.yml package/
+      # Copy _pkgdown.yml from main branch
+      - name: Copy pkgdown config from main
+        run: |
+          git fetch origin main:_main_temp
+          cp _main_temp/_pkgdown.yml _pkgdown.yml
 
       - name: Setup pandoc
         uses: r-lib/actions/setup-pandoc@v2
@@ -60,25 +44,19 @@ jobs:
       - name: Setup R dependencies
         uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          working-directory: package
           extra-packages: any::pkgdown, local::.
-          needs: website
-          
+
+      # Inject version menu into _pkgdown.yml
       - name: Inject version menu into _pkgdown.yml
         run: |
-          # list release branches from full repo
-          RELEASES=$(cd repo && git for-each-ref --sort=-creatordate --format='%(refname:short)' refs/heads/release/ | sed 's|refs/heads/||')
-
+          RELEASES=$(git for-each-ref --sort=-creatordate --format='%(refname:short)' refs/heads/release/ | sed 's|refs/heads/||')
           MENU=""
           for REL in $RELEASES; do
             MENU="$MENU\n        - text: \"$REL\"\n          href: /$REL/"
           done
-
-          # replace placeholder in _pkgdown.yml in package/
-          sed -i "s|#VERSIONS#|$MENU|" package/_pkgdown.yml
+          sed -i "s|#VERSIONS#|$MENU|" _pkgdown.yml
 
       - name: Build site
-        working-directory: package
         run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
         shell: Rscript {0}
 
@@ -96,7 +74,6 @@ jobs:
             echo "folder=$VER" >> $GITHUB_OUTPUT
           else
             echo "folder=$BRANCH" >> $GITHUB_OUTPUT
-          fi
 
       # Deploy to version-specific folder
       - name: Deploy to GitHub Pages 🚀
@@ -105,21 +82,20 @@ jobs:
         with:
           clean: false
           branch: gh-pages
-          folder: package/docs
+          folder: docs
           target-folder: ${{ steps.target.outputs.folder }}
 
       # Deploy latest release branch to root
       - name: Deploy latest release to root
         if: startsWith(github.ref, 'refs/heads/release/')
         run: |
-          LATEST=$(cd repo && git for-each-ref --sort=-creatordate --format='%(refname:short)' refs/heads/release/ | sed 's|refs/heads/||' | head -n 1)
+          LATEST=$(git for-each-ref --sort=-creatordate --format='%(refname:short)' refs/heads/release/ | sed 's|refs/heads/||' | head -n 1)
           CURRENT="${GITHUB_REF#refs/heads/}"
           echo "Latest: $LATEST, Current: $CURRENT"
           if [[ "$LATEST" == "$CURRENT" ]]; then
             echo "deploy=true" >> $GITHUB_OUTPUT
           else
             echo "deploy=false" >> $GITHUB_OUTPUT
-          fi
         id: latest-check
 
       - name: Deploy to root
@@ -128,5 +104,5 @@ jobs:
         with:
           clean: false
           branch: gh-pages
-          folder: package/docs
+          folder: docs
           target-folder: ""
