@@ -29,9 +29,7 @@ jobs:
 
       # Copy _pkgdown.yml from main branch
       - name: Copy pkgdown config from main
-        run: |
-          git fetch origin main:_main_temp
-          cp _main_temp/_pkgdown.yml _pkgdown.yml
+        run: git show origin/main:_pkgdown.yml > _pkgdown.yml
 
       - name: Setup pandoc
         uses: r-lib/actions/setup-pandoc@v2
