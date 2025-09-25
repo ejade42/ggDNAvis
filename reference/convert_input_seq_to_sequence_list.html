@@ -25,7 +25,7 @@ Optionally inserts empty strings "" after each line to space them out.'><meta pr
 
     <a class="navbar-brand me-2" href="../index.html">ggDNAvis</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,7 +53,7 @@ Optionally inserts empty strings "" after each line to space them out.'><meta pr
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Split a single input sequence into a vector of "lines" for visualisation (<code><a href="visualise_single_sequence.html">visualise_single_sequence()</a></code> helper)</h1>
-      <small class="dont-index">Source: <a href="https://github.com/ejade42/ggDNAvis/blob/tmp-v0.2.1/R/visualise_single_sequence.R" class="external-link"><code>R/visualise_single_sequence.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/ejade42/ggDNAvis/blob/v0.3.0/R/visualise_single_sequence.R" class="external-link"><code>R/visualise_single_sequence.R</code></a></small>
       <div class="d-none name"><code>convert_input_seq_to_sequence_list.Rd</code></div>
     </div>
 
@@ -69,7 +69,8 @@ Optionally inserts empty strings <code>""</code> after each line to space them o
 <span>  <span class="va">input_seq</span>,</span>
 <span>  <span class="va">line_length</span>,</span>
 <span>  spacing <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  spaces_first <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  start_spaces <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  end_spaces <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -89,8 +90,12 @@ Optionally inserts empty strings <code>""</code> after each line to space them o
 <dd><p><code>integer</code>. How many blank lines to leave before/after each line of sequence. Defaults to <code>0</code>.</p></dd>
 
 
-<dt id="arg-spaces-first">spaces_first<a class="anchor" aria-label="anchor" href="#arg-spaces-first"></a></dt>
-<dd><p><code>logical</code>. Whether blank lines should come before (<code>TRUE</code>, default) or after (<code>FALSE</code>) each line of sequence.</p></dd>
+<dt id="arg-start-spaces">start_spaces<a class="anchor" aria-label="anchor" href="#arg-start-spaces"></a></dt>
+<dd><p><code>logical</code>. Whether blank lines should also be present before the first line of sequence. Defaults to <code>FALSE</code>.</p></dd>
+
+
+<dt id="arg-end-spaces">end_spaces<a class="anchor" aria-label="anchor" href="#arg-end-spaces"></a></dt>
+<dd><p><code>logical</code>. Whether blank lines should also be present after the last line of sequence. Defaults to <code>FALSE</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -104,22 +109,32 @@ Optionally inserts empty strings <code>""</code> after each line to space them o
 <span class="r-in"><span>    <span class="st">"GGCGGCGGC"</span>,</span></span>
 <span class="r-in"><span>    line_length <span class="op">=</span> <span class="fl">6</span>,</span></span>
 <span class="r-in"><span>    spacing <span class="op">=</span> <span class="fl">1</span>,</span></span>
-<span class="r-in"><span>    spaces_first <span class="op">=</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span>    start_spaces <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>    end_spaces <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] ""       "GGCGGC" ""       "GGC"   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] ""       "GGCGGC" ""       "GGC"    ""      </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">convert_input_seq_to_sequence_list</span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="st">"GGCGGCGGC"</span>,</span></span>
+<span class="r-in"><span>    line_length <span class="op">=</span> <span class="fl">3</span>,</span></span>
+<span class="r-in"><span>    spacing <span class="op">=</span> <span class="fl">2</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "GGC" ""    ""    "GGC" ""    ""    "GGC"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">convert_input_seq_to_sequence_list</span><span class="op">(</span></span></span>
 <span class="r-in"><span>    <span class="st">"GGCGGCGGC"</span>,</span></span>
 <span class="r-in"><span>    line_length <span class="op">=</span> <span class="fl">3</span>,</span></span>
 <span class="r-in"><span>    spacing <span class="op">=</span> <span class="fl">2</span>,</span></span>
-<span class="r-in"><span>    spaces_first <span class="op">=</span> <span class="cn">FALSE</span></span></span>
+<span class="r-in"><span>    end_spaces <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "GGC" ""    ""    "GGC" ""    ""    "GGC" ""    ""   </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">convert_input_seq_to_sequence_list</span><span class="op">(</span></span></span>
 <span class="r-in"><span>    <span class="st">"GGCGGCGGC"</span>,</span></span>
 <span class="r-in"><span>    line_length <span class="op">=</span> <span class="fl">6</span>,</span></span>
-<span class="r-in"><span>    spacing <span class="op">=</span> <span class="fl">0</span></span></span>
+<span class="r-in"><span>    spacing <span class="op">=</span> <span class="fl">0</span>,</span></span>
+<span class="r-in"><span>    start_spaces <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>    end_spaces <span class="op">=</span> <span class="cn">FALSE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "GGCGGC" "GGC"   </span>
 <span class="r-in"><span></span></span>

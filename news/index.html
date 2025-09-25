@@ -21,7 +21,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ggDNAvis</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,9 +49,28 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/ejade42/ggDNAvis/blob/tmp-v0.2.1/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/ejade42/ggDNAvis/blob/v0.3.0/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.3.0" id="ggdnavis-030">ggDNAvis 0.3.0<a class="anchor" aria-label="anchor" href="#ggdnavis-030"></a></h2>
+<p>Changes:</p>
+<ul><li><p>Removed raster::raster() dependency</p></li>
+<li><p>Added new rasterise_matrix() function to do rasterisation</p></li>
+<li>
+<p>Changed convert_input_seq_to_sequence_list() behaviour:</p>
+<ul><li>Instead of additional spacing lines always being added before or after first line of sequence, there are now independent boolean settings for whether there should be spacing lines before and whether there should be spacing lines after.</li>
+</ul></li>
+</ul><p>Bug fixes:</p>
+<ul><li><p>Fixed critical error with plot matching lenience on some local linux systems that resulted in tests failing</p></li>
+<li><p>Inserted additional padding blank lines above/below with index annotation vertical position &gt; 1 to avoid plot dimensions breaking</p></li>
+</ul><p>Known issues remaining:</p>
+<ul><li>
+<p>Related to ggplot v4.0.0:</p>
+<ul><li><p>Pixel rendering changes means rectangles sometimes fail to render in visualise_methylation_colour_scale(), resulting in the appearance of vertical white lines. This depends on the precision and exact export size.</p></li>
+<li><p>There is a faint line around the panel area with non-white backgrounds.</p></li>
+</ul></li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.1" id="ggdnavis-021">ggDNAvis 0.2.1<a class="anchor" aria-label="anchor" href="#ggdnavis-021"></a></h2><p class="text-muted">CRAN release: 2025-09-21</p>
 <ul><li><p>Documented that debug_join_vector functions do not return a value</p></li>
