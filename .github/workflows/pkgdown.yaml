@@ -72,6 +72,7 @@ jobs:
             echo "folder=$VER" >> $GITHUB_OUTPUT
           else
             echo "folder=$BRANCH" >> $GITHUB_OUTPUT
+          fi
 
       # Deploy to version-specific folder
       - name: Deploy to GitHub Pages 🚀
@@ -94,6 +95,7 @@ jobs:
             echo "deploy=true" >> $GITHUB_OUTPUT
           else
             echo "deploy=false" >> $GITHUB_OUTPUT
+          fi
         id: latest-check
 
       - name: Deploy to root
