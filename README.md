@@ -86,7 +86,7 @@ install.packages("ggDNAvis")
 devtools::install_github("ejade42/ggDNAvis")
 
 ## Specific version from github
-devtools::install_github("ejade42/ggDNAvis", ref = "v0.2.1")
+devtools::install_github("ejade42/ggDNAvis", ref = "v0.3.0")
 ```
 
 Throughout this manual, only `ggDNAvis`, `dplyr`, and `ggplot2` are
