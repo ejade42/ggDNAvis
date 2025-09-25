@@ -54,8 +54,22 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="ggdnavis-development-version">ggDNAvis (development version)<a class="anchor" aria-label="anchor" href="#ggdnavis-development-version"></a></h2>
+<p>Changes:</p>
 <ul><li><p>Removed raster::raster() dependency</p></li>
 <li><p>Added new rasterise_matrix() function to do rasterisation</p></li>
+<li>
+<p>Changed convert_input_seq_to_sequence_list() behaviour:</p>
+<ul><li>Instead of additional spacing lines always being added before or after first line of sequence, there are now independent boolean settings for whether there should be spacing lines before and whether there should be spacing lines after.</li>
+</ul></li>
+</ul><p>Bug fixes:</p>
+<ul><li><p>Fixed critical error with plot matching lenience on some local linux systems that resulted in tests failing</p></li>
+<li><p>Inserted additional padding blank lines above/below with index annotation vertical position &gt; 1 to avoid plot dimensions breaking</p></li>
+</ul><p>Known issues remaining:</p>
+<ul><li>
+<p>Related to ggplot v4.0.0:</p>
+<ul><li><p>Pixel rendering changes means rectangles sometimes fail to render in visualise_methylation_colour_scale(), resulting in the appearance of vertical white lines. This depends on the precision and exact export size.</p></li>
+<li><p>There is a faint line around the panel area with non-white backgrounds.</p></li>
+</ul></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.1" id="ggdnavis-021">ggDNAvis 0.2.1<a class="anchor" aria-label="anchor" href="#ggdnavis-021"></a></h2><p class="text-muted">CRAN release: 2025-09-21</p>
