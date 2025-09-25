@@ -9,101 +9,112 @@ name: pkgdown
 permissions: read-all
 
 jobs:
-  # 1️⃣ Collect branch list (main + release/*)
-  collect-branches:
+  # 1️⃣ Discover which branches exist
+  discover:
     runs-on: ubuntu-latest
     outputs:
-      matrix: ${{ steps.set-matrix.outputs.matrix }}
+      branches: ${{ steps.collect.outputs.branches }}
+      latest: ${{ steps.collect.outputs.latest }}
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - id: set-matrix
+      - id: collect
         run: |
-          BRANCHES='["main"'
-          RELEASES=$(git for-each-ref --format='%(refname:short)' refs/remotes/origin/release/ | sed 's|origin/||' | sort -V)
+          RELEASES=$(git for-each-ref --format='%(refname:short)' refs/heads/release/ | sed 's|refs/heads/||' | sort -V)
+          BRANCHES="main"
           for R in $RELEASES; do
-            BRANCHES="$BRANCHES, \"$R\""
+            BRANCHES="$BRANCHES release/$R"
           done
-          BRANCHES="$BRANCHES]"
-          echo "matrix={\"branch\":$BRANCHES}" >> $GITHUB_OUTPUT
+          LATEST=$(echo "$RELEASES" | tail -n1)
+          echo "branches=$BRANCHES" >> $GITHUB_OUTPUT
+          echo "latest=release/$LATEST" >> $GITHUB_OUTPUT
 
-  # 2️⃣ Build + deploy per branch (matrix)
-  build-deploy:
-    needs: collect-branches
+  # 2️⃣ Build/deploy each branch in parallel
+  build:
+    needs: discover
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
-      matrix: ${{ fromJSON(needs.collect-branches.outputs.matrix) }}
-
+      matrix:
+        branch: ${{ fromJSON(needs.discover.outputs.branches) }}
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     permissions:
       contents: write
-
     steps:
-      - name: Checkout branch
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           ref: ${{ matrix.branch }}
           fetch-depth: 0
 
-      # always get _pkgdown.yml from main
-      - name: Copy config from main
+      # Get pkgdown config from main
+      - name: Sync _pkgdown.yml from main
         run: git show origin/main:_pkgdown.yml > _pkgdown.yml
 
       - uses: r-lib/actions/setup-pandoc@v2
       - uses: r-lib/actions/setup-r@v2
         with:
           use-public-rspm: true
+
+      # 3️⃣ Cache R packages for speed
+      - name: Cache R packages
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.R_LIBS_USER }}
+          key: ${{ runner.os }}-r-${{ hashFiles('**/DESCRIPTION') }}
+          restore-keys: |
+            ${{ runner.os }}-r-
+
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: any::pkgdown, local::.
 
-      - name: Insert version menu
+      # Inject version menu (links to dev, releases, latest)
+      - name: Inject version menu
         run: |
-          BASE_URL="/ggDNAvis"
-          ALL_RELEASES=$(git for-each-ref --format='%(refname:short)' refs/remotes/origin/release/ | sed 's|origin/||' | sort -V)
-          LATEST=$(echo "$ALL_RELEASES" | tail -n1)
-
+          ALL_RELEASES=$(git for-each-ref --format='%(refname:short)' refs/heads/release/ | sed 's|refs/heads/||' | sort -V)
           MENU=""
           for REL in $ALL_RELEASES; do
-            MENU="$MENU\n        - text: \"$REL\"\n          href: $BASE_URL/$REL/"
+            MENU="$MENU\n        - text: \"v$REL\"\n          href: /ggDNAvis/v$REL/"
           done
-          MENU="$MENU\n        - text: \"Latest dev\"\n          href: $BASE_URL/dev/"
-          MENU="$MENU\n        - text: \"Latest release\"\n          href: $BASE_URL/"
+          MENU="$MENU\n        - text: \"Latest release\"\n          href: /ggDNAvis/"
+          MENU="$MENU\n        - text: \"Latest dev\"\n          href: /ggDNAvis/dev/"
           sed -i "s|#VERSIONS#|$MENU|" _pkgdown.yml
 
-          echo "latest=$LATEST" >> $GITHUB_ENV
-
-      - name: Build site
+      - name: Build pkgdown
         run: Rscript -e "pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)"
 
-      - name: Deploy site
+      # Deploy to the right folder
+      - name: Deploy
         run: |
-          BR="${{ matrix.branch }}"
+          BR=${{ matrix.branch }}
+          LATEST=${{ needs.discover.outputs.latest }}
+
           if [[ "$BR" == "main" ]]; then
             TARGET="dev"
           elif [[ "$BR" == release/* ]]; then
-            TARGET="${BR#release/}"
+            VER="v${BR#release/}"
+            TARGET="$VER"
           else
             TARGET="$BR"
           fi
 
-          echo "Deploying $BR → /$TARGET"
+          echo "Deploying $BR to /$TARGET"
           npx --yes jamesives/github-pages-deploy-action@v4 \
             --branch gh-pages \
             --folder docs \
             --target-folder "$TARGET" \
             --clean false
 
-          # latest release also goes to root
-          if [[ "$BR" == "release/$latest" ]]; then
-            echo "Deploying $BR → /"
+          # also publish root for latest release
+          if [[ "$BR" == "$LATEST" ]]; then
+            echo "Deploying $BR to / (root)"
             npx --yes jamesives/github-pages-deploy-action@v4 \
               --branch gh-pages \
               --folder docs \
               --target-folder "" \
               --clean false
           fi
+          
