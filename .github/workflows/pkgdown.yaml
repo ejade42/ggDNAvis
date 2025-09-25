@@ -20,7 +20,7 @@ jobs:
       contents: write
 
     steps:
-      # Step 1: Checkout pkgdown config from main
+      # Step 1: Checkout pkgdown config from main (sparse)
       - name: Checkout _pkgdown.yml from main
         uses: actions/checkout@v4
         with:
@@ -29,6 +29,14 @@ jobs:
             _pkgdown.yml
           sparse-checkout-cone-mode: false
           path: config
+
+      # Step 1b: Checkout full repo from main for branch listing
+      - name: Checkout full repo for branch listing
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0   # full history needed
+          path: repo
 
       # Step 2: Checkout package code from triggered branch
       - name: Checkout package code
@@ -57,20 +65,17 @@ jobs:
           needs: website
           
       - name: Inject version menu into _pkgdown.yml
-        working-directory: package
         run: |
-          # list release branches
-          RELEASES=$(git ls-remote --heads origin "release/*" \
-            | sed 's|.*/release/||' \
-            | sort -Vr)
+          # list release branches from full repo
+          RELEASES=$(cd repo && git for-each-ref --sort=-creatordate --format='%(refname:short)' refs/heads/release/ | sed 's|refs/heads/||')
 
           MENU=""
           for REL in $RELEASES; do
             MENU="$MENU\n        - text: \"$REL\"\n          href: /$REL/"
           done
 
-          # replace placeholder in _pkgdown.yml
-          sed -i "s|#VERSIONS#|$MENU|" _pkgdown.yml
+          # replace placeholder in _pkgdown.yml in package/
+          sed -i "s|#VERSIONS#|$MENU|" package/_pkgdown.yml
 
       - name: Build site
         working-directory: package
@@ -107,11 +112,7 @@ jobs:
       - name: Deploy latest release to root
         if: startsWith(github.ref, 'refs/heads/release/')
         run: |
-          # get highest semver tag among release/* branches
-          LATEST=$(git ls-remote --heads origin "release/*" \
-            | sed 's|.*/release/||' \
-            | sort -V \
-            | tail -n 1)
+          LATEST=$(cd repo && git for-each-ref --sort=-creatordate --format='%(refname:short)' refs/heads/release/ | sed 's|refs/heads/||' | head -n 1)
           CURRENT="${GITHUB_REF#refs/heads/}"
           echo "Latest: $LATEST, Current: $CURRENT"
           if [[ "$LATEST" == "$CURRENT" ]]; then
