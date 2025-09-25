@@ -103,6 +103,7 @@ jobs:
             echo "folder=$VER" >> $GITHUB_OUTPUT
           else
             echo "folder=$BRANCH" >> $GITHUB_OUTPUT
+          fi
 
       - name: Deploy versioned site
         uses: JamesIves/github-pages-deploy-action@v4.5.0
