@@ -67,7 +67,7 @@ github_table <- function(data) {
 
 ## Set up file locations
 output_location <- "README_files/output/"
-github_location <- "https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/"
+github_location <- "https://raw.githubusercontent.com/ejade42/ggDNAvis/v0.3.0/README_files/output/"
 knitr::opts_chunk$set(fig.path = output_location)
 ```
 
