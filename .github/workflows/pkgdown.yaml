@@ -1,12 +1,11 @@
 on:
   push:
-    branches: [main, master, tmp-*]
-  pull_request:
-  release:
-    types: [published]
+    branches:
+      - main
+      - release/*
   workflow_dispatch:
 
-name: pkgdown.yaml
+name: pkgdown
 
 permissions: read-all
 
@@ -14,65 +13,119 @@ jobs:
   pkgdown:
     runs-on: ubuntu-latest
     concurrency:
-      group: pkgdown-${{ github.event_name != 'pull_request' || github.run_id }}
+      group: pkgdown-${{ github.ref }}
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     permissions:
       contents: write
 
     steps:
+      # Step 1: Checkout pkgdown config from main
+      - name: Checkout _pkgdown.yml from main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          sparse-checkout: |
+            _pkgdown.yml
+          sparse-checkout-cone-mode: false
+          path: config
+
+      # Step 2: Checkout package code from triggered branch
       - name: Checkout package code
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event_name == 'workflow_dispatch' && github.event.ref || github.ref }}
+          ref: ${{ github.ref }}
+          path: package
 
-      - uses: r-lib/actions/setup-pandoc@v2
+      # Step 3: Copy pkgdown config from main into package
+      - name: Use pkgdown config from main
+        run: cp config/_pkgdown.yml package/
 
-      - uses: r-lib/actions/setup-r@v2
+      - name: Setup pandoc
+        uses: r-lib/actions/setup-pandoc@v2
+
+      - name: Setup R
+        uses: r-lib/actions/setup-r@v2
         with:
           use-public-rspm: true
 
-      - uses: r-lib/actions/setup-r-dependencies@v2
+      - name: Setup R dependencies
+        uses: r-lib/actions/setup-r-dependencies@v2
         with:
+          working-directory: package
           extra-packages: any::pkgdown, local::.
           needs: website
+          
+      - name: Inject version menu into _pkgdown.yml
+        working-directory: package
+        run: |
+          # list release branches
+          RELEASES=$(git ls-remote --heads origin "release/*" \
+            | sed 's|.*/release/||' \
+            | sort -Vr)
+
+          MENU=""
+          for REL in $RELEASES; do
+            MENU="$MENU\n        - text: \"$REL\"\n          href: /$REL/"
+          done
+
+          # replace placeholder in _pkgdown.yml
+          sed -i "s|#VERSIONS#|$MENU|" _pkgdown.yml
 
       - name: Build site
+        working-directory: package
         run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
         shell: Rscript {0}
 
+      # Decide target folder
       - name: Choose target folder
         id: target
         run: |
           BRANCH="${GITHUB_REF#refs/heads/}"
-          echo "Branch is: $BRANCH"
+          echo "Branch: $BRANCH"
 
-          if [[ "$BRANCH" == "main" || "$BRANCH" == "master" ]]; then
+          if [[ "$BRANCH" == "main" ]]; then
             echo "folder=dev" >> $GITHUB_OUTPUT
-          elif [[ "$BRANCH" == tmp-* ]]; then
-            # strip the tmp- prefix so folder name matches the tag
-            TAG="${BRANCH#tmp-}"
-            echo "folder=$TAG" >> $GITHUB_OUTPUT
+          elif [[ "$BRANCH" == release/* ]]; then
+            VER="${BRANCH#release/}"
+            echo "folder=$VER" >> $GITHUB_OUTPUT
           else
             echo "folder=$BRANCH" >> $GITHUB_OUTPUT
           fi
 
-      # Deploy all types to github pages
+      # Deploy to version-specific folder
       - name: Deploy to GitHub Pages 🚀
         if: github.event_name != 'pull_request'
         uses: JamesIves/github-pages-deploy-action@v4.5.0
         with:
           clean: false
           branch: gh-pages
-          folder: docs
+          folder: package/docs
           target-folder: ${{ steps.target.outputs.folder }}
-      
-      # Deploy release to root (main page)
+
+      # Deploy latest release branch to root
       - name: Deploy latest release to root
-        if: startsWith(github.ref, 'refs/tags/')
+        if: startsWith(github.ref, 'refs/heads/release/')
+        run: |
+          # get highest semver tag among release/* branches
+          LATEST=$(git ls-remote --heads origin "release/*" \
+            | sed 's|.*/release/||' \
+            | sort -V \
+            | tail -n 1)
+          CURRENT="${GITHUB_REF#refs/heads/}"
+          echo "Latest: $LATEST, Current: $CURRENT"
+          if [[ "$LATEST" == "$CURRENT" ]]; then
+            echo "deploy=true" >> $GITHUB_OUTPUT
+          else
+            echo "deploy=false" >> $GITHUB_OUTPUT
+          fi
+        id: latest-check
+
+      - name: Deploy to root
+        if: steps.latest-check.outputs.deploy == 'true'
         uses: JamesIves/github-pages-deploy-action@v4.5.0
         with:
           clean: false
           branch: gh-pages
-          folder: docs
-          target-folder: ""  # root of gh-pages
+          folder: package/docs
+          target-folder: ""
