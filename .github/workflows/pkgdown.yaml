@@ -20,45 +20,49 @@ jobs:
       contents: write
 
     steps:
-      # Full checkout of the branch being built
+      # 1️⃣ Checkout the branch being built (full history)
       - name: Checkout package code
         uses: actions/checkout@v4
         with:
           ref: ${{ github.ref }}
-          fetch-depth: 0  # full history so we can list branches
+          fetch-depth: 0
 
-      # Copy _pkgdown.yml from main branch
+      # 2️⃣ Copy _pkgdown.yml from main
       - name: Copy pkgdown config from main
         run: git show origin/main:_pkgdown.yml > _pkgdown.yml
 
+      # 3️⃣ Setup pandoc
       - name: Setup pandoc
         uses: r-lib/actions/setup-pandoc@v2
 
+      # 4️⃣ Setup R
       - name: Setup R
         uses: r-lib/actions/setup-r@v2
         with:
           use-public-rspm: true
 
+      # 5️⃣ Setup dependencies
       - name: Setup R dependencies
         uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: any::pkgdown, local::.
 
-      # Inject version menu into _pkgdown.yml
-      - name: Inject version menu into _pkgdown.yml
+      # 6️⃣ Inject version menu into _pkgdown.yml
+      - name: Inject version menu
         run: |
-          RELEASES=$(git for-each-ref --sort=-creatordate --format='%(refname:short)' refs/heads/release/ | sed 's|refs/heads/||')
+          RELEASES=$(git for-each-ref --format='%(refname:short)' refs/heads/release/ | sed 's|refs/heads/||' | sort -V)
           MENU=""
           for REL in $RELEASES; do
             MENU="$MENU\n        - text: \"$REL\"\n          href: /$REL/"
           done
           sed -i "s|#VERSIONS#|$MENU|" _pkgdown.yml
 
+      # 7️⃣ Build site
       - name: Build site
         run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
         shell: Rscript {0}
 
-      # Decide target folder
+      # 8️⃣ Choose target folder
       - name: Choose target folder
         id: target
         run: |
@@ -74,7 +78,7 @@ jobs:
             echo "folder=$BRANCH" >> $GITHUB_OUTPUT
           fi
 
-      # Deploy to version-specific folder
+      # 9️⃣ Deploy to version-specific folder
       - name: Deploy to GitHub Pages 🚀
         if: github.event_name != 'pull_request'
         uses: JamesIves/github-pages-deploy-action@v4.5.0
@@ -84,19 +88,18 @@ jobs:
           folder: docs
           target-folder: ${{ steps.target.outputs.folder }}
 
-      # Deploy latest release branch to root
-      - name: Deploy latest release to root
+      # 🔟 Deploy latest release branch to root
+      - name: Check if this is the latest release
         if: startsWith(github.ref, 'refs/heads/release/')
+        id: latest-check
         run: |
-          LATEST=$(git for-each-ref --sort=-creatordate --format='%(refname:short)' refs/heads/release/ | sed 's|refs/heads/||' | head -n 1)
+          LATEST=$(git for-each-ref --format='%(refname:short)' refs/heads/release/ | sed 's|refs/heads/||' | sort -V | tail -n1)
           CURRENT="${GITHUB_REF#refs/heads/}"
           echo "Latest: $LATEST, Current: $CURRENT"
           if [[ "$LATEST" == "$CURRENT" ]]; then
             echo "deploy=true" >> $GITHUB_OUTPUT
           else
             echo "deploy=false" >> $GITHUB_OUTPUT
-          fi
-        id: latest-check
 
       - name: Deploy to root
         if: steps.latest-check.outputs.deploy == 'true'
