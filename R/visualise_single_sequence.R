@@ -135,8 +135,7 @@ visualise_single_sequence <- function(sequence, sequence_colours = sequence_colo
     ## Generate data for plotting
     sequences <- convert_input_seq_to_sequence_list(sequence, line_wrapping, spacing, FALSE, FALSE)
 
-    ## Trim extra spacing if >1 so margins don't go crazy
-    ## IMPORTANT - NEEDS REIMPLEMENTING WITH NEW LOGIC, BUT TRIM TO CEIL(VERT) RATHER THAN 1
+    ## Add extra top/bottom blank lines if needed for index annotations
     extra_spaces <- 0
     if (index_annotation_interval != 0) {
         extra_spaces <- ceiling(index_annotation_vertical_position)
