@@ -30,7 +30,7 @@ jobs:
         id: collect
         run: |
           # Fetch main to read _pkgdown.yml
-          git fetch origin main:main
+          git fetch origin main:refs/remotes/origin/main
           git show origin/main:_pkgdown.yml > _pkgdown.yml
 
           BUILD_ALL=$(yq -r '.site.build_all_versions // "false"' _pkgdown.yml)
