@@ -6,6 +6,9 @@ template:
   includes:
     in_header: pkgdown/google0acd00d8574ec2df.html
 
+site:
+  build_all_versions: true
+
 navbar:
   structure:
     left:  [intro, reference, articles, tutorials, news, version]

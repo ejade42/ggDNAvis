@@ -18,24 +18,35 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: main
           fetch-depth: 0
 
       - id: collect
         run: |
-          # Collect release branches (just the X.Y.Z part)
+          # Parse boolean flag from main's _pkgdown.yml
+          BUILD_ALL=$(yq -r '.site.build_all_versions // "false"' _pkgdown.yml)
+
+          # Collect release branches
           RELEASES=$(git for-each-ref --format='%(refname:short)' refs/heads/release/ \
             | sed 's|refs/heads/release/||' \
-            | sort -Vr)
+            | sort -V -r)
 
-          # Build JSON array with main + release branches
-          JSON="[\"main\""
-          for R in $RELEASES; do
-            JSON="$JSON, \"release/$R\""
-          done
-          JSON="$JSON]"
-
-          # Latest release = first item (highest version)
           LATEST=$(echo "$RELEASES" | head -n1)
+
+          if [ "$BUILD_ALL" = "true" ]; then
+            JSON="[\"main\""
+            for R in $RELEASES; do
+              JSON="$JSON, \"release/$R\""
+            done
+            JSON="$JSON]"
+          else
+            # Only main and latest release
+            JSON="[\"main\""
+            if [ -n "$LATEST" ]; then
+              JSON="$JSON, \"release/$LATEST\""
+            fi
+            JSON="$JSON]"
+          fi
 
           echo "branches=$JSON" >> $GITHUB_OUTPUT
           echo "latest=release/$LATEST" >> $GITHUB_OUTPUT
@@ -75,27 +86,16 @@ jobs:
 
       - name: Inject version menu into _pkgdown.yml
         run: |
-          # Collect releases sorted descending (highest first)
           RELEASES=$(git for-each-ref --format='%(refname:short)' refs/heads/release/ \
             | sed 's|refs/heads/release/||' \
             | sort -V -r)
-      
-          # First is latest
-          LATEST=$(echo "$RELEASES" | head -n1)
-      
+
           MENU=""
-          # Add "Latest release" entry
-          MENU="$MENU\n        - text: \"Latest release\"\n          href: /"
-          # Add "Latest dev" entry
-          MENU="$MENU\n        - text: \"Latest dev\"\n          href: /dev/"
-          # Add versioned entries
           for REL in $RELEASES; do
             MENU="$MENU\n        - text: \"v$REL\"\n          href: /$REL/"
           done
-      
-          # Replace placeholder in _pkgdown.yml
-          sed -i "s|#VERSIONS#|$MENU|" _pkgdown.yml
 
+          sed -i "s|#VERSIONS#|$MENU|" _pkgdown.yml
 
       - name: Build site
         run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
