@@ -23,7 +23,9 @@ jobs:
 
       - id: collect
         run: |
-          # Parse boolean flag from main's _pkgdown.yml
+          TRIGGER_BRANCH="${GITHUB_REF_NAME}"
+
+          # Read build_all_versions from main's _pkgdown.yml
           BUILD_ALL=$(yq -r '.site.build_all_versions // "false"' _pkgdown.yml)
 
           # Collect release branches
@@ -33,19 +35,27 @@ jobs:
 
           LATEST=$(echo "$RELEASES" | head -n1)
 
-          if [ "$BUILD_ALL" = "true" ]; then
-            JSON="[\"main\""
-            for R in $RELEASES; do
-              JSON="$JSON, \"release/$R\""
-            done
-            JSON="$JSON]"
-          else
-            # Only main and latest release
-            JSON="[\"main\""
-            if [ -n "$LATEST" ]; then
-              JSON="$JSON, \"release/$LATEST\""
+          if [[ "$TRIGGER_BRANCH" == "main" ]]; then
+            # Push to main → matrix depends on boolean
+            if [ "$BUILD_ALL" = "true" ]; then
+              JSON="[\"main\""
+              for R in $RELEASES; do
+                JSON="$JSON, \"release/$R\""
+              done
+              JSON="$JSON]"
+            else
+              JSON="[\"main\""
+              if [ -n "$LATEST" ]; then
+                JSON="$JSON, \"release/$LATEST\""
+              fi
+              JSON="$JSON]"
             fi
-            JSON="$JSON]"
+          elif [[ "$TRIGGER_BRANCH" == release/* ]]; then
+            # Push to a release branch → only that branch
+            JSON="[\"$TRIGGER_BRANCH\"]"
+          else
+            # Fallback (shouldn't happen)
+            JSON="[\"main\"]"
           fi
 
           echo "branches=$JSON" >> $GITHUB_OUTPUT
@@ -67,7 +77,6 @@ jobs:
           ref: ${{ matrix.branch }}
           fetch-depth: 0
 
-      # Always grab pkgdown config from main
       - name: Copy pkgdown config from main
         run: git show origin/main:_pkgdown.yml > _pkgdown.yml
 
@@ -112,7 +121,6 @@ jobs:
             echo "folder=$VER" >> $GITHUB_OUTPUT
           else
             echo "folder=$BRANCH" >> $GITHUB_OUTPUT
-          fi
 
       - name: Deploy versioned site
         uses: JamesIves/github-pages-deploy-action@v4.5.0
