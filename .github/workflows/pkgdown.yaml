@@ -75,18 +75,27 @@ jobs:
 
       - name: Inject version menu into _pkgdown.yml
         run: |
-          # Collect releases sorted descending
+          # Collect releases sorted descending (highest first)
           RELEASES=$(git for-each-ref --format='%(refname:short)' refs/heads/release/ \
             | sed 's|refs/heads/release/||' \
-            | sort -Vr)
-
+            | sort -V -r)
+      
+          # First is latest
+          LATEST=$(echo "$RELEASES" | head -n1)
+      
           MENU=""
+          # Add "Latest release" entry
+          MENU="$MENU\n        - text: \"Latest release\"\n          href: /"
+          # Add "Latest dev" entry
+          MENU="$MENU\n        - text: \"Latest dev\"\n          href: /dev/"
+          # Add versioned entries
           for REL in $RELEASES; do
-            MENU="$MENU\n        - text: \"$REL\"\n          href: /$REL/"
+            MENU="$MENU\n        - text: \"v$REL\"\n          href: /$REL/"
           done
-
-          # Replace placeholder
+      
+          # Replace placeholder in _pkgdown.yml
           sed -i "s|#VERSIONS#|$MENU|" _pkgdown.yml
+
 
       - name: Build site
         run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
