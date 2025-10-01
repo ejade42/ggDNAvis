@@ -10,80 +10,41 @@ name: pkgdown
 permissions: read-all
 
 jobs:
-  discover:
-    runs-on: ubuntu-latest
-    outputs:
-      branches: ${{ steps.collect.outputs.branches }}
-      latest: ${{ steps.collect.outputs.latest }}
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: main
-          fetch-depth: 0
-
-      - id: collect
-        run: |
-          TRIGGER_BRANCH="${GITHUB_REF_NAME}"
-
-          # Read build_all_versions from main's _pkgdown.yml
-          BUILD_ALL=$(yq -r '.site.build_all_versions // "false"' _pkgdown.yml)
-
-          # Collect release branches
-          RELEASES=$(git for-each-ref --format='%(refname:short)' refs/heads/release/ \
-            | sed 's|refs/heads/release/||' \
-            | sort -V -r)
-
-          LATEST=$(echo "$RELEASES" | head -n1)
-
-          if [[ "$TRIGGER_BRANCH" == "main" ]]; then
-            # Push to main → matrix depends on boolean
-            if [ "$BUILD_ALL" = "true" ]; then
-              JSON="[\"main\""
-              for R in $RELEASES; do
-                JSON="$JSON, \"release/$R\""
-              done
-              JSON="$JSON]"
-            else
-              JSON="[\"main\""
-              if [ -n "$LATEST" ]; then
-                JSON="$JSON, \"release/$LATEST\""
-              fi
-              JSON="$JSON]"
-            fi
-          elif [[ "$TRIGGER_BRANCH" == release/* ]]; then
-            # Push to a release branch → only that branch
-            JSON="[\"$TRIGGER_BRANCH\"]"
-          else
-            # Fallback (shouldn't happen)
-            JSON="[\"main\"]"
-          fi
-
-          echo "branches=$JSON" >> $GITHUB_OUTPUT
-          echo "latest=release/$LATEST" >> $GITHUB_OUTPUT
-
   build:
-    needs: discover
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        branch: ${{ fromJSON(needs.discover.outputs.branches) }}
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
         with:
-          ref: ${{ matrix.branch }}
           fetch-depth: 0
 
-      - name: Copy pkgdown config from main
-        run: git show origin/main:_pkgdown.yml > _pkgdown.yml
+      - name: Get trigger branch
+        id: trigger
+        run: echo "branch=${GITHUB_REF_NAME}" >> $GITHUB_OUTPUT
 
-      - name: Setup pandoc
-        uses: r-lib/actions/setup-pandoc@v2
+      - name: Collect release branches and boolean
+        id: collect
+        run: |
+          # Fetch main to read _pkgdown.yml
+          git fetch origin main:main
+          git show origin/main:_pkgdown.yml > _pkgdown.yml
 
-      - name: Setup R
+          BUILD_ALL=$(yq -r '.site.build_all_versions // "false"' _pkgdown.yml)
+          echo "build_all=$BUILD_ALL" >> $GITHUB_OUTPUT
+
+          RELEASES=$(git for-each-ref --format='%(refname:short)' refs/heads/release/ \
+            | sed 's|refs/heads/release/||' \
+            | sort -V -r)
+          echo "releases=$RELEASES" >> $GITHUB_OUTPUT
+
+          LATEST=$(echo "$RELEASES" | head -n1)
+          echo "latest=$LATEST" >> $GITHUB_OUTPUT
+
+      - name: Setup R environment
         uses: r-lib/actions/setup-r@v2
         with:
           use-public-rspm: true
@@ -93,48 +54,69 @@ jobs:
         with:
           extra-packages: any::pkgdown, local::.
 
-      - name: Inject version menu into _pkgdown.yml
+      - name: Setup pandoc
+        uses: r-lib/actions/setup-pandoc@v2
+
+      - name: Build and deploy branches
         run: |
-          RELEASES=$(git for-each-ref --format='%(refname:short)' refs/heads/release/ \
-            | sed 's|refs/heads/release/||' \
-            | sort -V -r)
+          TRIGGER=${{ steps.trigger.outputs.branch }}
+          BUILD_ALL=${{ steps.collect.outputs.build_all }}
+          RELEASES="${{ steps.collect.outputs.releases }}"
+          LATEST="${{ steps.collect.outputs.latest }}"
 
-          MENU=""
-          for REL in $RELEASES; do
-            MENU="$MENU\n        - text: \"v$REL\"\n          href: /$REL/"
-          done
+          build_branch() {
+            BRANCH="$1"
+            TARGET="$2"
+            echo "Building $BRANCH → /$TARGET/"
+            git checkout $BRANCH
 
-          sed -i "s|#VERSIONS#|$MENU|" _pkgdown.yml
+            # Use main's _pkgdown.yml
+            git show origin/main:_pkgdown.yml > _pkgdown.yml
 
-      - name: Build site
-        run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
-        shell: Rscript {0}
+            # Inject version menu
+            MENU=""
+            for REL in $RELEASES; do
+              MENU="$MENU\n        - text: \"v$REL\"\n          href: /$REL/"
+            done
+            sed -i "s|#VERSIONS#|$MENU|" _pkgdown.yml
 
-      - name: Choose target folder
-        id: target
-        run: |
-          BRANCH="${{ matrix.branch }}"
-          if [[ "$BRANCH" == "main" ]]; then
-            echo "folder=dev" >> $GITHUB_OUTPUT
-          elif [[ "$BRANCH" == release/* ]]; then
-            VER="${BRANCH#release/}"
-            echo "folder=$VER" >> $GITHUB_OUTPUT
-          else
-            echo "folder=$BRANCH" >> $GITHUB_OUTPUT
+            # Build site
+            Rscript -e "pkgdown::build_site_github_pages(new_process=FALSE, install=FALSE)"
 
-      - name: Deploy versioned site
-        uses: JamesIves/github-pages-deploy-action@v4.5.0
-        with:
-          clean: false
-          branch: gh-pages
-          folder: docs
-          target-folder: ${{ steps.target.outputs.folder }}
+            # Deploy
+            echo "Deploying $BRANCH → /$TARGET"
+            # Use JamesIves action
+            gh-pages-deploy() {
+              echo "Deploying $BRANCH → /$TARGET"
+            }
+          }
 
-      - name: Deploy latest release to root
-        if: ${{ matrix.branch == needs.discover.outputs.latest }}
-        uses: JamesIves/github-pages-deploy-action@v4.5.0
-        with:
-          clean: false
-          branch: gh-pages
-          folder: docs
-          target-folder: ""
+          # MAIN branch logic
+          if [[ "$TRIGGER" == "main" ]]; then
+            # 1. Latest release to /
+            if [[ -n "$LATEST" ]]; then
+              build_branch "release/$LATEST" ""
+            fi
+
+            # 2. main to /dev
+            build_branch "main" "dev"
+
+            # 3. All release branches to /vX.X.X if build_all_versions
+            if [[ "$BUILD_ALL" == "true" ]]; then
+              for REL in $RELEASES; do
+                build_branch "release/$REL" "$REL"
+              done
+            fi
+
+          # RELEASE branch logic
+          elif [[ "$TRIGGER" == release/* ]]; then
+            VER="${TRIGGER#release/}"
+
+            # Deploy release branch to /vX.X.X
+            build_branch "$TRIGGER" "$VER"
+
+            # Deploy to / if latest release
+            if [[ "$TRIGGER" == "release/$LATEST" ]]; then
+              build_branch "$TRIGGER" ""
+            fi
+          fi
