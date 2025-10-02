@@ -1,0 +1,51 @@
+on:
+  push:
+    branches:
+      - main
+      - release/*
+  workflow_dispatch:
+
+name: pkgdown
+
+permissions: read-all
+
+jobs:
+  pkgdown:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: pkgdown-${{ github.event_name != 'pull_request' || github.run_id }}
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+    permissions:
+      contents: write
+      
+    steps:
+      - name: Checkout code from trigger branch
+        uses: actions/checkout@v4
+
+      - name: Get trigger branch name
+        id: trigger
+        run: echo "branch=${GITHUB_REF_NAME}" >> $GITHUB_OUTPUT
+      
+      - name: Collect release branches and boolean
+        id: collect
+        run: |
+          # Fetch main to read _pkgdown.yml
+          git fetch origin main:refs/remotes/origin/main
+          git show origin/main:_pkgdown.yml > _pkgdown.yml
+
+          BUILD_ALL=$(yq -r '.site.build_all_versions // "false"' _pkgdown.yml)
+          echo "build_all=$BUILD_ALL" >> $GITHUB_OUTPUT
+
+          RELEASES=$(git for-each-ref --format='%(refname:short)' refs/heads/release/ \
+            | sed 's|refs/heads/release/||' \
+            | sort -V -r)
+          echo "releases=$RELEASES" >> $GITHUB_OUTPUT
+
+          LATEST=$(echo "$RELEASES" | head -n1)
+          echo "latest=$LATEST" >> $GITHUB_OUTPUT
+       
+       - name: Inspect github output
+         run: |
+           cat "$GITHUB_OUTPUT"
+         
