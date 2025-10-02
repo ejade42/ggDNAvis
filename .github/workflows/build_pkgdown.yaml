@@ -5,7 +5,7 @@ on:
       - release/*
   workflow_dispatch:
 
-name: pkgdown
+name: build_pkgdown
 
 permissions: read-all
 
