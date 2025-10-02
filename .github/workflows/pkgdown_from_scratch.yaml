@@ -84,21 +84,36 @@ jobs:
           ## Checkout latest release branch but overwrite _pkgdown.yml
           git checkout -B "release-${LATEST}" "origin/release/${LATEST}"
           git show origin/main:_pkgdown.yml > _pkgdown.yml
-          
           ## Build site in docs/
           Rscript -e "pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE, dest_dir = 'docs/')"
           
           
-          #echo; echo "Build step 2: Building latest dev"
+          echo; echo "Build step 2: Building latest dev"
           ## Checkout main branch
-          #git checkout -B "dev" "origin/main"
-          
+          git checkout -B "dev" "origin/main"
           ## Build site in docs/dev/
-          #Rscript -e "pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE, dest_dir = 'docs/dev/')"
+          Rscript -e "pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE, dest_dir = 'docs/dev/')"
           
           
+          echo; echo "Build step 3: Building all prior releases"
+          i=1
+          if [ "${BUILD_ALL}" == "true" ]; then
+            for release in $RELEASES; do
+              echo; echo "Build step 3-${i}: Building for ${release}"
+              
+              ## Checkout prior release branch but overwrite _pkgdown.yml
+              git checkout -B "release-${release}" "origin/release/${release}"
+              git show origin/main:_pkgdown.yml > _pkgdown.yml
+              
+              ## Build site in docs/vX.X.X
+              Rscript -e "pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE, dest_dir = 'docs/${release}')"
+              
+              i=$((i + 1))
+            done
+          fi
           
-          echo; echo "Copy to deploy folder"
+          
+          echo; echo "Copying to deploy folder"
           mkdir deploy
           cp -r docs/* deploy/
 
