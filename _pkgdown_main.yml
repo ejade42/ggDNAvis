@@ -19,7 +19,7 @@ navbar:
       text: "Version"
       menu:
         - text: "Latest release"
-          href: /
+          href: __BASE_URL__
         - text: "Latest dev"
-          href: /dev/
-        #VERSIONS#
+          href: __BASE_URL__/dev/
+        
