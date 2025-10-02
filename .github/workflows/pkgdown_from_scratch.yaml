@@ -27,7 +27,7 @@ jobs:
       
       - name: Fetch all release branches
         run: |
-          git fetch origin "release/*:refs/fetched/heads/release/*"
+          git fetch origin "release/*"
           git branch -a
 
       - name: Get trigger branch name
@@ -42,7 +42,7 @@ jobs:
           BUILD_ALL=$(yq -r '.site.build_all_versions // "false"' _pkgdown.yml)
           echo "build_all=$BUILD_ALL" >> $GITHUB_OUTPUT
 
-          RELEASES=$(git for-each-ref --format="%(refname:short)" refs/fetched/heads/release/ \
+          RELEASES=$(git for-each-ref --format="%(refname:short)" remotes/origin/release/ \
             | sort -Vr \
             | tr "\n" " ")
           echo "releases=$RELEASES" >> $GITHUB_OUTPUT
