@@ -27,7 +27,7 @@ jobs:
       
       - name: Fetch all release branches
         run: |
-          git fetch origin "release/*"
+          git fetch --prune origin
           git branch -a
 
       - name: Get trigger branch name
