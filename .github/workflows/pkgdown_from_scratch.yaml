@@ -83,19 +83,20 @@ jobs:
           echo; echo "Build step 1: Building latest release (${LATEST})"
           ## Checkout latest release branch but overwrite _pkgdown.yml
           git checkout -B "release-${LATEST}" "origin/release/${LATEST}"
-          git show origin/main:_pkgdown.yml > _pkgdown.yml
+          git show origin/main:_pkgdown_main.yml > _pkgdown.yml
+          echo _pkgdown_reference.yml >> _pkgdown.yml
           ## Build site in docs/
           Rscript -e "pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE, dest_dir = 'docs/')"
-          ## Tidy up to allow next checkout
-          git restore _pkgdown.yml
+
           
           echo; echo "Build step 2: Building latest dev"
           ## Checkout main branch
           git checkout -B "dev" "origin/main"
+          git show origin/main:_pkgdown_main.yml > _pkgdown.yml
+          echo _pkgdown_reference.yml >> _pkgdown.yml
           ## Build site in docs/dev/
           Rscript -e "pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE, dest_dir = 'docs/dev/')"
-          ## Tidy up to allow next checkout
-          git restore _pkgdown.yml
+
           
           echo; echo "Build step 3: Building all prior releases"
           i=1
@@ -105,13 +106,11 @@ jobs:
               
               ## Checkout prior release branch but overwrite _pkgdown.yml
               git checkout -B "release-${release}" "origin/release/${release}"
-              git show origin/main:_pkgdown.yml > _pkgdown.yml
+              git show origin/main:_pkgdown_main.yml > _pkgdown.yml
+              echo _pkgdown_reference.yml >> _pkgdown.yml
               
               ## Build site in docs/vX.X.X
               Rscript -e "pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE, dest_dir = 'docs/${release}')"
-              
-              ## Tidy up to allow next checkout
-              git restore _pkgdown.yml
               
               i=$((i + 1))
             done
