@@ -32,16 +32,14 @@ jobs:
       - name: Collect release branches and boolean
         id: collect
         run: |
-          # Fetch main to read _pkgdown.yml
-          git fetch origin main:refs/remotes/origin/main
           git show origin/main:_pkgdown.yml > _pkgdown.yml
 
           BUILD_ALL=$(yq -r '.site.build_all_versions // "false"' _pkgdown.yml)
           echo "build_all=$BUILD_ALL" >> $GITHUB_OUTPUT
 
-          RELEASES=$(git for-each-ref --format='%(refname:short)' refs/heads/release/ \
-            | sed 's|refs/heads/release/||' \
-            | sort -V -r)
+          RELEASES=$(git for-each-ref --format="%(refname:short)" refs/heads/release \
+            | sed 's|release/||' \
+            | sort -Vr)
           echo "releases=$RELEASES" >> $GITHUB_OUTPUT
 
           LATEST=$(echo "$RELEASES" | head -n1)
