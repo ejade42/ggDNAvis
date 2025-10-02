@@ -94,9 +94,23 @@ jobs:
           
           
           echo; echo "Pre-processing _pkgdown_main.yml"
+          ## Retrieve from main
           git show origin/main:_pkgdown_main.yml > _pkgdown_layout.yml
+          
+          ## Inject version menu
+          VERSION_MENU=""
+          for release in $RELEASES; do
+            VERSION_MENU='${VERSION_MENU}\n        - text: "${release}"\n          href: __BASE_URL__${release}/'
+          done
+          sed -i "/# VERSIONS_PLACEHOLDER #/c\\$VERSION_MENU" _pkgdown_layout.yml
+          
+          ## Replace URL
           BASE_URL=$(yq -r '.url' _pkgdown_layout.yml)
           sed -i "s|__BASE_URL__|$BASE_URL|g" _pkgdown_layout.yml
+          
+          ## Inspect contents for debugging
+          echo "Current contents of _pkgdown_layout.yml:"
+          cat _pkgdown_layout.yml
 
           
           echo; echo; echo "Build step 1: Building latest release (${LATEST})"
@@ -153,7 +167,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: workflow-working-directory
+          name: pkgdown-working-directory
           path: .
           
          

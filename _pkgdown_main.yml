@@ -21,5 +21,6 @@ navbar:
         - text: "Latest release"
           href: __BASE_URL__
         - text: "Latest dev"
-          href: __BASE_URL__/dev/
+          href: __BASE_URL__dev/
+        # VERSIONS_PLACEHOLDER #
         
