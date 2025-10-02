@@ -94,8 +94,9 @@ jobs:
           
           
           echo; echo "Pre-processing _pkgdown_main.yml"
-          ## Retrieve from main
+          ## Retrieve from main and read URL from original
           git show origin/main:_pkgdown_main.yml > _pkgdown_layout.yml
+          BASE_URL=$(yq -r '.url' _pkgdown_layout.yml)
           
           ## Inject version menu
           VERSION_MENU=""
@@ -105,7 +106,6 @@ jobs:
           sed -i "/# VERSIONS_PLACEHOLDER #/c\\$VERSION_MENU" _pkgdown_layout.yml
           
           ## Replace URL
-          BASE_URL=$(yq -r '.url' _pkgdown_layout.yml)
           sed -i "s|__BASE_URL__|$BASE_URL|g" _pkgdown_layout.yml
           
           ## Inspect contents for debugging
