@@ -1,29 +1,3 @@
-url: https://ejade42.github.io/ggDNAvis/
-template:
-  bootstrap: 5
-  bslib:
-    pkgdown_navbar: ~
-  includes:
-    in_header: pkgdown/google0acd00d8574ec2df.html
-
-site:
-  build_all_versions: true
-
-navbar:
-  structure:
-    left:  [intro, reference, articles, tutorials, news, version]
-    right: [search, github, lightswitch]
-
-  components:
-    version:
-      text: "Version"
-      menu:
-        - text: "Latest release"
-          href: /
-        - text: "Latest dev"
-          href: /dev/
-        #VERSIONS#
-
 reference:
 - title: DNA visualisation
 
