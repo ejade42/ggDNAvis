@@ -27,7 +27,7 @@ jobs:
       
       - name: Fetch all release branches
         run: |
-          git fetch origin "release/*:refs/remotes/origin/release/*"
+          git fetch origin "release/*:refs/heads/release/*"
 
       - name: Get trigger branch name
         id: trigger
@@ -46,9 +46,11 @@ jobs:
             | sort -Vr \
             | tr "\n" " ")
           echo "releases=$RELEASES" >> $GITHUB_OUTPUT
+          echo "Debug releases: ${RELEASES}"
 
-          LATEST=$(echo "$RELEASES" | awk "{print $1}")
+          LATEST=$(echo "$RELEASES" | awk '{print $1}')
           echo "latest=$LATEST" >> $GITHUB_OUTPUT
+          echo "Debug latest: ${LATEST}"
        
       #- name: Setup R environment
       #  uses: r-lib/actions/setup-r@v2
