@@ -101,7 +101,7 @@ jobs:
           ## Inject version menu
           VERSION_MENU=""
           for release in $RELEASES; do
-            VERSION_MENU='${VERSION_MENU}\n        - text: "${release}"\n          href: __BASE_URL__${release}/'
+            VERSION_MENU="${VERSION_MENU}\n        - text: \"${release}\"\n          href: __BASE_URL__${release}/"
           done
           sed -i "/# VERSIONS_PLACEHOLDER #/c\\$VERSION_MENU" _pkgdown_layout.yml
           
