@@ -44,6 +44,7 @@ jobs:
           echo "build_all=$BUILD_ALL" >> $GITHUB_OUTPUT
 
           RELEASES=$(git for-each-ref --format="%(refname:short)" refs/remotes/origin/release/ \
+            | sed "s|origin/release/||" \
             | sort -Vr \
             | tr "\n" " ")
           echo "releases=$RELEASES" >> $GITHUB_OUTPUT
