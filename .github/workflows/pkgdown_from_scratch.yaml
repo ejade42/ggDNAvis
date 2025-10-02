@@ -84,7 +84,7 @@ jobs:
           ## Checkout latest release branch but overwrite _pkgdown.yml
           git checkout -B "release-${LATEST}" "origin/release/${LATEST}"
           git show origin/main:_pkgdown_main.yml > _pkgdown.yml
-          echo _pkgdown_reference.yml >> _pkgdown.yml
+          cat _pkgdown_reference.yml >> _pkgdown.yml
           ## Build site in docs/
           Rscript -e "pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE, dest_dir = 'docs/')"
 
@@ -93,7 +93,7 @@ jobs:
           ## Checkout main branch
           git checkout -B "dev" "origin/main"
           git show origin/main:_pkgdown_main.yml > _pkgdown.yml
-          echo _pkgdown_reference.yml >> _pkgdown.yml
+          cat _pkgdown_reference.yml >> _pkgdown.yml
           ## Build site in docs/dev/
           Rscript -e "pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE, dest_dir = 'docs/dev/')"
 
@@ -107,7 +107,7 @@ jobs:
               ## Checkout prior release branch but overwrite _pkgdown.yml
               git checkout -B "release-${release}" "origin/release/${release}"
               git show origin/main:_pkgdown_main.yml > _pkgdown.yml
-              echo _pkgdown_reference.yml >> _pkgdown.yml
+              cat _pkgdown_reference.yml >> _pkgdown.yml
               
               ## Build site in docs/vX.X.X
               Rscript -e "pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE, dest_dir = 'docs/${release}')"
@@ -130,5 +130,13 @@ jobs:
           branch: gh-pages
           folder: deploy
           target-folder: ${{ steps.target.outputs.folder }}
+      
+      ## Upload directory for debug
+      - name: Upload working directory as artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: workflow-working-directory
+          path: .
           
          
