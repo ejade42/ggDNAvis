@@ -24,16 +24,19 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
       
       - name: Fetch all release branches
         run: |
           git fetch --prune origin
           git branch -a
 
+
       - name: Get trigger branch name
         id: trigger
         run: echo "branch=${GITHUB_REF_NAME}" >> $GITHUB_OUTPUT
-      
+
+
       - name: Collect release branches and boolean
         id: collect
         run: |
@@ -48,31 +51,36 @@ jobs:
             | sort -Vr \
             | tr "\n" " ")
           echo "releases=$RELEASES" >> $GITHUB_OUTPUT
-          echo "Debug releases: ${RELEASES}"
+          echo "Releases detected: ${RELEASES}"
 
           LATEST=$(echo "$RELEASES" | awk '{print $1}')
           echo "latest=$LATEST" >> $GITHUB_OUTPUT
-          echo "Debug latest: ${LATEST}"
-      
+          echo "Latest release detected: ${LATEST}"
+
+
       - name: Install system dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y libproj-dev libgdal-dev libgeos-dev libudunits2-dev
-          
+
+
       - name: Setup R environment
         uses: r-lib/actions/setup-r@v2
         with:
           use-public-rspm: true
+
 
       - name: Setup R dependencies
         uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: any::pkgdown, local::.
 
+
       - name: Setup pandoc
         uses: r-lib/actions/setup-pandoc@v2
-        
-      - name: Build and deploy branches
+
+
+      - name: Build site from branches
         run: |
           TRIGGER_BRANCH="${{ steps.trigger.outputs.branch }}"
           BUILD_ALL="${{ steps.collect.outputs.build_all }}"
@@ -85,48 +93,53 @@ jobs:
           echo "Latest release: ${LATEST}"
           
           
-          echo; echo "Build step 1: Building latest release (${LATEST})"
+          echo; echo "Pre-processing _pkgdown_main.yml"
+          git show origin/main:_pkgdown_main.yml > _pkgdown_layout.yml
+          BASE_URL=$(yq -r '.url' _pkgdown_layout.yml)
+          sed -i "s|__BASE_URL__|$BASE_URL|g" _pkgdown_layout.yml
+
+          
+          echo; echo; echo "Build step 1: Building latest release (${LATEST})"
           ## Checkout latest release branch but overwrite _pkgdown.yml
           git checkout -B "release-${LATEST}" "origin/release/${LATEST}"
-          git show origin/main:_pkgdown_main.yml > _pkgdown.yml
-          cat _pkgdown_reference.yml >> _pkgdown.yml
+          cat _pkgdown_layout.yml _pkgdown_reference.yml > _pkgdown.yml
           ## Build site in docs/
           Rscript -e "pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE, dest_dir = 'docs/')"
 
           
-          echo; echo "Build step 2: Building latest dev"
+          echo; echo; echo "Build step 2: Building latest dev"
           ## Checkout main branch
           git checkout -B "dev" "origin/main"
-          git show origin/main:_pkgdown_main.yml > _pkgdown.yml
-          cat _pkgdown_reference.yml >> _pkgdown.yml
+          cat _pkgdown_layout.yml _pkgdown_reference.yml > _pkgdown.yml
           ## Build site in docs/dev/
           Rscript -e "pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE, dest_dir = 'docs/dev/')"
 
           
-          echo; echo "Build step 3: Building all prior releases"
           i=1
           if [ "${BUILD_ALL}" == "true" ]; then
+            echo; echo; echo "Build step 3: Building all prior releases"
             for release in $RELEASES; do
-              echo; echo "Build step 3-${i}: Building for ${release}"
+              echo "Build step 3-${i}: Building for ${release}"
               
               ## Checkout prior release branch but overwrite _pkgdown.yml
               git checkout -B "release-${release}" "origin/release/${release}"
-              git show origin/main:_pkgdown_main.yml > _pkgdown.yml
-              cat _pkgdown_reference.yml >> _pkgdown.yml
+              cat _pkgdown_layout.yml _pkgdown_reference.yml > _pkgdown.yml
               
               ## Build site in docs/vX.X.X
               Rscript -e "pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE, dest_dir = 'docs/${release}')"
               
               i=$((i + 1))
+              echo; echo
             done
+          else
+            echo; echo; echo "Skipping step 3 (prior releases) due to _pkgdown_main.yml config in main"
           fi
           
           
-          echo; echo "Copying to deploy folder"
+          echo; echo; echo "Copying to deploy folder"
           mkdir deploy
           cp -r docs/* deploy/
 
-      # Deploy to github pages
       - name: Deploy to GitHub Pages 🚀
         if: github.event_name != 'pull_request'
         uses: JamesIves/github-pages-deploy-action@v4.5.0
@@ -136,7 +149,6 @@ jobs:
           folder: deploy
           target-folder: ${{ steps.target.outputs.folder }}
       
-      ## Upload directory for debug
       - name: Upload working directory as artifact
         uses: actions/upload-artifact@v4
         if: always()
