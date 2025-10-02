@@ -45,7 +45,28 @@ jobs:
           LATEST=$(echo "$RELEASES" | head -n1)
           echo "latest=$LATEST" >> $GITHUB_OUTPUT
        
-       - name: Inspect github output
-         run: |
-           cat "$GITHUB_OUTPUT"
+      #- name: Setup R environment
+      #  uses: r-lib/actions/setup-r@v2
+      #  with:
+      #    use-public-rspm: true
+
+      #- name: Setup R dependencies
+      #  uses: r-lib/actions/setup-r-dependencies@v2
+      #  with:
+      #    extra-packages: any::pkgdown, local::.
+
+      #- name: Setup pandoc
+      #  uses: r-lib/actions/setup-pandoc@v2
+        
+      - name: Build and deploy branches
+        run: |
+          TRIGGER_BRANCH="${{ steps.trigger.outputs.branch }}"
+          BUILD_ALL="${{ steps.collect.outputs.build_all }}"
+          RELEASES="${{ steps.collect.outputs.releases }}"
+          LATEST="${{ steps.collect.outputs.latest }}"
+          
+          echo "Trigger branch: ${TRIGGER_BRANCH}"
+          echo "Build all bool: ${BUILD_ALL}"
+          echo "Releases found: ${RELEASES}"
+          echo "Latest release: ${LATEST}"
          
