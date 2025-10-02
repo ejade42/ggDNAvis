@@ -37,7 +37,7 @@ jobs:
       - name: Collect release branches and boolean
         id: collect
         run: |
-          git show origin/main:_pkgdown.yml > _pkgdown.yml
+          git show origin/main:_pkgdown_main.yml > _pkgdown.yml
           git branch -a
 
           BUILD_ALL=$(yq -r '.site.build_all_versions // "false"' _pkgdown.yml)
