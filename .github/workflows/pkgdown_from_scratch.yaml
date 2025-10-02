@@ -86,7 +86,7 @@ jobs:
           git show origin/main:_pkgdown.yml > _pkgdown.yml
           
           ## Build site in docs/
-          Rscript -e "pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE, path = 'docs/')"
+          Rscript -e "pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE, dest_dir = 'docs/')"
           
           
           #echo; echo "Build step 2: Building latest dev"
@@ -94,7 +94,7 @@ jobs:
           #git checkout -B "dev" "origin/main"
           
           ## Build site in docs/dev/
-          #Rscript -e "pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE, path = 'docs/dev/')"
+          #Rscript -e "pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE, dest_dir = 'docs/dev/')"
           
           
           
