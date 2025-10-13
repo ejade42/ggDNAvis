@@ -115,7 +115,12 @@ github_table <- function(data) {
 output_location <- "README_files/output/"
 github_location <- "https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/"
 knitr::opts_chunk$set(fig.path = output_location)
+
+## Print current ggDNAvis version
+cat("Loaded ggDNAvis version is:", as.character(packageVersion("ggDNAvis")))
 ```
+
+    ## Loaded ggDNAvis version is: 0.3.0.9000
 
 # 2 Summary/quickstart
 
