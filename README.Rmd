@@ -11,6 +11,8 @@ csl: README_files/apa.csl
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/ejade42/ggDNAvis/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ejade42/ggDNAvis/actions/workflows/R-CMD-check.yaml)
 [![CRAN status](https://www.r-pkg.org/badges/version/ggDNAvis)](https://CRAN.R-project.org/package=ggDNAvis)
+[![CRAN monthly downloads](https://cranlogs.r-pkg.org/badges/ggDNAvis)](https://cran.r-project.org/package=ggDNAvis)
+[![CRAN total downloads](https://cranlogs.r-pkg.org/badges/grand-total/ggDNAvis)](https://cran.r-project.org/package=ggDNAvis)
 <!-- badges: end -->
 
 # ggDNAvis
@@ -425,7 +427,7 @@ for (i in 1:16) {
 
 This file is identical to the standard FASTQ seen in the [reading standard FASTQ](#331-standard-fastq) section in the sequence and quality lines, but has the MM and ML tags stored in the header. See the [SAM tags specification](https://samtools.github.io/hts-specs/SAMtags.pdf) or the documentation for `read_modified_fastq()`, `merge_methylation_with_metadata()`, and `reverse_locations_if_needed()` for a comprehensive explanation of how these store methylation/modification information.
 
-The modification information stored in these FASTQ header lines can be parsed with `read_modified_fastq()`. This converts the locations from the SAM/BAM MM format to simply being the indices along the read at which modification was assessed (starting indexing at 1). For example, in F1-1a, the `C+m?` (methylation) locations start `"3,6,9,12"`, indicating that the third, sixth, ninth, and twelfth bases in the read were assessed for probability of methylation. Checking the sequence, we see that all of these are CpG sites (CG dinucleotides), which are the main DNA methylation sites in the genome. For each assessed site, the modification probability is given as an 8-bit integer (0-255), where 0 represents ~0% modification probability and 255 represents ~100% modification probability (this is fully explained in \@ref(introduction-to-example_many_sequences)).
+The modification information stored in these FASTQ header lines can be parsed with `read_modified_fastq()`. This converts the locations from the SAM/BAM MM format to simply being the indices along the read at which modification was assessed (starting indexing at 1). For example, in F1-1a, the `C+m?` (methylation) locations start `"3,6,9,12"`, indicating that the third, sixth, ninth, and twelfth bases in the read were assessed for probability of methylation. Checking the sequence, we see that all of these are CpG sites (CG dinucleotides), which are the main DNA methylation sites in the genome. For each assessed site, the modification probability is given as an 8-bit integer (0-255), where 0 represents ~0% modification probability and 255 represents ~100% modification probability (this is fully explained in [introduction to `example_many_sequences`](#31-introduction-to-example_many_sequences)).
 
 ```{r}
 ## Load data from FASTQ
@@ -437,7 +439,7 @@ github_table(head(methylation_data, 4))
 
 Ultimately, `read_modified_fastq()` outputs a dataframe with the standard read information (ID, sequence, length, quality), a column stating which modification types were assessed for each read (e.g. `"C+h?"` for hydroxymethylation or `"C+m?"` for methylation - refer to the [SAM tags specification](https://samtools.github.io/hts-specs/SAMtags.pdf)), and for each modification type, a column of assessed locations (indices along the read) and a column of modification probabilities (as 8-bit integers).
 
-Modification types, locations, and probabilities are all stored as comma-condensed strings produced from vectors via `vector_to_string()`. These can be converted back to vectors via `string_to_vector()` - see \@ref(introduction-to-string_to_vector-and-vector_to_string).
+Modification types, locations, and probabilities are all stored as comma-condensed strings produced from vectors via `vector_to_string()`. These can be converted back to vectors via `string_to_vector()` - see [introduction to string/vector functions](#32-introduction-to-string_to_vector-and-vector_to_string).
 
 As with the standard FASTQ, some of the reads in the modified FASTQ are reverse. However, as the assessed modification locations are indices along the read and the probabilities correspond to locations in sequence, the modification information needs to be reversed in addition to reverse complementing the DNA sequence. Analogous to before, this is achieved via the `merge_methylation_with_metadata()` function.
 

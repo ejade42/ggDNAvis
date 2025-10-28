@@ -43,6 +43,10 @@
 [![R-CMD-check](https://github.com/ejade42/ggDNAvis/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ejade42/ggDNAvis/actions/workflows/R-CMD-check.yaml)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/ggDNAvis)](https://CRAN.R-project.org/package=ggDNAvis)
+[![CRAN monthly
+downloads](https://cranlogs.r-pkg.org/badges/ggDNAvis)](https://cran.r-project.org/package=ggDNAvis)
+[![CRAN total
+downloads](https://cranlogs.r-pkg.org/badges/grand-total/ggDNAvis)](https://cran.r-project.org/package=ggDNAvis)
 <!-- badges: end -->
 
 # 1 ggDNAvis
@@ -726,8 +730,8 @@ see that all of these are CpG sites (CG dinucleotides), which are the
 main DNA methylation sites in the genome. For each assessed site, the
 modification probability is given as an 8-bit integer (0-255), where 0
 represents ~0% modification probability and 255 represents ~100%
-modification probability (this is fully explained in
-@ref(introduction-to-example_many_sequences)).
+modification probability (this is fully explained in [introduction to
+`example_many_sequences`](#31-introduction-to-example_many_sequences)).
 
 ``` r
 ## Load data from FASTQ
@@ -757,7 +761,8 @@ integers).
 Modification types, locations, and probabilities are all stored as
 comma-condensed strings produced from vectors via `vector_to_string()`.
 These can be converted back to vectors via `string_to_vector()` - see
-@ref(introduction-to-string_to_vector-and-vector_to_string).
+[introduction to string/vector
+functions](#32-introduction-to-string_to_vector-and-vector_to_string).
 
 As with the standard FASTQ, some of the reads in the modified FASTQ are
 reverse. However, as the assessed modification locations are indices
