@@ -17,8 +17,8 @@
 ^cran-comments\.md$
 ^.DS_store$
 ^_pkgdown\.yml$
-^_pkgdown_main.yml$
-^_pkgdown_reference.yml$
+^_pkgdown_main\.yml$
+^_pkgdown_reference\.yml$
 ^docs$
 ^pkgdown$
 ^CRAN-SUBMISSION$
