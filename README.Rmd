@@ -43,7 +43,7 @@ install.packages("ggDNAvis")
 devtools::install_github("ejade42/ggDNAvis")
 
 ## Specific version from github
-devtools::install_github("ejade42/ggDNAvis", ref = "v0.3.0")
+devtools::install_github("ejade42/ggDNAvis", ref = "v0.3.1")
 ```
 
 Throughout this manual, only `ggDNAvis`, `dplyr`, and `ggplot2` are loaded.
@@ -69,7 +69,7 @@ github_table <- function(data) {
 
 ## Set up file locations
 output_location <- "README_files/output/"
-github_location <- "https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/"
+github_location <- "https://raw.githubusercontent.com/ejade42/ggDNAvis/v0.3.1/README_files/output/"
 knitr::opts_chunk$set(fig.path = output_location)
 
 ## Print current ggDNAvis version
