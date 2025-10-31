@@ -161,7 +161,6 @@ visualise_single_sequence <- function(sequence, sequence_colours = sequence_colo
 
     ## Generate plot
     result <- ggplot(image_data, aes(x = .data$x, y = .data$y)) +
-
         ## Background
         geom_tile(data = filter(image_data, layer == 0), width = tile_width, height = tile_height, fill = background_colour) +
 
