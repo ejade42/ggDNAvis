@@ -124,7 +124,7 @@ knitr::opts_chunk$set(fig.path = output_location)
 cat("Loaded ggDNAvis version is:", as.character(packageVersion("ggDNAvis")))
 ```
 
-    ## Loaded ggDNAvis version is: 0.3.2
+    ## Loaded ggDNAvis version is: 0.3.2.9000
 
 # 2 Summary/quickstart
 
