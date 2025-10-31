@@ -1,4 +1,6 @@
-# ggDNAvis (development version)
+# ggDNAvis 0.3.2
+
+* Added files related to pkgdown website building to .Rbuildignore so they are not part of the R package anymore (this caused a CRAN rejection).
 
 # ggDNAvis 0.3.1
 
