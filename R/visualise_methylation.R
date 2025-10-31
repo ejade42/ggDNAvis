@@ -204,6 +204,7 @@ visualise_methylation <- function(modification_locations, modification_probabili
         ## General plot setup
         coord_cartesian(expand = FALSE, clip = "off") +
         guides(x = "none", y = "none", fill = "none") +
+        theme_void() +
         theme(plot.background = element_rect(fill = background_colour, colour = NA),
               axis.title = element_blank(), plot.margin = grid::unit(c(margin, margin, margin, margin), "inches"))
 

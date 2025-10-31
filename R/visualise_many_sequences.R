@@ -131,6 +131,7 @@ visualise_many_sequences <- function(sequences_vector, sequence_colours = sequen
         ## General plot setup
         guides(x = "none", y = "none", fill = "none") +
         coord_cartesian(expand = FALSE, clip = "off") +
+        theme_void() +
         theme(plot.background = element_rect(fill = background_colour, colour = NA),
               axis.title = element_blank(), plot.margin = grid::unit(c(margin, margin, margin, margin), "inches"))
 
