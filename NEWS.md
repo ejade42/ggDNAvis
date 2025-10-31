@@ -1,4 +1,8 @@
-# ggDNAvis (development version)
+# ggDNAvis 0.3.1
+
+Bug fixes:
+
+* Fixed 1-pixel-wide border appearing between the panel and the margin when using non-white background colours
 
 # ggDNAvis 0.3.0
 
