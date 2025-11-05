@@ -71,26 +71,26 @@
 #'
 #' @export
 visualise_many_sequences <- function(
-    sequences_vector,
-    sequence_colours = sequence_colour_palettes$ggplot_style,
-    background_colour = "white",
-    margin = 0.5,
-    sequence_text_colour = "black",
-    sequence_text_size = 16,
-    index_annotation_lines = NA,
-    index_annotation_colour = "darkred",
-    index_annotation_size = 12.5,
-    index_annotation_interval = 15,
-    index_annotations_above = TRUE,
-    index_annotation_vertical_position = 1/3,
-    index_annotation_full_line = TRUE,
-    outline_colour = "black",
-    outline_linewidth = 3,
-    outline_join = "mitre",
-    return = TRUE,
-    filename = NA,
-    render_device = ragg::agg_png,
-    pixels_per_base = 100
+        sequences_vector,
+        sequence_colours = sequence_colour_palettes$ggplot_style,
+        background_colour = "white",
+        margin = 0.5,
+        sequence_text_colour = "black",
+        sequence_text_size = 16,
+        index_annotation_lines = NA,
+        index_annotation_colour = "darkred",
+        index_annotation_size = 12.5,
+        index_annotation_interval = 15,
+        index_annotations_above = TRUE,
+        index_annotation_vertical_position = 1/3,
+        index_annotation_full_line = TRUE,
+        outline_colour = "black",
+        outline_linewidth = 3,
+        outline_join = "mitre",
+        return = TRUE,
+        filename = NA,
+        render_device = ragg::agg_png,
+        pixels_per_base = 100
 ) {
     ## Validate arguments
     for (argument in list(sequences_vector, sequence_colours, background_colour, margin, sequence_text_colour, sequence_text_size, index_annotation_colour, index_annotation_size, index_annotation_interval, index_annotations_above, index_annotation_vertical_position, index_annotation_full_line, outline_colour, outline_linewidth, outline_join, return, filename, pixels_per_base)) {
@@ -160,13 +160,14 @@ visualise_many_sequences <- function(
 
 
     ## Insert additional blank lines for index annotations (nothing changes if length(index_annotation_lines) == 0)
-    new_sequences_vector <- insert_at_indices(sequences_vector, index_annotation_lines, insert_before = index_annotations_above, insert = "")
+    new_sequences_vector <- insert_at_indices(sequences_vector, index_annotation_lines, insert_before = index_annotations_above, insert = "", vert = index_annotation_vertical_position)
+    extra_spaces <- ceiling(index_annotation_vertical_position)
 
 
     ## Generate data for plotting
     image_data <- create_image_data(new_sequences_vector)
     sequence_text_data <- convert_sequences_to_annotations(new_sequences_vector, line_length = max(nchar(new_sequences_vector)), interval = 0)
-    index_annotation_data <- create_many_sequence_index_annotations(index_annotation_interval, new_sequences_vector, index_annotation_lines, index_annotation_full_line, index_annotations_above, index_annotation_vertical_position)
+    index_annotation_data <- create_many_sequence_index_annotations(index_annotation_interval, new_sequences_vector, sequences_vector, index_annotation_lines, index_annotation_full_line, index_annotations_above, index_annotation_vertical_position)
 
 
     ## Name the sequence colours vector
@@ -208,8 +209,6 @@ visualise_many_sequences <- function(
     }
 
     ## Correctly set margin, taking into consideration extra blank lines for annotations
-    ## Assume only a single extra space, but still set in a variable so that can update later if needed
-    extra_spaces <- 1
     if (1 %in% index_annotation_lines && index_annotations_above) {
         result <- result + theme(plot.margin = grid::unit(c(max(margin-extra_spaces, 0), margin, margin, margin), "inches"))
         extra_height <- margin + max(margin-extra_spaces, 0)
@@ -437,6 +436,7 @@ extract_and_sort_sequences <- function(sequence_dataframe, sequence_variable = "
 #' @param insertion_indices `integer vector`. The indices (1-indexed) at which blanks should be inserted. If length 0, no blanks will be inserted.
 #' @param insert_before `logical`. Whether blanks should be inserted before (`TRUE`, default) or after (`FALSE`) each specified index.
 #' @param insert `value`. The value that should be inserted before/after each specified index. Defaults to `""`. If length 0, nothing will be inserted. If length > 1, multiple items will be inserted at each specified index.
+#' @param vert `numerical`. The vertical distance into the box that index annotations will be drawn. If set to `NA` (default) does nothing so that this function is more generalisable.
 #'
 #' @return `vector`. The original vector but with the `insert` value added before/after each specified index.
 #'
@@ -489,7 +489,7 @@ extract_and_sort_sequences <- function(sequence_dataframe, sequence_variable = "
 #' )
 #'
 #' @export
-insert_at_indices <- function(original_vector, insertion_indices, insert_before = TRUE, insert = "") {
+insert_at_indices <- function(original_vector, insertion_indices, insert_before = TRUE, insert = "", vert = NA) {
     ## Validate arguments
     if (is.vector(original_vector) == FALSE) {
         abort("original_vector must be a vector", class = "argument_value_or_type")
@@ -506,6 +506,14 @@ insert_at_indices <- function(original_vector, insertion_indices, insert_before 
     if (length(insertion_indices) > 0 && max(insertion_indices) > length(original_vector)) {
         warn(paste0("One or more indices are beyond the length of the vector and will be ignored.\nLength: ", length(original_vector), "\nIndices: ", paste(insertion_indices, collapse = ", ")), class = "length_exceeded")
     }
+    if (length(vert) != 1 || is.null(vert) || (is.na(vert) == FALSE && (is.numeric(vert) == FALSE))) {
+        abort("vert must be NA or numeric. Recommended to leave it NA for most purposes", class = "argument_value_or_type")
+    }
+
+    ## Insert additional blanks if vert is specified
+    if (is.na(vert) == FALSE) {
+        insert <- rep(insert, ceiling(vert))
+    }
 
     ## Insert blanks
     new_vector <- NULL
@@ -520,18 +528,20 @@ insert_at_indices <- function(original_vector, insertion_indices, insert_before 
             new_vector <- c(new_vector, original_vector[i])
         }
     }
+
     return(new_vector)
 }
 
 
 
 create_many_sequence_index_annotations <- function(
-    index_annotation_interval,
-    new_sequences_vector,
-    original_indices_to_annotate,
-    annotate_full_lines = TRUE,
-    annotations_above = TRUE,
-    annotation_vertical_position = 1/3
+        index_annotation_interval,
+        new_sequences_vector,
+        original_sequences_vector,
+        original_indices_to_annotate,
+        annotate_full_lines = TRUE,
+        annotations_above = TRUE,
+        annotation_vertical_position = 1/3
 ) {
     ## Instantly return empty dataframe if interval or indices is blank
     if (index_annotation_interval == 0 || length(original_indices_to_annotate) == 0) {
@@ -539,12 +549,14 @@ create_many_sequence_index_annotations <- function(
     }
 
     ## Update indices to account for added blank lines
-    annotation_indices <- original_indices_to_annotate + seq_along(original_indices_to_annotate) - as.numeric(annotations_above)
+    annotation_indices <- original_indices_to_annotate + seq_along(original_indices_to_annotate)*ceiling(annotation_vertical_position) - as.numeric(annotations_above)*ceiling(annotation_vertical_position)
     if (annotations_above) {
-        corresponding_sequence_indices <- annotation_indices + 1
+        corresponding_sequence_indices <- annotation_indices + ceiling(annotation_vertical_position)
     } else {
-        corresponding_sequence_indices <- annotation_indices - 1
+        corresponding_sequence_indices <- annotation_indices - ceiling(annotation_vertical_position)
     }
+
+
 
     ## Calculate scaling factors
     x_interval <- 1 / max(nchar(new_sequences_vector))
@@ -552,8 +564,9 @@ create_many_sequence_index_annotations <- function(
 
 
     ## Create actual data
+    ## Make sure we don't iterate further than lines exist
     annotation_data <- data.frame(NULL)
-    for (i in 1:length(annotation_indices)) {
+    for (i in 1:min(length(annotation_indices), length(original_sequences_vector))) {
         annotation_index <- annotation_indices[i]
         corresponding_sequence_index <- corresponding_sequence_indices[i]
 
@@ -561,6 +574,9 @@ create_many_sequence_index_annotations <- function(
         ## Either from overall max length, or from length of annotated sequence
         if (!annotate_full_lines) {
             line_length <- nchar(new_sequences_vector[corresponding_sequence_index])
+            if (is.na(line_length)) {
+                abort("Provided indices go out of range, please avoid doing this", class = "out_of_range")
+            }
         } else {
             line_length <- max(nchar(new_sequences_vector))
         }

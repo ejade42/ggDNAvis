@@ -185,6 +185,34 @@ test_that("main plotting function works with outlines and annnotations, grouped"
                                        metric = "MAE"))$distortion, acceptable_distortion)
 })
 
+test_that("main plotting function works with outlines and annnotations, grouped, below", {
+    filename <- "visualise_many_sequences_test_21"
+    sequences <- extract_and_sort_sequences(example_many_sequences)
+    visualise_many_sequences(sequences, sequence_colours = sequence_colour_palettes$ggplot_style, pixels_per_base = 30, index_annotation_lines = c(1, 23, 37), index_annotation_interval = 20, index_annotation_size = 20, index_annotation_colour = "purple", index_annotation_vertical_position = 1/2, index_annotation_full_line = FALSE, index_annotations_above = FALSE, filename = paste0(root, filename, ".png"))
+    expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
+                                       image_read(paste0(reference, filename, ".png")),
+                                       metric = "MAE"))$distortion, acceptable_distortion)
+})
+
+test_that("main plotting function works with outlines and annnotations, all", {
+    filename <- "visualise_many_sequences_test_22"
+    sequences <- extract_and_sort_sequences(example_many_sequences, grouping_levels = NA, sort_by = NA)
+    visualise_many_sequences(sequences, sequence_colours = sequence_colour_palettes$bright_deep, pixels_per_base = 30, index_annotation_lines = c(1:23), index_annotation_interval = 1, index_annotation_size = 20, index_annotation_colour = "purple", sequence_text_colour = "cyan", background_colour = "orange", outline_colour = "red", index_annotation_vertical_position = 5/4, index_annotation_full_line = FALSE, filename = paste0(root, filename, ".png"))
+    expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
+                                       image_read(paste0(reference, filename, ".png")),
+                                       metric = "MAE"))$distortion, acceptable_distortion)
+})
+
+test_that("main plotting function works with outlines and annnotations, all, below", {
+    filename <- "visualise_many_sequences_test_23"
+    sequences <- extract_and_sort_sequences(example_many_sequences, grouping_levels = NA, sort_by = NA)
+    visualise_many_sequences(sequences, sequence_colours = sequence_colour_palettes$bright_deep, pixels_per_base = 30, index_annotation_lines = c(1:23), index_annotation_interval = 1, index_annotation_size = 20, index_annotation_colour = "purple", sequence_text_colour = "cyan", background_colour = "orange", outline_colour = "red", index_annotation_vertical_position = 5/4, index_annotation_full_line = FALSE, index_annotations_above = FALSE, filename = paste0(root, filename, ".png"))
+    expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
+                                       image_read(paste0(reference, filename, ".png")),
+                                       metric = "MAE"))$distortion, acceptable_distortion)
+})
+
+
 
 
 ## Test fail cases/invalid arguments to main multiple sequence visualisation function

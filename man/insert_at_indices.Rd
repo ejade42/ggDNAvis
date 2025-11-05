@@ -8,7 +8,8 @@ insert_at_indices(
   original_vector,
   insertion_indices,
   insert_before = TRUE,
-  insert = ""
+  insert = "",
+  vert = NA
 )
 }
 \arguments{
@@ -19,6 +20,8 @@ insert_at_indices(
 \item{insert_before}{\code{logical}. Whether blanks should be inserted before (\code{TRUE}, default) or after (\code{FALSE}) each specified index.}
 
 \item{insert}{\code{value}. The value that should be inserted before/after each specified index. Defaults to \code{""}. If length 0, nothing will be inserted. If length > 1, multiple items will be inserted at each specified index.}
+
+\item{vert}{\code{numerical}. The vertical distance into the box that index annotations will be drawn. If set to \code{NA} (default) does nothing so that this function is more generalisable.}
 }
 \value{
 \code{vector}. The original vector but with the \code{insert} value added before/after each specified index.
