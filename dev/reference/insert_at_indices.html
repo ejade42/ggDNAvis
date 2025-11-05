@@ -78,7 +78,8 @@ will be inserted after each specified index.</p>
 <span>  <span class="va">original_vector</span>,</span>
 <span>  <span class="va">insertion_indices</span>,</span>
 <span>  insert_before <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  insert <span class="op">=</span> <span class="st">""</span></span>
+<span>  insert <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  vert <span class="op">=</span> <span class="cn">NA</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -100,6 +101,10 @@ will be inserted after each specified index.</p>
 
 <dt id="arg-insert">insert<a class="anchor" aria-label="anchor" href="#arg-insert"></a></dt>
 <dd><p><code>value</code>. The value that should be inserted before/after each specified index. Defaults to <code>""</code>. If length 0, nothing will be inserted. If length &gt; 1, multiple items will be inserted at each specified index.</p></dd>
+
+
+<dt id="arg-vert">vert<a class="anchor" aria-label="anchor" href="#arg-vert"></a></dt>
+<dd><p><code>numerical</code>. The vertical distance into the box that index annotations will be drawn. If set to <code>NA</code> (default) does nothing so that this function is more generalisable.</p></dd>
 
 </dl></div>
     <div class="section level2">
