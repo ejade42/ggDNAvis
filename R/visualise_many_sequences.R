@@ -13,6 +13,13 @@
 #' @param margin `numeric`. The size of the margin relative to the size of each base square. Defaults to `0.5` (half the side length of each base square).\cr\cr Very small margins (\eqn{\le}0.25) may cause thick outlines to be cut off at the edges of the plot. Recommended to either use a wider margin or a smaller `outline_linewidth`.
 #' @param sequence_text_colour `character`. The colour of the text within the bases (e.g. colour of "A" letter within boxes representing adenosine bases). Defaults to black.
 #' @param sequence_text_size `numeric`. The size of the text within the bases (e.g. size of "A" letter within boxes representing adenosine bases). Defaults to `16`. Set to `0` to hide sequence text (show box colours only).
+#' @param index_annotation_lines `integer vector`. The lines (i.e. elements of `sequences_vector`) that should have their base incides annotated. 1-indexed e.g. `c(1, 10)` would annotate the first and tenth elements of `sequences_vector`.\cr\cr Extra lines are inserted above or below (depending on `index_annotations_above`) the selected lines - note that the line numbers come from `sequences_vector`, so are unaffected by these insertions.\cr\cr Setting to `NA` (default) disables index annotations (and prevents adding additional blank lines).
+#' @param index_annotation_colour `character`. The colour of the little numbers underneath indicating base index (e.g. colour "15" label under the 15th base). Defaults to dark red.
+#' @param index_annotation_size `numeric`. The size of the little number underneath indicating base index (e.g. size of "15" label under the 15th base). Defaults to `12.5`.\cr\cr Setting to `0` disables index annotations (and prevents adding additional blank lines).
+#' @param index_annotation_interval `integer`. The frequency at which numbers should be placed underneath indicating base index, starting counting from the leftmost base. Defaults to `15` (every 15 bases along each row).\cr\cr Setting to `0` disables index annotations (and prevents adding additional blank lines).
+#' @param index_annotations_above `logical`. Whether index annotations should go above (`TRUE`, default) or below (`FALSE`) each line of sequence.
+#' @param index_annotation_vertical_position `numeric`. How far annotation numbers should be rendered above (if `index_annotations_above = TRUE`) or below (if `index_annotations_above = FALSE`) each base. Defaults to `1/3`.\cr\cr Not recommended to change at all. Strongly discouraged to set below 0 or above 1.
+#' @param index_annotations_full_line `logical`. Whether index annotations should continue to the end of the longest sequence (`TRUE`, default) or should only continue as far as each selected line does (`FALSE`).
 #' @param outline_colour `character`. The colour of the box outlines. Defaults to black.
 #' @param outline_linewidth `numeric`. The linewidth of the box outlines. Defaults to `3`. Set to `0` to disable box outlines.
 #' @param outline_join `character`. One of `"mitre"`, `"round"`, or `"bevel"` specifying how outlines should be joined at the corners of boxes. Defaults to `"mitre"`. It would be unusual to need to change this.
@@ -63,37 +70,71 @@
 #' }
 #'
 #' @export
-visualise_many_sequences <- function(sequences_vector, sequence_colours = sequence_colour_palettes$ggplot_style, background_colour = "white",
-                                     margin = 0.5, sequence_text_colour = "black", sequence_text_size = 16,
-                                     outline_colour = "black", outline_linewidth = 3, outline_join = "mitre",
-                                     return = TRUE, filename = NA, render_device = ragg::agg_png, pixels_per_base = 100) {
+visualise_many_sequences <- function(
+    sequences_vector,
+    sequence_colours = sequence_colour_palettes$ggplot_style,
+    background_colour = "white",
+    margin = 0.5,
+    sequence_text_colour = "black",
+    sequence_text_size = 16,
+    index_annotation_lines = NA,
+    index_annotation_colour = "darkred",
+    index_annotation_size = 12.5,
+    index_annotation_interval = 15,
+    index_annotations_above = TRUE,
+    index_annotation_vertical_position = 1/3,
+    index_annotations_full_line = TRUE,
+    outline_colour = "black",
+    outline_linewidth = 3,
+    outline_join = "mitre",
+    return = TRUE,
+    filename = NA,
+    render_device = ragg::agg_png,
+    pixels_per_base = 100
+) {
     ## Validate arguments
-    for (argument in list(sequences_vector, sequence_colours, background_colour, margin, sequence_text_colour, sequence_text_size, outline_colour, outline_linewidth, outline_join, return, filename, pixels_per_base)) {
+    for (argument in list(sequences_vector, sequence_colours, background_colour, margin, sequence_text_colour, sequence_text_size, index_annotation_colour, index_annotation_size, index_annotation_interval, index_annotations_above, index_annotation_vertical_position, index_annotations_full_line, outline_colour, outline_linewidth, outline_join, return, filename, pixels_per_base)) {
         if (mean(is.null(argument)) != 0) {abort(paste("Argument", argument, "must not be null."), class = "argument_value_or_type")}
     }
-    for (argument in list(background_colour, margin, sequence_text_colour, sequence_text_size, outline_colour, outline_linewidth, outline_join, return, filename, pixels_per_base)) {
+    for (argument in list(background_colour, margin, sequence_text_colour, sequence_text_size, index_annotation_colour, index_annotation_size, index_annotation_interval, index_annotations_above, index_annotation_vertical_position, index_annotations_full_line, outline_colour, outline_linewidth, outline_join, return, filename, pixels_per_base)) {
         if (length(argument) != 1) {abort(paste("Argument", argument, "must have length 1"), class = "argument_value_or_type")}
     }
-    for (argument in list(sequences_vector, sequence_colours, background_colour, margin, sequence_text_colour, sequence_text_size, outline_colour, outline_linewidth, outline_join, return, pixels_per_base)) {
+    for (argument in list(sequences_vector, sequence_colours, background_colour, margin, sequence_text_colour, sequence_text_size, index_annotation_colour, index_annotation_size, index_annotation_interval, index_annotations_above, index_annotation_vertical_position, index_annotations_full_line, outline_colour, outline_linewidth, outline_join, return, pixels_per_base)) {
         if (mean(is.na(argument)) != 0) {abort(paste("Argument", argument, "must not be NA"), class = "argument_value_or_type")}
+    }
+    if (any(is.na(index_annotation_lines)) || any(is.null(index_annotation_lines)) || length(index_annotation_lines) == 0) {
+        index_annotation_lines <- integer(0)
     }
     if (is.character(sequence_colours) == FALSE || length(sequence_colours) != 4) {
         abort("Must provide exactly 4 sequence colours, in A C G T order, as a length-4 character vector.", class = "argument_value_or_type")
     }
-    for (argument in list(sequences_vector, background_colour, sequence_text_colour, outline_colour, outline_join)) {
+    for (argument in list(sequences_vector, background_colour, sequence_text_colour, index_annotation_colour, outline_colour, outline_join)) {
         if (is.character(argument) == FALSE) {abort(paste("Argument", argument, "must be a character/string."), class = "argument_value_or_type")}
     }
-    for (argument in list(margin, sequence_text_size, outline_linewidth)) {
+    for (argument in list(margin, sequence_text_size, index_annotation_size, outline_linewidth)) {
         if (is.numeric(argument) == FALSE || argument < 0) {
             abort(paste("Argument", argument, "must be a non-negative number"), class = "argument_value_or_type")
         }
+    }
+    for (argument in list(index_annotation_interval)) {
+        if (is.numeric(argument) == FALSE || argument %% 1 != 0 || argument < 0) {
+            abort(paste("Argument", argument, "must be a non-negative integer"), class = "argument_value_or_type")
+        }
+    }
+    for (argument in list(index_annotation_vertical_position)) {
+        if (is.numeric(argument) == FALSE) {
+            abort(paste("Argument", argument, "must be numeric"), class = "argument_value_or_type")
+        }
+    }
+    if (length(index_annotation_lines) > 0 && (!is.numeric(index_annotation_lines) || mean(index_annotation_lines %% 1 == 0) != 1 || mean(index_annotation_lines > 0) != 1)) {
+        abort("index_annotation_lines must be a vector of positive integers, or NA.", class = "argument_value_or_type")
     }
     for (argument in list(pixels_per_base)) {
         if (is.numeric(argument) == FALSE || argument %% 1 != 0 || argument < 1) {
             abort("pixels_per_base must be a positive integer", class = "argument_value_or_type")
         }
     }
-    for (argument in list(return)) {
+    for (argument in list(return, index_annotations_above, index_annotations_full_line)) {
         if (is.logical(argument) == FALSE) {abort(paste("Argument:", argument, "must be a logical/boolean value."), class = "argument_value_or_type")}
     }
     if (!(tolower(outline_join) %in% c("mitre", "round", "bevel"))) {
@@ -105,6 +146,29 @@ visualise_many_sequences <- function(sequences_vector, sequence_colours = sequen
     }
     ## Accept NA as NULL for render_device
     if (is.atomic(render_device) && any(is.na(render_device))) {render_device <- NULL}
+
+
+    ## Automatically turn off annotations if size or interval is set to 0.
+    if (index_annotation_interval == 0 && length(index_annotation_lines) > 1 ) {
+        inform("Automatically emptying index_annotation_lines as index_annotation_interval is 0", class = "atypical_turn_off")
+        index_annotation_lines <- integer(0)
+    }
+    if (index_annotation_size == 0 && length(index_annotation_lines) > 1 ) {
+        inform("Automatically emptying index_annotation_lines as index_annotation_size is 0", class = "atypical_turn_off")
+        index_annotation_lines <- integer(0)
+    }
+
+
+
+    ## Insert additional blank lines
+    current_index <- 1
+    if (length(index_annotation_lines) > 0) {
+        for (i in 1:length(index_annotation_lines)) {
+            if (index_annotations_above == TRUE) {
+
+            }
+        }
+    }
 
 
     ## Generate data for plotting
@@ -340,4 +404,100 @@ extract_and_sort_sequences <- function(sequence_dataframe, sequence_variable = "
     ## Perform calculation and return outcome
     sequences <- extract_sequences(sequence_dataframe_sorted)
     return(sequences)
+}
+
+
+
+
+#' Insert blank items at specified indices in a vector ([visualise_many_sequences()] helper)
+#'
+#' This function takes a vector (e.g. the output of [extract_and_sort_sequences()]) and
+#' inserts a specified "blank" value at the specified indices.
+#' If `insert_before` is `TRUE` then the blank value will be inserted before each
+#' specified index, whereas if `insert_before` is `FALSE` then the blank value
+#' will be inserted after each specified index.
+#'
+#' @param original_vector `vector`. The vector to insert blanks into at specified locations (e.g. vector of sequences from extract_and_sort_sequences, but doesn't have to be).
+#' @param insertion_indices `integer vector`. The indices (1-indexed) at which blanks should be inserted. If length 0, no blanks will be inserted.
+#' @param insert_before `logical`. Whether blanks should be inserted before (`TRUE`, default) or after (`FALSE`) each specified index.
+#' @param insert `value`. The value that should be inserted before/after each specified index. Defaults to `""`. If length 0, nothing will be inserted. If length > 1, multiple items will be inserted at each specified index.
+#'
+#' @return `vector`. The original vector but with the `insert` value added before/after each specified index.
+#'
+#' @examples
+#' insert_at_indices(c("A", "B", "C", "D", "E"), c(2, 4))
+#'
+#' insert_at_indices(
+#'     c("A", "B", "C", "D", "E"),
+#'     c(4, 2),
+#'     insert_before = TRUE,
+#'     insert = 0
+#' )
+#'
+#' insert_at_indices(
+#'     c("A", "B", "C", "D", "E"),
+#'     c(4, 2),
+#'     insert_before = FALSE,
+#'     insert = 0
+#' )
+#'
+#' insert_at_indices(
+#'     original_vector = c("A", "B", "C", "D", "E"),
+#'     insertion_indices = c(1, 4, 6),
+#'     insert_before = TRUE,
+#'     insert = c("X", "Y")
+#' )
+#'
+#' insert_at_indices(
+#'     list("A", "B", "C", "D", "E"),
+#'     c(2, 4),
+#'     insert = TRUE
+#' )
+#'
+#' insert_at_indices(
+#'     list("A", "B", "C", "D", "E"),
+#'     c(2, 4),
+#'     insert_before = FALSE,
+#'     insert = list(TRUE, 7)
+#' )
+#'
+#' insert_at_indices(
+#'     NA,
+#'     c(1, 2),
+#'     FALSE
+#' )
+#'
+#' @export
+insert_at_indices <- function(original_vector, insertion_indices, insert_before = TRUE, insert = "") {
+    ## Validate arguments
+    if (is.vector(original_vector) == FALSE) {
+        abort("original_vector must be a vector", class = "argument_value_or_type")
+    }
+    if (is.vector(insert) == FALSE) {
+        abort("insert must be a vector-coercable value", class = "argument_value_or_type")
+    }
+    if (any(is.na(insert_before)) || any(is.null(insert_before)) || length(insert_before) != 1 || is.logical(insert_before) == FALSE) {
+        abort("insert_before must be a single logical value", class = "argument_value_or_type")
+    }
+    if (any(is.na(insertion_indices)) || any(is.null(insertion_indices)) || !(is.numeric(insertion_indices)) || any(insertion_indices %% 1 != 0) || any(insertion_indices < 1)) {
+        abort("insertion_indices must be a vector of positive integers with no missing values", class = "argument_value_or_type")
+    }
+    if (max(insertion_indices) > length(original_vector)) {
+        warn(paste0("One or more indices are beyond the length of the vector and will be ignored.\nLength: ", length(original_vector), "\nIndices: ", paste(insertion_indices, collapse = ", ")), class = "length_exceeded")
+    }
+
+    ## Insert blanks
+    new_vector <- NULL
+    for (i in 1:length(original_vector)) {
+        if (i %in% insertion_indices) {
+            if (insert_before == TRUE) {
+                new_vector <- c(new_vector, insert, original_vector[i])
+            } else {
+                new_vector <- c(new_vector, original_vector[i], insert)
+            }
+        } else {
+            new_vector <- c(new_vector, original_vector[i])
+        }
+    }
+    return(new_vector)
 }

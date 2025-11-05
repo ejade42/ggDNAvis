@@ -43,7 +43,7 @@ reference:
 
 - subtitle: Advanced helpers
   desc: >
-    Helper functions that are mostly called by other functions; users shouldn't need these for normal use cases
+    Helper functions that are mostly called by other functions; users shouldn't need these for normal use cases (but they could be helpful if you need to do similar data processing steps for other workflows, so they are available if needed)
   contents:
   - convert_base_to_number
   - convert_input_seq_to_sequence_list
@@ -53,6 +53,7 @@ reference:
   - convert_sequence_to_numbers
   - convert_sequences_to_annotations
   - create_image_data
+  - insert_at_indices
   - rasterise_matrix
   - reverse_sequence_if_needed
   - reverse_quality_if_needed

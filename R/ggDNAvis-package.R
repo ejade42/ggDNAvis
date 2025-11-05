@@ -6,7 +6,7 @@
 #' @import dplyr
 #' @importFrom stringr str_locate_all
 #' @importFrom tidyr replace_na
-#' @importFrom rlang abort warn
+#' @importFrom rlang abort warn inform
 #' @importFrom magick image_read image_compare
 ## usethis namespace: end
 NULL

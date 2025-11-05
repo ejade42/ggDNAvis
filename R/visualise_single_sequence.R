@@ -14,8 +14,8 @@
 #' @param sequence_text_colour `character`. The colour of the text within the bases (e.g. colour of "A" letter within boxes representing adenosine bases). Defaults to black.
 #' @param sequence_text_size `numeric`. The size of the text within the bases (e.g. size of "A" letter within boxes representing adenosine bases). Defaults to `16`. Set to `0` to hide sequence text (show box colours only).
 #' @param index_annotation_colour `character`. The colour of the little numbers underneath indicating base index (e.g. colour "15" label under the 15th base). Defaults to dark red.
-#' @param index_annotation_size `numeric`. The size of the little number underneath indicating base index (e.g. size of "15" label under the 15th base). Defaults to `12.5`.\cr\cr Can sometimes be set to `0` to turn off annotations, but it is better/more reliable to do this via `index_annotation_interval = 0`.
-#' @param index_annotation_interval `integer`. The frequency at which numbers should be placed underneath indicating base index, starting counting from the leftmost base in each row. Defaults to `15` (every 15 bases along each row).\cr\cr Recommended to make this a factor/divisor of the line wrapping length (meaning the final base in each line is annotated), otherwise the numbering interval resetting at the beginning of each row will result in uneven intervals at each line break.\cr\cr Set to `0` to turn off annotations (preferable over using `index_annotation_size = 0`).
+#' @param index_annotation_size `numeric`. The size of the little number underneath indicating base index (e.g. size of "15" label under the 15th base). Defaults to `12.5`.\cr\cr Setting to `0` disables index annotations.
+#' @param index_annotation_interval `integer`. The frequency at which numbers should be placed underneath indicating base index, starting counting from the leftmost base in each row. Defaults to `15` (every 15 bases along each row).\cr\cr Recommended to make this a factor/divisor of the line wrapping length (meaning the final base in each line is annotated), otherwise the numbering interval resetting at the beginning of each row will result in uneven intervals at each line break.\cr\cr Setting to `0` disables index annotations.
 #' @param index_annotations_above `logical`. Whether index annotations should go above (`TRUE`, default) or below (`FALSE`) each line of sequence.
 #' @param index_annotation_vertical_position `numeric`. How far annotation numbers should be rendered above (if `index_annotations_above = TRUE`) or below (if `index_annotations_above = FALSE`) each base. Defaults to `1/3`.\cr\cr Not recommended to change at all. Strongly discouraged to set below 0 or above 1.
 #' @param outline_colour `character`. The colour of the box outlines. Defaults to black.
@@ -111,19 +111,17 @@ visualise_single_sequence <- function(sequence, sequence_colours = sequence_colo
     for (argument in list(return, index_annotations_above)) {
         if (is.logical(argument) == FALSE) {abort(paste("Argument:", argument, "must be a logical/boolean value."), class = "argument_value_or_type")}
     }
-    if (spacing == 0 && !(index_annotation_size == 0 || index_annotation_interval == 0)) {
+    if (index_annotation_size == 0 && index_annotation_interval != 0) {
+        inform("Automatically setting index_annotation_interval to 0 as index_annotation_size is 0", class = "atypical_turn_off")
+        index_annotation_interval <- 0
+    }
+    if (spacing == 0 && index_annotation_interval != 0) {
         warn("Using spacing = 0 without disabling index annotation is not recommended.\nIt is likely to draw the annotations overlapping the sequence.\nRecommended to set index_annotation_interval = 0 to disable index annotations.", class = "parameter_recommendation")
     }
     if (!(tolower(outline_join) %in% c("mitre", "round", "bevel"))) {
         abort("outline_join must be one of 'mitre', 'round', or 'bevel'.", class = "argument_value_or_type")
     }
-    ## If annotations are disabled via size, spacing is set to 0, but there would be an
-    ## annotation on the last line (i.e. seq_length %% line_wrapping >= index_annotation_interval)
-    ## then some grey boxes show up at the bottom. This cautions against setting parameters
-    ## in such a way that that would happen
-    if (index_annotation_size == 0 && index_annotation_interval != 0) {
-        warn("It is better to disable index annotations via index_annotation_interval = 0.\nDoing so via index_annotation_size = 0 can lead to rendering issues in some cases.", class = "parameter_recommendation")
-    }
+
     ## Warn about outlines getting cut off
     if (margin <= 0.25 && outline_linewidth > 0) {
         warn("If margin is small and outlines are on (outline_linewidth > 0), outlines may be cut off at the edges of the plot. Check if this is happening and consider using a bigger margin.", class = "parameter_recommendation")

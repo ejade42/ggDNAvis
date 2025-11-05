@@ -46,9 +46,9 @@ visualise_single_sequence(
 
 \item{index_annotation_colour}{\code{character}. The colour of the little numbers underneath indicating base index (e.g. colour "15" label under the 15th base). Defaults to dark red.}
 
-\item{index_annotation_size}{\code{numeric}. The size of the little number underneath indicating base index (e.g. size of "15" label under the 15th base). Defaults to \code{12.5}.\cr\cr Can sometimes be set to \code{0} to turn off annotations, but it is better/more reliable to do this via \code{index_annotation_interval = 0}.}
+\item{index_annotation_size}{\code{numeric}. The size of the little number underneath indicating base index (e.g. size of "15" label under the 15th base). Defaults to \code{12.5}.\cr\cr Setting to \code{0} disables index annotations.}
 
-\item{index_annotation_interval}{\code{integer}. The frequency at which numbers should be placed underneath indicating base index, starting counting from the leftmost base in each row. Defaults to \code{15} (every 15 bases along each row).\cr\cr Recommended to make this a factor/divisor of the line wrapping length (meaning the final base in each line is annotated), otherwise the numbering interval resetting at the beginning of each row will result in uneven intervals at each line break.\cr\cr Set to \code{0} to turn off annotations (preferable over using \code{index_annotation_size = 0}).}
+\item{index_annotation_interval}{\code{integer}. The frequency at which numbers should be placed underneath indicating base index, starting counting from the leftmost base in each row. Defaults to \code{15} (every 15 bases along each row).\cr\cr Recommended to make this a factor/divisor of the line wrapping length (meaning the final base in each line is annotated), otherwise the numbering interval resetting at the beginning of each row will result in uneven intervals at each line break.\cr\cr Setting to \code{0} disables index annotations.}
 
 \item{index_annotations_above}{\code{logical}. Whether index annotations should go above (\code{TRUE}, default) or below (\code{FALSE}) each line of sequence.}
 

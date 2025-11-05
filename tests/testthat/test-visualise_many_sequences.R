@@ -220,3 +220,47 @@ test_that("constructing sequences vector fails when columns are wrong", {
         expect_error(extract_and_sort_sequences(example_many_sequences, desc_sort = param), class = "argument_value_or_type")
     }
 })
+
+
+
+test_that("inserting blanks works as expected", {
+    expect_equal(insert_at_indices(c("A", "B", "C", "D", "E"), c(2, 4)),
+                 c("A", "", "B", "C", "", "D", "E"))
+    expect_equal(insert_at_indices(c("A", "B", "C", "D", "E"), c(4, 2), insert_before = TRUE, insert = 0),
+                 c("A", "0", "B", "C", "0", "D", "E"))
+    expect_equal(insert_at_indices(c("A", "B", "C", "D", "E"), c(4, 2), insert_before = FALSE, insert = 0),
+                 c("A", "B", "0", "C", "D", "0", "E"))
+    expect_warning(expect_equal(insert_at_indices(c("A", "B", "C", "D", "E"), c(1, 4, 6), insert_before = TRUE, insert = c("X", "Y")),
+                 c("X", "Y", "A", "B", "C", "X", "Y", "D", "E")),
+                 class = "length_exceeded")
+
+    expect_warning(expect_equal(insert_at_indices(NA, c(1, 2)),
+                                c("", NA)),
+                   class = "length_exceeded")
+
+    expect_equal(insert_at_indices(c("A", "B", "C", "D", "E"), c(2, 4), insert = TRUE),
+                 c("A", "TRUE", "B", "C", "TRUE", "D", "E"))
+
+    expect_equal(insert_at_indices(list("A", "B", "C", "D", "E"), c(2, 4), insert = TRUE),
+                 list("A", TRUE, "B", "C", TRUE, "D", "E"))
+
+    expect_equal(insert_at_indices(list("A", c("B1", "B2"), "C", "D", "E"), c(2, 4), insert = list(TRUE, 7)),
+                 list("A", TRUE, 7, c("B1", "B2"), "C", TRUE, 7, "D", "E"))
+})
+
+test_that("inserting blanks fails when required", {
+    bad_param_value_for_pos_int_vec <- list("X", TRUE, NA, NULL, list(1), -1, c(2, 0))
+    for (param in bad_param_value_for_pos_int_vec) {
+        expect_error(insert_at_indices(c("A", "B", "C", "D", "E"), param), class = "argument_value_or_type")
+    }
+
+    bad_param_value_for_vec <- list(NULL)
+    for (param in bad_param_value_for_vec) {
+        expect_error(insert_at_indices(param, 1), class = "argument_value_or_type")
+    }
+
+    bad_param_value_for_bool <- list("X", 1, c(TRUE, FALSE), list(TRUE, FALSE), NA, NULL, -1)
+    for (param in bad_param_value_for_bool) {
+        expect_error(insert_at_indices(c("A", "B", "C", "D", "E"), c(1, 2), param), class = "argument_value_or_type")
+    }
+})

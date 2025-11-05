@@ -11,6 +11,13 @@ visualise_many_sequences(
   margin = 0.5,
   sequence_text_colour = "black",
   sequence_text_size = 16,
+  index_annotation_lines = NA,
+  index_annotation_colour = "darkred",
+  index_annotation_size = 12.5,
+  index_annotation_interval = 15,
+  index_annotations_above = TRUE,
+  index_annotation_vertical_position = 1/3,
+  index_annotations_full_line = TRUE,
   outline_colour = "black",
   outline_linewidth = 3,
   outline_join = "mitre",
@@ -32,6 +39,20 @@ visualise_many_sequences(
 \item{sequence_text_colour}{\code{character}. The colour of the text within the bases (e.g. colour of "A" letter within boxes representing adenosine bases). Defaults to black.}
 
 \item{sequence_text_size}{\code{numeric}. The size of the text within the bases (e.g. size of "A" letter within boxes representing adenosine bases). Defaults to \code{16}. Set to \code{0} to hide sequence text (show box colours only).}
+
+\item{index_annotation_lines}{\verb{integer vector}. The lines (i.e. elements of \code{sequences_vector}) that should have their base incides annotated. 1-indexed e.g. \code{c(1, 10)} would annotate the first and tenth elements of \code{sequences_vector}.\cr\cr Extra lines are inserted above or below (depending on \code{index_annotations_above}) the selected lines - note that the line numbers come from \code{sequences_vector}, so are unaffected by these insertions.\cr\cr Setting to \code{NA} (default) disables index annotations (and prevents adding additional blank lines).}
+
+\item{index_annotation_colour}{\code{character}. The colour of the little numbers underneath indicating base index (e.g. colour "15" label under the 15th base). Defaults to dark red.}
+
+\item{index_annotation_size}{\code{numeric}. The size of the little number underneath indicating base index (e.g. size of "15" label under the 15th base). Defaults to \code{12.5}.\cr\cr Setting to \code{0} disables index annotations (and prevents adding additional blank lines).}
+
+\item{index_annotation_interval}{\code{integer}. The frequency at which numbers should be placed underneath indicating base index, starting counting from the leftmost base. Defaults to \code{15} (every 15 bases along each row).\cr\cr Setting to \code{0} disables index annotations (and prevents adding additional blank lines).}
+
+\item{index_annotations_above}{\code{logical}. Whether index annotations should go above (\code{TRUE}, default) or below (\code{FALSE}) each line of sequence.}
+
+\item{index_annotation_vertical_position}{\code{numeric}. How far annotation numbers should be rendered above (if \code{index_annotations_above = TRUE}) or below (if \code{index_annotations_above = FALSE}) each base. Defaults to \code{1/3}.\cr\cr Not recommended to change at all. Strongly discouraged to set below 0 or above 1.}
+
+\item{index_annotations_full_line}{\code{logical}. Whether index annotations should continue to the end of the longest sequence (\code{TRUE}, default) or should only continue as far as each selected line does (\code{FALSE}).}
 
 \item{outline_colour}{\code{character}. The colour of the box outlines. Defaults to black.}
 
