@@ -136,11 +136,11 @@ interval, and pixels per square when exported are configurable.</p>
 
 
 <dt id="arg-index-annotation-size">index_annotation_size<a class="anchor" aria-label="anchor" href="#arg-index-annotation-size"></a></dt>
-<dd><p><code>numeric</code>. The size of the little number underneath indicating base index (e.g. size of "15" label under the 15th base). Defaults to <code>12.5</code>.<br><br> Can sometimes be set to <code>0</code> to turn off annotations, but it is better/more reliable to do this via <code>index_annotation_interval = 0</code>.</p></dd>
+<dd><p><code>numeric</code>. The size of the little number underneath indicating base index (e.g. size of "15" label under the 15th base). Defaults to <code>12.5</code>.<br><br> Setting to <code>0</code> disables index annotations.</p></dd>
 
 
 <dt id="arg-index-annotation-interval">index_annotation_interval<a class="anchor" aria-label="anchor" href="#arg-index-annotation-interval"></a></dt>
-<dd><p><code>integer</code>. The frequency at which numbers should be placed underneath indicating base index, starting counting from the leftmost base in each row. Defaults to <code>15</code> (every 15 bases along each row).<br><br> Recommended to make this a factor/divisor of the line wrapping length (meaning the final base in each line is annotated), otherwise the numbering interval resetting at the beginning of each row will result in uneven intervals at each line break.<br><br> Set to <code>0</code> to turn off annotations (preferable over using <code>index_annotation_size = 0</code>).</p></dd>
+<dd><p><code>integer</code>. The frequency at which numbers should be placed underneath indicating base index, starting counting from the leftmost base in each row. Defaults to <code>15</code> (every 15 bases along each row).<br><br> Recommended to make this a factor/divisor of the line wrapping length (meaning the final base in each line is annotated), otherwise the numbering interval resetting at the beginning of each row will result in uneven intervals at each line break.<br><br> Setting to <code>0</code> disables index annotations.</p></dd>
 
 
 <dt id="arg-index-annotations-above">index_annotations_above<a class="anchor" aria-label="anchor" href="#arg-index-annotations-above"></a></dt>
