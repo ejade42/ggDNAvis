@@ -19,7 +19,7 @@
 #' @param index_annotation_interval `integer`. The frequency at which numbers should be placed underneath indicating base index, starting counting from the leftmost base. Defaults to `15` (every 15 bases along each row).\cr\cr Setting to `0` disables index annotations (and prevents adding additional blank lines).
 #' @param index_annotations_above `logical`. Whether index annotations should go above (`TRUE`, default) or below (`FALSE`) each line of sequence.
 #' @param index_annotation_vertical_position `numeric`. How far annotation numbers should be rendered above (if `index_annotations_above = TRUE`) or below (if `index_annotations_above = FALSE`) each base. Defaults to `1/3`.\cr\cr Not recommended to change at all. Strongly discouraged to set below 0 or above 1.
-#' @param index_annotations_full_line `logical`. Whether index annotations should continue to the end of the longest sequence (`TRUE`, default) or should only continue as far as each selected line does (`FALSE`).
+#' @param index_annotation_full_line `logical`. Whether index annotations should continue to the end of the longest sequence (`TRUE`, default) or should only continue as far as each selected line does (`FALSE`).
 #' @param outline_colour `character`. The colour of the box outlines. Defaults to black.
 #' @param outline_linewidth `numeric`. The linewidth of the box outlines. Defaults to `3`. Set to `0` to disable box outlines.
 #' @param outline_join `character`. One of `"mitre"`, `"round"`, or `"bevel"` specifying how outlines should be joined at the corners of boxes. Defaults to `"mitre"`. It would be unusual to need to change this.
@@ -83,7 +83,7 @@ visualise_many_sequences <- function(
     index_annotation_interval = 15,
     index_annotations_above = TRUE,
     index_annotation_vertical_position = 1/3,
-    index_annotations_full_line = TRUE,
+    index_annotation_full_line = TRUE,
     outline_colour = "black",
     outline_linewidth = 3,
     outline_join = "mitre",
@@ -93,13 +93,13 @@ visualise_many_sequences <- function(
     pixels_per_base = 100
 ) {
     ## Validate arguments
-    for (argument in list(sequences_vector, sequence_colours, background_colour, margin, sequence_text_colour, sequence_text_size, index_annotation_colour, index_annotation_size, index_annotation_interval, index_annotations_above, index_annotation_vertical_position, index_annotations_full_line, outline_colour, outline_linewidth, outline_join, return, filename, pixels_per_base)) {
+    for (argument in list(sequences_vector, sequence_colours, background_colour, margin, sequence_text_colour, sequence_text_size, index_annotation_colour, index_annotation_size, index_annotation_interval, index_annotations_above, index_annotation_vertical_position, index_annotation_full_line, outline_colour, outline_linewidth, outline_join, return, filename, pixels_per_base)) {
         if (mean(is.null(argument)) != 0) {abort(paste("Argument", argument, "must not be null."), class = "argument_value_or_type")}
     }
-    for (argument in list(background_colour, margin, sequence_text_colour, sequence_text_size, index_annotation_colour, index_annotation_size, index_annotation_interval, index_annotations_above, index_annotation_vertical_position, index_annotations_full_line, outline_colour, outline_linewidth, outline_join, return, filename, pixels_per_base)) {
+    for (argument in list(background_colour, margin, sequence_text_colour, sequence_text_size, index_annotation_colour, index_annotation_size, index_annotation_interval, index_annotations_above, index_annotation_vertical_position, index_annotation_full_line, outline_colour, outline_linewidth, outline_join, return, filename, pixels_per_base)) {
         if (length(argument) != 1) {abort(paste("Argument", argument, "must have length 1"), class = "argument_value_or_type")}
     }
-    for (argument in list(sequences_vector, sequence_colours, background_colour, margin, sequence_text_colour, sequence_text_size, index_annotation_colour, index_annotation_size, index_annotation_interval, index_annotations_above, index_annotation_vertical_position, index_annotations_full_line, outline_colour, outline_linewidth, outline_join, return, pixels_per_base)) {
+    for (argument in list(sequences_vector, sequence_colours, background_colour, margin, sequence_text_colour, sequence_text_size, index_annotation_colour, index_annotation_size, index_annotation_interval, index_annotations_above, index_annotation_vertical_position, index_annotation_full_line, outline_colour, outline_linewidth, outline_join, return, pixels_per_base)) {
         if (mean(is.na(argument)) != 0) {abort(paste("Argument", argument, "must not be NA"), class = "argument_value_or_type")}
     }
     if (any(is.na(index_annotation_lines)) || any(is.null(index_annotation_lines)) || length(index_annotation_lines) == 0) {
@@ -134,7 +134,7 @@ visualise_many_sequences <- function(
             abort("pixels_per_base must be a positive integer", class = "argument_value_or_type")
         }
     }
-    for (argument in list(return, index_annotations_above, index_annotations_full_line)) {
+    for (argument in list(return, index_annotations_above, index_annotation_full_line)) {
         if (is.logical(argument) == FALSE) {abort(paste("Argument:", argument, "must be a logical/boolean value."), class = "argument_value_or_type")}
     }
     if (!(tolower(outline_join) %in% c("mitre", "round", "bevel"))) {
@@ -149,38 +149,32 @@ visualise_many_sequences <- function(
 
 
     ## Automatically turn off annotations if size or interval is set to 0.
-    if (index_annotation_interval == 0 && length(index_annotation_lines) > 1 ) {
+    if (index_annotation_interval == 0 && length(index_annotation_lines) > 0 ) {
         inform("Automatically emptying index_annotation_lines as index_annotation_interval is 0", class = "atypical_turn_off")
         index_annotation_lines <- integer(0)
-    }
-    if (index_annotation_size == 0 && length(index_annotation_lines) > 1 ) {
+    } else if (index_annotation_size == 0 && length(index_annotation_lines) > 0 ) {
         inform("Automatically emptying index_annotation_lines as index_annotation_size is 0", class = "atypical_turn_off")
         index_annotation_lines <- integer(0)
     }
 
 
 
-    ## Insert additional blank lines
-    current_index <- 1
-    if (length(index_annotation_lines) > 0) {
-        for (i in 1:length(index_annotation_lines)) {
-            if (index_annotations_above == TRUE) {
-
-            }
-        }
-    }
+    ## Insert additional blank lines for index annotations (nothing changes if length(index_annotation_lines) == 0)
+    new_sequences_vector <- insert_at_indices(sequences_vector, index_annotation_lines, insert_before = index_annotations_above, insert = "")
 
 
     ## Generate data for plotting
-    image_data <- create_image_data(sequences_vector)
-    annotations <- convert_sequences_to_annotations(sequences_vector, line_length = max(nchar(sequences_vector)), interval = 0)
+    image_data <- create_image_data(new_sequences_vector)
+    sequence_text_data <- convert_sequences_to_annotations(new_sequences_vector, line_length = max(nchar(new_sequences_vector)), interval = 0)
+    index_annotation_data <- create_many_sequence_index_annotations(index_annotation_interval, new_sequences_vector, index_annotation_lines, index_annotation_full_line, index_annotations_above, index_annotation_vertical_position)
+
 
     ## Name the sequence colours vector
     names(sequence_colours) <- as.character(1:4)
 
     ## Calculate tile dimensions
-    tile_width  <- 1/max(nchar(sequences_vector))
-    tile_height <- 1/length(sequences_vector)
+    tile_width  <- 1/max(nchar(new_sequences_vector))
+    tile_height <- 1/length(new_sequences_vector)
 
     ## Generate actual plot
     result <- ggplot(image_data, aes(x = .data$x, y = .data$y)) +
@@ -197,14 +191,36 @@ visualise_many_sequences <- function(
         coord_cartesian(expand = FALSE, clip = "off") +
         theme_void() +
         theme(plot.background = element_rect(fill = background_colour, colour = NA),
-              axis.title = element_blank(), plot.margin = grid::unit(c(margin, margin, margin, margin), "inches"))
+              axis.title = element_blank())
 
     ## Add sequence text if desired
     if (sequence_text_size != 0) {
         result <- result +
-            geom_text(data = annotations, aes(x = .data$x_position, y = .data$y_position, label = .data$annotation), col = sequence_text_colour, size = sequence_text_size, fontface = "bold", inherit.aes = F) +
+            geom_text(data = sequence_text_data, aes(x = .data$x_position, y = .data$y_position, label = .data$annotation), col = sequence_text_colour, size = sequence_text_size, fontface = "bold", inherit.aes = F) +
             guides(col = "none", size = "none")
     }
+
+    ## Add index annotations if desired
+    if (length(index_annotation_lines) > 0) {
+        result <- result +
+            geom_text(data = index_annotation_data, aes(x = .data$x_position, y = .data$y_position, label = .data$annotation), col = index_annotation_colour, size = index_annotation_size, fontface = "bold", inherit.aes = F) +
+            guides(col = "none", size = "none")
+    }
+
+    ## Correctly set margin, taking into consideration extra blank lines for annotations
+    ## Assume only a single extra space, but still set in a variable so that can update later if needed
+    extra_spaces <- 1
+    if (1 %in% index_annotation_lines && index_annotations_above) {
+        result <- result + theme(plot.margin = grid::unit(c(max(margin-extra_spaces, 0), margin, margin, margin), "inches"))
+        extra_height <- margin + max(margin-extra_spaces, 0)
+    } else if (length(sequences_vector) %in% index_annotation_lines && !index_annotations_above) {
+        result <- result + theme(plot.margin = grid::unit(c(margin, margin, max(margin-extra_spaces, 0), margin), "inches"))
+        extra_height <- margin + max(margin-extra_spaces, 0)
+    } else {
+        result <- result + theme(plot.margin = grid::unit(c(margin, margin, margin, margin), "inches"))
+        extra_height <- 2 * margin
+    }
+
 
     ## Check if filename is set and warn if not png, then export image
     if (is.na(filename) == FALSE) {
@@ -214,7 +230,7 @@ visualise_many_sequences <- function(
         if (tolower(substr(filename, nchar(filename)-3, nchar(filename))) != ".png") {
             warn("Not recommended to use non-png filetype (but may still work).", class = "filetype_recommendation")
         }
-        ggsave(filename, plot = result, dpi = pixels_per_base, device = render_device, width = max(nchar(sequences_vector))+(2*margin), height = length(sequences_vector)+(2*margin), limitsize = FALSE)
+        ggsave(filename, plot = result, dpi = pixels_per_base, device = render_device, width = max(nchar(new_sequences_vector))+(2*margin), height = length(new_sequences_vector)+extra_height, limitsize = FALSE)
     }
 
     ## Return either the plot object or NULL
@@ -467,6 +483,11 @@ extract_and_sort_sequences <- function(sequence_dataframe, sequence_variable = "
 #'     FALSE
 #' )
 #'
+#' insert_at_indices(
+#'     c("A", "B", "C", "D", "E"),
+#'     integer(0)
+#' )
+#'
 #' @export
 insert_at_indices <- function(original_vector, insertion_indices, insert_before = TRUE, insert = "") {
     ## Validate arguments
@@ -482,7 +503,7 @@ insert_at_indices <- function(original_vector, insertion_indices, insert_before 
     if (any(is.na(insertion_indices)) || any(is.null(insertion_indices)) || !(is.numeric(insertion_indices)) || any(insertion_indices %% 1 != 0) || any(insertion_indices < 1)) {
         abort("insertion_indices must be a vector of positive integers with no missing values", class = "argument_value_or_type")
     }
-    if (max(insertion_indices) > length(original_vector)) {
+    if (length(insertion_indices) > 0 && max(insertion_indices) > length(original_vector)) {
         warn(paste0("One or more indices are beyond the length of the vector and will be ignored.\nLength: ", length(original_vector), "\nIndices: ", paste(insertion_indices, collapse = ", ")), class = "length_exceeded")
     }
 
@@ -500,4 +521,70 @@ insert_at_indices <- function(original_vector, insertion_indices, insert_before 
         }
     }
     return(new_vector)
+}
+
+
+
+create_many_sequence_index_annotations <- function(
+    index_annotation_interval,
+    new_sequences_vector,
+    original_indices_to_annotate,
+    annotate_full_lines = TRUE,
+    annotations_above = TRUE,
+    annotation_vertical_position = 1/3
+) {
+    ## Instantly return empty dataframe if interval or indices is blank
+    if (index_annotation_interval == 0 || length(original_indices_to_annotate) == 0) {
+        return(data.frame("x_position" = numeric(), "y_position" = numeric(), "annotation" = character(), "type" = character()))
+    }
+
+    ## Update indices to account for added blank lines
+    annotation_indices <- original_indices_to_annotate + seq_along(original_indices_to_annotate) - as.numeric(annotations_above)
+    if (annotations_above) {
+        corresponding_sequence_indices <- annotation_indices + 1
+    } else {
+        corresponding_sequence_indices <- annotation_indices - 1
+    }
+
+    ## Calculate scaling factors
+    x_interval <- 1 / max(nchar(new_sequences_vector))
+    y_interval <- 1 / length(new_sequences_vector)
+
+
+    ## Create actual data
+    annotation_data <- data.frame(NULL)
+    for (i in 1:length(annotation_indices)) {
+        annotation_index <- annotation_indices[i]
+        corresponding_sequence_index <- corresponding_sequence_indices[i]
+
+        ## Set max length along the line to annotate up to
+        ## Either from overall max length, or from length of annotated sequence
+        if (!annotate_full_lines) {
+            line_length <- nchar(new_sequences_vector[corresponding_sequence_index])
+        } else {
+            line_length <- max(nchar(new_sequences_vector))
+        }
+
+        ## Iterate along line and create dataframe observations for annotations
+        for (j in 1:line_length) {
+            if (j %% index_annotation_interval == 0) {
+                x_position <- x_interval * (j - 1/2)
+
+                if (annotations_above == TRUE) {
+                    y_position <- 1 - y_interval * (corresponding_sequence_index - 1 - annotation_vertical_position)
+                } else if (annotations_above == FALSE) {
+                    y_position <- 1 - y_interval * (corresponding_sequence_index + annotation_vertical_position)
+                }
+
+                annotation <- as.character(j)
+                type <- "Number"
+                annotation_data <- rbind(annotation_data, c(x_position, y_position, annotation, type))
+            }
+        }
+    }
+
+    colnames(annotation_data) <- c("x_position", "y_position", "annotation", "type")
+    annotation_data$x_position <- as.numeric(annotation_data$x_position)
+    annotation_data$y_position <- as.numeric(annotation_data$y_position)
+    return(annotation_data)
 }

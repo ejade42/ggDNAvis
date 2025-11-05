@@ -73,4 +73,9 @@ insert_at_indices(
     FALSE
 )
 
+insert_at_indices(
+    c("A", "B", "C", "D", "E"),
+    integer(0)
+)
+
 }
