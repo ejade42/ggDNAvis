@@ -71,26 +71,26 @@
 #'
 #' @export
 visualise_many_sequences <- function(
-    sequences_vector,
-    sequence_colours = sequence_colour_palettes$ggplot_style,
-    background_colour = "white",
-    margin = 0.5,
-    sequence_text_colour = "black",
-    sequence_text_size = 16,
-    index_annotation_lines = NA,
-    index_annotation_colour = "darkred",
-    index_annotation_size = 12.5,
-    index_annotation_interval = 15,
-    index_annotations_above = TRUE,
-    index_annotation_vertical_position = 1/3,
-    index_annotation_full_line = FALSE,
-    outline_colour = "black",
-    outline_linewidth = 3,
-    outline_join = "mitre",
-    return = TRUE,
-    filename = NA,
-    render_device = ragg::agg_png,
-    pixels_per_base = 100
+        sequences_vector,
+        sequence_colours = sequence_colour_palettes$ggplot_style,
+        background_colour = "white",
+        margin = 0.5,
+        sequence_text_colour = "black",
+        sequence_text_size = 16,
+        index_annotation_lines = NA,
+        index_annotation_colour = "darkred",
+        index_annotation_size = 12.5,
+        index_annotation_interval = 15,
+        index_annotations_above = TRUE,
+        index_annotation_vertical_position = 1/3,
+        index_annotation_full_line = FALSE,
+        outline_colour = "black",
+        outline_linewidth = 3,
+        outline_join = "mitre",
+        return = TRUE,
+        filename = NA,
+        render_device = ragg::agg_png,
+        pixels_per_base = 100
 ) {
     ## Validate arguments
     for (argument in list(sequences_vector, sequence_colours, background_colour, margin, sequence_text_colour, sequence_text_size, index_annotation_colour, index_annotation_size, index_annotation_interval, index_annotations_above, index_annotation_vertical_position, index_annotation_full_line, outline_colour, outline_linewidth, outline_join, return, filename, pixels_per_base)) {
@@ -155,6 +155,18 @@ visualise_many_sequences <- function(
     } else if (index_annotation_size == 0 && length(index_annotation_lines) > 0 ) {
         inform("Automatically emptying index_annotation_lines as index_annotation_size is 0", class = "atypical_turn_off")
         index_annotation_lines <- integer(0)
+    }
+
+    ## Automatically sort and unique-ify index annotations lines
+    sorted_index_annotation_lines <- sort(index_annotation_lines, na.last = TRUE)
+    if (any(sorted_index_annotation_lines != index_annotation_lines)) {
+        inform(paste0("Automatically sorting index_annotation_lines.\nBefore: ", paste(index_annotation_lines, collapse = ", "), "\nAfter: ", paste(sorted_index_annotation_lines, collapse = ", ")), class = "sanitising_index_annotation_lines")
+        index_annotation_lines <- sorted_index_annotation_lines
+    }
+    unique_index_annotation_lines <- unique(index_annotation_lines)
+    if (length(unique_index_annotation_lines) != length(index_annotation_lines)) {
+        inform(paste0("Automatically making index_annotation_lines unique.\nBefore: ", paste(index_annotation_lines, collapse = ", "), "\nAfter: ", paste(unique_index_annotation_lines, collapse = ", ")), class = "sanitising_index_annotation_lines")
+        index_annotation_lines <- unique_index_annotation_lines
     }
 
 
@@ -433,7 +445,7 @@ extract_and_sort_sequences <- function(sequence_dataframe, sequence_variable = "
 #'
 #' @param original_vector `vector`. The vector to insert blanks into at specified locations (e.g. vector of sequences from extract_and_sort_sequences, but doesn't have to be).
 #' @param insertion_indices `integer vector`. The indices (1-indexed) at which blanks should be inserted. If length 0, no blanks will be inserted.
-#' @param insert_before `logical`. Whether blanks should be inserted before (`TRUE`, default) or after (`FALSE`) each specified index.
+#' @param insert_before `logical`. Whether blanks should be inserted before (`TRUE`, default) or after (`FALSE`) each specified index. Values must be sorted and unique.
 #' @param insert `value`. The value that should be inserted before/after each specified index. Defaults to `""`. If length 0, nothing will be inserted. If length > 1, multiple items will be inserted at each specified index.
 #' @param vert `numerical`. The vertical distance into the box that index annotations will be drawn. If set to `NA` (default) does nothing so that this function is more generalisable. If set to a number, then the `insert` will be repeated `ceiling(vert)` times each time it is inserted.
 #'
@@ -444,14 +456,14 @@ extract_and_sort_sequences <- function(sequence_dataframe, sequence_variable = "
 #'
 #' insert_at_indices(
 #'     c("A", "B", "C", "D", "E"),
-#'     c(4, 2),
+#'     c(2, 4),
 #'     insert_before = TRUE,
 #'     insert = 0
 #' )
 #'
 #' insert_at_indices(
 #'     c("A", "B", "C", "D", "E"),
-#'     c(4, 2),
+#'     c(2, 4),
 #'     insert_before = FALSE,
 #'     insert = 0
 #' )
@@ -508,6 +520,13 @@ insert_at_indices <- function(original_vector, insertion_indices, insert_before 
     if (length(vert) != 1 || is.null(vert) || (is.na(vert) == FALSE && (is.numeric(vert) == FALSE))) {
         abort("vert must be NA or numeric. Recommended to leave it NA for most purposes", class = "argument_value_or_type")
     }
+    ## Check sorting and uniqueness
+    if (any(sort(insertion_indices, na.last = TRUE) != insertion_indices)) {
+        abort(paste0("insertion_indices must be sorted. current value: ", paste(insertion_indices, collapse = ", ")), class = "argument_value_or_type")
+    }
+    if (length(unique(insertion_indices)) != length(insertion_indices)) {
+        abort(paste0("insertion_indices must be unique. current value: ", paste(insertion_indices, collapse = ", ")), class = "argument_value_or_type")
+    }
 
     ## Insert additional blanks if vert is specified
     if (is.na(vert) == FALSE) {
@@ -548,8 +567,8 @@ insert_at_indices <- function(original_vector, insertion_indices, insert_before 
 #'
 #' @param new_sequences_vector `vector`. The output of [insert_at_indices()] when used with identical arguments.
 #' @param original_sequences_vector `vector`. The vector of sequences used for plotting, that was originally given to [visualise_many_sequences()]. Must also have been used as input to [insert_at_indices()] to create `new_sequences_vector`.
-#' @param original_indices_to_annotate `positive integer vector`. The vector of lines (i.e. indices) of `original_vector` to be annotated. Read from `index_annotation_lines` argument to `[visualise_many_sequences()]`. Must also have been used as input to [insert_at_indices()] to create `new_sequences_vector`.
-#' @param annnotation_interval `integer`. The frequency at which numbers should be placed underneath indicating base index, starting counting from the leftmost base. Setting to `0` causes this function to return an empty dataframe.
+#' @param original_indices_to_annotate `positive integer vector`. The vector of lines (i.e. indices) of `original_vector` to be annotated. Read from `index_annotation_lines` argument to `[visualise_many_sequences()]` (but after processing, so is assumed to be unique and sorted). Must also have been used as input to [insert_at_indices()] to create `new_sequences_vector`.
+#' @param annotation_interval `integer`. The frequency at which numbers should be placed underneath indicating base index, starting counting from the leftmost base. Setting to `0` causes this function to return an empty dataframe.
 #' @param annotate_full_lines `logical`. Whether annotations should be calculated up to the end of the longest line (`TRUE`) or to the end of each line being annotated (`FALSE`, default).
 #' @param annotations_above `logical`. Whether annotations should be drawn above (`TRUE`, default) or below (`FALSE`) each annotated line. Must also have been used as input to [insert_at_indices()] to create `new_sequences_vector`.
 #' @param annotation_vertical_position `numeric`. The vertical position above/below each annotated line that annotations should be drawn. Must also have been used as input to [insert_at_indices()] to create `new_sequences_vector`.
@@ -559,6 +578,7 @@ insert_at_indices <- function(original_vector, insertion_indices, insert_before 
 #' @examples
 #' ## Set up arguments (e.g. from visualise_many_sequences() call)
 #' sequences_data <- example_many_sequences
+#' index_annotation_lines <- c(1, 23, 37)
 #' index_annotation_interval <- 10
 #' index_annotations_above <- TRUE
 #' index_annotation_full_line <- FALSE
@@ -570,20 +590,23 @@ insert_at_indices <- function(original_vector, insertion_indices, insert_before 
 #'     example_many_sequences,
 #'     grouping_levels = c("family" = 8, "individual" = 2)
 #' )
+#' sequences
 #'
 #' ## Insert blank rows as needed
 #' new_sequences <- insert_at_indices(
 #'     sequences,
-#'     insertion_indices = c(1, 23, 37),
+#'     insertion_indices = index_annotation_lines,
 #'     insert_before = index_annotations_above,
 #'     insert = "",
 #'     vert = index_annotation_vertical_position
 #' )
+#' new_sequences
 #'
 #' ## Create annnotation dataframe
 #' create_many_sequence_index_annotations(
 #'     new_sequences_vector = new_sequences,
 #'     original_sequences_vector = sequences,
+#'     original_indices_to_annotate = index_annotation_lines,
 #'     annotation_interval = 10,
 #'     annotate_full_lines = index_annotation_full_line,
 #'     annotations_above = index_annotations_above,
@@ -593,19 +616,25 @@ insert_at_indices <- function(original_vector, insertion_indices, insert_before 
 #'
 #' @export
 create_many_sequence_index_annotations <- function(
-    new_sequences_vector,
-    original_sequences_vector,
-    original_indices_to_annotate,
-    annotation_interval,
-    annotate_full_lines = FALSE,
-    annotations_above = TRUE,
-    annotation_vertical_position = 1/3
+        new_sequences_vector,
+        original_sequences_vector,
+        original_indices_to_annotate,
+        annotation_interval,
+        annotate_full_lines = FALSE,
+        annotations_above = TRUE,
+        annotation_vertical_position = 1/3
 ) {
     ## Instantly return empty dataframe if interval or indices is blank
     if (annotation_interval == 0 || length(original_indices_to_annotate) == 0) {
         return(data.frame("x_position" = numeric(), "y_position" = numeric(), "annotation" = character(), "type" = character()))
     }
-
+    ## Check sorting and uniqueness
+    if (any(sort(original_indices_to_annotate, na.last = TRUE) != original_indices_to_annotate)) {
+        abort(paste0("original_indices_to_annotate must be sorted. current value: ", paste(original_indices_to_annotate, collapse = ", ")), class = "argument_value_or_type")
+    }
+    if (length(unique(original_indices_to_annotate)) != length(original_indices_to_annotate)) {
+        abort(paste0("original_indices_to_annotate must be unique. current value: ", paste(original_indices_to_annotate, collapse = ", ")), class = "argument_value_or_type")
+    }
 
     ## Update indices to account for added blank lines
     annotation_indices <- original_indices_to_annotate + seq_along(original_indices_to_annotate)*ceiling(annotation_vertical_position) - as.numeric(annotations_above)*ceiling(annotation_vertical_position)

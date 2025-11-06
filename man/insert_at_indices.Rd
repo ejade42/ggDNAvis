@@ -17,7 +17,7 @@ insert_at_indices(
 
 \item{insertion_indices}{\verb{integer vector}. The indices (1-indexed) at which blanks should be inserted. If length 0, no blanks will be inserted.}
 
-\item{insert_before}{\code{logical}. Whether blanks should be inserted before (\code{TRUE}, default) or after (\code{FALSE}) each specified index.}
+\item{insert_before}{\code{logical}. Whether blanks should be inserted before (\code{TRUE}, default) or after (\code{FALSE}) each specified index. Values must be sorted and unique.}
 
 \item{insert}{\code{value}. The value that should be inserted before/after each specified index. Defaults to \code{""}. If length 0, nothing will be inserted. If length > 1, multiple items will be inserted at each specified index.}
 
@@ -38,14 +38,14 @@ insert_at_indices(c("A", "B", "C", "D", "E"), c(2, 4))
 
 insert_at_indices(
     c("A", "B", "C", "D", "E"),
-    c(4, 2),
+    c(2, 4),
     insert_before = TRUE,
     insert = 0
 )
 
 insert_at_indices(
     c("A", "B", "C", "D", "E"),
-    c(4, 2),
+    c(2, 4),
     insert_before = FALSE,
     insert = 0
 )

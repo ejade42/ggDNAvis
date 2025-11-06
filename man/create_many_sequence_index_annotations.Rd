@@ -19,15 +19,15 @@ create_many_sequence_index_annotations(
 
 \item{original_sequences_vector}{\code{vector}. The vector of sequences used for plotting, that was originally given to \code{\link[=visualise_many_sequences]{visualise_many_sequences()}}. Must also have been used as input to \code{\link[=insert_at_indices]{insert_at_indices()}} to create \code{new_sequences_vector}.}
 
-\item{original_indices_to_annotate}{\verb{positive integer vector}. The vector of lines (i.e. indices) of \code{original_vector} to be annotated. Read from \code{index_annotation_lines} argument to \verb{[visualise_many_sequences()]}. Must also have been used as input to \code{\link[=insert_at_indices]{insert_at_indices()}} to create \code{new_sequences_vector}.}
+\item{original_indices_to_annotate}{\verb{positive integer vector}. The vector of lines (i.e. indices) of \code{original_vector} to be annotated. Read from \code{index_annotation_lines} argument to \verb{[visualise_many_sequences()]} (but after processing, so is assumed to be unique and sorted). Must also have been used as input to \code{\link[=insert_at_indices]{insert_at_indices()}} to create \code{new_sequences_vector}.}
+
+\item{annotation_interval}{\code{integer}. The frequency at which numbers should be placed underneath indicating base index, starting counting from the leftmost base. Setting to \code{0} causes this function to return an empty dataframe.}
 
 \item{annotate_full_lines}{\code{logical}. Whether annotations should be calculated up to the end of the longest line (\code{TRUE}) or to the end of each line being annotated (\code{FALSE}, default).}
 
 \item{annotations_above}{\code{logical}. Whether annotations should be drawn above (\code{TRUE}, default) or below (\code{FALSE}) each annotated line. Must also have been used as input to \code{\link[=insert_at_indices]{insert_at_indices()}} to create \code{new_sequences_vector}.}
 
 \item{annotation_vertical_position}{\code{numeric}. The vertical position above/below each annotated line that annotations should be drawn. Must also have been used as input to \code{\link[=insert_at_indices]{insert_at_indices()}} to create \code{new_sequences_vector}.}
-
-\item{annnotation_interval}{\code{integer}. The frequency at which numbers should be placed underneath indicating base index, starting counting from the leftmost base. Setting to \code{0} causes this function to return an empty dataframe.}
 }
 \value{
 \code{dataframe}. A dataframe with columns \code{x_position}, \code{y_position}, \code{annotation}, and \code{type}, with one observation per annotation number that needs to be drawn onto the ggplot.
@@ -46,6 +46,7 @@ because each line is a different sequence.
 \examples{
 ## Set up arguments (e.g. from visualise_many_sequences() call)
 sequences_data <- example_many_sequences
+index_annotation_lines <- c(1, 23, 37)
 index_annotation_interval <- 10
 index_annotations_above <- TRUE
 index_annotation_full_line <- FALSE
@@ -57,20 +58,23 @@ sequences <- extract_and_sort_sequences(
     example_many_sequences,
     grouping_levels = c("family" = 8, "individual" = 2)
 )
+sequences
 
 ## Insert blank rows as needed
 new_sequences <- insert_at_indices(
     sequences,
-    insertion_indices = c(1, 23, 37),
+    insertion_indices = index_annotation_lines,
     insert_before = index_annotations_above,
     insert = "",
     vert = index_annotation_vertical_position
 )
+new_sequences
 
 ## Create annnotation dataframe
 create_many_sequence_index_annotations(
     new_sequences_vector = new_sequences,
     original_sequences_vector = sequences,
+    original_indices_to_annotate = index_annotation_lines,
     annotation_interval = 10,
     annotate_full_lines = index_annotation_full_line,
     annotations_above = index_annotations_above,

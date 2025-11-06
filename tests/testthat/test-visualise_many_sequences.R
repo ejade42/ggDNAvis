@@ -319,9 +319,9 @@ test_that("constructing sequences vector fails when columns are wrong", {
 test_that("inserting blanks works as expected", {
     expect_equal(insert_at_indices(c("A", "B", "C", "D", "E"), c(2, 4)),
                  c("A", "", "B", "C", "", "D", "E"))
-    expect_equal(insert_at_indices(c("A", "B", "C", "D", "E"), c(4, 2), insert_before = TRUE, insert = 0),
+    expect_equal(insert_at_indices(c("A", "B", "C", "D", "E"), c(2, 4), insert_before = TRUE, insert = 0),
                  c("A", "0", "B", "C", "0", "D", "E"))
-    expect_equal(insert_at_indices(c("A", "B", "C", "D", "E"), c(4, 2), insert_before = FALSE, insert = 0),
+    expect_equal(insert_at_indices(c("A", "B", "C", "D", "E"), c(2, 4), insert_before = FALSE, insert = 0),
                  c("A", "B", "0", "C", "D", "0", "E"))
     expect_warning(expect_equal(insert_at_indices(c("A", "B", "C", "D", "E"), c(1, 4, 6), insert_before = TRUE, insert = c("X", "Y")),
                  c("X", "Y", "A", "B", "C", "X", "Y", "D", "E")),
@@ -342,8 +342,8 @@ test_that("inserting blanks works as expected", {
 })
 
 test_that("inserting blanks fails when required", {
-    bad_param_value_for_pos_int_vec <- list("X", TRUE, NA, NULL, list(1), -1, c(2, 0))
-    for (param in bad_param_value_for_pos_int_vec) {
+    bad_param_value_for_sorted_unique_pos_int_vec <- list("X", TRUE, NA, NULL, list(1), -1, c(2, 0), c(2, 1), c(1, 1, 2))
+    for (param in bad_param_value_for_sorted_unique_pos_int_vec) {
         expect_error(insert_at_indices(c("A", "B", "C", "D", "E"), param), class = "argument_value_or_type")
     }
 
