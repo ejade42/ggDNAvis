@@ -19,7 +19,7 @@
 #' @param index_annotation_interval `integer`. The frequency at which numbers should be placed underneath indicating base index, starting counting from the leftmost base. Defaults to `15` (every 15 bases along each row).\cr\cr Setting to `0` disables index annotations (and prevents adding additional blank lines).
 #' @param index_annotations_above `logical`. Whether index annotations should go above (`TRUE`, default) or below (`FALSE`) each line of sequence.
 #' @param index_annotation_vertical_position `numeric`. How far annotation numbers should be rendered above (if `index_annotations_above = TRUE`) or below (if `index_annotations_above = FALSE`) each base. Defaults to `1/3`.\cr\cr Not recommended to change at all. Strongly discouraged to set below 0 or above 1.
-#' @param index_annotation_full_line `logical`. Whether index annotations should continue to the end of the longest sequence (`TRUE`, default) or should only continue as far as each selected line does (`FALSE`).
+#' @param index_annotation_full_line `logical`. Whether index annotations should continue to the end of the longest sequence (`TRUE`) or should only continue as far as each selected line does (`FALSE`, default).
 #' @param outline_colour `character`. The colour of the box outlines. Defaults to black.
 #' @param outline_linewidth `numeric`. The linewidth of the box outlines. Defaults to `3`. Set to `0` to disable box outlines.
 #' @param outline_join `character`. One of `"mitre"`, `"round"`, or `"bevel"` specifying how outlines should be joined at the corners of boxes. Defaults to `"mitre"`. It would be unusual to need to change this.
@@ -83,7 +83,7 @@ visualise_many_sequences <- function(
     index_annotation_interval = 15,
     index_annotations_above = TRUE,
     index_annotation_vertical_position = 1/3,
-    index_annotation_full_line = TRUE,
+    index_annotation_full_line = FALSE,
     outline_colour = "black",
     outline_linewidth = 3,
     outline_join = "mitre",
@@ -436,7 +436,7 @@ extract_and_sort_sequences <- function(sequence_dataframe, sequence_variable = "
 #' @param insertion_indices `integer vector`. The indices (1-indexed) at which blanks should be inserted. If length 0, no blanks will be inserted.
 #' @param insert_before `logical`. Whether blanks should be inserted before (`TRUE`, default) or after (`FALSE`) each specified index.
 #' @param insert `value`. The value that should be inserted before/after each specified index. Defaults to `""`. If length 0, nothing will be inserted. If length > 1, multiple items will be inserted at each specified index.
-#' @param vert `numerical`. The vertical distance into the box that index annotations will be drawn. If set to `NA` (default) does nothing so that this function is more generalisable.
+#' @param vert `numerical`. The vertical distance into the box that index annotations will be drawn. If set to `NA` (default) does nothing so that this function is more generalisable. If set to a number, then the `insert` will be repeated `ceiling(vert)` times each time it is inserted.
 #'
 #' @return `vector`. The original vector but with the `insert` value added before/after each specified index.
 #'
@@ -534,17 +534,76 @@ insert_at_indices <- function(original_vector, insertion_indices, insert_before 
 
 
 
+
+#' Create index annotations at variable line positions in many sequences data ([visualise_many_sequences()] helper)
+#'
+#' This function is called by [visualise_many_sequences()] to create the x/y position
+#' data for placing the index annotations on the graph.
+#' Its arguments are either intermediate variables produced by [visualise_many_sequences()],
+#' or arguments of [visualise_many_sequences()] directly passed through.\cr\cr
+#' Returns a dataframe with `x_position`, `y_position`, `annotation`, and `type` columns.
+#' `type` is always `"Number"` (unused, but for consistency with [convert_sequences_to_annotations()]).
+#' `annotation` is always the position of the base along the line. In this function, the count
+#' is reset each line (compared to counting consistenly along in [convert_sequences_to_annotations()])
+#' because each line is a different sequence.
+#'
+#' @param new_sequences_vector `vector`. The output of [insert_at_indices()] when used with identical arguments.
+#' @param original_sequences_vector `vector`. The vector of sequences used for plotting, that was originally given to [visualise_many_sequences()]. Must also have been used as input to [insert_at_indices()] to create `new_sequences_vector`.
+#' @param original_indices_to_annotate `positive integer vector`. The vector of lines (i.e. indices) of `original_vector` to be annotated. Read from `index_annotation_lines` argument to `[visualise_many_sequences()]`. Must also have been used as input to [insert_at_indices()] to create `new_sequences_vector`.
+#' @param annnotation_interval `integer`. The frequency at which numbers should be placed underneath indicating base index, starting counting from the leftmost base. Setting to `0` causes this function to return an empty dataframe.
+#' @param annotate_full_lines `logical`. Whether annotations should be calculated up to the end of the longest line (`TRUE`) or to the end of each line being annotated (`FALSE`, default).
+#' @param annotations_above `logical`. Whether annotations should be drawn above (`TRUE`, default) or below (`FALSE`) each annotated line. Must also have been used as input to [insert_at_indices()] to create `new_sequences_vector`.
+#' @param annotation_vertical_position `numeric`. The vertical position above/below each annotated line that annotations should be drawn. Must also have been used as input to [insert_at_indices()] to create `new_sequences_vector`.
+#'
+#' @return `dataframe`. A dataframe with columns `x_position`, `y_position`, `annotation`, and `type`, with one observation per annotation number that needs to be drawn onto the ggplot.
+#'
+#' @examples
+#' ## Set up arguments (e.g. from visualise_many_sequences() call)
+#' sequences_data <- example_many_sequences
+#' index_annotation_interval <- 10
+#' index_annotations_above <- TRUE
+#' index_annotation_full_line <- FALSE
+#' index_annotation_vertical_position <- 1/3
+#'
+#'
+#' ## Create sequences vector
+#' sequences <- extract_and_sort_sequences(
+#'     example_many_sequences,
+#'     grouping_levels = c("family" = 8, "individual" = 2)
+#' )
+#'
+#' ## Insert blank rows as needed
+#' new_sequences <- insert_at_indices(
+#'     sequences,
+#'     insertion_indices = c(1, 23, 37),
+#'     insert_before = index_annotations_above,
+#'     insert = "",
+#'     vert = index_annotation_vertical_position
+#' )
+#'
+#' ## Create annnotation dataframe
+#' create_many_sequence_index_annotations(
+#'     new_sequences_vector = new_sequences,
+#'     original_sequences_vector = sequences,
+#'     annotation_interval = 10,
+#'     annotate_full_lines = index_annotation_full_line,
+#'     annotations_above = index_annotations_above,
+#'     annotation_vertical_position = index_annotation_vertical_position
+#' )
+#'
+#'
+#' @export
 create_many_sequence_index_annotations <- function(
-    index_annotation_interval,
     new_sequences_vector,
     original_sequences_vector,
     original_indices_to_annotate,
-    annotate_full_lines = TRUE,
+    annotation_interval,
+    annotate_full_lines = FALSE,
     annotations_above = TRUE,
     annotation_vertical_position = 1/3
 ) {
     ## Instantly return empty dataframe if interval or indices is blank
-    if (index_annotation_interval == 0 || length(original_indices_to_annotate) == 0) {
+    if (annotation_interval == 0 || length(original_indices_to_annotate) == 0) {
         return(data.frame("x_position" = numeric(), "y_position" = numeric(), "annotation" = character(), "type" = character()))
     }
 
@@ -583,7 +642,7 @@ create_many_sequence_index_annotations <- function(
 
         ## Iterate along line and create dataframe observations for annotations
         for (j in 1:line_length) {
-            if (j %% index_annotation_interval == 0) {
+            if (j %% annotation_interval == 0) {
                 x_position <- x_interval * (j - 1/2)
 
                 if (annotations_above == TRUE) {

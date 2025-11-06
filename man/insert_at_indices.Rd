@@ -21,7 +21,7 @@ insert_at_indices(
 
 \item{insert}{\code{value}. The value that should be inserted before/after each specified index. Defaults to \code{""}. If length 0, nothing will be inserted. If length > 1, multiple items will be inserted at each specified index.}
 
-\item{vert}{\code{numerical}. The vertical distance into the box that index annotations will be drawn. If set to \code{NA} (default) does nothing so that this function is more generalisable.}
+\item{vert}{\code{numerical}. The vertical distance into the box that index annotations will be drawn. If set to \code{NA} (default) does nothing so that this function is more generalisable. If set to a number, then the \code{insert} will be repeated \code{ceiling(vert)} times each time it is inserted.}
 }
 \value{
 \code{vector}. The original vector but with the \code{insert} value added before/after each specified index.
