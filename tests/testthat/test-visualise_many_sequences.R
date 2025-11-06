@@ -217,27 +217,46 @@ test_that("main plotting function works with outlines and annnotations, all, bel
 
 ## Test fail cases/invalid arguments to main multiple sequence visualisation function
 test_that("single sequence visualisation fails when arguments are invalid", {
-    bad_param_value_for_non_negative_num <- list("hi", -1, TRUE, c(1, 2), NA)
+    bad_param_value_for_num <- list("hi", TRUE, NA, NULL)
+    for (param in bad_param_value_for_num) {
+        expect_error(visualise_many_sequences(sequence_vector_1, index_annotation_vertical_position = param), class = "argument_value_or_type")
+    }
+
+    bad_param_value_for_non_negative_num <- list("hi", -1, TRUE, c(1, 2), NA, NULL)
     for (param in bad_param_value_for_non_negative_num) {
         expect_error(visualise_many_sequences(sequence_vector_1, sequence_text_size = param), class = "argument_value_or_type")
+        expect_error(visualise_many_sequences(sequence_vector_1, index_annotation_size = param), class = "argument_value_or_type")
         expect_error(visualise_many_sequences(sequence_vector_1, margin = param), class = "argument_value_or_type")
         expect_error(visualise_many_sequences(sequence_vector_1, outline_linewidth = param), class = "argument_value_or_type")
     }
 
-    bad_param_value_for_positive_int <- list("hi", -1, TRUE, c(1, 2), NA, 1.5, sqrt(5), 0)
+    bad_param_value_for_positive_int <- list("hi", -1, TRUE, c(1, 2), NA, 1.5, sqrt(5), 0, NULL)
     for (param in bad_param_value_for_positive_int) {
         expect_error(visualise_many_sequences(sequence_vector_1, pixels_per_base = param), class = "argument_value_or_type")
     }
 
-    bad_param_value_for_logical <- list(1, 1.5, -1, "hi", c(TRUE, FALSE), NA)
-    for (param in bad_param_value_for_logical) {
-        expect_error(visualise_many_sequences(sequence_vector_1, return = param), class = "argument_value_or_type")
+    bad_param_value_for_positive_int_vector <- list("hi", -1, TRUE, 1.5, sqrt(5), 0, c(1, 0), c(1, 2, 3, -5), c(1, 1.1))
+    for (param in bad_param_value_for_positive_int_vector) {
+        expect_error(visualise_many_sequences(sequence_vector_1, index_annotation_lines = param), class = "argument_value_or_type")
     }
 
-    bad_param_value_for_single_character <- list(c("hi", "bye"), 1, TRUE, -1, 0, 1.5, -1.5, c("A", "B", "C", "D"), NA, c(NA, NA))
+    bad_param_value_for_non_neg_int <- list("hi", -1, TRUE, c(1, 2), NA, 1.5, sqrt(5), NULL)
+    for (param in bad_param_value_for_non_neg_int) {
+        expect_error(visualise_many_sequences(sequence_vector_1, index_annotation_interval = param), class = "argument_value_or_type")
+    }
+
+    bad_param_value_for_logical <- list(1, 1.5, -1, "hi", c(TRUE, FALSE), NA, NULL)
+    for (param in bad_param_value_for_logical) {
+        expect_error(visualise_many_sequences(sequence_vector_1, return = param), class = "argument_value_or_type")
+        expect_error(visualise_many_sequences(sequence_vector_1, index_annotations_above = param), class = "argument_value_or_type")
+        expect_error(visualise_many_sequences(sequence_vector_1, index_annotation_full_line = param), class = "argument_value_or_type")
+    }
+
+    bad_param_value_for_single_character <- list(c("hi", "bye"), 1, TRUE, -1, 0, 1.5, -1.5, c("A", "B", "C", "D"), NA, c(NA, NA), NULL)
     for (param in bad_param_value_for_single_character) {
         expect_error(visualise_many_sequences(sequence_vector_1, background_colour = param), class = "argument_value_or_type")
         expect_error(visualise_many_sequences(sequence_vector_1, sequence_text_colour = param), class = "argument_value_or_type")
+        expect_error(visualise_many_sequences(sequence_vector_1, index_annotation_colour = param), class = "argument_value_or_type")
         expect_error(visualise_many_sequences(sequence_vector_1, outline_colour = param), class = "argument_value_or_type")
         expect_error(visualise_many_sequences(sequence_vector_1, outline_join = param), class = "argument_value_or_type")
     }

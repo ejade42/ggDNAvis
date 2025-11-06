@@ -71,26 +71,26 @@
 #'
 #' @export
 visualise_many_sequences <- function(
-        sequences_vector,
-        sequence_colours = sequence_colour_palettes$ggplot_style,
-        background_colour = "white",
-        margin = 0.5,
-        sequence_text_colour = "black",
-        sequence_text_size = 16,
-        index_annotation_lines = NA,
-        index_annotation_colour = "darkred",
-        index_annotation_size = 12.5,
-        index_annotation_interval = 15,
-        index_annotations_above = TRUE,
-        index_annotation_vertical_position = 1/3,
-        index_annotation_full_line = TRUE,
-        outline_colour = "black",
-        outline_linewidth = 3,
-        outline_join = "mitre",
-        return = TRUE,
-        filename = NA,
-        render_device = ragg::agg_png,
-        pixels_per_base = 100
+    sequences_vector,
+    sequence_colours = sequence_colour_palettes$ggplot_style,
+    background_colour = "white",
+    margin = 0.5,
+    sequence_text_colour = "black",
+    sequence_text_size = 16,
+    index_annotation_lines = NA,
+    index_annotation_colour = "darkred",
+    index_annotation_size = 12.5,
+    index_annotation_interval = 15,
+    index_annotations_above = TRUE,
+    index_annotation_vertical_position = 1/3,
+    index_annotation_full_line = TRUE,
+    outline_colour = "black",
+    outline_linewidth = 3,
+    outline_join = "mitre",
+    return = TRUE,
+    filename = NA,
+    render_device = ragg::agg_png,
+    pixels_per_base = 100
 ) {
     ## Validate arguments
     for (argument in list(sequences_vector, sequence_colours, background_colour, margin, sequence_text_colour, sequence_text_size, index_annotation_colour, index_annotation_size, index_annotation_interval, index_annotations_above, index_annotation_vertical_position, index_annotation_full_line, outline_colour, outline_linewidth, outline_join, return, filename, pixels_per_base)) {
@@ -535,13 +535,13 @@ insert_at_indices <- function(original_vector, insertion_indices, insert_before 
 
 
 create_many_sequence_index_annotations <- function(
-        index_annotation_interval,
-        new_sequences_vector,
-        original_sequences_vector,
-        original_indices_to_annotate,
-        annotate_full_lines = TRUE,
-        annotations_above = TRUE,
-        annotation_vertical_position = 1/3
+    index_annotation_interval,
+    new_sequences_vector,
+    original_sequences_vector,
+    original_indices_to_annotate,
+    annotate_full_lines = TRUE,
+    annotations_above = TRUE,
+    annotation_vertical_position = 1/3
 ) {
     ## Instantly return empty dataframe if interval or indices is blank
     if (index_annotation_interval == 0 || length(original_indices_to_annotate) == 0) {
