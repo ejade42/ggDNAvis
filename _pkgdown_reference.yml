@@ -53,6 +53,7 @@ reference:
   - convert_sequence_to_numbers
   - convert_sequences_to_annotations
   - create_image_data
+  - create_many_sequence_index_annotations
   - insert_at_indices
   - rasterise_matrix
   - reverse_sequence_if_needed

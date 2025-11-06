@@ -158,7 +158,6 @@ visualise_many_sequences <- function(
     }
 
 
-
     ## Insert additional blank lines for index annotations (nothing changes if length(index_annotation_lines) == 0)
     new_sequences_vector <- insert_at_indices(sequences_vector, index_annotation_lines, insert_before = index_annotations_above, insert = "", vert = index_annotation_vertical_position)
     extra_spaces <- ceiling(index_annotation_vertical_position)
@@ -167,7 +166,7 @@ visualise_many_sequences <- function(
     ## Generate data for plotting
     image_data <- create_image_data(new_sequences_vector)
     sequence_text_data <- convert_sequences_to_annotations(new_sequences_vector, line_length = max(nchar(new_sequences_vector)), interval = 0)
-    index_annotation_data <- create_many_sequence_index_annotations(index_annotation_interval, new_sequences_vector, sequences_vector, index_annotation_lines, index_annotation_full_line, index_annotations_above, index_annotation_vertical_position)
+    index_annotation_data <- create_many_sequence_index_annotations(new_sequences_vector, sequences_vector, index_annotation_lines, index_annotation_interval, index_annotation_full_line, index_annotations_above, index_annotation_vertical_position)
 
 
     ## Name the sequence colours vector
@@ -606,6 +605,7 @@ create_many_sequence_index_annotations <- function(
     if (annotation_interval == 0 || length(original_indices_to_annotate) == 0) {
         return(data.frame("x_position" = numeric(), "y_position" = numeric(), "annotation" = character(), "type" = character()))
     }
+
 
     ## Update indices to account for added blank lines
     annotation_indices <- original_indices_to_annotate + seq_along(original_indices_to_annotate)*ceiling(annotation_vertical_position) - as.numeric(annotations_above)*ceiling(annotation_vertical_position)
