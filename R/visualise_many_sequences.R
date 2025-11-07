@@ -528,10 +528,10 @@ insert_at_indices <- function(
     }
     ## Check sorting and uniqueness
     if (any(sort(insertion_indices, na.last = TRUE) != insertion_indices)) {
-        abort(paste0("insertion_indices must be sorted. current value: ", paste(insertion_indices, collapse = ", ")), class = "argument_value_or_type")
+        abort(paste0("insertion_indices must be sorted.\nCurrent value: ", paste(insertion_indices, collapse = ", ")), class = "argument_value_or_type")
     }
     if (length(unique(insertion_indices)) != length(insertion_indices)) {
-        abort(paste0("insertion_indices must be unique. current value: ", paste(insertion_indices, collapse = ", ")), class = "argument_value_or_type")
+        abort(paste0("insertion_indices must be unique.\nCurrent value: ", paste(insertion_indices, collapse = ", ")), class = "argument_value_or_type")
     }
 
     ## Insert additional blanks if vert is specified
@@ -631,6 +631,7 @@ create_many_sequence_index_annotations <- function(
     annotation_vertical_position = 1/3
 ) {
     ## Validate arguments
+    ## ---------------------------------------------------------------------
     not_na <- list(new_sequences_vector = new_sequences_vector, original_sequences_vector = original_sequences_vector, original_indices_to_annotate = original_indices_to_annotate, annotation_interval = annotation_interval, annotate_full_lines = annotate_full_lines, annotations_above = annotations_above, annotation_vertical_position = annotation_vertical_position)
     for (argument in names(not_na)) {
         if (any(is.na(not_na[[argument]]))) {
@@ -699,17 +700,17 @@ create_many_sequence_index_annotations <- function(
     if (length(unique(original_indices_to_annotate)) != length(original_indices_to_annotate)) {
         abort(paste0("original_indices_to_annotate must be unique.\nCurrent value: ", paste(original_indices_to_annotate, collapse = ", ")), class = "argument_value_or_type")
     }
+    ## ---------------------------------------------------------------------
 
 
 
 
-    ## Update indices to account for added blank lines
-    annotation_indices <- original_indices_to_annotate + seq_along(original_indices_to_annotate)*ceiling(annotation_vertical_position) - as.numeric(annotations_above)*ceiling(annotation_vertical_position)
-    if (annotations_above) {
-        corresponding_sequence_indices <- annotation_indices + ceiling(annotation_vertical_position)
-    } else {
-        corresponding_sequence_indices <- annotation_indices - ceiling(annotation_vertical_position)
-    }
+    ## Calculate indices of the sequences we are annotating
+    ## e.g. if sequences 1, 2, and 4 were annotated, they are now at positions:
+    ## - 2, 4, and 7 if insertions went before
+    ## - 1, 3, and 6 if insertions went after
+    ## (assuming each insertion is only one line - seq_along term is scaled if needed)
+    annotated_sequence_indices <- original_indices_to_annotate + seq_along(original_indices_to_annotate)*ceiling(annotation_vertical_position) - as.numeric(!annotations_above)*ceiling(annotation_vertical_position)
 
 
     ## Calculate scaling factors
@@ -720,14 +721,13 @@ create_many_sequence_index_annotations <- function(
     ## Create actual data
     ## Make sure we don't iterate further than lines exist
     annotation_data <- data.frame(NULL)
-    for (i in 1:min(length(annotation_indices), length(original_sequences_vector))) {
-        annotation_index <- annotation_indices[i]
-        corresponding_sequence_index <- corresponding_sequence_indices[i]
+    for (i in 1:min(length(annotated_sequence_indices), length(original_sequences_vector))) {
+        annotated_sequence_index <- annotated_sequence_indices[i]
 
         ## Set max length along the line to annotate up to
         ## Either from overall max length, or from length of annotated sequence
         if (!annotate_full_lines) {
-            line_length <- nchar(new_sequences_vector[corresponding_sequence_index])
+            line_length <- nchar(new_sequences_vector[annotated_sequence_index])
             if (is.na(line_length)) {
                 abort("Provided indices go out of range, please avoid doing this", class = "out_of_range")
             }
@@ -741,9 +741,9 @@ create_many_sequence_index_annotations <- function(
                 x_position <- x_interval * (j - 1/2)
 
                 if (annotations_above == TRUE) {
-                    y_position <- 1 - y_interval * (corresponding_sequence_index - 1 - annotation_vertical_position)
+                    y_position <- 1 - y_interval * (annotated_sequence_index - 1 - annotation_vertical_position)
                 } else if (annotations_above == FALSE) {
-                    y_position <- 1 - y_interval * (corresponding_sequence_index + annotation_vertical_position)
+                    y_position <- 1 - y_interval * (annotated_sequence_index + annotation_vertical_position)
                 }
 
                 annotation <- as.character(j)

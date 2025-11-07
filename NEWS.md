@@ -1,5 +1,17 @@
 # ggDNAvis (development version)
 
+New features:
+
+* `visualise_many_sequences()` now has index annotations! Arguments are the same as for `visualise_single_sequence()`, except with the additional `index_annotation_lines` (specifies any combination of lines to annotate, counting down from the top) and `index_annotation_full_lines` (specifies whether annotations should go up to the maximum line length, or stop for each line when that line's sequence ends) arguments. Of course, because each line is a different sequence, indices here "reset" each line rather than counting the total number of bases across lines.
+
+User-facing changes:
+
+* Removed warning for "incorrectly" removing index annotations. Now setting any relevant argument to 0/empty (e.g. `index_annotation_size = 0`, `index_annotation_interval = 0`, `index_annotation_lines = numeric(0)`) will automatically change the "main" one to remove annotations.
+
+Background changes:
+
+* Added new helper functions: [insert_at_indices()] and [create_many_sequences_index_annotations()]
+
 # ggDNAvis 0.3.2
 
 * Added files related to pkgdown website building to .Rbuildignore so they are not part of the R package anymore (this caused a CRAN rejection).
