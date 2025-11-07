@@ -1,3 +1,52 @@
+#' Print an error to console (generic `ggDNAvis` helper)
+#'
+#' This function takes an argument name, a named list of arguments
+#' (presumably being iterated over for a particular validation check),
+#' and a message. It prints an error message of the form:
+#'     Argument '<argument_name>' <message>
+#'     Current value: <argument_value>
+#'
+#' @param argument_name `character`. The name of the argument that caused the error
+#' @param arguments_list `list`. A named list where `arguments_list[[argument_name]]` is the value of the offending argument.
+#' @param message `character`. The message that should be printed to describe why the argument is invalid.
+#' @param class `character`. The class that the error should have. Defaults to `"argument_value_or_type"` for my own use.
+#'
+#' @return Nothing, but causes an error exit via [rlang::abort()]
+#'
+#' @examples
+#' ## Obviously this error message function causes
+#' ## an error, so needs to be wrapped in try()
+#' positive_args <- list(number = -1)
+#' try(bad_arg("number", positive_args, "must be positive"))
+#'
+#' @export
+bad_arg <- function(argument_name, arguments_list, message, class = "argument_value_or_type") {
+    ## Validate arguments
+    ## ---------------------------------------------------------------------
+    length_1_char <- list(argument_name = argument_name, message = message, class = class)
+    for (argument in names(length_1_char)) {
+        if (any(is.na(length_1_char[[argument]]))) {
+            bad_arg(argument, length_1_char, "must not be NA.")
+        }
+        if (any(is.null(length_1_char[[argument]]))) {
+            bad_arg(argument, length_1_char, "must not be NULL.")
+        }
+        if (length(length_1_char[[argument]]) != 1) {
+            bad_arg(argument, length_1_char, "must have length 1.")
+        }
+        if (is.character(length_1_char[[argument]]) == FALSE) {
+            bad_arg(argument, length_1_char, "must be of type character.")
+        }
+    }
+    if (!(argument_name %in% names(arguments_list))) {
+        abort(paste0("Argument 'argument_name' must be the name of an item in named list 'arguments_list'.\nargument_name: ", argument_name, "\nCurrent names of arguments_list: ", paste(names(arguments_list), collapse = ", ")), class = "argument_value_or_type")
+    }
+    ## ---------------------------------------------------------------------
+
+    abort(paste0("Argument '", argument_name, "' ", message, "\nCurrent value: ", paste(arguments_list[[argument_name]], collapse = ", ")), class = class)
+}
+
+
 ## Basic utilities for vector and string conversion
 ## ------------------------------------------------------------------------------------------
 

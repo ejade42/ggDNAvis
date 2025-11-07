@@ -93,12 +93,21 @@ visualise_many_sequences <- function(
     pixels_per_base = 100
 ) {
     ## Validate arguments
-    for (argument in list(sequences_vector, sequence_colours, background_colour, margin, sequence_text_colour, sequence_text_size, index_annotation_colour, index_annotation_size, index_annotation_interval, index_annotations_above, index_annotation_vertical_position, index_annotation_full_line, outline_colour, outline_linewidth, outline_join, return, filename, pixels_per_base)) {
-        if (mean(is.null(argument)) != 0) {abort(paste("Argument", argument, "must not be null."), class = "argument_value_or_type")}
+    ## ---------------------------------------------------------------------
+    not_null <- list(sequences_vector = sequences_vector, sequence_colours = sequence_colours, background_colour = background_colour, margin = margin, sequence_text_colour = sequence_text_colour, sequence_text_size = sequence_text_size, index_annotation_colour = index_annotation_colour, index_annotation_size = index_annotation_size, index_annotation_interval = index_annotation_interval, index_annotations_above = index_annotations_above, index_annotation_vertical_position = index_annotation_vertical_position, index_annotation_full_line = index_annotation_full_line, outline_colour = outline_colour, outline_linewidth = outline_linewidth, outline_join = outline_join, return = return, filename = filename, pixels_per_base = pixels_per_base)
+    for (argument in names(not_null)) {
+        if (any(is.null(not_null[[argument]]))) {
+            bad_arg(argument, not_null, "must not be NULL.")
+        }
     }
-    for (argument in list(background_colour, margin, sequence_text_colour, sequence_text_size, index_annotation_colour, index_annotation_size, index_annotation_interval, index_annotations_above, index_annotation_vertical_position, index_annotation_full_line, outline_colour, outline_linewidth, outline_join, return, filename, pixels_per_base)) {
-        if (length(argument) != 1) {abort(paste("Argument", argument, "must have length 1"), class = "argument_value_or_type")}
+    not_null <- NULL
+
+    length_1 <- list(background_colour = background_colour, margin = margin, sequence_text_colour = sequence_text_colour, sequence_text_size = sequence_text_size, index_annotation_colour = index_annotation_colour, index_annotation_size = index_annotation_size, index_annotation_interval = index_annotation_interval, index_annotations_above = index_annotations_above, index_annotation_vertical_position = index_annotation_vertical_position, index_annotation_full_line = index_annotation_full_line, outline_colour = outline_colour, outline_linewidth = outline_linewidth, outline_join = outline_join, return = return, filename = filename, pixels_per_base = pixels_per_base)
+    for (argument in names(length_1)) {
+        if (length(length_1[[argument]]) != 1) {bad_arg(argument, length_1, "must have length 1.")}
     }
+    length_1 <- NULL
+
     for (argument in list(sequences_vector, sequence_colours, background_colour, margin, sequence_text_colour, sequence_text_size, index_annotation_colour, index_annotation_size, index_annotation_interval, index_annotations_above, index_annotation_vertical_position, index_annotation_full_line, outline_colour, outline_linewidth, outline_join, return, pixels_per_base)) {
         if (mean(is.na(argument)) != 0) {abort(paste("Argument", argument, "must not be NA"), class = "argument_value_or_type")}
     }
@@ -168,6 +177,9 @@ visualise_many_sequences <- function(
         inform(paste0("Automatically making index_annotation_lines unique.\nBefore: ", paste(index_annotation_lines, collapse = ", "), "\nAfter: ", paste(unique_index_annotation_lines, collapse = ", ")), class = "sanitising_index_annotation_lines")
         index_annotation_lines <- unique_index_annotation_lines
     }
+    ## ---------------------------------------------------------------------
+
+
 
 
     ## Insert additional blank lines for index annotations (nothing changes if length(index_annotation_lines) == 0)
@@ -508,6 +520,7 @@ insert_at_indices <- function(
     vert = NA
 ) {
     ## Validate arguments
+    ## ---------------------------------------------------------------------
     if (is.vector(original_vector) == FALSE) {
         abort("original_vector must be a vector", class = "argument_value_or_type")
     }
@@ -533,6 +546,10 @@ insert_at_indices <- function(
     if (length(unique(insertion_indices)) != length(insertion_indices)) {
         abort(paste0("insertion_indices must be unique.\nCurrent value: ", paste(insertion_indices, collapse = ", ")), class = "argument_value_or_type")
     }
+    ## ---------------------------------------------------------------------
+
+
+
 
     ## Insert additional blanks if vert is specified
     if (is.na(vert) == FALSE) {
@@ -638,6 +655,7 @@ create_many_sequence_index_annotations <- function(
             abort(paste0("Argument '", argument, "' must not be NA.\nCurrent value: ", paste(not_na[[argument]], collapse = ", ")), class = "argument_value_or_type")
         }
     }
+    not_na <- NULL
 
     not_null <- list(new_sequences_vector = new_sequences_vector, original_sequences_vector = original_sequences_vector, original_indices_to_annotate = original_indices_to_annotate, annotation_interval = annotation_interval, annotate_full_lines = annotate_full_lines, annotations_above = annotations_above, annotation_vertical_position = annotation_vertical_position)
     for (argument in names(not_null)) {
@@ -645,6 +663,7 @@ create_many_sequence_index_annotations <- function(
             abort(paste0("Argument '", argument, "' must not be NULL.\nCurrent value: ", paste(not_null[[argument]], collapse = ", ")), class = "argument_value_or_type")
         }
     }
+    not_null <- NULL
 
     vectors <- list(new_sequences_vector = new_sequences_vector, original_sequences_vector = original_sequences_vector)
     for (argument in names(vectors)) {
@@ -652,6 +671,7 @@ create_many_sequence_index_annotations <- function(
             abort(paste0("Argument '", argument, "' must be a vector.\nCurrent value: ", paste(vectors[[argument]], collapse = ", ")), class = "argument_value_or_type")
         }
     }
+    vectors <- NULL
 
     length_1 <- list(annotation_interval = annotation_interval, annotate_full_lines = annotate_full_lines, annotations_above = annotations_above, annotation_vertical_position = annotation_vertical_position)
     for (argument in names(length_1)) {
@@ -659,6 +679,7 @@ create_many_sequence_index_annotations <- function(
             abort(paste0("Argument '", argument, "' must have length 1.\nCurrent value: ", paste(length_1[[argument]], collapse = ", ")), class = "argument_value_or_type")
         }
     }
+    length_1 <- NULL
 
     non_neg_numeric <- list(original_indices_to_annotate = original_indices_to_annotate, annotation_interval = annotation_interval, annotation_vertical_position = annotation_vertical_position)
     for (argument in names(non_neg_numeric)) {
@@ -666,13 +687,16 @@ create_many_sequence_index_annotations <- function(
             abort(abort(paste0("Argument '", argument, "' must be numeric and non-negative.\nCurrent value: ", paste(non_neg_numeric[[argument]], collapse = ", ")), class = "argument_value_or_type"))
         }
     }
+    non_neg_numeric <- NULL
 
-    integer <- list(original_indices_to_annotate = original_indices_to_annotate, annotation_interval = annotation_interval)
-    for (argument in names(integer)) {
-        if (any(integer[[argument]] %% 1 != 0)) {
-            abort(abort(paste0("Argument '", argument, "' must be integer only.\nCurrent value: ", paste(integer[[argument]], collapse = ", ")), class = "argument_value_or_type"))
+    integers <- list(original_indices_to_annotate = original_indices_to_annotate, annotation_interval = annotation_interval)
+    for (argument in names(integers)) {
+        if (any(integers[[argument]] %% 1 != 0)) {
+            bad_arg(argument, integers, "must be integer only.")
+            #abort(abort(paste0("Argument '", argument, "' must be integer only.\nCurrent value: ", paste(integers[[argument]], collapse = ", ")), class = "argument_value_or_type"))
         }
     }
+    integers <- NULL
 
     positive <- list(original_indices_to_annotate = original_indices_to_annotate)
     for (argument in names(positive)) {
@@ -680,6 +704,7 @@ create_many_sequence_index_annotations <- function(
             abort(abort(paste0("Argument '", argument, "' must be positive only.\nCurrent value: ", paste(positive[[argument]], collapse = ", ")), class = "argument_value_or_type"))
         }
     }
+    positive <- NULL
 
     logical <- list(annotate_full_lines = annotate_full_lines, annotations_above = annotations_above)
     for (argument in names(logical)) {
@@ -687,6 +712,7 @@ create_many_sequence_index_annotations <- function(
             abort(abort(paste0("Argument '", argument, "' must be logical/boolean.\nCurrent value: ", paste(logical[[argument]], collapse = ", ")), class = "argument_value_or_type"))
         }
     }
+    logical <- NULL
 
     ## Instantly return empty dataframe if interval or indices is blank
     if (annotation_interval == 0 || length(original_indices_to_annotate) == 0) {

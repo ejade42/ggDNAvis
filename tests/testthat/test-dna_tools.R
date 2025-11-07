@@ -14,6 +14,21 @@ test_that("reverse complementing fails with expected errors", {
 })
 
 
+## Test error reporting
+test_that("error reporting works", {
+    expect_error(bad_arg("x", list(x = 1), "is bad lol", "hi"), class = "hi", regexp = "*Argument 'x' is bad lol\nCurrent value: 1*")
+})
+
+test_that("error reporting recursively rejects bad arguments", {
+    bad_value_for_single_char <- list(NULL, NA, c("x", "y"), TRUE, -1, 0, 1, 1.5)
+    for (param in bad_value_for_single_char) {
+        expect_error(bad_arg(param, list(x = 1), "is bad", class = "not the usual class"), class = "argument_value_or_type")
+        expect_error(bad_arg("x", list(x = 1), param, class = "not the usual class"), class = "argument_value_or_type")
+        expect_error(bad_arg("x", list(x = 1), "is bad", class = param), class = "argument_value_or_type")
+    }
+    expect_error(bad_arg("x", list(y = 1), "is bad", class = "not the usual class"), class = "argument_value_or_type")
+})
+
 
 ## Test converting base to number
 test_that("converting base to number works when expected to", {
