@@ -58,12 +58,13 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="ggdnavis-development-version">ggDNAvis (development version)<a class="anchor" aria-label="anchor" href="#ggdnavis-development-version"></a></h2>
 <p>New features:</p>
-<ul><li>
-<code><a href="../reference/visualise_many_sequences.html">visualise_many_sequences()</a></code> now has index annotations! Arguments are the same as for <code><a href="../reference/visualise_single_sequence.html">visualise_single_sequence()</a></code>, except with the additional <code>index_annotation_lines</code> (specifies any combination of lines to annotate, counting down from the top) and <code>index_annotation_full_lines</code> (specifies whether annotations should go up to the maximum line length, or stop for each line when that line’s sequence ends) arguments. Of course, because each line is a different sequence, indices here “reset” each line rather than counting the total number of bases across lines.</li>
+<ul><li><p><code><a href="../reference/visualise_many_sequences.html">visualise_many_sequences()</a></code> now has index annotations! Arguments are the same as for <code><a href="../reference/visualise_single_sequence.html">visualise_single_sequence()</a></code>, except with the additional <code>index_annotation_lines</code> (specifies any combination of lines to annotate, counting down from the top) and <code>index_annotation_full_lines</code> (specifies whether annotations should go up to the maximum line length, or stop for each line when that line’s sequence ends) arguments. Of course, because each line is a different sequence, indices here “reset” each line rather than counting the total number of bases across lines.</p></li>
+<li><p>Added <code><a href="../reference/bad_arg.html">bad_arg()</a></code> function to streamline error reporting. May be useful for argument validation in other packages so exported.</p></li>
 </ul><p>User-facing changes:</p>
 <ul><li>Removed warning for “incorrectly” removing index annotations. Now setting any relevant argument to 0/empty (e.g. <code>index_annotation_size = 0</code>, <code>index_annotation_interval = 0</code>, <code>index_annotation_lines = numeric(0)</code>) will automatically change the “main” one to remove annotations.</li>
 </ul><p>Background changes:</p>
-<ul><li>Added new helper functions: [insert_at_indices()] and [create_many_sequences_index_annotations()]</li>
+<ul><li><p>Added new helper functions: <code><a href="../reference/insert_at_indices.html">insert_at_indices()</a></code> and <code><a href="../reference/create_many_sequence_index_annotations.html">create_many_sequence_index_annotations()</a></code></p></li>
+<li><p>Starting changing all error reporting to use <code><a href="../reference/bad_arg.html">bad_arg()</a></code> rather than copy pasting.</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.2" id="ggdnavis-032">ggDNAvis 0.3.2<a class="anchor" aria-label="anchor" href="#ggdnavis-032"></a></h2><p class="text-muted">CRAN release: 2025-10-31</p>
@@ -77,15 +78,15 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.0" id="ggdnavis-030">ggDNAvis 0.3.0<a class="anchor" aria-label="anchor" href="#ggdnavis-030"></a></h2><p class="text-muted">CRAN release: 2025-10-01</p>
 <p>Changes:</p>
-<ul><li><p>Removed raster::raster() dependency</p></li>
-<li><p>Added new rasterise_matrix() function to do rasterisation</p></li>
+<ul><li><p>Removed <code>raster::raster()</code> dependency</p></li>
+<li><p>Added new <code><a href="../reference/rasterise_matrix.html">rasterise_matrix()</a></code> function to do rasterisation</p></li>
 <li>
-<p>Changed convert_input_seq_to_sequence_list() behaviour:</p>
+<p>Changed <code><a href="../reference/convert_input_seq_to_sequence_list.html">convert_input_seq_to_sequence_list()</a></code> behaviour:</p>
 <ul><li>Instead of additional spacing lines always being added before or after first line of sequence, there are now independent boolean settings for whether there should be spacing lines before and whether there should be spacing lines after.</li>
 </ul></li>
 </ul><p>Bug fixes:</p>
 <ul><li><p>Fixed critical error with plot matching lenience on some local linux systems that resulted in tests failing</p></li>
-<li><p>Inserted additional padding blank lines above/below with index annotation vertical position &gt; 1 to avoid plot dimensions breaking</p></li>
+<li><p>Inserted additional padding blank lines above/below with <code>index_annotation_vertical_position</code> &gt; 1 to avoid plot dimensions breaking (<code><a href="../reference/visualise_single_sequence.html">visualise_single_sequence()</a></code>)</p></li>
 </ul><p>Known issues remaining:</p>
 <ul><li>
 <p>Related to ggplot v4.0.0:</p>
@@ -95,17 +96,17 @@
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.1" id="ggdnavis-021">ggDNAvis 0.2.1<a class="anchor" aria-label="anchor" href="#ggdnavis-021"></a></h2><p class="text-muted">CRAN release: 2025-09-21</p>
-<ul><li><p>Documented that debug_join_vector functions do not return a value</p></li>
-<li><p>Changed some reference images to account for ggplot updating to v4.0.0</p></li>
+<ul><li><p>Documented that <code><a href="../reference/debug_join_vector_num.html">debug_join_vector_num()</a></code> and <code><a href="../reference/debug_join_vector_str.html">debug_join_vector_str()</a></code> do not return a value</p></li>
+<li><p>Changed some reference images to account for ggplot2 updating to v4.0.0</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.0" id="ggdnavis-020">ggDNAvis 0.2.0<a class="anchor" aria-label="anchor" href="#ggdnavis-020"></a></h2>
 <ul><li><p>Initial CRAN submission</p></li>
 <li>
 <p>Initial functionality:</p>
-<ul><li><p>Visualise single DNA sequences, multiple DNA sequences, and DNA modification (e.g. methylation).</p></li>
-<li><p>Read and write FASTQ, including modified FASTQ produced with -T MM,ML that stores modification information in the header rows.</p></li>
-<li><p>Intelligently merge with metadata including read direction, and reverse all information for reverse reads only to make all reads “forward” versions.</p></li>
+<ul><li><p>Visualise single DNA sequences, multiple DNA sequences, and DNA modification (e.g. methylation): <code><a href="../reference/visualise_single_sequence.html">visualise_single_sequence()</a></code>, <code><a href="../reference/visualise_many_sequences.html">visualise_many_sequences()</a></code>, <code><a href="../reference/visualise_methylation.html">visualise_methylation()</a></code></p></li>
+<li><p>Read and write FASTQ, including modified FASTQ produced with -T MM,ML that stores modification information in the header rows: <code><a href="../reference/read_fastq.html">read_fastq()</a></code>, <code><a href="../reference/write_fastq.html">write_fastq()</a></code>, <code><a href="../reference/read_modified_fastq.html">read_modified_fastq()</a></code>, <code><a href="../reference/write_modified_fastq.html">write_modified_fastq()</a></code></p></li>
+<li><p>Intelligently merge with metadata including read direction, and reverse all information for reverse reads only to make all reads “forward” versions: <code><a href="../reference/merge_fastq_with_metadata.html">merge_fastq_with_metadata()</a></code>, <code><a href="../reference/merge_methylation_with_metadata.html">merge_methylation_with_metadata()</a></code></p></li>
 </ul></li>
 </ul></div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
