@@ -13,13 +13,13 @@
 #' @param margin `numeric`. The size of the margin relative to the size of each base square. Defaults to `0.5` (half the side length of each base square).\cr\cr Very small margins (\eqn{\le}0.25) may cause thick outlines to be cut off at the edges of the plot. Recommended to either use a wider margin or a smaller `outline_linewidth`.
 #' @param sequence_text_colour `character`. The colour of the text within the bases (e.g. colour of "A" letter within boxes representing adenosine bases). Defaults to black.
 #' @param sequence_text_size `numeric`. The size of the text within the bases (e.g. size of "A" letter within boxes representing adenosine bases). Defaults to `16`. Set to `0` to hide sequence text (show box colours only).
-#' @param index_annotation_lines `integer vector`. The lines (i.e. elements of `sequences_vector`) that should have their base incides annotated. 1-indexed e.g. `c(1, 10)` would annotate the first and tenth elements of `sequences_vector`.\cr\cr Extra lines are inserted above or below (depending on `index_annotations_above`) the selected lines - note that the line numbers come from `sequences_vector`, so are unaffected by these insertions.\cr\cr Setting to `NA` (default) disables index annotations (and prevents adding additional blank lines).
+#' @param index_annotation_lines `integer vector`. The lines (i.e. elements of `sequences_vector`) that should have their base incides annotated. 1-indexed e.g. `c(1, 10)` would annotate the first and tenth elements of `sequences_vector`.\cr\cr Extra lines are inserted above or below (depending on `index_annotations_above`) the selected lines - note that the line numbers come from `sequences_vector`, so are unaffected by these insertions.\cr\cr Setting to `NA` disables index annotations (and prevents adding additional blank lines). Defaults to `c(1)` i.e. first sequence is annotated.
 #' @param index_annotation_colour `character`. The colour of the little numbers underneath indicating base index (e.g. colour "15" label under the 15th base). Defaults to dark red.
 #' @param index_annotation_size `numeric`. The size of the little number underneath indicating base index (e.g. size of "15" label under the 15th base). Defaults to `12.5`.\cr\cr Setting to `0` disables index annotations (and prevents adding additional blank lines).
 #' @param index_annotation_interval `integer`. The frequency at which numbers should be placed underneath indicating base index, starting counting from the leftmost base. Defaults to `15` (every 15 bases along each row).\cr\cr Setting to `0` disables index annotations (and prevents adding additional blank lines).
 #' @param index_annotations_above `logical`. Whether index annotations should go above (`TRUE`, default) or below (`FALSE`) each line of sequence.
 #' @param index_annotation_vertical_position `numeric`. How far annotation numbers should be rendered above (if `index_annotations_above = TRUE`) or below (if `index_annotations_above = FALSE`) each base. Defaults to `1/3`.\cr\cr Not recommended to change at all. Strongly discouraged to set below 0 or above 1.
-#' @param index_annotation_full_line `logical`. Whether index annotations should continue to the end of the longest sequence (`TRUE`) or should only continue as far as each selected line does (`FALSE`, default).
+#' @param index_annotation_full_line `logical`. Whether index annotations should continue to the end of the longest sequence (`TRUE`, default) or should only continue as far as each selected line does (`FALSE`).
 #' @param outline_colour `character`. The colour of the box outlines. Defaults to black.
 #' @param outline_linewidth `numeric`. The linewidth of the box outlines. Defaults to `3`. Set to `0` to disable box outlines.
 #' @param outline_join `character`. One of `"mitre"`, `"round"`, or `"bevel"` specifying how outlines should be joined at the corners of boxes. Defaults to `"mitre"`. It would be unusual to need to change this.
@@ -77,13 +77,13 @@ visualise_many_sequences <- function(
     margin = 0.5,
     sequence_text_colour = "black",
     sequence_text_size = 16,
-    index_annotation_lines = NA,
+    index_annotation_lines = c(1),
     index_annotation_colour = "darkred",
     index_annotation_size = 12.5,
     index_annotation_interval = 15,
     index_annotations_above = TRUE,
     index_annotation_vertical_position = 1/3,
-    index_annotation_full_line = FALSE,
+    index_annotation_full_line = TRUE,
     outline_colour = "black",
     outline_linewidth = 3,
     outline_join = "mitre",
@@ -609,7 +609,7 @@ insert_at_indices <- function(
 #' @param original_sequences_vector `vector`. The vector of sequences used for plotting, that was originally given to [visualise_many_sequences()]. Must also have been used as input to [insert_at_indices()] to create `new_sequences_vector`.
 #' @param original_indices_to_annotate `positive integer vector`. The vector of lines (i.e. indices) of `original_vector` to be annotated. Read from `index_annotation_lines` argument to [visualise_many_sequences()] (but after processing, so is assumed to be unique and sorted). Must also have been used as input to [insert_at_indices()] to create `new_sequences_vector`. Setting to a length-0 value (e.g. `numeric(0)`) causes this function to return an empty dataframe.
 #' @param annotation_interval `integer`. The frequency at which numbers should be placed underneath indicating base index, starting counting from the leftmost base. Setting to `0` causes this function to return an empty dataframe. Defaults to `15`.
-#' @param annotate_full_lines `logical`. Whether annotations should be calculated up to the end of the longest line (`TRUE`) or to the end of each line being annotated (`FALSE`, default).
+#' @param annotate_full_lines `logical`. Whether annotations should be calculated up to the end of the longest line (`TRUE`, default) or to the end of each line being annotated (`FALSE`).
 #' @param annotations_above `logical`. Whether annotations should be drawn above (`TRUE`, default) or below (`FALSE`) each annotated line. Must also have been used as input to [insert_at_indices()] to create `new_sequences_vector`.
 #' @param annotation_vertical_position `numeric`. The vertical position above/below each annotated line that annotations should be drawn. Must also have been used as input to [insert_at_indices()] to create `new_sequences_vector`.
 #'
@@ -660,7 +660,7 @@ create_many_sequence_index_annotations <- function(
     original_sequences_vector,
     original_indices_to_annotate,
     annotation_interval = 15,
-    annotate_full_lines = FALSE,
+    annotate_full_lines = TRUE,
     annotations_above = TRUE,
     annotation_vertical_position = 1/3
 ) {

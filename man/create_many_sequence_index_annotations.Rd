@@ -9,7 +9,7 @@ create_many_sequence_index_annotations(
   original_sequences_vector,
   original_indices_to_annotate,
   annotation_interval = 15,
-  annotate_full_lines = FALSE,
+  annotate_full_lines = TRUE,
   annotations_above = TRUE,
   annotation_vertical_position = 1/3
 )
@@ -23,7 +23,7 @@ create_many_sequence_index_annotations(
 
 \item{annotation_interval}{\code{integer}. The frequency at which numbers should be placed underneath indicating base index, starting counting from the leftmost base. Setting to \code{0} causes this function to return an empty dataframe. Defaults to \code{15}.}
 
-\item{annotate_full_lines}{\code{logical}. Whether annotations should be calculated up to the end of the longest line (\code{TRUE}) or to the end of each line being annotated (\code{FALSE}, default).}
+\item{annotate_full_lines}{\code{logical}. Whether annotations should be calculated up to the end of the longest line (\code{TRUE}, default) or to the end of each line being annotated (\code{FALSE}).}
 
 \item{annotations_above}{\code{logical}. Whether annotations should be drawn above (\code{TRUE}, default) or below (\code{FALSE}) each annotated line. Must also have been used as input to \code{\link[=insert_at_indices]{insert_at_indices()}} to create \code{new_sequences_vector}.}
 

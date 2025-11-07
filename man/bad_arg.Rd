@@ -30,14 +30,12 @@ Nothing, but causes an error exit via \code{\link[rlang:abort]{rlang::abort()}}
 This function takes an argument name, a named list of arguments
 (presumably being iterated over for a particular validation check),
 and a message. It prints an error message of the form:
-\preformatted{
-Argument '<argument_name>' <message>
+\preformatted{Argument '<argument_name>' <message>
 Current value: <argument_value>
 }
 If the argument value is a named item (i.e. \code{names(arguments_list[[argument_name]])}
 is not null), or if \code{force_names} is \code{TRUE}, then the form will be:
-\preformatted{
-Argument '<argument_name>' <message>
+\preformatted{Argument '<argument_name>' <message>
 Current value: <argument_value>
 Current names: <argument_names>
 }
