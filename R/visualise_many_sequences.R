@@ -350,43 +350,53 @@ extract_and_sort_sequences <- function(sequence_dataframe, sequence_variable = "
     ## ---------------------------------------------------------------------
     not_null <- list(sequence_dataframe = sequence_dataframe, sequence_variable = sequence_variable, grouping_levels = grouping_levels, sort_by = sort_by, desc_sort = desc_sort)
     for (argument in names(not_null)) {
-        if(any(is.null(not_null[[argument]]))) {bad_arg(argument, not_null, "must not be null.")}
+        if (any(is.null(not_null[[argument]]))) {bad_arg(argument, not_null, "must not be null.")}
     }
     not_null <- NULL
 
-    if (mean(is.na(grouping_levels)) == 0 && mean(is.null(names(grouping_levels))) != 0) {
-        bad_arg("grouping_levels", list(grouping_levels = grouping_levels), "must be a named vector", force_names = TRUE)
+    length_1 <- list(sequence_variable = sequence_variable, sort_by = sort_by, desc_sort = desc_sort)
+    for (argument in names(length_1)) {
+        if (length(length_1[[argument]]) != 1) {bad_arg(argument, length_1, "must have length 1.")}
     }
+    length_1 <- NULL
 
-    for (argument in list(sequence_variable, sort_by, desc_sort)) {
-        if (length(argument) != 1) {abort(paste("Argument", argument, "must have length 1"), class = "argument_value_or_type")}
+    not_na <- list(sequence_variable = sequence_variable, desc_sort = desc_sort)
+    for (argument in names(not_na)) {
+        if (is.na(not_na[[argument]])) {bad_arg(argument, not_na, "must not be NA.")}
     }
-    for (argument in list(sequence_variable, desc_sort)) {
-        if (mean(is.na(argument)) != 0) {abort(paste("Argument", argument, "must not be NA"), class = "argument_value_or_type")}
-    }
-    if (mean(is.na(grouping_levels) == 0)) {
+    not_na <- NULL
+
+
+    if (!any(is.na(grouping_levels))) {
+        if (any(is.null(names(grouping_levels))) || any(names(grouping_levels) == "")) {
+            bad_arg("grouping_levels", list(grouping_levels = grouping_levels), "must be a named vector (all elements named).", force_names = TRUE)
+        }
+
         for (level in names(grouping_levels)) {
             if (level %in% colnames(sequence_dataframe) == FALSE  || is.character(level) == FALSE) {
-                abort(paste0("grouping_levels must be a named numeric vector where all the names are columns in the input dataframe.\nCurrently '", level, "' is given as a grouping level name but is not a column in sequence_dataframe."), class = "argument_value_or_type")
+                abort(paste0("Argument 'grouping_levels' must be a named numeric vector where all the names are columns in the input dataframe.\nCurrently '", level, "' is given as a grouping level name but is not a column in sequence_dataframe."), class = "argument_value_or_type")
             }
         }
         if (is.numeric(grouping_levels) == FALSE) {
-            abort("grouping_levels must be a named numeric vector. Currently the values are not numeric", class = "argument_value_or_type")
+            bad_arg("grouping_levels", list(grouping_levels = grouping_levels), "must be a named numeric vector. Currently it is not numeric.")
+        }
+    } else if (length(grouping_levels) > 1) {
+        bad_arg("grouping_levels", list(grouping_levels = grouping_levels), "must be a single NA, or a named numeric vector with no NAs.\n  It cannot be a multi-element vector with some NA values.")
+    }
+
+    na_or_char_column <- list(sequence_variable = sequence_variable, sort_by = sort_by)
+    for (argument in names(na_or_char_column)) {
+        if (!is.na(na_or_char_column[[argument]]) && (!is.character(na_or_char_column[[argument]]) || !(na_or_char_column[[argument]] %in% colnames(sequence_dataframe)))) {
+            bad_arg(argument, na_or_char_column, "must be a single character value and the name of a column within sequence_dataframe.")
         }
     }
-    if (mean(is.na(grouping_levels)) != 0 && length(grouping_levels) > 1) {
-        abort("if setting grouping_levels to NA, must provide a single NA rather than a vector of multiple values including NA.")
+    na_or_char_column <- FALSE
+
+    bools <- list(desc_sort = desc_sort)
+    for (argument in names(bools)) {
+        if (!is.logical(bools[[argument]])) {bad_arg(argument, bools, "must be a logical/boolean value.")}
     }
-    for (argument in list(sequence_variable, sort_by)) {
-        if (is.na(argument) == FALSE && (argument %in% colnames(sequence_dataframe) == FALSE || is.character(argument) == FALSE)) {
-            abort(paste("Argument", argument, "must be a single character value and the name of a column within sequence_dataframe."), class = "argument_value_or_type")
-        }
-    }
-    for (argument in list(desc_sort)) {
-        if (is.logical(argument) == FALSE) {
-            abort("desc_sort must be a logical/boolean value.", class = "argument_value_or_type")
-        }
-    }
+    bools <- FALSE
     ## ---------------------------------------------------------------------
 
 
@@ -396,7 +406,7 @@ extract_and_sort_sequences <- function(sequence_dataframe, sequence_variable = "
     sequence_variable  <- sym(sequence_variable)
 
     ## If grouping is off entirely, return sequences raw/sorted without breaks
-    if (mean(is.na(grouping_levels)) != 0) {
+    if (any(is.na(grouping_levels))) {
         if (!is.na(sort_by)) {
             sort_by <- sym(sort_by)
             if (desc_sort) {
