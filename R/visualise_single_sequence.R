@@ -112,7 +112,7 @@ visualise_single_sequence <- function(sequence, sequence_colours = sequence_colo
         if (is.logical(argument) == FALSE) {abort(paste("Argument:", argument, "must be a logical/boolean value."), class = "argument_value_or_type")}
     }
     if (index_annotation_size == 0 && index_annotation_interval != 0) {
-        inform("Automatically setting index_annotation_interval to 0 as index_annotation_size is 0", class = "atypical_turn_off")
+        cli_alert_info("Automatically setting index_annotation_interval to 0 as index_annotation_size is 0", class = "atypical_turn_off")
         index_annotation_interval <- 0
     }
     if (spacing == 0 && index_annotation_interval != 0) {

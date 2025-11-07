@@ -3,8 +3,10 @@
 #' This function takes an argument name, a named list of arguments
 #' (presumably being iterated over for a particular validation check),
 #' and a message. It prints an error message of the form:
-#'     Argument '<argument_name>' <message>
-#'     Current value: <argument_value>
+#' \preformatted{
+#' Argument '<argument_name>' <message>
+#' Current value: <argument_value>
+#' }
 #'
 #' @param argument_name `character`. The name of the argument that caused the error
 #' @param arguments_list `list`. A named list where `arguments_list[[argument_name]]` is the value of the offending argument.

@@ -27,8 +27,10 @@ Nothing, but causes an error exit via \code{\link[rlang:abort]{rlang::abort()}}
 This function takes an argument name, a named list of arguments
 (presumably being iterated over for a particular validation check),
 and a message. It prints an error message of the form:
-Argument '<argument_name>' \if{html}{\out{<message>}}
+\preformatted{
+Argument '<argument_name>' <message>
 Current value: <argument_value>
+}
 }
 \examples{
 ## Obviously this error message function causes

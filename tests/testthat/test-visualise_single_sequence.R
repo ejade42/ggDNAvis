@@ -23,8 +23,7 @@ test_that("single sequence visualisation works with funky colours", {
 
 test_that("single sequence visualisation works with no text, via index_annotation_size", {
     filename <- "sone_2019_f1_1_expanded_test_03"
-    expect_message(visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), outline_linewidth = 0, sequence_text_size = 0, index_annotation_size = 0, pixels_per_base = 30, index_annotations_above = FALSE, filename = paste0(root, filename, ".png")),
-                   class = "atypical_turn_off")
+    expect_message(visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), outline_linewidth = 0, sequence_text_size = 0, index_annotation_size = 0, pixels_per_base = 30, index_annotations_above = FALSE, filename = paste0(root, filename, ".png")))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -101,8 +100,7 @@ test_that("single sequence visualisation works with no spacing but annotations o
 ## This one is fine because seq_length %% line_wrapping < annotation_interval)
 test_that("single sequence visualisation works with no spacing but annotations off, via index_annotation_size", {
     filename <- "sone_2019_f1_1_expanded_test_12"
-    expect_message(visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), outline_linewidth = 0, spacing = 0, index_annotation_size = 0, pixels_per_base = 30, index_annotations_above = FALSE, filename = paste0(root, filename, ".PNG")),
-                   class = "atypical_turn_off")
+    expect_message(visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), outline_linewidth = 0, spacing = 0, index_annotation_size = 0, pixels_per_base = 30, index_annotations_above = FALSE, filename = paste0(root, filename, ".PNG")))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".PNG")),
                                        image_read(paste0(reference, filename, ".PNG")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -122,8 +120,7 @@ test_that("single sequence visualisation grey bottom bug: working case of spacin
 ## And giving a warning if done the other way.
 test_that("single sequence visualisation grey bottom bug: bug case of spacing off, annotations off via size", {
     filename <- "sone_2019_f1_1_expanded_test_14"
-    expect_message(visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), outline_linewidth = 0, spacing = 0, index_annotation_size = 0, line_wrapping = 60, pixels_per_base = 30, index_annotations_above = FALSE, filename = paste0(root, filename, ".PNG")),
-                   class = "atypical_turn_off")
+    expect_message(visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), outline_linewidth = 0, spacing = 0, index_annotation_size = 0, line_wrapping = 60, pixels_per_base = 30, index_annotations_above = FALSE, filename = paste0(root, filename, ".PNG")))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".PNG")),
                                        image_read(paste0(reference, filename, ".PNG")),
                                        metric = "MAE"))$distortion, acceptable_distortion)

@@ -7,7 +7,7 @@ template:
     in_header: pkgdown/google0acd00d8574ec2df.html
 
 site:
-  build_all_versions: true
+  build_all_versions: false
 
 navbar:
   structure:

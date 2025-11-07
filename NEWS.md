@@ -4,7 +4,7 @@ New features:
 
 * `visualise_many_sequences()` now has index annotations! Arguments are the same as for `visualise_single_sequence()`, except with the additional `index_annotation_lines` (specifies any combination of lines to annotate, counting down from the top) and `index_annotation_full_lines` (specifies whether annotations should go up to the maximum line length, or stop for each line when that line's sequence ends) arguments. Of course, because each line is a different sequence, indices here "reset" each line rather than counting the total number of bases across lines.
 
-* Added `bad_arg()` function to streamline error reporting. May be useful for argument validation in other packages so exported.
+* Added `bad_arg()` function to streamline argument validation. May be useful for argument validation in other packages so exported.
 
 User-facing changes:
 
@@ -14,7 +14,7 @@ Background changes:
 
 * Added new helper functions: `insert_at_indices()` and `create_many_sequence_index_annotations()`
 
-* Starting changing all error reporting to use `bad_arg()` rather than copy pasting.
+* Starting changing all argument validation to use `bad_arg()` rather than copy pasting.
 
 # ggDNAvis 0.3.2
 

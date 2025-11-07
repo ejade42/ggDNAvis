@@ -96,9 +96,7 @@ visualise_many_sequences <- function(
     ## ---------------------------------------------------------------------
     not_null <- list(sequences_vector = sequences_vector, sequence_colours = sequence_colours, background_colour = background_colour, margin = margin, sequence_text_colour = sequence_text_colour, sequence_text_size = sequence_text_size, index_annotation_colour = index_annotation_colour, index_annotation_size = index_annotation_size, index_annotation_interval = index_annotation_interval, index_annotations_above = index_annotations_above, index_annotation_vertical_position = index_annotation_vertical_position, index_annotation_full_line = index_annotation_full_line, outline_colour = outline_colour, outline_linewidth = outline_linewidth, outline_join = outline_join, return = return, filename = filename, pixels_per_base = pixels_per_base)
     for (argument in names(not_null)) {
-        if (any(is.null(not_null[[argument]]))) {
-            bad_arg(argument, not_null, "must not be NULL.")
-        }
+        if (any(is.null(not_null[[argument]]))) {bad_arg(argument, not_null, "must not be NULL.")}
     }
     not_null <- NULL
 
@@ -108,73 +106,86 @@ visualise_many_sequences <- function(
     }
     length_1 <- NULL
 
-    for (argument in list(sequences_vector, sequence_colours, background_colour, margin, sequence_text_colour, sequence_text_size, index_annotation_colour, index_annotation_size, index_annotation_interval, index_annotations_above, index_annotation_vertical_position, index_annotation_full_line, outline_colour, outline_linewidth, outline_join, return, pixels_per_base)) {
-        if (mean(is.na(argument)) != 0) {abort(paste("Argument", argument, "must not be NA"), class = "argument_value_or_type")}
+    not_na <- list(sequences_vector = sequences_vector, sequence_colours = sequence_colours, background_colour = background_colour, margin = margin, sequence_text_colour = sequence_text_colour, sequence_text_size = sequence_text_size, index_annotation_colour = index_annotation_colour, index_annotation_size = index_annotation_size, index_annotation_interval = index_annotation_interval, index_annotations_above = index_annotations_above, index_annotation_vertical_position = index_annotation_vertical_position, index_annotation_full_line = index_annotation_full_line, outline_colour = outline_colour, outline_linewidth = outline_linewidth, outline_join = outline_join, return = return, pixels_per_base = pixels_per_base)
+    for (argument in names(not_na)) {
+        if (any(is.na(not_na[[argument]]))) {bad_arg(argument, not_na, "must not be NA.")}
     }
+    not_na <- NULL
+
+    ## Interpret NA/NULL/empty argument as not wanting any annotations
     if (any(is.na(index_annotation_lines)) || any(is.null(index_annotation_lines)) || length(index_annotation_lines) == 0) {
         index_annotation_lines <- integer(0)
     }
-    if (is.character(sequence_colours) == FALSE || length(sequence_colours) != 4) {
+
+    if (!is.character(sequence_colours) || length(sequence_colours) != 4) {
         abort("Must provide exactly 4 sequence colours, in A C G T order, as a length-4 character vector.", class = "argument_value_or_type")
     }
-    for (argument in list(sequences_vector, background_colour, sequence_text_colour, index_annotation_colour, outline_colour, outline_join)) {
-        if (is.character(argument) == FALSE) {abort(paste("Argument", argument, "must be a character/string."), class = "argument_value_or_type")}
+
+    characters <- list(sequences_vector = sequences_vector, background_colour = background_colour, sequence_text_colour = sequence_text_colour, index_annotation_colour = index_annotation_colour, outline_colour = outline_colour, outline_join = outline_join)
+    for (argument in names(characters)) {
+        if (!is.character(characters[[argument]])) {bad_arg(argument, characters, "must be a character/string.")}
     }
-    for (argument in list(margin, sequence_text_size, index_annotation_size, outline_linewidth)) {
-        if (is.numeric(argument) == FALSE || argument < 0) {
-            abort(paste("Argument", argument, "must be a non-negative number"), class = "argument_value_or_type")
-        }
+    characters <- NULL
+
+    non_neg_nums <- list(margin = margin, sequence_text_size = sequence_text_size, index_annotation_size = index_annotation_size, outline_linewidth = outline_linewidth, index_annotation_interval = index_annotation_interval, index_annotation_vertical_position = index_annotation_vertical_position, pixels_per_base = pixels_per_base)
+    for (argument in names(non_neg_nums)) {
+        if (!is.numeric(non_neg_nums[[argument]]) || any(non_neg_nums[[argument]] < 0)) {bad_arg(argument, non_neg_nums, "must be a non-negative number.")}
     }
-    for (argument in list(index_annotation_interval)) {
-        if (is.numeric(argument) == FALSE || argument %% 1 != 0 || argument < 0) {
-            abort(paste("Argument", argument, "must be a non-negative integer"), class = "argument_value_or_type")
-        }
+    non_neg_nums <- NULL
+
+    ints <- list(index_annotation_interval = index_annotation_interval, pixels_per_base = pixels_per_base)
+    for (argument in names(ints)) {
+        if (ints[[argument]] %% 1 != 0) {bad_arg(argument, ints, "must be an integer.")}
     }
-    for (argument in list(index_annotation_vertical_position)) {
-        if (is.numeric(argument) == FALSE) {
-            abort(paste("Argument", argument, "must be numeric"), class = "argument_value_or_type")
-        }
+    ints <- NULL
+
+    pos <- list(pixels_per_base = pixels_per_base)
+    for (argument in names(pos)) {
+        if (any(pos[[argument]] <= 0)) {bad_arg(argument, pos, "must be positive.")}
     }
-    if (length(index_annotation_lines) > 0 && (!is.numeric(index_annotation_lines) || mean(index_annotation_lines %% 1 == 0) != 1 || mean(index_annotation_lines > 0) != 1)) {
-        abort("index_annotation_lines must be a vector of positive integers, or NA.", class = "argument_value_or_type")
+    pos <- NULL
+
+    bools <- list(return = return, index_annotations_above = index_annotations_above, index_annotation_full_line = index_annotation_full_line)
+    for (argument in names(bools)) {
+        if (!is.logical(bools[[argument]])) {bad_arg(argument, bools, "must be logical/boolean.")}
     }
-    for (argument in list(pixels_per_base)) {
-        if (is.numeric(argument) == FALSE || argument %% 1 != 0 || argument < 1) {
-            abort("pixels_per_base must be a positive integer", class = "argument_value_or_type")
-        }
-    }
-    for (argument in list(return, index_annotations_above, index_annotation_full_line)) {
-        if (is.logical(argument) == FALSE) {abort(paste("Argument:", argument, "must be a logical/boolean value."), class = "argument_value_or_type")}
-    }
+    bools <- NULL
+
     if (!(tolower(outline_join) %in% c("mitre", "round", "bevel"))) {
-        abort("outline_join must be one of 'mitre', 'round', or 'bevel'.", class = "argument_value_or_type")
+        bad_arg("outline_join", list(outline_join = outline_join), "must be one of 'mitre', 'round', or 'bevel'.")
     }
+
+    if (length(index_annotation_lines) > 0 && (!is.numeric(index_annotation_lines) || any(index_annotation_lines %% 1 != 0) || any(index_annotation_lines <= 0))) {
+        bad_arg("index_annotation_lines", list(index_annotation_lines = index_annotation_lines), "must be a vector of positive integers, or NA.")
+    }
+
     ## Warn about outlines getting cut off
     if (margin <= 0.25 && outline_linewidth > 0) {
         warn("If margin is small and outlines are on (outline_linewidth > 0), outlines may be cut off at the edges of the plot. Check if this is happening and consider using a bigger margin.", class = "parameter_recommendation")
     }
+
     ## Accept NA as NULL for render_device
     if (is.atomic(render_device) && any(is.na(render_device))) {render_device <- NULL}
 
 
     ## Automatically turn off annotations if size or interval is set to 0.
     if (index_annotation_interval == 0 && length(index_annotation_lines) > 0 ) {
-        inform("Automatically emptying index_annotation_lines as index_annotation_interval is 0", class = "atypical_turn_off")
+        cli_alert_info("Automatically emptying index_annotation_lines as index_annotation_interval is 0", class = "turn_off_annotations_by_other_argument")
         index_annotation_lines <- integer(0)
     } else if (index_annotation_size == 0 && length(index_annotation_lines) > 0 ) {
-        inform("Automatically emptying index_annotation_lines as index_annotation_size is 0", class = "atypical_turn_off")
+        cli_alert_info("Automatically emptying index_annotation_lines as index_annotation_size is 0", class = "turn_off_annotations_by_other_argument")
         index_annotation_lines <- integer(0)
     }
 
     ## Automatically sort and unique-ify index annotations lines
     sorted_index_annotation_lines <- sort(index_annotation_lines, na.last = TRUE)
     if (any(sorted_index_annotation_lines != index_annotation_lines)) {
-        inform(paste0("Automatically sorting index_annotation_lines.\nBefore: ", paste(index_annotation_lines, collapse = ", "), "\nAfter: ", paste(sorted_index_annotation_lines, collapse = ", ")), class = "sanitising_index_annotation_lines")
+        cli_alert_info(paste0("Automatically sorting index_annotation_lines.\nBefore: ", paste(index_annotation_lines, collapse = ", "), "\nAfter: ", paste(sorted_index_annotation_lines, collapse = ", ")), class = "sanitising_index_annotation_lines")
         index_annotation_lines <- sorted_index_annotation_lines
     }
     unique_index_annotation_lines <- unique(index_annotation_lines)
     if (length(unique_index_annotation_lines) != length(index_annotation_lines)) {
-        inform(paste0("Automatically making index_annotation_lines unique.\nBefore: ", paste(index_annotation_lines, collapse = ", "), "\nAfter: ", paste(unique_index_annotation_lines, collapse = ", ")), class = "sanitising_index_annotation_lines")
+        cli_alert_info(paste0("Automatically making index_annotation_lines unique.\nBefore: ", paste(index_annotation_lines, collapse = ", "), "\nAfter: ", paste(unique_index_annotation_lines, collapse = ", ")), class = "sanitising_index_annotation_lines")
         index_annotation_lines <- unique_index_annotation_lines
     }
     ## ---------------------------------------------------------------------
@@ -184,7 +195,6 @@ visualise_many_sequences <- function(
 
     ## Insert additional blank lines for index annotations (nothing changes if length(index_annotation_lines) == 0)
     new_sequences_vector <- insert_at_indices(sequences_vector, index_annotation_lines, insert_before = index_annotations_above, insert = "", vert = index_annotation_vertical_position)
-    extra_spaces <- ceiling(index_annotation_vertical_position)
 
 
     ## Generate data for plotting
@@ -232,6 +242,7 @@ visualise_many_sequences <- function(
     }
 
     ## Correctly set margin, taking into consideration extra blank lines for annotations
+    extra_spaces <- ceiling(index_annotation_vertical_position)
     if (1 %in% index_annotation_lines && index_annotations_above) {
         result <- result + theme(plot.margin = grid::unit(c(max(margin-extra_spaces, 0), margin, margin, margin), "inches"))
         extra_height <- margin + max(margin-extra_spaces, 0)
@@ -247,7 +258,7 @@ visualise_many_sequences <- function(
     ## Check if filename is set and warn if not png, then export image
     if (is.na(filename) == FALSE) {
         if (is.character(filename) == FALSE) {
-            abort("Filename must be a character/string (or NA if no file export wanted)", class = "argument_value_or_type")
+            bad_arg("filename", list(filename = filename), "must be a character/string (or NA if no file export wanted)")
         }
         if (tolower(substr(filename, nchar(filename)-3, nchar(filename))) != ".png") {
             warn("Not recommended to use non-png filetype (but may still work).", class = "filetype_recommendation")
@@ -336,6 +347,7 @@ extract_and_sort_sequences <- function(sequence_dataframe, sequence_variable = "
                                        grouping_levels = c("family" = 8, "individual" = 2),
                                        sort_by = "sequence_length", desc_sort = TRUE) {
     ## Validate arguments
+    not_null <-
     for (argument in list(sequence_dataframe, sequence_variable, grouping_levels, sort_by, desc_sort)) {
         if (mean(is.null(argument)) != 0) {abort(paste("Argument", argument, "must not be null."), class = "argument_value_or_type")}
     }
@@ -746,7 +758,7 @@ create_many_sequence_index_annotations <- function(
 
     ## Create actual data
     ## Make sure we don't iterate further than lines exist
-    annotation_data <- data.frame(NULL)
+    annotation_data <- data.frame("x_position" = numeric(), "y_position" = numeric(), "annotation" = character(), "type" = character())
     for (i in 1:min(length(annotated_sequence_indices), length(original_sequences_vector))) {
         annotated_sequence_index <- annotated_sequence_indices[i]
 
