@@ -8,7 +8,7 @@ create_many_sequence_index_annotations(
   new_sequences_vector,
   original_sequences_vector,
   original_indices_to_annotate,
-  annotation_interval,
+  annotation_interval = 15,
   annotate_full_lines = FALSE,
   annotations_above = TRUE,
   annotation_vertical_position = 1/3
@@ -19,9 +19,9 @@ create_many_sequence_index_annotations(
 
 \item{original_sequences_vector}{\code{vector}. The vector of sequences used for plotting, that was originally given to \code{\link[=visualise_many_sequences]{visualise_many_sequences()}}. Must also have been used as input to \code{\link[=insert_at_indices]{insert_at_indices()}} to create \code{new_sequences_vector}.}
 
-\item{original_indices_to_annotate}{\verb{positive integer vector}. The vector of lines (i.e. indices) of \code{original_vector} to be annotated. Read from \code{index_annotation_lines} argument to \verb{[visualise_many_sequences()]} (but after processing, so is assumed to be unique and sorted). Must also have been used as input to \code{\link[=insert_at_indices]{insert_at_indices()}} to create \code{new_sequences_vector}.}
+\item{original_indices_to_annotate}{\verb{positive integer vector}. The vector of lines (i.e. indices) of \code{original_vector} to be annotated. Read from \code{index_annotation_lines} argument to \code{\link[=visualise_many_sequences]{visualise_many_sequences()}} (but after processing, so is assumed to be unique and sorted). Must also have been used as input to \code{\link[=insert_at_indices]{insert_at_indices()}} to create \code{new_sequences_vector}. Setting to a length-0 value (e.g. \code{numeric(0)}) causes this function to return an empty dataframe.}
 
-\item{annotation_interval}{\code{integer}. The frequency at which numbers should be placed underneath indicating base index, starting counting from the leftmost base. Setting to \code{0} causes this function to return an empty dataframe.}
+\item{annotation_interval}{\code{integer}. The frequency at which numbers should be placed underneath indicating base index, starting counting from the leftmost base. Setting to \code{0} causes this function to return an empty dataframe. Defaults to \code{15}.}
 
 \item{annotate_full_lines}{\code{logical}. Whether annotations should be calculated up to the end of the longest line (\code{TRUE}) or to the end of each line being annotated (\code{FALSE}, default).}
 
