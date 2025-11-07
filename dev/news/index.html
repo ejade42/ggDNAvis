@@ -59,12 +59,12 @@
 <h2 class="pkg-version" data-toc-text="development version" id="ggdnavis-development-version">ggDNAvis (development version)<a class="anchor" aria-label="anchor" href="#ggdnavis-development-version"></a></h2>
 <p>New features:</p>
 <ul><li><p><code><a href="../reference/visualise_many_sequences.html">visualise_many_sequences()</a></code> now has index annotations! Arguments are the same as for <code><a href="../reference/visualise_single_sequence.html">visualise_single_sequence()</a></code>, except with the additional <code>index_annotation_lines</code> (specifies any combination of lines to annotate, counting down from the top) and <code>index_annotation_full_lines</code> (specifies whether annotations should go up to the maximum line length, or stop for each line when that line’s sequence ends) arguments. Of course, because each line is a different sequence, indices here “reset” each line rather than counting the total number of bases across lines.</p></li>
-<li><p>Added <code><a href="../reference/bad_arg.html">bad_arg()</a></code> function to streamline error reporting. May be useful for argument validation in other packages so exported.</p></li>
+<li><p>Added <code><a href="../reference/bad_arg.html">bad_arg()</a></code> function to streamline argument validation. May be useful for argument validation in other packages so exported.</p></li>
 </ul><p>User-facing changes:</p>
 <ul><li>Removed warning for “incorrectly” removing index annotations. Now setting any relevant argument to 0/empty (e.g. <code>index_annotation_size = 0</code>, <code>index_annotation_interval = 0</code>, <code>index_annotation_lines = numeric(0)</code>) will automatically change the “main” one to remove annotations.</li>
 </ul><p>Background changes:</p>
 <ul><li><p>Added new helper functions: <code><a href="../reference/insert_at_indices.html">insert_at_indices()</a></code> and <code><a href="../reference/create_many_sequence_index_annotations.html">create_many_sequence_index_annotations()</a></code></p></li>
-<li><p>Starting changing all error reporting to use <code><a href="../reference/bad_arg.html">bad_arg()</a></code> rather than copy pasting.</p></li>
+<li><p>Starting changing all argument validation to use <code><a href="../reference/bad_arg.html">bad_arg()</a></code> rather than copy pasting.</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.2" id="ggdnavis-032">ggDNAvis 0.3.2<a class="anchor" aria-label="anchor" href="#ggdnavis-032"></a></h2><p class="text-muted">CRAN release: 2025-10-31</p>
