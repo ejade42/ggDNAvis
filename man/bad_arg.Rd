@@ -8,7 +8,8 @@ bad_arg(
   argument_name,
   arguments_list,
   message,
-  class = "argument_value_or_type"
+  class = "argument_value_or_type",
+  force_names = FALSE
 )
 }
 \arguments{
@@ -19,6 +20,8 @@ bad_arg(
 \item{message}{\code{character}. The message that should be printed to describe why the argument is invalid.}
 
 \item{class}{\code{character}. The class that the error should have. Defaults to \code{"argument_value_or_type"} for my own use.}
+
+\item{force_names}{\code{logical}. Whether the names argument should be printed even if names is \code{NULL}. Defaults to \code{FALSE}.}
 }
 \value{
 Nothing, but causes an error exit via \code{\link[rlang:abort]{rlang::abort()}}
@@ -31,11 +34,27 @@ and a message. It prints an error message of the form:
 Argument '<argument_name>' <message>
 Current value: <argument_value>
 }
+If the argument value is a named item (i.e. \code{names(arguments_list[[argument_name]])}
+is not null), or if \code{force_names} is \code{TRUE}, then the form will be:
+\preformatted{
+Argument '<argument_name>' <message>
+Current value: <argument_value>
+Current names: <argument_names>
+}
 }
 \examples{
-## Obviously this error message function causes
-## an error, so needs to be wrapped in try()
+## Obviously this error-message function causes an error,
+## so needs to be wrapped in try() for these examples
+
+## Standard use
 positive_args <- list(number = -1)
 try(bad_arg("number", positive_args, "must be positive"))
+
+## Automatically detects named item and prints names
+named <- list(x = c("first item" = 1, "second item" = 7))
+try(bad_arg("x", named, "is not acceptable"))
+
+## Can force name printing
+try(bad_arg("number", positive_args, "must be positive", force_names = TRUE))
 
 }

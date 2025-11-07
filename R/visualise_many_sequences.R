@@ -347,13 +347,17 @@ extract_and_sort_sequences <- function(sequence_dataframe, sequence_variable = "
                                        grouping_levels = c("family" = 8, "individual" = 2),
                                        sort_by = "sequence_length", desc_sort = TRUE) {
     ## Validate arguments
-    not_null <-
-    for (argument in list(sequence_dataframe, sequence_variable, grouping_levels, sort_by, desc_sort)) {
-        if (mean(is.null(argument)) != 0) {abort(paste("Argument", argument, "must not be null."), class = "argument_value_or_type")}
+    ## ---------------------------------------------------------------------
+    not_null <- list(sequence_dataframe = sequence_dataframe, sequence_variable = sequence_variable, grouping_levels = grouping_levels, sort_by = sort_by, desc_sort = desc_sort)
+    for (argument in names(not_null)) {
+        if(any(is.null(not_null[[argument]]))) {bad_arg(argument, not_null, "must not be null.")}
     }
+    not_null <- NULL
+
     if (mean(is.na(grouping_levels)) == 0 && mean(is.null(names(grouping_levels))) != 0) {
-        abort("grouping_levels must be a named vector", class = "argument_value_or_type")
+        bad_arg("grouping_levels", list(grouping_levels = grouping_levels), "must be a named vector", force_names = TRUE)
     }
+
     for (argument in list(sequence_variable, sort_by, desc_sort)) {
         if (length(argument) != 1) {abort(paste("Argument", argument, "must have length 1"), class = "argument_value_or_type")}
     }
@@ -383,6 +387,7 @@ extract_and_sort_sequences <- function(sequence_dataframe, sequence_variable = "
             abort("desc_sort must be a logical/boolean value.", class = "argument_value_or_type")
         }
     }
+    ## ---------------------------------------------------------------------
 
 
 

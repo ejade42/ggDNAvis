@@ -7,22 +7,39 @@
 #' Argument '<argument_name>' <message>
 #' Current value: <argument_value>
 #' }
+#' If the argument value is a named item (i.e. `names(arguments_list[[argument_name]])`
+#' is not null), or if `force_names` is `TRUE`, then the form will be:
+#' \preformatted{
+#' Argument '<argument_name>' <message>
+#' Current value: <argument_value>
+#' Current names: <argument_names>
+#' }
 #'
 #' @param argument_name `character`. The name of the argument that caused the error
 #' @param arguments_list `list`. A named list where `arguments_list[[argument_name]]` is the value of the offending argument.
 #' @param message `character`. The message that should be printed to describe why the argument is invalid.
 #' @param class `character`. The class that the error should have. Defaults to `"argument_value_or_type"` for my own use.
+#' @param force_names `logical`. Whether the names argument should be printed even if names is `NULL`. Defaults to `FALSE`.
 #'
 #' @return Nothing, but causes an error exit via [rlang::abort()]
 #'
 #' @examples
-#' ## Obviously this error message function causes
-#' ## an error, so needs to be wrapped in try()
+#' ## Obviously this error-message function causes an error,
+#' ## so needs to be wrapped in try() for these examples
+#'
+#' ## Standard use
 #' positive_args <- list(number = -1)
 #' try(bad_arg("number", positive_args, "must be positive"))
 #'
+#' ## Automatically detects named item and prints names
+#' named <- list(x = c("first item" = 1, "second item" = 7))
+#' try(bad_arg("x", named, "is not acceptable"))
+#'
+#' ## Can force name printing
+#' try(bad_arg("number", positive_args, "must be positive", force_names = TRUE))
+#'
 #' @export
-bad_arg <- function(argument_name, arguments_list, message, class = "argument_value_or_type") {
+bad_arg <- function(argument_name, arguments_list, message, class = "argument_value_or_type", force_names = FALSE) {
     ## Validate arguments
     ## ---------------------------------------------------------------------
     length_1_char <- list(argument_name = argument_name, message = message, class = class)
@@ -45,7 +62,12 @@ bad_arg <- function(argument_name, arguments_list, message, class = "argument_va
     }
     ## ---------------------------------------------------------------------
 
-    abort(paste0("Argument '", argument_name, "' ", message, "\nCurrent value: ", paste(arguments_list[[argument_name]], collapse = ", ")), class = class)
+    error_message <- paste0("Argument '", argument_name, "' ", message,
+                            "\nCurrent value: ", paste(arguments_list[[argument_name]], collapse = ", "))
+    if (!is.null(names(arguments_list[[argument_name]])) || force_names) {
+        error_message <- paste0(error_message, "\nCurrent names: ", paste(names(arguments_list[[argument_name]]), collapse = ", "))
+    }
+    abort(error_message, class = class)
 }
 
 

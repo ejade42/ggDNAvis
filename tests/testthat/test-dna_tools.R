@@ -17,6 +17,8 @@ test_that("reverse complementing fails with expected errors", {
 ## Test error reporting
 test_that("error reporting works", {
     expect_error(bad_arg("x", list(x = 1), "is bad lol", "hi"), class = "hi", regexp = "*Argument 'x' is bad lol\nCurrent value: 1*")
+    expect_error(bad_arg("x", list(x = 1), "is bad lol", "hi", TRUE), class = "hi", regexp = "*Argument 'x' is bad lol\nCurrent value: 1\nCurrent names: *")
+    expect_error(bad_arg("x", list(x = c("item 1" = 1, "item 2" = 7)), "is bad lol", "hi"), class = "hi", regexp = "*Argument 'x' is bad lol\nCurrent value: 1, 7\nCurrent names: item 1, item 2*")
 })
 
 test_that("error reporting recursively rejects bad arguments", {
