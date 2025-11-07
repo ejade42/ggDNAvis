@@ -4,12 +4,22 @@
 and a message. It prints an error message of the form:
 Argument '&amp;lt;argument_name&amp;gt;' &amp;lt;message&amp;gt;
 Current value: &amp;lt;argument_value&amp;gt;
+If the argument value is a named item (i.e. names(arguments_list[[argument_name]])
+is not null), or if force_names is TRUE, then the form will be:
+Argument '&amp;lt;argument_name&amp;gt;' &amp;lt;message&amp;gt;
+Current value: &amp;lt;argument_value&amp;gt;
+Current names: &amp;lt;argument_names&amp;gt;
 
 "><meta property="og:description" content="This function takes an argument name, a named list of arguments
 (presumably being iterated over for a particular validation check),
 and a message. It prints an error message of the form:
 Argument '&amp;lt;argument_name&amp;gt;' &amp;lt;message&amp;gt;
 Current value: &amp;lt;argument_value&amp;gt;
+If the argument value is a named item (i.e. names(arguments_list[[argument_name]])
+is not null), or if force_names is TRUE, then the form will be:
+Argument '&amp;lt;argument_name&amp;gt;' &amp;lt;message&amp;gt;
+Current value: &amp;lt;argument_value&amp;gt;
+Current names: &amp;lt;argument_names&amp;gt;
 
 "><meta property="og:image" content="https://ejade42.github.io/ggDNAvis/logo.png"></head><body><p>
 
@@ -74,6 +84,11 @@ Current value: &amp;lt;argument_value&amp;gt;
 and a message. It prints an error message of the form:</p><div class="sourceCode"><pre><code>
 Argument '&lt;argument_name&gt;' &lt;message&gt;
 Current value: &lt;argument_value&gt;
+</code></pre></div><p>If the argument value is a named item (i.e. <code>names(arguments_list[[argument_name]])</code>
+is not null), or if <code>force_names</code> is <code>TRUE</code>, then the form will be:</p><div class="sourceCode"><pre><code>
+Argument '&lt;argument_name&gt;' &lt;message&gt;
+Current value: &lt;argument_value&gt;
+Current names: &lt;argument_names&gt;
 </code></pre></div>
 
     </div>
@@ -84,7 +99,8 @@ Current value: &lt;argument_value&gt;
 <span>  <span class="va">argument_name</span>,</span>
 <span>  <span class="va">arguments_list</span>,</span>
 <span>  <span class="va">message</span>,</span>
-<span>  class <span class="op">=</span> <span class="st">"argument_value_or_type"</span></span>
+<span>  class <span class="op">=</span> <span class="st">"argument_value_or_type"</span>,</span>
+<span>  force_names <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -107,6 +123,10 @@ Current value: &lt;argument_value&gt;
 <dt id="arg-class">class<a class="anchor" aria-label="anchor" href="#arg-class"></a></dt>
 <dd><p><code>character</code>. The class that the error should have. Defaults to <code>"argument_value_or_type"</code> for my own use.</p></dd>
 
+
+<dt id="arg-force-names">force_names<a class="anchor" aria-label="anchor" href="#arg-force-names"></a></dt>
+<dd><p><code>logical</code>. Whether the names argument should be printed even if names is <code>NULL</code>. Defaults to <code>FALSE</code>.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -115,13 +135,30 @@ Current value: &lt;argument_value&gt;
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">## Obviously this error message function causes</span></span></span>
-<span class="r-in"><span><span class="co">## an error, so needs to be wrapped in try()</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">## Obviously this error-message function causes an error,</span></span></span>
+<span class="r-in"><span><span class="co">## so needs to be wrapped in try() for these examples</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## Standard use</span></span></span>
 <span class="r-in"><span><span class="va">positive_args</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>number <span class="op">=</span> <span class="op">-</span><span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu">bad_arg</span><span class="op">(</span><span class="st">"number"</span>, <span class="va">positive_args</span>, <span class="st">"must be positive"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Error in bad_arg("number", positive_args, "must be positive") : </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Argument 'number' must be positive</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Current value: -1</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## Automatically detects named item and prints names</span></span></span>
+<span class="r-in"><span><span class="va">named</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"first item"</span> <span class="op">=</span> <span class="fl">1</span>, <span class="st">"second item"</span> <span class="op">=</span> <span class="fl">7</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu">bad_arg</span><span class="op">(</span><span class="st">"x"</span>, <span class="va">named</span>, <span class="st">"is not acceptable"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Error in bad_arg("x", named, "is not acceptable") : </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Argument 'x' is not acceptable</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Current value: 1, 7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Current names: first item, second item</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## Can force name printing</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu">bad_arg</span><span class="op">(</span><span class="st">"number"</span>, <span class="va">positive_args</span>, <span class="st">"must be positive"</span>, force_names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Error in bad_arg("number", positive_args, "must be positive", force_names = TRUE) : </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Argument 'number' must be positive</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Current value: -1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Current names: </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
