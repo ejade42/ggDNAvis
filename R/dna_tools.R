@@ -1,8 +1,8 @@
-#' Print an error to console (generic `ggDNAvis` helper)
+#' Emit an error message for an invalid function argument (generic `ggDNAvis` helper)
 #'
 #' This function takes an argument name, a named list of arguments
 #' (presumably being iterated over for a particular validation check),
-#' and a message. It prints an error message of the form:
+#' and a message. Using [rlang::abort()], it prints an error message of the form:
 #' \preformatted{Argument '<argument_name>' <message>
 #' Current value: <argument_value>
 #' }
@@ -198,19 +198,22 @@ debug_join_vector_str <- function(vector) {cat('"', paste(vector, collapse = '",
 #'
 #' @export
 reverse_complement <- function(sequence, output_mode = "DNA") {
-    for (argument in list(sequence, output_mode)) {
-        if (any(is.null(argument)) == TRUE || any(is.na(argument)) == TRUE) {
-            abort(paste("Argument", argument, "must not be NULL or NA"), class = "argument_value_or_type")
-        }
+    not_na_or_null <- list(sequence = sequence, output_mode = output_mode)
+    for (argument in names(not_na_or_null)) {
+        if (any(is.null(not_na_or_null[[argument]])) || any(is.na(not_na_or_null[[argument]]))) {bad_arg(argument, not_na_or_null, "must not be NULL or NA.")}
     }
+    not_na_or_null <- NULL
+
     if (length(sequence) != 1) {
-        abort("Can only input one sequence at once. Try sapply(input_vector, reverse_complement) to use on more than one input.", class = "argument_length")
+        bad_arg("sequence", list(sequence = sequence), "must have length 1. Try sapply(input_vector, reverse_complement) to use on more than one sequence.", class = "argument_length")
     }
     if (length(output_mode) != 1) {
-        abort("Output mode must be a single value (either 'DNA' or 'RNA')", class = "argument_length")
+        bad_arg("output_mode", list(output_mode = output_mode), "must be a single value (either 'DNA' or 'RNA')", class = "argument_length")
     }
-    if (is.character(sequence) == FALSE || is.character(output_mode) == FALSE) {
-        abort("Sequence and output mode must both be character/string values.", class = "argument_value_or_type")
+
+    chars <- list(sequence = sequence, output_mode = output_mode)
+    for (argument in names(chars)) {
+        if (!is.character(chars[[argument]])) {bad_arg(argument, chars, "must be a character/string value.")}
     }
     if (nchar(sequence) == 0) {
         return("")
@@ -226,7 +229,7 @@ reverse_complement <- function(sequence, output_mode = "DNA") {
             } else if (toupper(output_mode) == "RNA") {
                 new_sequence_vector[i] <- "U"
             } else {
-                abort("Output mode must be set to either 'DNA' (default) or 'RNA'", class = "argument_value_or_type")
+                bad_arg("output_mode", list(output_mode = output_mode), "must be either 'DNA' (default) or 'RNA'.")
             }
         } else if (reversed_vector[i] == "C") {
             new_sequence_vector[i] <- "G"
@@ -235,7 +238,7 @@ reverse_complement <- function(sequence, output_mode = "DNA") {
         } else if (reversed_vector[i] %in% c("T", "U")) {
             new_sequence_vector[i] <- "A"
         } else {
-            abort("Cannot reverse sequence for non-A/C/G/T/U", class = "argument_value_or_type")
+            abort(paste0("Cannot reverse sequence for non-A/C/G/T/U.\nNon-compliant character: ", reversed_vector[i]), class = "argument_value_or_type")
         }
     }
 
@@ -268,7 +271,7 @@ reverse_complement <- function(sequence, output_mode = "DNA") {
 #' @export
 convert_base_to_number <- function(base) {
     if (length(base) != 1) {
-        abort("Can only input one base at once", class = "argument_length")
+        bad_arg("base", list(base = base), "must have length 1.", class = "argument_length")
     }
 
     base <- toupper(base)
@@ -281,7 +284,7 @@ convert_base_to_number <- function(base) {
     } else if (base %in% c("T", "U")) {
         number <- 4
     } else {
-        abort("Base must be one of A/C/G/T/U to convert to number", class = "argument_value_or_type")
+        bad_arg("base", list(base = base), "must be one of A/C/G/T/U to convert to number.")
     }
     return(number)
 }
@@ -306,16 +309,15 @@ convert_base_to_number <- function(base) {
 convert_sequence_to_numbers <- function(sequence, length = NA) {
     ## Tests to make sure length is something sensible
     if (length(sequence) != 1) {
-        abort("Sequence must be a single character/string value", class = "argument_length")
+        bad_arg("sequence", list(sequence = sequence), "must be a single character/string value.", class = "argument_length")
     }
     if (length(length) != 1) {
-        abort("Length must be a single integer (or NA) value", class = "argument_length")
+        bad_arg("length", list(length = length), "must be a single integer (or NA) value.", class = "argument_length")
     }
     if (is.na(length)) {
         length <- nchar(sequence)
-    }
-    if (is.numeric(length) == FALSE || length %% 1 != 0 || length < 0) {
-        abort("Length must be a non-negative integer or NA", class = "argument_value_or_type")
+    } else if (!is.numeric(length)|| length %% 1 != 0 || length < 0) {
+        bad_arg("length", list(length = length), "must be a non-negative integer or NA.")
     }
 
     if (length == 0) {     ## specifically not else if, to return empty num vector if length not specified but sequence length is 0
@@ -350,7 +352,7 @@ convert_sequence_to_numbers <- function(sequence, length = NA) {
 #' @export
 create_image_data <- function(sequences) {
     if (is.character(sequences) == FALSE) {
-        abort("Must input a character vector of sequences", class = "argument_value_or_type")
+        bad_arg("sequences", list(sequences = sequences), "must be a character vector.")
     }
 
     max_length <- max(nchar(sequences))

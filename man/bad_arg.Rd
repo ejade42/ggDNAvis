@@ -2,7 +2,7 @@
 % Please edit documentation in R/dna_tools.R
 \name{bad_arg}
 \alias{bad_arg}
-\title{Print an error to console (generic \code{ggDNAvis} helper)}
+\title{Emit an error message for an invalid function argument (generic \code{ggDNAvis} helper)}
 \usage{
 bad_arg(
   argument_name,
@@ -29,7 +29,7 @@ Nothing, but causes an error exit via \code{\link[rlang:abort]{rlang::abort()}}
 \description{
 This function takes an argument name, a named list of arguments
 (presumably being iterated over for a particular validation check),
-and a message. It prints an error message of the form:
+and a message. Using \code{\link[rlang:abort]{rlang::abort()}}, it prints an error message of the form:
 \preformatted{Argument '<argument_name>' <message>
 Current value: <argument_value>
 }
