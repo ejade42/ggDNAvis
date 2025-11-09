@@ -118,7 +118,7 @@ visualise_many_sequences <- function(
     }
 
     if (!is.character(sequence_colours) || length(sequence_colours) != 4) {
-        abort("Must provide exactly 4 sequence colours, in A C G T order, as a length-4 character vector.", class = "argument_value_or_type")
+        bad_arg("sequence_colours", list(sequence_colours = sequence_colours), "must provide exactly 4 sequence colours, in A C G T order, as a length-4 character vector.")
     }
 
     characters <- list(sequences_vector = sequences_vector, background_colour = background_colour, sequence_text_colour = sequence_text_colour, index_annotation_colour = index_annotation_colour, outline_colour = outline_colour, outline_join = outline_join)
@@ -343,9 +343,13 @@ visualise_many_sequences <- function(
 #' )
 #'
 #' @export
-extract_and_sort_sequences <- function(sequence_dataframe, sequence_variable = "sequence",
-                                       grouping_levels = c("family" = 8, "individual" = 2),
-                                       sort_by = "sequence_length", desc_sort = TRUE) {
+extract_and_sort_sequences <- function(
+    sequence_dataframe,
+    sequence_variable = "sequence",
+    grouping_levels = c("family" = 8, "individual" = 2),
+    sort_by = "sequence_length",
+    desc_sort = TRUE
+) {
     ## Validate arguments
     ## ---------------------------------------------------------------------
     not_null <- list(sequence_dataframe = sequence_dataframe, sequence_variable = sequence_variable, grouping_levels = grouping_levels, sort_by = sort_by, desc_sort = desc_sort)
@@ -549,29 +553,29 @@ insert_at_indices <- function(
     ## Validate arguments
     ## ---------------------------------------------------------------------
     if (is.vector(original_vector) == FALSE) {
-        abort("original_vector must be a vector", class = "argument_value_or_type")
+        bad_arg("original_vector", list(original_vector = original_vector), "must be a vector.")
     }
     if (is.vector(insert) == FALSE) {
-        abort("insert must be a vector-coercable value", class = "argument_value_or_type")
+        bad_arg("insert", list(insert = insert), "must be a vector-coercable value.")
     }
     if (any(is.na(insert_before)) || any(is.null(insert_before)) || length(insert_before) != 1 || is.logical(insert_before) == FALSE) {
-        abort("insert_before must be a single logical value", class = "argument_value_or_type")
+        bad_arg("insert_before", list(insert_before = insert_before), "must be a single logical/boolean value.")
     }
     if (any(is.na(insertion_indices)) || any(is.null(insertion_indices)) || !(is.numeric(insertion_indices)) || any(insertion_indices %% 1 != 0) || any(insertion_indices < 1)) {
-        abort("insertion_indices must be a vector of positive integers with no missing values", class = "argument_value_or_type")
+        bad_arg("insertion_indices", list(insertion_indices = insertion_indices), "must be a vector of positive integers with no missing values.")
     }
     if (length(insertion_indices) > 0 && max(insertion_indices) > length(original_vector)) {
         warn(paste0("One or more indices are beyond the length of the vector and will be ignored.\nLength: ", length(original_vector), "\nIndices: ", paste(insertion_indices, collapse = ", ")), class = "length_exceeded")
     }
     if (length(vert) != 1 || is.null(vert) || (is.na(vert) == FALSE && (is.numeric(vert) == FALSE))) {
-        abort("vert must be NA or numeric. Recommended to leave it NA for most purposes", class = "argument_value_or_type")
+        bad_arg("vert", list(vert = vert), "must be NA or numeric. Recommended to leave it NA for most purposes.")
     }
     ## Check sorting and uniqueness
     if (any(sort(insertion_indices, na.last = TRUE) != insertion_indices)) {
-        abort(paste0("insertion_indices must be sorted.\nCurrent value: ", paste(insertion_indices, collapse = ", ")), class = "argument_value_or_type")
+        bad_arg("insertion_indices", list(insertion_indices = insertion_indices), "must be sorted.")
     }
     if (length(unique(insertion_indices)) != length(insertion_indices)) {
-        abort(paste0("insertion_indices must be unique.\nCurrent value: ", paste(insertion_indices, collapse = ", ")), class = "argument_value_or_type")
+        bad_arg("insertion_indices", list(insertion_indices = insertion_indices), "must be unique.")
     }
     ## ---------------------------------------------------------------------
 
@@ -678,68 +682,51 @@ create_many_sequence_index_annotations <- function(
     ## ---------------------------------------------------------------------
     not_na <- list(new_sequences_vector = new_sequences_vector, original_sequences_vector = original_sequences_vector, original_indices_to_annotate = original_indices_to_annotate, annotation_interval = annotation_interval, annotate_full_lines = annotate_full_lines, annotations_above = annotations_above, annotation_vertical_position = annotation_vertical_position)
     for (argument in names(not_na)) {
-        if (any(is.na(not_na[[argument]]))) {
-            abort(paste0("Argument '", argument, "' must not be NA.\nCurrent value: ", paste(not_na[[argument]], collapse = ", ")), class = "argument_value_or_type")
-        }
+        if (any(is.na(not_na[[argument]]))) {bad_arg(argument, not_na, "must not be NA.")}
     }
     not_na <- NULL
 
     not_null <- list(new_sequences_vector = new_sequences_vector, original_sequences_vector = original_sequences_vector, original_indices_to_annotate = original_indices_to_annotate, annotation_interval = annotation_interval, annotate_full_lines = annotate_full_lines, annotations_above = annotations_above, annotation_vertical_position = annotation_vertical_position)
     for (argument in names(not_null)) {
-        if (any(is.null(not_null[[argument]]))) {
-            abort(paste0("Argument '", argument, "' must not be NULL.\nCurrent value: ", paste(not_null[[argument]], collapse = ", ")), class = "argument_value_or_type")
-        }
+        if (any(is.null(not_null[[argument]]))) {bad_arg(argument, not_null, "must not be NULL.")}
     }
     not_null <- NULL
 
     vectors <- list(new_sequences_vector = new_sequences_vector, original_sequences_vector = original_sequences_vector)
     for (argument in names(vectors)) {
-        if (is.vector(vectors[[argument]]) == FALSE) {
-            abort(paste0("Argument '", argument, "' must be a vector.\nCurrent value: ", paste(vectors[[argument]], collapse = ", ")), class = "argument_value_or_type")
-        }
+        if (is.vector(vectors[[argument]]) == FALSE) {bad_arg(argument, vectors, "must be a vector.")}
     }
     vectors <- NULL
 
     length_1 <- list(annotation_interval = annotation_interval, annotate_full_lines = annotate_full_lines, annotations_above = annotations_above, annotation_vertical_position = annotation_vertical_position)
     for (argument in names(length_1)) {
-        if (length(length_1[[argument]]) != 1) {
-            abort(paste0("Argument '", argument, "' must have length 1.\nCurrent value: ", paste(length_1[[argument]], collapse = ", ")), class = "argument_value_or_type")
-        }
+        if (length(length_1[[argument]]) != 1) {bad_arg(argument, length_1, "must have length 1.")}
     }
     length_1 <- NULL
 
     non_neg_numeric <- list(original_indices_to_annotate = original_indices_to_annotate, annotation_interval = annotation_interval, annotation_vertical_position = annotation_vertical_position)
     for (argument in names(non_neg_numeric)) {
-        if (is.numeric(non_neg_numeric[[argument]]) == FALSE || any(non_neg_numeric[[argument]] < 0)) {
-            abort(abort(paste0("Argument '", argument, "' must be numeric and non-negative.\nCurrent value: ", paste(non_neg_numeric[[argument]], collapse = ", ")), class = "argument_value_or_type"))
-        }
+        if (is.numeric(non_neg_numeric[[argument]]) == FALSE || any(non_neg_numeric[[argument]] < 0)) {bad_arg(argument, non_neg_numeric, "must be numeric and non-negative.")}
     }
     non_neg_numeric <- NULL
 
     integers <- list(original_indices_to_annotate = original_indices_to_annotate, annotation_interval = annotation_interval)
     for (argument in names(integers)) {
-        if (any(integers[[argument]] %% 1 != 0)) {
-            bad_arg(argument, integers, "must be integer only.")
-            #abort(abort(paste0("Argument '", argument, "' must be integer only.\nCurrent value: ", paste(integers[[argument]], collapse = ", ")), class = "argument_value_or_type"))
-        }
+        if (any(integers[[argument]] %% 1 != 0)) {bad_arg(argument, integers, "must be integer only.")}
     }
     integers <- NULL
 
     positive <- list(original_indices_to_annotate = original_indices_to_annotate)
     for (argument in names(positive)) {
-        if (any(positive[[argument]] <= 0)) {
-            abort(abort(paste0("Argument '", argument, "' must be positive only.\nCurrent value: ", paste(positive[[argument]], collapse = ", ")), class = "argument_value_or_type"))
-        }
+        if (any(positive[[argument]] <= 0)) {bad_arg(argument, positive, "must be positive only.")}
     }
     positive <- NULL
 
-    logical <- list(annotate_full_lines = annotate_full_lines, annotations_above = annotations_above)
-    for (argument in names(logical)) {
-        if (is.logical(logical[[argument]]) == FALSE) {
-            abort(abort(paste0("Argument '", argument, "' must be logical/boolean.\nCurrent value: ", paste(logical[[argument]], collapse = ", ")), class = "argument_value_or_type"))
-        }
+    bools <- list(annotate_full_lines = annotate_full_lines, annotations_above = annotations_above)
+    for (argument in names(bools)) {
+        if (is.logical(bools[[argument]]) == FALSE) {bad_arg(argument, bools, "must be logical/boolean.")}
     }
-    logical <- NULL
+    bools <- NULL
 
     ## Instantly return empty dataframe if interval or indices is blank
     if (annotation_interval == 0 || length(original_indices_to_annotate) == 0) {
@@ -748,10 +735,10 @@ create_many_sequence_index_annotations <- function(
 
     ## Check sorting and uniqueness
     if (any(sort(original_indices_to_annotate, na.last = TRUE) != original_indices_to_annotate)) {
-        abort(paste0("original_indices_to_annotate must be sorted.\nCurrent value: ", paste(original_indices_to_annotate, collapse = ", ")), class = "argument_value_or_type")
+        bad_arg("original_indices_to_annotate", list(original_indices_to_annotate = original_indices_to_annotate), "must be sorted.")
     }
     if (length(unique(original_indices_to_annotate)) != length(original_indices_to_annotate)) {
-        abort(paste0("original_indices_to_annotate must be unique.\nCurrent value: ", paste(original_indices_to_annotate, collapse = ", ")), class = "argument_value_or_type")
+        bad_arg("original_indices_to_annotate", list(original_indices_to_annotate = original_indices_to_annotate), "must be unique.")
     }
     ## ---------------------------------------------------------------------
 
@@ -782,7 +769,7 @@ create_many_sequence_index_annotations <- function(
         if (!annotate_full_lines) {
             line_length <- nchar(new_sequences_vector[annotated_sequence_index])
             if (is.na(line_length)) {
-                abort("Provided indices go out of range, please avoid doing this", class = "out_of_range")
+                abort(paste("Provided indices go out of range, please avoid doing this.\nIndex:", annotated_sequence_index, "\nnew_sequences_vector length:", length(new_sequences_vector)), class = "out_of_range")
             }
         } else {
             line_length <- max(nchar(new_sequences_vector))
