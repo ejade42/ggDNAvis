@@ -1,0 +1,150 @@
+# Visualise methylation colour scalebar
+
+This function creates a scalebar showing the colouring scheme based on
+methylation probability that is used in
+[`visualise_methylation()`](https://ejade42.github.io/ggDNAvis/reference/visualise_methylation.md).
+Showing this is particularly important when the colour range is clamped
+via `low_clamp` and `high_clamp` (e.g. setting that all values below 100
+are fully blue (`#0000FF`), all values above 200 are fully red
+(`#FF0000`), and colour interpolation occurs only in the range 100-200,
+rather than across the whole range 0-255). If clamping is off (default),
+then 0 is fully blue, 255 is fully read, and all values are linearly
+interpolated. NB: colours are configurable but default to blue = low
+modification probability and red = high modification probability.
+
+## Usage
+
+``` r
+visualise_methylation_colour_scale(
+  low_colour = "blue",
+  high_colour = "red",
+  low_clamp = 0,
+  high_clamp = 255,
+  full_range = c(0, 255),
+  precision = 10^3,
+  background_colour = "white",
+  x_axis_title = NULL,
+  do_x_ticks = TRUE,
+  do_side_scale = FALSE,
+  side_scale_title = NULL,
+  outline_colour = "black",
+  outline_linewidth = 1
+)
+```
+
+## Arguments
+
+- low_colour:
+
+  `character`. The colour that should be used to represent minimum
+  probability of methylation/modification (defaults to blue).
+
+- high_colour:
+
+  `character`. The colour that should be used to represent maximum
+  probability of methylation/modification (defaults to red).
+
+- low_clamp:
+
+  `numeric`. The minimum probability below which all values are coloured
+  `low_colour`. Defaults to `0` (i.e. no clamping).
+
+- high_clamp:
+
+  `numeric`. The maximum probability above which all values are coloured
+  `high_colour`. Defaults to `255` (i.e. no clamping, assuming Nanopore
+  \> SAM style modification calling where probabilities are 8-bit
+  integers from 0 to 255).
+
+- full_range:
+
+  `numeric vector`, length 2. The total range of possible probabilities.
+  Defaults to `c(0, 255)`, which is appropriate for Nanopore \> SAM
+  style modification calling where probabilities are 8-bit integers from
+  0 to 255.  
+    
+  May need to be set to `c(0, 1)` if probabilites are instead stored as
+  decimals. Setting any other value is advanced use and should be done
+  for a good reason.
+
+- precision:
+
+  `integer`. How many different shades should be rendered. Larger values
+  give a smoother gradient. Defaults to `10^3` i.e. `1000`, which looks
+  smooth to my eyes and isn't too intensive to calculate.
+
+- background_colour:
+
+  `character`. The colour the background should be drawn (defaults to
+  white).
+
+- x_axis_title:
+
+  `character`. The desired x-axis title. Defaults to `NULL`.
+
+- do_x_ticks:
+
+  `logical`. Boolean specifying whether x axis ticks should be enabled
+  (`TRUE`, default) or disabled (`FALSE`).
+
+- do_side_scale:
+
+  `logical`. Boolean specifying whether a smaller scalebar should be
+  rendered on the right. Defaults to `FALSE`.  
+    
+  I think it is unlikely anyone would want to use this, but the option
+  is here. One potential usecase is that this scalebar shows the raw
+  probability values (e.g. 0 to 255), whereas the x-axis is normalised
+  to 0-1.
+
+- side_scale_title:
+
+  `character`. The desired title for the right-hand scalebar, if turned
+  on. Defaults to `NULL`.
+
+- outline_colour:
+
+  `character`. The colour of the scalebar outline. Defaults to black.
+
+- outline_linewidth:
+
+  `numeric`. The linewidth of the scalebar outline. Defaults to `1`. Set
+  to `0` to disable scalebar outline.
+
+## Value
+
+ggplot of the scalebar.  
+  
+Unlike the other `visualise_<>` functions in this package, does not
+directly export a png. This is because there are no squares that need to
+be rendered at a precise aspect ratio in this function. It can just be
+saved normally with
+[`ggplot2::ggsave()`](https://ggplot2.tidyverse.org/reference/ggsave.html)
+with any sensible combination of height and width.
+
+## Examples
+
+``` r
+## Defaults match defaults of visualise_methylation()
+visualise_methylation_colour_scale()
+
+
+## Use clamping and change colours
+visualise_methylation_colour_scale(
+    low_colour = "white",
+    high_colour = "black",
+    low_clamp = 0.3*255,
+    high_clamp = 0.7*255,
+    full_range = c(0, 255),
+    background_colour = "lightblue1",
+    x_axis_title = "Methylation probability"
+)
+
+
+## Lower precision = colour banding
+visualise_methylation_colour_scale(
+    precision = 10,
+    do_x_ticks = FALSE
+)
+
+```

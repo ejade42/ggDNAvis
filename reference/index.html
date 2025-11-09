@@ -59,14 +59,12 @@
 
 
 
-
-    </div><div class="section level2">
+      <dl></dl></div><div class="section level2">
 
       <h3 id="main-visualisation-functions">Main visualisation functions<a class="anchor" aria-label="anchor" href="#main-visualisation-functions"></a></h3>
       <div class="section-desc"><p>Main functions for visualising DNA/RNA/methylation information</p></div>
 
-
-    </div><div class="section level2">
+      <dl></dl></div><div class="section level2">
 
 
 
@@ -77,19 +75,22 @@
 
         </dt>
         <dd>Visualise a single DNA/RNA sequence</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="visualise_many_sequences.html">visualise_many_sequences()</a></code>
 
         </dt>
         <dd>Visualise many DNA/RNA sequences</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="visualise_methylation.html">visualise_methylation()</a></code>
 
         </dt>
         <dd>Visualise methylation probabilities for many DNA sequences</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="visualise_methylation_colour_scale.html">visualise_methylation_colour_scale()</a></code>
 
@@ -100,8 +101,7 @@
       <h3 id="key-data-processing-functions">Key data processing functions<a class="anchor" aria-label="anchor" href="#key-data-processing-functions"></a></h3>
       <div class="section-desc"><p>Frequently used functions for importing and processing</p></div>
 
-
-    </div><div class="section level2">
+      <dl></dl></div><div class="section level2">
 
 
 
@@ -112,43 +112,50 @@
 
         </dt>
         <dd>Read sequence and quality information from FASTQ</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="read_modified_fastq.html">read_modified_fastq()</a></code>
 
         </dt>
         <dd>Read modification information from modified FASTQ</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="write_fastq.html">write_fastq()</a></code>
 
         </dt>
         <dd>Write sequence and quality information to FASTQ</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="write_modified_fastq.html">write_modified_fastq()</a></code>
 
         </dt>
         <dd>Write modification information stored in dataframe back to modified FASTQ</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="merge_fastq_with_metadata.html">merge_fastq_with_metadata()</a></code>
 
         </dt>
         <dd>Merge FASTQ data with metadata</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="merge_methylation_with_metadata.html">merge_methylation_with_metadata()</a></code>
 
         </dt>
         <dd>Merge methylation with metadata</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="extract_and_sort_sequences.html">extract_and_sort_sequences()</a></code>
 
         </dt>
         <dd>Extract, sort, and add spacers between sequences in a dataframe</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="extract_methylation_from_dataframe.html">extract_methylation_from_dataframe()</a></code>
 
@@ -159,8 +166,7 @@
       <h3 id="included-data">Included data<a class="anchor" aria-label="anchor" href="#included-data"></a></h3>
       <div class="section-desc"><p>Data included in ggDNAvis</p></div>
 
-
-    </div><div class="section level2">
+      <dl></dl></div><div class="section level2">
 
 
 
@@ -171,13 +177,15 @@
 
         </dt>
         <dd>Example multiple sequences data</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="sequence_colour_palettes.html">sequence_colour_palettes</a></code>
 
         </dt>
         <dd>Colour palettes for sequence visualisations</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="fastq_quality_scores.html">fastq_quality_scores</a></code>
 
@@ -188,8 +196,7 @@
       <h3 id="basic-helpers">Basic helpers<a class="anchor" aria-label="anchor" href="#basic-helpers"></a></h3>
       <div class="section-desc"><p>Small, widely used helper functions</p></div>
 
-
-    </div><div class="section level2">
+      <dl></dl></div><div class="section level2">
 
 
 
@@ -200,25 +207,29 @@
 
         </dt>
         <dd>Split a <code>","</code>-joined string back to a vector (generic <code>ggDNAvis</code> helper)</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="vector_to_string.html">vector_to_string()</a></code>
 
         </dt>
         <dd>Join a vector into a comma-separated string (generic <code>ggDNAvis</code> helper)</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="reverse_complement.html">reverse_complement()</a></code>
 
         </dt>
         <dd>Reverse complement a DNA/RNA sequence (generic <code>ggDNAvis</code> helper)</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="debug_join_vector_num.html">debug_join_vector_num()</a></code>
 
         </dt>
         <dd>Print a numeric vector to console (<code>ggDNAvis</code> debug helper)</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="debug_join_vector_str.html">debug_join_vector_str()</a></code>
 
@@ -229,8 +240,7 @@
       <h3 id="advanced-helpers">Advanced helpers<a class="anchor" aria-label="anchor" href="#advanced-helpers"></a></h3>
       <div class="section-desc"><p>Helper functions that are mostly called by other functions; users shouldn’t need these for normal use cases</p></div>
 
-
-    </div><div class="section level2">
+      <dl></dl></div><div class="section level2">
 
 
 
@@ -241,73 +251,85 @@
 
         </dt>
         <dd>Map a single base to the corresponding number (generic <code>ggDNAvis</code> helper)</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="convert_input_seq_to_sequence_list.html">convert_input_seq_to_sequence_list()</a></code>
 
         </dt>
         <dd>Split a single input sequence into a vector of "lines" for visualisation (<code><a href="../reference/visualise_single_sequence.html">visualise_single_sequence()</a></code> helper)</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="convert_locations_to_MM_vector.html">convert_locations_to_MM_vector()</a></code>
 
         </dt>
         <dd>Convert absolute index locations to MM tag (<code><a href="../reference/write_modified_fastq.html">write_modified_fastq()</a></code> helper)</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="convert_MM_vector_to_locations.html">convert_MM_vector_to_locations()</a></code>
 
         </dt>
         <dd>Convert MM tag to absolute index locations (<code><a href="../reference/read_modified_fastq.html">read_modified_fastq()</a></code> helper)</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="convert_modification_to_number_vector.html">convert_modification_to_number_vector()</a></code>
 
         </dt>
         <dd>Convert string-ified modification probabilities and locations to a single vector of probabilities (<code><a href="../reference/visualise_methylation.html">visualise_methylation()</a></code> helper)</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="convert_sequence_to_numbers.html">convert_sequence_to_numbers()</a></code>
 
         </dt>
         <dd>Map a sequence to a vector of numbers (generic <code>ggDNAvis</code> helper)</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="convert_sequences_to_annotations.html">convert_sequences_to_annotations()</a></code>
 
         </dt>
         <dd>Convert a vector of sequences to a dataframe for plotting sequence contents and index annotations (<code><a href="../reference/visualise_single_sequence.html">visualise_single_sequence()</a></code> helper)</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="create_image_data.html">create_image_data()</a></code>
 
         </dt>
         <dd>Rasterise a vector of sequences into a numerical dataframe for ggplotting (generic <code>ggDNAvis</code> helper)</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="rasterise_matrix.html">rasterise_matrix()</a></code>
 
         </dt>
         <dd>Rasterise a matrix to an x/y/layer dataframe (generic <code>ggDNAvis</code> helper)</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="reverse_sequence_if_needed.html">reverse_sequence_if_needed()</a></code>
 
         </dt>
         <dd>Reverse sequences if needed (<code><a href="../reference/merge_methylation_with_metadata.html">merge_methylation_with_metadata()</a></code> helper)</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="reverse_quality_if_needed.html">reverse_quality_if_needed()</a></code>
 
         </dt>
         <dd>Reverse qualities if needed (<code><a href="../reference/merge_methylation_with_metadata.html">merge_methylation_with_metadata()</a></code> helper)</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="reverse_locations_if_needed.html">reverse_locations_if_needed()</a></code>
 
         </dt>
         <dd>Reverse modification locations if needed (<code><a href="../reference/merge_methylation_with_metadata.html">merge_methylation_with_metadata()</a></code> helper)</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="reverse_probabilities_if_needed.html">reverse_probabilities_if_needed()</a></code>
 
@@ -323,7 +345,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>
