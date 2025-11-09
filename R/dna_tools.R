@@ -65,7 +65,7 @@ bad_arg <- function(argument_name, arguments_list, message, class = "argument_va
     if (!is.null(names(arguments_list[[argument_name]])) || force_names) {
         error_message <- paste0(error_message, "\nCurrent names: ", paste(names(arguments_list[[argument_name]]), collapse = ", "))
     }
-    abort(error_message, class = class)
+    abort(error_message, class = class, call = rlang::caller_env())
 }
 
 
