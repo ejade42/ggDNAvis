@@ -1,8 +1,10 @@
-# Print an error to console (generic `ggDNAvis` helper)
+# Emit an error message for an invalid function argument (generic `ggDNAvis` helper)
 
 This function takes an argument name, a named list of arguments
 (presumably being iterated over for a particular validation check), and
-a message. It prints an error message of the form:
+a message. Using
+[`rlang::abort()`](https://rlang.r-lib.org/reference/abort.html), it
+prints an error message of the form:
 
     Argument '<argument_name>' <message>
     Current value: <argument_value>

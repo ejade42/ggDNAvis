@@ -82,7 +82,8 @@ Small, widely used helper functions
 - [`bad_arg()`](https://ejade42.github.io/ggDNAvis/reference/bad_arg.md)
   :
 
-  Print an error to console (generic `ggDNAvis` helper)
+  Emit an error message for an invalid function argument (generic
+  `ggDNAvis` helper)
 
 ### Advanced helpers
 
