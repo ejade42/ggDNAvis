@@ -101,47 +101,93 @@
 #' }
 #'
 #' @export
-visualise_methylation <- function(modification_locations, modification_probabilities, sequence_lengths,
-                                  low_colour = "blue", high_colour = "red", low_clamp = 0, high_clamp = 255,
-                                  background_colour = "white", other_bases_colour = "grey",
-                                  outline_colour = "black", outline_linewidth = 3, outline_join = "mitre",
-                                  modified_bases_outline_colour = NA, modified_bases_outline_linewidth = NA, modified_bases_outline_join = NA,
-                                  other_bases_outline_colour = NA, other_bases_outline_linewidth = NA, other_bases_outline_join = NA,
-                                  margin = 0.5, return = TRUE, filename = NA, render_device = ragg::agg_png, pixels_per_base = 20) {
+visualise_methylation <- function(
+    modification_locations,
+    modification_probabilities,
+    sequence_lengths,
+    low_colour = "blue",
+    high_colour = "red",
+    low_clamp = 0,
+    high_clamp = 255,
+    background_colour = "white",
+    other_bases_colour = "grey",
+    outline_colour = "black",
+    outline_linewidth = 3,
+    outline_join = "mitre",
+    modified_bases_outline_colour = NA,
+    modified_bases_outline_linewidth = NA,
+    modified_bases_outline_join = NA,
+    other_bases_outline_colour = NA,
+    other_bases_outline_linewidth = NA,
+    other_bases_outline_join = NA,
+    margin = 0.5,
+    return = TRUE,
+    filename = NA,
+    render_device = ragg::agg_png,
+    pixels_per_base = 20
+) {
     ## Validate arguments
-    for (argument in list(modification_locations, modification_probabilities, sequence_lengths, background_colour, other_bases_colour, low_colour, high_colour, low_clamp, high_clamp, outline_linewidth, outline_colour, outline_join, modified_bases_outline_linewidth, modified_bases_outline_colour, modified_bases_outline_join, other_bases_outline_linewidth, other_bases_outline_colour, other_bases_outline_join, margin, return, filename, pixels_per_base)) {
-        if (mean(is.null(argument)) != 0) {abort(paste("Argument", argument, "must not be null."), class = "argument_value_or_type")}
+    ## ---------------------------------------------------------------------
+    not_null <- list(modification_locations = modification_locations, modification_probabilities = modification_probabilities, sequence_lengths = sequence_lengths, background_colour = background_colour, other_bases_colour = other_bases_colour, low_colour = low_colour, high_colour = high_colour, low_clamp = low_clamp, high_clamp = high_clamp, outline_linewidth = outline_linewidth, outline_colour = outline_colour, outline_join = outline_join, modified_bases_outline_linewidth = modified_bases_outline_linewidth, modified_bases_outline_colour = modified_bases_outline_colour, modified_bases_outline_join = modified_bases_outline_join, other_bases_outline_linewidth = other_bases_outline_linewidth, other_bases_outline_colour = other_bases_outline_colour, other_bases_outline_join = other_bases_outline_join, margin = margin, return = return, filename = filename, pixels_per_base = pixels_per_base)
+    for (argument in names(not_null)) {
+        if (any(is.null(not_null[[argument]]))) {bad_arg(argument, not_null, "must not be NULL.")}
     }
-    for (argument in list(background_colour, other_bases_colour, low_colour, high_colour, low_clamp, high_clamp, outline_linewidth, outline_colour, outline_join, modified_bases_outline_linewidth, modified_bases_outline_colour, modified_bases_outline_join, other_bases_outline_linewidth, other_bases_outline_colour, other_bases_outline_join, margin, return, filename, pixels_per_base)) {
-        if (length(argument) != 1) {abort(paste("Argument", argument, "must have length 1."), class = "argument_value_or_type")}
+    not_null <- NULL
+
+    length_1 <- list(background_colour = background_colour, other_bases_colour = other_bases_colour, low_colour = low_colour, high_colour = high_colour, low_clamp = low_clamp, high_clamp = high_clamp, outline_linewidth = outline_linewidth, outline_colour = outline_colour, outline_join = outline_join, modified_bases_outline_linewidth = modified_bases_outline_linewidth, modified_bases_outline_colour = modified_bases_outline_colour, modified_bases_outline_join = modified_bases_outline_join, other_bases_outline_linewidth = other_bases_outline_linewidth, other_bases_outline_colour = other_bases_outline_colour, other_bases_outline_join = other_bases_outline_join, margin = margin, return = return, filename = filename, pixels_per_base = pixels_per_base)
+    for (argument in names(length_1)) {
+        if (length(length_1[[argument]]) != 1) {bad_arg(argument, length_1, "must have length 1.")}
     }
-    for (argument in list(modification_locations, modification_probabilities, sequence_lengths, background_colour, other_bases_colour, low_colour, high_colour, low_clamp, high_clamp, margin, return, pixels_per_base)) {
-        if (mean(is.na(argument)) != 0) {abort(paste("Argument", argument, "must not be NA."), class = "argument_value_or_type")}
+    length_1 <- NULL
+
+    not_na <- list(modification_locations = modification_locations, modification_probabilities = modification_probabilities, sequence_lengths = sequence_lengths, background_colour = background_colour, other_bases_colour = other_bases_colour, low_colour = low_colour, high_colour = high_colour, low_clamp = low_clamp, high_clamp = high_clamp, margin = margin, return = return, pixels_per_base = pixels_per_base)
+    for (argument in names(not_na)) {
+        if (any(is.na(not_na[[argument]]))) {bad_arg(argument, not_na, "must not be NA.")}
     }
-    for (argument in list(background_colour, other_bases_colour, low_colour, high_colour, outline_colour, modified_bases_outline_colour, other_bases_outline_colour)) {
-        if (is.na(argument) == FALSE && (is.character(argument) == FALSE || length(argument) != 1)) {abort(paste("All colours must be single character values.", argument, "is not valid."), class = "argument_value_or_type")}
+    not_na <- NULL
+
+    single_char <- list(background_colour = background_colour, other_bases_colour = other_bases_colour, low_colour = low_colour, high_colour = high_colour, outline_colour = outline_colour, modified_bases_outline_colour = modified_bases_outline_colour, other_bases_outline_colour = other_bases_outline_colour)
+    for (argument in names(single_char)) {
+        if (!is.na(single_char[[argument]]) && (!is.character(single_char[[argument]]) || length(single_char[[argument]]) != 1)) {bad_arg(argument, single_char, "must be a single character value, and a valid colour name or hexcode.")}
     }
-    for (argument in list(low_clamp, high_clamp, margin, pixels_per_base, outline_linewidth, modified_bases_outline_linewidth, other_bases_outline_linewidth)) {
-        if (is.na(argument) == FALSE && (is.numeric(argument) == FALSE || length(argument) != 1)) {abort(paste("Argument", argument, "must be a single numeric value."), class = "argument_value_or_type")}
+    single_char <- NULL
+
+    single_num <- list(low_clamp = low_clamp, high_clamp = high_clamp, margin = margin, pixels_per_base = pixels_per_base, outline_linewidth = outline_linewidth, modified_bases_outline_linewidth = modified_bases_outline_linewidth, other_bases_outline_linewidth = other_bases_outline_linewidth)
+    for (argument in names(single_num)) {
+        if (!is.na(single_num[[argument]]) && (!is.numeric(single_num[[argument]]) || length(single_num[[argument]]) != 1)) {bad_arg(argument, single_num, "must be a single numeric value.")}
     }
-    for (argument in list(pixels_per_base)) {
-        if (argument %% 1 != 0 || argument < 1) {abort(paste("Argument", argument, "must be a positive integer."), class = "argument_value_or_type")}
+    single_num <- NULL
+
+    pos_int <- list(pixels_per_base = pixels_per_base)
+    for (argument in names(pos_int)) {
+        if (any(pos_int[[argument]] %% 1 != 0) || any(pos_int[[argument]] < 1)) {bad_arg(argument, pos_int, "must be a positive integer.")}
     }
-    for (argument in list(return)) {
-        if (is.logical(argument) == FALSE || length(argument) != 1) {abort(paste("Argument", argument, "must be a single logical/boolean value."), class = "argument_value_or_type")}
+    pos_int <- NULL
+
+    bool <- list(return = return)
+    for (argument in names(bool)) {
+        if (!is.logical(bool[[argument]]) || length(bool[[argument]]) != 1) {bad_arg(argument, bool, "must be a single logical/boolean value.")}
     }
+    bool <- NULL
+
     if (length(modification_locations) != length(modification_probabilities) ||
         length(modification_locations) != length(sequence_lengths) ||
         length(modification_probabilities) != length(sequence_lengths)) {
-        abort("Modification locations, modification probabilities, and sequence lengths must all be the same length", class = "argument_value_or_type")
+        abort(paste("Modification locations, modification probabilities, and sequence lengths must all be the same length.\n'modification_locations' length:", length(modification_locations), "\n'modification_probabilities' length:", length(modification_probabilities), "\n'sequence_lengths' length:", length(sequence_lengths)), class = "argument_value_or_type")
     }
-    for (argument in list(modification_locations, modification_probabilities)) {
-        if (is.character(argument) == FALSE) {abort("Modification locations and probabilities must both be character vectors.", class = "argument value or type.")}
-        if (mean(is.na(string_to_vector(argument))) != 0) {abort("Modification locations and probabilities must both expand to numeric vectors via string_to_vector(). Check that the values within these inputs are comma-separated numbers e.g. '1,2,3,4'.", class = "argument_value_or_type")}
+
+    string_to_vector_valid <- list(modification_locations = modification_locations, modification_probabilities = modification_probabilities)
+    for (argument in names(string_to_vector_valid)) {
+        if (!is.character(string_to_vector_valid[[argument]])) {bad_arg(argument, string_to_vector_valid, "must be a character vector.")}
+        if (any(is.na(string_to_vector(string_to_vector_valid[[argument]])))) {bad_arg(argument, string_to_vector_valid, "must expand to a numeric vector via string_to_vector().\nCheck that all its values are comma-separated numbers e.g. '1,2,3,4'.")}
     }
-    for (argument in list(sequence_lengths)) {
-        if (is.numeric(argument) == FALSE) {abort("Sequence lengths vector must be numeric.", class = "argument_value_or_type")}
+    string_to_vector_valid <- NULL
+
+    numeric_vector <- list(sequence_lengths = sequence_lengths)
+    for (argument in names(numeric_vector)) {
+        if (!is.numeric(numeric_vector[[argument]])) {bad_arg(argument, numeric_vector, "must be numeric.")}
     }
+
     ## Overwrite outline parameters if needed
     if (is.na(modified_bases_outline_colour))    {modified_bases_outline_colour    <- outline_colour}
     if (is.na(modified_bases_outline_linewidth)) {modified_bases_outline_linewidth <- outline_linewidth}
@@ -149,26 +195,30 @@ visualise_methylation <- function(modification_locations, modification_probabili
     if (is.na(other_bases_outline_colour))       {other_bases_outline_colour       <- outline_colour}
     if (is.na(other_bases_outline_linewidth))    {other_bases_outline_linewidth    <- outline_linewidth}
     if (is.na(other_bases_outline_join))         {other_bases_outline_join         <- outline_join}
+
     ## Check colour, linewidth, and join are specified for both
     for (argument in list(modified_bases_outline_linewidth, modified_bases_outline_colour, modified_bases_outline_join, other_bases_outline_linewidth, other_bases_outline_colour, other_bases_outline_join)) {
         if (is.na(argument)) {abort("Outline colour, linewidth, and join must all be specified generally (via outline_colour etc) or for both modified bases and other bases (via both modified_bases_outline_colour and other_bases_outline_colour etc). Currently there is an NA.", class = "argument_value_or_type")}
     }
+
     ## Check join is valid
     for (argument in list(modified_bases_outline_join, other_bases_outline_join)) {
         if (!(tolower(argument) %in% c("mitre", "round", "bevel"))) {
-            abort("All outline join arguments must be one of 'mitre', 'round', or 'bevel'.", class = "argument_value_or_type")
+            abort(paste("All outline join arguments must be one of 'mitre', 'round', or 'bevel'.\nCurrent value(s):", paste(unique(c(modified_bases_outline_join, other_bases_outline_join)), collapse = ", ")), class = "argument_value_or_type")
         }
     }
     ## Warn about margin
     if (margin <= 0.25 && (modified_bases_outline_linewidth > 0 || other_bases_outline_linewidth > 0)) {
-        warn("If margin is small and outlines are on (outline_linewidth > 0), outlines may be cut off at the edges of the plot. Check if this is happening and consider using a bigger margin.", class = "parameter_recommendation")
+        warn(paste("If margin is small and outlines are on (outline_linewidth > 0), outlines may be cut off at the edges of the plot. Check if this is happening and consider using a bigger margin.\nCurrent margin:", margin), class = "parameter_recommendation")
     }
     ## Check clamping values
     if (low_clamp >= high_clamp) {
-        abort("Low clamp value must be strictly less than high clamp value", class = "argument_value_or_type")
+        abort(paste("Low clamp value must be strictly less than high clamp value.\nCurrent 'low_clamp' value:", low_clamp, "\nCurrent 'high_clamp' value:", high_clamp), class = "argument_value_or_type")
     }
     ## Accept NA as NULL for render_device
     if (is.atomic(render_device) && any(is.na(render_device))) {render_device <- NULL}
+    ## ---------------------------------------------------------------------
+
 
 
     ## Generate rasterised dataframes of methylation and masking layer
@@ -212,7 +262,7 @@ visualise_methylation <- function(modification_locations, modification_probabili
     ## Validate filename and export image
     if (is.na(filename) == FALSE) {
         if (is.character(filename) == FALSE) {
-            abort("Filename must be a character/string (or NA if no file export wanted)", class = "argument_value_or_type")
+            bad_arg("filename", list(filename = filename), "must be a character/string (or NA if no file export wanted).")
         }
         if (tolower(substr(filename, nchar(filename)-3, nchar(filename))) != ".png") {
             warn("Not recommended to use non-png filetype (but may still work).", class = "filetype_recommendation")
@@ -278,42 +328,76 @@ visualise_methylation <- function(modification_locations, modification_probabili
 #' )
 #'
 #' @export
-visualise_methylation_colour_scale <- function(low_colour = "blue", high_colour = "red", low_clamp = 0, high_clamp = 255, full_range = c(0, 255), precision = 10^3,
-                                               background_colour = "white", x_axis_title = NULL, do_x_ticks = TRUE, do_side_scale = FALSE, side_scale_title = NULL,
-                                               outline_colour = "black", outline_linewidth = 1) {
+visualise_methylation_colour_scale <- function(
+    low_colour = "blue",
+    high_colour = "red",
+    low_clamp = 0,
+    high_clamp = 255,
+    full_range = c(0, 255),
+    precision = 10^3,
+    background_colour = "white",
+    x_axis_title = NULL,
+    do_x_ticks = TRUE,
+    do_side_scale = FALSE,
+    side_scale_title = NULL,
+    outline_colour = "black",
+    outline_linewidth = 1
+) {
     ## Validate arguments
-    for (argument in list(low_colour, high_colour, low_clamp, high_clamp, full_range, precision, background_colour, do_x_ticks, do_side_scale, outline_colour, outline_linewidth)) {
-        if (mean(is.null(argument)) != 0 || mean(is.na(argument)) != 0) {abort(paste("Argument", argument, "must not be null or NA."), class = "argument_value_or_type")}
+    ## ---------------------------------------------------------------------
+    not_null_or_na <- list(low_colour = low_colour, high_colour = high_colour, low_clamp = low_clamp, high_clamp = high_clamp, full_range = full_range, precision = precision, background_colour = background_colour, do_x_ticks = do_x_ticks, do_side_scale = do_side_scale, outline_colour = outline_colour, outline_linewidth = outline_linewidth)
+    for (argument in names(not_null_or_na)) {
+        if (any(is.null(not_null_or_na[[argument]])) || any(is.na(not_null_or_na[[argument]]))) {bad_arg(argument, not_null_or_na, "must not be NULL or NA.")}
     }
-    for (argument in list(low_colour, high_colour, low_clamp, high_clamp, precision, background_colour, x_axis_title, do_x_ticks, do_side_scale, side_scale_title, outline_colour, outline_linewidth)) {
-        if (mean(is.null(argument)) == 0 && length(argument) != 1) {abort(paste("Argument", argument, "must have length 1"), class = "argument_value_or_type")}
+    not_null_or_na <- NULL
+
+    length_1 <- list(low_colour = low_colour, high_colour = high_colour, low_clamp = low_clamp, high_clamp = high_clamp, precision = precision, background_colour = background_colour, x_axis_title = x_axis_title, do_x_ticks = do_x_ticks, do_side_scale = do_side_scale, side_scale_title = side_scale_title, outline_colour = outline_colour, outline_linewidth = outline_linewidth)
+    for (argument in names(length_1)) {
+        if (!any(is.null(length_1[[argument]])) && length(length_1[[argument]]) != 1) {bad_arg(argument, length_1, "must have length 1.")}
     }
-    for (argument in list(background_colour, low_colour, high_colour, outline_colour)) {
-        if (is.character(argument) == FALSE || length(argument) != 1) {abort(paste("All colours must be single character values.", argument, "is not valid."), class = "argument_value_or_type")}
+
+    single_char <- list(background_colour = background_colour, low_colour = low_colour, high_colour = high_colour, outline_colour = outline_colour)
+    for (argument in names(single_char)) {
+        if (!is.na(single_char[[argument]]) && (!is.character(single_char[[argument]]) || length(single_char[[argument]]) != 1)) {bad_arg(argument, single_char, "must be a single character value, and a valid colour name or hexcode.")}
     }
-    for (argument in list(low_clamp, high_clamp, full_range, precision, outline_linewidth)) {
-        if (is.numeric(argument) == FALSE) {abort(paste("Argument", argument, "must be numeric."), class = "argument_value_or_type")}
+    single_char <- NULL
+
+    numerical <- list(low_clamp = low_clamp, high_clamp = high_clamp, full_range = full_range, precision = precision, outline_linewidth = outline_linewidth)
+    for (argument in names(numerical)) {
+        if (!is.numeric(numerical[[argument]])) {bad_arg(argument, numerical, "must be numeric.")}
     }
-    for (argument in list(do_x_ticks, do_side_scale)) {
-        if (is.logical(argument) == FALSE) {abort(paste("Argument", argument, "must be logical/boolean"), class = "argument_value_or_type")}
+    numerical <- NULL
+
+    bool <- list(do_x_ticks = do_x_ticks, do_side_scale = do_side_scale)
+    for (argument in names(bool)) {
+        if (!is.logical(bool[[argument]])) {bad_arg(argument, bool, "must be logical/boolean.")}
     }
-    for (argument in list(x_axis_title, side_scale_title)) {
-        if (mean(is.null(argument)) == 0 && mean(is.na(argument)) == 0) {
-            if (is.character(argument) == FALSE) {abort(paste("Argument", argument, "must be a character value, or NA/NULL."), class = "argument_value_or_type")}
+    bool <- NULL
+
+    char_or_na_null <- list(x_axis_title = x_axis_title, side_scale_title = side_scale_title)
+    for (argument in names(char_or_na_null)) {
+        if (!any(is.null(char_or_na_null[[argument]])) && !any(is.na(char_or_na_null[[argument]]))) {
+            if (!is.character(char_or_na_null[[argument]]) || length(char_or_na_null[[argument]]) != 1) {bad_arg(argument, char_or_na_null, "must be a single character value, or NA/NULL.")}
         }
     }
-    if (length(full_range) != 2) {abort("Must provide two numeric values e.g. c(0, 255) as the full probability range", class = "argument_value_or_type")}
-    if (mean(full_range == c(0, 255)) != 1 && mean(full_range == c(0, 1)) != 1) {
+    char_or_na_null <- NULL
+
+    ## Accept NA as meaning NULL for titles
+    if (any(is.null(x_axis_title)) || any(is.na(x_axis_title))) {x_axis_title <- NULL}
+    if (any(is.null(side_scale_title)) || any(is.na(side_scale_title))) {side_scale_title <- NULL}
+
+
+    if (length(full_range) != 2) {bad_arg("full_range", list(full_range = full_range), "must provide two numeric values e.g. c(0, 255) as the full probability range.")}
+
+    if (any(full_range != c(0, 255)) && any(full_range != c(0, 1))) {
         warn("It is unusual to set full probabality range to something other than 0-255 or 0-1. Make sure you know what you're doing.", class = "parameter_recommendation")
     }
     ## Check clamping values
     if (low_clamp >= high_clamp) {
-        abort("Low clamp value must be strictly less than high clamp value", class = "argument_value_or_type")
+        abort(paste("Low clamp value must be strictly less than high clamp value.\nCurrent 'low_clamp' value:", low_clamp, "\nCurrent 'high_clamp' value:", high_clamp), class = "argument_value_or_type")
     }
+    ## ---------------------------------------------------------------------
 
-    ## Accept NA as meaning NULL for titles
-    if (mean(is.null(x_axis_title)) == 0 && mean(is.na(x_axis_title)) != 0) {x_axis_title <- NULL}
-    if (mean(is.null(side_scale_title)) == 0 && mean(is.na(side_scale_title)) != 0) {side_scale_title <- NULL}
 
 
     ## Use arguments to calculate scales and evaluate at specified intervals
@@ -401,12 +485,15 @@ visualise_methylation_colour_scale <- function(low_colour = "blue", high_colour 
 #' )
 #'
 #' @export
-extract_methylation_from_dataframe <- function(modification_data,
-                                               locations_colname = "methylation_locations",
-                                               probabilities_colname = "methylation_probabilities",
-                                               lengths_colname = "sequence_length",
-                                               grouping_levels = c("family" = 8, "individual" = 2),
-                                               sort_by = "sequence_length", desc_sort = TRUE) {
+extract_methylation_from_dataframe <- function(
+    modification_data,
+    locations_colname = "methylation_locations",
+    probabilities_colname = "methylation_probabilities",
+    lengths_colname = "sequence_length",
+    grouping_levels = c("family" = 8, "individual" = 2),
+    sort_by = "sequence_length",
+    desc_sort = TRUE
+) {
     ## Doesn't need specific argument validation as extract_and_sort_sequences() handles that.
 
     locations <- extract_and_sort_sequences(modification_data, sequence_variable = locations_colname,
@@ -452,23 +539,40 @@ extract_methylation_from_dataframe <- function(modification_data,
 #' )
 #'
 #' @export
-convert_modification_to_number_vector <- function(modification_locations_str, modification_probabilities_str, max_length, sequence_length) {
+convert_modification_to_number_vector <- function(
+    modification_locations_str,
+    modification_probabilities_str,
+    max_length,
+    sequence_length
+) {
     ## Validate arguments
-    for (argument in list(modification_locations_str, modification_probabilities_str, max_length, sequence_length)) {
-        if (mean(is.null(argument)) != 0 || mean(is.na(argument)) != 0 || length(argument) != 1) {
-            abort("Argument", argument, "must be a single value, and not NULL or NA", class = "argument_value_or_type")
-        }
+    ## ---------------------------------------------------------------------
+    single_not_na_null <- list(modification_locations_str = modification_locations_str, modification_probabilities_str = modification_probabilities_str, max_length = max_length, sequence_length = sequence_length)
+    for (argument in names(single_not_na_null)) {
+        if (any(is.null(single_not_na_null[[argument]])) || any(is.na(single_not_na_null[[argument]])) || length(single_not_na_null[[argument]]) != 1) {bad_arg(argument, single_not_na_null, "must be a single value, and not NULL or NA.")}
     }
-    for (argument in list(modification_locations_str, modification_probabilities_str)) {
-        if (is.character(argument) == FALSE) {abort("Modification locations and probabilities must both be character vectors.", class = "argument value or type.")}
-        if (argument != "" && mean(is.na(string_to_vector(argument))) != 0) {abort("Modification locations and probabilities must both expand to numeric vectors via string_to_vector(). Check that the values within these inputs are comma-separated numbers e.g. '1,2,3,4'.", class = "argument_value_or_type")}
+    single_not_na_null <- NULL
+
+    string_to_vector_valid <- list(modification_locations_str = modification_locations_str, modification_probabilities_str = modification_probabilities_str)
+    for (argument in names(string_to_vector_valid)) {
+        if (!is.character(string_to_vector_valid[[argument]])) {bad_arg(argument, string_to_vector_valid, "must be a character vector.")}
+        if (any(is.na(string_to_vector(string_to_vector_valid[[argument]])))) {bad_arg(argument, string_to_vector_valid, "must expand to a numeric vector via string_to_vector().\nCheck that all its values are comma-separated numbers e.g. '1,2,3,4'.")}
     }
-    for (argument in list(max_length, sequence_length)) {
-        if (is.numeric(argument) == FALSE || argument %% 1 != 0 || argument < 0) {abort(paste("Argument", argument, "must be a non-negative integer."), class = "argument_value_or_type")}
+    string_to_vector_valid <- NULL
+
+    non_neg_int <- list(sequence_length = sequence_length)
+    for (argument in names(non_neg_int)) {
+        if (!is.numeric(non_neg_int[[argument]]) || non_neg_int[[argument]] %% 1 != 0 || non_neg_int[[argument]] < 0) {bad_arg(argument, non_neg_int, "must be a non-negative integer.")}
     }
-    for (argument in list(max_length)) {
-        if (is.numeric(argument) == FALSE || argument %% 1 != 0 || argument < 1) {abort("Max length must be a positive integer.", class = "argument_value_or_type")}
+    non_neg_int <- NULL
+
+    pos_int <- list(max_length = max_length)
+    for (argument in names(pos_int)) {
+        if (!is.numeric(pos_int[[argument]]) || pos_int[[argument]] %% 1 != 0 || pos_int[[argument]] < 0) {bad_arg(argument, pos_int, "must be a positive integer.")}
     }
+    pos_int <- NULL
+    ## ---------------------------------------------------------------------
+
 
 
     ## Convert input strings to vectors
