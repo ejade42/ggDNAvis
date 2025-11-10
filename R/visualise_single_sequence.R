@@ -71,13 +71,30 @@
 #' }
 #'
 #' @export
-visualise_single_sequence <- function(sequence, sequence_colours = sequence_colour_palettes$ggplot_style, background_colour = "white",
-                                      line_wrapping = 75, spacing = 1, margin = 0.5, sequence_text_colour = "black", sequence_text_size = 16,
-                                      index_annotation_colour = "darkred", index_annotation_size = 12.5, index_annotation_interval = 15,
-                                      index_annotations_above = TRUE, index_annotation_vertical_position = 1/3,
-                                      outline_colour = "black", outline_linewidth = 3, outline_join = "mitre",
-                                      return = TRUE, filename = NA, render_device = ragg::agg_png, pixels_per_base = 100) {
+visualise_single_sequence <- function(
+    sequence,
+    sequence_colours = sequence_colour_palettes$ggplot_style,
+    background_colour = "white",
+    line_wrapping = 75,
+    spacing = 1,
+    margin = 0.5,
+    sequence_text_colour = "black",
+    sequence_text_size = 16,
+    index_annotation_colour = "darkred",
+    index_annotation_size = 12.5,
+    index_annotation_interval = 15,
+    index_annotations_above = TRUE,
+    index_annotation_vertical_position = 1/3,
+    outline_colour = "black",
+    outline_linewidth = 3,
+    outline_join = "mitre",
+    return = TRUE,
+    filename = NA,
+    render_device = ragg::agg_png,
+    pixels_per_base = 100
+) {
     ## Validate arguments
+    ## ---------------------------------------------------------------------
     for (argument in list(sequence, sequence_colours, background_colour, line_wrapping, spacing, margin, sequence_text_colour, sequence_text_size, index_annotation_colour, index_annotation_size, index_annotation_interval, index_annotations_above, index_annotation_vertical_position, outline_colour, outline_linewidth, outline_join, return, filename, pixels_per_base)) {
         if (mean(is.null(argument)) != 0) {abort(paste("Argument", argument, "must not be null."), class = "argument_value_or_type")}
     }
@@ -128,6 +145,8 @@ visualise_single_sequence <- function(sequence, sequence_colours = sequence_colo
     }
     ## Accept NA as NULL for render_device
     if (is.atomic(render_device) && any(is.na(render_device))) {render_device <- NULL}
+    ## ---------------------------------------------------------------------
+
 
 
     ## Generate data for plotting
@@ -214,9 +233,6 @@ visualise_single_sequence <- function(sequence, sequence_colours = sequence_colo
 }
 
 
-## UNIQUE HELPER FUNCTIONS
-## "Missing" functions are likely in dna_tools.R as they are common to multiple visualisations
-
 
 #' Split a single input sequence into a vector of "lines" for visualisation ([visualise_single_sequence()] helper)
 #'
@@ -263,7 +279,15 @@ visualise_single_sequence <- function(sequence, sequence_colours = sequence_colo
 #' )
 #'
 #' @export
-convert_input_seq_to_sequence_list <- function(input_seq, line_length, spacing = 1, start_spaces = FALSE, end_spaces = FALSE) {
+convert_input_seq_to_sequence_list <- function(
+    input_seq,
+    line_length,
+    spacing = 1,
+    start_spaces = FALSE,
+    end_spaces = FALSE
+) {
+    ## Validate arguments
+    ## ---------------------------------------------------------------------
     for (argument in list(input_seq, line_length, spacing, start_spaces, end_spaces)) {
         if (mean(is.null(argument)) != 0 || mean(is.na(argument)) != 0) {abort(paste("Argument", argument, "must not be null or NA."), class = "argument_value_or_type")}
     }
@@ -281,6 +305,9 @@ convert_input_seq_to_sequence_list <- function(input_seq, line_length, spacing =
         if (is.logical(argument) == FALSE) {
             abort("Spaces at start/end settings must be logical/boolean values.", class = "argument_value_or_type")
         }
+    ## ---------------------------------------------------------------------
+
+
 
     ## Split sequences into a vector, without breaks
     starts <- seq(1, nchar(input_seq), line_length)
@@ -334,7 +361,15 @@ convert_input_seq_to_sequence_list <- function(input_seq, line_length, spacing =
 #')
 #'
 #' @export
-convert_sequences_to_annotations <- function(sequences, line_length, interval = 15, annotations_above = TRUE, annotation_vertical_position = 1/3) {
+convert_sequences_to_annotations <- function(
+    sequences,
+    line_length,
+    interval = 15,
+    annotations_above = TRUE,
+    annotation_vertical_position = 1/3
+) {
+    ## Validate arguments
+    ## ---------------------------------------------------------------------
     for (argument in list(sequences, line_length, interval, annotations_above, annotation_vertical_position)) {
         if (mean(is.null(argument)) != 0 || mean(is.na(argument)) != 0) {abort(paste("Argument", argument, "must not be null or NA."), class = "argument_value_or_type")}
     }
@@ -354,6 +389,7 @@ convert_sequences_to_annotations <- function(sequences, line_length, interval = 
     if (is.character(sequences) == FALSE) {
         abort("Input sequence must be a character vector.", class = "argument_value_or_type")
     }
+    ## ---------------------------------------------------------------------
 
     x_interval <- 1 / line_length
     y_interval <- 1 / length(sequences)
