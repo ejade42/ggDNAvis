@@ -198,6 +198,8 @@ debug_join_vector_str <- function(vector) {cat('"', paste(vector, collapse = '",
 #'
 #' @export
 reverse_complement <- function(sequence, output_mode = "DNA") {
+    ## Validate arguments
+    ## ---------------------------------------------------------------------
     not_na_or_null <- list(sequence = sequence, output_mode = output_mode)
     for (argument in names(not_na_or_null)) {
         if (any(is.null(not_na_or_null[[argument]])) || any(is.na(not_na_or_null[[argument]]))) {bad_arg(argument, not_na_or_null, "must not be NULL or NA.")}
@@ -215,9 +217,13 @@ reverse_complement <- function(sequence, output_mode = "DNA") {
     for (argument in names(chars)) {
         if (!is.character(chars[[argument]])) {bad_arg(argument, chars, "must be a character/string value.")}
     }
+    ## ---------------------------------------------------------------------
+
+
     if (nchar(sequence) == 0) {
         return("")
     }
+
     sequence_vector     <- strsplit(toupper(sequence), split = "")[[1]]
     reversed_vector     <- rev(sequence_vector)
     new_sequence_vector <- rep(NA, length(reversed_vector))
@@ -270,9 +276,12 @@ reverse_complement <- function(sequence, output_mode = "DNA") {
 #'
 #' @export
 convert_base_to_number <- function(base) {
+    ## Validate arguments
+    ## ---------------------------------------------------------------------
     if (length(base) != 1) {
         bad_arg("base", list(base = base), "must have length 1.", class = "argument_length")
     }
+    ## ---------------------------------------------------------------------
 
     base <- toupper(base)
     if (base == "A") {
@@ -307,7 +316,8 @@ convert_base_to_number <- function(base) {
 #'
 #' @export
 convert_sequence_to_numbers <- function(sequence, length = NA) {
-    ## Tests to make sure length is something sensible
+    ## Validate arguments
+    ## ---------------------------------------------------------------------
     if (length(sequence) != 1) {
         bad_arg("sequence", list(sequence = sequence), "must be a single character/string value.", class = "argument_length")
     }
@@ -319,6 +329,7 @@ convert_sequence_to_numbers <- function(sequence, length = NA) {
     } else if (!is.numeric(length)|| length %% 1 != 0 || length < 0) {
         bad_arg("length", list(length = length), "must be a non-negative integer or NA.")
     }
+    ## ---------------------------------------------------------------------
 
     if (length == 0) {     ## specifically not else if, to return empty num vector if length not specified but sequence length is 0
         return(numeric(0))
@@ -351,9 +362,13 @@ convert_sequence_to_numbers <- function(sequence, length = NA) {
 #'
 #' @export
 create_image_data <- function(sequences) {
+    ## Validate arguments
+    ## ---------------------------------------------------------------------
     if (is.character(sequences) == FALSE) {
         bad_arg("sequences", list(sequences = sequences), "must be a character vector.")
     }
+    ## ---------------------------------------------------------------------
+
 
     max_length <- max(nchar(sequences))
     image_matrix <- matrix(NA, nrow = length(sequences), ncol = max_length)

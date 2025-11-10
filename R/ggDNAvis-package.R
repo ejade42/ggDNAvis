@@ -96,10 +96,47 @@ fetch_acceptable_distortion <- function(verbose = TRUE) {
 #' \describe{
 #'  \item{ggplot_style}{The shades of red, green, blue, and purple that [ggplot2::ggplot()] uses by default for a 4-way discrete colour scheme.\cr\cr Values: `c("#F8766D", "#7CAE00", "#00BFC4", "#C77CFF")`}
 #'  \item{bright_pale}{Bright yellow, green, blue, and red in lighter pastel-like tones.\cr\cr Values: `c("#FFDD00", "#40C000", "#00A0FF", "#FF4E4E")`}
-#'  \item{bright_pale2}{Bright yellow, green, blue, and red in lighter pastel-like tones. The green (for C) is slightly ligther than bright_pale.\cr\cr Values: `c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E")`}
+#'  \item{bright_pale2}{Bright yellow, green, blue, and red in lighter pastel-like tones. The green (for C) is slightly lighter than bright_pale.\cr\cr Values: `c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E")`}
 #'  \item{bright_deep}{Bright orange, green, blue, and red in darker, richer tones.\cr\cr Values: `c("#FFAA00", "#00BC00", "#0000DC", "#FF1E1E")`}
 #'  \item{sanger}{Green, blue, black, and red similar to a traditional Sanger sequencing readout.\cr\cr Values: `c("#00B200", "#0000FF", "#000000", "#FF0000")`}
 #' }
+#'
+#' @examples
+#' ## ggplot_style:
+#' visualise_single_sequence(
+#'     "ACGT",
+#'     sequence_colours = sequence_colour_palettes$ggplot_style,
+#'     index_annotation_interval = 0
+#' )
+#'
+#' ## bright_pale:
+#' visualise_single_sequence(
+#'     "ACGT",
+#'     sequence_colours = sequence_colour_palettes$bright_pale,
+#'     index_annotation_interval = 0
+#' )
+#'
+#' ## bright_pale2:
+#' visualise_single_sequence(
+#'     "ACGT",
+#'     sequence_colours = sequence_colour_palettes$bright_pale2,
+#'     index_annotation_interval = 0
+#' )
+#'
+#' ## bright_deep:
+#' visualise_single_sequence(
+#'     "ACGT",
+#'     sequence_colours = sequence_colour_palettes$bright_deep,
+#'     index_annotation_interval = 0
+#' )
+#'
+#' ## sanger:
+#' visualise_single_sequence(
+#'     "ACGT",
+#'     sequence_colours = sequence_colour_palettes$sanger,
+#'     index_annotation_interval = 0
+#' )
+#'
 "sequence_colour_palettes"
 
 
