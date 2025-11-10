@@ -460,7 +460,7 @@ reverse_locations_if_needed <- function(locations_vector, direction_vector, leng
                 reverse_positions <- string_to_vector(locations_vector[i])
 
                 if (any(is.na(reverse_positions))) {
-                    abort(paste0("Invalid value in locations vector.\nCurrent value: ", paste(locations_vector, collapse = ", ")), class = "argument_value_or_type")
+                    abort(paste0("Invalid value in locations vector: ", locations_vector[i]), class = "argument_value_or_type")
                 }
 
                 ## With offset 0: index 1 needs to correspond to final index,
@@ -538,7 +538,7 @@ reverse_probabilities_if_needed <- function(probabilities_vector, direction_vect
             ## If probabilites vector is NA leave it unchanged, otherwise reverse it
             if (!is.na(probabilities_vector[i])) {
                 probabilities_to_reverse <- string_to_vector(probabilities_vector[i])
-                if (any(is.na(probabilities_to_reverse))) {abort(paste0("Invalid value in probabilities vector\nCurrent value: ", paste(probabilities_vector, collapse = ", ")), class = "argument_value_or_type")}
+                if (any(is.na(probabilities_to_reverse))) {abort(paste0("Invalid value in probabilities vector: ", probabilities_vector[i]), class = "argument_value_or_type")}
                 new_probabilities_vector[i] <- vector_to_string(rev(probabilities_to_reverse))
             } else {
                 new_probabilities_vector[i] <- NA
