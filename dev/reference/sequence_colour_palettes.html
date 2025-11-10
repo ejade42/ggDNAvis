@@ -91,7 +91,7 @@ Generation code is available at <code>data-raw/sequence_colour_palettes.R</code>
 <dd><p>Bright yellow, green, blue, and red in lighter pastel-like tones.<br><br> Values: <code>c("#FFDD00", "#40C000", "#00A0FF", "#FF4E4E")</code></p></dd>
 
 <dt>bright_pale2</dt>
-<dd><p>Bright yellow, green, blue, and red in lighter pastel-like tones. The green (for C) is slightly ligther than bright_pale.<br><br> Values: <code>c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E")</code></p></dd>
+<dd><p>Bright yellow, green, blue, and red in lighter pastel-like tones. The green (for C) is slightly lighter than bright_pale.<br><br> Values: <code>c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E")</code></p></dd>
 
 <dt>bright_deep</dt>
 <dd><p>Bright orange, green, blue, and red in darker, richer tones.<br><br> Values: <code>c("#FFAA00", "#00BC00", "#0000DC", "#FF1E1E")</code></p></dd>
@@ -104,6 +104,50 @@ Generation code is available at <code>data-raw/sequence_colour_palettes.R</code>
 
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">## ggplot_style:</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="visualise_single_sequence.html">visualise_single_sequence</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="st">"ACGT"</span>,</span></span>
+<span class="r-in"><span>    sequence_colours <span class="op">=</span> <span class="va">sequence_colour_palettes</span><span class="op">$</span><span class="va">ggplot_style</span>,</span></span>
+<span class="r-in"><span>    index_annotation_interval <span class="op">=</span> <span class="fl">0</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="sequence_colour_palettes-1.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## bright_pale:</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="visualise_single_sequence.html">visualise_single_sequence</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="st">"ACGT"</span>,</span></span>
+<span class="r-in"><span>    sequence_colours <span class="op">=</span> <span class="va">sequence_colour_palettes</span><span class="op">$</span><span class="va">bright_pale</span>,</span></span>
+<span class="r-in"><span>    index_annotation_interval <span class="op">=</span> <span class="fl">0</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="sequence_colour_palettes-2.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## bright_pale2:</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="visualise_single_sequence.html">visualise_single_sequence</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="st">"ACGT"</span>,</span></span>
+<span class="r-in"><span>    sequence_colours <span class="op">=</span> <span class="va">sequence_colour_palettes</span><span class="op">$</span><span class="va">bright_pale2</span>,</span></span>
+<span class="r-in"><span>    index_annotation_interval <span class="op">=</span> <span class="fl">0</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="sequence_colour_palettes-3.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## bright_deep:</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="visualise_single_sequence.html">visualise_single_sequence</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="st">"ACGT"</span>,</span></span>
+<span class="r-in"><span>    sequence_colours <span class="op">=</span> <span class="va">sequence_colour_palettes</span><span class="op">$</span><span class="va">bright_deep</span>,</span></span>
+<span class="r-in"><span>    index_annotation_interval <span class="op">=</span> <span class="fl">0</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="sequence_colour_palettes-4.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## sanger:</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="visualise_single_sequence.html">visualise_single_sequence</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="st">"ACGT"</span>,</span></span>
+<span class="r-in"><span>    sequence_colours <span class="op">=</span> <span class="va">sequence_colour_palettes</span><span class="op">$</span><span class="va">sanger</span>,</span></span>
+<span class="r-in"><span>    index_annotation_interval <span class="op">=</span> <span class="fl">0</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="sequence_colour_palettes-5.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

@@ -42,7 +42,7 @@ A list of 5 length-4 character vectors
 - bright_pale2:
 
   Bright yellow, green, blue, and red in lighter pastel-like tones. The
-  green (for C) is slightly ligther than bright_pale.  
+  green (for C) is slightly lighter than bright_pale.  
     
   Values: `c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E")`
 
@@ -58,3 +58,47 @@ A list of 5 length-4 character vectors
   readout.  
     
   Values: `c("#00B200", "#0000FF", "#000000", "#FF0000")`
+
+## Examples
+
+``` r
+## ggplot_style:
+visualise_single_sequence(
+    "ACGT",
+    sequence_colours = sequence_colour_palettes$ggplot_style,
+    index_annotation_interval = 0
+)
+
+
+## bright_pale:
+visualise_single_sequence(
+    "ACGT",
+    sequence_colours = sequence_colour_palettes$bright_pale,
+    index_annotation_interval = 0
+)
+
+
+## bright_pale2:
+visualise_single_sequence(
+    "ACGT",
+    sequence_colours = sequence_colour_palettes$bright_pale2,
+    index_annotation_interval = 0
+)
+
+
+## bright_deep:
+visualise_single_sequence(
+    "ACGT",
+    sequence_colours = sequence_colour_palettes$bright_deep,
+    index_annotation_interval = 0
+)
+
+
+## sanger:
+visualise_single_sequence(
+    "ACGT",
+    sequence_colours = sequence_colour_palettes$sanger,
+    index_annotation_interval = 0
+)
+
+```
