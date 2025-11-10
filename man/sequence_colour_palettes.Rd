@@ -53,6 +53,7 @@ visualise_single_sequence(
 visualise_single_sequence(
     "ACGT",
     sequence_colours = sequence_colour_palettes$bright_deep,
+    sequence_text_colour = "white",
     index_annotation_interval = 0
 )
 
@@ -60,6 +61,7 @@ visualise_single_sequence(
 visualise_single_sequence(
     "ACGT",
     sequence_colours = sequence_colour_palettes$sanger,
+    sequence_text_colour = "white",
     index_annotation_interval = 0
 )
 

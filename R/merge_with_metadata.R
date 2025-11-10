@@ -48,23 +48,25 @@
 #' @export
 merge_fastq_with_metadata <- function(fastq_data, metadata, reverse_complement_mode = "DNA") {
     ## Validate arguments
+    ## ---------------------------------------------------------------------
     if (length(reverse_complement_mode) != 1 || is.na(reverse_complement_mode) || !is.character(reverse_complement_mode) || !(reverse_complement_mode %in% c("DNA", "RNA"))) {
-        abort("Reverse complement mode must be a single character value, either 'DNA' or 'RNA'", class = "argument_value_or_type")
+        bad_arg("reverse_complement_mode", list(reverse_complement_mode = reverse_complement_mode), "must be a single character value, either 'DNA' or 'RNA'.")
     }
     if (nrow(metadata) != nrow(fastq_data)) {
-        abort("FASTQ and metadata dataframes must have the same number of rows, one row per read.", class = "argument_value_or_type")
+        abort(paste("FASTQ and metadata dataframes must have the same number of rows, one row per read.\n'fastq_data' rows:", nrow(fastq_data), "\n'metadata' rows:", nrow(metadata)), class = "argument_value_or_type")
     }
     for (column in c("read", "sequence", "quality")) {
         if (!(column %in% colnames(fastq_data))) {
-            abort(paste0("FASTQ dataframe must contain a '", column, "' column. This error should not occur if data was read via read_modified_fastq(), please contact the package maintainers."), class = "argument_value_or_type")
+            abort(paste0("FASTQ dataframe must contain a '", column, "' column. This error should not occur if data was read via read_modified_fastq(), please contact the package maintainers.\nCurrent columns: ", paste(colnames(fastq_data), collapse = ", ")), class = "argument_value_or_type")
         }
     }
     if (!("read" %in% colnames(metadata))) {
-        abort(paste0("Metadata must contain a 'read' column. Please make sure there is a column of unique read IDs in the metadata and that it is called 'read'."), class = "argument_value_or_type")
+        abort(paste0("Metadata must contain a 'read' column. Please make sure there is a column of unique read IDs in the metadata and that it is called 'read'.\nCurrent columns: ", paste(colnames(metadata), collapse = ", ")), class = "argument_value_or_type")
     }
     if (!("direction" %in% colnames(metadata))) {
-        abort(paste0("Metadata must contain a 'direction' column. Please make sure there is a column of forward/reverse read directions in the metadata and that it is called 'direction'."), class = "argument_value_or_type")
+        abort(paste0("Metadata must contain a 'direction' column. Please make sure there is a column of forward/reverse read directions in the metadata and that it is called 'direction'.\nCurrent columns: ", paste(colnames(metadata), collapse = ", ")), class = "argument_value_or_type")
     }
+    ## ---------------------------------------------------------------------
 
 
     ## Main function
@@ -146,26 +148,30 @@ merge_fastq_with_metadata <- function(fastq_data, metadata, reverse_complement_m
 #' @export
 merge_methylation_with_metadata <- function(methylation_data, metadata, reversed_location_offset = 0, reverse_complement_mode = "DNA") {
     ## Validate arguments
+    ## ---------------------------------------------------------------------
     if (length(reversed_location_offset) != 1 || is.na(reversed_location_offset) || !is.numeric(reversed_location_offset) || reversed_location_offset %% 1 != 0) {
-        abort("Reverse location offset must be a single integer value", class = "argument_value_or_type")
+        bad_arg("reverse_location_offset", list(reversed_location_offset = reversed_location_offset), "must be a single integer value.")
     }
     if (length(reverse_complement_mode) != 1 || is.na(reverse_complement_mode) || !is.character(reverse_complement_mode) || !(reverse_complement_mode %in% c("DNA", "RNA"))) {
-        abort("Reverse complement mode must be a single character value, either 'DNA' or 'RNA'", class = "argument_value_or_type")
+        bad_arg("reverse_complement_mode", list(reverse_complement_mode = reverse_complement_mode), "must be a single character value, either 'DNA' or 'RNA'.")
     }
     if (nrow(metadata) != nrow(methylation_data)) {
-        abort("Methylation and metadata dataframes must have the same number of rows, one row per read.", class = "argument_value_or_type")
+        abort(paste("Methylation and metadata dataframes must have the same number of rows, one row per read.\n'methylation_data' rows:", nrow(methylation_data), "\n'metadata' rows:", nrow(metadata)), class = "argument_value_or_type")
     }
     for (column in c("read", "sequence", "quality", "sequence_length", "modification_types")) {
         if (!(column %in% colnames(methylation_data))) {
-            abort(paste0("Methylation dataframe must contain a '", column, "' column. This error should not occur if data was read via read_modified_fastq(), please contact the package maintainers."), class = "argument_value_or_type")
+            abort(paste0("Methylation dataframe must contain a '", column, "' column. This error should not occur if data was read via read_modified_fastq(), please contact the package maintainers.\nCurrent columns: ", paste(colnames(methylation_data), collapse = ", ")), class = "argument_value_or_type")
         }
     }
     if (!("read" %in% colnames(metadata))) {
-        abort(paste0("Metadata must contain a 'read' column. Please make sure there is a column of unique read IDs in the metadata and that it is called 'read'."), class = "argument_value_or_type")
+        abort(paste0("Metadata must contain a 'read' column. Please make sure there is a column of unique read IDs in the metadata and that it is called 'read'.\nCurrent columns: ", paste(colnames(metadata), collapse = ", ")), class = "argument_value_or_type")
     }
     if (!("direction" %in% colnames(metadata))) {
-        abort(paste0("Metadata must contain a 'direction' column. Please make sure there is a column of forward/reverse read directions in the metadata and that it is called 'direction'."), class = "argument_value_or_type")
+        abort(paste0("Metadata must contain a 'direction' column. Please make sure there is a column of forward/reverse read directions in the metadata and that it is called 'direction'.\nCurrent columns: ", paste(colnames(metadata), collapse = ", ")), class = "argument_value_or_type")
     }
+    ## ---------------------------------------------------------------------
+
+
 
     ## Main function
     merged_data <- merge(metadata, methylation_data, by = "read")
@@ -224,22 +230,26 @@ merge_methylation_with_metadata <- function(methylation_data, metadata, reversed
 #' @export
 reverse_sequence_if_needed <- function(sequence_vector, direction_vector, output_mode = "DNA") {
     ## Validate arguments
-    for (argument in list(direction_vector, output_mode)) {
-        if (any(is.null(argument)) == TRUE || any(is.na(argument)) == TRUE) {
-            abort(paste("Argument", argument, "must not be NULL or NA"), class = "argument_value_or_type")
-        }
+    ## ---------------------------------------------------------------------
+    not_null_or_na <- list(direction_vector = direction_vector, output_mode = output_mode)
+    for (argument in names(not_null_or_na)) {
+        if (any(is.null(not_null_or_na[[argument]])) || any(is.na(not_null_or_na[[argument]]))) {bad_arg(argument, not_null_or_na, "must not be NULL or NA.")}
     }
-    for (argument in list(sequence_vector, direction_vector, output_mode)) {
-        if (is.character(argument) == FALSE) {
-            abort(paste("Argument", argument, "must be of type character/string"), class = "argument_value_or_type")
-        }
+    not_null_or_na <- NULL
+
+    char <- list(sequence_vector = sequence_vector, direction_vector = direction_vector, output_mode = output_mode)
+    for (argument in names(char)) {
+        if (!is.character(char[[argument]])) {bad_arg(argument, char, "must be of type character/string.")}
     }
+    char <- NULL
+
     if (length(output_mode) != 1) {
-        abort("Output mode must be of length 1 (and be either 'DNA' or 'RNA')", class = "argument_value_or_type")
+        bad_arg("output_mode", list(output_mode = output_mode), "must be of length 1 (and be either 'DNA' or 'RNA').")
     }
     if (length(sequence_vector) != length(direction_vector)) {
-        abort("Sequence and direction vectors need to be same length.", class = "argument_value_or_type")
+        abort(paste0("Sequence and direction vectors need to be same length.\n'sequence_vector' length: ", length(sequence_vector), "\n'direction_vector' length: ", length(direction_vector)), class = "argument_value_or_type")
     }
+    ## ---------------------------------------------------------------------
 
 
     ## Main function
@@ -250,7 +260,7 @@ reverse_sequence_if_needed <- function(sequence_vector, direction_vector, output
         } else if (tolower(direction_vector[i]) == "reverse") {
             new_sequence_vector[i] <- reverse_complement(sequence_vector[i], toupper(output_mode))
         } else {
-            abort("direction vector must contain only 'forward' and 'reverse' (not case sensitive)", class = "argument_value_or_type")
+            abort(paste0("direction vector must contain only 'forward' and 'reverse' (not case sensitive).\nIllegal value: ", direction_vector[i]), class = "argument_value_or_type")
         }
     }
     return(new_sequence_vector)
@@ -285,19 +295,23 @@ reverse_sequence_if_needed <- function(sequence_vector, direction_vector, output
 #' @export
 reverse_quality_if_needed <- function(quality_vector, direction_vector) {
     ## Validate arguments
-    for (argument in list(direction_vector)) {
-        if (any(is.null(argument)) == TRUE || any(is.na(argument)) == TRUE) {
-            abort(paste("Argument", argument, "must not be NULL or NA"), class = "argument_value_or_type")
-        }
+    ## ---------------------------------------------------------------------
+    not_null_or_na <- list(direction_vector = direction_vector)
+    for (argument in names(not_null_or_na)) {
+        if (any(is.null(not_null_or_na[[argument]])) || any(is.na(not_null_or_na[[argument]]))) {bad_arg(argument, not_null_or_na, "must not be NULL or NA.")}
     }
-    for (argument in list(quality_vector, direction_vector)) {
-        if (is.character(argument) == FALSE) {
-            abort(paste("Argument", argument, "must be of type character/string"), class = "argument_value_or_type")
-        }
+    not_null_or_na <- NULL
+
+    char <- list(quality_vector = quality_vector, direction_vector = direction_vector)
+    for (argument in names(char)) {
+        if (!is.character(char[[argument]])) {bad_arg(argument, char, "must be of type character/string.")}
     }
+    char <- NULL
+
     if (length(quality_vector) != length(direction_vector)) {
-        abort("Quality and direction vectors need to be same length.", class = "argument_value_or_type")
+        abort(paste0("Quality and direction vectors need to be same length.\n'quality_vector' length: ", length(quality_vector), "\n'direction_vector' length: ", length(direction_vector)), class = "argument_value_or_type")
     }
+    ## ---------------------------------------------------------------------
 
 
     ## Main function
@@ -308,7 +322,7 @@ reverse_quality_if_needed <- function(quality_vector, direction_vector) {
         } else if (tolower(direction_vector[i]) == "reverse") {
             new_quality_vector[i] <- paste(rev(strsplit(quality_vector[i], "")[[1]]), collapse = "")
         } else {
-            abort("direction vector must contain only 'forward' and 'reverse' (not case sensitive)", class = "argument_value_or_type")
+            abort(paste0("direction vector must contain only 'forward' and 'reverse' (not case sensitive)\nIllegal value: ", direction_vector[i]), class = "argument_value_or_type")
         }
     }
     return(new_quality_vector)
@@ -398,29 +412,41 @@ reverse_quality_if_needed <- function(quality_vector, direction_vector) {
 #' @export
 reverse_locations_if_needed <- function(locations_vector, direction_vector, length_vector, offset = 0) {
     ## Validate arguments
-    for (argument in list(direction_vector, length_vector, offset)) {
-        if (any(is.null(argument)) == TRUE || any(is.na(argument)) == TRUE) {
-            abort(paste("Argument", argument, "must not be NULL or NA"), class = "argument_value_or_type")
-        }
+    ## ---------------------------------------------------------------------
+    not_null_or_na <- list(direction_vector = direction_vector, length_vector = length_vector, offset = offset)
+    for (argument in names(not_null_or_na)) {
+        if (any(is.null(not_null_or_na[[argument]])) || any(is.na(not_null_or_na[[argument]]))) {bad_arg(argument, not_null_or_na, "must not be NULL or NA.")}
     }
-    for (argument in list(locations_vector, direction_vector)) {
-        if (is.character(argument) == FALSE) {abort("Locations and direction vectors must both be of character/string type", class = "argument_value_or_type")}
+    not_null_or_na <- NULL
+
+    char <- list(locations_vector = locations_vector, direction_vector = direction_vector)
+    for (argument in names(char)) {
+        if (!is.character(char[[argument]])) {bad_arg(argument, char, "must be of type character/string.")}
     }
-    for (argument in list(length_vector)) {
-        if (is.numeric(argument) == FALSE || any(argument %% 1 != 0) || any(argument < 0)) {abort("Length vector must contain only non-negative integer values", class = "argument_value_or_type")}
+    char <- NULL
+
+    non_neg_int <- list(length_vector = length_vector)
+    for (argument in names(non_neg_int)) {
+        if (!is.numeric(non_neg_int[[argument]]) || any(non_neg_int[[argument]] %% 1 != 0) || any(non_neg_int[[argument]] < 0)) {bad_arg(argument, non_neg_int, "must contain only non-negative integer values.")}
     }
-    for (argument in list(offset)) {
-        if (length(argument) != 1 || is.numeric(argument) == FALSE || argument %% 1 != 0) {abort("Offset must be a single integer value", class = "argument_value_or_type")}
+    non_neg_int <- NULL
+
+    non_neg_single_int <- list(offset = offset)
+    for (argument in names(non_neg_single_int)) {
+        if (length(non_neg_single_int[[argument]]) != 1 || is.numeric(non_neg_single_int[[argument]]) == FALSE || non_neg_single_int[[argument]] %% 1 != 0) {bad_arg(argument, non_neg_single_int, "must be a single integer value.")}
     }
 
     if (length(locations_vector) != length(direction_vector) ||
         length(locations_vector) != length(length_vector) ||
         length(length_vector)    != length(direction_vector)) {
-        abort("Locations, direction, and length vectors need to be the same length", class = "argument_value_or_type")
+        abort(paste0("Locations, direction, and length vectors need to be the same length.\n'locations_vector' length: ", length(locations_vector), "\n'direction_vector' length: ", length(direction_vector), "\n'length_vector' length: ", length(length_vector)), class = "argument_value_or_type")
     }
     if (!(offset %in% c(0, 1))) {
         warn("Setting location reversal offset to anything other than 0 or 1 is advanced use. Make sure this is intentional.", class = "parameter_recommendation")
     }
+    ## ---------------------------------------------------------------------
+
+
 
     ## Main function
     new_locations_vector <- rep(NA, length(locations_vector))
@@ -434,7 +460,7 @@ reverse_locations_if_needed <- function(locations_vector, direction_vector, leng
                 reverse_positions <- string_to_vector(locations_vector[i])
 
                 if (any(is.na(reverse_positions))) {
-                    abort("Invalid value in locations vector", class = "argument_value_or_type")
+                    abort(paste0("Invalid value in locations vector.\nCurrent value: ", paste(locations_vector, collapse = ", ")), class = "argument_value_or_type")
                 }
 
                 ## With offset 0: index 1 needs to correspond to final index,
@@ -447,7 +473,7 @@ reverse_locations_if_needed <- function(locations_vector, direction_vector, leng
                 new_locations_vector[i] <- NA
             }
         } else {
-            abort("direction vector must contain only 'forward' and 'reverse' (not case sensitive)", class = "argument_value_or_type")
+            abort(paste0("direction vector must contain only 'forward' and 'reverse' (not case sensitive).\nIllegal value: ", direction_vector[i]), class = "argument_value_or_type")
         }
     }
     return(new_locations_vector)
@@ -483,17 +509,25 @@ reverse_locations_if_needed <- function(locations_vector, direction_vector, leng
 #' @export
 reverse_probabilities_if_needed <- function(probabilities_vector, direction_vector) {
     ## Validate arguments
-    for (argument in list(direction_vector)) {
-        if (any(is.null(argument)) == TRUE || any(is.na(argument)) == TRUE) {
-            abort(paste("Argument", argument, "must not be NULL or NA"), class = "argument_value_or_type")
-        }
+    ## ---------------------------------------------------------------------
+    not_null_or_na <- list(direction_vector = direction_vector)
+    for (argument in names(not_null_or_na)) {
+        if (any(is.null(not_null_or_na[[argument]])) || any(is.na(not_null_or_na[[argument]]))) {bad_arg(argument, not_null_or_na, "must not be NULL or NA.")}
     }
-    for (argument in list(probabilities_vector, direction_vector)) {
-        if (is.character(argument) == FALSE) {abort("Probabilities and direction vectors must be character type", class = "argument_value_or_type")}
+    not_null_or_na <- NULL
+
+    char <- list(probabilities_vector = probabilities_vector, direction_vector = direction_vector)
+    for (argument in names(char)) {
+        if (!is.character(char[[argument]])) {bad_arg(argument, char, "must be of type character/string.")}
     }
+    char <- NULL
+
     if (length(probabilities_vector) != length(direction_vector)) {
-        abort("Probabilities and direction vectors need to be same length", class = "argument_value_or_type")
+        abort(paste0("Probabilities and direction vectors need to be same length.\n'probabilities_vector' length: ", length(probabilities_vector), "\n'direction_vector' length: ", length(direction_vector)), class = "argument_value_or_type")
     }
+    ## ---------------------------------------------------------------------
+
+
 
     ## Main function
     new_probabilities_vector <- rep(NA, length(probabilities_vector))
@@ -504,13 +538,13 @@ reverse_probabilities_if_needed <- function(probabilities_vector, direction_vect
             ## If probabilites vector is NA leave it unchanged, otherwise reverse it
             if (!is.na(probabilities_vector[i])) {
                 probabilities_to_reverse <- string_to_vector(probabilities_vector[i])
-                if (any(is.na(probabilities_to_reverse))) {abort("Invalid value in probabilities vector", class = "argument_value_or_type")}
+                if (any(is.na(probabilities_to_reverse))) {abort(paste0("Invalid value in probabilities vector\nCurrent value: ", paste(probabilities_vector, collapse = ", ")), class = "argument_value_or_type")}
                 new_probabilities_vector[i] <- vector_to_string(rev(probabilities_to_reverse))
             } else {
                 new_probabilities_vector[i] <- NA
             }
         } else {
-            abort("direction vector must contain only 'forward' and 'reverse' (not case sensitive)", class = "argument_value_or_type")
+            abort(paste0("direction vector must contain only 'forward' and 'reverse' (not case sensitive).\nIllegal value: ", direction_vector[i]), class = "argument_value_or_type")
         }
     }
     return(new_probabilities_vector)

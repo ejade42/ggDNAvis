@@ -127,6 +127,7 @@ fetch_acceptable_distortion <- function(verbose = TRUE) {
 #' visualise_single_sequence(
 #'     "ACGT",
 #'     sequence_colours = sequence_colour_palettes$bright_deep,
+#'     sequence_text_colour = "white",
 #'     index_annotation_interval = 0
 #' )
 #'
@@ -134,6 +135,7 @@ fetch_acceptable_distortion <- function(verbose = TRUE) {
 #' visualise_single_sequence(
 #'     "ACGT",
 #'     sequence_colours = sequence_colour_palettes$sanger,
+#'     sequence_text_colour = "white",
 #'     index_annotation_interval = 0
 #' )
 #'
