@@ -8,6 +8,7 @@ prints an error message of the form:
 
     Argument '<argument_name>' <message>
     Current value: <argument_value>
+    Current class: <class(argument_value)>
 
 If the argument value is a named item (i.e.
 `names(arguments_list[[argument_name]])` is not null), or if
@@ -16,6 +17,7 @@ If the argument value is a named item (i.e.
     Argument '<argument_name>' <message>
     Current value: <argument_value>
     Current names: <argument_names>
+    Current class: <class(argument_value)>
 
 ## Usage
 
@@ -71,6 +73,7 @@ positive_args <- list(number = -1)
 try(bad_arg("number", positive_args, "must be positive"))
 #> Error in eval(expr, envir) : Argument 'number' must be positive
 #> Current value: -1
+#> Current class: numeric
 
 ## Automatically detects named item and prints names
 named <- list(x = c("first item" = 1, "second item" = 7))
@@ -78,10 +81,12 @@ try(bad_arg("x", named, "is not acceptable"))
 #> Error in eval(expr, envir) : Argument 'x' is not acceptable
 #> Current value: 1, 7
 #> Current names: first item, second item
+#> Current class: numeric
 
 ## Can force name printing
 try(bad_arg("number", positive_args, "must be positive", force_names = TRUE))
 #> Error in eval(expr, envir) : Argument 'number' must be positive
 #> Current value: -1
 #> Current names: 
+#> Current class: numeric
 ```
