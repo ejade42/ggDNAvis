@@ -32,12 +32,14 @@ This function takes an argument name, a named list of arguments
 and a message. Using \code{\link[rlang:abort]{rlang::abort()}}, it prints an error message of the form:
 \preformatted{Argument '<argument_name>' <message>
 Current value: <argument_value>
+Current class: <class(argument_value)>
 }
 If the argument value is a named item (i.e. \code{names(arguments_list[[argument_name]])}
 is not null), or if \code{force_names} is \code{TRUE}, then the form will be:
 \preformatted{Argument '<argument_name>' <message>
 Current value: <argument_value>
 Current names: <argument_names>
+Current class: <class(argument_value)>
 }
 }
 \examples{

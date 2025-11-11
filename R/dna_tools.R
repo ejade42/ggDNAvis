@@ -5,12 +5,14 @@
 #' and a message. Using [rlang::abort()], it prints an error message of the form:
 #' \preformatted{Argument '<argument_name>' <message>
 #' Current value: <argument_value>
+#' Current class: <class(argument_value)>
 #' }
 #' If the argument value is a named item (i.e. `names(arguments_list[[argument_name]])`
 #' is not null), or if `force_names` is `TRUE`, then the form will be:
 #' \preformatted{Argument '<argument_name>' <message>
 #' Current value: <argument_value>
 #' Current names: <argument_names>
+#' Current class: <class(argument_value)>
 #' }
 #'
 #' @param argument_name `character`. The name of the argument that caused the error
@@ -55,8 +57,14 @@ bad_arg <- function(argument_name, arguments_list, message, class = "argument_va
             bad_arg(argument, length_1_char, "must be of type character.")
         }
     }
+    if (!is.list(arguments_list)) {
+        bad_arg("arguments_list", list(arguments_list = arguments_list), "must be a list.")
+    }
     if (!(argument_name %in% names(arguments_list))) {
         abort(paste0("Argument 'argument_name' must be the name of an item in named list 'arguments_list'.\nargument_name: ", argument_name, "\nCurrent names of arguments_list: ", paste(names(arguments_list), collapse = ", ")), class = "argument_value_or_type")
+    }
+    if (any(is.null(names(arguments_list))) || "" %in% names(arguments_list)) {
+        abort("Ev has clearly made a typo in argument validation that meant one of the argument list names is missing. Contact maintainer.", class = "contact_maintainer")
     }
     ## ---------------------------------------------------------------------
 
@@ -65,6 +73,7 @@ bad_arg <- function(argument_name, arguments_list, message, class = "argument_va
     if (!is.null(names(arguments_list[[argument_name]])) || force_names) {
         error_message <- paste0(error_message, "\nCurrent names: ", paste(names(arguments_list[[argument_name]]), collapse = ", "))
     }
+    error_message <- paste0(error_message, "\nCurrent class: ", class(arguments_list[[argument_name]]))
     abort(error_message, class = class, call = rlang::caller_env())
 }
 

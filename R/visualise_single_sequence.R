@@ -95,39 +95,69 @@ visualise_single_sequence <- function(
 ) {
     ## Validate arguments
     ## ---------------------------------------------------------------------
-    for (argument in list(sequence, sequence_colours, background_colour, line_wrapping, spacing, margin, sequence_text_colour, sequence_text_size, index_annotation_colour, index_annotation_size, index_annotation_interval, index_annotations_above, index_annotation_vertical_position, outline_colour, outline_linewidth, outline_join, return, filename, pixels_per_base)) {
-        if (mean(is.null(argument)) != 0) {abort(paste("Argument", argument, "must not be null."), class = "argument_value_or_type")}
+    not_null <- list(sequence = sequence, sequence_colours = sequence_colours, background_colour = background_colour, line_wrapping = line_wrapping, spacing = spacing, margin = margin, sequence_text_colour = sequence_text_colour, sequence_text_size = sequence_text_size, index_annotation_colour = index_annotation_colour, index_annotation_size = index_annotation_size, index_annotation_interval = index_annotation_interval, index_annotations_above = index_annotations_above, index_annotation_vertical_position = index_annotation_vertical_position, outline_colour = outline_colour, outline_linewidth = outline_linewidth, outline_join = outline_join, return = return, filename = filename, pixels_per_base = pixels_per_base)
+    for (argument in names(not_null)) {
+        if (any(is.null(not_null[[argument]]))) {bad_arg(argument, not_null, "must not be NULL.")}
     }
-    for (argument in list(sequence, background_colour, outline_colour, line_wrapping, spacing, sequence_text_colour, sequence_text_size, index_annotation_colour, index_annotation_size, index_annotation_interval, index_annotations_above, index_annotation_vertical_position, outline_colour, outline_linewidth, outline_join, return, filename, pixels_per_base, margin)) {
-        if (length(argument) != 1) {abort(paste("Argument", argument, "must have length 1"), class = "argument_value_or_type")}
+    not_null <- NULL
+
+    length_1 <- list(sequence = sequence, background_colour = background_colour, outline_colour = outline_colour, line_wrapping = line_wrapping, spacing = spacing, sequence_text_colour = sequence_text_colour, sequence_text_size = sequence_text_size, index_annotation_colour = index_annotation_colour, index_annotation_size = index_annotation_size, index_annotation_interval = index_annotation_interval, index_annotations_above = index_annotations_above, index_annotation_vertical_position = index_annotation_vertical_position, outline_colour = outline_colour, outline_linewidth = outline_linewidth, outline_join = outline_join, return = return, filename = filename, pixels_per_base = pixels_per_base, margin = margin)
+    for (argument in names(length_1)) {
+        if (length(length_1[[argument]]) != 1) {bad_arg(argument, length_1, "must have length 1.")}
     }
-    for (argument in list(sequence, sequence_colours, background_colour, sequence_text_colour, sequence_text_size, index_annotation_colour, index_annotation_size, index_annotation_interval, index_annotations_above, index_annotation_vertical_position, line_wrapping, spacing, outline_colour, outline_linewidth, outline_join, return, pixels_per_base, margin)) {
-        if (mean(is.na(argument)) != 0) {abort(paste("Argument", argument, "must not be NA"), class = "argument_value_or_type")}
+    length_1 <- NULL
+
+    not_na <- list(sequence = sequence, sequence_colours = sequence_colours, background_colour = background_colour, sequence_text_colour = sequence_text_colour, sequence_text_size = sequence_text_size, index_annotation_colour = index_annotation_colour, index_annotation_size = index_annotation_size, index_annotation_interval = index_annotation_interval, index_annotations_above = index_annotations_above, index_annotation_vertical_position = index_annotation_vertical_position, line_wrapping = line_wrapping, spacing = spacing, outline_colour = outline_colour, outline_linewidth = outline_linewidth, outline_join = outline_join, return = return, pixels_per_base = pixels_per_base, margin = margin)
+    for (argument in names(not_na)) {
+        if (any(is.na(not_na[[argument]]))) {bad_arg(argument, not_na, "must not be NA.")}
     }
-    if (is.character(sequence_colours) == FALSE || length(sequence_colours) != 4) {
-        abort("Must provide exactly 4 sequence colours, in A C G T order, as a length-4 character vector.", class = "argument_value_or_type")
+    not_na <- NULL
+
+    if (!is.character(sequence_colours) || length(sequence_colours) != 4) {
+        bad_arg("sequence_colours", list(sequence_colours = sequence_colours), "must provide exactly 4 sequence colours, in A C G T order, as a length-4 character vector.")
     }
-    for (argument in list(sequence, background_colour, sequence_text_colour, index_annotation_colour, outline_colour, outline_join)) {
-        if (is.character(argument) == FALSE) {abort(paste("Argument", argument, "must be a character/string value."), class = "argument_value_or_type")}
+
+    char <- list(sequence = sequence, background_colour = background_colour, sequence_text_colour = sequence_text_colour, index_annotation_colour = index_annotation_colour, outline_colour = outline_colour, outline_join = outline_join)
+    for (argument in names(char)) {
+        if (!is.character(char[[argument]])) {bad_arg(argument, char, "must be a character/string value.")}
     }
-    if (is.numeric(index_annotation_vertical_position) == FALSE) {
-        abort("Index annotation vertical position must be a numeric value", class = "argument_value_or_type")
+    char <- NULL
+
+    nums <- list(index_annotation_vertical_position = index_annotation_vertical_position)
+    for (argument in names(nums)) {
+        if (!is.numeric(nums[[argument]])) {bad_arg(argument, nums, "must be numeric.")}
     }
+    nums <- NULL
+
     if (index_annotation_vertical_position < 0 || index_annotation_vertical_position > 1) {
-        warn("Not recommended to set index annotation vertical position outside range 0-1.", class = "parameter_recommendation")
+        warn(paste("Not recommended to set index_annotation_vertical_position outside range 0-1.\nCurrent value:", index_annotation_vertical_position), class = "parameter_recommendation")
     }
-    for (argument in list(sequence_text_size, index_annotation_size, index_annotation_interval, spacing, pixels_per_base, line_wrapping, margin, outline_linewidth)) {
-        if (is.numeric(argument) == FALSE || is.logical(argument) == TRUE || argument < 0) {abort(paste("Argument", argument, "must be a non-negative number."), class = "argument_value_or_type")}
+
+    non_neg_num <- list(sequence_text_size = sequence_text_size, index_annotation_size = index_annotation_size, index_annotation_interval = index_annotation_interval, spacing = spacing, pixels_per_base = pixels_per_base, line_wrapping = line_wrapping, margin = margin, outline_linewidth = outline_linewidth)
+    for (argument in names(non_neg_num)) {
+        if (!is.numeric(non_neg_num[[argument]]) || any(non_neg_num[[argument]] < 0)) {bad_arg(argument, non_neg_num, "must be a non-negative number.")}
     }
-    for (argument in list(line_wrapping, spacing, pixels_per_base, index_annotation_interval)) {
-        if (argument %% 1 != 0) {abort(paste("Argument", argument, "must be an integer."), class = "argument_value_or_type")}
+    non_neg_num <- NULL
+
+    ints <- list(line_wrapping = line_wrapping, spacing = spacing, pixels_per_base = pixels_per_base, index_annotation_interval = index_annotation_interval)
+    for (argument in names(ints)) {
+        if (any(ints[[argument]] %% 1 != 0)) {bad_arg(argument, ints, "must be an integer.")}
     }
-    for (argument in list(line_wrapping, pixels_per_base)) {
-        if (argument < 1) {abort(paste("Argument", argument, "must be at least 1."), class = "argument_value_or_type")}
+    ints <- NULL
+
+    ge_1 <- list(line_wrapping = line_wrapping, pixels_per_base = pixels_per_base)
+    for (argument in names(ge_1)) {
+        if (any(ge_1[[argument]] < 1)) {bad_arg(argument, ge_1, "must be at least 1.")}
     }
-    for (argument in list(return, index_annotations_above)) {
-        if (is.logical(argument) == FALSE) {abort(paste("Argument:", argument, "must be a logical/boolean value."), class = "argument_value_or_type")}
+    ge_1 <- NULL
+
+    bool <- list(return = return, index_annotations_above = index_annotations_above)
+    for (argument in names(bool)) {
+        if (!is.logical(bool[[argument]])) {bad_arg(argument, bool, "must be a logical/boolean value.")}
     }
+    bool <- NULL
+
+
     if (index_annotation_size == 0 && index_annotation_interval != 0) {
         cli_alert_info("Automatically setting index_annotation_interval to 0 as index_annotation_size is 0", class = "atypical_turn_off")
         index_annotation_interval <- 0
@@ -136,12 +166,12 @@ visualise_single_sequence <- function(
         warn("Using spacing = 0 without disabling index annotation is not recommended.\nIt is likely to draw the annotations overlapping the sequence.\nRecommended to set index_annotation_interval = 0 to disable index annotations.", class = "parameter_recommendation")
     }
     if (!(tolower(outline_join) %in% c("mitre", "round", "bevel"))) {
-        abort("outline_join must be one of 'mitre', 'round', or 'bevel'.", class = "argument_value_or_type")
+        bad_arg("outline_join", list(outline_join = outline_join), "must be one of 'mitre', 'round', or 'bevel'.")
     }
 
     ## Warn about outlines getting cut off
     if (margin <= 0.25 && outline_linewidth > 0) {
-        warn("If margin is small and outlines are on (outline_linewidth > 0), outlines may be cut off at the edges of the plot. Check if this is happening and consider using a bigger margin.", class = "parameter_recommendation")
+        warn(paste("If margin is small and outlines are on (outline_linewidth > 0), outlines may be cut off at the edges of the plot. Check if this is happening and consider using a bigger margin.\nCurrent margin:", margin), class = "parameter_recommendation")
     }
     ## Accept NA as NULL for render_device
     if (is.atomic(render_device) && any(is.na(render_device))) {render_device <- NULL}
@@ -288,23 +318,41 @@ convert_input_seq_to_sequence_list <- function(
 ) {
     ## Validate arguments
     ## ---------------------------------------------------------------------
-    for (argument in list(input_seq, line_length, spacing, start_spaces, end_spaces)) {
-        if (mean(is.null(argument)) != 0 || mean(is.na(argument)) != 0) {abort(paste("Argument", argument, "must not be null or NA."), class = "argument_value_or_type")}
+    not_null_or_na <- list(input_seq = input_seq, line_length = line_length, spacing = spacing, start_spaces = start_spaces, end_spaces = end_spaces)
+    for (argument in names(not_null_or_na)) {
+        if (any(is.null(not_null_or_na[[argument]])) || any(is.na(not_null_or_na[[argument]]))) {bad_arg(argument, not_null_or_na, "must not be NA or NULL.")}
     }
-    if (length(input_seq) != 1 || length(line_length) != 1 || length(spacing) != 1 || length(start_spaces) != 1 || length(end_spaces) != 1) {
-        abort("Input sequence, line length, spacing, and start/end spaces setting must all be single values (length 1).", class = "argument_value_or_type")
+    not_null_or_na <- NULL
+
+    length_1 <- list(input_seq = input_seq, line_length = line_length, spacing = spacing, start_spaces = start_spaces, end_spaces = end_spaces)
+    for (argument in names(length_1)) {
+        if (length(length_1[[argument]]) != 1) {bad_arg(argument, length_1, "must have length 1.")}
     }
-    if (is.numeric(line_length) == FALSE || line_length %% 1 != 0 || line_length < 1 ||
-        is.numeric(spacing) == FALSE     || spacing %% 1 != 0     || spacing < 0) {
-        abort("Line length must be a positive integer and spacing must be a non-negative integer.", class = "argument_value_or_type")
+    length_1 <- NULL
+
+    non_neg_int <- list(spacing = spacing)
+    for (argument in names(non_neg_int)) {
+        if (!is.numeric(non_neg_int[[argument]]) || any(non_neg_int[[argument]] %% 1 != 0) || any(non_neg_int[[argument]] < 0)) {bad_arg(argument, non_neg_int, "must be a non-negative integer.")}
     }
-    if (is.character(input_seq) == FALSE) {
-        abort("Input sequence must be a character/string.", class = "argument_value_or_type")
+    non_neg_int <- NULL
+
+    pos_int <- list(line_length = line_length)
+    for (argument in names(pos_int)) {
+        if (!is.numeric(pos_int[[argument]]) || any(pos_int[[argument]] %% 1 != 0) || any(pos_int[[argument]] < 1)) {bad_arg(argument, pos_int, "must be a positive integer.")}
     }
-    for (argument in list(start_spaces, end_spaces))
-        if (is.logical(argument) == FALSE) {
-            abort("Spaces at start/end settings must be logical/boolean values.", class = "argument_value_or_type")
-        }
+    pos_int <- NULL
+
+    char <- list(input_seq = input_seq)
+    for (argument in names(char)) {
+        if (!is.character(char[[argument]])) {bad_arg(argument, char, "must be a character/string.")}
+    }
+    char <- NULL
+
+    bool <- list(start_spaces = start_spaces, end_spaces = end_spaces)
+    for (argument in names(bool)) {
+        if (!is.logical(bool[[argument]])) {bad_arg(argument, bool, "must be a logical/boolean value.")}
+    }
+    bool <- NULL
     ## ---------------------------------------------------------------------
 
 
@@ -370,25 +418,52 @@ convert_sequences_to_annotations <- function(
 ) {
     ## Validate arguments
     ## ---------------------------------------------------------------------
-    for (argument in list(sequences, line_length, interval, annotations_above, annotation_vertical_position)) {
-        if (mean(is.null(argument)) != 0 || mean(is.na(argument)) != 0) {abort(paste("Argument", argument, "must not be null or NA."), class = "argument_value_or_type")}
+    not_null_or_na <- list(sequences = sequences, line_length = line_length, interval = interval, annotations_above = annotations_above, annotation_vertical_position = annotation_vertical_position)
+    for (argument in names(not_null_or_na)) {
+        if (any(is.null(not_null_or_na[[argument]])) || any(is.na(not_null_or_na[[argument]]))) {bad_arg(argument, not_null_or_na, "must not be NULL or NA.")}
     }
-    if (is.numeric(line_length) == FALSE || length(line_length) != 1 || line_length %% 1 != 0 || line_length < 1 ||
-        is.numeric(interval) == FALSE    || length(interval) != 1    || interval %% 1 != 0    || interval < 0) {
-        abort("Line length must be a positive integer and annotation interval must be a single non-negative integer", class = "argument_value_or_type")
+    not_null_or_na <- NULL
+
+    length_1 <- list(line_length = line_length, interval = interval, annotations_above = annotations_above, annotation_vertical_position = annotation_vertical_position)
+    for (argument in names(length_1)) {
+        if (length(length_1[[argument]]) != 1) {bad_arg(argument, length_1, "must have length 1.")}
     }
-    if (is.logical(annotations_above) == FALSE || length(annotations_above) != 1) {
-        abort("annotations_above must be a single logical/boolean value.", class = "argument_value_or_type")
+    length_1 <- NULL
+
+    non_neg_int <- list(interval = interval)
+    for (argument in names(non_neg_int)) {
+        if (!is.numeric(non_neg_int[[argument]]) || any(non_neg_int[[argument]] %% 1 != 0) || any(non_neg_int[[argument]] < 0)) {bad_arg(argument, non_neg_int, "must be a non-negative integer.")}
     }
-    if (is.numeric(annotation_vertical_position) == FALSE || length(annotation_vertical_position) != 1) {
-        abort("Annotation vertical position must be a single numeric value", class = "argument_value_or_type")
+    non_neg_int <- NULL
+
+    pos_int <- list(line_length = line_length)
+    for (argument in names(pos_int)) {
+        if (!is.numeric(pos_int[[argument]]) || any(pos_int[[argument]] %% 1 != 0) || any(pos_int[[argument]] < 1)) {bad_arg(argument, pos_int, "must be a positive integer.")}
     }
+    pos_int <- NULL
+
+    bool <- list(annotations_above = annotations_above)
+    for (argument in names(bool)) {
+        if (!is.logical(bool[[argument]])) {bad_arg(argument, bool, "must be a logical/boolean value.")}
+    }
+    bool <- NULL
+
+    nums <- list(annotation_vertical_position = annotation_vertical_position)
+    for (argument in names(nums)) {
+        if (!is.numeric(nums[[argument]])) {bad_arg(argument, nums, "must be numeric.")}
+    }
+    nums <- NULL
+
+
     if (annotation_vertical_position < 0 || annotation_vertical_position > 1) {
-        warn("Not recommended to set index annotation vertical position outside range 0-1\n(though if spacing is much higher than 1, it is possible that values >1 might be acceptable).", class = "parameter_recommendation")
+        warn(paste("Not recommended to set index annotation vertical position outside range 0-1\n(though if spacing is much higher than 1, it is possible that values >1 might be acceptable).\nCurrent value:", annotation_vertical_position), class = "parameter_recommendation")
     }
-    if (is.character(sequences) == FALSE) {
-        abort("Input sequence must be a character vector.", class = "argument_value_or_type")
+
+    char <- list(sequences = sequences)
+    for (argument in names(char)) {
+        if (!is.character(char[[argument]])) {bad_arg(argument, char, "must be a character vector.")}
     }
+    char <- NULL
     ## ---------------------------------------------------------------------
 
     x_interval <- 1 / line_length
