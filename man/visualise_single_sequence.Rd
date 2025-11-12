@@ -44,7 +44,7 @@ visualise_single_sequence(
 
 \item{sequence_text_size}{\code{numeric}. The size of the text within the bases (e.g. size of "A" letter within boxes representing adenosine bases). Defaults to \code{16}. Set to \code{0} to hide sequence text (show box colours only).}
 
-\item{index_annotation_colour}{\code{character}. The colour of the little numbers underneath indicating base index (e.g. colour "15" label under the 15th base). Defaults to dark red.}
+\item{index_annotation_colour}{\code{character}. The colour of the little numbers underneath indicating base index (e.g. colour of "15" label under the 15th base). Defaults to dark red.}
 
 \item{index_annotation_size}{\code{numeric}. The size of the little number underneath indicating base index (e.g. size of "15" label under the 15th base). Defaults to \code{12.5}.\cr\cr Setting to \code{0} disables index annotations.}
 

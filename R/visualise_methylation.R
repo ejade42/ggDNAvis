@@ -31,6 +31,13 @@
 #' @param high_clamp `numeric`. The maximum probability above which all values are coloured `high_colour`. Defaults to `255` (i.e. no clamping, assuming Nanopore > SAM style modification calling where probabilities are 8-bit integers from 0 to 255).
 #' @param background_colour `character`. The colour the background should be drawn (defaults to white).
 #' @param other_bases_colour `character`. The colour non-assessed (e.g. non-CpG) bases should be drawn (defaults to grey).
+#' @param index_annotation_lines `integer vector`. The lines (i.e. elements of `sequences_vector`) that should have their base incides annotated. 1-indexed e.g. `c(1, 10)` would annotate the first and tenth elements of `sequences_vector`.\cr\cr Extra lines are inserted above or below (depending on `index_annotations_above`) the selected lines - note that the line numbers come from `sequences_vector`, so are unaffected by these insertions.\cr\cr Setting to `NA` disables index annotations (and prevents adding additional blank lines). Defaults to `c(1)` i.e. first sequence is annotated.
+#' @param index_annotation_colour `character`. The colour of the little numbers underneath indicating base index (e.g. colour of "15" label under the 15th base). Defaults to dark red.
+#' @param index_annotation_size `numeric`. The size of the little number underneath indicating base index (e.g. size of "15" label under the 15th base). Defaults to `12.5`.\cr\cr Setting to `0` disables index annotations (and prevents adding additional blank lines).
+#' @param index_annotation_interval `integer`. The frequency at which numbers should be placed underneath indicating base index, starting counting from the leftmost base. Defaults to `15` (every 15 bases along each row).\cr\cr Setting to `0` disables index annotations (and prevents adding additional blank lines).
+#' @param index_annotations_above `logical`. Whether index annotations should go above (`TRUE`, default) or below (`FALSE`) each line of sequence.
+#' @param index_annotation_vertical_position `numeric`. How far annotation numbers should be rendered above (if `index_annotations_above = TRUE`) or below (if `index_annotations_above = FALSE`) each base. Defaults to `1/3`.\cr\cr Not recommended to change at all. Strongly discouraged to set below 0 or above 1.
+#' @param index_annotation_full_line `logical`. Whether index annotations should continue to the end of the longest sequence (`TRUE`, default) or should only continue as far as each selected line does (`FALSE`).
 #' @param outline_colour `character`. The colour of the box outlines. Defaults to black.
 #' @param outline_linewidth `numeric`. The linewidth of the box outlines. Defaults to `3`. Set to `0` to disable box outlines.
 #' @param outline_join `character`. One of `"mitre"`, `"round"`, or `"bevel"` specifying how outlines should be joined at the corners of boxes. Defaults to `"mitre"`. It would be unusual to need to change this.
@@ -111,6 +118,13 @@ visualise_methylation <- function(
     high_clamp = 255,
     background_colour = "white",
     other_bases_colour = "grey",
+    index_annotation_lines = c(1),
+    index_annotation_colour = "darkred",
+    index_annotation_size = 12.5,
+    index_annotation_interval = 15,
+    index_annotations_above = TRUE,
+    index_annotation_vertical_position = 1/3,
+    index_annotation_full_line = TRUE,
     outline_colour = "black",
     outline_linewidth = 3,
     outline_join = "mitre",
@@ -128,43 +142,60 @@ visualise_methylation <- function(
 ) {
     ## Validate arguments
     ## ---------------------------------------------------------------------
-    not_null <- list(modification_locations = modification_locations, modification_probabilities = modification_probabilities, sequence_lengths = sequence_lengths, background_colour = background_colour, other_bases_colour = other_bases_colour, low_colour = low_colour, high_colour = high_colour, low_clamp = low_clamp, high_clamp = high_clamp, outline_linewidth = outline_linewidth, outline_colour = outline_colour, outline_join = outline_join, modified_bases_outline_linewidth = modified_bases_outline_linewidth, modified_bases_outline_colour = modified_bases_outline_colour, modified_bases_outline_join = modified_bases_outline_join, other_bases_outline_linewidth = other_bases_outline_linewidth, other_bases_outline_colour = other_bases_outline_colour, other_bases_outline_join = other_bases_outline_join, margin = margin, return = return, filename = filename, pixels_per_base = pixels_per_base)
+    not_null <- list(modification_locations = modification_locations, modification_probabilities = modification_probabilities, sequence_lengths = sequence_lengths, background_colour = background_colour, other_bases_colour = other_bases_colour, low_colour = low_colour, high_colour = high_colour, low_clamp = low_clamp, high_clamp = high_clamp, index_annotation_colour = index_annotation_colour, index_annotation_size = index_annotation_size, index_annotation_interval = index_annotation_interval, index_annotations_above = index_annotations_above, index_annotation_vertical_position = index_annotation_vertical_position, index_annotation_full_line = index_annotation_full_line, outline_linewidth = outline_linewidth, outline_colour = outline_colour, outline_join = outline_join, modified_bases_outline_linewidth = modified_bases_outline_linewidth, modified_bases_outline_colour = modified_bases_outline_colour, modified_bases_outline_join = modified_bases_outline_join, other_bases_outline_linewidth = other_bases_outline_linewidth, other_bases_outline_colour = other_bases_outline_colour, other_bases_outline_join = other_bases_outline_join, margin = margin, return = return, filename = filename, pixels_per_base = pixels_per_base)
     for (argument in names(not_null)) {
         if (any(is.null(not_null[[argument]]))) {bad_arg(argument, not_null, "must not be NULL.")}
     }
     not_null <- NULL
 
-    length_1 <- list(background_colour = background_colour, other_bases_colour = other_bases_colour, low_colour = low_colour, high_colour = high_colour, low_clamp = low_clamp, high_clamp = high_clamp, outline_linewidth = outline_linewidth, outline_colour = outline_colour, outline_join = outline_join, modified_bases_outline_linewidth = modified_bases_outline_linewidth, modified_bases_outline_colour = modified_bases_outline_colour, modified_bases_outline_join = modified_bases_outline_join, other_bases_outline_linewidth = other_bases_outline_linewidth, other_bases_outline_colour = other_bases_outline_colour, other_bases_outline_join = other_bases_outline_join, margin = margin, return = return, filename = filename, pixels_per_base = pixels_per_base)
+    length_1 <- list(background_colour = background_colour, other_bases_colour = other_bases_colour, low_colour = low_colour, high_colour = high_colour, low_clamp = low_clamp, high_clamp = high_clamp, index_annotation_colour = index_annotation_colour, index_annotation_size = index_annotation_size, index_annotation_interval = index_annotation_interval, index_annotations_above = index_annotations_above, index_annotation_vertical_position = index_annotation_vertical_position, index_annotation_full_line = index_annotation_full_line, outline_linewidth = outline_linewidth, outline_colour = outline_colour, outline_join = outline_join, modified_bases_outline_linewidth = modified_bases_outline_linewidth, modified_bases_outline_colour = modified_bases_outline_colour, modified_bases_outline_join = modified_bases_outline_join, other_bases_outline_linewidth = other_bases_outline_linewidth, other_bases_outline_colour = other_bases_outline_colour, other_bases_outline_join = other_bases_outline_join, margin = margin, return = return, filename = filename, pixels_per_base = pixels_per_base)
     for (argument in names(length_1)) {
         if (length(length_1[[argument]]) != 1) {bad_arg(argument, length_1, "must have length 1.")}
     }
     length_1 <- NULL
 
-    not_na <- list(modification_locations = modification_locations, modification_probabilities = modification_probabilities, sequence_lengths = sequence_lengths, background_colour = background_colour, other_bases_colour = other_bases_colour, low_colour = low_colour, high_colour = high_colour, low_clamp = low_clamp, high_clamp = high_clamp, margin = margin, return = return, pixels_per_base = pixels_per_base)
+    not_na <- list(modification_locations = modification_locations, modification_probabilities = modification_probabilities, sequence_lengths = sequence_lengths, background_colour = background_colour, other_bases_colour = other_bases_colour, low_colour = low_colour, high_colour = high_colour, low_clamp = low_clamp, high_clamp = high_clamp, index_annotation_colour = index_annotation_colour, index_annotation_size = index_annotation_size, index_annotation_interval = index_annotation_interval, index_annotations_above = index_annotations_above, index_annotation_vertical_position = index_annotation_vertical_position, index_annotation_full_line = index_annotation_full_line, margin = margin, return = return, pixels_per_base = pixels_per_base)
     for (argument in names(not_na)) {
         if (any(is.na(not_na[[argument]]))) {bad_arg(argument, not_na, "must not be NA.")}
     }
     not_na <- NULL
 
-    single_char <- list(background_colour = background_colour, other_bases_colour = other_bases_colour, low_colour = low_colour, high_colour = high_colour, outline_colour = outline_colour, modified_bases_outline_colour = modified_bases_outline_colour, other_bases_outline_colour = other_bases_outline_colour)
+    single_char <- list(background_colour = background_colour, other_bases_colour = other_bases_colour, index_annotation_colour = index_annotation_colour, low_colour = low_colour, high_colour = high_colour, outline_colour = outline_colour, modified_bases_outline_colour = modified_bases_outline_colour, other_bases_outline_colour = other_bases_outline_colour)
     for (argument in names(single_char)) {
         if (!is.na(single_char[[argument]]) && (!is.character(single_char[[argument]]) || length(single_char[[argument]]) != 1)) {bad_arg(argument, single_char, "must be a single character value, and a valid colour name or hexcode.")}
     }
     single_char <- NULL
 
-    single_num <- list(low_clamp = low_clamp, high_clamp = high_clamp, margin = margin, pixels_per_base = pixels_per_base, outline_linewidth = outline_linewidth, modified_bases_outline_linewidth = modified_bases_outline_linewidth, other_bases_outline_linewidth = other_bases_outline_linewidth)
+    ## Interpret NA/NULL/empty argument as not wanting any annotations
+    if (any(is.na(index_annotation_lines)) || any(is.null(index_annotation_lines)) || length(index_annotation_lines) == 0) {
+        index_annotation_lines <- integer(0)
+    }
+
+    single_num <- list(low_clamp = low_clamp, high_clamp = high_clamp, margin = margin, index_annotation_size = index_annotation_size, index_annotation_interval = index_annotation_interval, index_annotation_vertical_position = index_annotation_vertical_position, pixels_per_base = pixels_per_base, outline_linewidth = outline_linewidth, modified_bases_outline_linewidth = modified_bases_outline_linewidth, other_bases_outline_linewidth = other_bases_outline_linewidth)
     for (argument in names(single_num)) {
         if (!is.na(single_num[[argument]]) && (!is.numeric(single_num[[argument]]) || length(single_num[[argument]]) != 1)) {bad_arg(argument, single_num, "must be a single numeric value.")}
     }
     single_num <- NULL
 
-    pos_int <- list(pixels_per_base = pixels_per_base)
+    pos_int <- list(pixels_per_base = pixels_per_base, index_annotation_lines = index_annotation_lines)
     for (argument in names(pos_int)) {
-        if (any(pos_int[[argument]] %% 1 != 0) || any(pos_int[[argument]] < 1)) {bad_arg(argument, pos_int, "must be a positive integer.")}
+        if (!is.numeric(pos_int[[argument]]) || any(pos_int[[argument]] %% 1 != 0) || any(pos_int[[argument]] < 1)) {bad_arg(argument, pos_int, "must be a positive integer.")}
     }
     pos_int <- NULL
 
-    bool <- list(return = return)
+    non_neg_int <- list(index_annotation_interval = index_annotation_interval)
+    for (argument in names(non_neg_int)) {
+        if (!is.numeric(non_neg_int[[argument]]) || any(non_neg_int[[argument]] %% 1 != 0) || any(non_neg_int[[argument]] < 0)) {bad_arg(argument, non_neg_int, "must be a non-negative integer.")}
+    }
+    non_neg_int <- NULL
+
+    non_neg_num <- list(index_annotation_size = index_annotation_size, index_annotation_vertical_position = index_annotation_vertical_position)
+    for (argument in names(non_neg_num)) {
+        if (!is.numeric(non_neg_num[[argument]]) || any(non_neg_num[[argument]] < 0)) {bad_arg(argument, non_neg_num, "must be a non-negative number.")}
+    }
+    non_neg_num <- NULL
+
+    bool <- list(return = return, index_annotations_above = index_annotations_above, index_annotation_full_line = index_annotation_full_line)
     for (argument in names(bool)) {
         if (!is.logical(bool[[argument]]) || length(bool[[argument]]) != 1) {bad_arg(argument, bool, "must be a single logical/boolean value.")}
     }
@@ -217,8 +248,46 @@ visualise_methylation <- function(
     }
     ## Accept NA as NULL for render_device
     if (is.atomic(render_device) && any(is.na(render_device))) {render_device <- NULL}
+
+    ## Automatically turn off annotations if size or interval is set to 0.
+    if (index_annotation_interval == 0 && length(index_annotation_lines) > 0 ) {
+        cli_alert_info("Automatically emptying index_annotation_lines as index_annotation_interval is 0", class = "turn_off_annotations_by_other_argument")
+        index_annotation_lines <- integer(0)
+    } else if (index_annotation_size == 0 && length(index_annotation_lines) > 0 ) {
+        cli_alert_info("Automatically emptying index_annotation_lines as index_annotation_size is 0", class = "turn_off_annotations_by_other_argument")
+        index_annotation_lines <- integer(0)
+    }
+
+    ## Automatically sort and unique-ify index annotations lines
+    sorted_index_annotation_lines <- sort(index_annotation_lines, na.last = TRUE)
+    if (any(sorted_index_annotation_lines != index_annotation_lines)) {
+        cli_alert_info(paste0("Automatically sorting index_annotation_lines.\nBefore: ", paste(index_annotation_lines, collapse = ", "), "\nAfter: ", paste(sorted_index_annotation_lines, collapse = ", ")), class = "sanitising_index_annotation_lines")
+        index_annotation_lines <- sorted_index_annotation_lines
+    }
+    unique_index_annotation_lines <- unique(index_annotation_lines)
+    if (length(unique_index_annotation_lines) != length(index_annotation_lines)) {
+        cli_alert_info(paste0("Automatically making index_annotation_lines unique.\nBefore: ", paste(index_annotation_lines, collapse = ", "), "\nAfter: ", paste(unique_index_annotation_lines, collapse = ", ")), class = "sanitising_index_annotation_lines")
+        index_annotation_lines <- unique_index_annotation_lines
+    }
     ## ---------------------------------------------------------------------
 
+    ## Set up original vectors, so I can then modify the ones with the direct argument names
+    modification_locations_original     <- modification_locations
+    modification_probabilities_original <- modification_probabilities
+    sequence_lengths_original           <- sequence_lengths
+
+    ## Insert blanks as required
+    modification_locations <- insert_at_indices(modification_locations_original,     index_annotation_lines, insert_before = index_annotations_above, insert = "", vert = index_annotation_vertical_position)
+    suppressWarnings({ ## suppress duplicate warnings about out-of-range indices
+        modification_probabilities <- insert_at_indices(modification_probabilities_original, index_annotation_lines, insert_before = index_annotations_above, insert = "", vert = index_annotation_vertical_position)
+        sequence_lengths <- insert_at_indices(sequence_lengths_original, index_annotation_lines, insert_before = index_annotations_above, insert = 0, vert = index_annotation_vertical_position)
+    }, classes = "length_exceeded")
+
+    ## Placeholder until I implement sequence display
+    fake_sequences_for_lengths <- sapply(sequence_lengths, function(x) {paste(rep("X", x), collapse = "")})
+    ## 1st argument needs to be a blank-inserted vector with the correct nchar for each entry
+    ## 2nd argument needs to be a pre-insertion vector of the correct length but isn't otherwise used (so can pass one of the other originals)
+    index_annotation_data <- create_many_sequence_index_annotations(fake_sequences_for_lengths, modification_locations_original, index_annotation_lines, index_annotation_interval, index_annotation_full_line, index_annotations_above, index_annotation_vertical_position)
 
 
     ## Generate rasterised dataframes of methylation and masking layer
@@ -256,8 +325,29 @@ visualise_methylation <- function(
         guides(x = "none", y = "none", fill = "none") +
         theme_void() +
         theme(plot.background = element_rect(fill = background_colour, colour = NA),
-              axis.title = element_blank(), plot.margin = grid::unit(c(margin, margin, margin, margin), "inches"))
+              axis.title = element_blank())
 
+
+    ## Add index annotations if desired
+    if (length(index_annotation_lines) > 0) {
+        result <- result +
+            geom_text(data = index_annotation_data, aes(x = .data$x_position, y = .data$y_position, label = .data$annotation), col = index_annotation_colour, size = index_annotation_size, fontface = "bold", inherit.aes = F) +
+            guides(col = "none", size = "none")
+    }
+
+
+    ## Correctly set margin, taking into consideration extra blank lines for annotations
+    extra_spaces <- ceiling(index_annotation_vertical_position)
+    if (1 %in% index_annotation_lines && index_annotations_above) {
+        result <- result + theme(plot.margin = grid::unit(c(max(margin-extra_spaces, 0), margin, margin, margin), "inches"))
+        extra_height <- margin + max(margin-extra_spaces, 0)
+    } else if (length(modification_locations_original) %in% index_annotation_lines && !index_annotations_above) {
+        result <- result + theme(plot.margin = grid::unit(c(margin, margin, max(margin-extra_spaces, 0), margin), "inches"))
+        extra_height <- margin + max(margin-extra_spaces, 0)
+    } else {
+        result <- result + theme(plot.margin = grid::unit(c(margin, margin, margin, margin), "inches"))
+        extra_height <- 2 * margin
+    }
 
     ## Validate filename and export image
     if (is.na(filename) == FALSE) {
@@ -267,7 +357,7 @@ visualise_methylation <- function(
         if (tolower(substr(filename, nchar(filename)-3, nchar(filename))) != ".png") {
             warn("Not recommended to use non-png filetype (but may still work).", class = "filetype_recommendation")
         }
-        ggsave(filename, plot = result, dpi = pixels_per_base, device = render_device, width = max(sequence_lengths)+(2*margin), height = length(sequence_lengths)+(2*margin), limitsize = FALSE)
+        ggsave(filename, plot = result, dpi = pixels_per_base, device = render_device, width = max(sequence_lengths)+(2*margin), height = length(sequence_lengths)+extra_height, limitsize = FALSE)
     }
 
     ## Return either the plot object or NULL

@@ -42,7 +42,7 @@ visualise_many_sequences(
 
 \item{index_annotation_lines}{\verb{integer vector}. The lines (i.e. elements of \code{sequences_vector}) that should have their base incides annotated. 1-indexed e.g. \code{c(1, 10)} would annotate the first and tenth elements of \code{sequences_vector}.\cr\cr Extra lines are inserted above or below (depending on \code{index_annotations_above}) the selected lines - note that the line numbers come from \code{sequences_vector}, so are unaffected by these insertions.\cr\cr Setting to \code{NA} disables index annotations (and prevents adding additional blank lines). Defaults to \code{c(1)} i.e. first sequence is annotated.}
 
-\item{index_annotation_colour}{\code{character}. The colour of the little numbers underneath indicating base index (e.g. colour "15" label under the 15th base). Defaults to dark red.}
+\item{index_annotation_colour}{\code{character}. The colour of the little numbers underneath indicating base index (e.g. colour of "15" label under the 15th base). Defaults to dark red.}
 
 \item{index_annotation_size}{\code{numeric}. The size of the little number underneath indicating base index (e.g. size of "15" label under the 15th base). Defaults to \code{12.5}.\cr\cr Setting to \code{0} disables index annotations (and prevents adding additional blank lines).}
 
