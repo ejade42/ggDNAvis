@@ -99,8 +99,8 @@ visualise_many_sequences(
 - index_annotation_colour:
 
   `character`. The colour of the little numbers underneath indicating
-  base index (e.g. colour "15" label under the 15th base). Defaults to
-  dark red.
+  base index (e.g. colour of "15" label under the 15th base). Defaults
+  to dark red.
 
 - index_annotation_size:
 
