@@ -790,7 +790,7 @@ create_many_sequence_index_annotations <- function(
 
                 annotation <- as.character(j)
                 type <- "Number"
-                annotation_data <- rbind(annotation_data, c(x_position, y_position, annotation, type))
+                annotation_data <- rbind(annotation_data, list(x_position, y_position, annotation, type))
             }
         }
     }

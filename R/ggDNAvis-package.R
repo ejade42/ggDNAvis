@@ -16,37 +16,36 @@ utils::globalVariables("example_many_sequences")
 utils::globalVariables("sequence_colour_palettes")
 utils::globalVariables("fastq_quality_scores")
 
-
 ## Helper function for dealing with different systems when comparing images
 fetch_acceptable_distortion <- function(verbose = TRUE) {
     if (Sys.info()[["sysname"]] == "Linux") {
-        if (verbose) {print("Linux detected. Setting font to 'Liberation Sans' for Arial/Helvetica metric compability.", quote = F)}
+        if (verbose) {cli_alert_info("Linux detected. Setting font to 'Liberation Sans' for Arial/Helvetica metric compability.")}
         ggplot2::theme_update(text = element_text(family = "Liberation Sans"))
     }
 
     if (Sys.info()[["sysname"]] == "Darwin" && Sys.info()[["user"]] == "evelyn") {
-        if (verbose) {print("Evelyn's macbook detected, using extremely strict matching", quote = F)}
+        if (verbose) {cli_alert_info("Evelyn's macbook detected, using extremely strict matching")}
         acceptable_distortion <- 0.0005
     } else if (Sys.getenv("NOT_CRAN") == "false" || Sys.getenv("GITHUB_ACTIONS") == "true") {
-        if (verbose) {print("GitHub actions/CRAN environment detected. Allowing lenience in plot matching.", quote = F)}
+        if (verbose) {cli_alert_info("GitHub actions/CRAN environment detected. Allowing lenience in plot matching.")}
 
         if (Sys.info()[["sysname"]] == "Linux") {
             acceptable_distortion <- 0.05
         }  else if (Sys.info()[["sysname"]] == "Windows") {
-            if (verbose) {print("Windows detected. Not taking any special action.", quote = F)}
+            if (verbose) {cli_alert_info("Windows detected. Not taking any special action.")}
             acceptable_distortion <- 0.05
         } else if (Sys.info()[["sysname"]] == "Darwin") {
-            if (verbose) {print("MacOS (Darwin) detected. Giving a little less lenience in plot matching as Helvetica is available.", quote = F)}
+            if (verbose) {cli_alert_info("MacOS (Darwin) detected. Giving a little less lenience in plot matching as Helvetica is available.")}
             acceptable_distortion <- 0.025
         } else {
             abort("Operating system not Linux/Windows/Darwin. Don't know what to do. Evelyn should take a look at this.", class = "unrecognised_OS")
         }
 
     } else {
-        if (verbose) {print("Unknown local system detected, using lenient matching", quote = F)}
+        if (verbose) {cli_alert_info("Unknown local system detected, using lenient matching")}
         acceptable_distortion <- 0.05
     }
-    if (verbose) {print(paste("Current acceptable distortion:", acceptable_distortion), quote = F)}
+    if (verbose) {cli_alert_info(paste("Current acceptable distortion:", acceptable_distortion))}
 
     return(acceptable_distortion)
 }
