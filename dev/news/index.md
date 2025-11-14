@@ -22,6 +22,14 @@ New features:
 
 User-facing changes:
 
+- Changed
+  [`extract_methylation_from_dataframe()`](https://ejade42.github.io/ggDNAvis/reference/extract_methylation_from_dataframe.md)
+  to now return a list of 4 vectors instead of 3, with `sequences`
+  added. `sequence_lengths` is still returned just in case it’s useful
+  for anything, but it is no longer used in
+  [`visualise_methylation()`](https://ejade42.github.io/ggDNAvis/reference/visualise_methylation.md)
+  which now takes the sequences directly rather than their lengths.
+
 - Removed warning for “incorrectly” removing index annotations. Now
   setting any relevant argument to 0/empty
   (e.g. `index_annotation_size = 0`, `index_annotation_interval = 0`,
@@ -38,6 +46,8 @@ Background changes:
 - Starting changing all argument validation to use
   [`bad_arg()`](https://ejade42.github.io/ggDNAvis/reference/bad_arg.md)
   rather than copy pasting.
+
+- Enforced version requirement for ggplot2 (\>= 4.0.0)
 
 ## ggDNAvis 0.3.2
 

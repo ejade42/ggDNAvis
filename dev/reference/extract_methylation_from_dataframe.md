@@ -14,9 +14,9 @@ vector of such strings (e.g. `c("3,6,9,12", "1,2,3,4")`).
   
 This function calls
 [`extract_and_sort_sequences()`](https://ejade42.github.io/ggDNAvis/reference/extract_and_sort_sequences.md)
-on each of these three columns and returns a list of vectors stored in
-`$locations`, `$probabilities`, and `$lengths`. These can then be used
-as input for
+on the relevant columns and returns a list of vectors stored in
+`$locations`, `$probabilities`, `$sequences`, and `$lengths`. These can
+then be used as input for
 [`visualise_methylation()`](https://ejade42.github.io/ggDNAvis/reference/visualise_methylation.md).  
   
 Default arguments are set up to work with the included
@@ -30,6 +30,7 @@ extract_methylation_from_dataframe(
   modification_data,
   locations_colname = "methylation_locations",
   probabilities_colname = "methylation_probabilities",
+  sequences_colname = "sequence",
   lengths_colname = "sequence_length",
   grouping_levels = c(family = 8, individual = 2),
   sort_by = "sequence_length",
@@ -76,6 +77,14 @@ extract_methylation_from_dataframe(
   [`vector_to_string()`](https://ejade42.github.io/ggDNAvis/reference/vector_to_string.md))
   of the probability of modification as an 8-bit (0-255) integer for
   each base where modification was assessed.
+
+- sequences_colname:
+
+  `character`. The name of the column within the input dataframe that
+  contains the actual sequences. Defaults to `"sequence"`.  
+    
+  Values within this column must be the actual sequences (e.g.
+  `"GGCGGA"`).
 
 - lengths_colname:
 
@@ -127,7 +136,8 @@ extract_methylation_from_dataframe(
 ## Value
 
 `list`, containing `$locations` (`character vector`), `$probabilities`
-(`character vector`), and `$lengths` (`numeric vector`).
+(`character vector`), `$sequences` (`character vector`), and `$lengths`
+(`integer vector`).
 
 ## Examples
 
@@ -249,6 +259,59 @@ extract_methylation_from_dataframe(
 #> [50] "161,156,9,65,198,255,245,191,174,63,155,146,13,95,228,100,132,45,49"                                      
 #> [51] "109,86,70,169,200,112,237,69,168,97,239,188,150,208,225,190,128,252,142,224"                              
 #> 
+#> $sequences
+#>  [1] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA"
+#>  [2] "GGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA"         
+#>  [3] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA"               
+#>  [4] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA"                     
+#>  [5] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA"                                       
+#>  [6] ""                                                                                                      
+#>  [7] ""                                                                                                      
+#>  [8] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGAGGCGGCGGAGGAGGAGGCGGCGGA"                                 
+#>  [9] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGAGGCGGCGGAGGAGGAGGCGGCGGA"                                       
+#> [10] ""                                                                                                      
+#> [11] ""                                                                                                      
+#> [12] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA"               
+#> [13] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGA"                  
+#> [14] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGCGGA"                     
+#> [15] ""                                                                                                      
+#> [16] ""                                                                                                      
+#> [17] ""                                                                                                      
+#> [18] ""                                                                                                      
+#> [19] ""                                                                                                      
+#> [20] ""                                                                                                      
+#> [21] ""                                                                                                      
+#> [22] ""                                                                                                      
+#> [23] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGA"         
+#> [24] ""                                                                                                      
+#> [25] ""                                                                                                      
+#> [26] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGA"            
+#> [27] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGA"               
+#> [28] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGA"                  
+#> [29] ""                                                                                                      
+#> [30] ""                                                                                                      
+#> [31] ""                                                                                                      
+#> [32] ""                                                                                                      
+#> [33] ""                                                                                                      
+#> [34] ""                                                                                                      
+#> [35] ""                                                                                                      
+#> [36] ""                                                                                                      
+#> [37] "GGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGA"      
+#> [38] "GGCGGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGA"      
+#> [39] ""                                                                                                      
+#> [40] ""                                                                                                      
+#> [41] "GGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGA"         
+#> [42] "GGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGA"            
+#> [43] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGCGGCGGA"               
+#> [44] ""                                                                                                      
+#> [45] ""                                                                                                      
+#> [46] "GGCGGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGA"      
+#> [47] ""                                                                                                      
+#> [48] ""                                                                                                      
+#> [49] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGA"      
+#> [50] "GGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGCGGA"            
+#> [51] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGCGGCGGA"                     
+#> 
 #> $lengths
 #>  [1] 102  93  87  81  63   0   0  69  63   0   0  87  84  81   0   0   0   0   0
 #> [20]   0   0   0  93   0   0  90  87  84   0   0   0   0   0   0   0   0  96  96
@@ -369,6 +432,59 @@ extract_methylation_from_dataframe(
 #> [49] "36,44,73,14,35,20,6,162,33,32,108,24,113,116,11,10,111,207,6,21,225"                
 #> [50] "52,87,155,117,2,0,3,50,81,184,75,74,60,97,15,8,46,188,81"                           
 #> [51] "29,9,79,29,15,95,14,82,81,43,11,25,98,35,18,53,112,2,57,31"                         
+#> 
+#> $sequences
+#>  [1] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA"
+#>  [2] "GGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA"         
+#>  [3] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA"               
+#>  [4] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA"                     
+#>  [5] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA"                                       
+#>  [6] ""                                                                                                      
+#>  [7] ""                                                                                                      
+#>  [8] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGAGGCGGCGGAGGAGGAGGCGGCGGA"                                 
+#>  [9] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGAGGCGGCGGAGGAGGAGGCGGCGGA"                                       
+#> [10] ""                                                                                                      
+#> [11] ""                                                                                                      
+#> [12] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA"               
+#> [13] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGA"                  
+#> [14] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGCGGA"                     
+#> [15] ""                                                                                                      
+#> [16] ""                                                                                                      
+#> [17] ""                                                                                                      
+#> [18] ""                                                                                                      
+#> [19] ""                                                                                                      
+#> [20] ""                                                                                                      
+#> [21] ""                                                                                                      
+#> [22] ""                                                                                                      
+#> [23] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGA"         
+#> [24] ""                                                                                                      
+#> [25] ""                                                                                                      
+#> [26] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGA"            
+#> [27] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGA"               
+#> [28] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGA"                  
+#> [29] ""                                                                                                      
+#> [30] ""                                                                                                      
+#> [31] ""                                                                                                      
+#> [32] ""                                                                                                      
+#> [33] ""                                                                                                      
+#> [34] ""                                                                                                      
+#> [35] ""                                                                                                      
+#> [36] ""                                                                                                      
+#> [37] "GGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGA"      
+#> [38] "GGCGGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGA"      
+#> [39] ""                                                                                                      
+#> [40] ""                                                                                                      
+#> [41] "GGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGA"         
+#> [42] "GGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGA"            
+#> [43] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGCGGCGGA"               
+#> [44] ""                                                                                                      
+#> [45] ""                                                                                                      
+#> [46] "GGCGGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGA"      
+#> [47] ""                                                                                                      
+#> [48] ""                                                                                                      
+#> [49] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGA"      
+#> [50] "GGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGCGGA"            
+#> [51] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGCGGCGGA"                     
 #> 
 #> $lengths
 #>  [1] 102  93  87  81  63   0   0  69  63   0   0  87  84  81   0   0   0   0   0

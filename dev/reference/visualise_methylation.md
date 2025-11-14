@@ -36,13 +36,17 @@ probability, with any/no clamping values, can be produced via
 visualise_methylation(
   modification_locations,
   modification_probabilities,
-  sequence_lengths,
+  sequences,
   low_colour = "blue",
   high_colour = "red",
   low_clamp = 0,
   high_clamp = 255,
   background_colour = "white",
   other_bases_colour = "grey",
+  sequence_text_type = "none",
+  sequence_text_rounding = 2,
+  sequence_text_colour = "black",
+  sequence_text_size = 16,
   index_annotation_lines = c(1),
   index_annotation_colour = "darkred",
   index_annotation_size = 12.5,
@@ -63,7 +67,7 @@ visualise_methylation(
   return = TRUE,
   filename = NA,
   render_device = ragg::agg_png,
-  pixels_per_base = 20
+  pixels_per_base = 100
 )
 ```
 
@@ -89,9 +93,10 @@ visualise_methylation(
   integer from 0 to 255, but changing other arguments could make this
   work on other scales.
 
-- sequence_lengths:
+- sequences:
 
-  `numeric vector`. The length of each sequence.
+  `character vector`. One character value for each sequence, storing the
+  actual DNA sequence.
 
 - low_colour:
 
@@ -126,6 +131,34 @@ visualise_methylation(
 
   `character`. The colour non-assessed (e.g. non-CpG) bases should be
   drawn (defaults to grey).
+
+- sequence_text_type:
+
+  `character`. What type of text should be drawn in the boxes. One of
+  `"sequence"` (to draw the base sequence in the boxes, similar to
+  [`visualise_many_sequences()`](https://ejade42.github.io/ggDNAvis/reference/visualise_many_sequences.md)),
+  `"raw_probability"` (to draw the original probabilities passed in,
+  presumably 8-bit integer scores), `"scaled_probability"` (to draw the
+  probabilities scaled to 0-1), or `"none"` (to draw the boxes only, no
+  text).
+
+- sequence_text_rounding:
+
+  `integer`. How many decimal places the text drawn in the boxes should
+  be rounded to (defaults to `2`). Ignored if `sequence_text_type` is
+  `"sequence"` or `"none"`.
+
+- sequence_text_colour:
+
+  `character`. The colour of the text within the bases (e.g. colour of
+  "A" letter within boxes representing adenosine bases). Defaults to
+  black.
+
+- sequence_text_size:
+
+  `numeric`. The size of the text within the bases (e.g. size of "A"
+  letter within boxes representing adenosine bases). Defaults to `16`.
+  Set to `0` to hide sequence text (show box colours only).
 
 - index_annotation_lines:
 
@@ -289,7 +322,9 @@ visualise_methylation(
     methylation_info$probabilities,
     methylation_info$lengths
 )
-
+#> Error in visualise_methylation(methylation_info$locations, methylation_info$probabilities,     methylation_info$lengths): Argument 'sequences' must be a character vector.
+#> Current value: 102, 93, 87, 81, 63, 0, 0, 69, 63, 0, 0, 87, 84, 81, 0, 0, 0, 0, 0, 0, 0, 0, 93, 0, 0, 90, 87, 84, 0, 0, 0, 0, 0, 0, 0, 0, 96, 96, 0, 0, 93, 90, 87, 0, 0, 96, 0, 0, 96, 90, 81
+#> Current class: numeric
 
 ## Export with all defaults rather than returning
 visualise_methylation(
@@ -299,12 +334,16 @@ visualise_methylation(
     filename = "example_vm_01.png",
     return = FALSE
 )
+#> Error in visualise_methylation(methylation_info$locations, methylation_info$probabilities,     methylation_info$lengths, filename = "example_vm_01.png",     return = FALSE): Argument 'sequences' must be a character vector.
+#> Current value: 102, 93, 87, 81, 63, 0, 0, 69, 63, 0, 0, 87, 84, 81, 0, 0, 0, 0, 0, 0, 0, 0, 93, 0, 0, 90, 87, 84, 0, 0, 0, 0, 0, 0, 0, 0, 96, 96, 0, 0, 93, 90, 87, 0, 0, 96, 0, 0, 96, 90, 81
+#> Current class: numeric
 ## View exported image
 image <- png::readPNG("example_vm_01.png")
+#> Error in png::readPNG("example_vm_01.png"): unable to open example_vm_01.png
 unlink("example_vm_01.png")
 grid::grid.newpage()
 grid::grid.raster(image)
-
+#> Error in UseMethod("as.raster"): no applicable method for 'as.raster' applied to an object of class "function"
 
 ## Export with customisation
 visualise_methylation(
@@ -324,11 +363,15 @@ visualise_methylation(
     modified_bases_outline_colour = "black",
     margin = 0.3
 )
+#> Error in visualise_methylation(methylation_info$locations, methylation_info$probabilities,     methylation_info$lengths, filename = "example_vm_02.png",     return = FALSE, low_colour = "white", high_colour = "black",     low_clamp = 0.3 * 255, high_clamp = 0.7 * 255, other_bases_colour = "lightblue1",     other_bases_outline_linewidth = 1, other_bases_outline_colour = "grey",     modified_bases_outline_linewidth = 3, modified_bases_outline_colour = "black",     margin = 0.3): Argument 'sequences' must be a character vector.
+#> Current value: 102, 93, 87, 81, 63, 0, 0, 69, 63, 0, 0, 87, 84, 81, 0, 0, 0, 0, 0, 0, 0, 0, 93, 0, 0, 90, 87, 84, 0, 0, 0, 0, 0, 0, 0, 0, 96, 96, 0, 0, 93, 90, 87, 0, 0, 96, 0, 0, 96, 90, 81
+#> Current class: numeric
 ## View exported image
 image <- png::readPNG("example_vm_02.png")
+#> Error in png::readPNG("example_vm_02.png"): unable to open example_vm_02.png
 unlink("example_vm_02.png")
 grid::grid.newpage()
 grid::grid.raster(image)
-
+#> Error in UseMethod("as.raster"): no applicable method for 'as.raster' applied to an object of class "function"
 # }
 ```
