@@ -323,6 +323,18 @@ visualise_methylation <- function(
     ## Transform image data if clamping limits are set
     image_data$clamped_layer <- pmin(pmax(image_data$layer, low_clamp), high_clamp)
 
+
+    ## Generate sequence text data based on the chosen setting
+    if (sequence_text_type == "sequence") {
+        sequence_text_data <- convert_sequences_to_annotations(sequences, line_length = max(nchar(sequences)), interval = 0)
+    } else if (sequence_text_type == "raw_probability") {
+        pass <- ""
+    } else if (sequence_text_type == "scaled_probability") {
+        pass <- ""
+    }
+
+
+
     tile_width  <- 1/max(nchar(sequences))
     tile_height <- 1/length(sequences)
 
@@ -348,6 +360,12 @@ visualise_methylation <- function(
         theme(plot.background = element_rect(fill = background_colour, colour = NA),
               axis.title = element_blank())
 
+    ## Add sequence text if desired
+    if (sequence_text_type == "sequence") {
+        result <- result +
+            geom_text(data = sequence_text_data, aes(x = .data$x_position, y = .data$y_position, label = .data$annotation), col = sequence_text_colour, size = sequence_text_size, fontface = "bold", inherit.aes = F) +
+            guides(col = "none", size = "none")
+    }
 
     ## Add index annotations if desired
     if (length(index_annotation_lines) > 0) {

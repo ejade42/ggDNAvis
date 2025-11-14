@@ -137,7 +137,25 @@ test_that("methylation visualisation works with index annotations, big, below", 
 test_that("methylation visualisation works with index annotations, default", {
     filename <- "visualise_methylation_test_13"
     d <- extract_methylation_from_dataframe(example_many_sequences)
-    visualise_methylation(d$locations, d$probabilities, d$sequences, filename = paste0(root, filename, ".png"), high_colour = "magenta", low_colour = "cyan", other_bases_colour = "orange", other_bases_outline_linewidth = 0, pixels_per_base = 30)
+    expect_message(visualise_methylation(d$locations, d$probabilities, d$sequences, filename = paste0(root, filename, ".png"), high_colour = "magenta", low_colour = "cyan", sequence_text_type = "sequence", sequence_text_size = 0, other_bases_colour = "orange", other_bases_outline_linewidth = 0, pixels_per_base = 30))
+    expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
+                                       image_read(paste0(reference, filename, ".png")),
+                                       metric = "MAE"))$distortion, acceptable_distortion)
+})
+
+test_that("methylation visualisation works with sequence, default", {
+    filename <- "visualise_methylation_test_14"
+    d <- extract_methylation_from_dataframe(example_many_sequences)
+    visualise_methylation(d$locations, d$probabilities, d$sequences, filename = paste0(root, filename, ".png"), sequence_text_type = "sequence", pixels_per_base = 30)
+    expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
+                                       image_read(paste0(reference, filename, ".png")),
+                                       metric = "MAE"))$distortion, acceptable_distortion)
+})
+
+test_that("methylation visualisation works with sequence, fancy", {
+    filename <- "visualise_methylation_test_15"
+    d <- extract_methylation_from_dataframe(example_many_sequences)
+    visualise_methylation(d$locations, d$probabilities, d$sequences, filename = paste0(root, filename, ".png"), sequence_text_type = "sequence", sequence_text_colour = "magenta", sequence_text_size = 20, index_annotation_interval = 5, index_annotation_full_line = TRUE, index_annotation_lines = c(1, 23, 37), pixels_per_base = 30)
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
