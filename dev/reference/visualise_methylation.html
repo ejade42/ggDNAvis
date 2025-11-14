@@ -107,6 +107,7 @@ can be produced via <code><a href="visualise_methylation_colour_scale.html">visu
 <span>  background_colour <span class="op">=</span> <span class="st">"white"</span>,</span>
 <span>  other_bases_colour <span class="op">=</span> <span class="st">"grey"</span>,</span>
 <span>  sequence_text_type <span class="op">=</span> <span class="st">"none"</span>,</span>
+<span>  sequence_text_scaling <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.5</span>, <span class="fl">256</span><span class="op">)</span>,</span>
 <span>  sequence_text_rounding <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  sequence_text_colour <span class="op">=</span> <span class="st">"black"</span>,</span>
 <span>  sequence_text_size <span class="op">=</span> <span class="fl">16</span>,</span>
@@ -175,7 +176,11 @@ can be produced via <code><a href="visualise_methylation_colour_scale.html">visu
 
 
 <dt id="arg-sequence-text-type">sequence_text_type<a class="anchor" aria-label="anchor" href="#arg-sequence-text-type"></a></dt>
-<dd><p><code>character</code>. What type of text should be drawn in the boxes. One of <code>"sequence"</code> (to draw the base sequence in the boxes, similar to <code><a href="visualise_many_sequences.html">visualise_many_sequences()</a></code>), <code>"raw_probability"</code> (to draw the original probabilities passed in, presumably 8-bit integer scores), <code>"scaled_probability"</code> (to draw the probabilities scaled to 0-1), or <code>"none"</code> (to draw the boxes only, no text).</p></dd>
+<dd><p><code>character</code>. What type of text should be drawn in the boxes. One of <code>"sequence"</code> (to draw the base sequence in the boxes, similar to <code><a href="visualise_many_sequences.html">visualise_many_sequences()</a></code>), <code>"probability"</code> (to draw the numerical probability of methylation in each assessed box, optionally scaled via <code>sequence_text_scaling</code>), or <code>"none"</code> (to draw the boxes only, no text).</p></dd>
+
+
+<dt id="arg-sequence-text-scaling">sequence_text_scaling<a class="anchor" aria-label="anchor" href="#arg-sequence-text-scaling"></a></dt>
+<dd><p><code>numeric vector, length 2</code>. The min and max possible probability values, used to facilitate scaling of the text in each to 0-1. Scaling is implemented as \(\frac{p - min}{max}\), so custom scalings (e.g. scaled to 0-9 space) can be implemented by setting this values as required.<br><br> Set to <code>c(0, 1)</code> to not scale at all i.e. print the raw integer probability values.<br><br> Set to <code>c(0, 255)</code> to scale 8-bit integer probabilities such that 0 corresponds to 0% and 255 corresponds to 100%. This is <strong>not recommended</strong> for most scenarios as it does not accurately reflect the uncertainties associated with each probability (see immediately below). <br><br> Set to <code>c(-0.5, 256)</code> (default, results in \(\frac{p+0.5}{256}\)) to scale to the centre of the probability spaces defined by the SAMtools spec, where integer \(p\) represents the probability space from \(\frac{p}{256}\) to \(\frac{p+1}{256}\). This is slightly better at representing the uncertainty compared to <code>c(0, 255)</code> as strictly speaking <code>0</code> represents the probability space from 0.000 to 0.004 and <code>255</code> represents the probability space from 0.996 to 1.000, so scaling them to 0.002 and 0.998 respectively is a more accurate representation of the probability space they each represent.</p></dd>
 
 
 <dt id="arg-sequence-text-rounding">sequence_text_rounding<a class="anchor" aria-label="anchor" href="#arg-sequence-text-rounding"></a></dt>

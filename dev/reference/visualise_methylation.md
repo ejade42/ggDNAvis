@@ -44,6 +44,7 @@ visualise_methylation(
   background_colour = "white",
   other_bases_colour = "grey",
   sequence_text_type = "none",
+  sequence_text_scaling = c(-0.5, 256),
   sequence_text_rounding = 2,
   sequence_text_colour = "black",
   sequence_text_size = 16,
@@ -137,10 +138,36 @@ visualise_methylation(
   `character`. What type of text should be drawn in the boxes. One of
   `"sequence"` (to draw the base sequence in the boxes, similar to
   [`visualise_many_sequences()`](https://ejade42.github.io/ggDNAvis/reference/visualise_many_sequences.md)),
-  `"raw_probability"` (to draw the original probabilities passed in,
-  presumably 8-bit integer scores), `"scaled_probability"` (to draw the
-  probabilities scaled to 0-1), or `"none"` (to draw the boxes only, no
-  text).
+  `"probability"` (to draw the numerical probability of methylation in
+  each assessed box, optionally scaled via `sequence_text_scaling`), or
+  `"none"` (to draw the boxes only, no text).
+
+- sequence_text_scaling:
+
+  `numeric vector, length 2`. The min and max possible probability
+  values, used to facilitate scaling of the text in each to 0-1. Scaling
+  is implemented as \\\frac{p - min}{max}\\, so custom scalings (e.g.
+  scaled to 0-9 space) can be implemented by setting this values as
+  required.  
+    
+  Set to `c(0, 1)` to not scale at all i.e. print the raw integer
+  probability values.  
+    
+  Set to `c(0, 255)` to scale 8-bit integer probabilities such that 0
+  corresponds to 0% and 255 corresponds to 100%. This is **not
+  recommended** for most scenarios as it does not accurately reflect the
+  uncertainties associated with each probability (see immediately
+  below).  
+    
+  Set to `c(-0.5, 256)` (default, results in \\\frac{p+0.5}{256}\\) to
+  scale to the centre of the probability spaces defined by the SAMtools
+  spec, where integer \\p\\ represents the probability space from
+  \\\frac{p}{256}\\ to \\\frac{p+1}{256}\\. This is slightly better at
+  representing the uncertainty compared to `c(0, 255)` as strictly
+  speaking `0` represents the probability space from 0.000 to 0.004 and
+  `255` represents the probability space from 0.996 to 1.000, so scaling
+  them to 0.002 and 0.998 respectively is a more accurate representation
+  of the probability space they each represent.
 
 - sequence_text_rounding:
 
