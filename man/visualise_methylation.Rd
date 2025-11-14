@@ -142,14 +142,14 @@ methylation_info <- extract_methylation_from_dataframe(example_many_sequences)
 visualise_methylation(
     methylation_info$locations,
     methylation_info$probabilities,
-    methylation_info$lengths
+    methylation_info$sequences
 )
 
 ## Export with all defaults rather than returning
 visualise_methylation(
     methylation_info$locations,
     methylation_info$probabilities,
-    methylation_info$lengths,
+    methylation_info$sequences,
     filename = "example_vm_01.png",
     return = FALSE
 )
@@ -163,7 +163,7 @@ grid::grid.raster(image)
 visualise_methylation(
     methylation_info$locations,
     methylation_info$probabilities,
-    methylation_info$lengths,
+    methylation_info$sequences,
     filename = "example_vm_02.png",
     return = FALSE,
     low_colour = "white",

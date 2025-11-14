@@ -69,14 +69,14 @@
 #' visualise_methylation(
 #'     methylation_info$locations,
 #'     methylation_info$probabilities,
-#'     methylation_info$lengths
+#'     methylation_info$sequences
 #' )
 #'
 #' ## Export with all defaults rather than returning
 #' visualise_methylation(
 #'     methylation_info$locations,
 #'     methylation_info$probabilities,
-#'     methylation_info$lengths,
+#'     methylation_info$sequences,
 #'     filename = "example_vm_01.png",
 #'     return = FALSE
 #' )
@@ -90,7 +90,7 @@
 #' visualise_methylation(
 #'     methylation_info$locations,
 #'     methylation_info$probabilities,
-#'     methylation_info$lengths,
+#'     methylation_info$sequences,
 #'     filename = "example_vm_02.png",
 #'     return = FALSE,
 #'     low_colour = "white",
@@ -328,7 +328,11 @@ visualise_methylation <- function(
     if (sequence_text_type == "sequence") {
         sequence_text_data <- convert_sequences_to_annotations(sequences, line_length = max(nchar(sequences)), interval = 0)
     } else if (sequence_text_type == "raw_probability") {
-        pass <- ""
+        for (i in 1:length(modification_locations)) {
+            for (j in string_to_vector(modification_locations[i])) {
+                pass <- ""
+            }
+        }
     } else if (sequence_text_type == "scaled_probability") {
         pass <- ""
     }
