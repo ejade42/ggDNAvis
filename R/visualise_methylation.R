@@ -24,13 +24,17 @@
 #'
 #' @param modification_locations `character vector`. One character value for each sequence, storing a condensed string (e.g. `"3,6,9,12"`, produced via [vector_to_string()]) of the indices along the read at which modification was assessed. Indexing starts at 1.
 #' @param modification_probabilities `character vector`. One character value for each sequence, storing a condensed string (e.g. `"0,128,255,15"`, produced via [vector_to_string()]) of the probability of methylation/modification at each assessed base.\cr\cr Assumed to be Nanopore > SAM style modification stored as an 8-bit integer from 0 to 255, but changing other arguments could make this work on other scales.
-#' @param sequence_lengths `numeric vector`. The length of each sequence.
+#' @param sequences `character vector`. One character value for each sequence, storing the actual DNA sequence.
 #' @param low_colour `character`. The colour that should be used to represent minimum probability of methylation/modification (defaults to blue).
 #' @param high_colour `character`. The colour that should be used to represent maximum probability of methylation/modification (defaults to red).
 #' @param low_clamp `numeric`. The minimum probability below which all values are coloured `low_colour`. Defaults to `0` (i.e. no clamping). To specify a proportion probability in 8-bit form, multiply by 255 e.g. to low-clamp at 30% probability, set this to `0.3*255`.
 #' @param high_clamp `numeric`. The maximum probability above which all values are coloured `high_colour`. Defaults to `255` (i.e. no clamping, assuming Nanopore > SAM style modification calling where probabilities are 8-bit integers from 0 to 255).
 #' @param background_colour `character`. The colour the background should be drawn (defaults to white).
 #' @param other_bases_colour `character`. The colour non-assessed (e.g. non-CpG) bases should be drawn (defaults to grey).
+#' @param sequence_text_type `character`. What type of text should be drawn in the boxes. One of `"sequence"` (to draw the base sequence in the boxes, similar to [visualise_many_sequences()]), `"raw_probability"` (to draw the original probabilities passed in, presumably 8-bit integer scores), `"scaled_probability"` (to draw the probabilities scaled to 0-1), or `"none"` (to draw the boxes only, no text).
+#' @param sequence_text_rounding `integer`. How many decimal places the text drawn in the boxes should be rounded to (defaults to `2`). Ignored if `sequence_text_type` is `"sequence"` or `"none"`.
+#' @param sequence_text_colour `character`. The colour of the text within the bases (e.g. colour of "A" letter within boxes representing adenosine bases). Defaults to black.
+#' @param sequence_text_size `numeric`. The size of the text within the bases (e.g. size of "A" letter within boxes representing adenosine bases). Defaults to `16`. Set to `0` to hide sequence text (show box colours only).
 #' @param index_annotation_lines `integer vector`. The lines (i.e. elements of `sequences_vector`) that should have their base incides annotated. 1-indexed e.g. `c(1, 10)` would annotate the first and tenth elements of `sequences_vector`.\cr\cr Extra lines are inserted above or below (depending on `index_annotations_above`) the selected lines - note that the line numbers come from `sequences_vector`, so are unaffected by these insertions.\cr\cr Setting to `NA` disables index annotations (and prevents adding additional blank lines). Defaults to `c(1)` i.e. first sequence is annotated.
 #' @param index_annotation_colour `character`. The colour of the little numbers underneath indicating base index (e.g. colour of "15" label under the 15th base). Defaults to dark red.
 #' @param index_annotation_size `numeric`. The size of the little number underneath indicating base index (e.g. size of "15" label under the 15th base). Defaults to `12.5`.\cr\cr Setting to `0` disables index annotations (and prevents adding additional blank lines).
@@ -111,13 +115,17 @@
 visualise_methylation <- function(
     modification_locations,
     modification_probabilities,
-    sequence_lengths,
+    sequences,
     low_colour = "blue",
     high_colour = "red",
     low_clamp = 0,
     high_clamp = 255,
     background_colour = "white",
     other_bases_colour = "grey",
+    sequence_text_type = "none",
+    sequence_text_rounding = 2,
+    sequence_text_colour = "black",
+    sequence_text_size = 16,
     index_annotation_lines = c(1),
     index_annotation_colour = "darkred",
     index_annotation_size = 12.5,
@@ -138,29 +146,29 @@ visualise_methylation <- function(
     return = TRUE,
     filename = NA,
     render_device = ragg::agg_png,
-    pixels_per_base = 20
+    pixels_per_base = 100
 ) {
     ## Validate arguments
     ## ---------------------------------------------------------------------
-    not_null <- list(modification_locations = modification_locations, modification_probabilities = modification_probabilities, sequence_lengths = sequence_lengths, background_colour = background_colour, other_bases_colour = other_bases_colour, low_colour = low_colour, high_colour = high_colour, low_clamp = low_clamp, high_clamp = high_clamp, index_annotation_colour = index_annotation_colour, index_annotation_size = index_annotation_size, index_annotation_interval = index_annotation_interval, index_annotations_above = index_annotations_above, index_annotation_vertical_position = index_annotation_vertical_position, index_annotation_full_line = index_annotation_full_line, outline_linewidth = outline_linewidth, outline_colour = outline_colour, outline_join = outline_join, modified_bases_outline_linewidth = modified_bases_outline_linewidth, modified_bases_outline_colour = modified_bases_outline_colour, modified_bases_outline_join = modified_bases_outline_join, other_bases_outline_linewidth = other_bases_outline_linewidth, other_bases_outline_colour = other_bases_outline_colour, other_bases_outline_join = other_bases_outline_join, margin = margin, return = return, filename = filename, pixels_per_base = pixels_per_base)
+    not_null <- list(modification_locations = modification_locations, modification_probabilities = modification_probabilities, sequences = sequences, background_colour = background_colour, other_bases_colour = other_bases_colour, low_colour = low_colour, high_colour = high_colour, low_clamp = low_clamp, high_clamp = high_clamp, sequence_text_type = sequence_text_type, sequence_text_rounding = sequence_text_rounding, sequence_text_colour = sequence_text_colour, sequence_text_size = sequence_text_size, index_annotation_colour = index_annotation_colour, index_annotation_size = index_annotation_size, index_annotation_interval = index_annotation_interval, index_annotations_above = index_annotations_above, index_annotation_vertical_position = index_annotation_vertical_position, index_annotation_full_line = index_annotation_full_line, outline_linewidth = outline_linewidth, outline_colour = outline_colour, outline_join = outline_join, modified_bases_outline_linewidth = modified_bases_outline_linewidth, modified_bases_outline_colour = modified_bases_outline_colour, modified_bases_outline_join = modified_bases_outline_join, other_bases_outline_linewidth = other_bases_outline_linewidth, other_bases_outline_colour = other_bases_outline_colour, other_bases_outline_join = other_bases_outline_join, margin = margin, return = return, filename = filename, pixels_per_base = pixels_per_base)
     for (argument in names(not_null)) {
         if (any(is.null(not_null[[argument]]))) {bad_arg(argument, not_null, "must not be NULL.")}
     }
     not_null <- NULL
 
-    length_1 <- list(background_colour = background_colour, other_bases_colour = other_bases_colour, low_colour = low_colour, high_colour = high_colour, low_clamp = low_clamp, high_clamp = high_clamp, index_annotation_colour = index_annotation_colour, index_annotation_size = index_annotation_size, index_annotation_interval = index_annotation_interval, index_annotations_above = index_annotations_above, index_annotation_vertical_position = index_annotation_vertical_position, index_annotation_full_line = index_annotation_full_line, outline_linewidth = outline_linewidth, outline_colour = outline_colour, outline_join = outline_join, modified_bases_outline_linewidth = modified_bases_outline_linewidth, modified_bases_outline_colour = modified_bases_outline_colour, modified_bases_outline_join = modified_bases_outline_join, other_bases_outline_linewidth = other_bases_outline_linewidth, other_bases_outline_colour = other_bases_outline_colour, other_bases_outline_join = other_bases_outline_join, margin = margin, return = return, filename = filename, pixels_per_base = pixels_per_base)
+    length_1 <- list(background_colour = background_colour, other_bases_colour = other_bases_colour, low_colour = low_colour, high_colour = high_colour, low_clamp = low_clamp, high_clamp = high_clamp,sequence_text_type = sequence_text_type, sequence_text_rounding = sequence_text_rounding, sequence_text_colour = sequence_text_colour, sequence_text_size = sequence_text_size, index_annotation_colour = index_annotation_colour, index_annotation_size = index_annotation_size, index_annotation_interval = index_annotation_interval, index_annotations_above = index_annotations_above, index_annotation_vertical_position = index_annotation_vertical_position, index_annotation_full_line = index_annotation_full_line, outline_linewidth = outline_linewidth, outline_colour = outline_colour, outline_join = outline_join, modified_bases_outline_linewidth = modified_bases_outline_linewidth, modified_bases_outline_colour = modified_bases_outline_colour, modified_bases_outline_join = modified_bases_outline_join, other_bases_outline_linewidth = other_bases_outline_linewidth, other_bases_outline_colour = other_bases_outline_colour, other_bases_outline_join = other_bases_outline_join, margin = margin, return = return, filename = filename, pixels_per_base = pixels_per_base)
     for (argument in names(length_1)) {
         if (length(length_1[[argument]]) != 1) {bad_arg(argument, length_1, "must have length 1.")}
     }
     length_1 <- NULL
 
-    not_na <- list(modification_locations = modification_locations, modification_probabilities = modification_probabilities, sequence_lengths = sequence_lengths, background_colour = background_colour, other_bases_colour = other_bases_colour, low_colour = low_colour, high_colour = high_colour, low_clamp = low_clamp, high_clamp = high_clamp, index_annotation_colour = index_annotation_colour, index_annotation_size = index_annotation_size, index_annotation_interval = index_annotation_interval, index_annotations_above = index_annotations_above, index_annotation_vertical_position = index_annotation_vertical_position, index_annotation_full_line = index_annotation_full_line, margin = margin, return = return, pixels_per_base = pixels_per_base)
+    not_na <- list(modification_locations = modification_locations, modification_probabilities = modification_probabilities, sequence = sequences, background_colour = background_colour, other_bases_colour = other_bases_colour, low_colour = low_colour, high_colour = high_colour, low_clamp = low_clamp, high_clamp = high_clamp, sequence_text_type = sequence_text_type, sequence_text_rounding = sequence_text_rounding, sequence_text_colour = sequence_text_colour, sequence_text_size = sequence_text_size, index_annotation_colour = index_annotation_colour, index_annotation_size = index_annotation_size, index_annotation_interval = index_annotation_interval, index_annotations_above = index_annotations_above, index_annotation_vertical_position = index_annotation_vertical_position, index_annotation_full_line = index_annotation_full_line, margin = margin, return = return, pixels_per_base = pixels_per_base)
     for (argument in names(not_na)) {
         if (any(is.na(not_na[[argument]]))) {bad_arg(argument, not_na, "must not be NA.")}
     }
     not_na <- NULL
 
-    single_char <- list(background_colour = background_colour, other_bases_colour = other_bases_colour, index_annotation_colour = index_annotation_colour, low_colour = low_colour, high_colour = high_colour, outline_colour = outline_colour, modified_bases_outline_colour = modified_bases_outline_colour, other_bases_outline_colour = other_bases_outline_colour)
+    single_char <- list(background_colour = background_colour, other_bases_colour = other_bases_colour, sequence_text_colour = sequence_text_colour, index_annotation_colour = index_annotation_colour, low_colour = low_colour, high_colour = high_colour, outline_colour = outline_colour, modified_bases_outline_colour = modified_bases_outline_colour, other_bases_outline_colour = other_bases_outline_colour)
     for (argument in names(single_char)) {
         if (!is.na(single_char[[argument]]) && (!is.character(single_char[[argument]]) || length(single_char[[argument]]) != 1)) {bad_arg(argument, single_char, "must be a single character value, and a valid colour name or hexcode.")}
     }
@@ -171,7 +179,7 @@ visualise_methylation <- function(
         index_annotation_lines <- integer(0)
     }
 
-    single_num <- list(low_clamp = low_clamp, high_clamp = high_clamp, margin = margin, index_annotation_size = index_annotation_size, index_annotation_interval = index_annotation_interval, index_annotation_vertical_position = index_annotation_vertical_position, pixels_per_base = pixels_per_base, outline_linewidth = outline_linewidth, modified_bases_outline_linewidth = modified_bases_outline_linewidth, other_bases_outline_linewidth = other_bases_outline_linewidth)
+    single_num <- list(low_clamp = low_clamp, high_clamp = high_clamp, margin = margin, sequence_text_rounding = sequence_text_rounding, sequence_text_size = sequence_text_size, index_annotation_size = index_annotation_size, index_annotation_interval = index_annotation_interval, index_annotation_vertical_position = index_annotation_vertical_position, pixels_per_base = pixels_per_base, outline_linewidth = outline_linewidth, modified_bases_outline_linewidth = modified_bases_outline_linewidth, other_bases_outline_linewidth = other_bases_outline_linewidth)
     for (argument in names(single_num)) {
         if (!is.na(single_num[[argument]]) && (!is.numeric(single_num[[argument]]) || length(single_num[[argument]]) != 1)) {bad_arg(argument, single_num, "must be a single numeric value.")}
     }
@@ -183,13 +191,13 @@ visualise_methylation <- function(
     }
     pos_int <- NULL
 
-    non_neg_int <- list(index_annotation_interval = index_annotation_interval)
+    non_neg_int <- list(index_annotation_interval = index_annotation_interval, sequence_text_rounding = sequence_text_rounding)
     for (argument in names(non_neg_int)) {
         if (!is.numeric(non_neg_int[[argument]]) || any(non_neg_int[[argument]] %% 1 != 0) || any(non_neg_int[[argument]] < 0)) {bad_arg(argument, non_neg_int, "must be a non-negative integer.")}
     }
     non_neg_int <- NULL
 
-    non_neg_num <- list(index_annotation_size = index_annotation_size, index_annotation_vertical_position = index_annotation_vertical_position)
+    non_neg_num <- list(index_annotation_size = index_annotation_size, index_annotation_vertical_position = index_annotation_vertical_position, sequence_text_size = sequence_text_size)
     for (argument in names(non_neg_num)) {
         if (!is.numeric(non_neg_num[[argument]]) || any(non_neg_num[[argument]] < 0)) {bad_arg(argument, non_neg_num, "must be a non-negative number.")}
     }
@@ -202,9 +210,9 @@ visualise_methylation <- function(
     bool <- NULL
 
     if (length(modification_locations) != length(modification_probabilities) ||
-        length(modification_locations) != length(sequence_lengths) ||
-        length(modification_probabilities) != length(sequence_lengths)) {
-        abort(paste("Modification locations, modification probabilities, and sequence lengths must all be the same length.\n'modification_locations' length:", length(modification_locations), "\n'modification_probabilities' length:", length(modification_probabilities), "\n'sequence_lengths' length:", length(sequence_lengths)), class = "argument_value_or_type")
+        length(modification_locations) != length(sequences) ||
+        length(modification_probabilities) != length(sequences)) {
+        abort(paste("Modification locations, modification probabilities, and sequences must all be the same length.\n'modification_locations' length:", length(modification_locations), "\n'modification_probabilities' length:", length(modification_probabilities), "\n'sequences' length:", length(sequences)), class = "argument_value_or_type")
     }
 
     string_to_vector_valid <- list(modification_locations = modification_locations, modification_probabilities = modification_probabilities)
@@ -214,10 +222,12 @@ visualise_methylation <- function(
     }
     string_to_vector_valid <- NULL
 
-    numeric_vector <- list(sequence_lengths = sequence_lengths)
-    for (argument in names(numeric_vector)) {
-        if (!is.numeric(numeric_vector[[argument]])) {bad_arg(argument, numeric_vector, "must be numeric.")}
+    valid_seq <- list(sequences = sequences)
+    for (argument in names(valid_seq)) {
+        if (!is.character(valid_seq[[argument]])) {bad_arg(argument, valid_seq, "must be a character vector.")}
+        if (any(!(toupper(strsplit(paste(sequences, collapse = ""), "")[[1]]) %in% c("A", "C", "G", "T", "U")))) {bad_arg(argument, valid_seq, "must consist only of A/C/G/T/U.")}
     }
+    valid_seq <- NULL
 
     ## Overwrite outline parameters if needed
     if (is.na(modified_bases_outline_colour))    {modified_bases_outline_colour    <- outline_colour}
@@ -238,6 +248,13 @@ visualise_methylation <- function(
             abort(paste("All outline join arguments must be one of 'mitre', 'round', or 'bevel'.\nCurrent value(s):", paste(unique(c(modified_bases_outline_join, other_bases_outline_join)), collapse = ", ")), class = "argument_value_or_type")
         }
     }
+
+    ## Make sequence_text_type all lowercase
+    sequence_text_type <- tolower(sequence_text_type)
+    if (!(sequence_text_type %in% c("sequence", "raw_probability", "scaled_probability", "none"))) {
+        bad_arg("sequence_text_type", list(sequence_text_type = sequence_text_type), "must be one of 'sequence', 'raw_probability', 'scaled_probability', or 'none'.")
+    }
+
     ## Warn about margin
     if (margin <= 0.25 && (modified_bases_outline_linewidth > 0 || other_bases_outline_linewidth > 0)) {
         warn(paste("If margin is small and outlines are on (outline_linewidth > 0), outlines may be cut off at the edges of the plot. Check if this is happening and consider using a bigger margin.\nCurrent margin:", margin), class = "parameter_recommendation")
@@ -251,10 +268,10 @@ visualise_methylation <- function(
 
     ## Automatically turn off annotations if size or interval is set to 0.
     if (index_annotation_interval == 0 && length(index_annotation_lines) > 0 ) {
-        cli_alert_info("Automatically emptying index_annotation_lines as index_annotation_interval is 0", class = "turn_off_annotations_by_other_argument")
+        cli_alert_info("Automatically emptying index_annotation_lines as index_annotation_interval is 0.", class = "turn_off_annotations_by_other_argument")
         index_annotation_lines <- integer(0)
     } else if (index_annotation_size == 0 && length(index_annotation_lines) > 0 ) {
-        cli_alert_info("Automatically emptying index_annotation_lines as index_annotation_size is 0", class = "turn_off_annotations_by_other_argument")
+        cli_alert_info("Automatically emptying index_annotation_lines as index_annotation_size is 0.", class = "turn_off_annotations_by_other_argument")
         index_annotation_lines <- integer(0)
     }
 
@@ -269,32 +286,36 @@ visualise_methylation <- function(
         cli_alert_info(paste0("Automatically making index_annotation_lines unique.\nBefore: ", paste(index_annotation_lines, collapse = ", "), "\nAfter: ", paste(unique_index_annotation_lines, collapse = ", ")), class = "sanitising_index_annotation_lines")
         index_annotation_lines <- unique_index_annotation_lines
     }
+
+    ## Automatically turn off sequences if size is 0
+    if (sequence_text_size == 0 && sequence_text_type != "none") {
+        cli_alert_info("Automatically setting sequence_text_type to 'none' as sequence_text_size is 0.")
+        sequence_text_type <- "none"
+    }
     ## ---------------------------------------------------------------------
+
+
+
 
     ## Set up original vectors, so I can then modify the ones with the direct argument names
     modification_locations_original     <- modification_locations
     modification_probabilities_original <- modification_probabilities
-    sequence_lengths_original           <- sequence_lengths
+    sequences_original <- sequences
 
     ## Insert blanks as required
     modification_locations <- insert_at_indices(modification_locations_original,     index_annotation_lines, insert_before = index_annotations_above, insert = "", vert = index_annotation_vertical_position)
     suppressWarnings({ ## suppress duplicate warnings about out-of-range indices
         modification_probabilities <- insert_at_indices(modification_probabilities_original, index_annotation_lines, insert_before = index_annotations_above, insert = "", vert = index_annotation_vertical_position)
-        sequence_lengths <- insert_at_indices(sequence_lengths_original, index_annotation_lines, insert_before = index_annotations_above, insert = 0, vert = index_annotation_vertical_position)
+        sequences <- insert_at_indices(sequences_original, index_annotation_lines, insert_before = index_annotations_above, insert = "", vert = index_annotation_vertical_position)
     }, classes = "length_exceeded")
-
-    ## Placeholder until I implement sequence display
-    fake_sequences_for_lengths <- sapply(sequence_lengths, function(x) {paste(rep("X", x), collapse = "")})
-    ## 1st argument needs to be a blank-inserted vector with the correct nchar for each entry
-    ## 2nd argument needs to be a pre-insertion vector of the correct length but isn't otherwise used (so can pass one of the other originals)
-    index_annotation_data <- create_many_sequence_index_annotations(fake_sequences_for_lengths, modification_locations_original, index_annotation_lines, index_annotation_interval, index_annotation_full_line, index_annotations_above, index_annotation_vertical_position)
+    index_annotation_data <- create_many_sequence_index_annotations(sequences, sequences_original, index_annotation_lines, index_annotation_interval, index_annotation_full_line, index_annotations_above, index_annotation_vertical_position)
 
 
     ## Generate rasterised dataframes of methylation and masking layer
-    max_length <- max(sequence_lengths)
+    max_length <- max(nchar(sequences))
     image_matrix <- matrix(NA, nrow = length(modification_locations), ncol = max_length)
     for (i in 1:length(modification_locations)) {
-        numeric_sequence_representation <- convert_modification_to_number_vector(modification_locations[i], modification_probabilities[i], max_length, sequence_lengths[i])
+        numeric_sequence_representation <- convert_modification_to_number_vector(modification_locations[i], modification_probabilities[i], max_length, nchar(sequences[i]))
         image_matrix[i, ] <- numeric_sequence_representation
     }
     image_data <- rasterise_matrix(image_matrix)
@@ -302,8 +323,8 @@ visualise_methylation <- function(
     ## Transform image data if clamping limits are set
     image_data$clamped_layer <- pmin(pmax(image_data$layer, low_clamp), high_clamp)
 
-    tile_width  <- 1/max(sequence_lengths)
-    tile_height <- 1/length(sequence_lengths)
+    tile_width  <- 1/max(nchar(sequences))
+    tile_height <- 1/length(sequences)
 
 
     ## Make methylation visualisation plot
@@ -357,7 +378,7 @@ visualise_methylation <- function(
         if (tolower(substr(filename, nchar(filename)-3, nchar(filename))) != ".png") {
             warn("Not recommended to use non-png filetype (but may still work).", class = "filetype_recommendation")
         }
-        ggsave(filename, plot = result, dpi = pixels_per_base, device = render_device, width = max(sequence_lengths)+(2*margin), height = length(sequence_lengths)+extra_height, limitsize = FALSE)
+        ggsave(filename, plot = result, dpi = pixels_per_base, device = render_device, width = max(nchar(sequences))+(2*margin), height = length(sequences)+extra_height, limitsize = FALSE)
     }
 
     ## Return either the plot object or NULL
@@ -536,20 +557,21 @@ visualise_methylation_colour_scale <- function(
 #' In the locations and probabilities column, each sequence (row) has many numbers associated.
 #' These are stored as one string per observation e.g. `"3,6,9,12"`, with the column representing
 #' a character vector of such strings (e.g. `c("3,6,9,12", "1,2,3,4")`).\cr\cr
-#' This function calls [extract_and_sort_sequences()] on each of these three columns and returns
-#' a list of vectors stored in `$locations`, `$probabilities`, and `$lengths`.
+#' This function calls [extract_and_sort_sequences()] on the relevant columns and returns
+#' a list of vectors stored in `$locations`, `$probabilities`, `$sequences`, and `$lengths`.
 #' These can then be used as input for [visualise_methylation()]. \cr\cr
 #' Default arguments are set up to work with the included [`example_many_sequences`] data.
 #'
 #' @param modification_data `dataframe`. A dataframe that must contain columns for methylation locations, methylation probabilities, and sequence length for each read. The former two should be condensed strings as produced by [vector_to_string()] e.g. `"1,2,3,4"`. The latter should be integer.\cr\cr See [`example_many_sequences`] for an example of a compatible dataframe.
 #' @param locations_colname `character`. The name of the column within the input dataframe that contains methylation/modification location information. Defaults to `"methylation_locations"`.\cr\cr Values within this column must be a comma-separated string representing a condensed numerical vector (e.g. `"3,6,9,12"`, produced via [vector_to_string()]) of the indices along the read at which modification was assessed. Indexing starts at 1.
 #' @param probabilities_colname `character`. The name of the column within the input dataframe that contains methylation/modification probability information. Defaults to `"methylation_probabilities"`.\cr\cr Values within this column must be a comma-separated string representing a condensed numerical vector (e.g. `"2,212,128,64"`, produced via [vector_to_string()]) of the probability of modification as an 8-bit (0-255) integer for each base where modification was assessed.
+#' @param sequences_colname `character`. The name of the column within the input dataframe that contains the actual sequences. Defaults to `"sequence"`.\cr\cr Values within this column must be the actual sequences (e.g. `"GGCGGA"`).
 #' @param lengths_colname `character`. The name of the column within the input dataframe that contains the length of each sequence. Defaults to `"sequence_length"`.\cr\cr Values within this column must be non-negative integers.
 #' @param grouping_levels `named character vector`. What variables should be used to define the groups/chunks, and how large a gap should be left between groups at that level. Set to `NA` to turn off grouping.\cr\cr Defaults to `c("family" = 8, "individual" = 2)`, meaning the highest-level groups are defined by the `family` column, and there is a gap of 8 between each family. Likewise the second-level groups (within each family) are defined by the `individual` column, and there is a gap of 2 between each individual.\cr\cr Any number of grouping variables and gaps can be given, as long as each grouping variable is a column within the dataframe. It is recommended that lower-level groups are more granular and subdivide higher-level groups (e.g. first divide into families, then into individuals within families). \cr\cr To change the order of groups within a level, make that column a factor with the order specified e.g. `example_many_sequences$family <- factor(example_many_sequences$family, levels = c("Family 2", "Family 3", "Family 1"))` to change the order to Family 2, Family 3, Family 1.
 #' @param sort_by `character`. The name of the column within the dataframe that should be used to sort/order the rows within each lowest-level group. Set to `NA` to turn off sorting within groups.\cr\cr Recommended to be the length of the sequence information, as is the case for the default `"sequence_length"` which was generated via `example_many_sequences$sequence_legnth <- nchar(example_many_sequences$sequence)`.
 #' @param desc_sort `logical`. Boolean specifying whether rows within groups should be sorted by the `sort_by` variable descending (`TRUE`, default) or ascending (`FALSE`).
 #'
-#' @return `list`, containing `$locations` (`character vector`), `$probabilities` (`character vector`), and `$lengths` (`numeric vector`).
+#' @return `list`, containing `$locations` (`character vector`), `$probabilities` (`character vector`), `$sequences` (`character vector`), and `$lengths` (`integer vector`).
 #'
 #' @examples
 #' ## See documentation for extract_and_sort_sequences()
@@ -579,6 +601,7 @@ extract_methylation_from_dataframe <- function(
     modification_data,
     locations_colname = "methylation_locations",
     probabilities_colname = "methylation_probabilities",
+    sequences_colname = "sequence",
     lengths_colname = "sequence_length",
     grouping_levels = c("family" = 8, "individual" = 2),
     sort_by = "sequence_length",
@@ -590,11 +613,13 @@ extract_methylation_from_dataframe <- function(
                                             grouping_levels = grouping_levels, sort_by = sort_by, desc_sort = desc_sort)
     probabilities <- extract_and_sort_sequences(modification_data, sequence_variable = probabilities_colname,
                                                 grouping_levels = grouping_levels, sort_by = sort_by, desc_sort = desc_sort)
+    sequences <- extract_and_sort_sequences(modification_data, sequence_variable = sequences_colname,
+                                            grouping_levels = grouping_levels, sort_by = sort_by, desc_sort = desc_sort)
     lengths <- extract_and_sort_sequences(modification_data, sequence_variable = lengths_colname,
                                           grouping_levels = grouping_levels, sort_by = sort_by, desc_sort = desc_sort) %>%
         as.numeric() %>% replace_na(0)
 
-    output <- list(locations = locations, probabilities = probabilities, lengths = lengths)
+    output <- list(locations = locations, probabilities = probabilities, sequences = sequences, lengths = lengths)
     return(output)
 }
 

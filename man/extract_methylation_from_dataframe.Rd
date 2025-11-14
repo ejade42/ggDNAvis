@@ -8,6 +8,7 @@ extract_methylation_from_dataframe(
   modification_data,
   locations_colname = "methylation_locations",
   probabilities_colname = "methylation_probabilities",
+  sequences_colname = "sequence",
   lengths_colname = "sequence_length",
   grouping_levels = c(family = 8, individual = 2),
   sort_by = "sequence_length",
@@ -21,6 +22,8 @@ extract_methylation_from_dataframe(
 
 \item{probabilities_colname}{\code{character}. The name of the column within the input dataframe that contains methylation/modification probability information. Defaults to \code{"methylation_probabilities"}.\cr\cr Values within this column must be a comma-separated string representing a condensed numerical vector (e.g. \code{"2,212,128,64"}, produced via \code{\link[=vector_to_string]{vector_to_string()}}) of the probability of modification as an 8-bit (0-255) integer for each base where modification was assessed.}
 
+\item{sequences_colname}{\code{character}. The name of the column within the input dataframe that contains the actual sequences. Defaults to \code{"sequence"}.\cr\cr Values within this column must be the actual sequences (e.g. \code{"GGCGGA"}).}
+
 \item{lengths_colname}{\code{character}. The name of the column within the input dataframe that contains the length of each sequence. Defaults to \code{"sequence_length"}.\cr\cr Values within this column must be non-negative integers.}
 
 \item{grouping_levels}{\verb{named character vector}. What variables should be used to define the groups/chunks, and how large a gap should be left between groups at that level. Set to \code{NA} to turn off grouping.\cr\cr Defaults to \code{c("family" = 8, "individual" = 2)}, meaning the highest-level groups are defined by the \code{family} column, and there is a gap of 8 between each family. Likewise the second-level groups (within each family) are defined by the \code{individual} column, and there is a gap of 2 between each individual.\cr\cr Any number of grouping variables and gaps can be given, as long as each grouping variable is a column within the dataframe. It is recommended that lower-level groups are more granular and subdivide higher-level groups (e.g. first divide into families, then into individuals within families). \cr\cr To change the order of groups within a level, make that column a factor with the order specified e.g. \code{example_many_sequences$family <- factor(example_many_sequences$family, levels = c("Family 2", "Family 3", "Family 1"))} to change the order to Family 2, Family 3, Family 1.}
@@ -30,7 +33,7 @@ extract_methylation_from_dataframe(
 \item{desc_sort}{\code{logical}. Boolean specifying whether rows within groups should be sorted by the \code{sort_by} variable descending (\code{TRUE}, default) or ascending (\code{FALSE}).}
 }
 \value{
-\code{list}, containing \verb{$locations} (\verb{character vector}), \verb{$probabilities} (\verb{character vector}), and \verb{$lengths} (\verb{numeric vector}).
+\code{list}, containing \verb{$locations} (\verb{character vector}), \verb{$probabilities} (\verb{character vector}), \verb{$sequences} (\verb{character vector}), and \verb{$lengths} (\verb{integer vector}).
 }
 \description{
 This function takes a dataframe that contains methylation information in the form of
@@ -41,8 +44,8 @@ Each observation/row in the dataframe represents one sequence (e.g. a Nanopore r
 In the locations and probabilities column, each sequence (row) has many numbers associated.
 These are stored as one string per observation e.g. \code{"3,6,9,12"}, with the column representing
 a character vector of such strings (e.g. \code{c("3,6,9,12", "1,2,3,4")}).\cr\cr
-This function calls \code{\link[=extract_and_sort_sequences]{extract_and_sort_sequences()}} on each of these three columns and returns
-a list of vectors stored in \verb{$locations}, \verb{$probabilities}, and \verb{$lengths}.
+This function calls \code{\link[=extract_and_sort_sequences]{extract_and_sort_sequences()}} on the relevant columns and returns
+a list of vectors stored in \verb{$locations}, \verb{$probabilities}, \verb{$sequences}, and \verb{$lengths}.
 These can then be used as input for \code{\link[=visualise_methylation]{visualise_methylation()}}. \cr\cr
 Default arguments are set up to work with the included \code{\link{example_many_sequences}} data.
 }

@@ -7,13 +7,17 @@
 visualise_methylation(
   modification_locations,
   modification_probabilities,
-  sequence_lengths,
+  sequences,
   low_colour = "blue",
   high_colour = "red",
   low_clamp = 0,
   high_clamp = 255,
   background_colour = "white",
   other_bases_colour = "grey",
+  sequence_text_type = "none",
+  sequence_text_rounding = 2,
+  sequence_text_colour = "black",
+  sequence_text_size = 16,
   index_annotation_lines = c(1),
   index_annotation_colour = "darkred",
   index_annotation_size = 12.5,
@@ -34,7 +38,7 @@ visualise_methylation(
   return = TRUE,
   filename = NA,
   render_device = ragg::agg_png,
-  pixels_per_base = 20
+  pixels_per_base = 100
 )
 }
 \arguments{
@@ -42,7 +46,7 @@ visualise_methylation(
 
 \item{modification_probabilities}{\verb{character vector}. One character value for each sequence, storing a condensed string (e.g. \code{"0,128,255,15"}, produced via \code{\link[=vector_to_string]{vector_to_string()}}) of the probability of methylation/modification at each assessed base.\cr\cr Assumed to be Nanopore > SAM style modification stored as an 8-bit integer from 0 to 255, but changing other arguments could make this work on other scales.}
 
-\item{sequence_lengths}{\verb{numeric vector}. The length of each sequence.}
+\item{sequences}{\verb{character vector}. One character value for each sequence, storing the actual DNA sequence.}
 
 \item{low_colour}{\code{character}. The colour that should be used to represent minimum probability of methylation/modification (defaults to blue).}
 
@@ -55,6 +59,14 @@ visualise_methylation(
 \item{background_colour}{\code{character}. The colour the background should be drawn (defaults to white).}
 
 \item{other_bases_colour}{\code{character}. The colour non-assessed (e.g. non-CpG) bases should be drawn (defaults to grey).}
+
+\item{sequence_text_type}{\code{character}. What type of text should be drawn in the boxes. One of \code{"sequence"} (to draw the base sequence in the boxes, similar to \code{\link[=visualise_many_sequences]{visualise_many_sequences()}}), \code{"raw_probability"} (to draw the original probabilities passed in, presumably 8-bit integer scores), \code{"scaled_probability"} (to draw the probabilities scaled to 0-1), or \code{"none"} (to draw the boxes only, no text).}
+
+\item{sequence_text_rounding}{\code{integer}. How many decimal places the text drawn in the boxes should be rounded to (defaults to \code{2}). Ignored if \code{sequence_text_type} is \code{"sequence"} or \code{"none"}.}
+
+\item{sequence_text_colour}{\code{character}. The colour of the text within the bases (e.g. colour of "A" letter within boxes representing adenosine bases). Defaults to black.}
+
+\item{sequence_text_size}{\code{numeric}. The size of the text within the bases (e.g. size of "A" letter within boxes representing adenosine bases). Defaults to \code{16}. Set to \code{0} to hide sequence text (show box colours only).}
 
 \item{index_annotation_lines}{\verb{integer vector}. The lines (i.e. elements of \code{sequences_vector}) that should have their base incides annotated. 1-indexed e.g. \code{c(1, 10)} would annotate the first and tenth elements of \code{sequences_vector}.\cr\cr Extra lines are inserted above or below (depending on \code{index_annotations_above}) the selected lines - note that the line numbers come from \code{sequences_vector}, so are unaffected by these insertions.\cr\cr Setting to \code{NA} disables index annotations (and prevents adding additional blank lines). Defaults to \code{c(1)} i.e. first sequence is annotated.}
 

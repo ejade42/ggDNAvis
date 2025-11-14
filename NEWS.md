@@ -8,6 +8,8 @@ New features:
 
 User-facing changes:
 
+* Changed `extract_methylation_from_dataframe()` to now return a list of 4 vectors instead of 3, with `sequences` added. `sequence_lengths` is still returned just in case it's useful for anything, but it is no longer used in `visualise_methylation()` which now takes the sequences directly rather than their lengths.
+
 * Removed warning for "incorrectly" removing index annotations. Now setting any relevant argument to 0/empty (e.g. `index_annotation_size = 0`, `index_annotation_interval = 0`, `index_annotation_lines = numeric(0)`) will automatically change the "main" one to remove annotations.
 
 Background changes:
@@ -15,6 +17,8 @@ Background changes:
 * Added new helper functions: `insert_at_indices()` and `create_many_sequence_index_annotations()`
 
 * Starting changing all argument validation to use `bad_arg()` rather than copy pasting.
+
+* Enforced version requirement for ggplot2 (>= 4.0.0)
 
 # ggDNAvis 0.3.2
 
