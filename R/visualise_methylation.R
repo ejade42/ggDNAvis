@@ -31,8 +31,8 @@
 #' @param high_clamp `numeric`. The maximum probability above which all values are coloured `high_colour`. Defaults to `255` (i.e. no clamping, assuming Nanopore > SAM style modification calling where probabilities are 8-bit integers from 0 to 255).
 #' @param background_colour `character`. The colour the background should be drawn (defaults to white).
 #' @param other_bases_colour `character`. The colour non-assessed (e.g. non-CpG) bases should be drawn (defaults to grey).
-#' @param sequence_text_type `character`. What type of text should be drawn in the boxes. One of `"sequence"` (to draw the base sequence in the boxes, similar to [visualise_many_sequences()]), `"probability"` (to draw the numerical probability of methylation in each assessed box, optionally scaled via `sequence_text_scaling`), or `"none"` (to draw the boxes only, no text).
-#' @param sequence_text_scaling `numeric vector, length 2`. The min and max possible probability values, used to facilitate scaling of the text in each to 0-1. Scaling is implemented as \eqn{\frac{p - min}{max}}, so custom scalings (e.g. scaled to 0-9 space) can be implemented by setting this values as required.\cr\cr Set to `c(0, 1)` to not scale at all i.e. print the raw integer probability values.\cr\cr Set to `c(0, 255)` to scale 8-bit integer probabilities such that 0 corresponds to 0% and 255 corresponds to 100%. This is **not recommended** for most scenarios as it does not accurately reflect the uncertainties associated with each probability (see immediately below). \cr\cr Set to `c(-0.5, 256)` (default, results in \eqn{\frac{p+0.5}{256}}) to scale to the centre of the probability spaces defined by the SAMtools spec, where integer \eqn{p} represents the probability space from \eqn{\frac{p}{256}} to \eqn{\frac{p+1}{256}}. This is slightly better at representing the uncertainty compared to `c(0, 255)` as strictly speaking `0` represents the probability space from 0.000 to 0.004 and `255` represents the probability space from 0.996 to 1.000, so scaling them to 0.002 and 0.998 respectively is a more accurate representation of the probability space they each represent.
+#' @param sequence_text_type `character`. What type of text should be drawn in the boxes. One of `"sequence"` (to draw the base sequence in the boxes, similar to [visualise_many_sequences()]), `"probability"` (to draw the numerical probability of methylation in each assessed box, optionally scaled via `sequence_text_scaling`), or `"none"` (default, to draw the boxes only with no text).
+#' @param sequence_text_scaling `numeric vector, length 2`. The min and max possible probability values, used to facilitate scaling of the text in each to 0-1. Scaling is implemented as \eqn{\frac{p - min}{max}}, so custom scalings (e.g. scaled to 0-9 space) can be implemented by setting this values as required.\cr\cr Set to `c(0, 1)` to not scale at all i.e. print the raw integer probability values. It is recommended to also set `sequence_text_rounding = 0` to print integers as the default value of `2` will result in e.g. `"128.00"`. \cr\cr Set to `c(-0.5, 256)` (default, results in \eqn{\frac{p+0.5}{256}}) to scale to the centre of the probability spaces defined by the SAMtools spec, where integer \eqn{p} represents the probability space from \eqn{\frac{p}{256}} to \eqn{\frac{p+1}{256}}. This is slightly better at representing the uncertainty compared to `c(0, 255)` as strictly speaking `0` represents the probability space from 0.000 to 0.004 and `255` represents the probability space from 0.996 to 1.000, so scaling them to 0.002 and 0.998 respectively is a more accurate representation of the probability space they each represent. Setting `c(0, 255)` would scale such that 0 is exactly 0.000 and 255 is exactly 1.000, which is not as accurate so it discouraged.
 #' @param sequence_text_rounding `integer`. How many decimal places the text drawn in the boxes should be rounded to (defaults to `2`). Ignored if `sequence_text_type` is `"sequence"` or `"none"`.
 #' @param sequence_text_colour `character`. The colour of the text within the bases (e.g. colour of "A" letter within boxes representing adenosine bases). Defaults to black.
 #' @param sequence_text_size `numeric`. The size of the text within the bases (e.g. size of "A" letter within boxes representing adenosine bases). Defaults to `16`. Set to `0` to hide sequence text (show box colours only).
@@ -254,7 +254,7 @@ visualise_methylation <- function(
     ## Make sequence_text_type all lowercase, then check it is a valid option
     sequence_text_type <- tolower(sequence_text_type)
     if (!is.character(sequence_text_type) || !(sequence_text_type %in% c("sequence", "probability", "none"))) {
-        bad_arg("sequence_text_type", list(sequence_text_type = sequence_text_type), "must be one of 'sequence', 'raw_probability', 'scaled_probability', or 'none'.")
+        bad_arg("sequence_text_type", list(sequence_text_type = sequence_text_type), "must be one of 'sequence', 'probability', or 'none'.")
     }
 
     scaling_list <- list(sequence_text_scaling = sequence_text_scaling)
@@ -305,6 +305,11 @@ visualise_methylation <- function(
         cli_alert_info("Automatically setting sequence_text_type to 'none' as sequence_text_size is 0.")
         sequence_text_type <- "none"
     }
+
+    ## Warn about showing probabilities if text size is too large
+    if (sequence_text_type == "probability" && sequence_text_size == 16) {
+        warn("The default sequence_text_size of 16 is likely to be too large for displaying probabilities.\nConsider setting sequence_text_size to a smaller value e.g. 10.", class = "default_text_too_large_for_prob")
+    }
     ## ---------------------------------------------------------------------
 
 
@@ -345,25 +350,25 @@ visualise_methylation <- function(
     if (sequence_text_type == "sequence") {
         sequence_text_data <- convert_sequences_to_annotations(sequences, line_length = max(nchar(sequences)), interval = 0)
     } else if (sequence_text_type == "probability") {
-        annotation_data <- data.frame("x_position" = numeric(), "y_position" = numeric(), "annotation" = character(), "type" = character())
+        probability_data <- data.frame("x_position" = numeric(), "y_position" = numeric(), "annotation" = character(), "type" = character())
         for (i in 1:length(modification_locations)) {
             locations <- string_to_vector(modification_locations[i])
             probabilities <- string_to_vector(modification_probabilities[i])
 
             min <- sequence_text_scaling[1]
             max <- sequence_text_scaling[2]
-            scaled_probabilities <- round((probabilities - min) / max, sequence_text_rounding)
+            scaled_probabilities <- (probabilities - min) / max
 
-            for (j in 1:length(locations)) {
-                x_position <- tile_width * (locations[j] - 1/2)
-                y_position <- 1 - tile_height * (i - 1/2)
-                annotation <- as.character(scaled_probabilities[j])
-                type <- "Probability"
-                annotation_data <- rbind(annotation_data, list(x_position, y_position, annotation, type))
+            if (length(locations) > 0) {
+                for (j in 1:length(locations)) {
+                    x_position <- tile_width * (locations[j] - 1/2)
+                    y_position <- 1 - tile_height * (i - 1/2)
+                    annotation <- sprintf(paste0("%.", sequence_text_rounding, "f"), (scaled_probabilities[j]))
+                    type <- "Probability"
+                    probability_data <- rbind(probability_data, data.frame(x_position, y_position, annotation, type))
+                }
             }
         }
-    } else if (sequence_text_type == "scaled_probability") {
-        pass <- ""
     }
 
 
@@ -392,10 +397,14 @@ visualise_methylation <- function(
         theme(plot.background = element_rect(fill = background_colour, colour = NA),
               axis.title = element_blank())
 
-    ## Add sequence text if desired
+    ## Add sequence text or probability labels if desired
     if (sequence_text_type == "sequence") {
         result <- result +
             geom_text(data = sequence_text_data, aes(x = .data$x_position, y = .data$y_position, label = .data$annotation), col = sequence_text_colour, size = sequence_text_size, fontface = "bold", inherit.aes = F) +
+            guides(col = "none", size = "none")
+    } else if (sequence_text_type == "probability") {
+        result <- result +
+            geom_text(data = probability_data, aes(x = .data$x_position, y = .data$y_position, label = .data$annotation), col = sequence_text_colour, size = sequence_text_size, fontface = "bold", inherit.aes = F) +
             guides(col = "none", size = "none")
     }
 
