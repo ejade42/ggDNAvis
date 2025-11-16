@@ -140,7 +140,7 @@ visualise_methylation(
   [`visualise_many_sequences()`](https://ejade42.github.io/ggDNAvis/reference/visualise_many_sequences.md)),
   `"probability"` (to draw the numerical probability of methylation in
   each assessed box, optionally scaled via `sequence_text_scaling`), or
-  `"none"` (to draw the boxes only, no text).
+  `"none"` (default, to draw the boxes only with no text).
 
 - sequence_text_scaling:
 
@@ -151,13 +151,9 @@ visualise_methylation(
   required.  
     
   Set to `c(0, 1)` to not scale at all i.e. print the raw integer
-  probability values.  
-    
-  Set to `c(0, 255)` to scale 8-bit integer probabilities such that 0
-  corresponds to 0% and 255 corresponds to 100%. This is **not
-  recommended** for most scenarios as it does not accurately reflect the
-  uncertainties associated with each probability (see immediately
-  below).  
+  probability values. It is recommended to also set
+  `sequence_text_rounding = 0` to print integers as the default value of
+  `2` will result in e.g. `"128.00"`.  
     
   Set to `c(-0.5, 256)` (default, results in \\\frac{p+0.5}{256}\\) to
   scale to the centre of the probability spaces defined by the SAMtools
@@ -167,7 +163,9 @@ visualise_methylation(
   speaking `0` represents the probability space from 0.000 to 0.004 and
   `255` represents the probability space from 0.996 to 1.000, so scaling
   them to 0.002 and 0.998 respectively is a more accurate representation
-  of the probability space they each represent.
+  of the probability space they each represent. Setting `c(0, 255)`
+  would scale such that 0 is exactly 0.000 and 255 is exactly 1.000,
+  which is not as accurate so it discouraged.
 
 - sequence_text_rounding:
 
