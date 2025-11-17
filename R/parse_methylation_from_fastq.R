@@ -413,6 +413,7 @@ convert_MM_vector_to_locations <- function(sequence, skips, target_base = "C") {
 #' (SAM/BAM MM and ML tags) in the header lines, use
 #' [read_modified_fastq()] and [write_modified_fastq()].
 #'
+#' @param dataframe Dataframe containing sequence information to write back to FASTQ. Must have columns for unique read ID and DNA sequence. Should also have a column for quality, unless wanting to fill in qualities with `"B"`.
 #' @inheritParams write_modified_fastq
 #'
 #' @return `character vector`. The resulting FASTQ file as a character vector of its constituent lines (or `invisible(NULL)` if `return` is `FALSE`). This is probably mostly useful for debugging, as setting `filename` within this function directly writes to FASTQ via [writeLines()]. Therefore, defaults to returning `invisible(NULL)`.
@@ -538,7 +539,7 @@ write_fastq <- function(dataframe, filename = NA, read_id_colname = "read", sequ
 #' Default arguments are set up to work with the included [`example_many_sequences`] data.
 #'
 #' @param dataframe `dataframe`. Dataframe containing modification information to write back to modified FASTQ. Must have columns for unique read ID, DNA sequence, and at least one set of locations and probabilities for a particular modification type (e.g. 5C methylation).
-#' @param filename `character`. File to write the modified FASTQ to. Recommended to end with `.fastq` (warns but works if not). If set to `NA` (default), no file will be output, which may be useful for testing/debugging.
+#' @param filename `character`. File to write the FASTQ to. Recommended to end with `.fastq` (warns but works if not). If set to `NA` (default), no file will be output, which may be useful for testing/debugging.
 #' @param read_id_colname `character`. The name of the column within the dataframe that contains the unique ID for each read. Defaults to `"read"`.
 #' @param sequence_colname `character`. The name of the column within the dataframe that contains the DNA sequence for each read. Defaults to `"sequence"`.\cr\cr The values within this column must be DNA sequences e.g. `"GGCGGC"`.
 #' @param quality_colname `character`. The name of the column within the dataframe that contains the FASTQ quality scores for each read. Defaults to `"quality"`. If scores are not known, can be set to `NA` to fill in quality with `"B"`.\cr\cr If not `NA`, must correspond to a column where the values are the FASTQ quality scores e.g. `"$12\">/2C;4:9F8:816E,6C3*,"` - see [`fastq_quality_scores`].
