@@ -3,6 +3,7 @@ template:
   bootstrap: 5
   bslib:
     pkgdown_navbar: ~
+  math-rendering: katex
 
 site:
   build_all_versions: false
