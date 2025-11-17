@@ -7,25 +7,10 @@
 #' interval, and pixels per square when exported are configurable.
 #'
 #' @param sequence `character`. A DNA or RNA sequence to visualise e.g. `"AAATGCTGC"`.
-#' @param sequence_colours `character vector`, length 4. A vector indicating which colours should be used for each base. In order: `c(A_colour, C_colour, G_colour, T/U_colour)`.\cr\cr Defaults to red, green, blue, purple in the default shades produced by ggplot with 4 colours, i.e. `c("#F8766D", "#7CAE00", "#00BFC4", "#C77CFF")`, accessed via [`sequence_colour_palettes`]`$ggplot_style`.
-#' @param background_colour `character`. The colour of the background. Defaults to white.
 #' @param line_wrapping `integer`. The number of bases that should be on each line before wrapping. Defaults to `75`. Recommended to make this a multiple of the repeat unit size (e.g. 3*n* for a trinucleotide repeat) if visualising a repeat sequence.
 #' @param spacing `integer`. The number of blank lines between each line of sequence. Defaults to `1`.\cr\cr Be careful when setting to `0` as this means annotations have no space so might render strangely. Recommended to set `index_annotation_interval = 0` if doing so to disable annotations entirely.
-#' @param margin `numeric`. The size of the margin relative to the size of each base square. Defaults to `0.5` (half the side length of each base square).\cr\cr Note that if index annotations are on (i.e. `index_annotation_interval` is not `0`), the top/bottom margin (depending on `index_annotations_above`) will always be at least 1 to leave space for them.\cr\cr Likewise, very small margins (\eqn{\le}0.25) may cause thick outlines to be cut off at the edges of the plot. Recommended to either use a wider margin or a smaller `outline_linewidth`.
-#' @param sequence_text_colour `character`. The colour of the text within the bases (e.g. colour of "A" letter within boxes representing adenosine bases). Defaults to black.
-#' @param sequence_text_size `numeric`. The size of the text within the bases (e.g. size of "A" letter within boxes representing adenosine bases). Defaults to `16`. Set to `0` to hide sequence text (show box colours only).
-#' @param index_annotation_colour `character`. The colour of the little numbers underneath indicating base index (e.g. colour of "15" label under the 15th base). Defaults to dark red.
-#' @param index_annotation_size `numeric`. The size of the little number underneath indicating base index (e.g. size of "15" label under the 15th base). Defaults to `12.5`.\cr\cr Setting to `0` disables index annotations.
-#' @param index_annotation_interval `integer`. The frequency at which numbers should be placed underneath indicating base index, starting counting from the leftmost base in each row. Defaults to `15` (every 15 bases along each row).\cr\cr Recommended to make this a factor/divisor of the line wrapping length (meaning the final base in each line is annotated), otherwise the numbering interval resetting at the beginning of each row will result in uneven intervals at each line break.\cr\cr Setting to `0` disables index annotations.
-#' @param index_annotations_above `logical`. Whether index annotations should go above (`TRUE`, default) or below (`FALSE`) each line of sequence.
-#' @param index_annotation_vertical_position `numeric`. How far annotation numbers should be rendered above (if `index_annotations_above = TRUE`) or below (if `index_annotations_above = FALSE`) each base. Defaults to `1/3`.\cr\cr Not recommended to change at all. Strongly discouraged to set below 0 or above 1.
-#' @param outline_colour `character`. The colour of the box outlines. Defaults to black.
-#' @param outline_linewidth `numeric`. The linewidth of the box outlines. Defaults to `3`. Set to `0` to disable box outlines.
-#' @param outline_join `character`. One of `"mitre"`, `"round"`, or `"bevel"` specifying how outlines should be joined at the corners of boxes. Defaults to `"mitre"`. It would be unusual to need to change this.
-#' @param return `logical`. Boolean specifying whether this function should return the ggplot object, otherwise it will return `invisible(NULL)`. Defaults to `TRUE`.
-#' @param filename `character`. Filename to which output should be saved. If set to `NA` (default), no file will be saved. Recommended to end with `".png"`, but can change if render device is changed.
-#' @param render_device `function/character`. Device to use when rendering. See [ggplot2::ggsave()] documentation for options. Defaults to [`ragg::agg_png`]. Can be set to `NULL` to infer from file extension, but results may vary between systems.
-#' @param pixels_per_base `integer`. How large each box should be in pixels, if file output is turned on via setting `filename`. Corresponds to dpi of the exported image. Large values recommended because text needs to be legible when rendered significantly smaller than a box. Defaults to `100`.
+#'
+#' @inheritParams visualise_many_sequences
 #'
 #' @return A ggplot object containing the full visualisation, or `invisible(NULL)` if `return = FALSE`. It is often more useful to use `filename = "myfilename.png"`, because then the visualisation is exported at the correct aspect ratio.
 #'
@@ -92,8 +77,27 @@ visualise_single_sequence <- function(
     return = TRUE,
     filename = NA,
     render_device = ragg::agg_png,
-    pixels_per_base = 100
+    pixels_per_base = 100,
+    ...
 ) {
+    ## Process aliases
+    ## ---------------------------------------------------------------------
+    dots <- list(...)
+    sequence_colours <- resolve_alias("sequence_colours", sequence_colours, "sequence_colors", dots$sequence_colors, sequence_colour_palettes$ggplot_style)
+    sequence_colours <- resolve_alias("sequence_colours", sequence_colours, "sequence_cols", dots$sequence_cols, sequence_colour_palettes$ggplot_style)
+    background_colour <- resolve_alias("background_colour", background_colour, "background_color", dots$background_color, "white")
+    background_colour <- resolve_alias("background_colour", background_colour, "background_col", dots$background_col, "white")
+    sequence_text_colour <- resolve_alias("sequence_text_colour", sequence_text_colour, "sequence_text_color", dots$sequence_text_color, "black")
+    sequence_text_colour <- resolve_alias("sequence_text_colour", sequence_text_colour, "sequence_text_col", dots$sequence_text_col, "black")
+    index_annotation_colour <- resolve_alias("index_annotation_colour", index_annotation_colour, "index_annotation_color", dots$index_annotation_color, "darkred")
+    index_annotation_colour <- resolve_alias("index_annotation_colour", index_annotation_colour, "index_annotation_col", dots$index_annotation_col, "darkred")
+    outline_colour <- resolve_alias("outline_colour", outline_colour, "outline_color", dots$outline_color, "black")
+    outline_colour <- resolve_alias("outline_colour", outline_colour, "outline_col", dots$outline_col, "black")
+    index_annotations_above <- resolve_alias("index_annotations_above", index_annotations_above, "index_annotation_above", dots$index_annotation_above, TRUE)
+    ## ---------------------------------------------------------------------
+
+
+
     ## Validate arguments
     ## ---------------------------------------------------------------------
     not_null <- list(sequence = sequence, sequence_colours = sequence_colours, background_colour = background_colour, line_wrapping = line_wrapping, spacing = spacing, margin = margin, sequence_text_colour = sequence_text_colour, sequence_text_size = sequence_text_size, index_annotation_colour = index_annotation_colour, index_annotation_size = index_annotation_size, index_annotation_interval = index_annotation_interval, index_annotations_above = index_annotations_above, index_annotation_vertical_position = index_annotation_vertical_position, outline_colour = outline_colour, outline_linewidth = outline_linewidth, outline_join = outline_join, return = return, filename = filename, pixels_per_base = pixels_per_base)

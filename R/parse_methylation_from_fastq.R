@@ -12,8 +12,8 @@
 #' (SAM/BAM MM and ML tags) in the header lines, use
 #' [read_modified_fastq()] and [write_modified_fastq()].
 #'
-#' @param filename `character`. The file to be read. Defaults to [file.choose()] to select a file interactively.
 #' @param calculate_length `logical`. Whether or not `sequence_length` column should be calculated and included.
+#' @inheritParams read_modified_fastq
 #'
 #' @return `dataframe`. A dataframe with `read`, `sequence`, `quality`, and optionally `sequence_length` columns.
 #'
@@ -413,12 +413,7 @@ convert_MM_vector_to_locations <- function(sequence, skips, target_base = "C") {
 #' (SAM/BAM MM and ML tags) in the header lines, use
 #' [read_modified_fastq()] and [write_modified_fastq()].
 #'
-#' @param dataframe `dataframe`. Dataframe containing modification information to write back to modified FASTQ. Must have columns for unique read ID and DNA sequence. Should also have a column for quality, unless wanting to fill in qualities with `"B"`.
-#' @param filename `character`. File to write the FASTQ to. Recommended to end with `.fastq` (warns but works if not). If set to `NA` (default), no file will be output, which may be useful for testing/debugging.
-#' @param read_id_colname `character`. The name of the column within the dataframe that contains the unique ID for each read. Defaults to `"read"`.
-#' @param sequence_colname `character`. The name of the column within the dataframe that contains the DNA sequence for each read. Defaults to `"sequence"`.\cr\cr The values within this column must be DNA sequences e.g. `"GGCGGC"`.
-#' @param quality_colname `character`. The name of the column within the dataframe that contains the FASTQ quality scores for each read. Defaults to `"quality"`. If scores are not known, can be set to `NA` to fill in quality with `"B"`.\cr\cr If not `NA`, must correspond to a column where the values are the FASTQ quality scores e.g. `"$12\">/2C;4:9F8:816E,6C3*,"` - see [`fastq_quality_scores`].
-#' @param return `logical`. Boolean specifying whether this function should return the FASTQ (as a character vector of each line in the FASTQ), otherwise it will return `invisible(NULL)`. Defaults to `FALSE`.
+#' @inheritParams write_modified_fastq
 #'
 #' @return `character vector`. The resulting FASTQ file as a character vector of its constituent lines (or `invisible(NULL)` if `return` is `FALSE`). This is probably mostly useful for debugging, as setting `filename` within this function directly writes to FASTQ via [writeLines()]. Therefore, defaults to returning `invisible(NULL)`.
 #'

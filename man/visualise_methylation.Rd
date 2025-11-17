@@ -113,9 +113,9 @@ visualise_methylation(
 
 \item{render_device}{\verb{function/character}. Device to use when rendering. See \code{\link[ggplot2:ggsave]{ggplot2::ggsave()}} documentation for options. Defaults to \code{\link[ragg:agg_png]{ragg::agg_png}}. Can be set to \code{NULL} to infer from file extension, but results may vary between systems.}
 
-\item{pixels_per_base}{\code{integer}. How large each box should be in pixels, if file output is turned on via setting \code{filename}. Corresponds to dpi of the exported image. Defaults to \code{20}. Low values acceptable as currently this function does not write any text.}
+\item{pixels_per_base}{\code{integer}. How large each box should be in pixels, if file output is turned on via setting \code{filename}. Corresponds to dpi of the exported image. Defaults to \code{100}.\cr\cr Low values (e.g. 20) will work when sequence text is off, and very low values (e.g. 10) will work when sequence text and outlines are both off.}
 
-\item{...}{American-spelt aliases should automatically be recognised e.g. \code{low_color} should work in place of \code{low_colour} - see \link{aliases}. Contact maintainer if they do not work.}
+\item{...}{Used to recognise aliases e.g. American spellings or common misspellings - see \link{aliases}. Contact maintainer if any American spellings do not work.}
 }
 \value{
 A ggplot object containing the full visualisation, or \code{invisible(NULL)} if \code{return = FALSE}. It is often more useful to use \code{filename = "myfilename.png"}, because then the visualisation is exported at the correct aspect ratio.

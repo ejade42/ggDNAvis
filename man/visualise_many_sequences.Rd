@@ -25,7 +25,8 @@ visualise_many_sequences(
   return = TRUE,
   filename = NA,
   render_device = ragg::agg_png,
-  pixels_per_base = 100
+  pixels_per_base = 100,
+  ...
 )
 }
 \arguments{
@@ -33,9 +34,9 @@ visualise_many_sequences(
 
 \item{sequence_colours}{\verb{character vector}, length 4. A vector indicating which colours should be used for each base. In order: \code{c(A_colour, C_colour, G_colour, T/U_colour)}.\cr\cr Defaults to red, green, blue, purple in the default shades produced by ggplot with 4 colours, i.e. \code{c("#F8766D", "#7CAE00", "#00BFC4", "#C77CFF")}, accessed via \code{\link{sequence_colour_palettes}}\verb{$ggplot_style}.}
 
-\item{background_colour}{\code{character}. The colour of the background. Defaults to white.}
+\item{background_colour}{\code{character}. The colour the background should be drawn (defaults to white).}
 
-\item{margin}{\code{numeric}. The size of the margin relative to the size of each base square. Defaults to \code{0.5} (half the side length of each base square).\cr\cr Very small margins (\eqn{\le}0.25) may cause thick outlines to be cut off at the edges of the plot. Recommended to either use a wider margin or a smaller \code{outline_linewidth}.}
+\item{margin}{\code{numeric}. The size of the margin relative to the size of each base square. Defaults to \code{0.5} (half the side length of each base square).}
 
 \item{sequence_text_colour}{\code{character}. The colour of the text within the bases (e.g. colour of "A" letter within boxes representing adenosine bases). Defaults to black.}
 
@@ -67,7 +68,9 @@ visualise_many_sequences(
 
 \item{render_device}{\verb{function/character}. Device to use when rendering. See \code{\link[ggplot2:ggsave]{ggplot2::ggsave()}} documentation for options. Defaults to \code{\link[ragg:agg_png]{ragg::agg_png}}. Can be set to \code{NULL} to infer from file extension, but results may vary between systems.}
 
-\item{pixels_per_base}{\code{integer}. How large each box should be in pixels, if file output is turned on via setting \code{filename}. Corresponds to dpi of the exported image.\cr\cr If text is shown (i.e. \code{sequence_text_size} is not 0), needs to be fairly large otherwise text is blurry. Defaults to \code{100}.}
+\item{pixels_per_base}{\code{integer}. How large each box should be in pixels, if file output is turned on via setting \code{filename}. Corresponds to dpi of the exported image. Defaults to \code{100}.\cr\cr Low values (e.g. 20) will work when sequence text is off, and very low values (e.g. 10) will work when sequence text and outlines are both off.}
+
+\item{...}{Used to recognise aliases e.g. American spellings or common misspellings - see \link{aliases}. Contact maintainer if any American spellings do not work.}
 }
 \value{
 A ggplot object containing the full visualisation, or \code{invisible(NULL)} if \code{return = FALSE}. It is often more useful to use \code{filename = "myfilename.png"}, because then the visualisation is exported at the correct aspect ratio.

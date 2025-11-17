@@ -18,7 +18,8 @@ visualise_methylation_colour_scale(
   do_side_scale = FALSE,
   side_scale_title = NULL,
   outline_colour = "black",
-  outline_linewidth = 1
+  outline_linewidth = 1,
+  ...
 )
 }
 \arguments{
@@ -26,7 +27,7 @@ visualise_methylation_colour_scale(
 
 \item{high_colour}{\code{character}. The colour that should be used to represent maximum probability of methylation/modification (defaults to red).}
 
-\item{low_clamp}{\code{numeric}. The minimum probability below which all values are coloured \code{low_colour}. Defaults to \code{0} (i.e. no clamping).}
+\item{low_clamp}{\code{numeric}. The minimum probability below which all values are coloured \code{low_colour}. Defaults to \code{0} (i.e. no clamping). To specify a proportion probability in 8-bit form, multiply by 255 e.g. to low-clamp at 30\% probability, set this to \code{0.3*255}.}
 
 \item{high_clamp}{\code{numeric}. The maximum probability above which all values are coloured \code{high_colour}. Defaults to \code{255} (i.e. no clamping, assuming Nanopore > SAM style modification calling where probabilities are 8-bit integers from 0 to 255).}
 
@@ -47,6 +48,8 @@ visualise_methylation_colour_scale(
 \item{outline_colour}{\code{character}. The colour of the scalebar outline. Defaults to black.}
 
 \item{outline_linewidth}{\code{numeric}. The linewidth of the scalebar outline. Defaults to \code{1}. Set to \code{0} to disable scalebar outline.}
+
+\item{...}{Used to recognise aliases e.g. American spellings or common misspellings - see \link{aliases}. Contact maintainer if any American spellings do not work.}
 }
 \value{
 ggplot of the scalebar.\cr\cr Unlike the other \verb{visualise_<>} functions in this package, does not directly export a png. This is because there are no squares that need to be rendered at a precise aspect ratio in this function. It can just be saved normally with \code{\link[ggplot2:ggsave]{ggplot2::ggsave()}} with any sensible combination of height and width.

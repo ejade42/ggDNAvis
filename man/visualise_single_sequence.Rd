@@ -25,7 +25,8 @@ visualise_single_sequence(
   return = TRUE,
   filename = NA,
   render_device = ragg::agg_png,
-  pixels_per_base = 100
+  pixels_per_base = 100,
+  ...
 )
 }
 \arguments{
@@ -33,13 +34,13 @@ visualise_single_sequence(
 
 \item{sequence_colours}{\verb{character vector}, length 4. A vector indicating which colours should be used for each base. In order: \code{c(A_colour, C_colour, G_colour, T/U_colour)}.\cr\cr Defaults to red, green, blue, purple in the default shades produced by ggplot with 4 colours, i.e. \code{c("#F8766D", "#7CAE00", "#00BFC4", "#C77CFF")}, accessed via \code{\link{sequence_colour_palettes}}\verb{$ggplot_style}.}
 
-\item{background_colour}{\code{character}. The colour of the background. Defaults to white.}
+\item{background_colour}{\code{character}. The colour the background should be drawn (defaults to white).}
 
 \item{line_wrapping}{\code{integer}. The number of bases that should be on each line before wrapping. Defaults to \code{75}. Recommended to make this a multiple of the repeat unit size (e.g. 3\emph{n} for a trinucleotide repeat) if visualising a repeat sequence.}
 
 \item{spacing}{\code{integer}. The number of blank lines between each line of sequence. Defaults to \code{1}.\cr\cr Be careful when setting to \code{0} as this means annotations have no space so might render strangely. Recommended to set \code{index_annotation_interval = 0} if doing so to disable annotations entirely.}
 
-\item{margin}{\code{numeric}. The size of the margin relative to the size of each base square. Defaults to \code{0.5} (half the side length of each base square).\cr\cr Note that if index annotations are on (i.e. \code{index_annotation_interval} is not \code{0}), the top/bottom margin (depending on \code{index_annotations_above}) will always be at least 1 to leave space for them.\cr\cr Likewise, very small margins (\eqn{\le}0.25) may cause thick outlines to be cut off at the edges of the plot. Recommended to either use a wider margin or a smaller \code{outline_linewidth}.}
+\item{margin}{\code{numeric}. The size of the margin relative to the size of each base square. Defaults to \code{0.5} (half the side length of each base square).}
 
 \item{sequence_text_colour}{\code{character}. The colour of the text within the bases (e.g. colour of "A" letter within boxes representing adenosine bases). Defaults to black.}
 
@@ -47,9 +48,9 @@ visualise_single_sequence(
 
 \item{index_annotation_colour}{\code{character}. The colour of the little numbers underneath indicating base index (e.g. colour of "15" label under the 15th base). Defaults to dark red.}
 
-\item{index_annotation_size}{\code{numeric}. The size of the little number underneath indicating base index (e.g. size of "15" label under the 15th base). Defaults to \code{12.5}.\cr\cr Setting to \code{0} disables index annotations.}
+\item{index_annotation_size}{\code{numeric}. The size of the little number underneath indicating base index (e.g. size of "15" label under the 15th base). Defaults to \code{12.5}.\cr\cr Setting to \code{0} disables index annotations (and prevents adding additional blank lines).}
 
-\item{index_annotation_interval}{\code{integer}. The frequency at which numbers should be placed underneath indicating base index, starting counting from the leftmost base in each row. Defaults to \code{15} (every 15 bases along each row).\cr\cr Recommended to make this a factor/divisor of the line wrapping length (meaning the final base in each line is annotated), otherwise the numbering interval resetting at the beginning of each row will result in uneven intervals at each line break.\cr\cr Setting to \code{0} disables index annotations.}
+\item{index_annotation_interval}{\code{integer}. The frequency at which numbers should be placed underneath indicating base index, starting counting from the leftmost base. Defaults to \code{15} (every 15 bases along each row).\cr\cr Setting to \code{0} disables index annotations (and prevents adding additional blank lines).}
 
 \item{index_annotations_above}{\code{logical}. Whether index annotations should go above (\code{TRUE}, default) or below (\code{FALSE}) each line of sequence.}
 
@@ -67,7 +68,9 @@ visualise_single_sequence(
 
 \item{render_device}{\verb{function/character}. Device to use when rendering. See \code{\link[ggplot2:ggsave]{ggplot2::ggsave()}} documentation for options. Defaults to \code{\link[ragg:agg_png]{ragg::agg_png}}. Can be set to \code{NULL} to infer from file extension, but results may vary between systems.}
 
-\item{pixels_per_base}{\code{integer}. How large each box should be in pixels, if file output is turned on via setting \code{filename}. Corresponds to dpi of the exported image. Large values recommended because text needs to be legible when rendered significantly smaller than a box. Defaults to \code{100}.}
+\item{pixels_per_base}{\code{integer}. How large each box should be in pixels, if file output is turned on via setting \code{filename}. Corresponds to dpi of the exported image. Defaults to \code{100}.\cr\cr Low values (e.g. 20) will work when sequence text is off, and very low values (e.g. 10) will work when sequence text and outlines are both off.}
+
+\item{...}{Used to recognise aliases e.g. American spellings or common misspellings - see \link{aliases}. Contact maintainer if any American spellings do not work.}
 }
 \value{
 A ggplot object containing the full visualisation, or \code{invisible(NULL)} if \code{return = FALSE}. It is often more useful to use \code{filename = "myfilename.png"}, because then the visualisation is exported at the correct aspect ratio.

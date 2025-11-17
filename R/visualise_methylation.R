@@ -63,8 +63,8 @@
 #' @param return `logical`. Boolean specifying whether this function should return the ggplot object, otherwise it will return `invisible(NULL)`. Defaults to `TRUE`.
 #' @param filename `character`. Filename to which output should be saved. If set to `NA` (default), no file will be saved. Recommended to end with `".png"`, but can change if render device is changed.
 #' @param render_device `function/character`. Device to use when rendering. See [ggplot2::ggsave()] documentation for options. Defaults to [`ragg::agg_png`]. Can be set to `NULL` to infer from file extension, but results may vary between systems.
-#' @param pixels_per_base `integer`. How large each box should be in pixels, if file output is turned on via setting `filename`. Corresponds to dpi of the exported image. Defaults to `20`. Low values acceptable as currently this function does not write any text.
-#' @param ... American-spelt aliases should automatically be recognised e.g. `low_color` should work in place of `low_colour` - see [aliases]. Contact maintainer if they do not work.
+#' @param pixels_per_base `integer`. How large each box should be in pixels, if file output is turned on via setting `filename`. Corresponds to dpi of the exported image. Defaults to `100`.\cr\cr Low values (e.g. 20) will work when sequence text is off, and very low values (e.g. 10) will work when sequence text and outlines are both off.
+#' @param ... Used to recognise aliases e.g. American spellings or common misspellings - see [aliases]. Contact maintainer if any American spellings do not work.
 #'
 #' @return A ggplot object containing the full visualisation, or `invisible(NULL)` if `return = FALSE`. It is often more useful to use `filename = "myfilename.png"`, because then the visualisation is exported at the correct aspect ratio.
 #'
@@ -499,19 +499,16 @@ visualise_methylation <- function(
 #' 255 is fully read, and all values are linearly interpolated. NB: colours are configurable
 #' but default to blue = low modification probability and red = high modification probability.
 #'
-#' @param low_colour `character`. The colour that should be used to represent minimum probability of methylation/modification (defaults to blue).
-#' @param high_colour `character`. The colour that should be used to represent maximum probability of methylation/modification (defaults to red).
-#' @param low_clamp `numeric`. The minimum probability below which all values are coloured `low_colour`. Defaults to `0` (i.e. no clamping).
-#' @param high_clamp `numeric`. The maximum probability above which all values are coloured `high_colour`. Defaults to `255` (i.e. no clamping, assuming Nanopore > SAM style modification calling where probabilities are 8-bit integers from 0 to 255).
 #' @param full_range `numeric vector`, length 2. The total range of possible probabilities. Defaults to `c(0, 255)`, which is appropriate for Nanopore > SAM style modification calling where probabilities are 8-bit integers from 0 to 255.\cr\cr May need to be set to `c(0, 1)` if probabilites are instead stored as decimals. Setting any other value is advanced use and should be done for a good reason.
 #' @param precision `integer`. How many different shades should be rendered. Larger values give a smoother gradient. Defaults to `10^3` i.e. `1000`, which looks smooth to my eyes and isn't too intensive to calculate.
-#' @param background_colour `character`. The colour the background should be drawn (defaults to white).
 #' @param x_axis_title `character`. The desired x-axis title. Defaults to `NULL`.
 #' @param do_x_ticks `logical`. Boolean specifying whether x axis ticks should be enabled (`TRUE`, default) or disabled (`FALSE`).
 #' @param do_side_scale `logical`. Boolean specifying whether a smaller scalebar should be rendered on the right. Defaults to `FALSE`.\cr\cr I think it is unlikely anyone would want to use this, but the option is here. One potential usecase is that this scalebar shows the raw probability values (e.g. 0 to 255), whereas the x-axis is normalised to 0-1.
 #' @param side_scale_title `character`. The desired title for the right-hand scalebar, if turned on. Defaults to `NULL`.
 #' @param outline_colour `character`. The colour of the scalebar outline. Defaults to black.
 #' @param outline_linewidth `numeric`. The linewidth of the scalebar outline. Defaults to `1`. Set to `0` to disable scalebar outline.
+#'
+#' @inheritParams visualise_methylation
 #'
 #' @return ggplot of the scalebar.\cr\cr Unlike the other `visualise_<>` functions in this package, does not directly export a png. This is because there are no squares that need to be rendered at a precise aspect ratio in this function. It can just be saved normally with [ggplot2::ggsave()] with any sensible combination of height and width.
 #'
@@ -550,8 +547,24 @@ visualise_methylation_colour_scale <- function(
     do_side_scale = FALSE,
     side_scale_title = NULL,
     outline_colour = "black",
-    outline_linewidth = 1
+    outline_linewidth = 1,
+    ...
 ) {
+    ## Process aliases
+    ## ---------------------------------------------------------------------
+    dots <- list(...)
+    low_colour <- resolve_alias("low_colour", low_colour, "low_color", dots$low_color, "blue")
+    low_colour <- resolve_alias("low_colour", low_colour, "low_col", dots$low_col, "blue")
+    high_colour <- resolve_alias("high_colour", high_colour, "high_color", dots$high_color, "red")
+    high_colour <- resolve_alias("high_colour", high_colour, "high_col", dots$high_col, "red")
+    background_colour <- resolve_alias("background_colour", background_colour, "background_color", dots$background_color, "white")
+    background_colour <- resolve_alias("background_colour", background_colour, "background_col", dots$background_col, "white")
+    outline_colour <- resolve_alias("outline_colour", outline_colour, "outline_color", dots$outline_color, "black")
+    outline_colour <- resolve_alias("outline_colour", outline_colour, "outline_col", dots$outline_col, "black")
+    ## ---------------------------------------------------------------------
+
+
+
     ## Validate arguments
     ## ---------------------------------------------------------------------
     not_null_or_na <- list(low_colour = low_colour, high_colour = high_colour, low_clamp = low_clamp, high_clamp = high_clamp, full_range = full_range, precision = precision, background_colour = background_colour, do_x_ticks = do_x_ticks, do_side_scale = do_side_scale, outline_colour = outline_colour, outline_linewidth = outline_linewidth)
@@ -665,9 +678,8 @@ visualise_methylation_colour_scale <- function(
 #' @param probabilities_colname `character`. The name of the column within the input dataframe that contains methylation/modification probability information. Defaults to `"methylation_probabilities"`.\cr\cr Values within this column must be a comma-separated string representing a condensed numerical vector (e.g. `"2,212,128,64"`, produced via [vector_to_string()]) of the probability of modification as an 8-bit (0-255) integer for each base where modification was assessed.
 #' @param sequences_colname `character`. The name of the column within the input dataframe that contains the actual sequences. Defaults to `"sequence"`.\cr\cr Values within this column must be the actual sequences (e.g. `"GGCGGA"`).
 #' @param lengths_colname `character`. The name of the column within the input dataframe that contains the length of each sequence. Defaults to `"sequence_length"`.\cr\cr Values within this column must be non-negative integers.
-#' @param grouping_levels `named character vector`. What variables should be used to define the groups/chunks, and how large a gap should be left between groups at that level. Set to `NA` to turn off grouping.\cr\cr Defaults to `c("family" = 8, "individual" = 2)`, meaning the highest-level groups are defined by the `family` column, and there is a gap of 8 between each family. Likewise the second-level groups (within each family) are defined by the `individual` column, and there is a gap of 2 between each individual.\cr\cr Any number of grouping variables and gaps can be given, as long as each grouping variable is a column within the dataframe. It is recommended that lower-level groups are more granular and subdivide higher-level groups (e.g. first divide into families, then into individuals within families). \cr\cr To change the order of groups within a level, make that column a factor with the order specified e.g. `example_many_sequences$family <- factor(example_many_sequences$family, levels = c("Family 2", "Family 3", "Family 1"))` to change the order to Family 2, Family 3, Family 1.
-#' @param sort_by `character`. The name of the column within the dataframe that should be used to sort/order the rows within each lowest-level group. Set to `NA` to turn off sorting within groups.\cr\cr Recommended to be the length of the sequence information, as is the case for the default `"sequence_length"` which was generated via `example_many_sequences$sequence_legnth <- nchar(example_many_sequences$sequence)`.
-#' @param desc_sort `logical`. Boolean specifying whether rows within groups should be sorted by the `sort_by` variable descending (`TRUE`, default) or ascending (`FALSE`).
+#'
+#' @inheritParams extract_and_sort_sequences
 #'
 #' @return `list`, containing `$locations` (`character vector`), `$probabilities` (`character vector`), `$sequences` (`character vector`), and `$lengths` (`integer vector`).
 #'
