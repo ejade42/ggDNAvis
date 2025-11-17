@@ -3201,6 +3201,9 @@ Small, widely used helper functions
   Emit an error message for an invalid function argument (generic
   `ggDNAvis` helper)
 
+- [`resolve_alias()`](https://ejade42.github.io/ggDNAvis/reference/resolve_alias.md)
+  : Resolve argument value when aliases are used
+
 ### Advanced helpers
 
 Helper functions that are mostly called by other functions; users
