@@ -86,7 +86,8 @@ lines. Colours and pixels per square when exported are configurable.</p>
 <span>  return <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  filename <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  render_device <span class="op">=</span> <span class="fu">ragg</span><span class="fu">::</span><span class="va"><a href="https://ragg.r-lib.org/reference/agg_png.html" class="external-link">agg_png</a></span>,</span>
-<span>  pixels_per_base <span class="op">=</span> <span class="fl">100</span></span>
+<span>  pixels_per_base <span class="op">=</span> <span class="fl">100</span>,</span>
+<span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -103,11 +104,11 @@ lines. Colours and pixels per square when exported are configurable.</p>
 
 
 <dt id="arg-background-colour">background_colour<a class="anchor" aria-label="anchor" href="#arg-background-colour"></a></dt>
-<dd><p><code>character</code>. The colour of the background. Defaults to white.</p></dd>
+<dd><p><code>character</code>. The colour the background should be drawn (defaults to white).</p></dd>
 
 
 <dt id="arg-margin">margin<a class="anchor" aria-label="anchor" href="#arg-margin"></a></dt>
-<dd><p><code>numeric</code>. The size of the margin relative to the size of each base square. Defaults to <code>0.5</code> (half the side length of each base square).<br><br> Very small margins (\(\le\)0.25) may cause thick outlines to be cut off at the edges of the plot. Recommended to either use a wider margin or a smaller <code>outline_linewidth</code>.</p></dd>
+<dd><p><code>numeric</code>. The size of the margin relative to the size of each base square. Defaults to <code>0.5</code> (half the side length of each base square).</p></dd>
 
 
 <dt id="arg-sequence-text-colour">sequence_text_colour<a class="anchor" aria-label="anchor" href="#arg-sequence-text-colour"></a></dt>
@@ -171,7 +172,11 @@ lines. Colours and pixels per square when exported are configurable.</p>
 
 
 <dt id="arg-pixels-per-base">pixels_per_base<a class="anchor" aria-label="anchor" href="#arg-pixels-per-base"></a></dt>
-<dd><p><code>integer</code>. How large each box should be in pixels, if file output is turned on via setting <code>filename</code>. Corresponds to dpi of the exported image.<br><br> If text is shown (i.e. <code>sequence_text_size</code> is not 0), needs to be fairly large otherwise text is blurry. Defaults to <code>100</code>.</p></dd>
+<dd><p><code>integer</code>. How large each box should be in pixels, if file output is turned on via setting <code>filename</code>. Corresponds to dpi of the exported image. Defaults to <code>100</code>.<br><br> Low values (e.g. 20) will work when sequence text is off, and very low values (e.g. 10) will work when sequence text and outlines are both off.</p></dd>
+
+
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
+<dd><p>Used to recognise aliases e.g. American spellings or common misspellings - see <a href="ggDNAvis_aliases.html">aliases</a>. Contact maintainer if any American spellings do not work.</p></dd>
 
 </dl></div>
     <div class="section level2">

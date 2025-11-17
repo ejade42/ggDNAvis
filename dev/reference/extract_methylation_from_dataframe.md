@@ -125,7 +125,7 @@ extract_methylation_from_dataframe(
     
   Recommended to be the length of the sequence information, as is the
   case for the default `"sequence_length"` which was generated via
-  `example_many_sequences$sequence_legnth <- nchar(example_many_sequences$sequence)`.
+  `example_many_sequences$sequence_length <- nchar(example_many_sequences$sequence)`.
 
 - desc_sort:
 

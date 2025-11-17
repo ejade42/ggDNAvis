@@ -80,7 +80,8 @@ interval, and pixels per square when exported are configurable.</p>
 <span>  return <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  filename <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  render_device <span class="op">=</span> <span class="fu">ragg</span><span class="fu">::</span><span class="va"><a href="https://ragg.r-lib.org/reference/agg_png.html" class="external-link">agg_png</a></span>,</span>
-<span>  pixels_per_base <span class="op">=</span> <span class="fl">100</span></span>
+<span>  pixels_per_base <span class="op">=</span> <span class="fl">100</span>,</span>
+<span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -97,7 +98,7 @@ interval, and pixels per square when exported are configurable.</p>
 
 
 <dt id="arg-background-colour">background_colour<a class="anchor" aria-label="anchor" href="#arg-background-colour"></a></dt>
-<dd><p><code>character</code>. The colour of the background. Defaults to white.</p></dd>
+<dd><p><code>character</code>. The colour the background should be drawn (defaults to white).</p></dd>
 
 
 <dt id="arg-line-wrapping">line_wrapping<a class="anchor" aria-label="anchor" href="#arg-line-wrapping"></a></dt>
@@ -109,7 +110,7 @@ interval, and pixels per square when exported are configurable.</p>
 
 
 <dt id="arg-margin">margin<a class="anchor" aria-label="anchor" href="#arg-margin"></a></dt>
-<dd><p><code>numeric</code>. The size of the margin relative to the size of each base square. Defaults to <code>0.5</code> (half the side length of each base square).<br><br> Note that if index annotations are on (i.e. <code>index_annotation_interval</code> is not <code>0</code>), the top/bottom margin (depending on <code>index_annotations_above</code>) will always be at least 1 to leave space for them.<br><br> Likewise, very small margins (\(\le\)0.25) may cause thick outlines to be cut off at the edges of the plot. Recommended to either use a wider margin or a smaller <code>outline_linewidth</code>.</p></dd>
+<dd><p><code>numeric</code>. The size of the margin relative to the size of each base square. Defaults to <code>0.5</code> (half the side length of each base square).</p></dd>
 
 
 <dt id="arg-sequence-text-colour">sequence_text_colour<a class="anchor" aria-label="anchor" href="#arg-sequence-text-colour"></a></dt>
@@ -125,11 +126,11 @@ interval, and pixels per square when exported are configurable.</p>
 
 
 <dt id="arg-index-annotation-size">index_annotation_size<a class="anchor" aria-label="anchor" href="#arg-index-annotation-size"></a></dt>
-<dd><p><code>numeric</code>. The size of the little number underneath indicating base index (e.g. size of "15" label under the 15th base). Defaults to <code>12.5</code>.<br><br> Setting to <code>0</code> disables index annotations.</p></dd>
+<dd><p><code>numeric</code>. The size of the little number underneath indicating base index (e.g. size of "15" label under the 15th base). Defaults to <code>12.5</code>.<br><br> Setting to <code>0</code> disables index annotations (and prevents adding additional blank lines).</p></dd>
 
 
 <dt id="arg-index-annotation-interval">index_annotation_interval<a class="anchor" aria-label="anchor" href="#arg-index-annotation-interval"></a></dt>
-<dd><p><code>integer</code>. The frequency at which numbers should be placed underneath indicating base index, starting counting from the leftmost base in each row. Defaults to <code>15</code> (every 15 bases along each row).<br><br> Recommended to make this a factor/divisor of the line wrapping length (meaning the final base in each line is annotated), otherwise the numbering interval resetting at the beginning of each row will result in uneven intervals at each line break.<br><br> Setting to <code>0</code> disables index annotations.</p></dd>
+<dd><p><code>integer</code>. The frequency at which numbers should be placed underneath indicating base index, starting counting from the leftmost base. Defaults to <code>15</code> (every 15 bases along each row).<br><br> Setting to <code>0</code> disables index annotations (and prevents adding additional blank lines).</p></dd>
 
 
 <dt id="arg-index-annotations-above">index_annotations_above<a class="anchor" aria-label="anchor" href="#arg-index-annotations-above"></a></dt>
@@ -165,7 +166,11 @@ interval, and pixels per square when exported are configurable.</p>
 
 
 <dt id="arg-pixels-per-base">pixels_per_base<a class="anchor" aria-label="anchor" href="#arg-pixels-per-base"></a></dt>
-<dd><p><code>integer</code>. How large each box should be in pixels, if file output is turned on via setting <code>filename</code>. Corresponds to dpi of the exported image. Large values recommended because text needs to be legible when rendered significantly smaller than a box. Defaults to <code>100</code>.</p></dd>
+<dd><p><code>integer</code>. How large each box should be in pixels, if file output is turned on via setting <code>filename</code>. Corresponds to dpi of the exported image. Defaults to <code>100</code>.<br><br> Low values (e.g. 20) will work when sequence text is off, and very low values (e.g. 10) will work when sequence text and outlines are both off.</p></dd>
+
+
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
+<dd><p>Used to recognise aliases e.g. American spellings or common misspellings - see <a href="ggDNAvis_aliases.html">aliases</a>. Contact maintainer if any American spellings do not work.</p></dd>
 
 </dl></div>
     <div class="section level2">

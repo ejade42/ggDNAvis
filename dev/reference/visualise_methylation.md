@@ -328,15 +328,18 @@ visualise_methylation(
 
   `integer`. How large each box should be in pixels, if file output is
   turned on via setting `filename`. Corresponds to dpi of the exported
-  image. Defaults to `20`. Low values acceptable as currently this
-  function does not write any text.
+  image. Defaults to `100`.  
+    
+  Low values (e.g. 20) will work when sequence text is off, and very low
+  values (e.g. 10) will work when sequence text and outlines are both
+  off.
 
 - ...:
 
-  American-spelt aliases should automatically be recognised e.g.
-  `low_color` should work in place of `low_colour` - see
+  Used to recognise aliases e.g. American spellings or common
+  misspellings - see
   [aliases](https://ejade42.github.io/ggDNAvis/reference/ggDNAvis_aliases.md).
-  Contact maintainer if they do not work.
+  Contact maintainer if any American spellings do not work.
 
 ## Value
 

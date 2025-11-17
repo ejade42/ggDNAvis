@@ -49,6 +49,7 @@ visualise_methylation(
     d$locations,
     d$probabilities,
     d$sequences,
+    outline_linewidth = 0,
     low_colour = "green",
     low_color = "orange",
     low_col = "purple"
@@ -70,6 +71,7 @@ visualise_methylation(
     d$locations,
     d$probabilities,
     d$sequences,
+    outline_linewidth = 0,
     low_color = "orange",
     low_col = "purple"
 )
@@ -90,6 +92,7 @@ visualise_methylation(
     d$locations,
     d$probabilities,
     d$sequences,
+    outline_linewidth = 0,
     low_col = "purple"
 )
 

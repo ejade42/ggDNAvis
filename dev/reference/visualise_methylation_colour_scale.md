@@ -32,7 +32,8 @@ visualise_methylation_colour_scale(
   do_side_scale = FALSE,
   side_scale_title = NULL,
   outline_colour = "black",
-  outline_linewidth = 1
+  outline_linewidth = 1,
+  ...
 )
 ```
 
@@ -51,7 +52,9 @@ visualise_methylation_colour_scale(
 - low_clamp:
 
   `numeric`. The minimum probability below which all values are coloured
-  `low_colour`. Defaults to `0` (i.e. no clamping).
+  `low_colour`. Defaults to `0` (i.e. no clamping). To specify a
+  proportion probability in 8-bit form, multiply by 255 e.g. to
+  low-clamp at 30% probability, set this to `0.3*255`.
 
 - high_clamp:
 
@@ -114,6 +117,13 @@ visualise_methylation_colour_scale(
 
   `numeric`. The linewidth of the scalebar outline. Defaults to `1`. Set
   to `0` to disable scalebar outline.
+
+- ...:
+
+  Used to recognise aliases e.g. American spellings or common
+  misspellings - see
+  [aliases](https://ejade42.github.io/ggDNAvis/reference/ggDNAvis_aliases.md).
+  Contact maintainer if any American spellings do not work.
 
 ## Value
 

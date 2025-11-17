@@ -35,7 +35,8 @@ visualise_many_sequences(
   return = TRUE,
   filename = NA,
   render_device = ragg::agg_png,
-  pixels_per_base = 100
+  pixels_per_base = 100,
+  ...
 )
 ```
 
@@ -61,17 +62,13 @@ visualise_many_sequences(
 
 - background_colour:
 
-  `character`. The colour of the background. Defaults to white.
+  `character`. The colour the background should be drawn (defaults to
+  white).
 
 - margin:
 
   `numeric`. The size of the margin relative to the size of each base
-  square. Defaults to `0.5` (half the side length of each base
-  square).  
-    
-  Very small margins (\\\le\\0.25) may cause thick outlines to be cut
-  off at the edges of the plot. Recommended to either use a wider margin
-  or a smaller `outline_linewidth`.
+  square. Defaults to `0.5` (half the side length of each base square).
 
 - sequence_text_colour:
 
@@ -184,10 +181,18 @@ visualise_many_sequences(
 
   `integer`. How large each box should be in pixels, if file output is
   turned on via setting `filename`. Corresponds to dpi of the exported
-  image.  
+  image. Defaults to `100`.  
     
-  If text is shown (i.e. `sequence_text_size` is not 0), needs to be
-  fairly large otherwise text is blurry. Defaults to `100`.
+  Low values (e.g. 20) will work when sequence text is off, and very low
+  values (e.g. 10) will work when sequence text and outlines are both
+  off.
+
+- ...:
+
+  Used to recognise aliases e.g. American spellings or common
+  misspellings - see
+  [aliases](https://ejade42.github.io/ggDNAvis/reference/ggDNAvis_aliases.md).
+  Contact maintainer if any American spellings do not work.
 
 ## Value
 

@@ -85,7 +85,8 @@ but default to blue = low modification probability and red = high modification p
 <span>  do_side_scale <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  side_scale_title <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  outline_colour <span class="op">=</span> <span class="st">"black"</span>,</span>
-<span>  outline_linewidth <span class="op">=</span> <span class="fl">1</span></span>
+<span>  outline_linewidth <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -102,7 +103,7 @@ but default to blue = low modification probability and red = high modification p
 
 
 <dt id="arg-low-clamp">low_clamp<a class="anchor" aria-label="anchor" href="#arg-low-clamp"></a></dt>
-<dd><p><code>numeric</code>. The minimum probability below which all values are coloured <code>low_colour</code>. Defaults to <code>0</code> (i.e. no clamping).</p></dd>
+<dd><p><code>numeric</code>. The minimum probability below which all values are coloured <code>low_colour</code>. Defaults to <code>0</code> (i.e. no clamping). To specify a proportion probability in 8-bit form, multiply by 255 e.g. to low-clamp at 30% probability, set this to <code>0.3*255</code>.</p></dd>
 
 
 <dt id="arg-high-clamp">high_clamp<a class="anchor" aria-label="anchor" href="#arg-high-clamp"></a></dt>
@@ -143,6 +144,10 @@ but default to blue = low modification probability and red = high modification p
 
 <dt id="arg-outline-linewidth">outline_linewidth<a class="anchor" aria-label="anchor" href="#arg-outline-linewidth"></a></dt>
 <dd><p><code>numeric</code>. The linewidth of the scalebar outline. Defaults to <code>1</code>. Set to <code>0</code> to disable scalebar outline.</p></dd>
+
+
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
+<dd><p>Used to recognise aliases e.g. American spellings or common misspellings - see <a href="ggDNAvis_aliases.html">aliases</a>. Contact maintainer if any American spellings do not work.</p></dd>
 
 </dl></div>
     <div class="section level2">
