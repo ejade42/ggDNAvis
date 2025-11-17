@@ -231,7 +231,7 @@ new_sequences
 #> [54] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGCGGCGGA"                     
 
 ## Create annnotation dataframe
-create_many_sequence_index_annotations(
+convert_many_sequences_to_index_annotations(
     new_sequences_vector = new_sequences,
     original_sequences_vector = sequences,
     original_indices_to_annotate = index_annotation_lines,
@@ -240,6 +240,34 @@ create_many_sequence_index_annotations(
     annotations_above = index_annotations_above,
     annotation_vertical_position = index_annotation_vertical_position
 )
-#> Error in create_many_sequence_index_annotations(new_sequences_vector = new_sequences,     original_sequences_vector = sequences, original_indices_to_annotate = index_annotation_lines,     annotation_interval = 10, annotate_full_lines = index_annotation_full_line,     annotations_above = index_annotations_above, annotation_vertical_position = index_annotation_vertical_position): could not find function "create_many_sequence_index_annotations"
+#>    x_position y_position annotation   type
+#> 1  0.09313725  0.9876543         10 Number
+#> 2  0.19117647  0.9876543         20 Number
+#> 3  0.28921569  0.9876543         30 Number
+#> 4  0.38725490  0.9876543         40 Number
+#> 5  0.48529412  0.9876543         50 Number
+#> 6  0.58333333  0.9876543         60 Number
+#> 7  0.68137255  0.9876543         70 Number
+#> 8  0.77941176  0.9876543         80 Number
+#> 9  0.87745098  0.9876543         90 Number
+#> 10 0.97549020  0.9876543        100 Number
+#> 11 0.09313725  0.5617284         10 Number
+#> 12 0.19117647  0.5617284         20 Number
+#> 13 0.28921569  0.5617284         30 Number
+#> 14 0.38725490  0.5617284         40 Number
+#> 15 0.48529412  0.5617284         50 Number
+#> 16 0.58333333  0.5617284         60 Number
+#> 17 0.68137255  0.5617284         70 Number
+#> 18 0.77941176  0.5617284         80 Number
+#> 19 0.87745098  0.5617284         90 Number
+#> 20 0.09313725  0.2839506         10 Number
+#> 21 0.19117647  0.2839506         20 Number
+#> 22 0.28921569  0.2839506         30 Number
+#> 23 0.38725490  0.2839506         40 Number
+#> 24 0.48529412  0.2839506         50 Number
+#> 25 0.58333333  0.2839506         60 Number
+#> 26 0.68137255  0.2839506         70 Number
+#> 27 0.77941176  0.2839506         80 Number
+#> 28 0.87745098  0.2839506         90 Number
 
 ```
