@@ -32,16 +32,15 @@ write_fastq(
 
 - dataframe:
 
-  `dataframe`. Dataframe containing modification information to write
-  back to modified FASTQ. Must have columns for unique read ID, DNA
-  sequence, and at least one set of locations and probabilities for a
-  particular modification type (e.g. 5C methylation).
+  Dataframe containing sequence information to write back to FASTQ. Must
+  have columns for unique read ID and DNA sequence. Should also have a
+  column for quality, unless wanting to fill in qualities with `"B"`.
 
 - filename:
 
-  `character`. File to write the modified FASTQ to. Recommended to end
-  with `.fastq` (warns but works if not). If set to `NA` (default), no
-  file will be output, which may be useful for testing/debugging.
+  `character`. File to write the FASTQ to. Recommended to end with
+  `.fastq` (warns but works if not). If set to `NA` (default), no file
+  will be output, which may be useful for testing/debugging.
 
 - read_id_colname:
 

@@ -57,9 +57,9 @@ write_modified_fastq(
 
 - filename:
 
-  `character`. File to write the modified FASTQ to. Recommended to end
-  with `.fastq` (warns but works if not). If set to `NA` (default), no
-  file will be output, which may be useful for testing/debugging.
+  `character`. File to write the FASTQ to. Recommended to end with
+  `.fastq` (warns but works if not). If set to `NA` (default), no file
+  will be output, which may be useful for testing/debugging.
 
 - read_id_colname:
 

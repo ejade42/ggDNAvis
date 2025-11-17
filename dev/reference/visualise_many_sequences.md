@@ -68,7 +68,17 @@ visualise_many_sequences(
 - margin:
 
   `numeric`. The size of the margin relative to the size of each base
-  square. Defaults to `0.5` (half the side length of each base square).
+  square. Defaults to `0.5` (half the side length of each base
+  square).  
+    
+  Note that index annotations can require a minimum margin size at the
+  top or bottom if present above the first/below the last row. This is
+  handled automatically but can mean the top/bottom margin is sometimes
+  larger than the `margin` setting.  
+    
+  Very small margins (\\\le\\0.25) may cause thick outlines to be cut
+  off at the edges of the plot. Recommended to either use a wider margin
+  or a smaller `outline_linewidth`.
 
 - sequence_text_colour:
 
@@ -183,9 +193,10 @@ visualise_many_sequences(
   turned on via setting `filename`. Corresponds to dpi of the exported
   image. Defaults to `100`.  
     
-  Low values (e.g. 20) will work when sequence text is off, and very low
-  values (e.g. 10) will work when sequence text and outlines are both
-  off.
+  Large values (e.g. 100) are required to render small text properly.
+  Small values (e.g. 20) will work when sequence/annotation text is off,
+  and very small values (e.g. 10) will work when sequence/annotation
+  text and outlines are all off.
 
 - ...:
 
