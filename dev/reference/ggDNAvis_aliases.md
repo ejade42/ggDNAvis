@@ -84,14 +84,9 @@ visualise_methylation(
 #>     Value: orange
 #> 'low_colour' will be used.
 #>     Value: purple
-#> Warning: Both 'low_colour' and alias 'low_col' were provided.
-#> 'low_col' will be discarded.
-#>     Value: orange
-#> 'low_colour' will be used.
-#>     Value: purple
 
 
-## The resulting colour will be purple
+## The resulting low colour will be purple
 visualise_methylation(
     d$locations,
     d$probabilities,
