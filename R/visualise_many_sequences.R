@@ -209,7 +209,7 @@ visualise_many_sequences <- function(
     ## Generate data for plotting
     image_data <- create_image_data(new_sequences_vector)
     sequence_text_data <- convert_sequences_to_annotations(new_sequences_vector, line_length = max(nchar(new_sequences_vector)), interval = 0)
-    index_annotation_data <- create_many_sequence_index_annotations(new_sequences_vector, sequences_vector, index_annotation_lines, index_annotation_interval, index_annotation_full_line, index_annotations_above, index_annotation_vertical_position)
+    index_annotation_data <- convert_many_sequences_to_index_annotations(new_sequences_vector, sequences_vector, index_annotation_lines, index_annotation_interval, index_annotation_full_line, index_annotations_above, index_annotation_vertical_position)
 
 
     ## Name the sequence colours vector
@@ -678,7 +678,7 @@ insert_at_indices <- function(
 #'
 #'
 #' @export
-create_many_sequence_index_annotations <- function(
+convert_many_sequences_to_index_annotations <- function(
     new_sequences_vector,
     original_sequences_vector,
     original_indices_to_annotate,

@@ -387,7 +387,7 @@ test_that("creating many sequences annotations works, full example", {
     )
 
     ## Create annnotation dataframe
-    d <- create_many_sequence_index_annotations(
+    d <- convert_many_sequences_to_index_annotations(
         new_sequences_vector = new_sequences,
         original_sequences_vector = sequences,
         original_indices_to_annotate = index_annotation_lines,
@@ -408,9 +408,9 @@ test_that("creating many sequences annotations works, full example", {
 
     ## Extra tests for returning blank dataframe
     blank_data <- data.frame("x_position" = numeric(), "y_position" = numeric(), "annotation" = character(), "type" = character())
-    expect_equal(create_many_sequence_index_annotations(new_sequences, sequences, annotation_interval = 0, original_indices_to_annotate = numeric()), blank_data)
-    expect_equal(create_many_sequence_index_annotations(new_sequences, sequences, annotation_interval = 10, original_indices_to_annotate = numeric()), blank_data)
-    expect_equal(create_many_sequence_index_annotations(new_sequences, sequences, annotation_interval = 0, original_indices_to_annotate = c(1, 2, 3)), blank_data)
+    expect_equal(convert_many_sequences_to_index_annotations(new_sequences, sequences, annotation_interval = 0, original_indices_to_annotate = numeric()), blank_data)
+    expect_equal(convert_many_sequences_to_index_annotations(new_sequences, sequences, annotation_interval = 10, original_indices_to_annotate = numeric()), blank_data)
+    expect_equal(convert_many_sequences_to_index_annotations(new_sequences, sequences, annotation_interval = 0, original_indices_to_annotate = c(1, 2, 3)), blank_data)
 })
 
 
@@ -439,7 +439,7 @@ test_that("creating many sequences annotations works, annotations below", {
     )
 
     ## Create annnotation dataframe
-    d <- create_many_sequence_index_annotations(
+    d <- convert_many_sequences_to_index_annotations(
         new_sequences_vector = new_sequences,
         original_sequences_vector = sequences,
         original_indices_to_annotate = index_annotation_lines,
@@ -475,22 +475,22 @@ test_that("creating many sequences annotations fails when needed", {
 
     bad_param_value_for_sorted_unique_pos_int_vec <- list("X", TRUE, NA, list(0), -1, 0, c(2, 0), c(2, 1), c(1, 1, 2), 0.5)
     for (param in bad_param_value_for_sorted_unique_pos_int_vec) {
-        expect_error(create_many_sequence_index_annotations(sequences, new_sequences, original_indices_to_annotate = param, annotation_interval = 1), class = "argument_value_or_type")
+        expect_error(convert_many_sequences_to_index_annotations(sequences, new_sequences, original_indices_to_annotate = param, annotation_interval = 1), class = "argument_value_or_type")
     }
 
     bad_param_value_for_bool <- list("X", 1, c(TRUE, FALSE), list(TRUE, FALSE), NA, NULL, -1)
     for (param in bad_param_value_for_bool) {
-        expect_error(create_many_sequence_index_annotations(sequences, new_sequences, annotate_full_lines = param, original_indices_to_annotate = 1, annotation_interval = 1), class = "argument_value_or_type")
-        expect_error(create_many_sequence_index_annotations(sequences, new_sequences, annotations_above = param, original_indices_to_annotate = 1, annotation_interval = 1), class = "argument_value_or_type")
+        expect_error(convert_many_sequences_to_index_annotations(sequences, new_sequences, annotate_full_lines = param, original_indices_to_annotate = 1, annotation_interval = 1), class = "argument_value_or_type")
+        expect_error(convert_many_sequences_to_index_annotations(sequences, new_sequences, annotations_above = param, original_indices_to_annotate = 1, annotation_interval = 1), class = "argument_value_or_type")
     }
 
     bad_param_value_for_non_neg_int <- list("X", TRUE, NA, list(1), -1, c(2, 0), c(2, 1), c(1, 1, 2), 0.5)
     for (param in bad_param_value_for_non_neg_int) {
-        expect_error(create_many_sequence_index_annotations(sequences, new_sequences, original_indices_to_annotate = 1, annotation_interval = param), class = "argument_value_or_type")
+        expect_error(convert_many_sequences_to_index_annotations(sequences, new_sequences, original_indices_to_annotate = 1, annotation_interval = param), class = "argument_value_or_type")
     }
 
     bad_param_value_for_non_neg_num <- list("X", TRUE, NA, list(1), -1, c(2, 0), c(2, 1), c(1, 1, 2))
     for (param in bad_param_value_for_non_neg_num) {
-        expect_error(create_many_sequence_index_annotations(sequences, new_sequences, annotation_vertical_position = param, original_indices_to_annotate = 1, annotation_interval = 1), class = "argument_value_or_type")
+        expect_error(convert_many_sequences_to_index_annotations(sequences, new_sequences, annotation_vertical_position = param, original_indices_to_annotate = 1, annotation_interval = 1), class = "argument_value_or_type")
     }
 })

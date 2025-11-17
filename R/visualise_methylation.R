@@ -364,7 +364,7 @@ visualise_methylation <- function(
         modification_probabilities <- insert_at_indices(modification_probabilities_original, index_annotation_lines, insert_before = index_annotations_above, insert = "", vert = index_annotation_vertical_position)
         sequences <- insert_at_indices(sequences_original, index_annotation_lines, insert_before = index_annotations_above, insert = "", vert = index_annotation_vertical_position)
     }, classes = "length_exceeded")
-    index_annotation_data <- create_many_sequence_index_annotations(sequences, sequences_original, index_annotation_lines, index_annotation_interval, index_annotation_full_line, index_annotations_above, index_annotation_vertical_position)
+    index_annotation_data <- convert_many_sequences_to_index_annotations(sequences, sequences_original, index_annotation_lines, index_annotation_interval, index_annotation_full_line, index_annotations_above, index_annotation_vertical_position)
 
 
     ## Generate rasterised dataframes of methylation and masking layer
@@ -380,39 +380,17 @@ visualise_methylation <- function(
     image_data$clamped_layer <- pmin(pmax(image_data$layer, low_clamp), high_clamp)
 
 
-
-    tile_width  <- 1/max(nchar(sequences))
-    tile_height <- 1/length(sequences)
-
     ## Generate sequence text data based on the chosen setting
     if (sequence_text_type == "sequence") {
         sequence_text_data <- convert_sequences_to_annotations(sequences, line_length = max(nchar(sequences)), interval = 0)
     } else if (sequence_text_type == "probability") {
-        probability_data <- data.frame("x_position" = numeric(), "y_position" = numeric(), "annotation" = character(), "type" = character())
-        for (i in 1:length(modification_locations)) {
-            locations <- string_to_vector(modification_locations[i])
-            probabilities <- string_to_vector(modification_probabilities[i])
-
-            min <- sequence_text_scaling[1]
-            max <- sequence_text_scaling[2]
-            scaled_probabilities <- (probabilities - min) / max
-
-            if (length(locations) > 0) {
-                for (j in 1:length(locations)) {
-                    x_position <- tile_width * (locations[j] - 1/2)
-                    y_position <- 1 - tile_height * (i - 1/2)
-                    annotation <- sprintf(paste0("%.", sequence_text_rounding, "f"), (scaled_probabilities[j]))
-                    type <- "Probability"
-                    probability_data <- rbind(probability_data, data.frame(x_position, y_position, annotation, type))
-                }
-            }
-        }
+        probability_data <- convert_probabilities_to_annotations(modification_locations, modification_probabilities, sequences, sequence_text_scaling, sequence_text_rounding)
     }
 
 
-
-
-
+    ## Calculate width and height of tiles based on sequences
+    tile_width  <- 1/max(nchar(sequences))
+    tile_height <- 1/length(sequences)
 
     ## Make methylation visualisation plot
     result <- ggplot(mapping = aes(x = .data$x, y = .data$y)) +
@@ -821,6 +799,82 @@ convert_modification_to_number_vector <- function(
     return(output_vector)
 }
 
+
+
+#' Create dataframe of locations and rendered probabilities ([visualise_methylation()] helper)
+#'
+#' @description
+#' This function takes the locations/probabilities/sequences input to [visualise_methylation()],
+#' as well as the scaling and rounding to apply to the probability text,
+#' and produces a dataframe of the x and y coordinates to draw each probability at
+#' (i.e. inside the coloured box for each assessed base)
+#' and the probability text to draw inside each box.
+#'
+#' @inheritParams visualise_methylation
+#' @return `dataframe`. Dataframe of `x_position`, `y_position`, `annotation` (i.e. probability to draw), and `type` (always `"Probability"`).
+#'
+#' @examples
+#' d <- extract_methylation_from_dataframe(example_many_sequences)
+#'
+#' ## Unscaled i.e. integers
+#' convert_probabilities_to_annotations(
+#'     d$locations,
+#'     d$probabilities,
+#'     d$sequences,
+#'     sequence_text_scaling = c(0, 1),
+#'     sequence_text_rounding = 0
+#' )
+#'
+#' ## Scaled to 0-1
+#' convert_probabilities_to_annotations(
+#'     d$locations,
+#'     d$probabilities,
+#'     d$sequences,
+#'     sequence_text_scaling = c(-0.5, 256),
+#'     sequence_text_rounding = 2
+#' )
+#'
+#' ## Default (i.e. scaled to 0-1)
+#' convert_probabilities_to_annotations(
+#'     d$locations,
+#'     d$probabilities,
+#'     d$sequences
+#' )
+#'
+#' @export
+convert_probabilities_to_annotations <- function(
+    modification_locations,
+    modification_probabilities,
+    sequences,
+    sequence_text_scaling = c(-0.5, 256),
+    sequence_text_rounding = 2
+) {
+    ## Calculate width and height of tiles based on sequences
+    tile_width  <- 1/max(nchar(sequences))
+    tile_height <- 1/length(sequences)
+
+    probability_data <- data.frame("x_position" = numeric(), "y_position" = numeric(), "annotation" = character(), "type" = character())
+    for (i in 1:length(modification_locations)) {
+        locations <- string_to_vector(modification_locations[i])
+        probabilities <- string_to_vector(modification_probabilities[i])
+
+        ## Scale probabilities as requested
+        min <- sequence_text_scaling[1]
+        max <- sequence_text_scaling[2]
+        scaled_probabilities <- (probabilities - min) / max
+
+        if (length(locations) > 0) {
+            for (j in 1:length(locations)) {
+                x_position <- tile_width * (locations[j] - 1/2)
+                y_position <- 1 - tile_height * (i - 1/2)
+                annotation <- sprintf(paste0("%.", sequence_text_rounding, "f"), (scaled_probabilities[j]))
+                type <- "Probability"
+                probability_data <- rbind(probability_data, data.frame(x_position, y_position, annotation, type))
+            }
+        }
+    }
+    return(probability_data)
+}
 
 
 
