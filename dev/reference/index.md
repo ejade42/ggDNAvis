@@ -2,20 +2,28 @@
 
 ## DNA visualisation
 
+### Alias information
+
+Information on how function and argument aliases are implemented in
+ggDNAvis
+
+- [`ggDNAvis_aliases`](https://ejade42.github.io/ggDNAvis/reference/ggDNAvis_aliases.md)
+  [`aliases`](https://ejade42.github.io/ggDNAvis/reference/ggDNAvis_aliases.md)
+  :
+
+  `ggDNAvis` aliases
+
 ### Main visualisation functions
 
 Main functions for visualising DNA/RNA/methylation information
 
 - [`visualise_single_sequence()`](https://ejade42.github.io/ggDNAvis/reference/visualise_single_sequence.md)
-  [`visualize_single_sequence()`](https://ejade42.github.io/ggDNAvis/reference/visualise_single_sequence.md)
   : Visualise a single DNA/RNA sequence
 - [`visualise_many_sequences()`](https://ejade42.github.io/ggDNAvis/reference/visualise_many_sequences.md)
-  [`visualize_many_sequences()`](https://ejade42.github.io/ggDNAvis/reference/visualise_many_sequences.md)
   : Visualise many DNA/RNA sequences
 - [`visualise_methylation()`](https://ejade42.github.io/ggDNAvis/reference/visualise_methylation.md)
   : Visualise methylation probabilities for many DNA sequences
 - [`visualise_methylation_colour_scale()`](https://ejade42.github.io/ggDNAvis/reference/visualise_methylation_colour_scale.md)
-  [`visualize_methylation_color_scale()`](https://ejade42.github.io/ggDNAvis/reference/visualise_methylation_colour_scale.md)
   : Visualise methylation colour scalebar
 
 ### Key data processing functions
@@ -166,7 +174,6 @@ they are available if needed)
   helper)
 
 - [`rasterise_matrix()`](https://ejade42.github.io/ggDNAvis/reference/rasterise_matrix.md)
-  [`rasterize_matrix()`](https://ejade42.github.io/ggDNAvis/reference/rasterise_matrix.md)
   :
 
   Rasterise a matrix to an x/y/layer dataframe (generic `ggDNAvis`

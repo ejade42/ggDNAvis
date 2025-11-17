@@ -1,24 +1,26 @@
 # Visualise methylation probabilities for many DNA sequences
 
-`visualize_methylation()` is an alias for this function.  
-  
+`visualize_methylation()` is an alias for `visualise_methylation()` -
+see
+[aliases](https://ejade42.github.io/ggDNAvis/reference/ggDNAvis_aliases.md).
+
 This function takes vectors of modifications locations, modification
 probabilities, and sequence lengths (e.g. created by
 [`extract_methylation_from_dataframe()`](https://ejade42.github.io/ggDNAvis/reference/extract_methylation_from_dataframe.md))
 and visualises the probability of methylation (or other modification)
-across each read.  
-  
-Assumes that the three main input vectors are of equal length *n* and
-represent *n* sequences (e.g. Nanopore reads), where `locations` are the
-indices along each read at which modification was assessed,
+across each read.
+
+Assumes that the three main input vectors are of equal length \\n\\ and
+represent \\n\\ sequences (e.g. Nanopore reads), where `locations` are
+the indices along each read at which modification was assessed,
 `probabilities` are the probability of modification at each assessed
-site, and `lengths` are the lengths of each sequence.  
-  
+site, and `lengths` are the lengths of each sequence.
+
 For each sequence, renders non-assessed (e.g. non-CpG) bases as
 `other_bases_colour`, renders background (including after the end of the
 sequence) as `background_colour`, and renders assessed bases on a linear
-scale from `low_colour` to `high_colour`.  
-  
+scale from `low_colour` to `high_colour`.
+
 Clamping means that the endpoints of the colour gradient can be set some
 distance into the probability space e.g. with Nanopore \> SAM
 probability values from 0-255, the default is to render 0 as fully blue
@@ -26,8 +28,8 @@ probability values from 0-255, the default is to render 0 as fully blue
 linearly interpolated. However, clamping with `low_clamp = 100` and
 `high_clamp = 200` would set *all probabilities up to 100* as fully
 blue, *all probabilities 200 and above* as fully red, and linearly
-interpolate only over the `100-200` range.  
-  
+interpolate only over the `100-200` range.
+
 A separate scalebar plot showing the colours corresponding to each
 probability, with any/no clamping values, can be produced via
 [`visualise_methylation_colour_scale()`](https://ejade42.github.io/ggDNAvis/reference/visualise_methylation_colour_scale.md).
@@ -70,7 +72,8 @@ visualise_methylation(
   return = TRUE,
   filename = NA,
   render_device = ragg::agg_png,
-  pixels_per_base = 100
+  pixels_per_base = 100,
+  ...
 )
 ```
 
@@ -327,6 +330,13 @@ visualise_methylation(
   turned on via setting `filename`. Corresponds to dpi of the exported
   image. Defaults to `20`. Low values acceptable as currently this
   function does not write any text.
+
+- ...:
+
+  American-spelt aliases should automatically be recognised e.g.
+  `low_color` should work in place of `low_colour` - see
+  [aliases](https://ejade42.github.io/ggDNAvis/reference/ggDNAvis_aliases.md).
+  Contact maintainer if they do not work.
 
 ## Value
 

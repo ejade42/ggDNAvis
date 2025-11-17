@@ -1,41 +1,21 @@
 # Visualise many DNA/RNA sequences
 
-`visualize_many_sequences()` is an alias for this function.  
-\\ This function takes a vector of DNA/RNA sequences (each sequence can
-be any length and they can be different lengths), and plots each
-sequence as base-coloured squares along a single line. Setting
-`filename` allows direct export of a png image with the correct
-dimensions to make every base a perfect square. Empty strings (`""`)
-within the vector can be utilised as blank spacing lines. Colours and
-pixels per square when exported are configurable.
+`visualize_many_sequences()` is an alias for
+`visualise_many_sequences()` - see
+[aliases](https://ejade42.github.io/ggDNAvis/reference/ggDNAvis_aliases.md).
+
+This function takes a vector of DNA/RNA sequences (each sequence can be
+any length and they can be different lengths), and plots each sequence
+as base-coloured squares along a single line. Setting `filename` allows
+direct export of a png image with the correct dimensions to make every
+base a perfect square. Empty strings (`""`) within the vector can be
+utilised as blank spacing lines. Colours and pixels per square when
+exported are configurable.
 
 ## Usage
 
 ``` r
 visualise_many_sequences(
-  sequences_vector,
-  sequence_colours = sequence_colour_palettes$ggplot_style,
-  background_colour = "white",
-  margin = 0.5,
-  sequence_text_colour = "black",
-  sequence_text_size = 16,
-  index_annotation_lines = c(1),
-  index_annotation_colour = "darkred",
-  index_annotation_size = 12.5,
-  index_annotation_interval = 15,
-  index_annotations_above = TRUE,
-  index_annotation_vertical_position = 1/3,
-  index_annotation_full_line = TRUE,
-  outline_colour = "black",
-  outline_linewidth = 3,
-  outline_join = "mitre",
-  return = TRUE,
-  filename = NA,
-  render_device = ragg::agg_png,
-  pixels_per_base = 100
-)
-
-visualize_many_sequences(
   sequences_vector,
   sequence_colours = sequence_colour_palettes$ggplot_style,
   background_colour = "white",

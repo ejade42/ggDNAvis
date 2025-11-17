@@ -1,6 +1,8 @@
 # Visualise methylation colour scalebar
 
-`visualize_methylation_color_scale()` is an alias for this function.  
+`visualize_methylation_color_scale()` is an alias for
+`visualise_methylation_colour_scale()` - see
+[aliases](https://ejade42.github.io/ggDNAvis/reference/ggDNAvis_aliases.md).  
   
 This function creates a scalebar showing the colouring scheme based on
 methylation probability that is used in
@@ -18,22 +20,6 @@ modification probability and red = high modification probability.
 
 ``` r
 visualise_methylation_colour_scale(
-  low_colour = "blue",
-  high_colour = "red",
-  low_clamp = 0,
-  high_clamp = 255,
-  full_range = c(0, 255),
-  precision = 10^3,
-  background_colour = "white",
-  x_axis_title = NULL,
-  do_x_ticks = TRUE,
-  do_side_scale = FALSE,
-  side_scale_title = NULL,
-  outline_colour = "black",
-  outline_linewidth = 1
-)
-
-visualize_methylation_color_scale(
   low_colour = "blue",
   high_colour = "red",
   low_clamp = 0,

@@ -12,8 +12,6 @@ dataframe is simply the value of each element of the matrix.
 
 ``` r
 rasterise_matrix(image_matrix)
-
-rasterize_matrix(image_matrix)
 ```
 
 ## Arguments

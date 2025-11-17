@@ -17,8 +17,8 @@ Modification locations are the indices along the read at which
 modification was assessed e.g. a 3 indicates that the third base in the
 read was assessed for modifications of the given type. Modification
 probabilities are the probability that the given modification is
-present, given as an integer from 0-255 where integer \\N\\ represents
-the probability space from \\\frac{N}{256}\\ to \\\frac{N+1}{256}\\.  
+present, given as an integer from 0-255 where integer \\p\\ represents
+the probability space from \\\frac{p}{256}\\ to \\\frac{p+1}{256}\\.  
   
 To extract the numbers from these columns as numeric vectors to analyse,
 use
