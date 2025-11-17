@@ -334,13 +334,13 @@ Probabilities are also a comma-condensed string of integers produced via
 [`vector_to_string()`](https://ejade42.github.io/ggDNAvis/reference/vector_to_string.md),
 but here each integer represents the probability that the corresponding
 base is modified. Probabilities are stored as 8-bit integers (0-255)
-where a score of $N$ represents the probability space from
-$\frac{N}{256}$ to $\frac{N + 1}{256}$. For the read above, a
-probability string of `"250,3,50,127"` would indicate that the third
-base is almost certainly methylated (97.66%-98.05%), the sixth base is
-almost certainly not methylated (1.17%-1.56%), the twelfth base is most
-likely not methylated (19.53%-19.92%), and the fifteenth base may or may
-not be methylated (49.61%-50.00%)
+where a score of N represents the probability space from \frac{N}{256}
+to \frac{N+1}{256}. For the read above, a probability string of
+`"250,3,50,127"` would indicate that the third base is almost certainly
+methylated (97.66%-98.05%), the sixth base is almost certainly not
+methylated (1.17%-1.56%), the twelfth base is most likely not methylated
+(19.53%-19.92%), and the fifteenth base may or may not be methylated
+(49.61%-50.00%)
 
 ``` r
 ## Function to convert integer scores to corresponding percentages
