@@ -71,7 +71,7 @@ new_sequences <- insert_at_indices(
 new_sequences
 
 ## Create annnotation dataframe
-create_many_sequence_index_annotations(
+convert_many_sequences_to_index_annotations(
     new_sequences_vector = new_sequences,
     original_sequences_vector = sequences,
     original_indices_to_annotate = index_annotation_lines,
