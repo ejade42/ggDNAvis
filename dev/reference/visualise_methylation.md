@@ -1,5 +1,7 @@
 # Visualise methylation probabilities for many DNA sequences
 
+`visualize_methylation()` is an alias for this function.  
+  
 This function takes vectors of modifications locations, modification
 probabilities, and sequence lengths (e.g. created by
 [`extract_methylation_from_dataframe()`](https://ejade42.github.io/ggDNAvis/reference/extract_methylation_from_dataframe.md))
