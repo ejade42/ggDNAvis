@@ -59,7 +59,7 @@ visualise_methylation(
     low_col = "purple"
 )
 
-## The resulting colour will be purple
+## The resulting low colour will be purple
 visualise_methylation(
     d$locations,
     d$probabilities,
