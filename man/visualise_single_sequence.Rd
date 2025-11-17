@@ -27,29 +27,6 @@ visualise_single_sequence(
   render_device = ragg::agg_png,
   pixels_per_base = 100
 )
-
-visualize_single_sequence(
-  sequence,
-  sequence_colours = sequence_colour_palettes$ggplot_style,
-  background_colour = "white",
-  line_wrapping = 75,
-  spacing = 1,
-  margin = 0.5,
-  sequence_text_colour = "black",
-  sequence_text_size = 16,
-  index_annotation_colour = "darkred",
-  index_annotation_size = 12.5,
-  index_annotation_interval = 15,
-  index_annotations_above = TRUE,
-  index_annotation_vertical_position = 1/3,
-  outline_colour = "black",
-  outline_linewidth = 3,
-  outline_join = "mitre",
-  return = TRUE,
-  filename = NA,
-  render_device = ragg::agg_png,
-  pixels_per_base = 100
-)
 }
 \arguments{
 \item{sequence}{\code{character}. A DNA or RNA sequence to visualise e.g. \code{"AAATGCTGC"}.}
@@ -96,7 +73,7 @@ visualize_single_sequence(
 A ggplot object containing the full visualisation, or \code{invisible(NULL)} if \code{return = FALSE}. It is often more useful to use \code{filename = "myfilename.png"}, because then the visualisation is exported at the correct aspect ratio.
 }
 \description{
-\code{visualize_single_sequence()} is an alias for this function.\cr\cr
+\code{visualize_single_sequence()} is an alias for \code{visualise_single_sequence()} - see \link{aliases}.\cr\cr
 This function takes a DNA/RNA sequence and returns a ggplot
 visualising it, with the option to directly export a png image
 with appropriate dimensions. Colours, line wrapping, index annotation

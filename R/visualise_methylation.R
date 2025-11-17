@@ -4,22 +4,28 @@
 
 #' Visualise methylation probabilities for many DNA sequences
 #'
-#' `visualize_methylation()` is an alias for this function.\cr\cr
+#' @description
+#' `visualize_methylation()` is an alias for `visualise_methylation()` - see [aliases].
+#'
 #' This function takes vectors of modifications locations, modification probabilities,
 #' and sequence lengths (e.g. created by [extract_methylation_from_dataframe()]) and
-#' visualises the probability of methylation (or other modification) across each read.\cr\cr
-#' Assumes that the three main input vectors are of equal length *n* and represent *n* sequences
+#' visualises the probability of methylation (or other modification) across each read.
+#'
+#' Assumes that the three main input vectors are of equal length \eqn{n} and represent \eqn{n} sequences
 #' (e.g. Nanopore reads), where `locations` are the indices along each read at which modification
 #' was assessed, `probabilities` are the probability of modification at each assessed site, and
-#' `lengths` are the lengths of each sequence.\cr\cr
+#' `lengths` are the lengths of each sequence.
+#'
 #' For each sequence, renders non-assessed (e.g. non-CpG) bases as `other_bases_colour`, renders
 #' background (including after the end of the sequence) as `background_colour`, and renders assessed
-#' bases on a linear scale from `low_colour` to `high_colour`.\cr\cr
+#' bases on a linear scale from `low_colour` to `high_colour`.
+#'
 #' Clamping means that the endpoints of the colour gradient can be set some distance into the probability
 #' space e.g. with Nanopore > SAM probability values from 0-255, the default is to render 0 as fully blue
 #' (`#0000FF`), 255 as fully red (`#FF0000`), and values in between linearly interpolated. However, clamping with
 #' `low_clamp = 100` and `high_clamp = 200` would set *all probabilities up to 100* as fully blue,
-#' *all probabilities 200 and above* as fully red, and linearly interpolate only over the `100-200` range.\cr\cr
+#' *all probabilities 200 and above* as fully red, and linearly interpolate only over the `100-200` range.
+#'
 #' A separate scalebar plot showing the colours corresponding to each probability, with any/no clamping values,
 #' can be produced via [visualise_methylation_colour_scale()].
 #'
@@ -58,6 +64,7 @@
 #' @param filename `character`. Filename to which output should be saved. If set to `NA` (default), no file will be saved. Recommended to end with `".png"`, but can change if render device is changed.
 #' @param render_device `function/character`. Device to use when rendering. See [ggplot2::ggsave()] documentation for options. Defaults to [`ragg::agg_png`]. Can be set to `NULL` to infer from file extension, but results may vary between systems.
 #' @param pixels_per_base `integer`. How large each box should be in pixels, if file output is turned on via setting `filename`. Corresponds to dpi of the exported image. Defaults to `20`. Low values acceptable as currently this function does not write any text.
+#' @param ... American-spelt aliases should automatically be recognised e.g. `low_color` should work in place of `low_colour` - see [aliases]. Contact maintainer if they do not work.
 #'
 #' @return A ggplot object containing the full visualisation, or `invisible(NULL)` if `return = FALSE`. It is often more useful to use `filename = "myfilename.png"`, because then the visualisation is exported at the correct aspect ratio.
 #'
@@ -149,8 +156,38 @@ visualise_methylation <- function(
     return = TRUE,
     filename = NA,
     render_device = ragg::agg_png,
-    pixels_per_base = 100
+    pixels_per_base = 100,
+    ...
 ) {
+    ## Process aliases
+    ## ---------------------------------------------------------------------
+    dots <- list(...)
+    low_colour <- resolve_alias("low_colour", low_colour, "low_color", dots$low_color, "blue")
+    low_colour <- resolve_alias("low_colour", low_colour, "low_col", dots$low_col, "blue")
+    high_colour <- resolve_alias("high_colour", high_colour, "high_color", dots$high_color, "red")
+    high_colour <- resolve_alias("high_colour", high_colour, "high_col", dots$high_col, "red")
+    background_colour <- resolve_alias("background_colour", background_colour, "background_color", dots$background_color, "white")
+    background_colour <- resolve_alias("background_colour", background_colour, "background_col", dots$background_col, "white")
+    other_bases_colour <- resolve_alias("other_bases_colour", other_bases_colour, "other_bases_color", dots$other_bases_color, "grey")
+    other_bases_colour <- resolve_alias("other_bases_colour", other_bases_colour, "other_bases_col", dots$other_bases_col, "grey")
+    sequence_text_colour <- resolve_alias("sequence_text_colour", sequence_text_colour, "sequence_text_color", dots$sequence_text_color, "black")
+    sequence_text_colour <- resolve_alias("sequence_text_colour", sequence_text_colour, "sequence_text_col", dots$sequence_text_col, "black")
+    index_annotation_colour <- resolve_alias("index_annotation_colour", index_annotation_colour, "index_annotation_color", dots$index_annotation_color, "darkred")
+    index_annotation_colour <- resolve_alias("index_annotation_colour", index_annotation_colour, "index_annotation_col", dots$index_annotation_col, "darkred")
+    outline_colour <- resolve_alias("outline_colour", outline_colour, "outline_color", dots$outline_color, "black")
+    outline_colour <- resolve_alias("outline_colour", outline_colour, "outline_col", dots$outline_col, "black")
+    modified_bases_outline_colour <- resolve_alias("modified_bases_outline_colour", modified_bases_outline_colour, "modified_bases_outline_color", dots$modified_bases_outline_color, NA)
+    modified_bases_outline_colour <- resolve_alias("modified_bases_outline_colour", modified_bases_outline_colour, "modified_bases_outline_col", dots$modified_bases_outline_col, NA)
+    other_bases_outline_colour <- resolve_alias("other_bases_outline_colour", other_bases_outline_colour, "other_bases_outline_color", dots$other_bases_outline_color, NA)
+    other_bases_outline_colour <- resolve_alias("other_bases_outline_colour", other_bases_outline_colour, "other_bases_outline_col", dots$other_bases_outline_col, NA)
+    index_annotations_above <- resolve_alias("index_annotations_above", index_annotations_above, "index_annotation_above", dots$index_annotation_above, TRUE)
+    index_annotation_full_line <- resolve_alias("index_annotation_full_line", index_annotation_full_line, "index_annotations_full_line", dots$index_annotations_full_line, TRUE)
+    index_annotation_full_line <- resolve_alias("index_annotation_full_line", index_annotation_full_line, "index_annotations_full_lines", dots$index_annotations_full_lines, TRUE)
+    index_annotation_full_line <- resolve_alias("index_annotation_full_line", index_annotation_full_line, "index_annotation_full_lines", dots$index_annotation_full_lines, TRUE)
+    ## ---------------------------------------------------------------------
+
+
+
     ## Validate arguments
     ## ---------------------------------------------------------------------
     not_null <- list(modification_locations = modification_locations, modification_probabilities = modification_probabilities, sequences = sequences, background_colour = background_colour, other_bases_colour = other_bases_colour, low_colour = low_colour, high_colour = high_colour, low_clamp = low_clamp, high_clamp = high_clamp, sequence_text_type = sequence_text_type, sequence_text_rounding = sequence_text_rounding, sequence_text_colour = sequence_text_colour, sequence_text_size = sequence_text_size, index_annotation_colour = index_annotation_colour, index_annotation_size = index_annotation_size, index_annotation_interval = index_annotation_interval, index_annotations_above = index_annotations_above, index_annotation_vertical_position = index_annotation_vertical_position, index_annotation_full_line = index_annotation_full_line, outline_linewidth = outline_linewidth, outline_colour = outline_colour, outline_join = outline_join, modified_bases_outline_linewidth = modified_bases_outline_linewidth, modified_bases_outline_colour = modified_bases_outline_colour, modified_bases_outline_join = modified_bases_outline_join, other_bases_outline_linewidth = other_bases_outline_linewidth, other_bases_outline_colour = other_bases_outline_colour, other_bases_outline_join = other_bases_outline_join, margin = margin, return = return, filename = filename, pixels_per_base = pixels_per_base)
@@ -452,7 +489,7 @@ visualise_methylation <- function(
 
 #' Visualise methylation colour scalebar
 #'
-#' `visualize_methylation_color_scale()` is an alias for this function.\cr\cr
+#' `visualize_methylation_color_scale()` is an alias for `visualise_methylation_colour_scale()` - see [aliases].\cr\cr
 #' This function creates a scalebar showing the colouring scheme based on methylation
 #' probability that is used in [visualise_methylation()]. Showing this is particularly
 #' important when the colour range is clamped via `low_clamp` and `high_clamp` (e.g.
@@ -782,5 +819,6 @@ convert_modification_to_number_vector <- function(
 visualize_methylation <- visualise_methylation
 
 #' @rdname visualise_methylation_colour_scale
+#' @usage NULL
 #' @export
 visualize_methylation_color_scale <- visualise_methylation_colour_scale

@@ -1,6 +1,12 @@
 reference:
 - title: DNA visualisation
 
+- subtitle: Alias information
+  desc: >
+    Information on how function and argument aliases are implemented in ggDNAvis
+  contents:
+  - ggDNAvis_aliases
+
 - subtitle: Main visualisation functions
   desc: >
     Main functions for visualising DNA/RNA/methylation information

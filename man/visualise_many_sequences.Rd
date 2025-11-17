@@ -27,29 +27,6 @@ visualise_many_sequences(
   render_device = ragg::agg_png,
   pixels_per_base = 100
 )
-
-visualize_many_sequences(
-  sequences_vector,
-  sequence_colours = sequence_colour_palettes$ggplot_style,
-  background_colour = "white",
-  margin = 0.5,
-  sequence_text_colour = "black",
-  sequence_text_size = 16,
-  index_annotation_lines = c(1),
-  index_annotation_colour = "darkred",
-  index_annotation_size = 12.5,
-  index_annotation_interval = 15,
-  index_annotations_above = TRUE,
-  index_annotation_vertical_position = 1/3,
-  index_annotation_full_line = TRUE,
-  outline_colour = "black",
-  outline_linewidth = 3,
-  outline_join = "mitre",
-  return = TRUE,
-  filename = NA,
-  render_device = ragg::agg_png,
-  pixels_per_base = 100
-)
 }
 \arguments{
 \item{sequences_vector}{\verb{character vector}. The sequences to visualise, often created from a dataframe via \code{\link[=extract_and_sort_sequences]{extract_and_sort_sequences()}}. E.g. \code{c("GGCGGC", "", "AGCTAGCTA")}.}
@@ -96,7 +73,8 @@ visualize_many_sequences(
 A ggplot object containing the full visualisation, or \code{invisible(NULL)} if \code{return = FALSE}. It is often more useful to use \code{filename = "myfilename.png"}, because then the visualisation is exported at the correct aspect ratio.
 }
 \description{
-\code{visualize_many_sequences()} is an alias for this function.\cr\
+\code{visualize_many_sequences()} is an alias for \code{visualise_many_sequences()} - see \link{aliases}.
+
 This function takes a vector of DNA/RNA sequences (each sequence can be
 any length and they can be different lengths), and plots each sequence
 as base-coloured squares along a single line. Setting \code{filename} allows direct

@@ -20,22 +20,6 @@ visualise_methylation_colour_scale(
   outline_colour = "black",
   outline_linewidth = 1
 )
-
-visualize_methylation_color_scale(
-  low_colour = "blue",
-  high_colour = "red",
-  low_clamp = 0,
-  high_clamp = 255,
-  full_range = c(0, 255),
-  precision = 10^3,
-  background_colour = "white",
-  x_axis_title = NULL,
-  do_x_ticks = TRUE,
-  do_side_scale = FALSE,
-  side_scale_title = NULL,
-  outline_colour = "black",
-  outline_linewidth = 1
-)
 }
 \arguments{
 \item{low_colour}{\code{character}. The colour that should be used to represent minimum probability of methylation/modification (defaults to blue).}
@@ -68,7 +52,7 @@ visualize_methylation_color_scale(
 ggplot of the scalebar.\cr\cr Unlike the other \verb{visualise_<>} functions in this package, does not directly export a png. This is because there are no squares that need to be rendered at a precise aspect ratio in this function. It can just be saved normally with \code{\link[ggplot2:ggsave]{ggplot2::ggsave()}} with any sensible combination of height and width.
 }
 \description{
-\code{visualize_methylation_color_scale()} is an alias for this function.\cr\cr
+\code{visualize_methylation_color_scale()} is an alias for \code{visualise_methylation_colour_scale()} - see \link{aliases}.\cr\cr
 This function creates a scalebar showing the colouring scheme based on methylation
 probability that is used in \code{\link[=visualise_methylation]{visualise_methylation()}}. Showing this is particularly
 important when the colour range is clamped via \code{low_clamp} and \code{high_clamp} (e.g.

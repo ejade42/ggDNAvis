@@ -6,8 +6,6 @@
 \title{Rasterise a matrix to an x/y/layer dataframe (generic \code{ggDNAvis} helper)}
 \usage{
 rasterise_matrix(image_matrix)
-
-rasterize_matrix(image_matrix)
 }
 \arguments{
 \item{image_matrix}{\code{matrix}. A matrix (or anything that can be coerced to a matrix via \code{\link[base:matrix]{base::as.matrix()}}).}

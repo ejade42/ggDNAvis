@@ -1,6 +1,8 @@
 #' Visualise many DNA/RNA sequences
 #'
-#' `visualize_many_sequences()` is an alias for this function.\cr\
+#' @description
+#' `visualize_many_sequences()` is an alias for `visualise_many_sequences()` - see [aliases].
+#'
 #' This function takes a vector of DNA/RNA sequences (each sequence can be
 #' any length and they can be different lengths), and plots each sequence
 #' as base-coloured squares along a single line. Setting `filename` allows direct
@@ -805,5 +807,6 @@ create_many_sequence_index_annotations <- function(
 
 ## Define alias
 #' @rdname visualise_many_sequences
+#' @usage NULL
 #' @export
 visualize_many_sequences <- visualise_many_sequences

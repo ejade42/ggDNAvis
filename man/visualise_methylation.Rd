@@ -40,7 +40,8 @@ visualise_methylation(
   return = TRUE,
   filename = NA,
   render_device = ragg::agg_png,
-  pixels_per_base = 100
+  pixels_per_base = 100,
+  ...
 )
 }
 \arguments{
@@ -113,27 +114,34 @@ visualise_methylation(
 \item{render_device}{\verb{function/character}. Device to use when rendering. See \code{\link[ggplot2:ggsave]{ggplot2::ggsave()}} documentation for options. Defaults to \code{\link[ragg:agg_png]{ragg::agg_png}}. Can be set to \code{NULL} to infer from file extension, but results may vary between systems.}
 
 \item{pixels_per_base}{\code{integer}. How large each box should be in pixels, if file output is turned on via setting \code{filename}. Corresponds to dpi of the exported image. Defaults to \code{20}. Low values acceptable as currently this function does not write any text.}
+
+\item{...}{American-spelt aliases should automatically be recognised e.g. \code{low_color} should work in place of \code{low_colour} - see \link{aliases}. Contact maintainer if they do not work.}
 }
 \value{
 A ggplot object containing the full visualisation, or \code{invisible(NULL)} if \code{return = FALSE}. It is often more useful to use \code{filename = "myfilename.png"}, because then the visualisation is exported at the correct aspect ratio.
 }
 \description{
-\code{visualize_methylation()} is an alias for this function.\cr\cr
+\code{visualize_methylation()} is an alias for \code{visualise_methylation()} - see \link{aliases}.
+
 This function takes vectors of modifications locations, modification probabilities,
 and sequence lengths (e.g. created by \code{\link[=extract_methylation_from_dataframe]{extract_methylation_from_dataframe()}}) and
-visualises the probability of methylation (or other modification) across each read.\cr\cr
-Assumes that the three main input vectors are of equal length \emph{n} and represent \emph{n} sequences
+visualises the probability of methylation (or other modification) across each read.
+
+Assumes that the three main input vectors are of equal length \eqn{n} and represent \eqn{n} sequences
 (e.g. Nanopore reads), where \code{locations} are the indices along each read at which modification
 was assessed, \code{probabilities} are the probability of modification at each assessed site, and
-\code{lengths} are the lengths of each sequence.\cr\cr
+\code{lengths} are the lengths of each sequence.
+
 For each sequence, renders non-assessed (e.g. non-CpG) bases as \code{other_bases_colour}, renders
 background (including after the end of the sequence) as \code{background_colour}, and renders assessed
-bases on a linear scale from \code{low_colour} to \code{high_colour}.\cr\cr
+bases on a linear scale from \code{low_colour} to \code{high_colour}.
+
 Clamping means that the endpoints of the colour gradient can be set some distance into the probability
 space e.g. with Nanopore > SAM probability values from 0-255, the default is to render 0 as fully blue
 (\verb{#0000FF}), 255 as fully red (\verb{#FF0000}), and values in between linearly interpolated. However, clamping with
 \code{low_clamp = 100} and \code{high_clamp = 200} would set \emph{all probabilities up to 100} as fully blue,
-\emph{all probabilities 200 and above} as fully red, and linearly interpolate only over the \code{100-200} range.\cr\cr
+\emph{all probabilities 200 and above} as fully red, and linearly interpolate only over the \code{100-200} range.
+
 A separate scalebar plot showing the colours corresponding to each probability, with any/no clamping values,
 can be produced via \code{\link[=visualise_methylation_colour_scale]{visualise_methylation_colour_scale()}}.
 }

@@ -1,3 +1,40 @@
+
+
+
+resolve_alias <- function(
+    primary_name,
+    primary_val,
+    alias_name,
+    alias_val,
+    primary_default
+) {
+    ## This function doesn't cope is a mandatory argument is missing but its alias is provided.
+    ## I don't think that shows up in the package, at least in user-facing functions.
+
+    ## If alias has been provided:
+    if (!is.null(alias_val)) {
+        not_default <- !identical(primary_val, primary_default)
+
+        ## If both are set, warn and return primary value
+        if (not_default) {
+            warn(paste0("Both '", primary_name, "' and alias '", alias_name, "' were provided.",
+                        "\n'", alias_name,   "' will be discarded.\n    Value: ", paste0(alias_val, collapse = ""),
+                        "\n'", primary_name, "' will be used.\n    Value: ", paste0(primary_val, collapse = "")),
+                 class = "alias_conflict")
+            return(primary_val)
+
+        ## If primary is default and alias is set, return alias
+        } else {
+            return(alias_val)
+        }
+    ## If alias was not provided, return primary:
+    } else {
+        return(primary_val)
+    }
+}
+
+
+
 #' Emit an error message for an invalid function argument (generic `ggDNAvis` helper)
 #'
 #' This function takes an argument name, a named list of arguments
@@ -469,5 +506,6 @@ rasterise_matrix <- function(image_matrix) {
 
 ## Define alias
 #' @rdname rasterise_matrix
+#' @usage NULL
 #' @export
 rasterize_matrix <- rasterise_matrix

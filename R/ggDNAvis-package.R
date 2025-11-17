@@ -50,6 +50,67 @@ fetch_acceptable_distortion <- function(verbose = TRUE) {
     return(acceptable_distortion)
 }
 
+#' `ggDNAvis` aliases
+#'
+#' @name ggDNAvis_aliases
+#' @aliases aliases
+#'
+#' @description
+#' As of v1.0.0, `ggDNAvis` supports function and argument aliases.
+#' The code is entirely written with British spellings (e.g. [visualise_methylation_colour_scale()]),
+#' but should also accept American spellings (e.g. [visualize_methylation_color_scale()]).
+#' If any American spellings don't work, please contact the maintainer (evelynjade42@gmail.com)
+#' or submit a pull request (<https://github.com/ejade42/ggDNAvis>).
+#'
+#' There are currently five functions with aliases configured:
+#' - [rasterise_matrix()] ([rasterize_matrix()])
+#' - [visualise_many_sequences()] ([visualize_many_sequences()])
+#' - [visualise_methylation()] ([visualize_methylation()])
+#' - [visualise_methylation_colour_scale()] ([visualize_methylation_color_scale()])
+#' - [visualise_single_sequence()] ([visualize_single_sequence()])
+#'
+#' All arguments should have aliases configured. In particular, any `_colour` arguments
+#' should also accept `_color` or `_col`.
+#'
+#' When more than one equivalent argument is provided, the 'canonical' (British) argument
+#' takes precedence, and will produce a warning message explaining this. For colours, `_colour`
+#' takes precedence over `_color`, which itself takes precedence over `_col`.
+#'
+#' I have also tried to provide aliases for common argument misspellings. In particular,
+#' `index_annotation_full_line` also accepts any of `index_annotations_full_lines`,
+#' `index_annotation_full_lines`, or `index_annotations_full_line`.
+#' Likewise, `index_annotations_above` also accepts `index_annotation_above`.
+#'
+#' @examples
+#' d <- extract_methylation_from_dataframe(example_many_sequences)
+#' ## The resulting colour will be green
+#' visualise_methylation(
+#'     d$locations,
+#'     d$probabilities,
+#'     d$sequences,
+#'     low_colour = "green",
+#'     low_color = "orange",
+#'     low_col = "purple"
+#' )
+#'
+#' ## The resulting colour will be orange
+#' visualise_methylation(
+#'     d$locations,
+#'     d$probabilities,
+#'     d$sequences,
+#'     low_color = "orange",
+#'     low_col = "purple"
+#' )
+#'
+#' ## The resulting colour will be purple
+#' visualise_methylation(
+#'     d$locations,
+#'     d$probabilities,
+#'     d$sequences,
+#'     low_col = "purple"
+#' )
+#'
+NULL
 
 #' Example multiple sequences data
 #'
