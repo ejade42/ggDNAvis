@@ -10,11 +10,12 @@
 <url><loc>https://ejade42.github.io/ggDNAvis/reference/convert_base_to_number.html</loc></url>
 <url><loc>https://ejade42.github.io/ggDNAvis/reference/convert_input_seq_to_sequence_list.html</loc></url>
 <url><loc>https://ejade42.github.io/ggDNAvis/reference/convert_locations_to_MM_vector.html</loc></url>
+<url><loc>https://ejade42.github.io/ggDNAvis/reference/convert_many_sequences_to_index_annotations.html</loc></url>
 <url><loc>https://ejade42.github.io/ggDNAvis/reference/convert_modification_to_number_vector.html</loc></url>
+<url><loc>https://ejade42.github.io/ggDNAvis/reference/convert_probabilities_to_annotations.html</loc></url>
 <url><loc>https://ejade42.github.io/ggDNAvis/reference/convert_sequence_to_numbers.html</loc></url>
 <url><loc>https://ejade42.github.io/ggDNAvis/reference/convert_sequences_to_annotations.html</loc></url>
 <url><loc>https://ejade42.github.io/ggDNAvis/reference/create_image_data.html</loc></url>
-<url><loc>https://ejade42.github.io/ggDNAvis/reference/create_many_sequence_index_annotations.html</loc></url>
 <url><loc>https://ejade42.github.io/ggDNAvis/reference/debug_join_vector_num.html</loc></url>
 <url><loc>https://ejade42.github.io/ggDNAvis/reference/debug_join_vector_str.html</loc></url>
 <url><loc>https://ejade42.github.io/ggDNAvis/reference/example_many_sequences.html</loc></url>

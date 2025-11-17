@@ -3232,6 +3232,14 @@ they are available if needed)
   ([`write_modified_fastq()`](https://ejade42.github.io/ggDNAvis/reference/write_modified_fastq.md)
   helper)
 
+- [`convert_many_sequences_to_index_annotations()`](https://ejade42.github.io/ggDNAvis/reference/convert_many_sequences_to_index_annotations.md)
+  :
+
+  Create index annotations at variable line positions in many sequences
+  data
+  ([`visualise_many_sequences()`](https://ejade42.github.io/ggDNAvis/reference/visualise_many_sequences.md)
+  helper)
+
 - [`convert_MM_vector_to_locations()`](https://ejade42.github.io/ggDNAvis/reference/convert_MM_vector_to_locations.md)
   :
 
@@ -3244,6 +3252,13 @@ they are available if needed)
 
   Convert string-ified modification probabilities and locations to a
   single vector of probabilities
+  ([`visualise_methylation()`](https://ejade42.github.io/ggDNAvis/reference/visualise_methylation.md)
+  helper)
+
+- [`convert_probabilities_to_annotations()`](https://ejade42.github.io/ggDNAvis/reference/convert_probabilities_to_annotations.md)
+  :
+
+  Create dataframe of locations and rendered probabilities
   ([`visualise_methylation()`](https://ejade42.github.io/ggDNAvis/reference/visualise_methylation.md)
   helper)
 
@@ -3265,14 +3280,6 @@ they are available if needed)
 
   Rasterise a vector of sequences into a numerical dataframe for
   ggplotting (generic `ggDNAvis` helper)
-
-- [`create_many_sequence_index_annotations()`](https://ejade42.github.io/ggDNAvis/reference/create_many_sequence_index_annotations.md)
-  :
-
-  Create index annotations at variable line positions in many sequences
-  data
-  ([`visualise_many_sequences()`](https://ejade42.github.io/ggDNAvis/reference/visualise_many_sequences.md)
-  helper)
 
 - [`insert_at_indices()`](https://ejade42.github.io/ggDNAvis/reference/insert_at_indices.md)
   :

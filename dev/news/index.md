@@ -40,8 +40,7 @@ Background changes:
 
 - Added new helper functions:
   [`insert_at_indices()`](https://ejade42.github.io/ggDNAvis/reference/insert_at_indices.md)
-  and
-  [`create_many_sequence_index_annotations()`](https://ejade42.github.io/ggDNAvis/reference/create_many_sequence_index_annotations.md)
+  and `create_many_sequence_index_annotations()`
 
 - Starting changing all argument validation to use
   [`bad_arg()`](https://ejade42.github.io/ggDNAvis/reference/bad_arg.md)

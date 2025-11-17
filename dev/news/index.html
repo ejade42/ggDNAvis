@@ -50,7 +50,7 @@
 <ul><li><p>Changed <code><a href="../reference/extract_methylation_from_dataframe.html">extract_methylation_from_dataframe()</a></code> to now return a list of 4 vectors instead of 3, with <code>sequences</code> added. <code>sequence_lengths</code> is still returned just in case it’s useful for anything, but it is no longer used in <code><a href="../reference/visualise_methylation.html">visualise_methylation()</a></code> which now takes the sequences directly rather than their lengths.</p></li>
 <li><p>Removed warning for “incorrectly” removing index annotations. Now setting any relevant argument to 0/empty (e.g. <code>index_annotation_size = 0</code>, <code>index_annotation_interval = 0</code>, <code>index_annotation_lines = numeric(0)</code>) will automatically change the “main” one to remove annotations.</p></li>
 </ul><p>Background changes:</p>
-<ul><li><p>Added new helper functions: <code><a href="../reference/insert_at_indices.html">insert_at_indices()</a></code> and <code><a href="../reference/create_many_sequence_index_annotations.html">create_many_sequence_index_annotations()</a></code></p></li>
+<ul><li><p>Added new helper functions: <code><a href="../reference/insert_at_indices.html">insert_at_indices()</a></code> and <code>create_many_sequence_index_annotations()</code></p></li>
 <li><p>Starting changing all argument validation to use <code><a href="../reference/bad_arg.html">bad_arg()</a></code> rather than copy pasting.</p></li>
 <li><p>Enforced version requirement for ggplot2 (&gt;= 4.0.0)</p></li>
 </ul></div>
