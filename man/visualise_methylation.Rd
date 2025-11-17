@@ -2,6 +2,7 @@
 % Please edit documentation in R/visualise_methylation.R
 \name{visualise_methylation}
 \alias{visualise_methylation}
+\alias{visualize_methylation}
 \title{Visualise methylation probabilities for many DNA sequences}
 \usage{
 visualise_methylation(
@@ -117,6 +118,7 @@ visualise_methylation(
 A ggplot object containing the full visualisation, or \code{invisible(NULL)} if \code{return = FALSE}. It is often more useful to use \code{filename = "myfilename.png"}, because then the visualisation is exported at the correct aspect ratio.
 }
 \description{
+\code{visualize_methylation()} is an alias for this function.\cr\cr
 This function takes vectors of modifications locations, modification probabilities,
 and sequence lengths (e.g. created by \code{\link[=extract_methylation_from_dataframe]{extract_methylation_from_dataframe()}}) and
 visualises the probability of methylation (or other modification) across each read.\cr\cr

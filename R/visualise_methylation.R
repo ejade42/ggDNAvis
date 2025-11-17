@@ -4,6 +4,7 @@
 
 #' Visualise methylation probabilities for many DNA sequences
 #'
+#' `visualize_methylation()` is an alias for this function.\cr\cr
 #' This function takes vectors of modifications locations, modification probabilities,
 #' and sequence lengths (e.g. created by [extract_methylation_from_dataframe()]) and
 #' visualises the probability of methylation (or other modification) across each read.\cr\cr
@@ -451,6 +452,7 @@ visualise_methylation <- function(
 
 #' Visualise methylation colour scalebar
 #'
+#' `visualize_methylation_color_scale()` is an alias for this function.\cr\cr
 #' This function creates a scalebar showing the colouring scheme based on methylation
 #' probability that is used in [visualise_methylation()]. Showing this is particularly
 #' important when the colour range is clamped via `low_clamp` and `high_clamp` (e.g.
@@ -769,3 +771,16 @@ convert_modification_to_number_vector <- function(
     ## Return output vector
     return(output_vector)
 }
+
+
+
+
+## Define aliases
+#' @rdname visualise_methylation
+#' @usage NULL
+#' @export
+visualize_methylation <- visualise_methylation
+
+#' @rdname visualise_methylation_colour_scale
+#' @export
+visualize_methylation_color_scale <- visualise_methylation_colour_scale

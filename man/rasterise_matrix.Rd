@@ -2,9 +2,12 @@
 % Please edit documentation in R/dna_tools.R
 \name{rasterise_matrix}
 \alias{rasterise_matrix}
+\alias{rasterize_matrix}
 \title{Rasterise a matrix to an x/y/layer dataframe (generic \code{ggDNAvis} helper)}
 \usage{
 rasterise_matrix(image_matrix)
+
+rasterize_matrix(image_matrix)
 }
 \arguments{
 \item{image_matrix}{\code{matrix}. A matrix (or anything that can be coerced to a matrix via \code{\link[base:matrix]{base::as.matrix()}}).}
@@ -13,6 +16,7 @@ rasterise_matrix(image_matrix)
 \code{dataframe}. A dataframe containing x and y coordinates for the centre of a rectangle per element of the matrix, such that the whole matrix occupies the space from (0, 0) to (1, 1). Additionally contains a layer column storing the value of each element of the matrix.
 }
 \description{
+\code{rasterize_matrix()} is an alias for this function.\cr\cr
 This function takes a matrix and rasterises it to a dataframe of x and y
 coordinates, such that the matrix occupies the space from (0, 0) to (1, 1) and each
 element of the matrix represents a rectangle with width 1/ncol(matrix) and height

@@ -1,5 +1,6 @@
 #' Visualise a single DNA/RNA sequence
 #'
+#' `visualize_single_sequence()` is an alias for this function.\cr\cr
 #' This function takes a DNA/RNA sequence and returns a ggplot
 #' visualising it, with the option to directly export a png image
 #' with appropriate dimensions. Colours, line wrapping, index annotation
@@ -511,3 +512,10 @@ convert_sequences_to_annotations <- function(
     annotation_data$y_position <- as.numeric(annotation_data$y_position)
     return(annotation_data)
 }
+
+
+## Define alias
+#' @rdname visualise_single_sequence
+#' @export
+visualize_single_sequence <- visualise_single_sequence
+
