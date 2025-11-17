@@ -1,6 +1,29 @@
-
-
-
+#' Resolve argument value when aliases are used
+#'
+#' @description
+#' See the [aliases] page for a general explanation of how aliases are used in `ggDNAvis`.
+#'
+#' This function takes the name and value for the 'primary' form of an argument
+#' (generally British spellings in `ggDNAvis`), the name and value of an alternative
+#' 'alias' form, and the default value of the 'primary' argument.
+#'
+#' If the alias has not been used (i.e. the 'alias' value is `NULL`) or if the 'primary'
+#' value has been changed from the default, then the 'primary' value will be returned.
+#' (Note that if the 'alias' value is not `NULL` and the 'primary' value has been changed
+#' from the default, then the updated 'primary' value 'wins' and is returned, but with a
+#' warning that explains that both values were set and the 'alias' has been discarded).
+#'
+#' If the alias has been used (i.e. the 'alias' value is not `NULL`) and the 'primary'
+#' value is the default, then the 'alias' value will be returned.
+#'
+#' @param primary_name `character`. The usual name of the argument.
+#' @param primary_val `value`. The value of the argument under its usual name.
+#' @param alias_name `character`. An alternative alias name for the argument.
+#' @param alias_val `value`. The value of the argument under its alias. Expected to be `NULL` if the alias argument is not being used.
+#' @param primary_default `value`. The default value of the argument under its usual name, used to determine if the primary argument has been explicitly set.
+#'
+#' @return `value`. Either `primary_val` or `alias_val`, depending on the logic above.
+#' @export
 resolve_alias <- function(
     primary_name,
     primary_val,
@@ -10,6 +33,16 @@ resolve_alias <- function(
 ) {
     ## This function doesn't cope is a mandatory argument is missing but its alias is provided.
     ## I don't think that shows up in the package, at least in user-facing functions.
+
+    ## Validate arguments
+    ## ---------------------------------------------------------------------
+    single_char <- list(primary_name = primary_name, alias_name = alias_name)
+    for (argument in names(single_char)) {
+        if (!is.character(single_char[[argument]]) || length(single_char[[argument]]) != 1) {bad_arg(argument, single_char, "must be a character value with length 1.")}
+    }
+    single_char <- NULL
+    ## ---------------------------------------------------------------------
+
 
     ## If alias has been provided:
     if (!is.null(alias_val)) {

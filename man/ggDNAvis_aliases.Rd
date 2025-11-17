@@ -34,23 +34,27 @@ Likewise, \code{index_annotations_above} also accepts \code{index_annotation_abo
 }
 \examples{
 d <- extract_methylation_from_dataframe(example_many_sequences)
-## The resulting colour will be green
+## The resulting low colour will be green
 visualise_methylation(
     d$locations,
     d$probabilities,
     d$sequences,
+    index_annotation_lines = NA,
     outline_linewidth = 0,
+    high_colour = "white",
     low_colour = "green",
     low_color = "orange",
     low_col = "purple"
 )
 
-## The resulting colour will be orange
+## The resulting low colour will be orange
 visualise_methylation(
     d$locations,
     d$probabilities,
     d$sequences,
+    index_annotation_lines = NA,
     outline_linewidth = 0,
+    high_colour = "white",
     low_color = "orange",
     low_col = "purple"
 )
@@ -60,7 +64,9 @@ visualise_methylation(
     d$locations,
     d$probabilities,
     d$sequences,
+    index_annotation_lines = NA,
     outline_linewidth = 0,
+    high_colour = "white",
     low_col = "purple"
 )
 

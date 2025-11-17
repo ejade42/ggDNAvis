@@ -47,6 +47,7 @@ reference:
   - debug_join_vector_num
   - debug_join_vector_str
   - bad_arg
+  - resolve_alias
 
 - subtitle: Advanced helpers
   desc: >

@@ -32,6 +32,46 @@ test_that("error reporting recursively rejects bad arguments", {
 })
 
 
+## Test alias management
+test_that("alias management works", {
+    low_colour <- "blue"
+    dots <- list(low_color = "orange")
+    low_colour <- resolve_alias("low_colour", low_colour, "low_color", dots$low_color, "blue")
+    expect_equal(low_colour, "orange")
+})
+
+test_that("alias management works, canonical changed", {
+    low_colour <- "red"
+    dots <- list(low_color = "orange")
+    expect_warning(low_colour <- resolve_alias("low_colour", low_colour, "low_color", dots$low_color, "blue"), class = "alias_conflict")
+    expect_equal(low_colour, "red")
+})
+
+test_that("alias management works, canonical always wins", {
+    low_colour <- "green"
+    dots <- list(low_color = "orange", low_col = "purple")
+    expect_warning(low_colour <- resolve_alias("low_colour", low_colour, "low_color", dots$low_color, "blue"), class = "alias_conflict")
+    expect_warning(low_colour <- resolve_alias("low_colour", low_colour, "low_col", dots$low_col, "blue"), class = "alias_conflict")
+    expect_equal(low_colour, "green")
+})
+
+test_that("alias management works, cascading", {
+    low_colour <- "blue"
+    dots <- list(low_color = "orange", low_col = "purple")
+    low_colour <- resolve_alias("low_colour", low_colour, "low_color", dots$low_color, "blue")
+    expect_warning(low_colour <- resolve_alias("low_colour", low_colour, "low_col", dots$low_col, "blue"), class = "alias_conflict")
+    expect_equal(low_colour, "orange")
+})
+
+test_that("alias management works, cascading", {
+    low_colour <- "blue"
+    dots <- list(low_col = "purple")
+    low_colour <- resolve_alias("low_colour", low_colour, "low_color", dots$low_color, "blue")
+    low_colour <- resolve_alias("low_colour", low_colour, "low_col", dots$low_col, "blue")
+    expect_equal(low_colour, "purple")
+})
+
+
 ## Test converting base to number
 test_that("converting base to number works when expected to", {
     expect_equal(convert_base_to_number("A"), 1)
