@@ -29,7 +29,8 @@ Merge a dataframe of methylation/modification data (as produced by
 sequence and modification information if required such that all information
 is now in the forward direction.
 \code{\link[=merge_fastq_with_metadata]{merge_fastq_with_metadata()}} is the equivalent function for working with
-unmodified FASTQs (sequence and quality only).\cr\cr
+unmodified FASTQs (sequence and quality only).
+
 Methylation/modification dataframe must contain columns of \code{"read"} (unique read ID),
 \code{"sequence"} (DNA sequence), \code{"quality"} (FASTQ quality score), \code{"sequence_length"}
 (read length), \code{"modification_types"} (a comma-separated string of SAMtools modification
@@ -39,18 +40,21 @@ locations (e.g. \code{"3,6,9,12"}) and a column of comma-separated strings of
 modification probabilities (e.g. \code{"255,0,64,128"}). See \code{\link[=read_modified_fastq]{read_modified_fastq()}}
 for more information on how this dataframe is formatted and produced.
 Other columns are allowed but not required, and will be preserved unaltered
-in the merged data.\cr\cr
+in the merged data.
+
 Metadata dataframe must contain \code{"read"} (unique read ID) and \code{"direction"}
 (read direction, either \code{"forward"} or \code{"reverse"} for each read) columns,
 and can contain any other columns with arbitrary information for each read.
 Columns that might be useful include participant ID and family designations
-so that each read can be associated with its participant and family.\cr\cr
+so that each read can be associated with its participant and family.
+
 \strong{Important:} A key feature of this function is that it uses the direction
 column from the metadata to identify which rows are reverse reads. These reverse
 reads will then be reversed-complemented and have modification information reversed
 such that all reads are in the forward direction, ideal for consistent analysis or
 visualisation. The output columns are \code{"forward_sequence"}, \code{"forward_quality"},
-\code{"forward_<modification_type>_locations"}, and \code{"forward_<modification_type>_probabilities"}.\cr\cr
+\code{"forward_<modification_type>_locations"}, and \code{"forward_<modification_type>_probabilities"}.
+
 Calls \code{\link[=reverse_sequence_if_needed]{reverse_sequence_if_needed()}}, \code{\link[=reverse_quality_if_needed]{reverse_quality_if_needed()}},
 \code{\link[=reverse_locations_if_needed]{reverse_locations_if_needed()}}, and \code{\link[=reverse_probabilities_if_needed]{reverse_probabilities_if_needed()}}
 to implement the reversing - see documentation for these functions for more details.
@@ -59,6 +63,7 @@ must be symmetric (e.g. CpG) and offset must be set to 1. Asymmetric locations a
 to write to modified FASTQ once reversed because then e.g. cytosine methylation will be assessed
 at guanines, which SAMtools can't account for. Symmetrically reversing CpGs via
 \code{reversed_location_offset = 1} is the only way to fix this.
+\emph{\strong{PLEASE READ THE \code{\link[=reverse_locations_if_needed]{reverse_locations_if_needed()}} DOCUMENTATION TO UNDERSTAND THE CHOICE OF OFFSET!}}
 }
 \examples{
 ## Locate files

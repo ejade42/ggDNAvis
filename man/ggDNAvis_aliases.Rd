@@ -8,12 +8,14 @@
 As of v1.0.0, \code{ggDNAvis} supports function and argument aliases.
 The code is entirely written with British spellings (e.g. \code{\link[=visualise_methylation_colour_scale]{visualise_methylation_colour_scale()}}),
 but should also accept American spellings (e.g. \code{\link[=visualize_methylation_color_scale]{visualize_methylation_color_scale()}}).
-If any American spellings don't work, please contact the maintainer (evelynjade42@gmail.com)
-or submit a pull request (\url{https://github.com/ejade42/ggDNAvis}).
+If any American spellings don't work, I most likely overlooked them and can easily fix,
+so please submit a bug report by creating a github issue
+(\url{https://github.com/ejade42/ggDNAvis/issues}).
 
-There are currently five functions with aliases configured:
+There are currently five functions and one dataset with aliases configured:
 \itemize{
 \item \code{\link[=rasterise_matrix]{rasterise_matrix()}} (\code{\link[=rasterize_matrix]{rasterize_matrix()}})
+\item \code{\link{sequence_colour_palettes}} (\code{\link{sequence_color_palettes}} & \code{\link{sequence_col_palettes}})
 \item \code{\link[=visualise_many_sequences]{visualise_many_sequences()}} (\code{\link[=visualize_many_sequences]{visualize_many_sequences()}})
 \item \code{\link[=visualise_methylation]{visualise_methylation()}} (\code{\link[=visualize_methylation]{visualize_methylation()}})
 \item \code{\link[=visualise_methylation_colour_scale]{visualise_methylation_colour_scale()}} (\code{\link[=visualize_methylation_color_scale]{visualize_methylation_color_scale()}})

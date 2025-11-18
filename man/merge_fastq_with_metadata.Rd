@@ -26,7 +26,8 @@ Merge a dataframe of sequence and quality data (as produced by
 metadata, reverse-complementing sequences if required such that all
 reads are now in the forward direction.
 \code{\link[=merge_methylation_with_metadata]{merge_methylation_with_metadata()}} is the equivalent function for
-working with FASTQs that contain DNA modification information.\cr\cr
+working with FASTQs that contain DNA modification information.
+
 FASTQ dataframe must contain columns of \code{"read"} (unique read ID),
 \code{"sequence"} (DNA sequence), and \code{"quality"} (FASTQ quality score).
 Other columns are allowed but not required, and will be preserved unaltered
@@ -35,7 +36,8 @@ Metadata dataframe must contain \code{"read"} (unique read ID) and \code{"direct
 (read direction, either \code{"forward"} or \code{"reverse"} for each read) columns,
 and can contain any other columns with arbitrary information for each read.
 Columns that might be useful include participant ID and family designations
-so that each read can be associated with its participant and family.\cr\cr
+so that each read can be associated with its participant and family.
+
 \strong{Important:} A key feature of this function is that it uses the direction
 column from the metadata to identify which rows are reverse reads. These reverse
 reads will then be reversed-complemented and have quality scores reversed

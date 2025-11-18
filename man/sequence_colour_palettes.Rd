@@ -3,6 +3,8 @@
 \docType{data}
 \name{sequence_colour_palettes}
 \alias{sequence_colour_palettes}
+\alias{sequence_color_palettes}
+\alias{sequence_col_palettes}
 \title{Colour palettes for sequence visualisations}
 \format{
 \subsection{\code{sequence_colour_palettes}}{
@@ -21,10 +23,16 @@ A list of 5 length-4 character vectors
 sequence_colour_palettes
 }
 \description{
+\code{sequence_color_palettes} and \code{sequence_col_palettes}
+are aliases for \code{sequence_colour_palettes} - see \link{aliases}.
+
 A collection of colour palettes for use with \code{\link[=visualise_single_sequence]{visualise_single_sequence()}}
-and \code{\link[=visualise_many_sequences]{visualise_many_sequences()}}.\cr\cr Each is a character vector of 4 colours,
-corresponding to A, C, G, and T/U in that order.\cr\cr To use inside the visualisation
-functions, set \verb{sequence_colours = sequence_colour_palettes$<palette_name>}\cr\cr
+and \code{\link[=visualise_many_sequences]{visualise_many_sequences()}}. Each is a character vector of 4 colours,
+corresponding to A, C, G, and T/U in that order.
+
+To use inside the visualisation functions, set
+\verb{sequence_colours = sequence_colour_palettes$<palette_name>}
+
 Generation code is available at \code{data-raw/sequence_colour_palettes.R}
 }
 \examples{

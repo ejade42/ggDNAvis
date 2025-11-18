@@ -1,11 +1,13 @@
 #' Merge FASTQ data with metadata
 #'
+#' @description
 #' Merge a dataframe of sequence and quality data (as produced by
 #' [read_fastq()] from an unmodified FASTQ file) with a dataframe of
 #' metadata, reverse-complementing sequences if required such that all
 #' reads are now in the forward direction.
 #' [merge_methylation_with_metadata()] is the equivalent function for
-#' working with FASTQs that contain DNA modification information.\cr\cr
+#' working with FASTQs that contain DNA modification information.
+#'
 #' FASTQ dataframe must contain columns of `"read"` (unique read ID),
 #' `"sequence"` (DNA sequence), and `"quality"` (FASTQ quality score).
 #' Other columns are allowed but not required, and will be preserved unaltered
@@ -14,7 +16,8 @@
 #' (read direction, either `"forward"` or `"reverse"` for each read) columns,
 #' and can contain any other columns with arbitrary information for each read.
 #' Columns that might be useful include participant ID and family designations
-#' so that each read can be associated with its participant and family.\cr\cr
+#' so that each read can be associated with its participant and family.
+#'
 #' **Important:** A key feature of this function is that it uses the direction
 #' column from the metadata to identify which rows are reverse reads. These reverse
 #' reads will then be reversed-complemented and have quality scores reversed
@@ -57,7 +60,7 @@ merge_fastq_with_metadata <- function(fastq_data, metadata, reverse_complement_m
     }
     for (column in c("read", "sequence", "quality")) {
         if (!(column %in% colnames(fastq_data))) {
-            abort(paste0("FASTQ dataframe must contain a '", column, "' column. This error should not occur if data was read via read_modified_fastq(), please contact the package maintainers.\nCurrent columns: ", paste(colnames(fastq_data), collapse = ", ")), class = "argument_value_or_type")
+            abort(paste0("FASTQ dataframe must contain a '", column, "' column. This error should not occur if data was read via read_modified_fastq(), please create a bug report at ", packageDescription("ggDNAvis")$BugReports, "\nCurrent columns: ", paste(colnames(fastq_data), collapse = ", ")), class = "argument_value_or_type")
         }
     }
     if (!("read" %in% colnames(metadata))) {
@@ -83,12 +86,14 @@ merge_fastq_with_metadata <- function(fastq_data, metadata, reverse_complement_m
 
 #' Merge methylation with metadata
 #'
+#' @description
 #' Merge a dataframe of methylation/modification data (as produced by
 #' [read_modified_fastq()]) with a dataframe of metadata, reversing
 #' sequence and modification information if required such that all information
 #' is now in the forward direction.
 #' [merge_fastq_with_metadata()] is the equivalent function for working with
-#' unmodified FASTQs (sequence and quality only).\cr\cr
+#' unmodified FASTQs (sequence and quality only).
+#'
 #' Methylation/modification dataframe must contain columns of `"read"` (unique read ID),
 #' `"sequence"` (DNA sequence), `"quality"` (FASTQ quality score), `"sequence_length"`
 #' (read length), `"modification_types"` (a comma-separated string of SAMtools modification
@@ -98,18 +103,21 @@ merge_fastq_with_metadata <- function(fastq_data, metadata, reverse_complement_m
 #' modification probabilities (e.g. `"255,0,64,128"`). See [read_modified_fastq()]
 #' for more information on how this dataframe is formatted and produced.
 #' Other columns are allowed but not required, and will be preserved unaltered
-#' in the merged data.\cr\cr
+#' in the merged data.
+#'
 #' Metadata dataframe must contain `"read"` (unique read ID) and `"direction"`
 #' (read direction, either `"forward"` or `"reverse"` for each read) columns,
 #' and can contain any other columns with arbitrary information for each read.
 #' Columns that might be useful include participant ID and family designations
-#' so that each read can be associated with its participant and family.\cr\cr
+#' so that each read can be associated with its participant and family.
+#'
 #' **Important:** A key feature of this function is that it uses the direction
 #' column from the metadata to identify which rows are reverse reads. These reverse
 #' reads will then be reversed-complemented and have modification information reversed
 #' such that all reads are in the forward direction, ideal for consistent analysis or
 #' visualisation. The output columns are `"forward_sequence"`, `"forward_quality"`,
-#' `"forward_<modification_type>_locations"`, and `"forward_<modification_type>_probabilities"`.\cr\cr
+#' `"forward_<modification_type>_locations"`, and `"forward_<modification_type>_probabilities"`.
+#'
 #' Calls [reverse_sequence_if_needed()], [reverse_quality_if_needed()],
 #' [reverse_locations_if_needed()], and [reverse_probabilities_if_needed()]
 #' to implement the reversing - see documentation for these functions for more details.
@@ -118,6 +126,7 @@ merge_fastq_with_metadata <- function(fastq_data, metadata, reverse_complement_m
 #' to write to modified FASTQ once reversed because then e.g. cytosine methylation will be assessed
 #' at guanines, which SAMtools can't account for. Symmetrically reversing CpGs via
 #' `reversed_location_offset = 1` is the only way to fix this.
+#' ***PLEASE READ THE [reverse_locations_if_needed()] DOCUMENTATION TO UNDERSTAND THE CHOICE OF OFFSET!***
 #'
 #' @param methylation_data `dataframe`. A dataframe contaning methylation/modification data, as produced by [read_modified_fastq()].\cr\cr Must contain a read id column (must be called `"read"`), a sequence column (`"sequence"`), a quality column (`"quality"`), a sequence length column (`"sequence_length"`), a modification types column (`"modification_types"`), and, for each modification type listed in `modification_types`, a column of locations (`"<modification_type>_locations"`) and a column of probabilities (`"<modification_type>_probabilities"`). Additional columns are fine and will simply be included unaltered in the merged dataframe. \cr\cr See [read_modified_fastq()] documentation for more details about the expected dataframe format.
 #' @param metadata `dataframe`. A dataframe containing metadata for each read in `methylation_data`.\cr\cr Must contain a `"read"` column identical to the column of the same name in `methylation_data`, containing unique read IDs (this is used to merge the dataframes). Must also contain a `"direction"` column of `"forward"` and `"reverse"` (e.g. `c("forward", "forward", "reverse")`) indicating the direction of each read.\cr\cr **Important:** Reverse reads will have their sequence, quality scores, modification locations, and modification probabilities reversed such that every output read is now forward. These will be stored in columns called `"forward_sequence"`, `"forward_quality"`, `"forward_<modification_type>_locations"`, and `"forward_<modification_type>_probabilities"`. If multiple modification types are present, multiple locations and probabilities columns will be created.\cr\cr See [reverse_sequence_if_needed()], [reverse_quality_if_needed()], [reverse_locations_if_needed()], and [reverse_probabilities_if_needed()] documentation for details of how the reversing is implemented.
@@ -160,7 +169,7 @@ merge_methylation_with_metadata <- function(methylation_data, metadata, reversed
     }
     for (column in c("read", "sequence", "quality", "sequence_length", "modification_types")) {
         if (!(column %in% colnames(methylation_data))) {
-            abort(paste0("Methylation dataframe must contain a '", column, "' column. This error should not occur if data was read via read_modified_fastq(), please contact the package maintainers.\nCurrent columns: ", paste(colnames(methylation_data), collapse = ", ")), class = "argument_value_or_type")
+            abort(paste0("Methylation dataframe must contain a '", column, "' column. This error should not occur if data was read via read_modified_fastq(), please create a bug report at ", packageDescription("ggDNAvis")$BugReports, "\nCurrent columns: ", paste(colnames(methylation_data), collapse = ", ")), class = "argument_value_or_type")
         }
     }
     if (!("read" %in% colnames(metadata))) {

@@ -59,11 +59,13 @@ fetch_acceptable_distortion <- function(verbose = TRUE) {
 #' As of v1.0.0, `ggDNAvis` supports function and argument aliases.
 #' The code is entirely written with British spellings (e.g. [visualise_methylation_colour_scale()]),
 #' but should also accept American spellings (e.g. [visualize_methylation_color_scale()]).
-#' If any American spellings don't work, please contact the maintainer (evelynjade42@gmail.com)
-#' or submit a pull request (<https://github.com/ejade42/ggDNAvis>).
+#' If any American spellings don't work, I most likely overlooked them and can easily fix,
+#' so please submit a bug report by creating a github issue
+#'  (<`r packageDescription("ggDNAvis")$BugReports`>).
 #'
-#' There are currently five functions with aliases configured:
+#' There are currently five functions and one dataset with aliases configured:
 #' - [rasterise_matrix()] ([rasterize_matrix()])
+#' - [`sequence_colour_palettes`] ([`sequence_color_palettes`] & [`sequence_col_palettes`])
 #' - [visualise_many_sequences()] ([visualize_many_sequences()])
 #' - [visualise_methylation()] ([visualize_methylation()])
 #' - [visualise_methylation_colour_scale()] ([visualize_methylation_color_scale()])
@@ -155,10 +157,19 @@ NULL
 
 #' Colour palettes for sequence visualisations
 #'
+#' @aliases sequence_color_palettes sequence_col_palettes
+#'
+#' @description
+#' `sequence_color_palettes` and `sequence_col_palettes`
+#' are aliases for `sequence_colour_palettes` - see [aliases].
+#'
 #' A collection of colour palettes for use with [visualise_single_sequence()]
-#' and [visualise_many_sequences()].\cr\cr Each is a character vector of 4 colours,
-#' corresponding to A, C, G, and T/U in that order.\cr\cr To use inside the visualisation
-#' functions, set `sequence_colours = sequence_colour_palettes$<palette_name>`\cr\cr
+#' and [visualise_many_sequences()]. Each is a character vector of 4 colours,
+#' corresponding to A, C, G, and T/U in that order.
+#'
+#' To use inside the visualisation functions, set
+#' `sequence_colours = sequence_colour_palettes$<palette_name>`
+#'
 #' Generation code is available at `data-raw/sequence_colour_palettes.R`
 #'
 #' @docType data
