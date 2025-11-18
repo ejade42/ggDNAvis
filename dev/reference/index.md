@@ -97,7 +97,10 @@ Small, widely used helper functions
   `ggDNAvis` helper)
 
 - [`resolve_alias()`](https://ejade42.github.io/ggDNAvis/reference/resolve_alias.md)
-  : Resolve argument value when aliases are used
+  :
+
+  Resolve argument value when aliases are used (generic `ggDNAvis`
+  helper)
 
 ### Advanced helpers
 

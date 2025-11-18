@@ -1,4 +1,4 @@
-# Resolve argument value when aliases are used
+# Resolve argument value when aliases are used (generic `ggDNAvis` helper)
 
 See the
 [aliases](https://ejade42.github.io/ggDNAvis/reference/ggDNAvis_aliases.md)
