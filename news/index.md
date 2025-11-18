@@ -2,6 +2,8 @@
 
 ## ggDNAvis 0.3.2
 
+CRAN release: 2025-10-31
+
 - Added files related to pkgdown website building to .Rbuildignore so
   they are not part of the R package anymore (this caused a CRAN
   rejection).
@@ -14,6 +16,8 @@ Bug fixes:
   when using non-white background colours
 
 ## ggDNAvis 0.3.0
+
+CRAN release: 2025-10-01
 
 Changes:
 
@@ -49,6 +53,8 @@ Known issues remaining:
     backgrounds.
 
 ## ggDNAvis 0.2.1
+
+CRAN release: 2025-09-21
 
 - Documented that debug_join_vector functions do not return a value
 
