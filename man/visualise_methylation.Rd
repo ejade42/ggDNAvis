@@ -183,6 +183,9 @@ visualise_methylation(
     high_colour = "black",
     low_clamp = 0.3*255,
     high_clamp = 0.7*255,
+    index_annotation_lines = c(1, 23, 37),
+    index_annotation_interval = 3,
+    index_annotation_full_line = FALSE,
     other_bases_colour = "lightblue1",
     other_bases_outline_linewidth = 1,
     other_bases_outline_colour = "grey",
@@ -193,6 +196,99 @@ visualise_methylation(
 ## View exported image
 image <- png::readPNG("example_vm_02.png")
 unlink("example_vm_02.png")
+grid::grid.newpage()
+grid::grid.raster(image)
+
+
+## Export with customisation, viewing sequences
+visualise_methylation(
+    methylation_info$locations,
+    methylation_info$probabilities,
+    methylation_info$sequences,
+    filename = "example_vm_03.png",
+    return = FALSE,
+    low_colour = "white",
+    high_colour = "black",
+    low_clamp = 0.3*255,
+    high_clamp = 0.7*255,
+    sequence_text_type = "sequence",
+    index_annotation_lines = c(1, 23, 37),
+    index_annotation_interval = 3,
+    index_annotation_full_line = FALSE,
+    other_bases_colour = "lightblue1",
+    other_bases_outline_linewidth = 1,
+    other_bases_outline_colour = "grey",
+    modified_bases_outline_linewidth = 3,
+    modified_bases_outline_colour = "black",
+    margin = 0.3
+)
+## View exported image
+image <- png::readPNG("example_vm_03.png")
+unlink("example_vm_03.png")
+grid::grid.newpage()
+grid::grid.raster(image)
+
+
+## Export with customisation, viewing probabilities
+visualise_methylation(
+    methylation_info$locations,
+    methylation_info$probabilities,
+    methylation_info$sequences,
+    filename = "example_vm_04.png",
+    return = FALSE,
+    low_colour = "white",
+    high_colour = "black",
+    low_clamp = 0.3*255,
+    high_clamp = 0.7*255,
+    sequence_text_type = "probability",
+    sequence_text_size = 10,
+    sequence_text_colour = "white",
+    index_annotation_lines = c(1, 23, 37),
+    index_annotation_interval = 3,
+    index_annotation_full_line = FALSE,
+    other_bases_colour = "lightblue1",
+    other_bases_outline_linewidth = 1,
+    other_bases_outline_colour = "grey",
+    modified_bases_outline_linewidth = 3,
+    modified_bases_outline_colour = "black",
+    margin = 0.3
+)
+## View exported image
+image <- png::readPNG("example_vm_04.png")
+unlink("example_vm_04.png")
+grid::grid.newpage()
+grid::grid.raster(image)
+
+
+## Export with customisation, viewing probability integers
+visualise_methylation(
+    methylation_info$locations,
+    methylation_info$probabilities,
+    methylation_info$sequences,
+    filename = "example_vm_05.png",
+    return = FALSE,
+    low_colour = "white",
+    high_colour = "black",
+    low_clamp = 0.3*255,
+    high_clamp = 0.7*255,
+    sequence_text_type = "probability",
+    sequence_text_scaling = c(0, 1),
+    sequence_text_rounding = 0,
+    sequence_text_size = 10,
+    sequence_text_colour = "white",
+    index_annotation_lines = c(1, 23, 37),
+    index_annotation_interval = 3,
+    index_annotation_full_line = FALSE,
+    other_bases_colour = "lightblue1",
+    other_bases_outline_linewidth = 1,
+    other_bases_outline_colour = "grey",
+    modified_bases_outline_linewidth = 3,
+    modified_bases_outline_colour = "black",
+    margin = 0.3
+)
+## View exported image
+image <- png::readPNG("example_vm_05.png")
+unlink("example_vm_05.png")
 grid::grid.newpage()
 grid::grid.raster(image)
 }

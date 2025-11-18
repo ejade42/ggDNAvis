@@ -113,6 +113,9 @@ visualise_many_sequences(
     return = FALSE,
     sequence_colours = sequence_colour_palettes$bright_pale,
     sequence_text_colour = "white",
+    index_annotation_interval = 3,
+    index_annotation_lines = 1:51,
+    index_annotation_full_line = FALSE,
     background_colour = "lightgrey",
     outline_linewidth = 0,
     margin = 0
