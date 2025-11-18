@@ -32,4 +32,7 @@ the family each participant is from. Can be used in \code{\link[=visualise_many_
 \code{\link[=visualise_methylation]{visualise_methylation()}}, and helper functions to visualise these sequences.\cr\cr
 Generation code is available at \code{data-raw/example_many_sequences.R}
 }
+\examples{
+example_many_sequences
+}
 \keyword{datasets}

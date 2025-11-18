@@ -33,4 +33,7 @@ The full set of possible score representations, in order and presented as a sing
 string, is \verb{!"#$\%&'()*+,-./0123456789:;<=>?@ABCDEFGHI}.\cr\cr
 Generation code is available at \code{data-raw/fastq_quality_scores.R}
 }
+\examples{
+fastq_quality_scores
+}
 \keyword{datasets}

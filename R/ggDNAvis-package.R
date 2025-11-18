@@ -146,6 +146,9 @@ NULL
 #'  \item{hydroxymethylation_probabilities}{Probability of hydroxymethylation (8-bit integer i.e. 0-255) for each assessed base. Stored as a single character value per read, condensed from a numeric vector via [vector_to_string()].\cr\cr These values are made up via `round(runif(n, min = 0, max = 255 - this_base_methylation_probability))` such that the summed methylation and hydroxymethylation probability never exceeds 255 (100%) - see `example_many_sequences.R`}
 #
 #' }
+#'
+#' @examples
+#' example_many_sequences
 "example_many_sequences"
 
 
@@ -236,4 +239,7 @@ NULL
 #' \describe{
 #'  \item{fastq_quality_scores}{The vector `c("!", '"', "#", "$", "%", "&", "'", "(", ")", "*", "+", ",", "-", ".", "/", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", ":", ";", "<", "=", ">", "?", "@", "A", "B", "C", "D", "E", "F", "G", "H", "I")`}
 #' }
+#'
+#' @examples
+#' fastq_quality_scores
 "fastq_quality_scores"
