@@ -1,4 +1,4 @@
-#' Resolve argument value when aliases are used
+#' Resolve argument value when aliases are used (generic `ggDNAvis` helper)
 #'
 #' @description
 #' See the [aliases] page for a general explanation of how aliases are used in `ggDNAvis`.

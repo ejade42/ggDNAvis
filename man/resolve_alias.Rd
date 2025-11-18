@@ -2,7 +2,7 @@
 % Please edit documentation in R/dna_tools.R
 \name{resolve_alias}
 \alias{resolve_alias}
-\title{Resolve argument value when aliases are used}
+\title{Resolve argument value when aliases are used (generic \code{ggDNAvis} helper)}
 \usage{
 resolve_alias(
   primary_name,
