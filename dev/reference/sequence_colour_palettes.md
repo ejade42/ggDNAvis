@@ -1,16 +1,19 @@
 # Colour palettes for sequence visualisations
 
+`sequence_color_palettes` and `sequence_col_palettes` are aliases for
+`sequence_colour_palettes` - see
+[aliases](https://ejade42.github.io/ggDNAvis/reference/ggDNAvis_aliases.md).
+
 A collection of colour palettes for use with
 [`visualise_single_sequence()`](https://ejade42.github.io/ggDNAvis/reference/visualise_single_sequence.md)
 and
-[`visualise_many_sequences()`](https://ejade42.github.io/ggDNAvis/reference/visualise_many_sequences.md).  
-  
+[`visualise_many_sequences()`](https://ejade42.github.io/ggDNAvis/reference/visualise_many_sequences.md).
 Each is a character vector of 4 colours, corresponding to A, C, G, and
-T/U in that order.  
-  
+T/U in that order.
+
 To use inside the visualisation functions, set
-`sequence_colours = sequence_colour_palettes$<palette_name>`  
-  
+`sequence_colours = sequence_colour_palettes$<palette_name>`
+
 Generation code is available at `data-raw/sequence_colour_palettes.R`
 
 ## Usage

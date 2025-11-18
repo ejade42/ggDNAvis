@@ -123,7 +123,8 @@ visualise_methylation_colour_scale(
   Used to recognise aliases e.g. American spellings or common
   misspellings - see
   [aliases](https://ejade42.github.io/ggDNAvis/reference/ggDNAvis_aliases.md).
-  Contact maintainer if any American spellings do not work.
+  If any American spellings do not work, please make a bug report at
+  <https://github.com/ejade42/ggDNAvis/issues>.
 
 ## Value
 

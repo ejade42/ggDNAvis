@@ -7,8 +7,8 @@ information if required such that all information is now in the forward
 direction.
 [`merge_fastq_with_metadata()`](https://ejade42.github.io/ggDNAvis/reference/merge_fastq_with_metadata.md)
 is the equivalent function for working with unmodified FASTQs (sequence
-and quality only).  
-  
+and quality only).
+
 Methylation/modification dataframe must contain columns of `"read"`
 (unique read ID), `"sequence"` (DNA sequence), `"quality"` (FASTQ
 quality score), `"sequence_length"` (read length),
@@ -22,15 +22,15 @@ and a column of comma-separated strings of modification probabilities
 [`read_modified_fastq()`](https://ejade42.github.io/ggDNAvis/reference/read_modified_fastq.md)
 for more information on how this dataframe is formatted and produced.
 Other columns are allowed but not required, and will be preserved
-unaltered in the merged data.  
-  
+unaltered in the merged data.
+
 Metadata dataframe must contain `"read"` (unique read ID) and
 `"direction"` (read direction, either `"forward"` or `"reverse"` for
 each read) columns, and can contain any other columns with arbitrary
 information for each read. Columns that might be useful include
 participant ID and family designations so that each read can be
-associated with its participant and family.  
-  
+associated with its participant and family.
+
 **Important:** A key feature of this function is that it uses the
 direction column from the metadata to identify which rows are reverse
 reads. These reverse reads will then be reversed-complemented and have
@@ -38,8 +38,8 @@ modification information reversed such that all reads are in the forward
 direction, ideal for consistent analysis or visualisation. The output
 columns are `"forward_sequence"`, `"forward_quality"`,
 `"forward_<modification_type>_locations"`, and
-`"forward_<modification_type>_probabilities"`.  
-  
+`"forward_<modification_type>_probabilities"`.
+
 Calls
 [`reverse_sequence_if_needed()`](https://ejade42.github.io/ggDNAvis/reference/reverse_sequence_if_needed.md),
 [`reverse_quality_if_needed()`](https://ejade42.github.io/ggDNAvis/reference/reverse_quality_if_needed.md),
@@ -54,6 +54,9 @@ Asymmetric locations are impossible to write to modified FASTQ once
 reversed because then e.g. cytosine methylation will be assessed at
 guanines, which SAMtools can't account for. Symmetrically reversing CpGs
 via `reversed_location_offset = 1` is the only way to fix this.
+***PLEASE READ THE
+[`reverse_locations_if_needed()`](https://ejade42.github.io/ggDNAvis/reference/reverse_locations_if_needed.md)
+DOCUMENTATION TO UNDERSTAND THE CHOICE OF OFFSET!***
 
 ## Usage
 

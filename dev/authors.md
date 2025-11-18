@@ -11,13 +11,13 @@ Source:
 [`DESCRIPTION`](https://github.com/ejade42/ggDNAvis/blob/main/DESCRIPTION)
 
 Jade E (2025). *ggDNAvis: 'ggplot2'-Based Tools for Visualising DNA
-Sequences and Modifications*. R package version 0.3.2.9000,
+Sequences and Modifications*. R package version 0.3.2.9001,
 <https://ejade42.github.io/ggDNAvis/>.
 
     @Manual{,
       title = {ggDNAvis: 'ggplot2'-Based Tools for Visualising DNA Sequences and Modifications},
       author = {Evelyn Jade},
       year = {2025},
-      note = {R package version 0.3.2.9000},
+      note = {R package version 0.3.2.9001},
       url = {https://ejade42.github.io/ggDNAvis/},
     }

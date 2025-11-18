@@ -7,8 +7,8 @@ reverse-complementing sequences if required such that all reads are now
 in the forward direction.
 [`merge_methylation_with_metadata()`](https://ejade42.github.io/ggDNAvis/reference/merge_methylation_with_metadata.md)
 is the equivalent function for working with FASTQs that contain DNA
-modification information.  
-  
+modification information.
+
 FASTQ dataframe must contain columns of `"read"` (unique read ID),
 `"sequence"` (DNA sequence), and `"quality"` (FASTQ quality score).
 Other columns are allowed but not required, and will be preserved
@@ -19,8 +19,8 @@ Metadata dataframe must contain `"read"` (unique read ID) and
 each read) columns, and can contain any other columns with arbitrary
 information for each read. Columns that might be useful include
 participant ID and family designations so that each read can be
-associated with its participant and family.  
-  
+associated with its participant and family.
+
 **Important:** A key feature of this function is that it uses the
 direction column from the metadata to identify which rows are reverse
 reads. These reverse reads will then be reversed-complemented and have

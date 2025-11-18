@@ -49,7 +49,7 @@ to implement the reversing - see documentation for these functions for more deta
 
     <a class="navbar-brand me-2" href="../index.html">ggDNAvis</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.2.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.2.9001</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -90,8 +90,8 @@ to implement the reversing - see documentation for these functions for more deta
 metadata, reverse-complementing sequences if required such that all
 reads are now in the forward direction.
 <code><a href="merge_methylation_with_metadata.html">merge_methylation_with_metadata()</a></code> is the equivalent function for
-working with FASTQs that contain DNA modification information.<br><br>
-FASTQ dataframe must contain columns of <code>"read"</code> (unique read ID),
+working with FASTQs that contain DNA modification information.</p>
+<p>FASTQ dataframe must contain columns of <code>"read"</code> (unique read ID),
 <code>"sequence"</code> (DNA sequence), and <code>"quality"</code> (FASTQ quality score).
 Other columns are allowed but not required, and will be preserved unaltered
 in the merged data.<br><br>
@@ -99,7 +99,8 @@ Metadata dataframe must contain <code>"read"</code> (unique read ID) and <code>"
 (read direction, either <code>"forward"</code> or <code>"reverse"</code> for each read) columns,
 and can contain any other columns with arbitrary information for each read.
 Columns that might be useful include participant ID and family designations
-so that each read can be associated with its participant and family.<br><br><strong>Important:</strong> A key feature of this function is that it uses the direction
+so that each read can be associated with its participant and family.</p>
+<p><strong>Important:</strong> A key feature of this function is that it uses the direction
 column from the metadata to identify which rows are reverse reads. These reverse
 reads will then be reversed-complemented and have quality scores reversed
 such that all reads are in the forward direction, ideal for consistent analysis or

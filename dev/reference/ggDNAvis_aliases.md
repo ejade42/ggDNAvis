@@ -5,14 +5,20 @@ code is entirely written with British spellings (e.g.
 [`visualise_methylation_colour_scale()`](https://ejade42.github.io/ggDNAvis/reference/visualise_methylation_colour_scale.md)),
 but should also accept American spellings (e.g.
 [`visualize_methylation_color_scale()`](https://ejade42.github.io/ggDNAvis/reference/visualise_methylation_colour_scale.md)).
-If any American spellings don't work, please contact the maintainer
-(evelynjade42@gmail.com) or submit a pull request
-(<https://github.com/ejade42/ggDNAvis>).
+If any American spellings don't work, I most likely overlooked them and
+can easily fix, so please submit a bug report by creating a github issue
+(<https://github.com/ejade42/ggDNAvis/issues>).
 
-There are currently five functions with aliases configured:
+There are currently five functions and one dataset with aliases
+configured:
 
 - [`rasterise_matrix()`](https://ejade42.github.io/ggDNAvis/reference/rasterise_matrix.md)
   ([`rasterize_matrix()`](https://ejade42.github.io/ggDNAvis/reference/rasterise_matrix.md))
+
+- [`sequence_colour_palettes`](https://ejade42.github.io/ggDNAvis/reference/sequence_colour_palettes.md)
+  ([`sequence_color_palettes`](https://ejade42.github.io/ggDNAvis/reference/sequence_colour_palettes.md)
+  &
+  [`sequence_col_palettes`](https://ejade42.github.io/ggDNAvis/reference/sequence_colour_palettes.md))
 
 - [`visualise_many_sequences()`](https://ejade42.github.io/ggDNAvis/reference/visualise_many_sequences.md)
   ([`visualize_many_sequences()`](https://ejade42.github.io/ggDNAvis/reference/visualise_many_sequences.md))
