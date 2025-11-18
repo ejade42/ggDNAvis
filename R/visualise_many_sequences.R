@@ -1,5 +1,7 @@
 #' Visualise many DNA/RNA sequences
 #'
+#' @aliases visualize_many_sequences
+#'
 #' @description
 #' `visualize_many_sequences()` is an alias for `visualise_many_sequences()` - see [aliases].
 #'

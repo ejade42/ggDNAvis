@@ -45,16 +45,16 @@ convert_probabilities_to_annotations(
     sequence_text_rounding = 0
 )
 
-## Scaled to 0-1
+## Scaled to 0-1, 3 dp
 convert_probabilities_to_annotations(
     d$locations,
     d$probabilities,
     d$sequences,
     sequence_text_scaling = c(-0.5, 256),
-    sequence_text_rounding = 2
+    sequence_text_rounding = 3
 )
 
-## Default (i.e. scaled to 0-1)
+## Default (i.e. scaled to 0-1, 2 dp)
 convert_probabilities_to_annotations(
     d$locations,
     d$probabilities,

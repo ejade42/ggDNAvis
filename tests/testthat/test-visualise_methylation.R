@@ -331,3 +331,43 @@ test_that("argument validation rejects bad arguments for converting modification
     }
 })
 
+
+
+test_that("creating probabilities data works", {
+    d <- extract_methylation_from_dataframe(example_many_sequences, grouping_levels = NA)
+    expect_equal(convert_probabilities_to_annotations(d$locations, d$probabilities, d$sequences, sequence_text_scaling = c(0, 1), sequence_text_rounding = 0)[1:10,],
+                 data.frame(x_position = c(0.0245098039215686, 0.053921568627451, 0.0833333333333333, 0.112745098039216, 0.142156862745098, 0.17156862745098, 0.200980392156863, 0.230392156862745, 0.259803921568627, 0.348039215686274),
+                            y_position = c(0.978260869565217, 0.978260869565217, 0.978260869565217, 0.978260869565217, 0.978260869565217, 0.978260869565217, 0.978260869565217, 0.978260869565217, 0.978260869565217, 0.978260869565217),
+                            annotation = c("29", "159", "155", "159", "220", "163", "2", "59", "170", "131"),
+                            type = c("Probability", "Probability", "Probability", "Probability", "Probability", "Probability", "Probability", "Probability", "Probability", "Probability")))
+
+    expect_equal(convert_probabilities_to_annotations(d$locations, d$probabilities, d$sequences, sequence_text_scaling = c(-0.5, 256), sequence_text_rounding = 3)[10:20,],
+                 data.frame(x_position = c(0.348039215686274, 0.377450980392157, 0.406862745098039, 0.495098039215686, 0.524509803921569, 0.553921568627451, 0.642156862745098, 0.67156862745098, 0.700980392156863, 0.78921568627451, 0.818627450980392),
+                            y_position = c(0.978260869565217, 0.978260869565217, 0.978260869565217, 0.978260869565217, 0.978260869565217, 0.978260869565217, 0.978260869565217, 0.978260869565217, 0.978260869565217, 0.978260869565217, 0.978260869565217),
+                            annotation = c("0.514", "0.693", "0.545", "0.283", "0.920", "0.295", "0.838", "0.287", "0.268", "0.189", "0.232"),
+                            type = c("Probability", "Probability", "Probability", "Probability", "Probability", "Probability", "Probability", "Probability", "Probability", "Probability", "Probability"),
+                            row.names = 10:20))
+})
+
+test_that("creating probabilities data rejects bad arguments", {
+    d <- extract_methylation_from_dataframe(example_many_sequences, grouping_levels = NA)
+
+    bad_param_value_for_char_vector <- c(TRUE, NA, NULL, 6, -1, 0.5, c(1, 2))
+    for (param in bad_param_value_for_char_vector) {
+        expect_error(convert_probabilities_to_annotations(param, d$probabilities, d$sequences), class = "argument_value_or_type")
+        expect_error(convert_probabilities_to_annotations(d$locations, param, d$sequences), class = "argument_value_or_type")
+        expect_error(convert_probabilities_to_annotations(d$locations, d$probabilities, param), class = "argument_value_or_type")
+    }
+
+    bad_param_value_for_string_to_vector <- c("x", c("x", "y"))
+    for (param in bad_param_value_for_string_to_vector) {
+        expect_warning(expect_error(convert_probabilities_to_annotations(param, d$probabilities, d$sequences), class = "argument_value_or_type"))
+        expect_warning(expect_error(convert_probabilities_to_annotations(d$locations, param, d$sequences), class = "argument_value_or_type"))
+    }
+
+    bad_param_value_for_num <- c(TRUE, NA, NULL, "X", c(1, 2, 3))
+    for (param in bad_param_value_for_num) {
+        expect_error(convert_probabilities_to_annotations(d$locations, d$probabilities, d$sequences, sequence_text_rounding = param), class = "argument_value_or_type")
+        expect_error(convert_probabilities_to_annotations(d$locations, d$probabilities, d$sequences, sequence_text_scaling = param), class = "argument_value_or_type")
+    }
+})

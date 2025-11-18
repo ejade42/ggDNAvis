@@ -1,6 +1,10 @@
 #' Visualise a single DNA/RNA sequence
 #'
-#' `visualize_single_sequence()` is an alias for `visualise_single_sequence()` - see [aliases].\cr\cr
+#' @aliases visualize_single_sequence
+#'
+#' @description
+#' `visualize_single_sequence()` is an alias for `visualise_single_sequence()` - see [aliases].
+#'
 #' This function takes a DNA/RNA sequence and returns a ggplot
 #' visualising it, with the option to directly export a png image
 #' with appropriate dimensions. Colours, line wrapping, index annotation

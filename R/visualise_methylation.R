@@ -4,6 +4,8 @@
 
 #' Visualise methylation probabilities for many DNA sequences
 #'
+#' @aliases visualize_methylation
+#'
 #' @description
 #' `visualize_methylation()` is an alias for `visualise_methylation()` - see [aliases].
 #'
@@ -467,7 +469,11 @@ visualise_methylation <- function(
 
 #' Visualise methylation colour scalebar
 #'
-#' `visualize_methylation_color_scale()` is an alias for `visualise_methylation_colour_scale()` - see [aliases].\cr\cr
+#' @aliases visualize_methylation_color_scale
+#'
+#' @description
+#' `visualize_methylation_color_scale()` is an alias for `visualise_methylation_colour_scale()` - see [aliases].
+#'
 #' This function creates a scalebar showing the colouring scheme based on methylation
 #' probability that is used in [visualise_methylation()]. Showing this is particularly
 #' important when the colour range is clamped via `low_clamp` and `high_clamp` (e.g.
@@ -825,16 +831,16 @@ convert_modification_to_number_vector <- function(
 #'     sequence_text_rounding = 0
 #' )
 #'
-#' ## Scaled to 0-1
+#' ## Scaled to 0-1, 3 dp
 #' convert_probabilities_to_annotations(
 #'     d$locations,
 #'     d$probabilities,
 #'     d$sequences,
 #'     sequence_text_scaling = c(-0.5, 256),
-#'     sequence_text_rounding = 2
+#'     sequence_text_rounding = 3
 #' )
 #'
-#' ## Default (i.e. scaled to 0-1)
+#' ## Default (i.e. scaled to 0-1, 2 dp)
 #' convert_probabilities_to_annotations(
 #'     d$locations,
 #'     d$probabilities,
@@ -849,6 +855,47 @@ convert_probabilities_to_annotations <- function(
     sequence_text_scaling = c(-0.5, 256),
     sequence_text_rounding = 2
 ) {
+    ## Validate arguments
+    ## ---------------------------------------------------------------------
+    not_na_or_null <- list(modification_locations = modification_locations, modification_probabilities = modification_probabilities, sequences = sequences, sequence_text_scaling = sequence_text_scaling, sequence_text_rounding = sequence_text_rounding)
+    for (argument in names(not_na_or_null)) {
+        if (any(is.null(not_na_or_null[[argument]])) || any(is.na(not_na_or_null[[argument]]))) {bad_arg(argument, not_na_or_null, "must not be NA or NULL.")}
+    }
+    not_na_or_null <- NULL
+
+    chars <- list(modification_locations = modification_locations, modification_probabilities = modification_probabilities, sequences = sequences)
+    for (argument in names(chars)) {
+        if (!is.character(chars[[argument]])) {bad_arg(argument, chars, "must be a character vector.")}
+    }
+    chars <- NULL
+
+    string_to_vector_valid <- list(modification_locations = modification_locations, modification_probabilities = modification_probabilities)
+    for (argument in names(string_to_vector_valid)) {
+        if (any(is.na(string_to_vector(string_to_vector_valid[[argument]])))) {bad_arg(argument, string_to_vector_valid, "must expand to a numeric vector via string_to_vector().\nCheck that all its values are comma-separated numbers e.g. '1,2,3,4'.")}
+    }
+    string_to_vector_valid <- NULL
+
+    nums <- list(sequence_text_rounding = sequence_text_rounding, sequence_text_scaling = sequence_text_scaling)
+    for (argument in names(nums)) {
+        if (!is.numeric(nums[[argument]])) {bad_arg(argument, nums, "must be numeric.")}
+    }
+    nums <- NULL
+
+    non_neg_single_int <- list(sequence_text_rounding = sequence_text_rounding)
+    for (argument in names(non_neg_single_int)) {
+        if (length(non_neg_single_int[[argument]]) != 1 || non_neg_single_int[[argument]] %% 1 != 0 || non_neg_single_int[[argument]] < 0) {bad_arg(argument, non_neg_single_int, "must be a single non-negative integer.")}
+    }
+    non_neg_single_int <- NULL
+
+    length_2 <- list(sequence_text_scaling = sequence_text_scaling)
+    for (argument in names(length_2)) {
+        if (length(length_2[[argument]]) != 2) {bad_arg(argument, length_2, "must have length 2")}
+    }
+    length_2 <- NULL
+    ## ---------------------------------------------------------------------
+
+
+
     ## Calculate width and height of tiles based on sequences
     tile_width  <- 1/max(nchar(sequences))
     tile_height <- 1/length(sequences)
@@ -863,6 +910,7 @@ convert_probabilities_to_annotations <- function(
         max <- sequence_text_scaling[2]
         scaled_probabilities <- (probabilities - min) / max
 
+        ## If there is an assessed base this line, calculate all coordinates
         if (length(locations) > 0) {
             for (j in 1:length(locations)) {
                 x_position <- tile_width * (locations[j] - 1/2)

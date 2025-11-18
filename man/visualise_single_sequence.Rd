@@ -76,7 +76,8 @@ visualise_single_sequence(
 A ggplot object containing the full visualisation, or \code{invisible(NULL)} if \code{return = FALSE}. It is often more useful to use \code{filename = "myfilename.png"}, because then the visualisation is exported at the correct aspect ratio.
 }
 \description{
-\code{visualize_single_sequence()} is an alias for \code{visualise_single_sequence()} - see \link{aliases}.\cr\cr
+\code{visualize_single_sequence()} is an alias for \code{visualise_single_sequence()} - see \link{aliases}.
+
 This function takes a DNA/RNA sequence and returns a ggplot
 visualising it, with the option to directly export a png image
 with appropriate dimensions. Colours, line wrapping, index annotation

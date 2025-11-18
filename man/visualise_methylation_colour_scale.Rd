@@ -55,7 +55,8 @@ visualise_methylation_colour_scale(
 ggplot of the scalebar.\cr\cr Unlike the other \verb{visualise_<>} functions in this package, does not directly export a png. This is because there are no squares that need to be rendered at a precise aspect ratio in this function. It can just be saved normally with \code{\link[ggplot2:ggsave]{ggplot2::ggsave()}} with any sensible combination of height and width.
 }
 \description{
-\code{visualize_methylation_color_scale()} is an alias for \code{visualise_methylation_colour_scale()} - see \link{aliases}.\cr\cr
+\code{visualize_methylation_color_scale()} is an alias for \code{visualise_methylation_colour_scale()} - see \link{aliases}.
+
 This function creates a scalebar showing the colouring scheme based on methylation
 probability that is used in \code{\link[=visualise_methylation]{visualise_methylation()}}. Showing this is particularly
 important when the colour range is clamped via \code{low_clamp} and \code{high_clamp} (e.g.
