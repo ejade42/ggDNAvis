@@ -2,8 +2,8 @@
 
 `visualize_methylation_color_scale()` is an alias for
 `visualise_methylation_colour_scale()` - see
-[aliases](https://ejade42.github.io/ggDNAvis/reference/ggDNAvis_aliases.md).  
-  
+[aliases](https://ejade42.github.io/ggDNAvis/reference/ggDNAvis_aliases.md).
+
 This function creates a scalebar showing the colouring scheme based on
 methylation probability that is used in
 [`visualise_methylation()`](https://ejade42.github.io/ggDNAvis/reference/visualise_methylation.md).

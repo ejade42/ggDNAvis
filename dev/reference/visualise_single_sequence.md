@@ -2,8 +2,8 @@
 
 `visualize_single_sequence()` is an alias for
 `visualise_single_sequence()` - see
-[aliases](https://ejade42.github.io/ggDNAvis/reference/ggDNAvis_aliases.md).  
-  
+[aliases](https://ejade42.github.io/ggDNAvis/reference/ggDNAvis_aliases.md).
+
 This function takes a DNA/RNA sequence and returns a ggplot visualising
 it, with the option to directly export a png image with appropriate
 dimensions. Colours, line wrapping, index annotation interval, and
