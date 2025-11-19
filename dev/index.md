@@ -65,9 +65,12 @@ Additionally, ggDNAvis contains a built-in example dataset
 (`example_many_sequences`) and a set of colour palettes for DNA
 visualisation (`sequence_colour_palettes`).
 
-Note that all spellings are the British English version (e.g. “colour”,
-“visualise”). Aliases have not been defined, meaning American spellings
-will not work.
+As of v1.0.0, aliases are now fully configured so either American or
+British spellings should work. “Colour” and “visualise” remain the
+spellings used throughout the code and documentation but “color” (and
+“col”) and “visualize” should also work in all user-facing scenarios. If
+any American spellings don’t work then please submit a bug report at
+<https://github.com/ejade42/ggDNAvis/issues>.
 
 The latest release of ggDNAvis is available from CRAN or via github
 releases. Alternatively, the latest in-development version can be
@@ -82,7 +85,7 @@ install.packages("ggDNAvis")
 devtools::install_github("ejade42/ggDNAvis")
 
 ## Specific version from github
-devtools::install_github("ejade42/ggDNAvis", ref = "v0.3.2")
+devtools::install_github("ejade42/ggDNAvis", ref = "v1.0.0")
 ```
 
 Throughout this manual, only `ggDNAvis`, `dplyr`, and `ggplot2` are
@@ -117,7 +120,7 @@ cat("Loaded ggDNAvis version is:", as.character(packageVersion("ggDNAvis")))
 ```
 
 ``` R
-## Loaded ggDNAvis version is: 0.3.2.9000
+## Loaded ggDNAvis version is: 0.3.2.9001
 ```
 
 # 2 Summary/quickstart
@@ -190,6 +193,13 @@ visualise_many_sequences(
     margin = 0.5,
     sequence_text_colour = "white",
     sequence_text_size = 16,
+    index_annotation_lines = c(1, 23, 37),
+    index_annotation_colour = "darkred",
+    index_annotation_size = 12.5,
+    index_annotation_interval = 3,
+    index_annotations_above = TRUE,
+    index_annotation_vertical_position = 1/3,
+    index_annotation_full_line = FALSE,
     outline_colour = "black",
     outline_linewidth = 3,
     outline_join = "mitre",
@@ -211,8 +221,11 @@ knitr::include_graphics(paste0(github_location, "summary_many_sequences.png"))
 ## Read and merge data
 modification_data <- read_modified_fastq("inst/extdata/example_many_sequences_raw_modified.fastq")
 metadata          <- read.csv("inst/extdata/example_many_sequences_metadata.csv")
-merged_modification_data <- merge_methylation_with_metadata(modification_data, metadata,
-                                                            reversed_location_offset = 1)
+merged_modification_data <- merge_methylation_with_metadata(
+    modification_data, 
+    metadata,
+    reversed_location_offset = 1
+)
 
 ## Extract list of character vectors
 ## These arguments should all be considered, as they are highly specific to your data
@@ -231,34 +244,157 @@ methylation_for_visualisation <- extract_methylation_from_dataframe(
 visualise_methylation(
     modification_locations     = methylation_for_visualisation$locations,
     modification_probabilities = methylation_for_visualisation$probabilities,
-    sequence_lengths           = methylation_for_visualisation$lengths,
-    background_colour = "white",
-    other_bases_colour = "grey",
+    sequences                  = methylation_for_visualisation$sequences,
     low_colour = "blue",
     high_colour = "red",
     low_clamp = 0.1*255,
     high_clamp = 0.9*255,
+    background_colour = "white",
+    other_bases_colour = "grey",
+    sequence_text_type = "none",
+    index_annotation_lines = 1:51,
+    index_annotation_colour = "darkred",
+    index_annotation_size = 12.5,
+    index_annotation_interval = 3,
+    index_annotations_above = TRUE,
+    index_annotation_vertical_position = 1/3,
+    index_annotation_full_line = FALSE,
     outline_colour = "black",
     outline_linewidth = 3,
     outline_join = "mitre",
-    modified_bases_outline_colour = NA,
-    modified_bases_outline_linewidth = NA,
-    modified_bases_outline_join = NA,
-    other_bases_outline_colour = NA,
-    other_bases_outline_linewidth = NA,
-    other_bases_outline_join = NA,
     margin = 0.5,
     return = FALSE,
-    filename = paste0(output_location, "summary_methylation.png"),
+    filename = paste0(output_location, "summary_methylation_none.png"),
     render_device = ragg::agg_png,
-    pixels_per_base = 20
+    pixels_per_base = 100
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "summary_methylation.png"))
+knitr::include_graphics(paste0(github_location, "summary_methylation_none.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/summary_methylation.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/summary_methylation_none.png)
+
+``` r
+## Create visualisation showing sequence
+visualise_methylation(
+    modification_locations     = methylation_for_visualisation$locations,
+    modification_probabilities = methylation_for_visualisation$probabilities,
+    sequences                  = methylation_for_visualisation$sequences,
+    low_colour = "blue",
+    high_colour = "red",
+    low_clamp = 0.1*255,
+    high_clamp = 0.9*255,
+    background_colour = "white",
+    other_bases_colour = "grey",
+    sequence_text_type = "sequence",
+    sequence_text_colour = "black",
+    sequence_text_size = 16,
+    index_annotation_lines = c(1, 23, 37),
+    index_annotation_colour = "darkred",
+    index_annotation_size = 12.5,
+    index_annotation_interval = 15,
+    index_annotations_above = TRUE,
+    index_annotation_vertical_position = 1/3,
+    index_annotation_full_line = TRUE,
+    outline_colour = "black",
+    outline_join = "mitre",
+    modified_bases_outline_linewidth = 3,
+    other_bases_outline_linewidth = 1,
+    margin = 0.5,
+    return = FALSE,
+    filename = paste0(output_location, "summary_methylation_sequence.png"),
+    render_device = ragg::agg_png,
+    pixels_per_base = 100
+)
+
+## View image
+knitr::include_graphics(paste0(github_location, "summary_methylation_sequence.png"))
+```
+
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/summary_methylation_sequence.png)
+
+``` r
+## Create visualisation showing probabilities
+visualise_methylation(
+    modification_locations     = methylation_for_visualisation$locations,
+    modification_probabilities = methylation_for_visualisation$probabilities,
+    sequences                  = methylation_for_visualisation$sequences,
+    low_colour = "blue",
+    high_colour = "red",
+    low_clamp = 0.1*255,
+    high_clamp = 0.9*255,
+    background_colour = "white",
+    other_bases_colour = "grey",
+    sequence_text_type = "probability",
+    sequence_text_scaling = c(-0.5, 256),
+    sequence_text_rounding = 2,
+    sequence_text_colour = "white",
+    sequence_text_size = 10,
+    index_annotation_lines = c(1, 23, 37),
+    index_annotation_colour = "darkred",
+    index_annotation_size = 12.5,
+    index_annotation_interval = 15,
+    index_annotations_above = TRUE,
+    index_annotation_vertical_position = 1/3,
+    index_annotation_full_line = TRUE,
+    outline_colour = "black",
+    outline_join = "mitre",
+    modified_bases_outline_linewidth = 3,
+    other_bases_outline_linewidth = 1,
+    margin = 0.5,
+    return = FALSE,
+    filename = paste0(output_location, "summary_methylation_probabilities.png"),
+    render_device = ragg::agg_png,
+    pixels_per_base = 100
+)
+
+## View image
+knitr::include_graphics(paste0(github_location, "summary_methylation_probabilities.png"))
+```
+
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/summary_methylation_probabilities.png)
+
+``` r
+## Create visualisation showing probability integers
+visualise_methylation(
+    modification_locations     = methylation_for_visualisation$locations,
+    modification_probabilities = methylation_for_visualisation$probabilities,
+    sequences                  = methylation_for_visualisation$sequences,
+    low_colour = "blue",
+    high_colour = "red",
+    low_clamp = 0.1*255,
+    high_clamp = 0.9*255,
+    background_colour = "white",
+    other_bases_colour = "grey",
+    sequence_text_type = "probability",
+    sequence_text_scaling = c(0, 1),
+    sequence_text_rounding = 0,
+    sequence_text_colour = "white",
+    sequence_text_size = 10,
+    index_annotation_lines = c(1, 23, 37),
+    index_annotation_colour = "darkred",
+    index_annotation_size = 12.5,
+    index_annotation_interval = 15,
+    index_annotations_above = TRUE,
+    index_annotation_vertical_position = 1/3,
+    index_annotation_full_line = TRUE,
+    outline_colour = "black",
+    outline_join = "mitre",
+    modified_bases_outline_linewidth = 3,
+    other_bases_outline_linewidth = 1,
+    margin = 0.5,
+    return = FALSE,
+    filename = paste0(output_location, "summary_methylation_probability_integers.png"),
+    render_device = ragg::agg_png,
+    pixels_per_base = 100
+)
+
+## View image
+knitr::include_graphics(paste0(github_location, "summary_methylation_probability_integers.png"))
+```
+
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/summary_methylation_probability_integers.png)
 
 ``` r
 ## Create scalebar and save to ggplot object
@@ -280,7 +416,7 @@ scalebar <- visualise_methylation_colour_scale(
 )
 
 ## Write png from object (the object is just a standard ggplot)
-ggsave(paste0(output_location, "summary_methylation_scalebar.png"), scalebar, dpi = 300, width = 5.25, height = 1.5, device = ragg::agg_png)
+ggsave(paste0(output_location, "summary_methylation_scalebar.png"), scalebar, dpi = 300, width = 5.25, height = 1.25, device = ragg::agg_png)
 
 ## View image
 knitr::include_graphics(paste0(github_location, "summary_methylation_scalebar.png"))
@@ -1320,9 +1456,8 @@ visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
 ```
 
 ``` R
-## Warning: If margin is small and outlines are on (outline_linewidth > 0),
-## outlines may be cut off at the edges of the plot. Check if this is happening
-## and consider using a bigger margin.
+## Warning: If margin is small and outlines are on (outline_linewidth > 0), outlines may be cut off at the edges of the plot. Check if this is happening and consider using a bigger margin.
+## Current margin: 0
 ```
 
 ``` r
@@ -1823,11 +1958,47 @@ Colour-related arguments:
   boxes of A, C, G, and T respectively.
 - `sequence_text_colour`: The colour used for the A, C, G, and T
   lettering inside the boxes.
+- `index_annotation_colour`: The colour used for the index numbers
+  above/below the boxes.
 - `background_colour`: The colour used for the background.
 - `outline_colour`: The colour used for the box outlines.
 
 Layout-related arguments:
 
+- `index_annotation_lines`: This is a ***key argument to change***.
+  Controls which lines should have their indices annotated. Defaults to
+  1 i.e. only the first line will be annotated. Can be set to
+  `1:length(sequences_vector)` to annotate all lines, or to a custom
+  integer vector to annotate specific lines. With the default argument
+  values of
+  [`extract_and_sort_sequences()`](https://ejade42.github.io/ggDNAvis/reference/extract_and_sort_sequences.md),
+  `c(1, 23, 37)` annotates the first sequence from each family, which I
+  personally find a useful setting. It may take some trial and error to
+  find the ideal setting of this for each ordering/dataset.
+- `index_annotation_full_line`: Whether the annotations should always
+  continue to the end of the longest sequence (`TRUE`, default) or
+  whether they should end once the sequence along each annotated line
+  ends.
+- `index_annotation_size`: The size of the index numbers above/below the
+  boxes. Should not be set to 0 to disable; instead disable via
+  `index_annotation_interval = 0`. Defaults to 12.5.
+- `index_annotation_interval`: The frequency at which index numbers
+  should be listed. Can be set to 0 to disable index annotations.
+  Defaults to 15. Note that unlike
+  [`visualise_single_sequence()`](https://ejade42.github.io/ggDNAvis/reference/visualise_single_sequence.md),
+  the count resets each line in
+  [`visualise_many_sequences()`](https://ejade42.github.io/ggDNAvis/reference/visualise_many_sequences.md)
+  and
+  [`visualise_methylation()`](https://ejade42.github.io/ggDNAvis/reference/visualise_methylation.md)
+  because each line is assumed to be a different sequence. Setting to
+  `NA` disables index annotations.
+- `index_annotations_above`: Boolean specifying whether index
+  annotations should be drawn above or below each line of sequence.
+  Defaults to `TRUE` (above).
+- `index_annotation_vertical_position`: How far annotation numbers
+  should be rendered above (if `index_annotations_above = TRUE`) or
+  below (if `index_annotations_above = FALSE`) each base. Defaults to
+  1/3, not recommended to change generally.
 - `margin`: The margin around the image in terms of the size of base
   boxes (e.g. the default value of 0.5 adds a margin half the size of
   the base boxes, which is 50 px with the default
@@ -1849,8 +2020,9 @@ Layout-related arguments:
   recommended to change. Can be set to `NULL` to infer device based on
   `filename` extension.
 
-For example, a layout with increased margins, enlarged text, and crazy
-colours might be:
+For example, a layout with increased margins, enlarged text, annotations
+every 3 bases ending once each sequence ends, and crazy colours might
+be:
 
 ``` r
 ## Extract sequences to a character vector
@@ -1862,6 +2034,12 @@ visualise_many_sequences(sequences_for_visualisation,
                          return = FALSE,
                          sequence_colours = c("orange", "#00FF00", "magenta", "black"),
                          sequence_text_colour = "cyan",
+                         index_annotation_lines = c(1:51),
+                         index_annotation_interval = 3,
+                         index_annotation_size = 15,
+                         index_annotation_vertical_position = 1/2,
+                         index_annotation_full_line = FALSE,
+                         index_annotation_colour = "purple",
                          background_colour = "yellow",
                          outline_colour = "red",
                          outline_join = "round",
@@ -1874,6 +2052,34 @@ knitr::include_graphics(paste0(github_location, "many_sequences_08.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_08.png)
+
+A layout with annotations below the last sequence in each family to the
+end of the image might be (also illustrating the use of American
+spellings):
+
+``` r
+## Extract sequences to a character vector
+sequences_for_visualization <- extract_and_sort_sequences(example_many_sequences)
+
+## Use the character vector to make the image
+visualize_many_sequences(sequences_for_visualization,
+                         filename = paste0(output_location, "many_sequences_09.png"),
+                         return = FALSE,
+                         sequence_colors = sequence_color_palettes$bright_deep,
+                         sequence_text_col = "white",
+                         index_annotation_lines = c(14, 28, 51),
+                         index_annotations_above = FALSE,
+                         index_annotation_interval = 6,
+                         index_annotation_full_line = TRUE,
+                         background_col = "lightgrey",
+                         outline_color = "darkred",
+                         margin = 5)
+
+## View image
+knitr::include_graphics(paste0(github_location, "many_sequences_09.png"))
+```
+
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_09.png)
 
 As with
 [`visualise_single_sequence()`](https://ejade42.github.io/ggDNAvis/reference/visualise_single_sequence.md),
@@ -1888,10 +2094,11 @@ sequences_for_visualisation <- extract_and_sort_sequences(example_many_sequences
 
 ## Use the character vector to make the image
 visualise_many_sequences(sequences_for_visualisation,
-                         filename = paste0(output_location, "many_sequences_09.png"),
+                         filename = paste0(output_location, "many_sequences_10.png"),
                          return = FALSE,
                          sequence_colours = sequence_colour_palettes$bright_pale,
                          sequence_text_size = 0,
+                         index_annotation_lines = NA,
                          margin = 0.1,
                          pixels_per_base = 20,
                          outline_join = "round")
@@ -1905,10 +2112,10 @@ visualise_many_sequences(sequences_for_visualisation,
 
 ``` r
 ## View image
-knitr::include_graphics(paste0(github_location, "many_sequences_09.png"))
+knitr::include_graphics(paste0(github_location, "many_sequences_10.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_09.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_10.png)
 Note that the margin/outline warning is produced whenever the margin is
 ≤0.25 and the outline linewidth is \>0. Getting the warning does not
 necessarily mean that the outlines are getting cut off (as this only
@@ -2107,6 +2314,59 @@ methylation_data_for_visualisation
 ## [50] "161,156,9,65,198,255,245,191,174,63,155,146,13,95,228,100,132,45,49"                                      
 ## [51] "109,86,70,169,200,112,237,69,168,97,239,188,150,208,225,190,128,252,142,224"                              
 ## 
+## $sequences
+##  [1] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA"
+##  [2] "GGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA"         
+##  [3] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA"               
+##  [4] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA"                     
+##  [5] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA"                                       
+##  [6] ""                                                                                                      
+##  [7] ""                                                                                                      
+##  [8] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGAGGCGGCGGAGGAGGAGGCGGCGGA"                                 
+##  [9] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGAGGCGGCGGAGGAGGAGGCGGCGGA"                                       
+## [10] ""                                                                                                      
+## [11] ""                                                                                                      
+## [12] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA"               
+## [13] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGA"                  
+## [14] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGCGGA"                     
+## [15] ""                                                                                                      
+## [16] ""                                                                                                      
+## [17] ""                                                                                                      
+## [18] ""                                                                                                      
+## [19] ""                                                                                                      
+## [20] ""                                                                                                      
+## [21] ""                                                                                                      
+## [22] ""                                                                                                      
+## [23] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGA"         
+## [24] ""                                                                                                      
+## [25] ""                                                                                                      
+## [26] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGA"            
+## [27] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGA"               
+## [28] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGA"                  
+## [29] ""                                                                                                      
+## [30] ""                                                                                                      
+## [31] ""                                                                                                      
+## [32] ""                                                                                                      
+## [33] ""                                                                                                      
+## [34] ""                                                                                                      
+## [35] ""                                                                                                      
+## [36] ""                                                                                                      
+## [37] "GGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGA"      
+## [38] "GGCGGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGA"      
+## [39] ""                                                                                                      
+## [40] ""                                                                                                      
+## [41] "GGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGA"         
+## [42] "GGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGA"            
+## [43] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGCGGCGGA"               
+## [44] ""                                                                                                      
+## [45] ""                                                                                                      
+## [46] "GGCGGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGA"      
+## [47] ""                                                                                                      
+## [48] ""                                                                                                      
+## [49] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGA"      
+## [50] "GGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGCGGA"            
+## [51] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGCGGCGGA"                     
+## 
 ## $lengths
 ##  [1] 102  93  87  81  63   0   0  69  63   0   0  87  84  81   0   0   0   0   0
 ## [20]   0   0   0  93   0   0  90  87  84   0   0   0   0   0   0   0   0  96  96
@@ -2247,6 +2507,59 @@ hydroxymethylation_data_for_visualisation
 ## [50] "52,87,155,117,2,0,3,50,81,184,75,74,60,97,15,8,46,188,81"                           
 ## [51] "29,9,79,29,15,95,14,82,81,43,11,25,98,35,18,53,112,2,57,31"                         
 ## 
+## $sequences
+##  [1] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA"
+##  [2] "GGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA"         
+##  [3] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA"               
+##  [4] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA"                     
+##  [5] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA"                                       
+##  [6] ""                                                                                                      
+##  [7] ""                                                                                                      
+##  [8] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGAGGCGGCGGAGGAGGAGGCGGCGGA"                                 
+##  [9] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGAGGCGGCGGAGGAGGAGGCGGCGGA"                                       
+## [10] ""                                                                                                      
+## [11] ""                                                                                                      
+## [12] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA"               
+## [13] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGA"                  
+## [14] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGCGGA"                     
+## [15] ""                                                                                                      
+## [16] ""                                                                                                      
+## [17] ""                                                                                                      
+## [18] ""                                                                                                      
+## [19] ""                                                                                                      
+## [20] ""                                                                                                      
+## [21] ""                                                                                                      
+## [22] ""                                                                                                      
+## [23] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGA"         
+## [24] ""                                                                                                      
+## [25] ""                                                                                                      
+## [26] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGA"            
+## [27] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGA"               
+## [28] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGA"                  
+## [29] ""                                                                                                      
+## [30] ""                                                                                                      
+## [31] ""                                                                                                      
+## [32] ""                                                                                                      
+## [33] ""                                                                                                      
+## [34] ""                                                                                                      
+## [35] ""                                                                                                      
+## [36] ""                                                                                                      
+## [37] "GGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGA"      
+## [38] "GGCGGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGA"      
+## [39] ""                                                                                                      
+## [40] ""                                                                                                      
+## [41] "GGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGA"         
+## [42] "GGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGA"            
+## [43] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGCGGCGGA"               
+## [44] ""                                                                                                      
+## [45] ""                                                                                                      
+## [46] "GGCGGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGA"      
+## [47] ""                                                                                                      
+## [48] ""                                                                                                      
+## [49] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGA"      
+## [50] "GGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGCGGA"            
+## [51] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGCGGCGGA"                     
+## 
 ## $lengths
 ##  [1] 102  93  87  81  63   0   0  69  63   0   0  87  84  81   0   0   0   0   0
 ## [20]   0   0   0  93   0   0  90  87  84   0   0   0   0   0   0   0   0  96  96
@@ -2267,7 +2580,7 @@ input for
 ## Use saved methylation data for visualisation to make image
 visualise_methylation(modification_locations     = methylation_data_for_visualisation$locations,
                       modification_probabilities = methylation_data_for_visualisation$probabilities,
-                      sequence_lengths           = methylation_data_for_visualisation$lengths,
+                      sequences                  = methylation_data_for_visualisation$sequences,
                       filename = paste0(output_location, "modification_01.png"),
                       return = FALSE)
 
@@ -2296,7 +2609,7 @@ exported manually via
 scalebar <- visualise_methylation_colour_scale(x_axis_title = "Methylation probability")
 
 ## Write png from object
-ggsave(paste0(output_location, "modification_01_scalebar.png"), scalebar, dpi = 300, width = 5.25, height = 1.5, device = ragg::agg_png)
+ggsave(paste0(output_location, "modification_01_scalebar.png"), scalebar, dpi = 300, width = 5.25, height = 1.25, device = ragg::agg_png)
 
 ## View image
 knitr::include_graphics(paste0(github_location, "modification_01_scalebar.png"))
@@ -2363,7 +2676,7 @@ methylation_data_for_visualisation <- extract_methylation_from_dataframe(
 ## Use saved methylation data for visualisation to make image
 visualise_methylation(modification_locations     = methylation_data_for_visualisation$locations,
                       modification_probabilities = methylation_data_for_visualisation$probabilities,
-                      sequence_lengths           = methylation_data_for_visualisation$lengths,
+                      sequences                  = methylation_data_for_visualisation$sequences,
                       filename = paste0(output_location, "modification_02.png"),
                       return = FALSE)
 
@@ -2486,7 +2799,7 @@ methylation_data_for_visualisation <- extract_methylation_from_dataframe(
 ## Use saved methylation data for visualisation to make image
 visualise_methylation(modification_locations     = methylation_data_for_visualisation$locations,
                       modification_probabilities = methylation_data_for_visualisation$probabilities,
-                      sequence_lengths           = methylation_data_for_visualisation$lengths,
+                      sequences                  = methylation_data_for_visualisation$sequences,
                       filename = paste0(output_location, "modification_03.png"),
                       return = FALSE,
                       margin = 4, 
@@ -2519,7 +2832,7 @@ scalebar <- visualise_methylation_colour_scale(x_axis_title = "Methylation proba
           axis.text  = element_text(colour = "white"))
 
 ## Write png from object
-ggsave(paste0(output_location, "modification_03_scalebar.png"), scalebar, dpi = 300, width = 5.25, height = 1.5, device = ragg::agg_png)
+ggsave(paste0(output_location, "modification_03_scalebar.png"), scalebar, dpi = 300, width = 5.25, height = 1.25, device = ragg::agg_png)
 
 ## View image
 knitr::include_graphics(paste0(github_location, "modification_03_scalebar.png"))
@@ -2547,7 +2860,7 @@ methylation_data_for_visualisation <- extract_methylation_from_dataframe(
 ## Use saved methylation data for visualisation to make image
 visualise_methylation(modification_locations     = methylation_data_for_visualisation$locations,
                       modification_probabilities = methylation_data_for_visualisation$probabilities,
-                      sequence_lengths           = methylation_data_for_visualisation$lengths,
+                      sequences                  = methylation_data_for_visualisation$sequences,
                       filename = paste0(output_location, "modification_04.png"),
                       return = FALSE,
                       margin = 0.1, 
@@ -2560,9 +2873,8 @@ visualise_methylation(modification_locations     = methylation_data_for_visualis
 ```
 
 ``` R
-## Warning: If margin is small and outlines are on (outline_linewidth > 0),
-## outlines may be cut off at the edges of the plot. Check if this is happening
-## and consider using a bigger margin.
+## Warning: If margin is small and outlines are on (outline_linewidth > 0), outlines may be cut off at the edges of the plot. Check if this is happening and consider using a bigger margin.
+## Current margin: 0.1
 ```
 
 ``` r
@@ -2580,7 +2892,7 @@ scalebar <- visualise_methylation_colour_scale(x_axis_title = "Methylation proba
                                                background_colour = "lightblue1")
 
 ## Write png from object
-ggsave(paste0(output_location, "modification_04_scalebar.png"), scalebar, dpi = 300, width = 5.25, height = 1.5, device = ragg::agg_png)
+ggsave(paste0(output_location, "modification_04_scalebar.png"), scalebar, dpi = 300, width = 5.25, height = 1.25, device = ragg::agg_png)
 
 ## View image
 knitr::include_graphics(paste0(github_location, "modification_04_scalebar.png"))
@@ -2631,7 +2943,7 @@ methylation_data_for_visualisation <- extract_methylation_from_dataframe(
 ## Use saved methylation data for visualisation to make image
 visualise_methylation(modification_locations     = methylation_data_for_visualisation$locations,
                       modification_probabilities = methylation_data_for_visualisation$probabilities,
-                      sequence_lengths           = methylation_data_for_visualisation$lengths,
+                      sequences                  = methylation_data_for_visualisation$sequences,
                       filename = paste0(output_location, "modification_05.png"),
                       return = FALSE,
                       margin = 0.1, 
@@ -2646,9 +2958,8 @@ visualise_methylation(modification_locations     = methylation_data_for_visualis
 ```
 
 ``` R
-## Warning: If margin is small and outlines are on (outline_linewidth > 0),
-## outlines may be cut off at the edges of the plot. Check if this is happening
-## and consider using a bigger margin.
+## Warning: If margin is small and outlines are on (outline_linewidth > 0), outlines may be cut off at the edges of the plot. Check if this is happening and consider using a bigger margin.
+## Current margin: 0.1
 ```
 
 ``` r
@@ -2668,7 +2979,7 @@ scalebar <- visualise_methylation_colour_scale(x_axis_title = "Methylation proba
                                                background_colour = "lightblue1")
 
 ## Write png from object
-ggsave(paste0(output_location, "modification_05_scalebar.png"), scalebar, dpi = 300, width = 5.25, height = 1.5, device = ragg::agg_png)
+ggsave(paste0(output_location, "modification_05_scalebar.png"), scalebar, dpi = 300, width = 5.25, height = 1.25, device = ragg::agg_png)
 
 ## View image
 knitr::include_graphics(paste0(github_location, "modification_05_scalebar.png"))
@@ -2709,7 +3020,7 @@ methylation_data_for_visualisation <- extract_methylation_from_dataframe(
 ## Use saved methylation data for visualisation to make image
 visualise_methylation(modification_locations     = methylation_data_for_visualisation$locations,
                       modification_probabilities = methylation_data_for_visualisation$probabilities,
-                      sequence_lengths           = methylation_data_for_visualisation$lengths,
+                      sequences                  = methylation_data_for_visualisation$sequences,
                       filename = paste0(output_location, "modification_06.png"),
                       return = FALSE,
                       low_clamp = 0.3*255,
@@ -2729,7 +3040,7 @@ scalebar <- visualise_methylation_colour_scale(x_axis_title = "Methylation proba
                                                high_clamp = 0.7*255)
 
 ## Write png from object
-ggsave(paste0(output_location, "modification_06_scalebar.png"), scalebar, dpi = 300, width = 5.25, height = 1.5, device = ragg::agg_png)
+ggsave(paste0(output_location, "modification_06_scalebar.png"), scalebar, dpi = 300, width = 5.25, height = 1.25, device = ragg::agg_png)
 
 ## View image
 knitr::include_graphics(paste0(github_location, "modification_06_scalebar.png"))
@@ -2761,7 +3072,7 @@ hydroxymethylation_data_for_visualisation <- extract_methylation_from_dataframe(
 ## Use saved methylation data for visualisation to make image
 visualise_methylation(modification_locations     = hydroxymethylation_data_for_visualisation$locations,
                       modification_probabilities = hydroxymethylation_data_for_visualisation$probabilities,
-                      sequence_lengths           = hydroxymethylation_data_for_visualisation$lengths,
+                      sequences                  = hydroxymethylation_data_for_visualisation$sequences,
                       filename = paste0(output_location, "modification_07.png"),
                       return = FALSE,
                       low_clamp = 0.1*255,
@@ -2781,7 +3092,7 @@ scalebar <- visualise_methylation_colour_scale(x_axis_title = "Hydroxymethylatio
                                                high_clamp = 0.5*255)
 
 ## Write png from object
-ggsave(paste0(output_location, "modification_07_scalebar.png"), scalebar, dpi = 300, width = 5.25, height = 1.5, device = ragg::agg_png)
+ggsave(paste0(output_location, "modification_07_scalebar.png"), scalebar, dpi = 300, width = 5.25, height = 1.25, device = ragg::agg_png)
 
 ## View image
 knitr::include_graphics(paste0(github_location, "modification_07_scalebar.png"))
@@ -2848,7 +3159,7 @@ Using all defaults but with lower precision gives the following:
 scalebar <- visualise_methylation_colour_scale(precision = 10)
 
 ## Write png from object
-ggsave(paste0(output_location, "modification_scalebar_alone_01.png"), scalebar, dpi = 300, width = 5.25, height = 1.5, device = ragg::agg_png)
+ggsave(paste0(output_location, "modification_scalebar_alone_01.png"), scalebar, dpi = 300, width = 5.25, height = 1.25, device = ragg::agg_png)
 
 ## View image
 knitr::include_graphics(paste0(github_location, "modification_scalebar_alone_01.png"))
@@ -2864,7 +3175,7 @@ scalebar <- visualise_methylation_colour_scale(precision = 50,
                                                do_x_ticks = FALSE)
 
 ## Write png from object
-ggsave(paste0(output_location, "modification_scalebar_alone_02.png"), scalebar, dpi = 300, width = 5.25, height = 1.5, device = ragg::agg_png)
+ggsave(paste0(output_location, "modification_scalebar_alone_02.png"), scalebar, dpi = 300, width = 5.25, height = 1.25, device = ragg::agg_png)
 
 ## View image
 knitr::include_graphics(paste0(github_location, "modification_scalebar_alone_02.png"))
@@ -2993,7 +3304,7 @@ methylation_data_for_visualisation <- extract_methylation_from_dataframe(
 ## Use saved methylation data for visualisation to make image
 visualise_methylation(modification_locations     = methylation_data_for_visualisation$locations,
                       modification_probabilities = methylation_data_for_visualisation$probabilities,
-                      sequence_lengths           = methylation_data_for_visualisation$lengths,
+                      sequences                  = methylation_data_for_visualisation$sequences,
                       filename = paste0(output_location, "modification_08.png"),
                       return = FALSE)
 
@@ -3040,7 +3351,7 @@ methylation_data_for_visualisation <- extract_methylation_from_dataframe(
 ## Use saved methylation data for visualisation to make image
 visualise_methylation(modification_locations     = methylation_data_for_visualisation$locations,
                       modification_probabilities = methylation_data_for_visualisation$probabilities,
-                      sequence_lengths           = methylation_data_for_visualisation$lengths,
+                      sequences                  = methylation_data_for_visualisation$sequences,
                       filename = paste0(output_location, "modification_09.png"),
                       return = FALSE)
 
@@ -3083,7 +3394,7 @@ methylation_data_for_visualisation <- extract_methylation_from_dataframe(
 ## Use saved methylation data for visualisation to make image
 visualise_methylation(modification_locations     = methylation_data_for_visualisation$locations,
                       modification_probabilities = methylation_data_for_visualisation$probabilities,
-                      sequence_lengths           = methylation_data_for_visualisation$lengths,
+                      sequences                  = methylation_data_for_visualisation$sequences,
                       filename = paste0(output_location, "modification_10.png"),
                       return = FALSE)
 
