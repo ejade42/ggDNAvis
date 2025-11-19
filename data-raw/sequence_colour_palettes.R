@@ -7,3 +7,10 @@ sequence_colour_palettes <- list(
 )
 
 usethis::use_data(sequence_colour_palettes, overwrite = TRUE)
+
+
+## Define aliases
+sequence_color_palettes <- sequence_colour_palettes
+sequence_col_palettes <- sequence_colour_palettes
+usethis::use_data(sequence_color_palettes, overwrite = TRUE)
+usethis::use_data(sequence_col_palettes, overwrite = TRUE)
