@@ -3811,7 +3811,9 @@ visualise_methylation(modification_locations     = methylation_data_for_visualis
                       sequences                  = methylation_data_for_visualisation$sequences,
                       filename = paste0(output_location, "modification_13.png"),
                       return = FALSE,
-                      sequence_text_type = "sequence")
+                      sequence_text_type = "sequence",
+                      index_annotation_lines = c(1, 21, 33),
+                      index_annotation_interval = 3)
 
 ## View image
 knitr::include_graphics(paste0(github_location, "modification_13.png"))
@@ -3860,7 +3862,9 @@ visualise_methylation(modification_locations     = methylation_data_for_visualis
                       sequences                  = methylation_data_for_visualisation$sequences,
                       filename = paste0(output_location, "modification_14.png"),
                       return = FALSE,
-                      sequence_text_type = "sequence")
+                      sequence_text_type = "sequence",
+                      index_annotation_lines = c(1, 21, 33),
+                      index_annotation_interval = 3)
 
 ## View image
 knitr::include_graphics(paste0(github_location, "modification_14.png"))
@@ -3904,7 +3908,10 @@ visualise_methylation(modification_locations     = methylation_data_for_visualis
                       modification_probabilities = methylation_data_for_visualisation$probabilities,
                       sequences                  = methylation_data_for_visualisation$sequences,
                       filename = paste0(output_location, "modification_15.png"),
-                      return = FALSE)
+                      return = FALSE,
+                      sequence_text_type = "sequence",
+                      index_annotation_lines = c(1, 21, 33),
+                      index_annotation_interval = 3)
 
 ## View image
 knitr::include_graphics(paste0(github_location, "modification_15.png"))
