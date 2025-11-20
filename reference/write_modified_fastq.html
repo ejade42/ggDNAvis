@@ -174,7 +174,7 @@ Default arguments are set up to work with the included <code><a href="example_ma
 <span class="r-in"><span>    modification_prefixes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"C+h?"</span>, <span class="st">"C+m?"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    return <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in write_modified_fastq(example_many_sequences, filename = NA, read_id_colname = "read",     sequence_colname = "sequence", quality_colname = "quality",     locations_colnames = c("hydroxymethylation_locations", "methylation_locations"),     probabilities_colnames = c("hydroxymethylation_probabilities",         "methylation_probabilities"), modification_prefixes = c("C+h?",         "C+m?"), return = TRUE):</span> '...' used in an incorrect context</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in write_modified_fastq(example_many_sequences, filename = NA, read_id_colname = "read",     sequence_colname = "sequence", quality_colname = "quality",     locations_colnames = c("hydroxymethylation_locations", "methylation_locations"),     probabilities_colnames = c("hydroxymethylation_probabilities",         "methylation_probabilities"), modification_prefixes = c("C+h?",         "C+m?"), return = TRUE):</span> object 'locations_colname' not found</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Write methylation only, and fill in qualities with "B"</span></span></span>
 <span class="r-in"><span><span class="fu">write_modified_fastq</span><span class="op">(</span></span></span>
@@ -188,7 +188,7 @@ Default arguments are set up to work with the included <code><a href="example_ma
 <span class="r-in"><span>    modification_prefixes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"C+m?"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    return <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in write_modified_fastq(example_many_sequences, filename = NA, read_id_colname = "read",     sequence_colname = "sequence", quality_colname = NA, locations_colnames = c("methylation_locations"),     probabilities_colnames = c("methylation_probabilities"),     modification_prefixes = c("C+m?"), return = TRUE):</span> '...' used in an incorrect context</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in write_modified_fastq(example_many_sequences, filename = NA, read_id_colname = "read",     sequence_colname = "sequence", quality_colname = NA, locations_colnames = c("methylation_locations"),     probabilities_colnames = c("methylation_probabilities"),     modification_prefixes = c("C+m?"), return = TRUE):</span> object 'locations_colname' not found</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

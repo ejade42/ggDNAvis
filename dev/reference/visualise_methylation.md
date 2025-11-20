@@ -366,7 +366,6 @@ exported at the correct aspect ratio.
 # \donttest{
 ## Extract info from dataframe
 methylation_info <- extract_methylation_from_dataframe(example_many_sequences)
-#> Error in extract_methylation_from_dataframe(example_many_sequences): '...' used in an incorrect context
 
 ## Visualise example_many_sequences with all defaults
 ## This looks ugly because it isn't at the right scale/aspect ratio
@@ -375,7 +374,7 @@ visualise_methylation(
     methylation_info$probabilities,
     methylation_info$sequences
 )
-#> Error: object 'methylation_info' not found
+
 
 ## Export with all defaults rather than returning
 visualise_methylation(
@@ -385,14 +384,12 @@ visualise_methylation(
     filename = "example_vm_01.png",
     return = FALSE
 )
-#> Error: object 'methylation_info' not found
 ## View exported image
 image <- png::readPNG("example_vm_01.png")
-#> Error in png::readPNG("example_vm_01.png"): unable to open example_vm_01.png
 unlink("example_vm_01.png")
 grid::grid.newpage()
 grid::grid.raster(image)
-#> Error in UseMethod("as.raster"): no applicable method for 'as.raster' applied to an object of class "function"
+
 
 ## Export with customisation
 visualise_methylation(
@@ -415,14 +412,12 @@ visualise_methylation(
     modified_bases_outline_colour = "black",
     margin = 0.3
 )
-#> Error: object 'methylation_info' not found
 ## View exported image
 image <- png::readPNG("example_vm_02.png")
-#> Error in png::readPNG("example_vm_02.png"): unable to open example_vm_02.png
 unlink("example_vm_02.png")
 grid::grid.newpage()
 grid::grid.raster(image)
-#> Error in UseMethod("as.raster"): no applicable method for 'as.raster' applied to an object of class "function"
+
 
 
 ## Export with customisation, viewing sequences
@@ -448,14 +443,12 @@ visualise_methylation(
     modified_bases_outline_colour = "black",
     margin = 0.3
 )
-#> Error: object 'methylation_info' not found
 ## View exported image
 image <- png::readPNG("example_vm_03.png")
-#> Error in png::readPNG("example_vm_03.png"): unable to open example_vm_03.png
 unlink("example_vm_03.png")
 grid::grid.newpage()
 grid::grid.raster(image)
-#> Error in UseMethod("as.raster"): no applicable method for 'as.raster' applied to an object of class "function"
+
 
 
 ## Export with customisation, viewing probabilities
@@ -482,14 +475,12 @@ visualise_methylation(
     modified_bases_outline_colour = "black",
     margin = 0.3
 )
-#> Error: object 'methylation_info' not found
 ## View exported image
 image <- png::readPNG("example_vm_04.png")
-#> Error in png::readPNG("example_vm_04.png"): unable to open example_vm_04.png
 unlink("example_vm_04.png")
 grid::grid.newpage()
 grid::grid.raster(image)
-#> Error in UseMethod("as.raster"): no applicable method for 'as.raster' applied to an object of class "function"
+
 
 
 ## Export with customisation, viewing probability integers
@@ -517,13 +508,11 @@ visualise_methylation(
     modified_bases_outline_colour = "black",
     margin = 0.3
 )
-#> Error: object 'methylation_info' not found
 ## View exported image
 image <- png::readPNG("example_vm_05.png")
-#> Error in png::readPNG("example_vm_05.png"): unable to open example_vm_05.png
 unlink("example_vm_05.png")
 grid::grid.newpage()
 grid::grid.raster(image)
-#> Error in UseMethod("as.raster"): no applicable method for 'as.raster' applied to an object of class "function"
+
 # }
 ```

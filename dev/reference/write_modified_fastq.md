@@ -42,7 +42,8 @@ write_modified_fastq(
     "methylation_probabilities"),
   modification_prefixes = c("C+h?", "C+m?"),
   include_blank_tags = TRUE,
-  return = FALSE
+  return = FALSE,
+  ...
 )
 ```
 
@@ -145,6 +146,14 @@ write_modified_fastq(
   FASTQ (as a character vector of each line in the FASTQ), otherwise it
   will return `invisible(NULL)`. Defaults to `FALSE`.
 
+- ...:
+
+  Used to recognise aliases e.g. American spellings or common
+  misspellings - see
+  [aliases](https://ejade42.github.io/ggDNAvis/reference/ggDNAvis_aliases.md).
+  If any American spellings do not work, please make a bug report at
+  <https://github.com/ejade42/ggDNAvis/issues>.
+
 ## Value
 
 `character vector`. The resulting modified FASTQ file as a character
@@ -172,7 +181,7 @@ write_modified_fastq(
     modification_prefixes = c("C+h?", "C+m?"),
     return = TRUE
 )
-#> Error in write_modified_fastq(example_many_sequences, filename = NA, read_id_colname = "read",     sequence_colname = "sequence", quality_colname = "quality",     locations_colnames = c("hydroxymethylation_locations", "methylation_locations"),     probabilities_colnames = c("hydroxymethylation_probabilities",         "methylation_probabilities"), modification_prefixes = c("C+h?",         "C+m?"), return = TRUE): '...' used in an incorrect context
+#> Error in write_modified_fastq(example_many_sequences, filename = NA, read_id_colname = "read",     sequence_colname = "sequence", quality_colname = "quality",     locations_colnames = c("hydroxymethylation_locations", "methylation_locations"),     probabilities_colnames = c("hydroxymethylation_probabilities",         "methylation_probabilities"), modification_prefixes = c("C+h?",         "C+m?"), return = TRUE): object 'locations_colname' not found
 
 ## Write methylation only, and fill in qualities with "B"
 write_modified_fastq(
@@ -186,5 +195,5 @@ write_modified_fastq(
     modification_prefixes = c("C+m?"),
     return = TRUE
 )
-#> Error in write_modified_fastq(example_many_sequences, filename = NA, read_id_colname = "read",     sequence_colname = "sequence", quality_colname = NA, locations_colnames = c("methylation_locations"),     probabilities_colnames = c("methylation_probabilities"),     modification_prefixes = c("C+m?"), return = TRUE): '...' used in an incorrect context
+#> Error in write_modified_fastq(example_many_sequences, filename = NA, read_id_colname = "read",     sequence_colname = "sequence", quality_colname = NA, locations_colnames = c("methylation_locations"),     probabilities_colnames = c("methylation_probabilities"),     modification_prefixes = c("C+m?"), return = TRUE): object 'locations_colname' not found
 ```

@@ -104,7 +104,8 @@ Default arguments are set up to work with the included <code><a href="example_ma
 <span>    <span class="st">"methylation_probabilities"</span><span class="op">)</span>,</span>
 <span>  modification_prefixes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"C+h?"</span>, <span class="st">"C+m?"</span><span class="op">)</span>,</span>
 <span>  include_blank_tags <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  return <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  return <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -151,6 +152,10 @@ Default arguments are set up to work with the included <code><a href="example_ma
 <dt id="arg-return">return<a class="anchor" aria-label="anchor" href="#arg-return"></a></dt>
 <dd><p><code>logical</code>. Boolean specifying whether this function should return the FASTQ (as a character vector of each line in the FASTQ), otherwise it will return <code>invisible(NULL)</code>. Defaults to <code>FALSE</code>.</p></dd>
 
+
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
+<dd><p>Used to recognise aliases e.g. American spellings or common misspellings - see <a href="ggDNAvis_aliases.html">aliases</a>. If any American spellings do not work, please make a bug report at <a href="https://github.com/ejade42/ggDNAvis/issues" class="external-link">https://github.com/ejade42/ggDNAvis/issues</a>.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -174,7 +179,7 @@ Default arguments are set up to work with the included <code><a href="example_ma
 <span class="r-in"><span>    modification_prefixes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"C+h?"</span>, <span class="st">"C+m?"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    return <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in write_modified_fastq(example_many_sequences, filename = NA, read_id_colname = "read",     sequence_colname = "sequence", quality_colname = "quality",     locations_colnames = c("hydroxymethylation_locations", "methylation_locations"),     probabilities_colnames = c("hydroxymethylation_probabilities",         "methylation_probabilities"), modification_prefixes = c("C+h?",         "C+m?"), return = TRUE):</span> '...' used in an incorrect context</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in write_modified_fastq(example_many_sequences, filename = NA, read_id_colname = "read",     sequence_colname = "sequence", quality_colname = "quality",     locations_colnames = c("hydroxymethylation_locations", "methylation_locations"),     probabilities_colnames = c("hydroxymethylation_probabilities",         "methylation_probabilities"), modification_prefixes = c("C+h?",         "C+m?"), return = TRUE):</span> object 'locations_colname' not found</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Write methylation only, and fill in qualities with "B"</span></span></span>
 <span class="r-in"><span><span class="fu">write_modified_fastq</span><span class="op">(</span></span></span>
@@ -188,7 +193,7 @@ Default arguments are set up to work with the included <code><a href="example_ma
 <span class="r-in"><span>    modification_prefixes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"C+m?"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    return <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in write_modified_fastq(example_many_sequences, filename = NA, read_id_colname = "read",     sequence_colname = "sequence", quality_colname = NA, locations_colnames = c("methylation_locations"),     probabilities_colnames = c("methylation_probabilities"),     modification_prefixes = c("C+m?"), return = TRUE):</span> '...' used in an incorrect context</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in write_modified_fastq(example_many_sequences, filename = NA, read_id_colname = "read",     sequence_colname = "sequence", quality_colname = NA, locations_colnames = c("methylation_locations"),     probabilities_colnames = c("methylation_probabilities"),     modification_prefixes = c("C+m?"), return = TRUE):</span> object 'locations_colname' not found</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

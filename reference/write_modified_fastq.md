@@ -172,7 +172,7 @@ write_modified_fastq(
     modification_prefixes = c("C+h?", "C+m?"),
     return = TRUE
 )
-#> Error in write_modified_fastq(example_many_sequences, filename = NA, read_id_colname = "read",     sequence_colname = "sequence", quality_colname = "quality",     locations_colnames = c("hydroxymethylation_locations", "methylation_locations"),     probabilities_colnames = c("hydroxymethylation_probabilities",         "methylation_probabilities"), modification_prefixes = c("C+h?",         "C+m?"), return = TRUE): '...' used in an incorrect context
+#> Error in write_modified_fastq(example_many_sequences, filename = NA, read_id_colname = "read",     sequence_colname = "sequence", quality_colname = "quality",     locations_colnames = c("hydroxymethylation_locations", "methylation_locations"),     probabilities_colnames = c("hydroxymethylation_probabilities",         "methylation_probabilities"), modification_prefixes = c("C+h?",         "C+m?"), return = TRUE): object 'locations_colname' not found
 
 ## Write methylation only, and fill in qualities with "B"
 write_modified_fastq(
@@ -186,5 +186,5 @@ write_modified_fastq(
     modification_prefixes = c("C+m?"),
     return = TRUE
 )
-#> Error in write_modified_fastq(example_many_sequences, filename = NA, read_id_colname = "read",     sequence_colname = "sequence", quality_colname = NA, locations_colnames = c("methylation_locations"),     probabilities_colnames = c("methylation_probabilities"),     modification_prefixes = c("C+m?"), return = TRUE): '...' used in an incorrect context
+#> Error in write_modified_fastq(example_many_sequences, filename = NA, read_id_colname = "read",     sequence_colname = "sequence", quality_colname = NA, locations_colnames = c("methylation_locations"),     probabilities_colnames = c("methylation_probabilities"),     modification_prefixes = c("C+m?"), return = TRUE): object 'locations_colname' not found
 ```
