@@ -50,6 +50,7 @@ accepts `index_annotation_above`.
 
 ``` r
 d <- extract_methylation_from_dataframe(example_many_sequences)
+#> Error in extract_methylation_from_dataframe(example_many_sequences): '...' used in an incorrect context
 ## The resulting low colour will be green
 visualise_methylation(
     d$locations,
@@ -72,7 +73,7 @@ visualise_methylation(
 #>     Value: purple
 #> 'low_colour' will be used.
 #>     Value: green
-
+#> Error: object 'd' not found
 
 ## The resulting low colour will be orange
 visualise_methylation(
@@ -90,7 +91,7 @@ visualise_methylation(
 #>     Value: orange
 #> 'low_colour' will be used.
 #>     Value: purple
-
+#> Error: object 'd' not found
 
 ## The resulting low colour will be purple
 visualise_methylation(
@@ -102,5 +103,5 @@ visualise_methylation(
     high_colour = "white",
     low_col = "purple"
 )
-
+#> Error: object 'd' not found
 ```

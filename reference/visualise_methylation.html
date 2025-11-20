@@ -229,6 +229,7 @@ can be produced via <code><a href="visualise_methylation_colour_scale.html">visu
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="co">## Extract info from dataframe</span></span></span>
 <span class="r-in"><span><span class="va">methylation_info</span> <span class="op">&lt;-</span> <span class="fu"><a href="extract_methylation_from_dataframe.html">extract_methylation_from_dataframe</a></span><span class="op">(</span><span class="va">example_many_sequences</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in extract_methylation_from_dataframe(example_many_sequences):</span> '...' used in an incorrect context</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Visualise example_many_sequences with all defaults</span></span></span>
 <span class="r-in"><span><span class="co">## This looks ugly because it isn't at the right scale/aspect ratio</span></span></span>
@@ -237,9 +238,7 @@ can be produced via <code><a href="visualise_methylation_colour_scale.html">visu
 <span class="r-in"><span>    <span class="va">methylation_info</span><span class="op">$</span><span class="va">probabilities</span>,</span></span>
 <span class="r-in"><span>    <span class="va">methylation_info</span><span class="op">$</span><span class="va">lengths</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in visualise_methylation(methylation_info$locations, methylation_info$probabilities,     methylation_info$lengths):</span> Argument 'sequences' must be a character vector.</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> Current value: 102, 93, 87, 81, 63, 0, 0, 69, 63, 0, 0, 87, 84, 81, 0, 0, 0, 0, 0, 0, 0, 0, 93, 0, 0, 90, 87, 84, 0, 0, 0, 0, 0, 0, 0, 0, 96, 96, 0, 0, 93, 90, 87, 0, 0, 96, 0, 0, 96, 90, 81</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> Current class: numeric</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'methylation_info' not found</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Export with all defaults rather than returning</span></span></span>
 <span class="r-in"><span><span class="fu">visualise_methylation</span><span class="op">(</span></span></span>
@@ -249,9 +248,7 @@ can be produced via <code><a href="visualise_methylation_colour_scale.html">visu
 <span class="r-in"><span>    filename <span class="op">=</span> <span class="st">"example_vm_01.png"</span>,</span></span>
 <span class="r-in"><span>    return <span class="op">=</span> <span class="cn">FALSE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in visualise_methylation(methylation_info$locations, methylation_info$probabilities,     methylation_info$lengths, filename = "example_vm_01.png",     return = FALSE):</span> Argument 'sequences' must be a character vector.</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> Current value: 102, 93, 87, 81, 63, 0, 0, 69, 63, 0, 0, 87, 84, 81, 0, 0, 0, 0, 0, 0, 0, 0, 93, 0, 0, 90, 87, 84, 0, 0, 0, 0, 0, 0, 0, 0, 96, 96, 0, 0, 93, 90, 87, 0, 0, 96, 0, 0, 96, 90, 81</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> Current class: numeric</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'methylation_info' not found</span>
 <span class="r-in"><span><span class="co">## View exported image</span></span></span>
 <span class="r-in"><span><span class="va">image</span> <span class="op">&lt;-</span> <span class="fu">png</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/png/man/readPNG.html" class="external-link">readPNG</a></span><span class="op">(</span><span class="st">"example_vm_01.png"</span><span class="op">)</span></span></span>
 <span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in png::readPNG("example_vm_01.png"):</span> unable to open example_vm_01.png</span>
@@ -278,9 +275,7 @@ can be produced via <code><a href="visualise_methylation_colour_scale.html">visu
 <span class="r-in"><span>    modified_bases_outline_colour <span class="op">=</span> <span class="st">"black"</span>,</span></span>
 <span class="r-in"><span>    margin <span class="op">=</span> <span class="fl">0.3</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in visualise_methylation(methylation_info$locations, methylation_info$probabilities,     methylation_info$lengths, filename = "example_vm_02.png",     return = FALSE, low_colour = "white", high_colour = "black",     low_clamp = 0.3 * 255, high_clamp = 0.7 * 255, other_bases_colour = "lightblue1",     other_bases_outline_linewidth = 1, other_bases_outline_colour = "grey",     modified_bases_outline_linewidth = 3, modified_bases_outline_colour = "black",     margin = 0.3):</span> Argument 'sequences' must be a character vector.</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> Current value: 102, 93, 87, 81, 63, 0, 0, 69, 63, 0, 0, 87, 84, 81, 0, 0, 0, 0, 0, 0, 0, 0, 93, 0, 0, 90, 87, 84, 0, 0, 0, 0, 0, 0, 0, 0, 96, 96, 0, 0, 93, 90, 87, 0, 0, 96, 0, 0, 96, 90, 81</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> Current class: numeric</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'methylation_info' not found</span>
 <span class="r-in"><span><span class="co">## View exported image</span></span></span>
 <span class="r-in"><span><span class="va">image</span> <span class="op">&lt;-</span> <span class="fu">png</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/png/man/readPNG.html" class="external-link">readPNG</a></span><span class="op">(</span><span class="st">"example_vm_02.png"</span><span class="op">)</span></span></span>
 <span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in png::readPNG("example_vm_02.png"):</span> unable to open example_vm_02.png</span>
