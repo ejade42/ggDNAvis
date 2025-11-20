@@ -2312,7 +2312,9 @@ Layout-related arguments:
   `pixels_per_base = 100`).
 - `sequence_text_size`: The size of the text inside the boxes. Can be
   set to `0` to disable text inside boxes. Defaults to `16`.
-- `index_text_size`: The
+- `index_annotation_size`: The size of the index numbers above/below the
+  boxes. Can be set to `0` to disable index annotations. Defaults to
+  `12.5`.
 - `outline_linewidth`: The thickness of the box outlines. Can be set to
   `0` to disable box outlines. Defaults to `3`.
 - `outline_join`: Changes how the corners of the box outlines are
@@ -2381,12 +2383,15 @@ visualise_many_sequences(sequences_for_visualisation,
                          sequence_colours = sequence_colour_palettes$bright_pale2,
                          sequence_text_size = 0,
                          index_annotation_size = 0,
-                         outline_linewidth = 0,
-                         margin = 0,
+                         margin = 0.1,
                          pixels_per_base = 20)
 ```
 
 ``` R
+## Warning: If margin is small and outlines are on (outline_linewidth > 0),
+## outlines may be cut off at the edges of the plot. Check if this is happening
+## and consider using a bigger margin.
+
 ## ℹ Automatically emptying index_annotation_lines as index_annotation_size is 0
 ```
 
@@ -2857,10 +2862,10 @@ methylation and `C+h?` CG hydroxymethylation.
 This list of locations, probabilities, and sequences can then be used as
 input for
 [`visualise_methylation()`](https://ejade42.github.io/ggDNAvis/reference/visualise_methylation.md).
-(Note: prior versions of `ggDNAvis` used sequence lengths instead of
-sequences as the third argument, but this has been changed as inputting
-sequences allows calculation of sequence lengths, while also enabling
-sequence visualisation).
+(Note: pre-v1.0.0 versions of `ggDNAvis` used sequence lengths instead
+of sequences as the third argument, but this has been changed as
+inputting sequences allows calculation of sequence lengths, while also
+enabling sequence visualisation).
 
 ``` r
 ## Use saved methylation data for visualisation to make image
@@ -2996,12 +3001,178 @@ Briefly:
   end of the image or the end of each sequence
 - `index_annotations_above` controls whether annotations (and the blank
   lines they are drawn in) go above or below each annotated line
-- `index_annoation_vertical_position` controls how far above each
+- `index_annotation_vertical_position` controls how far above each
   annotated line numbers are drawn
 - `index_annotation_colour` controls the colour of the numbers
 - `index_annotation_size` controls the size of the numbers
 
+For example:
+
+``` r
+## Extract information to list of character vectors using all default settings
+methylation_data_for_visualisation <- extract_methylation_from_dataframe(example_many_sequences)
+
+## Use saved methylation data for visualisation to make image
+visualise_methylation(modification_locations     = methylation_data_for_visualisation$locations,
+                      modification_probabilities = methylation_data_for_visualisation$probabilities,
+                      sequences                  = methylation_data_for_visualisation$sequences,
+                      filename = paste0(output_location, "modification_03.png"),
+                      return = FALSE,
+                      index_annotation_lines = c(14, 28, 51),
+                      index_annotations_above = FALSE,
+                      index_annotation_interval = 3,
+                      index_annotation_full_line = FALSE,
+                      index_annotation_colour = "purple",
+                      index_annotation_size = 16,
+                      index_annotation_vertical_position = 0.45)
+
+## View image
+knitr::include_graphics(paste0(github_location, "modification_03.png"))
+```
+
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_03.png)
+
 ## 6.4 Sequence text customisation
+
+[`visualise_methylation()`](https://ejade42.github.io/ggDNAvis/reference/visualise_methylation.md)
+is unique in that it has several different options for the text that can
+be drawn inside the boxes. Like
+[`visualise_single_sequence()`](https://ejade42.github.io/ggDNAvis/reference/visualise_single_sequence.md)
+and
+[`visualise_many_sequences()`](https://ejade42.github.io/ggDNAvis/reference/visualise_many_sequences.md),
+the letter for each base can be drawn inside each corresponding box.
+However, there is also an option for drawing the probability of
+modification inside each assessed base. Probabilities can be scaled to
+any desired range - however, the most common options would be leaving
+them as 8-bit integers from 0-255 or transforming to probabilities
+between 0 and 1.
+
+In all cases, the appearance of the text can be controlled via
+`sequence_text_colour` and `sequence_text_size`.
+
+The arguments that control the sequence text are:
+
+- `sequence_text_type`: Either `"none"` (default) to draw the boxes only
+  with no text, `"sequence"` to draw the base sequence inside the boxes
+  similarly to
+  [`visualise_many_sequences()`](https://ejade42.github.io/ggDNAvis/reference/visualise_many_sequences.md),
+  or `"probability"` to draw the probability of modification inside each
+  assessed base. Note: if set to `"none"`, all other `sequence_text_`
+  arguments do nothing. If set to `"sequence"`, then
+  `sequence_text_scaling` and `sequence_text_rounding` do nothing.
+- `sequence_text_scaling`: The transformation to be applied to the
+  probabilities, as a length-2 numeric vector of `c(min, max)`.
+  Probabilities will be scaled via \frac{p-min}{max} before drawing.
+  Setting this to `c(0, 1)` means no scaling is applied (subtract zero
+  then divide by one) so the original probabilities are drawn i.e. the
+  8-bit integers. Setting to `c(-0.5, 256)` (default) applies
+  \frac{p+0.5}{256} to find the centre of the probability space from
+  \frac{p}{256} to \frac{p+1}{256} represented by each integer p, in
+  order to convert each integer to the corresponding probability.
+  Setting to `c(0, 255)` is therefore **not an accurate transformation**
+  to 0-1 probability space and should not be used.
+- `sequence_text_rounding`: The number of decimal places that should be
+  drawn. Defaults to `2`. If setting `sequence_text_scaling = c(0, 1)`
+  to draw original integers, this should probably be set to `0`
+  otherwise it will result in e.g. `"128.00"`.
+- `sequence_text_colour`: The colour of the sequence/probability text.
+- `sequence_text_size`: The size of the sequence/probability text.
+
+An example drawing the sequences is:
+
+``` r
+## Extract information to list of character vectors using all default settings
+methylation_data_for_visualisation <- extract_methylation_from_dataframe(example_many_sequences)
+
+## Use saved methylation data for visualisation to make image
+visualise_methylation(modification_locations     = methylation_data_for_visualisation$locations,
+                      modification_probabilities = methylation_data_for_visualisation$probabilities,
+                      sequences                  = methylation_data_for_visualisation$sequences,
+                      filename = paste0(output_location, "modification_04.png"),
+                      return = FALSE,
+                      index_annotation_lines = c(1, 23, 37),
+                      sequence_text_type = "sequence")
+                      
+
+## View image
+knitr::include_graphics(paste0(github_location, "modification_04.png"))
+```
+
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_04.png)
+
+The default text size is 16, which is appropriate for sequence (1
+character per box) but is generally too large for probabilities (often
+3-4 characters per box):
+
+``` r
+## Default sequence_text_scaling is c(-0.5, 256) to scale integers to 0-1.
+visualise_methylation(modification_locations     = methylation_data_for_visualisation$locations,
+                      modification_probabilities = methylation_data_for_visualisation$probabilities,
+                      sequences                  = methylation_data_for_visualisation$sequences,
+                      filename = paste0(output_location, "modification_05.png"),
+                      return = FALSE,
+                      index_annotation_lines = c(1, 23, 37),
+                      sequence_text_type = "probability")
+```
+
+``` R
+## Warning: The default sequence_text_size of 16 is likely to be too large for displaying probabilities.
+## Consider setting sequence_text_size to a smaller value e.g. 10.
+```
+
+``` r
+## View image
+knitr::include_graphics(paste0(github_location, "modification_05.png"))
+```
+
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_05.png)
+
+A more sensible version with integers scaled to 0-1 (which is the
+default, but we will write the arguments explicitly for clarity) would
+be:
+
+``` r
+visualise_methylation(modification_locations     = methylation_data_for_visualisation$locations,
+                      modification_probabilities = methylation_data_for_visualisation$probabilities,
+                      sequences                  = methylation_data_for_visualisation$sequences,
+                      filename = paste0(output_location, "modification_06.png"),
+                      return = FALSE,
+                      index_annotation_lines = c(1, 23, 37),
+                      sequence_text_type = "probability",
+                      sequence_text_scaling = c(-0.5, 256),
+                      sequence_text_rounding = 2,
+                      sequence_text_size = 10,
+                      sequence_text_colour = "white")
+                      
+
+## View image
+knitr::include_graphics(paste0(github_location, "modification_06.png"))
+```
+
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_06.png)
+
+If we instead wanted to see the integer scores from the original data we
+would turn off scaling and rounding:
+
+``` r
+visualise_methylation(modification_locations     = methylation_data_for_visualisation$locations,
+                      modification_probabilities = methylation_data_for_visualisation$probabilities,
+                      sequences                  = methylation_data_for_visualisation$sequences,
+                      filename = paste0(output_location, "modification_07.png"),
+                      return = FALSE,
+                      index_annotation_lines = c(1, 23, 37),
+                      sequence_text_type = "probability",
+                      sequence_text_scaling = c(0, 1),
+                      sequence_text_rounding = 0,
+                      sequence_text_size = 10,
+                      sequence_text_colour = "white")
+                      
+
+## View image
+knitr::include_graphics(paste0(github_location, "modification_07.png"))
+```
+
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_07.png)
 
 ## 6.5 Colour and layout customisation
 
@@ -3010,9 +3181,7 @@ Colours in
 are controlled by setting the low and high end points of the
 modification colour mapping scale, as well as the colour to use for
 non-modification-assessed bases and the background. As before, margin
-and resolution are customisable. There is not currently support for
-having text rendered as well to avoid visual clutter, so the resolution
-defaults to a much lower 20 pixels per base.
+and resolution are customisable.
 
 One important feature to note is that the box outlines can be controlled
 separately for modification-assessed (e.g. C of CpG) and
@@ -3042,6 +3211,10 @@ Colour-related arguments:
   this is not enforced in any way).
 - `background_colour`: The colour to use for the background. Defaults to
   white.
+- `index_annotation_colour`: The colour to use for index annotations.
+  Defaults to dark red.
+- `sequence_text_colour`: The colour to use for sequence/probability
+  text. Defaults to black.
 - `outline_colour`: The colour to use for the box outlines. Defaults to
   white.
 - `modified_bases_outline_colour`: The colour to use for the box
@@ -3059,21 +3232,21 @@ Colour-related arguments:
 Layout-related arguments:
 
 - `margin`: The margin around the image in terms of the size of base
-  boxes (e.g. the default value of 0.5 adds a margin half the size of
+  boxes (e.g. the default value of `0.5` adds a margin half the size of
   the base boxes, which is 50 px with the default
   `pixels_per_base = 100`).
 - `outline_linewidth`: The thickness of the box outlines. Can be set to
-  0 to disable box outlines. Defaults to 3.
+  `0` to disable box outlines. Defaults to `3`.
 - `modified_bases_outline_linewidth`: The thickness of the box outlines
   for modification-assessed bases specifically. Can be set to `NA`
-  (default) to inherit the value from `outline_linewidth`, or 0 to
+  (default) to inherit the value from `outline_linewidth`, or `0` to
   disable box outlines specifically for modification-assessed bases. If
   `outline_linewidth` and `modified_bases_outline_linewidth` are set to
   different values, the value from `modified_bases_outline_linewidth` is
   prioritised.
 - `other_bases_outline_linewidth`: The thickness of the box outlines for
   non-modification-assessed bases specifically. Can be set to `NA`
-  (default) to inherit the value from `outline_linewidth`, or 0 to
+  (default) to inherit the value from `outline_linewidth`, or `0` to
   disable box outlines specifically for non-modification-assessed bases.
   If `outline_linewidth` and `other_bases_outline_linewidth` are set to
   different values, the value from `other_bases_outline_linewidth` is
@@ -3089,12 +3262,15 @@ Layout-related arguments:
   inherit from `outline_join`, otherwise overrides `outline_join`.
 - `pixels_per_base`: Resolution, as determined by number of pixels in
   the side length of one DNA base square. Everything else is scaled
-  proportionally. Defaults to 20.
+  proportionally. Defaults to `100`.
 - `render_device`: The device `ggsave` should use to render the plot.
   Defaults to
   [`ragg::agg_png`](https://ragg.r-lib.org/reference/agg_png.html), not
   recommended to change. Can be set to `NULL` to infer device based on
   `filename` extension.
+
+All colour-type arguments should accept `colour`, `color`, or `col` for
+the argument name.
 
 Here is an example with wild colours:
 
@@ -3104,6 +3280,7 @@ methylation_data_for_visualisation <- extract_methylation_from_dataframe(
     example_many_sequences,
     locations_colname = "methylation_locations",
     probabilities_colname = "methylation_probabilities",
+    sequences_colname = "sequence",
     lengths_colname = "sequence_length",
     grouping_levels = c("family" = 6, 
                         "individual" = 2),
@@ -3115,9 +3292,12 @@ methylation_data_for_visualisation <- extract_methylation_from_dataframe(
 visualise_methylation(modification_locations     = methylation_data_for_visualisation$locations,
                       modification_probabilities = methylation_data_for_visualisation$probabilities,
                       sequences                  = methylation_data_for_visualisation$sequences,
-                      filename = paste0(output_location, "modification_03.png"),
+                      filename = paste0(output_location, "modification_08.png"),
                       return = FALSE,
                       margin = 4, 
+                      sequence_text_type = "sequence",
+                      sequence_text_colour = "magenta",
+                      index_annotation_colour = "yellow",
                       low_colour = "#00FF00",
                       high_colour = "blue",
                       modified_bases_outline_colour = "purple",
@@ -3128,10 +3308,10 @@ visualise_methylation(modification_locations     = methylation_data_for_visualis
                       background_colour = "red")
 
 ## View image
-knitr::include_graphics(paste0(github_location, "modification_03.png"))
+knitr::include_graphics(paste0(github_location, "modification_08.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_03.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_08.png)
 
 ``` r
 ## Create scalebar and save to object
@@ -3147,13 +3327,13 @@ scalebar <- visualise_methylation_colour_scale(x_axis_title = "Methylation proba
           axis.text  = element_text(colour = "white"))
 
 ## Write png from object
-ggsave(paste0(output_location, "modification_03_scalebar.png"), scalebar, dpi = 300, width = 5.25, height = 1.25, device = ragg::agg_png)
+ggsave(paste0(output_location, "modification_08_scalebar.png"), scalebar, dpi = 300, width = 5.25, height = 1.25, device = ragg::agg_png)
 
 ## View image
-knitr::include_graphics(paste0(github_location, "modification_03_scalebar.png"))
+knitr::include_graphics(paste0(github_location, "modification_08_scalebar.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_03_scalebar.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_08_scalebar.png)
 
 One way this might be used in practice is for making a graphic in the
 “lollipop” style where methylated/modified CGs are black and unmodified
@@ -3165,6 +3345,7 @@ methylation_data_for_visualisation <- extract_methylation_from_dataframe(
     example_many_sequences,
     locations_colname = "methylation_locations",
     probabilities_colname = "methylation_probabilities",
+    sequences_colname = "sequence",
     lengths_colname = "sequence_length",
     grouping_levels = c("family" = 6, 
                         "individual" = 2),
@@ -3176,9 +3357,10 @@ methylation_data_for_visualisation <- extract_methylation_from_dataframe(
 visualise_methylation(modification_locations     = methylation_data_for_visualisation$locations,
                       modification_probabilities = methylation_data_for_visualisation$probabilities,
                       sequences                  = methylation_data_for_visualisation$sequences,
-                      filename = paste0(output_location, "modification_04.png"),
+                      filename = paste0(output_location, "modification_09.png"),
                       return = FALSE,
                       margin = 0.1, 
+                      sequence_text_type = "none",
                       low_colour = "white",
                       high_colour = "black",
                       other_bases_colour = "lightblue1",
@@ -3194,10 +3376,10 @@ visualise_methylation(modification_locations     = methylation_data_for_visualis
 
 ``` r
 ## View image
-knitr::include_graphics(paste0(github_location, "modification_04.png"))
+knitr::include_graphics(paste0(github_location, "modification_09.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_04.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_09.png)
 
 ``` r
 ## Create scalebar and save to object
@@ -3207,13 +3389,13 @@ scalebar <- visualise_methylation_colour_scale(x_axis_title = "Methylation proba
                                                background_colour = "lightblue1")
 
 ## Write png from object
-ggsave(paste0(output_location, "modification_04_scalebar.png"), scalebar, dpi = 300, width = 5.25, height = 1.25, device = ragg::agg_png)
+ggsave(paste0(output_location, "modification_09_scalebar.png"), scalebar, dpi = 300, width = 5.25, height = 1.25, device = ragg::agg_png)
 
 ## View image
-knitr::include_graphics(paste0(github_location, "modification_04_scalebar.png"))
+knitr::include_graphics(paste0(github_location, "modification_09_scalebar.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_04_scalebar.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_09_scalebar.png)
 
 ## 6.6 Colour mapping customisation
 
@@ -3248,6 +3430,7 @@ methylation_data_for_visualisation <- extract_methylation_from_dataframe(
     example_many_sequences,
     locations_colname = "methylation_locations",
     probabilities_colname = "methylation_probabilities",
+    sequences_colname = "sequence",
     lengths_colname = "sequence_length",
     grouping_levels = c("family" = 6, 
                         "individual" = 2),
@@ -3259,9 +3442,10 @@ methylation_data_for_visualisation <- extract_methylation_from_dataframe(
 visualise_methylation(modification_locations     = methylation_data_for_visualisation$locations,
                       modification_probabilities = methylation_data_for_visualisation$probabilities,
                       sequences                  = methylation_data_for_visualisation$sequences,
-                      filename = paste0(output_location, "modification_05.png"),
+                      filename = paste0(output_location, "modification_10.png"),
                       return = FALSE,
                       margin = 0.1, 
+                      sequence_text_type = "none",
                       low_colour = "white",
                       low_clamp = 127,
                       high_colour = "black",
@@ -3279,10 +3463,10 @@ visualise_methylation(modification_locations     = methylation_data_for_visualis
 
 ``` r
 ## View image
-knitr::include_graphics(paste0(github_location, "modification_05.png"))
+knitr::include_graphics(paste0(github_location, "modification_10.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_05.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_10.png)
 
 ``` r
 ## Create scalebar and save to object
@@ -3294,13 +3478,13 @@ scalebar <- visualise_methylation_colour_scale(x_axis_title = "Methylation proba
                                                background_colour = "lightblue1")
 
 ## Write png from object
-ggsave(paste0(output_location, "modification_05_scalebar.png"), scalebar, dpi = 300, width = 5.25, height = 1.25, device = ragg::agg_png)
+ggsave(paste0(output_location, "modification_10_scalebar.png"), scalebar, dpi = 300, width = 5.25, height = 1.25, device = ragg::agg_png)
 
 ## View image
-knitr::include_graphics(paste0(github_location, "modification_05_scalebar.png"))
+knitr::include_graphics(paste0(github_location, "modification_10_scalebar.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_05_scalebar.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_10_scalebar.png)
 
 The clamping arguments do not have to be integers. Clamping is
 implemented with [`pmin()`](https://rdrr.io/r/base/Extremes.html) and
@@ -3325,6 +3509,7 @@ methylation_data_for_visualisation <- extract_methylation_from_dataframe(
     example_many_sequences,
     locations_colname = "methylation_locations",
     probabilities_colname = "methylation_probabilities",
+    sequences_colname = "sequence",
     lengths_colname = "sequence_length",
     grouping_levels = c("family" = 6, 
                         "individual" = 2),
@@ -3336,17 +3521,18 @@ methylation_data_for_visualisation <- extract_methylation_from_dataframe(
 visualise_methylation(modification_locations     = methylation_data_for_visualisation$locations,
                       modification_probabilities = methylation_data_for_visualisation$probabilities,
                       sequences                  = methylation_data_for_visualisation$sequences,
-                      filename = paste0(output_location, "modification_06.png"),
+                      filename = paste0(output_location, "modification_11.png"),
                       return = FALSE,
+                      sequence_text_type = "none",
                       low_clamp = 0.3*255,
                       high_clamp = 0.7*255,
                       outline_linewidth = 0)
 
 ## View image
-knitr::include_graphics(paste0(github_location, "modification_06.png"))
+knitr::include_graphics(paste0(github_location, "modification_11.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_06.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_11.png)
 
 ``` r
 ## Create scalebar and save to object
@@ -3355,13 +3541,13 @@ scalebar <- visualise_methylation_colour_scale(x_axis_title = "Methylation proba
                                                high_clamp = 0.7*255)
 
 ## Write png from object
-ggsave(paste0(output_location, "modification_06_scalebar.png"), scalebar, dpi = 300, width = 5.25, height = 1.25, device = ragg::agg_png)
+ggsave(paste0(output_location, "modification_11_scalebar.png"), scalebar, dpi = 300, width = 5.25, height = 1.25, device = ragg::agg_png)
 
 ## View image
-knitr::include_graphics(paste0(github_location, "modification_06_scalebar.png"))
+knitr::include_graphics(paste0(github_location, "modification_11_scalebar.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_06_scalebar.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_11_scalebar.png)
 
 The clamping does not need to be symmetrical. One use for this is if the
 data is skewed. For example, the methylation scores were randomly
@@ -3377,6 +3563,7 @@ hydroxymethylation_data_for_visualisation <- extract_methylation_from_dataframe(
     example_many_sequences,
     locations_colname = "hydroxymethylation_locations",
     probabilities_colname = "hydroxymethylation_probabilities",
+    sequences_colname = "sequence",
     lengths_colname = "sequence_length",
     grouping_levels = c("family" = 6, 
                         "individual" = 2),
@@ -3388,17 +3575,18 @@ hydroxymethylation_data_for_visualisation <- extract_methylation_from_dataframe(
 visualise_methylation(modification_locations     = hydroxymethylation_data_for_visualisation$locations,
                       modification_probabilities = hydroxymethylation_data_for_visualisation$probabilities,
                       sequences                  = hydroxymethylation_data_for_visualisation$sequences,
-                      filename = paste0(output_location, "modification_07.png"),
+                      filename = paste0(output_location, "modification_12.png"),
                       return = FALSE,
+                      sequence_text_type = "none",
                       low_clamp = 0.1*255,
                       high_clamp = 0.5*255,
                       other_bases_outline_linewidth = 0)
 
 ## View image
-knitr::include_graphics(paste0(github_location, "modification_07.png"))
+knitr::include_graphics(paste0(github_location, "modification_12.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_07.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_12.png)
 
 ``` r
 ## Create scalebar and save to object
@@ -3407,13 +3595,13 @@ scalebar <- visualise_methylation_colour_scale(x_axis_title = "Hydroxymethylatio
                                                high_clamp = 0.5*255)
 
 ## Write png from object
-ggsave(paste0(output_location, "modification_07_scalebar.png"), scalebar, dpi = 300, width = 5.25, height = 1.25, device = ragg::agg_png)
+ggsave(paste0(output_location, "modification_12_scalebar.png"), scalebar, dpi = 300, width = 5.25, height = 1.25, device = ragg::agg_png)
 
 ## View image
-knitr::include_graphics(paste0(github_location, "modification_07_scalebar.png"))
+knitr::include_graphics(paste0(github_location, "modification_12_scalebar.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_07_scalebar.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_12_scalebar.png)
 
 ***IMPORTANT:** make sure that you provide the scalebar when presenting
 data, especially if clamping is used, otherwise the colours could be
@@ -3609,6 +3797,7 @@ methylation_data_for_visualisation <- extract_methylation_from_dataframe(
     merged_modification_data,
     locations_colname = "forward_C+m?_locations",
     probabilities_colname = "forward_C+m?_probabilities",
+    sequences_colname = "forward_sequence",
     lengths_colname = "sequence_length",
     grouping_levels = c("family" = 6, 
                         "individual" = 2),
@@ -3620,14 +3809,15 @@ methylation_data_for_visualisation <- extract_methylation_from_dataframe(
 visualise_methylation(modification_locations     = methylation_data_for_visualisation$locations,
                       modification_probabilities = methylation_data_for_visualisation$probabilities,
                       sequences                  = methylation_data_for_visualisation$sequences,
-                      filename = paste0(output_location, "modification_08.png"),
-                      return = FALSE)
+                      filename = paste0(output_location, "modification_13.png"),
+                      return = FALSE,
+                      sequence_text_type = "sequence")
 
 ## View image
-knitr::include_graphics(paste0(github_location, "modification_08.png"))
+knitr::include_graphics(paste0(github_location, "modification_13.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_08.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_13.png)
 We can see here that some methylation-assessed sites are now offset by
 1, as the location is now assigned to the G of each CG site rather than
 the C. This is perhaps more biochemically accurate, as these Gs are
@@ -3656,6 +3846,7 @@ methylation_data_for_visualisation <- extract_methylation_from_dataframe(
     merged_modification_data,
     locations_colname = "forward_C+m?_locations",
     probabilities_colname = "forward_C+m?_probabilities",
+    sequences_colname = "forward_sequence",
     lengths_colname = "sequence_length",
     grouping_levels = c("family" = 6, 
                         "individual" = 2),
@@ -3667,14 +3858,15 @@ methylation_data_for_visualisation <- extract_methylation_from_dataframe(
 visualise_methylation(modification_locations     = methylation_data_for_visualisation$locations,
                       modification_probabilities = methylation_data_for_visualisation$probabilities,
                       sequences                  = methylation_data_for_visualisation$sequences,
-                      filename = paste0(output_location, "modification_09.png"),
-                      return = FALSE)
+                      filename = paste0(output_location, "modification_14.png"),
+                      return = FALSE,
+                      sequence_text_type = "sequence")
 
 ## View image
-knitr::include_graphics(paste0(github_location, "modification_09.png"))
+knitr::include_graphics(paste0(github_location, "modification_14.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_09.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_14.png)
 However, this is strongly discouraged and produces a warning. Offset
 values other than 0 and 1 have not been tested so results may be
 unpredictable and aspects of the visualisation may break.
@@ -3699,6 +3891,7 @@ methylation_data_for_visualisation <- extract_methylation_from_dataframe(
     merged_modification_data,
     locations_colname = "C+m?_locations",
     probabilities_colname = "C+m?_probabilities",
+    sequences_colname = "sequence",
     lengths_colname = "sequence_length",
     grouping_levels = c("family" = 6, 
                         "individual" = 2),
@@ -3710,14 +3903,14 @@ methylation_data_for_visualisation <- extract_methylation_from_dataframe(
 visualise_methylation(modification_locations     = methylation_data_for_visualisation$locations,
                       modification_probabilities = methylation_data_for_visualisation$probabilities,
                       sequences                  = methylation_data_for_visualisation$sequences,
-                      filename = paste0(output_location, "modification_10.png"),
+                      filename = paste0(output_location, "modification_15.png"),
                       return = FALSE)
 
 ## View image
-knitr::include_graphics(paste0(github_location, "modification_10.png"))
+knitr::include_graphics(paste0(github_location, "modification_15.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_10.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_15.png)
 
 # 7 References
 

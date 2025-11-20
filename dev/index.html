@@ -2472,7 +2472,7 @@
 <li>
 <code>sequence_text_size</code>: The size of the text inside the boxes. Can be set to <code>0</code> to disable text inside boxes. Defaults to <code>16</code>.</li>
 <li>
-<code>index_text_size</code>: The</li>
+<code>index_annotation_size</code>: The size of the index numbers above/below the boxes. Can be set to <code>0</code> to disable index annotations. Defaults to <code>12.5</code>.</li>
 <li>
 <code>outline_linewidth</code>: The thickness of the box outlines. Can be set to <code>0</code> to disable box outlines. Defaults to <code>3</code>.</li>
 <li>
@@ -2524,10 +2524,13 @@
 <span>                         sequence_colours <span class="op">=</span> <span class="va">sequence_colour_palettes</span><span class="op">$</span><span class="va">bright_pale2</span>,</span>
 <span>                         sequence_text_size <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>                         index_annotation_size <span class="op">=</span> <span class="fl">0</span>,</span>
-<span>                         outline_linewidth <span class="op">=</span> <span class="fl">0</span>,</span>
-<span>                         margin <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>                         margin <span class="op">=</span> <span class="fl">0.1</span>,</span>
 <span>                         pixels_per_base <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb107"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb107-1"><a href="#cb107-1" tabindex="-1"></a><span class="do">## ℹ Automatically emptying index_annotation_lines as index_annotation_size is 0</span></span></code></pre></div>
+<div class="sourceCode" id="cb107"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb107-1"><a href="#cb107-1" tabindex="-1"></a><span class="do">## Warning: If margin is small and outlines are on (outline_linewidth &gt; 0),</span></span>
+<span id="cb107-2"><a href="#cb107-2" tabindex="-1"></a><span class="do">## outlines may be cut off at the edges of the plot. Check if this is happening</span></span>
+<span id="cb107-3"><a href="#cb107-3" tabindex="-1"></a><span class="do">## and consider using a bigger margin.</span></span>
+<span id="cb107-4"><a href="#cb107-4" tabindex="-1"></a></span>
+<span id="cb107-5"><a href="#cb107-5" tabindex="-1"></a><span class="do">## ℹ Automatically emptying index_annotation_lines as index_annotation_size is 0</span></span></code></pre></div>
 <div class="sourceCode" id="cb108"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## View image</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"many_sequences_18.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -2999,7 +3002,7 @@
 <span id="cb116-162"><a href="#cb116-162" tabindex="-1"></a><span class="do">## [20]   0   0   0  93   0   0  90  87  84   0   0   0   0   0   0   0   0  96  96</span></span>
 <span id="cb116-163"><a href="#cb116-163" tabindex="-1"></a><span class="do">## [39]   0   0  93  90  87   0   0  96   0   0  96  90  81</span></span></code></pre></div>
 <p>The hydroxymethylation locations are the same as the methylation locations (as they have both been assessed at all CpG sites), but the probabilities are different. This should work for any modification type in the MM and ML tags, though it has only been tested for <code>C+m?</code> CG methylation and <code>C+h?</code> CG hydroxymethylation.</p>
-<p>This list of locations, probabilities, and sequences can then be used as input for <code><a href="reference/visualise_methylation.html">visualise_methylation()</a></code>. (Note: prior versions of <code>ggDNAvis</code> used sequence lengths instead of sequences as the third argument, but this has been changed as inputting sequences allows calculation of sequence lengths, while also enabling sequence visualisation).</p>
+<p>This list of locations, probabilities, and sequences can then be used as input for <code><a href="reference/visualise_methylation.html">visualise_methylation()</a></code>. (Note: pre-v1.0.0 versions of <code>ggDNAvis</code> used sequence lengths instead of sequences as the third argument, but this has been changed as inputting sequences allows calculation of sequence lengths, while also enabling sequence visualisation).</p>
 <div class="sourceCode" id="cb117"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Use saved methylation data for visualisation to make image</span></span>
 <span><span class="fu"><a href="reference/visualise_methylation.html">visualise_methylation</a></span><span class="op">(</span>modification_locations     <span class="op">=</span> <span class="va">methylation_data_for_visualisation</span><span class="op">$</span><span class="va">locations</span>,</span>
@@ -3088,21 +3091,128 @@
 <li>
 <code>index_annotations_above</code> controls whether annotations (and the blank lines they are drawn in) go above or below each annotated line</li>
 <li>
-<code>index_annoation_vertical_position</code> controls how far above each annotated line numbers are drawn</li>
+<code>index_annotation_vertical_position</code> controls how far above each annotated line numbers are drawn</li>
 <li>
 <code>index_annotation_colour</code> controls the colour of the numbers</li>
 <li>
 <code>index_annotation_size</code> controls the size of the numbers</li>
 </ul>
+<p>For example:</p>
+<div class="sourceCode" id="cb120"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## Extract information to list of character vectors using all default settings</span></span>
+<span><span class="va">methylation_data_for_visualisation</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/extract_methylation_from_dataframe.html">extract_methylation_from_dataframe</a></span><span class="op">(</span><span class="va">example_many_sequences</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## Use saved methylation data for visualisation to make image</span></span>
+<span><span class="fu"><a href="reference/visualise_methylation.html">visualise_methylation</a></span><span class="op">(</span>modification_locations     <span class="op">=</span> <span class="va">methylation_data_for_visualisation</span><span class="op">$</span><span class="va">locations</span>,</span>
+<span>                      modification_probabilities <span class="op">=</span> <span class="va">methylation_data_for_visualisation</span><span class="op">$</span><span class="va">probabilities</span>,</span>
+<span>                      sequences                  <span class="op">=</span> <span class="va">methylation_data_for_visualisation</span><span class="op">$</span><span class="va">sequences</span>,</span>
+<span>                      filename <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_03.png"</span><span class="op">)</span>,</span>
+<span>                      return <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>                      index_annotation_lines <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">14</span>, <span class="fl">28</span>, <span class="fl">51</span><span class="op">)</span>,</span>
+<span>                      index_annotations_above <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>                      index_annotation_interval <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>                      index_annotation_full_line <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>                      index_annotation_colour <span class="op">=</span> <span class="st">"purple"</span>,</span>
+<span>                      index_annotation_size <span class="op">=</span> <span class="fl">16</span>,</span>
+<span>                      index_annotation_vertical_position <span class="op">=</span> <span class="fl">0.45</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## View image</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"modification_03.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_03.png"><!-- --></p>
 </div>
 <div class="section level2">
 <h2 id="id_64-sequence-text-customisation">6.4 Sequence text customisation<a class="anchor" aria-label="anchor" href="#id_64-sequence-text-customisation"></a>
 </h2>
+<p><code><a href="reference/visualise_methylation.html">visualise_methylation()</a></code> is unique in that it has several different options for the text that can be drawn inside the boxes. Like <code><a href="reference/visualise_single_sequence.html">visualise_single_sequence()</a></code> and <code><a href="reference/visualise_many_sequences.html">visualise_many_sequences()</a></code>, the letter for each base can be drawn inside each corresponding box. However, there is also an option for drawing the probability of modification inside each assessed base. Probabilities can be scaled to any desired range - however, the most common options would be leaving them as 8-bit integers from 0-255 or transforming to probabilities between 0 and 1.</p>
+<p>In all cases, the appearance of the text can be controlled via <code>sequence_text_colour</code> and <code>sequence_text_size</code>.</p>
+<p>The arguments that control the sequence text are:</p>
+<ul>
+<li>
+<code>sequence_text_type</code>: Either <code>"none"</code> (default) to draw the boxes only with no text, <code>"sequence"</code> to draw the base sequence inside the boxes similarly to <code><a href="reference/visualise_many_sequences.html">visualise_many_sequences()</a></code>, or <code>"probability"</code> to draw the probability of modification inside each assessed base. Note: if set to <code>"none"</code>, all other <code>sequence_text_</code> arguments do nothing. If set to <code>"sequence"</code>, then <code>sequence_text_scaling</code> and <code>sequence_text_rounding</code> do nothing.</li>
+<li>
+<code>sequence_text_scaling</code>: The transformation to be applied to the probabilities, as a length-2 numeric vector of <code>c(min, max)</code>. Probabilities will be scaled via <span class="math inline">\frac{p-min}{max}</span> before drawing. Setting this to <code>c(0, 1)</code> means no scaling is applied (subtract zero then divide by one) so the original probabilities are drawn i.e. the 8-bit integers. Setting to <code>c(-0.5, 256)</code> (default) applies <span class="math inline">\frac{p+0.5}{256}</span> to find the centre of the probability space from <span class="math inline">\frac{p}{256}</span> to <span class="math inline">\frac{p+1}{256}</span> represented by each integer <span class="math inline">p</span>, in order to convert each integer to the corresponding probability. Setting to <code>c(0, 255)</code> is therefore <strong>not an accurate transformation</strong> to 0-1 probability space and should not be used.</li>
+<li>
+<code>sequence_text_rounding</code>: The number of decimal places that should be drawn. Defaults to <code>2</code>. If setting <code>sequence_text_scaling = c(0, 1)</code> to draw original integers, this should probably be set to <code>0</code> otherwise it will result in e.g. <code>"128.00"</code>.</li>
+<li>
+<code>sequence_text_colour</code>: The colour of the sequence/probability text.</li>
+<li>
+<code>sequence_text_size</code>: The size of the sequence/probability text.</li>
+</ul>
+<p>An example drawing the sequences is:</p>
+<div class="sourceCode" id="cb121"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## Extract information to list of character vectors using all default settings</span></span>
+<span><span class="va">methylation_data_for_visualisation</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/extract_methylation_from_dataframe.html">extract_methylation_from_dataframe</a></span><span class="op">(</span><span class="va">example_many_sequences</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## Use saved methylation data for visualisation to make image</span></span>
+<span><span class="fu"><a href="reference/visualise_methylation.html">visualise_methylation</a></span><span class="op">(</span>modification_locations     <span class="op">=</span> <span class="va">methylation_data_for_visualisation</span><span class="op">$</span><span class="va">locations</span>,</span>
+<span>                      modification_probabilities <span class="op">=</span> <span class="va">methylation_data_for_visualisation</span><span class="op">$</span><span class="va">probabilities</span>,</span>
+<span>                      sequences                  <span class="op">=</span> <span class="va">methylation_data_for_visualisation</span><span class="op">$</span><span class="va">sequences</span>,</span>
+<span>                      filename <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_04.png"</span><span class="op">)</span>,</span>
+<span>                      return <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>                      index_annotation_lines <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">23</span>, <span class="fl">37</span><span class="op">)</span>,</span>
+<span>                      sequence_text_type <span class="op">=</span> <span class="st">"sequence"</span><span class="op">)</span></span>
+<span>                      </span>
+<span></span>
+<span><span class="co">## View image</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"modification_04.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_04.png"><!-- --></p>
+<p>The default text size is 16, which is appropriate for sequence (1 character per box) but is generally too large for probabilities (often 3-4 characters per box):</p>
+<div class="sourceCode" id="cb122"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## Default sequence_text_scaling is c(-0.5, 256) to scale integers to 0-1.</span></span>
+<span><span class="fu"><a href="reference/visualise_methylation.html">visualise_methylation</a></span><span class="op">(</span>modification_locations     <span class="op">=</span> <span class="va">methylation_data_for_visualisation</span><span class="op">$</span><span class="va">locations</span>,</span>
+<span>                      modification_probabilities <span class="op">=</span> <span class="va">methylation_data_for_visualisation</span><span class="op">$</span><span class="va">probabilities</span>,</span>
+<span>                      sequences                  <span class="op">=</span> <span class="va">methylation_data_for_visualisation</span><span class="op">$</span><span class="va">sequences</span>,</span>
+<span>                      filename <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_05.png"</span><span class="op">)</span>,</span>
+<span>                      return <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>                      index_annotation_lines <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">23</span>, <span class="fl">37</span><span class="op">)</span>,</span>
+<span>                      sequence_text_type <span class="op">=</span> <span class="st">"probability"</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb123"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb123-1"><a href="#cb123-1" tabindex="-1"></a><span class="do">## Warning: The default sequence_text_size of 16 is likely to be too large for displaying probabilities.</span></span>
+<span id="cb123-2"><a href="#cb123-2" tabindex="-1"></a><span class="do">## Consider setting sequence_text_size to a smaller value e.g. 10.</span></span></code></pre></div>
+<div class="sourceCode" id="cb124"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## View image</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"modification_05.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_05.png"><!-- --></p>
+<p>A more sensible version with integers scaled to 0-1 (which is the default, but we will write the arguments explicitly for clarity) would be:</p>
+<div class="sourceCode" id="cb125"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/visualise_methylation.html">visualise_methylation</a></span><span class="op">(</span>modification_locations     <span class="op">=</span> <span class="va">methylation_data_for_visualisation</span><span class="op">$</span><span class="va">locations</span>,</span>
+<span>                      modification_probabilities <span class="op">=</span> <span class="va">methylation_data_for_visualisation</span><span class="op">$</span><span class="va">probabilities</span>,</span>
+<span>                      sequences                  <span class="op">=</span> <span class="va">methylation_data_for_visualisation</span><span class="op">$</span><span class="va">sequences</span>,</span>
+<span>                      filename <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_06.png"</span><span class="op">)</span>,</span>
+<span>                      return <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>                      index_annotation_lines <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">23</span>, <span class="fl">37</span><span class="op">)</span>,</span>
+<span>                      sequence_text_type <span class="op">=</span> <span class="st">"probability"</span>,</span>
+<span>                      sequence_text_scaling <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.5</span>, <span class="fl">256</span><span class="op">)</span>,</span>
+<span>                      sequence_text_rounding <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>                      sequence_text_size <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>                      sequence_text_colour <span class="op">=</span> <span class="st">"white"</span><span class="op">)</span></span>
+<span>                      </span>
+<span></span>
+<span><span class="co">## View image</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"modification_06.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_06.png"><!-- --></p>
+<p>If we instead wanted to see the integer scores from the original data we would turn off scaling and rounding:</p>
+<div class="sourceCode" id="cb126"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/visualise_methylation.html">visualise_methylation</a></span><span class="op">(</span>modification_locations     <span class="op">=</span> <span class="va">methylation_data_for_visualisation</span><span class="op">$</span><span class="va">locations</span>,</span>
+<span>                      modification_probabilities <span class="op">=</span> <span class="va">methylation_data_for_visualisation</span><span class="op">$</span><span class="va">probabilities</span>,</span>
+<span>                      sequences                  <span class="op">=</span> <span class="va">methylation_data_for_visualisation</span><span class="op">$</span><span class="va">sequences</span>,</span>
+<span>                      filename <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_07.png"</span><span class="op">)</span>,</span>
+<span>                      return <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>                      index_annotation_lines <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">23</span>, <span class="fl">37</span><span class="op">)</span>,</span>
+<span>                      sequence_text_type <span class="op">=</span> <span class="st">"probability"</span>,</span>
+<span>                      sequence_text_scaling <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,</span>
+<span>                      sequence_text_rounding <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>                      sequence_text_size <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>                      sequence_text_colour <span class="op">=</span> <span class="st">"white"</span><span class="op">)</span></span>
+<span>                      </span>
+<span></span>
+<span><span class="co">## View image</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"modification_07.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_07.png"><!-- --></p>
 </div>
 <div class="section level2">
 <h2 id="id_65-colour-and-layout-customisation">6.5 Colour and layout customisation<a class="anchor" aria-label="anchor" href="#id_65-colour-and-layout-customisation"></a>
 </h2>
-<p>Colours in <code><a href="reference/visualise_methylation.html">visualise_methylation()</a></code> are controlled by setting the low and high end points of the modification colour mapping scale, as well as the colour to use for non-modification-assessed bases and the background. As before, margin and resolution are customisable. There is not currently support for having text rendered as well to avoid visual clutter, so the resolution defaults to a much lower 20 pixels per base.</p>
+<p>Colours in <code><a href="reference/visualise_methylation.html">visualise_methylation()</a></code> are controlled by setting the low and high end points of the modification colour mapping scale, as well as the colour to use for non-modification-assessed bases and the background. As before, margin and resolution are customisable.</p>
 <p>One important feature to note is that the box outlines can be controlled separately for modification-assessed (e.g. C of CpG) and non-modification assessed bases. The same global <code>outline_colour</code>, <code>outline_linewidth</code>, and <code>outline_join</code> parameters are available as for <code><a href="reference/visualise_single_sequence.html">visualise_single_sequence()</a></code> and <code><a href="reference/visualise_many_sequences.html">visualise_many_sequences()</a></code>. However, there are also <code>modified_bases_outline_&lt;parameter&gt;</code> and <code>other_bases_outline_&lt;parameter&gt;</code> arguments that can be used to override the global setting, or set to <code>NA</code> to inherit the global setting.</p>
 <p>One use of this might be to draw outlines only for modification-assessed bases (using the default black/3/mitre settings). This could be accomplished by setting <code>other_bases_outline_linewidth = 0</code> to disable outlines for non-modification-assessed bases, while allowing modification-assessed bases to inherit the global default outlines.</p>
 <p>Colour-related arguments:</p>
@@ -3116,6 +3226,10 @@
 <li>
 <code>background_colour</code>: The colour to use for the background. Defaults to white.</li>
 <li>
+<code>index_annotation_colour</code>: The colour to use for index annotations. Defaults to dark red.</li>
+<li>
+<code>sequence_text_colour</code>: The colour to use for sequence/probability text. Defaults to black.</li>
+<li>
 <code>outline_colour</code>: The colour to use for the box outlines. Defaults to white.</li>
 <li>
 <code>modified_bases_outline_colour</code>: The colour to use for the box outlines of modification-assessed bases specifically. Can be set to <code>NA</code> (default), in which case the value from <code>outline_colour</code> is used. If <code>outline_colour</code> and <code>modified_bases_outline_colour</code> are set to different values, the value from <code>modified_bases_outline_colour</code> is prioritised.</li>
@@ -3125,13 +3239,13 @@
 <p>Layout-related arguments:</p>
 <ul>
 <li>
-<code>margin</code>: The margin around the image in terms of the size of base boxes (e.g. the default value of 0.5 adds a margin half the size of the base boxes, which is 50 px with the default <code>pixels_per_base = 100</code>).</li>
+<code>margin</code>: The margin around the image in terms of the size of base boxes (e.g. the default value of <code>0.5</code> adds a margin half the size of the base boxes, which is 50 px with the default <code>pixels_per_base = 100</code>).</li>
 <li>
-<code>outline_linewidth</code>: The thickness of the box outlines. Can be set to 0 to disable box outlines. Defaults to 3.</li>
+<code>outline_linewidth</code>: The thickness of the box outlines. Can be set to <code>0</code> to disable box outlines. Defaults to <code>3</code>.</li>
 <li>
-<code>modified_bases_outline_linewidth</code>: The thickness of the box outlines for modification-assessed bases specifically. Can be set to <code>NA</code> (default) to inherit the value from <code>outline_linewidth</code>, or 0 to disable box outlines specifically for modification-assessed bases. If <code>outline_linewidth</code> and <code>modified_bases_outline_linewidth</code> are set to different values, the value from <code>modified_bases_outline_linewidth</code> is prioritised.</li>
+<code>modified_bases_outline_linewidth</code>: The thickness of the box outlines for modification-assessed bases specifically. Can be set to <code>NA</code> (default) to inherit the value from <code>outline_linewidth</code>, or <code>0</code> to disable box outlines specifically for modification-assessed bases. If <code>outline_linewidth</code> and <code>modified_bases_outline_linewidth</code> are set to different values, the value from <code>modified_bases_outline_linewidth</code> is prioritised.</li>
 <li>
-<code>other_bases_outline_linewidth</code>: The thickness of the box outlines for non-modification-assessed bases specifically. Can be set to <code>NA</code> (default) to inherit the value from <code>outline_linewidth</code>, or 0 to disable box outlines specifically for non-modification-assessed bases. If <code>outline_linewidth</code> and <code>other_bases_outline_linewidth</code> are set to different values, the value from <code>other_bases_outline_linewidth</code> is prioritised.</li>
+<code>other_bases_outline_linewidth</code>: The thickness of the box outlines for non-modification-assessed bases specifically. Can be set to <code>NA</code> (default) to inherit the value from <code>outline_linewidth</code>, or <code>0</code> to disable box outlines specifically for non-modification-assessed bases. If <code>outline_linewidth</code> and <code>other_bases_outline_linewidth</code> are set to different values, the value from <code>other_bases_outline_linewidth</code> is prioritised.</li>
 <li>
 <code>outline_join</code>: Changes how the corners of the box outlines are handled. Must be one of <code>"mitre"</code>, <code>"bevel"</code>, or <code>"round"</code>. Defaults to <code>"mitre"</code>. It is unlikely that you would ever need to change this.</li>
 <li>
@@ -3139,17 +3253,19 @@
 <li>
 <code>other_bases_outline_join</code>: How corners are handled for non-modification-assessed bases only. Can be set to <code>NA</code> (default) to inherit from <code>outline_join</code>, otherwise overrides <code>outline_join</code>.</li>
 <li>
-<code>pixels_per_base</code>: Resolution, as determined by number of pixels in the side length of one DNA base square. Everything else is scaled proportionally. Defaults to 20.</li>
+<code>pixels_per_base</code>: Resolution, as determined by number of pixels in the side length of one DNA base square. Everything else is scaled proportionally. Defaults to <code>100</code>.</li>
 <li>
 <code>render_device</code>: The device <code>ggsave</code> should use to render the plot. Defaults to <code><a href="https://ragg.r-lib.org/reference/agg_png.html" class="external-link">ragg::agg_png</a></code>, not recommended to change. Can be set to <code>NULL</code> to infer device based on <code>filename</code> extension.</li>
 </ul>
+<p>All colour-type arguments should accept <code>colour</code>, <code>color</code>, or <code>col</code> for the argument name.</p>
 <p>Here is an example with wild colours:</p>
-<div class="sourceCode" id="cb120"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb127"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Extract information to list of character vectors</span></span>
 <span><span class="va">methylation_data_for_visualisation</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/extract_methylation_from_dataframe.html">extract_methylation_from_dataframe</a></span><span class="op">(</span></span>
 <span>    <span class="va">example_many_sequences</span>,</span>
 <span>    locations_colname <span class="op">=</span> <span class="st">"methylation_locations"</span>,</span>
 <span>    probabilities_colname <span class="op">=</span> <span class="st">"methylation_probabilities"</span>,</span>
+<span>    sequences_colname <span class="op">=</span> <span class="st">"sequence"</span>,</span>
 <span>    lengths_colname <span class="op">=</span> <span class="st">"sequence_length"</span>,</span>
 <span>    grouping_levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"family"</span> <span class="op">=</span> <span class="fl">6</span>, </span>
 <span>                        <span class="st">"individual"</span> <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span>
@@ -3161,9 +3277,12 @@
 <span><span class="fu"><a href="reference/visualise_methylation.html">visualise_methylation</a></span><span class="op">(</span>modification_locations     <span class="op">=</span> <span class="va">methylation_data_for_visualisation</span><span class="op">$</span><span class="va">locations</span>,</span>
 <span>                      modification_probabilities <span class="op">=</span> <span class="va">methylation_data_for_visualisation</span><span class="op">$</span><span class="va">probabilities</span>,</span>
 <span>                      sequences                  <span class="op">=</span> <span class="va">methylation_data_for_visualisation</span><span class="op">$</span><span class="va">sequences</span>,</span>
-<span>                      filename <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_03.png"</span><span class="op">)</span>,</span>
+<span>                      filename <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_08.png"</span><span class="op">)</span>,</span>
 <span>                      return <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>                      margin <span class="op">=</span> <span class="fl">4</span>, </span>
+<span>                      sequence_text_type <span class="op">=</span> <span class="st">"sequence"</span>,</span>
+<span>                      sequence_text_colour <span class="op">=</span> <span class="st">"magenta"</span>,</span>
+<span>                      index_annotation_colour <span class="op">=</span> <span class="st">"yellow"</span>,</span>
 <span>                      low_colour <span class="op">=</span> <span class="st">"#00FF00"</span>,</span>
 <span>                      high_colour <span class="op">=</span> <span class="st">"blue"</span>,</span>
 <span>                      modified_bases_outline_colour <span class="op">=</span> <span class="st">"purple"</span>,</span>
@@ -3174,9 +3293,9 @@
 <span>                      background_colour <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"modification_03.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_03.png"><!-- --></p>
-<div class="sourceCode" id="cb121"><pre class="downlit sourceCode r">
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"modification_08.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_08.png"><!-- --></p>
+<div class="sourceCode" id="cb128"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Create scalebar and save to object</span></span>
 <span><span class="co">## Text colour doesn't have an argument within the function</span></span>
 <span><span class="co">## but can be modified by adding to the ggplot object like normal</span></span>
@@ -3190,18 +3309,19 @@
 <span>          axis.text  <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="st">"white"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## Write png from object</span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_03_scalebar.png"</span><span class="op">)</span>, <span class="va">scalebar</span>, dpi <span class="op">=</span> <span class="fl">300</span>, width <span class="op">=</span> <span class="fl">5.25</span>, height <span class="op">=</span> <span class="fl">1.25</span>, device <span class="op">=</span> <span class="fu">ragg</span><span class="fu">::</span><span class="va"><a href="https://ragg.r-lib.org/reference/agg_png.html" class="external-link">agg_png</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_08_scalebar.png"</span><span class="op">)</span>, <span class="va">scalebar</span>, dpi <span class="op">=</span> <span class="fl">300</span>, width <span class="op">=</span> <span class="fl">5.25</span>, height <span class="op">=</span> <span class="fl">1.25</span>, device <span class="op">=</span> <span class="fu">ragg</span><span class="fu">::</span><span class="va"><a href="https://ragg.r-lib.org/reference/agg_png.html" class="external-link">agg_png</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"modification_03_scalebar.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_03_scalebar.png" width="60%" style="display: block; margin: auto;"></p>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"modification_08_scalebar.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_08_scalebar.png" width="60%" style="display: block; margin: auto;"></p>
 <p>One way this might be used in practice is for making a graphic in the “lollipop” style where methylated/modified CGs are black and unmodified CGs are white:</p>
-<div class="sourceCode" id="cb122"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb129"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Extract information to list of character vectors</span></span>
 <span><span class="va">methylation_data_for_visualisation</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/extract_methylation_from_dataframe.html">extract_methylation_from_dataframe</a></span><span class="op">(</span></span>
 <span>    <span class="va">example_many_sequences</span>,</span>
 <span>    locations_colname <span class="op">=</span> <span class="st">"methylation_locations"</span>,</span>
 <span>    probabilities_colname <span class="op">=</span> <span class="st">"methylation_probabilities"</span>,</span>
+<span>    sequences_colname <span class="op">=</span> <span class="st">"sequence"</span>,</span>
 <span>    lengths_colname <span class="op">=</span> <span class="st">"sequence_length"</span>,</span>
 <span>    grouping_levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"family"</span> <span class="op">=</span> <span class="fl">6</span>, </span>
 <span>                        <span class="st">"individual"</span> <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span>
@@ -3213,22 +3333,23 @@
 <span><span class="fu"><a href="reference/visualise_methylation.html">visualise_methylation</a></span><span class="op">(</span>modification_locations     <span class="op">=</span> <span class="va">methylation_data_for_visualisation</span><span class="op">$</span><span class="va">locations</span>,</span>
 <span>                      modification_probabilities <span class="op">=</span> <span class="va">methylation_data_for_visualisation</span><span class="op">$</span><span class="va">probabilities</span>,</span>
 <span>                      sequences                  <span class="op">=</span> <span class="va">methylation_data_for_visualisation</span><span class="op">$</span><span class="va">sequences</span>,</span>
-<span>                      filename <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_04.png"</span><span class="op">)</span>,</span>
+<span>                      filename <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_09.png"</span><span class="op">)</span>,</span>
 <span>                      return <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>                      margin <span class="op">=</span> <span class="fl">0.1</span>, </span>
+<span>                      sequence_text_type <span class="op">=</span> <span class="st">"none"</span>,</span>
 <span>                      low_colour <span class="op">=</span> <span class="st">"white"</span>,</span>
 <span>                      high_colour <span class="op">=</span> <span class="st">"black"</span>,</span>
 <span>                      other_bases_colour <span class="op">=</span> <span class="st">"lightblue1"</span>,</span>
 <span>                      other_bases_outline_colour <span class="op">=</span> <span class="st">"grey"</span>,</span>
 <span>                      other_bases_outline_linewidth <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>                      background_colour <span class="op">=</span> <span class="st">"white"</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb123"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb123-1"><a href="#cb123-1" tabindex="-1"></a><span class="do">## Warning: If margin is small and outlines are on (outline_linewidth &gt; 0), outlines may be cut off at the edges of the plot. Check if this is happening and consider using a bigger margin.</span></span>
-<span id="cb123-2"><a href="#cb123-2" tabindex="-1"></a><span class="do">## Current margin: 0.1</span></span></code></pre></div>
-<div class="sourceCode" id="cb124"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb130"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb130-1"><a href="#cb130-1" tabindex="-1"></a><span class="do">## Warning: If margin is small and outlines are on (outline_linewidth &gt; 0), outlines may be cut off at the edges of the plot. Check if this is happening and consider using a bigger margin.</span></span>
+<span id="cb130-2"><a href="#cb130-2" tabindex="-1"></a><span class="do">## Current margin: 0.1</span></span></code></pre></div>
+<div class="sourceCode" id="cb131"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## View image</span></span>
-<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"modification_04.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_04.png"><!-- --></p>
-<div class="sourceCode" id="cb125"><pre class="downlit sourceCode r">
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"modification_09.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_09.png"><!-- --></p>
+<div class="sourceCode" id="cb132"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Create scalebar and save to object</span></span>
 <span><span class="va">scalebar</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/visualise_methylation_colour_scale.html">visualise_methylation_colour_scale</a></span><span class="op">(</span>x_axis_title <span class="op">=</span> <span class="st">"Methylation probability"</span>,</span>
 <span>                                               low_colour <span class="op">=</span> <span class="st">"white"</span>,</span>
@@ -3236,11 +3357,11 @@
 <span>                                               background_colour <span class="op">=</span> <span class="st">"lightblue1"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## Write png from object</span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_04_scalebar.png"</span><span class="op">)</span>, <span class="va">scalebar</span>, dpi <span class="op">=</span> <span class="fl">300</span>, width <span class="op">=</span> <span class="fl">5.25</span>, height <span class="op">=</span> <span class="fl">1.25</span>, device <span class="op">=</span> <span class="fu">ragg</span><span class="fu">::</span><span class="va"><a href="https://ragg.r-lib.org/reference/agg_png.html" class="external-link">agg_png</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_09_scalebar.png"</span><span class="op">)</span>, <span class="va">scalebar</span>, dpi <span class="op">=</span> <span class="fl">300</span>, width <span class="op">=</span> <span class="fl">5.25</span>, height <span class="op">=</span> <span class="fl">1.25</span>, device <span class="op">=</span> <span class="fu">ragg</span><span class="fu">::</span><span class="va"><a href="https://ragg.r-lib.org/reference/agg_png.html" class="external-link">agg_png</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"modification_04_scalebar.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_04_scalebar.png" width="60%" style="display: block; margin: auto;"></p>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"modification_09_scalebar.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_09_scalebar.png" width="60%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="id_66-colour-mapping-customisation">6.6 Colour mapping customisation<a class="anchor" aria-label="anchor" href="#id_66-colour-mapping-customisation"></a>
@@ -3255,12 +3376,13 @@
 </ul>
 <p>The clamp values need to be on the same scale as the probability input i.e. 0-255 for standard MM/ML tags from Dorado/Guppy modified basecalling. It would be possible to input decimal probabilities e.g. <code>"0.1,0.5,0.9,0.23"</code>, in which case the default high clamp of 255 will not be appropriate and must be set to a sensible value ≤ 1.</p>
 <p>Here is the lollipop scale but with <code>low_clamp = 127</code> and <code>high_clamp = 128</code> to make all values binary white/black depending on whether they are below or above the equivalent of 0.5 methylation probability:</p>
-<div class="sourceCode" id="cb126"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb133"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Extract information to list of character vectors</span></span>
 <span><span class="va">methylation_data_for_visualisation</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/extract_methylation_from_dataframe.html">extract_methylation_from_dataframe</a></span><span class="op">(</span></span>
 <span>    <span class="va">example_many_sequences</span>,</span>
 <span>    locations_colname <span class="op">=</span> <span class="st">"methylation_locations"</span>,</span>
 <span>    probabilities_colname <span class="op">=</span> <span class="st">"methylation_probabilities"</span>,</span>
+<span>    sequences_colname <span class="op">=</span> <span class="st">"sequence"</span>,</span>
 <span>    lengths_colname <span class="op">=</span> <span class="st">"sequence_length"</span>,</span>
 <span>    grouping_levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"family"</span> <span class="op">=</span> <span class="fl">6</span>, </span>
 <span>                        <span class="st">"individual"</span> <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span>
@@ -3272,9 +3394,10 @@
 <span><span class="fu"><a href="reference/visualise_methylation.html">visualise_methylation</a></span><span class="op">(</span>modification_locations     <span class="op">=</span> <span class="va">methylation_data_for_visualisation</span><span class="op">$</span><span class="va">locations</span>,</span>
 <span>                      modification_probabilities <span class="op">=</span> <span class="va">methylation_data_for_visualisation</span><span class="op">$</span><span class="va">probabilities</span>,</span>
 <span>                      sequences                  <span class="op">=</span> <span class="va">methylation_data_for_visualisation</span><span class="op">$</span><span class="va">sequences</span>,</span>
-<span>                      filename <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_05.png"</span><span class="op">)</span>,</span>
+<span>                      filename <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_10.png"</span><span class="op">)</span>,</span>
 <span>                      return <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>                      margin <span class="op">=</span> <span class="fl">0.1</span>, </span>
+<span>                      sequence_text_type <span class="op">=</span> <span class="st">"none"</span>,</span>
 <span>                      low_colour <span class="op">=</span> <span class="st">"white"</span>,</span>
 <span>                      low_clamp <span class="op">=</span> <span class="fl">127</span>,</span>
 <span>                      high_colour <span class="op">=</span> <span class="st">"black"</span>,</span>
@@ -3283,13 +3406,13 @@
 <span>                      other_bases_outline_colour <span class="op">=</span> <span class="st">"grey"</span>,</span>
 <span>                      other_bases_outline_linewidth <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>                      background_colour <span class="op">=</span> <span class="st">"white"</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb127"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb127-1"><a href="#cb127-1" tabindex="-1"></a><span class="do">## Warning: If margin is small and outlines are on (outline_linewidth &gt; 0), outlines may be cut off at the edges of the plot. Check if this is happening and consider using a bigger margin.</span></span>
-<span id="cb127-2"><a href="#cb127-2" tabindex="-1"></a><span class="do">## Current margin: 0.1</span></span></code></pre></div>
-<div class="sourceCode" id="cb128"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb134"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb134-1"><a href="#cb134-1" tabindex="-1"></a><span class="do">## Warning: If margin is small and outlines are on (outline_linewidth &gt; 0), outlines may be cut off at the edges of the plot. Check if this is happening and consider using a bigger margin.</span></span>
+<span id="cb134-2"><a href="#cb134-2" tabindex="-1"></a><span class="do">## Current margin: 0.1</span></span></code></pre></div>
+<div class="sourceCode" id="cb135"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## View image</span></span>
-<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"modification_05.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_05.png"><!-- --></p>
-<div class="sourceCode" id="cb129"><pre class="downlit sourceCode r">
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"modification_10.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_10.png"><!-- --></p>
+<div class="sourceCode" id="cb136"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Create scalebar and save to object</span></span>
 <span><span class="va">scalebar</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/visualise_methylation_colour_scale.html">visualise_methylation_colour_scale</a></span><span class="op">(</span>x_axis_title <span class="op">=</span> <span class="st">"Methylation probability"</span>,</span>
 <span>                                               low_colour <span class="op">=</span> <span class="st">"white"</span>,</span>
@@ -3299,19 +3422,20 @@
 <span>                                               background_colour <span class="op">=</span> <span class="st">"lightblue1"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## Write png from object</span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_05_scalebar.png"</span><span class="op">)</span>, <span class="va">scalebar</span>, dpi <span class="op">=</span> <span class="fl">300</span>, width <span class="op">=</span> <span class="fl">5.25</span>, height <span class="op">=</span> <span class="fl">1.25</span>, device <span class="op">=</span> <span class="fu">ragg</span><span class="fu">::</span><span class="va"><a href="https://ragg.r-lib.org/reference/agg_png.html" class="external-link">agg_png</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_10_scalebar.png"</span><span class="op">)</span>, <span class="va">scalebar</span>, dpi <span class="op">=</span> <span class="fl">300</span>, width <span class="op">=</span> <span class="fl">5.25</span>, height <span class="op">=</span> <span class="fl">1.25</span>, device <span class="op">=</span> <span class="fu">ragg</span><span class="fu">::</span><span class="va"><a href="https://ragg.r-lib.org/reference/agg_png.html" class="external-link">agg_png</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"modification_05_scalebar.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_05_scalebar.png" width="60%" style="display: block; margin: auto;"></p>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"modification_10_scalebar.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_10_scalebar.png" width="60%" style="display: block; margin: auto;"></p>
 <p>The clamping arguments do not have to be integers. Clamping is implemented with <code><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">pmin()</a></code> and <code><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">pmax()</a></code> and relies on their default behaviour for <code>pm&lt;in/ax&gt;(vector, clamping_value)</code>, which is to clamp to a fraction when the clamping value is fractional. For example, <code>pmin(c(1,2,3,4,5), 3.5)</code> produces <code>c(1.0, 2.0, 3.0, 3.5, 3.5)</code> i.e. the values above <code>3.5</code> were clamped down to <code>3.5</code>. Therefore, clamping with fractional values will clamp extreme probabilities to said fractional value, but this is not visible and does not interfere with plotting logic.</p>
 <p>This means one approach is to define clamping values as <code>proportion*255</code>, as that can be easier than working out which integer to use. Using the standard blue/red colour scheme with the hydroxymethylation data but clamping at 30% and 70% probability gives the following:</p>
-<div class="sourceCode" id="cb130"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb137"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Extract information to list of character vectors</span></span>
 <span><span class="va">methylation_data_for_visualisation</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/extract_methylation_from_dataframe.html">extract_methylation_from_dataframe</a></span><span class="op">(</span></span>
 <span>    <span class="va">example_many_sequences</span>,</span>
 <span>    locations_colname <span class="op">=</span> <span class="st">"methylation_locations"</span>,</span>
 <span>    probabilities_colname <span class="op">=</span> <span class="st">"methylation_probabilities"</span>,</span>
+<span>    sequences_colname <span class="op">=</span> <span class="st">"sequence"</span>,</span>
 <span>    lengths_colname <span class="op">=</span> <span class="st">"sequence_length"</span>,</span>
 <span>    grouping_levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"family"</span> <span class="op">=</span> <span class="fl">6</span>, </span>
 <span>                        <span class="st">"individual"</span> <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span>
@@ -3323,34 +3447,36 @@
 <span><span class="fu"><a href="reference/visualise_methylation.html">visualise_methylation</a></span><span class="op">(</span>modification_locations     <span class="op">=</span> <span class="va">methylation_data_for_visualisation</span><span class="op">$</span><span class="va">locations</span>,</span>
 <span>                      modification_probabilities <span class="op">=</span> <span class="va">methylation_data_for_visualisation</span><span class="op">$</span><span class="va">probabilities</span>,</span>
 <span>                      sequences                  <span class="op">=</span> <span class="va">methylation_data_for_visualisation</span><span class="op">$</span><span class="va">sequences</span>,</span>
-<span>                      filename <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_06.png"</span><span class="op">)</span>,</span>
+<span>                      filename <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_11.png"</span><span class="op">)</span>,</span>
 <span>                      return <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>                      sequence_text_type <span class="op">=</span> <span class="st">"none"</span>,</span>
 <span>                      low_clamp <span class="op">=</span> <span class="fl">0.3</span><span class="op">*</span><span class="fl">255</span>,</span>
 <span>                      high_clamp <span class="op">=</span> <span class="fl">0.7</span><span class="op">*</span><span class="fl">255</span>,</span>
 <span>                      outline_linewidth <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"modification_06.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_06.png"><!-- --></p>
-<div class="sourceCode" id="cb131"><pre class="downlit sourceCode r">
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"modification_11.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_11.png"><!-- --></p>
+<div class="sourceCode" id="cb138"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Create scalebar and save to object</span></span>
 <span><span class="va">scalebar</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/visualise_methylation_colour_scale.html">visualise_methylation_colour_scale</a></span><span class="op">(</span>x_axis_title <span class="op">=</span> <span class="st">"Methylation probability"</span>,</span>
 <span>                                               low_clamp <span class="op">=</span> <span class="fl">0.3</span><span class="op">*</span><span class="fl">255</span>,</span>
 <span>                                               high_clamp <span class="op">=</span> <span class="fl">0.7</span><span class="op">*</span><span class="fl">255</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## Write png from object</span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_06_scalebar.png"</span><span class="op">)</span>, <span class="va">scalebar</span>, dpi <span class="op">=</span> <span class="fl">300</span>, width <span class="op">=</span> <span class="fl">5.25</span>, height <span class="op">=</span> <span class="fl">1.25</span>, device <span class="op">=</span> <span class="fu">ragg</span><span class="fu">::</span><span class="va"><a href="https://ragg.r-lib.org/reference/agg_png.html" class="external-link">agg_png</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_11_scalebar.png"</span><span class="op">)</span>, <span class="va">scalebar</span>, dpi <span class="op">=</span> <span class="fl">300</span>, width <span class="op">=</span> <span class="fl">5.25</span>, height <span class="op">=</span> <span class="fl">1.25</span>, device <span class="op">=</span> <span class="fu">ragg</span><span class="fu">::</span><span class="va"><a href="https://ragg.r-lib.org/reference/agg_png.html" class="external-link">agg_png</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"modification_06_scalebar.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_06_scalebar.png" width="60%" style="display: block; margin: auto;"></p>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"modification_11_scalebar.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_11_scalebar.png" width="60%" style="display: block; margin: auto;"></p>
 <p>The clamping does not need to be symmetrical. One use for this is if the data is skewed. For example, the methylation scores were randomly generated from <code>0</code> to <code>255</code> for each CpG in <code>example_many_sequences</code>, but the hydroxymethylation scores were generated from <code>0</code> to <code>(255 - methylation score)</code> for each CpG to avoid &gt;100% total modification probability, so they tend to be lower. Here is the hydroxymethylation data visualised with clamping at 10% and 50%:</p>
-<div class="sourceCode" id="cb132"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb139"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Extract information to list of character vectors</span></span>
 <span><span class="va">hydroxymethylation_data_for_visualisation</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/extract_methylation_from_dataframe.html">extract_methylation_from_dataframe</a></span><span class="op">(</span></span>
 <span>    <span class="va">example_many_sequences</span>,</span>
 <span>    locations_colname <span class="op">=</span> <span class="st">"hydroxymethylation_locations"</span>,</span>
 <span>    probabilities_colname <span class="op">=</span> <span class="st">"hydroxymethylation_probabilities"</span>,</span>
+<span>    sequences_colname <span class="op">=</span> <span class="st">"sequence"</span>,</span>
 <span>    lengths_colname <span class="op">=</span> <span class="st">"sequence_length"</span>,</span>
 <span>    grouping_levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"family"</span> <span class="op">=</span> <span class="fl">6</span>, </span>
 <span>                        <span class="st">"individual"</span> <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span>
@@ -3362,27 +3488,28 @@
 <span><span class="fu"><a href="reference/visualise_methylation.html">visualise_methylation</a></span><span class="op">(</span>modification_locations     <span class="op">=</span> <span class="va">hydroxymethylation_data_for_visualisation</span><span class="op">$</span><span class="va">locations</span>,</span>
 <span>                      modification_probabilities <span class="op">=</span> <span class="va">hydroxymethylation_data_for_visualisation</span><span class="op">$</span><span class="va">probabilities</span>,</span>
 <span>                      sequences                  <span class="op">=</span> <span class="va">hydroxymethylation_data_for_visualisation</span><span class="op">$</span><span class="va">sequences</span>,</span>
-<span>                      filename <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_07.png"</span><span class="op">)</span>,</span>
+<span>                      filename <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_12.png"</span><span class="op">)</span>,</span>
 <span>                      return <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>                      sequence_text_type <span class="op">=</span> <span class="st">"none"</span>,</span>
 <span>                      low_clamp <span class="op">=</span> <span class="fl">0.1</span><span class="op">*</span><span class="fl">255</span>,</span>
 <span>                      high_clamp <span class="op">=</span> <span class="fl">0.5</span><span class="op">*</span><span class="fl">255</span>,</span>
 <span>                      other_bases_outline_linewidth <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"modification_07.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_07.png"><!-- --></p>
-<div class="sourceCode" id="cb133"><pre class="downlit sourceCode r">
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"modification_12.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_12.png"><!-- --></p>
+<div class="sourceCode" id="cb140"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Create scalebar and save to object</span></span>
 <span><span class="va">scalebar</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/visualise_methylation_colour_scale.html">visualise_methylation_colour_scale</a></span><span class="op">(</span>x_axis_title <span class="op">=</span> <span class="st">"Hydroxymethylation probability"</span>,</span>
 <span>                                               low_clamp <span class="op">=</span> <span class="fl">0.1</span><span class="op">*</span><span class="fl">255</span>,</span>
 <span>                                               high_clamp <span class="op">=</span> <span class="fl">0.5</span><span class="op">*</span><span class="fl">255</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## Write png from object</span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_07_scalebar.png"</span><span class="op">)</span>, <span class="va">scalebar</span>, dpi <span class="op">=</span> <span class="fl">300</span>, width <span class="op">=</span> <span class="fl">5.25</span>, height <span class="op">=</span> <span class="fl">1.25</span>, device <span class="op">=</span> <span class="fu">ragg</span><span class="fu">::</span><span class="va"><a href="https://ragg.r-lib.org/reference/agg_png.html" class="external-link">agg_png</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_12_scalebar.png"</span><span class="op">)</span>, <span class="va">scalebar</span>, dpi <span class="op">=</span> <span class="fl">300</span>, width <span class="op">=</span> <span class="fl">5.25</span>, height <span class="op">=</span> <span class="fl">1.25</span>, device <span class="op">=</span> <span class="fu">ragg</span><span class="fu">::</span><span class="va"><a href="https://ragg.r-lib.org/reference/agg_png.html" class="external-link">agg_png</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"modification_07_scalebar.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_07_scalebar.png" width="60%" style="display: block; margin: auto;"></p>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"modification_12_scalebar.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_12_scalebar.png" width="60%" style="display: block; margin: auto;"></p>
 <p><em><strong>IMPORTANT:</strong> make sure that you provide the scalebar when presenting data, especially if clamping is used, otherwise the colours could be misleading or academically dishonest.</em></p>
 </div>
 <div class="section level2">
@@ -3425,7 +3552,7 @@
 <code>outline_linewidth</code>: The width of the outline around the whole scalebar. Can be set to 0 to remove outline. Defaults to 1.</li>
 </ul>
 <p>Using all defaults but with lower precision gives the following:</p>
-<div class="sourceCode" id="cb134"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb141"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Create scalebar and save to object</span></span>
 <span><span class="va">scalebar</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/visualise_methylation_colour_scale.html">visualise_methylation_colour_scale</a></span><span class="op">(</span>precision <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
 <span></span>
@@ -3436,7 +3563,7 @@
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"modification_scalebar_alone_01.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_scalebar_alone_01.png" width="60%" style="display: block; margin: auto;"></p>
 <p>Disabling x axis ticks with intermediate precision gives the following:</p>
-<div class="sourceCode" id="cb135"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb142"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Create scalebar and save to object</span></span>
 <span><span class="va">scalebar</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/visualise_methylation_colour_scale.html">visualise_methylation_colour_scale</a></span><span class="op">(</span>precision <span class="op">=</span> <span class="fl">50</span>,</span>
 <span>                                               do_x_ticks <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
@@ -3448,7 +3575,7 @@
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"modification_scalebar_alone_02.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_scalebar_alone_02.png" width="60%" style="display: block; margin: auto;"></p>
 <p>If ticks are left on, they can be customised with <code><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_x_continuous()</a></code> as per usual for a ggplot. Here is an example with the side scalebar turned on and ticks customised:</p>
-<div class="sourceCode" id="cb136"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb143"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Create scalebar and save to object</span></span>
 <span><span class="va">scalebar</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/visualise_methylation_colour_scale.html">visualise_methylation_colour_scale</a></span><span class="op">(</span>high_colour <span class="op">=</span> <span class="st">"green"</span>,</span>
 <span>                                               low_colour <span class="op">=</span> <span class="st">"yellow"</span>,</span>
@@ -3471,7 +3598,7 @@
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"modification_scalebar_alone_03.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_scalebar_alone_03.png" width="60%" style="display: block; margin: auto;"></p>
 <p>And here is an example of a more sensible scalebar but with the side scale turned on:</p>
-<div class="sourceCode" id="cb137"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb144"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Create scalebar and save to object</span></span>
 <span><span class="va">scalebar</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/visualise_methylation_colour_scale.html">visualise_methylation_colour_scale</a></span><span class="op">(</span>low_clamp <span class="op">=</span> <span class="fl">0.1</span><span class="op">*</span><span class="fl">255</span>,</span>
 <span>                                               high_clamp  <span class="op">=</span> <span class="fl">0.9</span><span class="op">*</span><span class="fl">255</span>,</span>
@@ -3492,33 +3619,33 @@
 </h2>
 <p>When merging modification data read from FASTQ, the positional offset when reversing can be changed (as discussed in detail in the <a href="#id_332-modified-fastq-eg-methylation">reading from modified FASTQ</a> section).</p>
 <p>A summary of the sensible offset options (i.e. 0 or 1) copied from that section is as follows:</p>
-<div class="sourceCode" id="cb138"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb138-1"><a href="#cb138-1" tabindex="-1"></a><span class="do">## Here the stars represent the true biochemical modifications on the reverse strand:</span></span>
-<span id="cb138-2"><a href="#cb138-2" tabindex="-1"></a><span class="do">## (occurring at the Cs of CGs in the 5'-3' direction)</span></span>
-<span id="cb138-3"><a href="#cb138-3" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb138-4"><a href="#cb138-4" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb138-5"><a href="#cb138-5" tabindex="-1"></a><span class="do">## 5'  GGCGGCGGCGGCGGCGGA  3'</span></span>
-<span id="cb138-6"><a href="#cb138-6" tabindex="-1"></a><span class="do">## 3'  CCGCCGCCGCCGCCGCCT  5'</span></span>
-<span id="cb138-7"><a href="#cb138-7" tabindex="-1"></a><span class="do">##        *  *  *  *  *</span></span>
-<span id="cb138-8"><a href="#cb138-8" tabindex="-1"></a></span>
-<span id="cb138-9"><a href="#cb138-9" tabindex="-1"></a><span class="do">## If we take the complementary locations on the forward strand,</span></span>
-<span id="cb138-10"><a href="#cb138-10" tabindex="-1"></a><span class="do">## the modification locations correspond to Gs rather than Cs,</span></span>
-<span id="cb138-11"><a href="#cb138-11" tabindex="-1"></a><span class="do">## but are in the exact same locations:</span></span>
-<span id="cb138-12"><a href="#cb138-12" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb138-13"><a href="#cb138-13" tabindex="-1"></a><span class="do">##        o  o  o  o  o      </span></span>
-<span id="cb138-14"><a href="#cb138-14" tabindex="-1"></a><span class="do">## 5'  GGCGGCGGCGGCGGCGGA  3'</span></span>
-<span id="cb138-15"><a href="#cb138-15" tabindex="-1"></a><span class="do">## 3'  CCGCCGCCGCCGCCGCCT  5'</span></span>
-<span id="cb138-16"><a href="#cb138-16" tabindex="-1"></a><span class="do">##        *  *  *  *  *</span></span>
-<span id="cb138-17"><a href="#cb138-17" tabindex="-1"></a></span>
-<span id="cb138-18"><a href="#cb138-18" tabindex="-1"></a><span class="do">## If we offset the locations by 1 on the forward strand,</span></span>
-<span id="cb138-19"><a href="#cb138-19" tabindex="-1"></a><span class="do">## the modifications are always associated with the C of a CG,</span></span>
-<span id="cb138-20"><a href="#cb138-20" tabindex="-1"></a><span class="do">## but the locations are moved slightly:</span></span>
-<span id="cb138-21"><a href="#cb138-21" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb138-22"><a href="#cb138-22" tabindex="-1"></a><span class="do">##       o  o  o  o  o       </span></span>
-<span id="cb138-23"><a href="#cb138-23" tabindex="-1"></a><span class="do">## 5'  GGCGGCGGCGGCGGCGGA  3'</span></span>
-<span id="cb138-24"><a href="#cb138-24" tabindex="-1"></a><span class="do">## 3'  CCGCCGCCGCCGCCGCCT  5'</span></span>
-<span id="cb138-25"><a href="#cb138-25" tabindex="-1"></a><span class="do">##        *  *  *  *  *</span></span></code></pre></div>
+<div class="sourceCode" id="cb145"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb145-1"><a href="#cb145-1" tabindex="-1"></a><span class="do">## Here the stars represent the true biochemical modifications on the reverse strand:</span></span>
+<span id="cb145-2"><a href="#cb145-2" tabindex="-1"></a><span class="do">## (occurring at the Cs of CGs in the 5'-3' direction)</span></span>
+<span id="cb145-3"><a href="#cb145-3" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb145-4"><a href="#cb145-4" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb145-5"><a href="#cb145-5" tabindex="-1"></a><span class="do">## 5'  GGCGGCGGCGGCGGCGGA  3'</span></span>
+<span id="cb145-6"><a href="#cb145-6" tabindex="-1"></a><span class="do">## 3'  CCGCCGCCGCCGCCGCCT  5'</span></span>
+<span id="cb145-7"><a href="#cb145-7" tabindex="-1"></a><span class="do">##        *  *  *  *  *</span></span>
+<span id="cb145-8"><a href="#cb145-8" tabindex="-1"></a></span>
+<span id="cb145-9"><a href="#cb145-9" tabindex="-1"></a><span class="do">## If we take the complementary locations on the forward strand,</span></span>
+<span id="cb145-10"><a href="#cb145-10" tabindex="-1"></a><span class="do">## the modification locations correspond to Gs rather than Cs,</span></span>
+<span id="cb145-11"><a href="#cb145-11" tabindex="-1"></a><span class="do">## but are in the exact same locations:</span></span>
+<span id="cb145-12"><a href="#cb145-12" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb145-13"><a href="#cb145-13" tabindex="-1"></a><span class="do">##        o  o  o  o  o      </span></span>
+<span id="cb145-14"><a href="#cb145-14" tabindex="-1"></a><span class="do">## 5'  GGCGGCGGCGGCGGCGGA  3'</span></span>
+<span id="cb145-15"><a href="#cb145-15" tabindex="-1"></a><span class="do">## 3'  CCGCCGCCGCCGCCGCCT  5'</span></span>
+<span id="cb145-16"><a href="#cb145-16" tabindex="-1"></a><span class="do">##        *  *  *  *  *</span></span>
+<span id="cb145-17"><a href="#cb145-17" tabindex="-1"></a></span>
+<span id="cb145-18"><a href="#cb145-18" tabindex="-1"></a><span class="do">## If we offset the locations by 1 on the forward strand,</span></span>
+<span id="cb145-19"><a href="#cb145-19" tabindex="-1"></a><span class="do">## the modifications are always associated with the C of a CG,</span></span>
+<span id="cb145-20"><a href="#cb145-20" tabindex="-1"></a><span class="do">## but the locations are moved slightly:</span></span>
+<span id="cb145-21"><a href="#cb145-21" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb145-22"><a href="#cb145-22" tabindex="-1"></a><span class="do">##       o  o  o  o  o       </span></span>
+<span id="cb145-23"><a href="#cb145-23" tabindex="-1"></a><span class="do">## 5'  GGCGGCGGCGGCGGCGGA  3'</span></span>
+<span id="cb145-24"><a href="#cb145-24" tabindex="-1"></a><span class="do">## 3'  CCGCCGCCGCCGCCGCCT  5'</span></span>
+<span id="cb145-25"><a href="#cb145-25" tabindex="-1"></a><span class="do">##        *  *  *  *  *</span></span></code></pre></div>
 <p>The visualisations thus far in this section have all used <code>offset = 1</code> so that methylated Cs in CGs on the reverse strand are mapped to Cs of CGs in the forward strand when reverse complemented, ensuring consistency with reads that were forward to begin with. If we used <code>offset = 0</code> to show the true biochemical locations of the modifications, we would get the following:</p>
-<div class="sourceCode" id="cb139"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb146"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">modified_fastq_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/read_modified_fastq.html">read_modified_fastq</a></span><span class="op">(</span><span class="st">"inst/extdata/example_many_sequences_raw_modified.fastq"</span><span class="op">)</span></span>
 <span><span class="va">metadata</span>            <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="st">"inst/extdata/example_many_sequences_metadata.csv"</span><span class="op">)</span></span>
 <span></span>
@@ -3534,6 +3661,7 @@
 <span>    <span class="va">merged_modification_data</span>,</span>
 <span>    locations_colname <span class="op">=</span> <span class="st">"forward_C+m?_locations"</span>,</span>
 <span>    probabilities_colname <span class="op">=</span> <span class="st">"forward_C+m?_probabilities"</span>,</span>
+<span>    sequences_colname <span class="op">=</span> <span class="st">"forward_sequence"</span>,</span>
 <span>    lengths_colname <span class="op">=</span> <span class="st">"sequence_length"</span>,</span>
 <span>    grouping_levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"family"</span> <span class="op">=</span> <span class="fl">6</span>, </span>
 <span>                        <span class="st">"individual"</span> <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span>
@@ -3545,28 +3673,30 @@
 <span><span class="fu"><a href="reference/visualise_methylation.html">visualise_methylation</a></span><span class="op">(</span>modification_locations     <span class="op">=</span> <span class="va">methylation_data_for_visualisation</span><span class="op">$</span><span class="va">locations</span>,</span>
 <span>                      modification_probabilities <span class="op">=</span> <span class="va">methylation_data_for_visualisation</span><span class="op">$</span><span class="va">probabilities</span>,</span>
 <span>                      sequences                  <span class="op">=</span> <span class="va">methylation_data_for_visualisation</span><span class="op">$</span><span class="va">sequences</span>,</span>
-<span>                      filename <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_08.png"</span><span class="op">)</span>,</span>
-<span>                      return <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span>                      filename <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_13.png"</span><span class="op">)</span>,</span>
+<span>                      return <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>                      sequence_text_type <span class="op">=</span> <span class="st">"sequence"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"modification_08.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_08.png"><!-- --> We can see here that some methylation-assessed sites are now offset by 1, as the location is now assigned to the G of each CG site rather than the C. This is perhaps more biochemically accurate, as these Gs are complementary to the Cs on the reverse strands where the modification actually occurred.</p>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"modification_13.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_13.png"><!-- --> We can see here that some methylation-assessed sites are now offset by 1, as the location is now assigned to the G of each CG site rather than the C. This is perhaps more biochemically accurate, as these Gs are complementary to the Cs on the reverse strands where the modification actually occurred.</p>
 <p>Other offset values are theoretically possible, e.g. -1 here:</p>
-<div class="sourceCode" id="cb140"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb147"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">modified_fastq_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/read_modified_fastq.html">read_modified_fastq</a></span><span class="op">(</span><span class="st">"inst/extdata/example_many_sequences_raw_modified.fastq"</span><span class="op">)</span></span>
 <span><span class="va">metadata</span>            <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="st">"inst/extdata/example_many_sequences_metadata.csv"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## Merge with offset = -1 (not recommended)</span></span>
 <span><span class="va">merged_modification_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/merge_methylation_with_metadata.html">merge_methylation_with_metadata</a></span><span class="op">(</span><span class="va">modified_fastq_data</span>, <span class="va">metadata</span>,</span>
 <span>                                                            reversed_location_offset <span class="op">=</span> <span class="op">-</span><span class="fl">1</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb141"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb141-1"><a href="#cb141-1" tabindex="-1"></a><span class="do">## Warning: Setting location reversal offset to anything other than 0 or 1 is advanced use. Make sure this is intentional.</span></span>
-<span id="cb141-2"><a href="#cb141-2" tabindex="-1"></a><span class="do">## Setting location reversal offset to anything other than 0 or 1 is advanced use. Make sure this is intentional.</span></span></code></pre></div>
-<div class="sourceCode" id="cb142"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb148"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb148-1"><a href="#cb148-1" tabindex="-1"></a><span class="do">## Warning: Setting location reversal offset to anything other than 0 or 1 is advanced use. Make sure this is intentional.</span></span>
+<span id="cb148-2"><a href="#cb148-2" tabindex="-1"></a><span class="do">## Setting location reversal offset to anything other than 0 or 1 is advanced use. Make sure this is intentional.</span></span></code></pre></div>
+<div class="sourceCode" id="cb149"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Extract information to list of character vectors</span></span>
 <span><span class="va">methylation_data_for_visualisation</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/extract_methylation_from_dataframe.html">extract_methylation_from_dataframe</a></span><span class="op">(</span></span>
 <span>    <span class="va">merged_modification_data</span>,</span>
 <span>    locations_colname <span class="op">=</span> <span class="st">"forward_C+m?_locations"</span>,</span>
 <span>    probabilities_colname <span class="op">=</span> <span class="st">"forward_C+m?_probabilities"</span>,</span>
+<span>    sequences_colname <span class="op">=</span> <span class="st">"forward_sequence"</span>,</span>
 <span>    lengths_colname <span class="op">=</span> <span class="st">"sequence_length"</span>,</span>
 <span>    grouping_levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"family"</span> <span class="op">=</span> <span class="fl">6</span>, </span>
 <span>                        <span class="st">"individual"</span> <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span>
@@ -3578,14 +3708,15 @@
 <span><span class="fu"><a href="reference/visualise_methylation.html">visualise_methylation</a></span><span class="op">(</span>modification_locations     <span class="op">=</span> <span class="va">methylation_data_for_visualisation</span><span class="op">$</span><span class="va">locations</span>,</span>
 <span>                      modification_probabilities <span class="op">=</span> <span class="va">methylation_data_for_visualisation</span><span class="op">$</span><span class="va">probabilities</span>,</span>
 <span>                      sequences                  <span class="op">=</span> <span class="va">methylation_data_for_visualisation</span><span class="op">$</span><span class="va">sequences</span>,</span>
-<span>                      filename <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_09.png"</span><span class="op">)</span>,</span>
-<span>                      return <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span>                      filename <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_14.png"</span><span class="op">)</span>,</span>
+<span>                      return <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>                      sequence_text_type <span class="op">=</span> <span class="st">"sequence"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"modification_09.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_09.png"><!-- --> However, this is strongly discouraged and produces a warning. Offset values other than 0 and 1 have not been tested so results may be unpredictable and aspects of the visualisation may break.</p>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"modification_14.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_14.png"><!-- --> However, this is strongly discouraged and produces a warning. Offset values other than 0 and 1 have not been tested so results may be unpredictable and aspects of the visualisation may break.</p>
 <p>Finally, it is of course possible to read from the columns that weren’t reversed/forward-ified. However, <strong><em>this is likely to be misleading</em></strong> as it implies positional equivalence between bases at opposite ends of the region but on opposite strands. This is not recommended either, but there is no way to identify that you are doing this so no warning is produced.</p>
-<div class="sourceCode" id="cb143"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb150"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">modified_fastq_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/read_modified_fastq.html">read_modified_fastq</a></span><span class="op">(</span><span class="st">"inst/extdata/example_many_sequences_raw_modified.fastq"</span><span class="op">)</span></span>
 <span><span class="va">metadata</span>            <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="st">"inst/extdata/example_many_sequences_metadata.csv"</span><span class="op">)</span></span>
 <span></span>
@@ -3598,6 +3729,7 @@
 <span>    <span class="va">merged_modification_data</span>,</span>
 <span>    locations_colname <span class="op">=</span> <span class="st">"C+m?_locations"</span>,</span>
 <span>    probabilities_colname <span class="op">=</span> <span class="st">"C+m?_probabilities"</span>,</span>
+<span>    sequences_colname <span class="op">=</span> <span class="st">"sequence"</span>,</span>
 <span>    lengths_colname <span class="op">=</span> <span class="st">"sequence_length"</span>,</span>
 <span>    grouping_levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"family"</span> <span class="op">=</span> <span class="fl">6</span>, </span>
 <span>                        <span class="st">"individual"</span> <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span>
@@ -3609,12 +3741,12 @@
 <span><span class="fu"><a href="reference/visualise_methylation.html">visualise_methylation</a></span><span class="op">(</span>modification_locations     <span class="op">=</span> <span class="va">methylation_data_for_visualisation</span><span class="op">$</span><span class="va">locations</span>,</span>
 <span>                      modification_probabilities <span class="op">=</span> <span class="va">methylation_data_for_visualisation</span><span class="op">$</span><span class="va">probabilities</span>,</span>
 <span>                      sequences                  <span class="op">=</span> <span class="va">methylation_data_for_visualisation</span><span class="op">$</span><span class="va">sequences</span>,</span>
-<span>                      filename <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_10.png"</span><span class="op">)</span>,</span>
+<span>                      filename <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_15.png"</span><span class="op">)</span>,</span>
 <span>                      return <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"modification_10.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_10.png"><!-- --></p>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"modification_15.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_15.png"><!-- --></p>
 </div>
 </div>
 <div class="section level1">
