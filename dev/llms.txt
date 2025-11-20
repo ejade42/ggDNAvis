@@ -5,6 +5,13 @@
   - [2.1 Single sequence](#id_21-single-sequence)
   - [2.2 Many sequences](#id_22-many-sequences)
   - [2.3 Methylation/modification](#id_23-methylationmodification)
+    - [2.3.1 Methylation showing
+      sequence](#id_231-methylation-showing-sequence)
+    - [2.3.2 Methylation showing
+      probabilities](#id_232-methylation-showing-probabilities)
+    - [2.3.3 Methylation showing probability
+      integers](#id_233-methylation-showing-probability-integers)
+    - [2.3.4 Methylation scalebar](#id_234-methylation-scalebar)
 - [3 Loading data](#id_3-loading-data)
   - [3.1 Introduction to
     `example_many_sequences`](#id_31-introduction-to-example_many_sequences)
@@ -25,19 +32,25 @@
   - [5.1 Basic visualisation](#id_51-basic-visualisation)
   - [5.2 Sequence arrangement
     customisation](#id_52-sequence-arrangement-customisation)
-  - [5.3 Colour and layout
-    customisation](#id_53-colour-and-layout-customisation)
+  - [5.3 Index annotation
+    customisation](#id_53-index-annotation-customisation)
+  - [5.4 Colour and layout
+    customisation](#id_54-colour-and-layout-customisation)
 - [6 Visualising DNA
   methylation/modification](#id_6-visualising-dna-methylationmodification)
   - [6.1 Basic visualisation](#id_61-basic-visualisation)
   - [6.2 Sequence arrangement
     customisation](#id_62-sequence-arrangement-customisation)
-  - [6.3 Colour and layout
-    customisation](#id_63-colour-and-layout-customisation)
-  - [6.4 Colour mapping
-    customisation](#id_64-colour-mapping-customisation)
-  - [6.5 Scalebar customisation](#id_65-scalebar-customisation)
-  - [6.6 Think about the offset!](#id_66-think-about-the-offset)
+  - [6.3 Index annotation
+    customisation](#id_63-index-annotation-customisation)
+  - [6.4 Sequence text
+    customisation](#id_64-sequence-text-customisation)
+  - [6.5 Colour and layout
+    customisation](#id_65-colour-and-layout-customisation)
+  - [6.6 Colour mapping
+    customisation](#id_66-colour-mapping-customisation)
+  - [6.7 Scalebar customisation](#id_67-scalebar-customisation)
+  - [6.8 Think about the offset!](#id_68-think-about-the-offset)
 - [7 References](#id_7-references)
 
 [](https://ejade42.github.io/ggDNAvis/)
@@ -67,9 +80,10 @@ visualisation (`sequence_colour_palettes`).
 
 As of v1.0.0, aliases are now fully configured so either American or
 British spellings should work. “Colour” and “visualise” remain the
-spellings used throughout the code and documentation but “color” (and
-“col”) and “visualize” should also work in all user-facing scenarios. If
-any American spellings don’t work then please submit a bug report at
+spellings used throughout the code and documentation but “color”, “col”,
+and “visualize” should also work in all function and argument names
+(e.g. [`visualize_single_sequence()`](https://ejade42.github.io/ggDNAvis/reference/visualise_single_sequence.md)).
+If any American spellings don’t work then please submit a bug report at
 <https://github.com/ejade42/ggDNAvis/issues>.
 
 The latest release of ggDNAvis is available from CRAN or via github
@@ -275,6 +289,8 @@ knitr::include_graphics(paste0(github_location, "summary_methylation_none.png"))
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/summary_methylation_none.png)
 
+### 2.3.1 Methylation showing sequence
+
 ``` r
 ## Create visualisation showing sequence
 visualise_methylation(
@@ -313,6 +329,8 @@ knitr::include_graphics(paste0(github_location, "summary_methylation_sequence.pn
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/summary_methylation_sequence.png)
+
+### 2.3.2 Methylation showing probabilities
 
 ``` r
 ## Create visualisation showing probabilities
@@ -355,6 +373,8 @@ knitr::include_graphics(paste0(github_location, "summary_methylation_probabiliti
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/summary_methylation_probabilities.png)
 
+### 2.3.3 Methylation showing probability integers
+
 ``` r
 ## Create visualisation showing probability integers
 visualise_methylation(
@@ -395,6 +415,8 @@ knitr::include_graphics(paste0(github_location, "summary_methylation_probability
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/summary_methylation_probability_integers.png)
+
+### 2.3.4 Methylation scalebar
 
 ``` r
 ## Create scalebar and save to ggplot object
@@ -470,8 +492,8 @@ Probabilities are also a comma-condensed string of integers produced via
 [`vector_to_string()`](https://ejade42.github.io/ggDNAvis/reference/vector_to_string.md),
 but here each integer represents the probability that the corresponding
 base is modified. Probabilities are stored as 8-bit integers (0-255)
-where a score of N represents the probability space from \frac{N}{256}
-to \frac{N+1}{256}. For the read above, a probability string of
+where a score of p represents the probability space from \frac{p}{256}
+to \frac{p+1}{256}. For the read above, a probability string of
 `"250,3,50,127"` would indicate that the third base is almost certainly
 methylated (97.66%-98.05%), the sixth base is almost certainly not
 methylated (1.17%-1.56%), the twelfth base is most likely not methylated
@@ -1264,6 +1286,9 @@ following arguments:
 - `background_colour`: The colour used for the background.
 - `outline_colour`: The colour used for the box outlines.
 
+All colour-type arguments should accept `colour`, `color`, or `col` for
+the argument name.
+
 For example, we can change all of the colours in an inadvisable way:
 
 ``` r
@@ -1271,10 +1296,10 @@ For example, we can change all of the colours in an inadvisable way:
 visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
                           filename = paste0(output_location, "single_sequence_03.png"), 
                           return = FALSE,
-                          sequence_colours = c("black", "white", "#00FFFF", "#00FF00"),
-                          sequence_text_colour = "magenta",
+                          sequence_colors = c("black", "white", "#00FFFF", "#00FF00"),
+                          sequence_text_col = "magenta",
                           index_annotation_colour = "yellow",
-                          background_colour = "red",
+                          background_color = "red",
                           outline_colour = "orange")
 
 ## View image
@@ -1380,7 +1405,7 @@ Many aspects of the sequence layout are also customisable via arguments:
   images are rasterised and the whole visualisation logic would need to
   be re-implemented to allow non-integer spacing values.
 - `margin`: The margin around the image in terms of the size of base
-  boxes (e.g. the default value of 0.5 adds a margin half the size of
+  boxes (e.g. the default value of `0.5` adds a margin half the size of
   the base boxes, which is 50 px with the default
   `pixels_per_base = 100`). Note that if index annotations are on, there
   is a minimum margin of 1 above (if annotations are above) of below (if
@@ -1394,21 +1419,22 @@ Many aspects of the sequence layout are also customisable via arguments:
 - `sequence_text_size`: The size of the text inside the boxes. Can be
   set to 0 to disable text inside boxes. Defaults to 16.
 - `index_annotation_size`: The size of the index numbers above/below the
-  boxes. Should not be set to 0 to disable; instead disable via
-  `index_annotation_interval = 0`. Defaults to 12.5.
+  boxes. Can be set to `0` to disable index annotations. Defaults to
+  `12.5`.
 - `index_annotation_interval`: The frequency at which index numbers
-  should be listed. Can be set to 0 to disable index annotations.
-  Defaults to 15.
+  should be listed. Can be set to `0` to disable index annotations.
+  Defaults to `15`.
 - `index_annotations_above`: Boolean specifying whether index
   annotations should be drawn above or below each line of sequence.
   Defaults to `TRUE` (above).
 - `index_annotation_vertical_position`: How far annotation numbers
   should be rendered above (if `index_annotations_above = TRUE`) or
   below (if `index_annotations_above = FALSE`) each base. Defaults to
-  1/3, not recommended to change generally. If spacing is much larger
-  than 1, setting this to a slightly higher value might be appropriate.
+  `1/3`, not recommended to change generally. If spacing is much larger
+  than `1`, setting this to a slightly higher value might be
+  appropriate.
 - `outline_linewidth`: The thickness of the box outlines. Can be set to
-  0 to disable box outlines. Defaults to 3.
+  `0` to disable box outlines. Defaults to `3`.
 - `outline_join`: Changes how the corners of the box outlines are
   handled. Must be one of `"mitre"`, `"bevel"`, or `"round"`. Defaults
   to `"mitre"`. It is unlikely that you would ever need to change this.
@@ -1942,7 +1968,321 @@ print(extracted_and_sorted_qualities, quote = F)
 This extracted the `quality` column, with families separated by 2 blank
 strings, and sorted alphabetically by quality string within each family.
 
-## 5.3 Colour and layout customisation
+## 5.3 Index annotation customisation
+
+As of `ggDNAvis` v1.0.0,
+[`visualise_many_sequences()`](https://ejade42.github.io/ggDNAvis/reference/visualise_many_sequences.md)
+(and
+[`visualise_methylation()`](https://ejade42.github.io/ggDNAvis/reference/visualise_methylation.md))
+support index annotation. This is implemented differently to
+[`visualise_single_sequence()`](https://ejade42.github.io/ggDNAvis/reference/visualise_single_sequence.md)
+because each line represents a different sequence/read, so it would not
+make sense to maintain a single base count. Instead, base indices are
+counted along each line and reset for each new line. To reduce
+redundancy, it is user-configurable which lines are annotated.
+
+The full set of arguments controlling index annotations are:
+
+- `index_annotation_lines`: This is a ***key argument to change***.
+  Controls which lines should have their indices annotated. Defaults to
+  `1` i.e. only the first line will be annotated. Can be set to
+  `1:length(sequences_vector)` to annotate all lines, or to a custom
+  integer vector to annotate specific lines. With the default argument
+  values of
+  [`extract_and_sort_sequences()`](https://ejade42.github.io/ggDNAvis/reference/extract_and_sort_sequences.md),
+  `c(1, 23, 37)` annotates the first sequence from each family, which I
+  personally find a useful setting. It may take some trial and error to
+  find the ideal setting of this for each ordering/dataset. Can be set
+  to `NA` or `numeric(0)` to disable index annotations.
+- `index_annotation_full_line`: Whether the annotations should always
+  continue to the end of the longest sequence (`TRUE`, default) or
+  whether they should end once the sequence along each annotated line
+  ends (`FALSE`).
+- `index_annotation_colour`: The colour used for the index numbers
+  above/below the boxes. Defaults to dark red.
+- `index_annotation_size`: The size of the index numbers above/below the
+  boxes. Can be set to `0` to disable index annotations. Defaults to
+  `12.5`.
+- `index_annotation_interval`: The frequency at which index numbers
+  should be listed. Defaults to `15`. Note that unlike
+  [`visualise_single_sequence()`](https://ejade42.github.io/ggDNAvis/reference/visualise_single_sequence.md),
+  the count resets each line in
+  [`visualise_many_sequences()`](https://ejade42.github.io/ggDNAvis/reference/visualise_many_sequences.md)
+  and
+  [`visualise_methylation()`](https://ejade42.github.io/ggDNAvis/reference/visualise_methylation.md)
+  because each line is assumed to be a different sequence.
+- `index_annotations_above`: Boolean specifying whether index
+  annotations should be drawn above or below each line of sequence.
+  Defaults to `TRUE` (above).
+- `index_annotation_vertical_position`: How far annotation numbers
+  should be rendered above (if `index_annotations_above = TRUE`) or
+  below (if `index_annotations_above = FALSE`) each base. Defaults to
+  `1/3`, not recommended to change generally.
+
+We will work through these arguments step by step to fully explain how
+they work.
+
+By default, annotations are drawn above the first line:
+
+``` r
+## Extract sequences to a character vector, using all default settings
+sequences_for_visualisation <- extract_and_sort_sequences(example_many_sequences)
+
+## Use the character vector to make the image
+## index_annotation_lines = c(1) is the default value
+visualise_many_sequences(sequences_for_visualisation,
+                         filename = paste0(output_location, "many_sequences_08.png"),
+                         return = FALSE,
+                         sequence_colours = sequence_colour_palettes$bright_pale2,
+                         index_annotation_lines = c(1))
+
+## View image
+knitr::include_graphics(paste0(github_location, "many_sequences_08.png"))
+```
+
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_08.png)
+
+However, any numerical vector can be used as `index_annotation_lines` to
+specify which lines should be annotated. For each selected line, an
+additional blank/spacer line will be inserted above (if
+`index_annotations_above = TRUE`) or below (if
+`index_annotations_below = FALSE`), and index annotations will be drawn
+in the new space.
+
+*(Note: if `index_annotation_vertical_position` is more than 1, more
+than 1 additional blank line will be inserted, according to
+`ceiling(index_annotation_vertical_position)`).*
+
+Annotating above each line would look as follows:
+
+``` r
+visualise_many_sequences(sequences_for_visualisation,
+                         filename = paste0(output_location, "many_sequences_09.png"),
+                         return = FALSE,
+                         sequence_colours = sequence_colour_palettes$bright_pale2,
+                         index_annotation_lines = c(1:51))
+
+## View image
+knitr::include_graphics(paste0(github_location, "many_sequences_09.png"))
+```
+
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_09.png)
+
+To annotate below the final line of each family, we can look at the
+sequences vector:
+
+``` r
+sequences_for_visualisation
+```
+
+``` R
+##  [1] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA"
+##  [2] "GGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA"         
+##  [3] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA"               
+##  [4] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA"                     
+##  [5] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA"                                       
+##  [6] ""                                                                                                      
+##  [7] ""                                                                                                      
+##  [8] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGAGGCGGCGGAGGAGGAGGCGGCGGA"                                 
+##  [9] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGAGGCGGCGGAGGAGGAGGCGGCGGA"                                       
+## [10] ""                                                                                                      
+## [11] ""                                                                                                      
+## [12] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA"               
+## [13] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGA"                  
+## [14] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGCGGA"                     
+## [15] ""                                                                                                      
+## [16] ""                                                                                                      
+## [17] ""                                                                                                      
+## [18] ""                                                                                                      
+## [19] ""                                                                                                      
+## [20] ""                                                                                                      
+## [21] ""                                                                                                      
+## [22] ""                                                                                                      
+## [23] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGA"         
+## [24] ""                                                                                                      
+## [25] ""                                                                                                      
+## [26] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGA"            
+## [27] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGA"               
+## [28] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGA"                  
+## [29] ""                                                                                                      
+## [30] ""                                                                                                      
+## [31] ""                                                                                                      
+## [32] ""                                                                                                      
+## [33] ""                                                                                                      
+## [34] ""                                                                                                      
+## [35] ""                                                                                                      
+## [36] ""                                                                                                      
+## [37] "GGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGA"      
+## [38] "GGCGGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGA"      
+## [39] ""                                                                                                      
+## [40] ""                                                                                                      
+## [41] "GGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGA"         
+## [42] "GGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGA"            
+## [43] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGCGGCGGA"               
+## [44] ""                                                                                                      
+## [45] ""                                                                                                      
+## [46] "GGCGGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGA"      
+## [47] ""                                                                                                      
+## [48] ""                                                                                                      
+## [49] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGA"      
+## [50] "GGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGCGGA"            
+## [51] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGCGGCGGA"
+```
+
+We can see that lines 14, 28, and 51 are the last sequence in each
+family, so we will annotate below those lines:
+
+``` r
+visualise_many_sequences(sequences_for_visualisation,
+                         filename = paste0(output_location, "many_sequences_10.png"),
+                         return = FALSE,
+                         sequence_colours = sequence_colour_palettes$bright_pale2,
+                         index_annotation_lines = c(14, 28, 51),
+                         index_annotations_above = FALSE)
+
+## View image
+knitr::include_graphics(paste0(github_location, "many_sequences_10.png"))
+```
+
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_10.png)
+
+As with
+[`visualise_single_sequence()`](https://ejade42.github.io/ggDNAvis/reference/visualise_single_sequence.md),
+the frequency of annotations along each line is controlled by
+`index_annotation_interval`. Additionally, it is configurable whether
+annotations continue to the end of the image
+(`index_annotation_full_line = TRUE`, default) or stop when each
+annotated sequence ends (`index_annotation_full_line = FALSE`).
+
+Annotating above every line every 3 bases until each sequence ends would
+look as follows:
+
+``` r
+visualise_many_sequences(sequences_for_visualisation,
+                         filename = paste0(output_location, "many_sequences_11.png"),
+                         return = FALSE,
+                         sequence_colours = sequence_colour_palettes$bright_pale2,
+                         index_annotation_lines = c(1:51),
+                         index_annotations_above = TRUE,
+                         index_annotation_interval = 3,
+                         index_annotation_full_line = FALSE)
+
+## View image
+knitr::include_graphics(paste0(github_location, "many_sequences_11.png"))
+```
+
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_11.png)
+
+And doing the same but annotating until the end of the image regardless
+of when each sequence ends would look as follows:
+
+Note that the blank/spacing lines are also annotated, but with
+`index_annotation_full_line = FALSE` they don’t display anything as
+there is no sequence (however, the additional spacers are still inserted
+to make room for theoretical annotations).
+
+``` r
+visualise_many_sequences(sequences_for_visualisation,
+                         filename = paste0(output_location, "many_sequences_12.png"),
+                         return = FALSE,
+                         sequence_colours = sequence_colour_palettes$bright_pale2,
+                         index_annotation_lines = c(1:51),
+                         index_annotations_above = TRUE,
+                         index_annotation_interval = 3,
+                         index_annotation_full_line = TRUE)
+
+## View image
+knitr::include_graphics(paste0(github_location, "many_sequences_12.png"))
+```
+
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_12.png)
+
+Customising the colour, size, and vertical position of annotations works
+exactly the same as
+[`visualise_single_sequence()`](https://ejade42.github.io/ggDNAvis/reference/visualise_single_sequence.md)
+via `index_annotation_colour`, `index_annotation_size`, and
+`index_annotation_vertical_position` respectively:
+
+(if you make the text much bigger than this then the `margin` will also
+need increasing to prevent the top of the text being cut off).
+
+``` r
+visualise_many_sequences(sequences_for_visualisation,
+                         filename = paste0(output_location, "many_sequences_13.png"),
+                         return = FALSE,
+                         sequence_colours = sequence_colour_palettes$bright_pale2,
+                         index_annotation_lines = c(1, 23, 37),
+                         index_annotations_above = TRUE,
+                         index_annotation_interval = 6,
+                         index_annotation_full_line = TRUE,
+                         index_annotation_colour = "green",
+                         index_annotation_size = 30,
+                         index_annotation_vertical_position = 1.5)
+
+## View image
+knitr::include_graphics(paste0(github_location, "many_sequences_13.png"))
+```
+
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_13.png)
+
+Finally, index annotations can of course also be turned completely off
+if desired. The ‘canonical’ way of doing this is by setting
+`index_annotation_lines = NA` or `index_annotation_lines = numeric(0)`,
+but `index_annotation_size = 0` and `index_annotation_interval = 0` also
+work perfectly well:
+
+``` r
+visualise_many_sequences(sequences_for_visualisation,
+                         filename = paste0(output_location, "many_sequences_14.png"),
+                         return = FALSE,
+                         sequence_colours = sequence_colour_palettes$bright_pale2,
+                         index_annotation_lines = NA)
+
+## View image
+knitr::include_graphics(paste0(github_location, "many_sequences_14.png"))
+```
+
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_14.png)
+
+``` r
+visualise_many_sequences(sequences_for_visualisation,
+                         filename = paste0(output_location, "many_sequences_15.png"),
+                         return = FALSE,
+                         sequence_colours = sequence_colour_palettes$bright_pale2,
+                         index_annotation_interval = 0)
+```
+
+``` R
+## ℹ Automatically emptying index_annotation_lines as index_annotation_interval is 0
+```
+
+``` r
+## View image
+knitr::include_graphics(paste0(github_location, "many_sequences_15.png"))
+```
+
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_15.png)
+
+``` r
+visualise_many_sequences(sequences_for_visualisation,
+                         filename = paste0(output_location, "many_sequences_16.png"),
+                         return = FALSE,
+                         sequence_colours = sequence_colour_palettes$bright_pale2,
+                         index_annotation_size = 0)
+```
+
+``` R
+## ℹ Automatically emptying index_annotation_lines as index_annotation_size is 0
+```
+
+``` r
+## View image
+knitr::include_graphics(paste0(github_location, "many_sequences_16.png"))
+```
+
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_16.png)
+
+## 5.4 Colour and layout customisation
 
 As with
 [`visualise_single_sequence()`](https://ejade42.github.io/ggDNAvis/reference/visualise_single_sequence.md),
@@ -1950,7 +2290,8 @@ colours in
 [`visualise_many_sequences()`](https://ejade42.github.io/ggDNAvis/reference/visualise_many_sequences.md)
 are highly customisable and can use the various palettes from
 `sequence_colour_palettes`. Additionally, margin, resolution, and text
-size are customisable (including turning text off by setting size to 0).
+size are customisable (including turning text off by setting size to
+`0`).
 
 Colour-related arguments:
 
@@ -1965,97 +2306,33 @@ Colour-related arguments:
 
 Layout-related arguments:
 
-- `index_annotation_lines`: This is a ***key argument to change***.
-  Controls which lines should have their indices annotated. Defaults to
-  1 i.e. only the first line will be annotated. Can be set to
-  `1:length(sequences_vector)` to annotate all lines, or to a custom
-  integer vector to annotate specific lines. With the default argument
-  values of
-  [`extract_and_sort_sequences()`](https://ejade42.github.io/ggDNAvis/reference/extract_and_sort_sequences.md),
-  `c(1, 23, 37)` annotates the first sequence from each family, which I
-  personally find a useful setting. It may take some trial and error to
-  find the ideal setting of this for each ordering/dataset.
-- `index_annotation_full_line`: Whether the annotations should always
-  continue to the end of the longest sequence (`TRUE`, default) or
-  whether they should end once the sequence along each annotated line
-  ends.
-- `index_annotation_size`: The size of the index numbers above/below the
-  boxes. Should not be set to 0 to disable; instead disable via
-  `index_annotation_interval = 0`. Defaults to 12.5.
-- `index_annotation_interval`: The frequency at which index numbers
-  should be listed. Can be set to 0 to disable index annotations.
-  Defaults to 15. Note that unlike
-  [`visualise_single_sequence()`](https://ejade42.github.io/ggDNAvis/reference/visualise_single_sequence.md),
-  the count resets each line in
-  [`visualise_many_sequences()`](https://ejade42.github.io/ggDNAvis/reference/visualise_many_sequences.md)
-  and
-  [`visualise_methylation()`](https://ejade42.github.io/ggDNAvis/reference/visualise_methylation.md)
-  because each line is assumed to be a different sequence. Setting to
-  `NA` disables index annotations.
-- `index_annotations_above`: Boolean specifying whether index
-  annotations should be drawn above or below each line of sequence.
-  Defaults to `TRUE` (above).
-- `index_annotation_vertical_position`: How far annotation numbers
-  should be rendered above (if `index_annotations_above = TRUE`) or
-  below (if `index_annotations_above = FALSE`) each base. Defaults to
-  1/3, not recommended to change generally.
 - `margin`: The margin around the image in terms of the size of base
-  boxes (e.g. the default value of 0.5 adds a margin half the size of
+  boxes (e.g. the default value of `0.5` adds a margin half the size of
   the base boxes, which is 50 px with the default
   `pixels_per_base = 100`).
 - `sequence_text_size`: The size of the text inside the boxes. Can be
-  set to 0 to disable text inside boxes. Defaults to 16.
+  set to `0` to disable text inside boxes. Defaults to `16`.
+- `index_text_size`: The
 - `outline_linewidth`: The thickness of the box outlines. Can be set to
-  0 to disable box outlines. Defaults to 3.
+  `0` to disable box outlines. Defaults to `3`.
 - `outline_join`: Changes how the corners of the box outlines are
   handled. Must be one of `"mitre"`, `"bevel"`, or `"round"`. Defaults
   to `"mitre"`. It is unlikely that you would ever need to change this.
 - `pixels_per_base`: Resolution, as determined by number of pixels in
   the side length of one DNA base square. Everything else is scaled
-  proportionally. Defaults to 100 (sensible for text, but can be set
-  lower e.g. 10 or 20 if text is turned off).
+  proportionally. Defaults to `100` (sensible for text, but can be set
+  lower e.g. `10` or `20` if text is turned off).
 - `render_device`: The device `ggsave` should use to render the plot.
   Defaults to
   [`ragg::agg_png`](https://ragg.r-lib.org/reference/agg_png.html), not
   recommended to change. Can be set to `NULL` to infer device based on
   `filename` extension.
 
-For example, a layout with increased margins, enlarged text, annotations
-every 3 bases ending once each sequence ends, and crazy colours might
-be:
+All colour-type arguments should accept `colour`, `color`, or `col` for
+the argument name.
 
-``` r
-## Extract sequences to a character vector
-sequences_for_visualisation <- extract_and_sort_sequences(example_many_sequences)
-
-## Use the character vector to make the image
-visualise_many_sequences(sequences_for_visualisation,
-                         filename = paste0(output_location, "many_sequences_08.png"),
-                         return = FALSE,
-                         sequence_colours = c("orange", "#00FF00", "magenta", "black"),
-                         sequence_text_colour = "cyan",
-                         index_annotation_lines = c(1:51),
-                         index_annotation_interval = 3,
-                         index_annotation_size = 15,
-                         index_annotation_vertical_position = 1/2,
-                         index_annotation_full_line = FALSE,
-                         index_annotation_colour = "purple",
-                         background_colour = "yellow",
-                         outline_colour = "red",
-                         outline_join = "round",
-                         outline_linewidth = 15,
-                         sequence_text_size = 40,
-                         margin = 5)
-
-## View image
-knitr::include_graphics(paste0(github_location, "many_sequences_08.png"))
-```
-
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_08.png)
-
-A layout with annotations below the last sequence in each family to the
-end of the image might be (also illustrating the use of American
-spellings):
+For example, a layout with increased margins, enlarged text, and crazy
+colours might be:
 
 ``` r
 ## Extract sequences to a character vector
@@ -2063,23 +2340,28 @@ sequences_for_visualization <- extract_and_sort_sequences(example_many_sequences
 
 ## Use the character vector to make the image
 visualize_many_sequences(sequences_for_visualization,
-                         filename = paste0(output_location, "many_sequences_09.png"),
+                         filename = paste0(output_location, "many_sequences_17.png"),
                          return = FALSE,
-                         sequence_colors = sequence_color_palettes$bright_deep,
-                         sequence_text_col = "white",
-                         index_annotation_lines = c(14, 28, 51),
-                         index_annotations_above = FALSE,
-                         index_annotation_interval = 6,
+                         sequence_colors = c("orange", "#00FF00", "magenta", "black"),
+                         sequence_text_col = "cyan",
+                         index_annotation_colour = "purple",
+                         background_color = "yellow",
+                         outline_col = "red",
+                         outline_join = "round",
+                         outline_linewidth = 15,
+                         sequence_text_size = 40,
+                         index_annotation_lines = c(1, 11, 21, 31, 41, 51),
                          index_annotation_full_line = TRUE,
-                         background_col = "lightgrey",
-                         outline_color = "darkred",
+                         index_annotation_interval = 5,
+                         index_annotations_above = FALSE,
+                         index_annotation_size = 25,
                          margin = 5)
 
 ## View image
-knitr::include_graphics(paste0(github_location, "many_sequences_09.png"))
+knitr::include_graphics(paste0(github_location, "many_sequences_17.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_09.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_17.png)
 
 As with
 [`visualise_single_sequence()`](https://ejade42.github.io/ggDNAvis/reference/visualise_single_sequence.md),
@@ -2094,28 +2376,26 @@ sequences_for_visualisation <- extract_and_sort_sequences(example_many_sequences
 
 ## Use the character vector to make the image
 visualise_many_sequences(sequences_for_visualisation,
-                         filename = paste0(output_location, "many_sequences_10.png"),
+                         filename = paste0(output_location, "many_sequences_18.png"),
                          return = FALSE,
-                         sequence_colours = sequence_colour_palettes$bright_pale,
+                         sequence_colours = sequence_colour_palettes$bright_pale2,
                          sequence_text_size = 0,
-                         index_annotation_lines = NA,
-                         margin = 0.1,
-                         pixels_per_base = 20,
-                         outline_join = "round")
+                         index_annotation_size = 0,
+                         outline_linewidth = 0,
+                         margin = 0,
+                         pixels_per_base = 20)
 ```
 
 ``` R
-## Warning: If margin is small and outlines are on (outline_linewidth > 0),
-## outlines may be cut off at the edges of the plot. Check if this is happening
-## and consider using a bigger margin.
+## ℹ Automatically emptying index_annotation_lines as index_annotation_size is 0
 ```
 
 ``` r
 ## View image
-knitr::include_graphics(paste0(github_location, "many_sequences_10.png"))
+knitr::include_graphics(paste0(github_location, "many_sequences_18.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_10.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_18.png)
 Note that the margin/outline warning is produced whenever the margin is
 ≤0.25 and the outline linewidth is \>0. Getting the warning does not
 necessarily mean that the outlines are getting cut off (as this only
@@ -2188,8 +2468,8 @@ This function works extremely similarly to
 (as explained with examples previously in the [many sequences
 arrangement customisation](#id_52-sequence-arrangement-customisation)
 section), but instead of taking a single argument for the sequence
-column to extract, it takes three arguments for locations,
-probabilities, and sequence length colnames to extract:
+column to extract, it takes four arguments for locations, probabilities,
+sequences, and sequence length colnames to extract:
 
 ``` r
 ## Extract locations, probabilities, and lengths
@@ -2198,6 +2478,7 @@ methylation_data_for_visualisation <- extract_methylation_from_dataframe(
     example_many_sequences,
     locations_colname = "methylation_locations",
     probabilities_colname = "methylation_probabilities",
+    sequences_colname = "sequence",
     lengths_colname = "sequence_length",
     grouping_levels = c("family" = 8, "individual" = 2),
     sort_by = "sequence_length",
@@ -2373,12 +2654,12 @@ methylation_data_for_visualisation
 ## [39]   0   0  93  90  87   0   0  96   0   0  96  90  81
 ```
 
-This returns a 3-item list, where each item in the list is a vector of
-either modification locations, probabilities, or sequence lengths. The
-modification locations are the indices (starting from 1) along each read
-at which modification was assessed, while the probabilities are 8-bit
-integers giving the probability of modification from 0 to 255. This is
-explained in more detail in the [introduction to
+This returns a 4-item list, where each item in the list is a vector of
+either modification locations, probabilities, sequences, or sequence
+lengths. The modification locations are the indices (starting from 1)
+along each read at which modification was assessed, while the
+probabilities are 8-bit integers giving the probability of modification
+from 0 to 255. This is explained in more detail in the [introduction to
 `example_many_sequences`](#id_31-introduction-to-example_many_sequences)
 section.
 
@@ -2391,6 +2672,7 @@ hydroxymethylation_data_for_visualisation <- extract_methylation_from_dataframe(
     example_many_sequences,
     locations_colname = "hydroxymethylation_locations",
     probabilities_colname = "hydroxymethylation_probabilities",
+    sequences_colname = "sequence",
     lengths_colname = "sequence_length",
     grouping_levels = c("family" = 8, "individual" = 2),
     sort_by = "sequence_length",
@@ -2572,9 +2854,13 @@ probabilities are different. This should work for any modification type
 in the MM and ML tags, though it has only been tested for `C+m?` CG
 methylation and `C+h?` CG hydroxymethylation.
 
-This list of locations, probabilities, and lengths can then be used as
+This list of locations, probabilities, and sequences can then be used as
 input for
 [`visualise_methylation()`](https://ejade42.github.io/ggDNAvis/reference/visualise_methylation.md).
+(Note: prior versions of `ggDNAvis` used sequence lengths instead of
+sequences as the third argument, but this has been changed as inputting
+sequences allows calculation of sequence lengths, while also enabling
+sequence visualisation).
 
 ``` r
 ## Use saved methylation data for visualisation to make image
@@ -2634,8 +2920,9 @@ arguments:
 - `locations_colname`: The column locations should be extracted from.
 - `probabilities_colname`: The column probabilities should be extracted
   from.
+- `sequences_colname`: The column sequences should be extracted from.
 - `lengths_colname`: The column sequence lengths should be extracted
-  from. All three of these just call
+  from. All four of these just call
   [`extract_and_sort_sequences()`](https://ejade42.github.io/ggDNAvis/reference/extract_and_sort_sequences.md)
   to extract these columns, so they can technically be used to extract
   any three columns regardless of what they contain. However, if you are
@@ -2667,6 +2954,7 @@ methylation_data_for_visualisation <- extract_methylation_from_dataframe(
     example_many_sequences,
     locations_colname = "methylation_locations",
     probabilities_colname = "methylation_probabilities",
+    sequences_colname = "sequence",
     lengths_colname = "sequence_length",
     grouping_levels = c("individual" = 3),
     sort_by = "sequence_length",
@@ -2690,7 +2978,32 @@ Here there is no grouping by family, 3 blank lines between each
 participant, and sequences are sorted in ascending length order within
 each participant.
 
-## 6.3 Colour and layout customisation
+## 6.3 Index annotation customisation
+
+Index annotations for
+[`visualise_methylation()`](https://ejade42.github.io/ggDNAvis/reference/visualise_methylation.md)
+work identically to
+[`visualise_many_sequences()`](https://ejade42.github.io/ggDNAvis/reference/visualise_many_sequences.md),
+as explained in [index annotation customisation for
+`visualise_many_sequences()`](#id_53-index-annotation-customisation).
+
+Briefly:
+
+- `index_annotation_lines` controls which lines receive annotations
+- `index_annotation_interval` controls how frequently along each line
+  index annotations are drawn
+- `index_annotation_full_line` controls whether annotations go to the
+  end of the image or the end of each sequence
+- `index_annotations_above` controls whether annotations (and the blank
+  lines they are drawn in) go above or below each annotated line
+- `index_annoation_vertical_position` controls how far above each
+  annotated line numbers are drawn
+- `index_annotation_colour` controls the colour of the numbers
+- `index_annotation_size` controls the size of the numbers
+
+## 6.4 Sequence text customisation
+
+## 6.5 Colour and layout customisation
 
 Colours in
 [`visualise_methylation()`](https://ejade42.github.io/ggDNAvis/reference/visualise_methylation.md)
@@ -2705,8 +3018,10 @@ One important feature to note is that the box outlines can be controlled
 separately for modification-assessed (e.g. C of CpG) and
 non-modification assessed bases. The same global `outline_colour`,
 `outline_linewidth`, and `outline_join` parameters are available as for
-the single sequence and multiple sequences functions. However, there are
-also `modified_bases_outline_<parameter>` and
+[`visualise_single_sequence()`](https://ejade42.github.io/ggDNAvis/reference/visualise_single_sequence.md)
+and
+[`visualise_many_sequences()`](https://ejade42.github.io/ggDNAvis/reference/visualise_many_sequences.md).
+However, there are also `modified_bases_outline_<parameter>` and
 `other_bases_outline_<parameter>` arguments that can be used to override
 the global setting, or set to `NA` to inherit the global setting.
 
@@ -2900,7 +3215,7 @@ knitr::include_graphics(paste0(github_location, "modification_04_scalebar.png"))
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_04_scalebar.png)
 
-## 6.4 Colour mapping customisation
+## 6.6 Colour mapping customisation
 
 A very useful feature in
 [`visualise_methylation()`](https://ejade42.github.io/ggDNAvis/reference/visualise_methylation.md)
@@ -3104,7 +3419,7 @@ knitr::include_graphics(paste0(github_location, "modification_07_scalebar.png"))
 data, especially if clamping is used, otherwise the colours could be
 misleading or academically dishonest.*
 
-## 6.5 Scalebar customisation
+## 6.7 Scalebar customisation
 
 The scalebar produced by
 [`visualise_methylation_colour_scale()`](https://ejade42.github.io/ggDNAvis/reference/visualise_methylation_colour_scale.md)
@@ -3234,7 +3549,7 @@ knitr::include_graphics(paste0(github_location, "modification_scalebar_alone_04.
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_scalebar_alone_04.png)
 
-## 6.6 Think about the offset!
+## 6.8 Think about the offset!
 
 When merging modification data read from FASTQ, the positional offset
 when reversing can be changed (as discussed in detail in the [reading
