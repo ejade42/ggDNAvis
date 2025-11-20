@@ -11,6 +11,11 @@ site:
 home:
   sidebar:
     structure:
+      - links
+      - license
+      - citation
+      - authors
+      - dev_status
       - toc
 
 navbar:
