@@ -1,0 +1,26 @@
+/* pkgdown/extra.css */
+
+/* 1. Reset the main sidebar container so it moves naturally with the page */
+.aside {
+  position: static !important; /* Overrides previous sticky settings */
+  display: block; /* Ensures standard block layout */
+}
+
+/* 2. Target the TOC specifically and make IT sticky */
+/* pkgdown usually renders the sidebar TOC as a <nav id="toc"> */
+.aside nav#toc {
+  position: -webkit-sticky;
+  position: sticky;
+
+  /* Distance from top of screen when it locks */
+  top: 80px;
+
+  /* Add some spacing so it looks distinct from the authors list above it */
+  margin-top: 20px;
+  padding-top: 10px;
+  border-top: 1px solid #eee; /* Optional: adds a separator line */
+
+  /* Handle long TOCs */
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
+}
