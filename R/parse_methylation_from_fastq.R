@@ -442,6 +442,15 @@ convert_MM_vector_to_locations <- function(sequence, skips, target_base = "C") {
 #'
 #' @export
 write_fastq <- function(dataframe, filename = NA, read_id_colname = "read", sequence_colname = "sequence", quality_colname = "quality", return = FALSE) {
+    ## Process aliases
+    ## ---------------------------------------------------------------------
+    dots <- list(...)
+    sequence_colname <- resolve_alias("sequence_colname", sequence_colname, "sequences_colname", dots[["sequences_colname"]], "sequence")
+    quality_colname <- resolve_alias("quality_colname", quality_colname, "qualities_colname", dots[["qualities_colname"]], "quality")
+    ## ---------------------------------------------------------------------
+
+
+
     ## Validate arguments
     ## ---------------------------------------------------------------------
     not_null <- list(dataframe = dataframe, filename = filename, read_id_colname = read_id_colname, sequence_colname = sequence_colname, quality_colname = quality_colname, return = return)
@@ -583,6 +592,17 @@ write_fastq <- function(dataframe, filename = NA, read_id_colname = "read", sequ
 #'
 #' @export
 write_modified_fastq <- function(dataframe, filename = NA, read_id_colname = "read", sequence_colname = "sequence", quality_colname = "quality", locations_colnames = c("hydroxymethylation_locations", "methylation_locations"), probabilities_colnames = c("hydroxymethylation_probabilities", "methylation_probabilities"), modification_prefixes = c("C+h?", "C+m?"), include_blank_tags = TRUE, return = FALSE) {
+    ## Process aliases
+    ## ---------------------------------------------------------------------
+    dots <- list(...)
+    sequence_colname <- resolve_alias("sequence_colname", sequence_colname, "sequences_colname", dots[["sequences_colname"]], "sequence")
+    quality_colname <- resolve_alias("quality_colname", quality_colname, "qualities_colname", dots[["qualities_colname"]], "quality")
+    locations_colname <- resolve_alias("locations_colname", locations_colname, "location_colname", dots[["location_colname"]], c("hydroxymethylation_locations", "methylation_locations"))
+    probabilities_colname <- resolve_alias("probabilities_colname", probabilities_colname, "probability_colname", dots[["probability_colname"]], c("hydroxymethylation_probabilities", "methylation_probabilities"))
+    ## ---------------------------------------------------------------------
+
+
+
     ## Validate arguments
     ## ---------------------------------------------------------------------
     not_null <- list(dataframe = dataframe, filename = filename, read_id_colname = read_id_colname, sequence_colname = sequence_colname, quality_colname = quality_colname, locations_colnames = locations_colnames, probabilities_colnames = probabilities_colnames, modification_prefixes = modification_prefixes, include_blank_tags = include_blank_tags, return = return)

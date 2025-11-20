@@ -770,6 +770,7 @@ visualise_methylation_colour_scale <- function(
 #'     example_many_sequences,
 #'     locations_colname = "methylation_locations",
 #'     probabilities_colname = "methylation_probabilities",
+#'     sequences_colname = "sequence",
 #'     lengths_colname = "sequence_length",
 #'     grouping_levels = c("family" = 8, "individual" = 2),
 #'     sort_by = "sequence_length",
@@ -780,6 +781,7 @@ visualise_methylation_colour_scale <- function(
 #'     example_many_sequences,
 #'     locations_colname = "hydroxymethylation_locations",
 #'     probabilities_colname = "hydroxymethylation_probabilities",
+#'     sequences_colname = "sequence",
 #'     lengths_colname = "sequence_length",
 #'     grouping_levels = c("family" = 8, "individual" = 2),
 #'     sort_by = "sequence_length",
@@ -797,6 +799,16 @@ extract_methylation_from_dataframe <- function(
     sort_by = "sequence_length",
     desc_sort = TRUE
 ) {
+    ## Process aliases
+    ## ---------------------------------------------------------------------
+    dots <- list(...)
+    sequences_colname <- resolve_alias("sequences_colname", sequences_colname, "sequence_colname", dots[["sequence_colname"]], "sequence")
+    locations_colname <- resolve_alias("locations_colname", locations_colname, "location_colname", dots[["location_colname"]], "methylation_locations")
+    probabilities_colname <- resolve_alias("probabilities_colname", probabilities_colname, "probability_colname", dots[["probability_colname"]], "methylation_probabilities")
+    lengths_colname <- resolve_alias("lengths_colname", lengths_colname, "length_colname", dots[["length_colname"]], "sequence_length")
+    ## ---------------------------------------------------------------------
+
+
     ## Doesn't need specific argument validation as extract_and_sort_sequences() handles that.
 
     locations <- extract_and_sort_sequences(modification_data, sequence_variable = locations_colname,
