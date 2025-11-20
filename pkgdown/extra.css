@@ -8,7 +8,7 @@
 
 /* 2. Target the TOC specifically and make IT sticky */
 /* pkgdown usually renders the sidebar TOC as a <nav id="toc"> */
-.aside nav#toc {
+.aside nav#table-of-contents {
   position: -webkit-sticky;
   position: sticky;
 
