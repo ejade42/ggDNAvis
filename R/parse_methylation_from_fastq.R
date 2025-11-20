@@ -620,8 +620,8 @@ write_modified_fastq <- function(
     dots <- list(...)
     sequence_colname <- resolve_alias("sequence_colname", sequence_colname, "sequences_colname", dots[["sequences_colname"]], "sequence")
     quality_colname <- resolve_alias("quality_colname", quality_colname, "qualities_colname", dots[["qualities_colname"]], "quality")
-    locations_colname <- resolve_alias("locations_colname", locations_colname, "location_colname", dots[["location_colname"]], c("hydroxymethylation_locations", "methylation_locations"))
-    probabilities_colname <- resolve_alias("probabilities_colname", probabilities_colname, "probability_colname", dots[["probability_colname"]], c("hydroxymethylation_probabilities", "methylation_probabilities"))
+    locations_colnames <- resolve_alias("locations_colnames", locations_colnames, "location_colnames", dots[["location_colnames"]], c("hydroxymethylation_locations", "methylation_locations"))
+    probabilities_colnames <- resolve_alias("probabilities_colnames", probabilities_colnames, "probability_colnames", dots[["probability_colnames"]], c("hydroxymethylation_probabilities", "methylation_probabilities"))
     ## ---------------------------------------------------------------------
 
 
