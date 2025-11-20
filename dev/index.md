@@ -113,7 +113,13 @@ library(ggDNAvis)
 ## These are ggDNAvis dependencies, so will always be installed when installing ggDNAvis
 library(dplyr)
 library(ggplot2)
+```
 
+``` R
+## Warning: package 'ggplot2' was built under R version 4.5.2
+```
+
+``` r
 ## Function for viewing tables throughout this document
 github_table <- function(data) {
     quoted <- as.data.frame(
@@ -3838,8 +3844,8 @@ merged_modification_data <- merge_methylation_with_metadata(modified_fastq_data,
 ```
 
 ``` R
-## Warning: Setting location reversal offset to anything other than 0 or 1 is advanced use. Make sure this is intentional.
-## Setting location reversal offset to anything other than 0 or 1 is advanced use. Make sure this is intentional.
+## Warning: Setting location reversal offset to anything other than 0 or 1 is
+## advanced use. Make sure this is intentional.
 ```
 
 ``` r
