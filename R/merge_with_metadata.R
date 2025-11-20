@@ -187,6 +187,7 @@ merge_methylation_with_metadata <- function(methylation_data, metadata, reversed
     merged_data$forward_sequence <- reverse_sequence_if_needed(merged_data$sequence, merged_data$direction, reverse_complement_mode)
     merged_data$forward_quality  <- reverse_quality_if_needed(merged_data$quality, merged_data$direction)
 
+    first_loop <- TRUE
     for (modification_type in unique(string_to_vector(merged_data$modification_types, "character"))) {
         if (!(paste0(modification_type, "_locations")) %in% colnames(merged_data)) {
             abort(paste0("Modification type '", modification_type, "' is present in modification_types but there is no '", modification_type, "_locations' column."), class = "argument_value_or_type")
@@ -195,8 +196,16 @@ merge_methylation_with_metadata <- function(methylation_data, metadata, reversed
             abort(paste0("Modification type '", modification_type, "' is present in modification_types but there is no '", modification_type, "_probabilities' column."), class = "argument_value_or_type")
         }
 
-        merged_data[, paste0("forward_", modification_type, "_locations")] <- reverse_locations_if_needed(pull(merged_data, paste0(modification_type, "_locations")), merged_data$direction, merged_data$sequence_length, offset = reversed_location_offset)
+        if (first_loop) {
+            merged_data[, paste0("forward_", modification_type, "_locations")] <- reverse_locations_if_needed(pull(merged_data, paste0(modification_type, "_locations")), merged_data$direction, merged_data$sequence_length, offset = reversed_location_offset)
+        } else {
+            suppressWarnings(
+                merged_data[, paste0("forward_", modification_type, "_locations")] <- reverse_locations_if_needed(pull(merged_data, paste0(modification_type, "_locations")), merged_data$direction, merged_data$sequence_length, offset = reversed_location_offset),
+                classes = "parameter_recommendation")
+        }
         merged_data[, paste0("forward_", modification_type, "_probabilities")] <- reverse_probabilities_if_needed(pull(merged_data, paste0(modification_type, "_probabilities")), merged_data$direction)
+
+        first_loop <- FALSE
     }
 
     return(merged_data)
