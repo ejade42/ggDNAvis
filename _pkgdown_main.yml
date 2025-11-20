@@ -15,7 +15,7 @@ home:
       - license
       - citation
       - authors
-      - dev_status
+      - dev
       - toc
 
 navbar:
