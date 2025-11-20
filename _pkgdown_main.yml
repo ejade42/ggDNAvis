@@ -8,6 +8,11 @@ template:
 site:
   build_all_versions: false
 
+home:
+  sidebar:
+    structure:
+      - toc
+
 navbar:
   structure:
     left:  [intro, reference, articles, tutorials, news, version]

@@ -4,6 +4,11 @@ output:
         number_sections: true
         toc: true
         toc_depth: 3
+    html_document:
+        number_sections: true
+        toc: true
+        toc_depth: 3
+        toc_float: true
 bibliography: README_files/citations.bib
 csl: README_files/apa.csl
 ---
@@ -31,7 +36,7 @@ This is accomplished through main functions `visualise_single_sequence()`, `visu
 
 Additionally, ggDNAvis contains a built-in example dataset (`example_many_sequences`) and a set of colour palettes for DNA visualisation (`sequence_colour_palettes`).
 
-As of v1.0.0, aliases are now fully configured so either American or British spellings should work. "Colour" and "visualise" remain the spellings used throughout the code and documentation but "color" (and "col") and "visualize" should also work in all user-facing scenarios. If any American spellings don't work then please submit a bug report at https://github.com/ejade42/ggDNAvis/issues.
+As of v1.0.0, aliases are now fully configured so either American or British spellings should work. "Colour" and "visualise" remain the spellings used throughout the code and documentation but "color", "col", and "visualize" should also work in all function and argument names (e.g. `visualize_single_sequence()`). If any American spellings don't work then please submit a bug report at https://github.com/ejade42/ggDNAvis/issues.
 
 The latest release of ggDNAvis is available from CRAN or via github releases. Alternatively, the latest in-development version can be installed directly from the github repository, but may have unexpected bugs.
 
@@ -215,8 +220,10 @@ visualise_methylation(
 
 ## View image
 knitr::include_graphics(paste0(github_location, "summary_methylation_none.png"))
+```
 
-
+### Methylation showing sequence
+```{r}
 ## Create visualisation showing sequence
 visualise_methylation(
     modification_locations     = methylation_for_visualisation$locations,
@@ -251,8 +258,11 @@ visualise_methylation(
 
 ## View image
 knitr::include_graphics(paste0(github_location, "summary_methylation_sequence.png"))
+```
 
 
+### Methylation showing probabilities
+```{r}
 ## Create visualisation showing probabilities
 visualise_methylation(
     modification_locations     = methylation_for_visualisation$locations,
@@ -289,8 +299,10 @@ visualise_methylation(
 
 ## View image
 knitr::include_graphics(paste0(github_location, "summary_methylation_probabilities.png"))
+```
 
-
+### Methylation showing probability integers
+```{r}
 ## Create visualisation showing probability integers
 visualise_methylation(
     modification_locations     = methylation_for_visualisation$locations,
@@ -328,6 +340,8 @@ visualise_methylation(
 ## View image
 knitr::include_graphics(paste0(github_location, "summary_methylation_probability_integers.png"))
 ```
+
+### Methylation scalebar
 ```{r, out.width="60%", fig.align="center"}
 ## Create scalebar and save to ggplot object
 ## Usually it's fine to leave most of these as defaults
@@ -371,7 +385,7 @@ The DNA sequence in column `sequence` is the information used for visualising si
 
 Locations are stored as a comma-condensed string of integers for each read, produced via `vector_to_string()`, and indicate the indices along the read at which the probability of modification was assessed. For example, methylation might be assessed at each CpG site, which in the read `"GGCGGCGGAGGCGGCGGA"` would be the third, sixth, twelfth, and fifteenth bases, thus the location string would be `"3,6,12,15"` for that read.
 
-Probabilities are also a comma-condensed string of integers produced via `vector_to_string()`, but here each integer represents the probability that the corresponding base is modified. Probabilities are stored as 8-bit integers (0-255) where a score of $N$ represents the probability space from $\frac{N}{256}$ to $\frac{N+1}{256}$. For the read above, a probability string of `"250,3,50,127"` would indicate that the third base is almost certainly methylated (97.66%-98.05%), the sixth base is almost certainly not methylated (1.17%-1.56%), the twelfth base is most likely not methylated (19.53%-19.92%), and the fifteenth base may or may not be methylated (49.61%-50.00%)
+Probabilities are also a comma-condensed string of integers produced via `vector_to_string()`, but here each integer represents the probability that the corresponding base is modified. Probabilities are stored as 8-bit integers (0-255) where a score of $p$ represents the probability space from $\frac{p}{256}$ to $\frac{p+1}{256}$. For the read above, a probability string of `"250,3,50,127"` would indicate that the third base is almost certainly methylated (97.66%-98.05%), the sixth base is almost certainly not methylated (1.17%-1.56%), the twelfth base is most likely not methylated (19.53%-19.92%), and the fifteenth base may or may not be methylated (49.61%-50.00%)
 
 ```{r}
 ## Function to convert integer scores to corresponding percentages
@@ -757,6 +771,8 @@ All of the colours used in the visualisation can be modified with the following 
 - `background_colour`: The colour used for the background.
 - `outline_colour`: The colour used for the box outlines.
 
+All colour-type arguments should accept `colour`, `color`, or `col` for the argument name.
+
 For example, we can change all of the colours in an inadvisable way:
 
 ```{r}
@@ -764,10 +780,10 @@ For example, we can change all of the colours in an inadvisable way:
 visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
                           filename = paste0(output_location, "single_sequence_03.png"), 
                           return = FALSE,
-                          sequence_colours = c("black", "white", "#00FFFF", "#00FF00"),
-                          sequence_text_colour = "magenta",
+                          sequence_colors = c("black", "white", "#00FFFF", "#00FF00"),
+                          sequence_text_col = "magenta",
                           index_annotation_colour = "yellow",
-                          background_colour = "red",
+                          background_color = "red",
                           outline_colour = "orange")
 
 ## View image
@@ -847,13 +863,13 @@ Many aspects of the sequence layout are also customisable via arguments:
 
 - `line_wrapping`: The length/number of bases in each line.
 - `spacing`: The number of blank lines in between each line of sequence. Must be an integer - this is a fundamental consequence of how the images are rasterised and the whole visualisation logic would need to be re-implemented to allow non-integer spacing values.
-- `margin`: The margin around the image in terms of the size of base boxes (e.g. the default value of 0.5 adds a margin half the size of the base boxes, which is 50 px with the default `pixels_per_base = 100`). Note that if index annotations are on, there is a minimum margin of 1 above (if annotations are above) of below (if annotations are below) to allow space to render the annotations, so if margin is set to less than this then it will be increased to 1 in the relevant direction. Also note that if the margin is very narrow it can clip the box outlines, as they are rendered centred on the actual edge of the boxes (i.e. they "spill over" a little to each side if outline linewidth is non-zero), so placing the margin exactly at the box edges will cut half the outlines.
+- `margin`: The margin around the image in terms of the size of base boxes (e.g. the default value of `0.5` adds a margin half the size of the base boxes, which is 50 px with the default `pixels_per_base = 100`). Note that if index annotations are on, there is a minimum margin of 1 above (if annotations are above) of below (if annotations are below) to allow space to render the annotations, so if margin is set to less than this then it will be increased to 1 in the relevant direction. Also note that if the margin is very narrow it can clip the box outlines, as they are rendered centred on the actual edge of the boxes (i.e. they "spill over" a little to each side if outline linewidth is non-zero), so placing the margin exactly at the box edges will cut half the outlines.
 - `sequence_text_size`: The size of the text inside the boxes. Can be set to 0 to disable text inside boxes. Defaults to 16.
-- `index_annotation_size`: The size of the index numbers above/below the boxes. Should not be set to 0 to disable; instead disable via `index_annotation_interval = 0`. Defaults to 12.5.
-- `index_annotation_interval`: The frequency at which index numbers should be listed. Can be set to 0 to disable index annotations. Defaults to 15.
+- `index_annotation_size`: The size of the index numbers above/below the boxes. Can be set to `0` to disable index annotations. Defaults to `12.5`. 
+- `index_annotation_interval`: The frequency at which index numbers should be listed. Can be set to `0` to disable index annotations. Defaults to `15`.
 - `index_annotations_above`: Boolean specifying whether index annotations should be drawn above or below each line of sequence. Defaults to `TRUE` (above).
-- `index_annotation_vertical_position`: How far annotation numbers should be rendered above (if `index_annotations_above = TRUE`) or below (if `index_annotations_above = FALSE`) each base. Defaults to 1/3, not recommended to change generally. If spacing is much larger than 1, setting this to a slightly higher value might be appropriate.
-- `outline_linewidth`: The thickness of the box outlines. Can be set to 0 to disable box outlines. Defaults to 3.
+- `index_annotation_vertical_position`: How far annotation numbers should be rendered above (if `index_annotations_above = TRUE`) or below (if `index_annotations_above = FALSE`) each base. Defaults to `1/3`, not recommended to change generally. If spacing is much larger than `1`, setting this to a slightly higher value might be appropriate.
+- `outline_linewidth`: The thickness of the box outlines. Can be set to `0` to disable box outlines. Defaults to `3`.
 - `outline_join`: Changes how the corners of the box outlines are handled. Must be one of `"mitre"`, `"bevel"`, or `"round"`. Defaults to `"mitre"`. It is unlikely that you would ever need to change this.
 
 A sensible example of how these might be changed is as follows:
@@ -1173,10 +1189,165 @@ print(extracted_and_sorted_qualities, quote = F)
 This extracted the `quality` column, with families separated by 2 blank strings, and sorted alphabetically by quality string within each family.
 
 
+## Index annotation customisation
+As of `ggDNAvis` v1.0.0, `visualise_many_sequences()` (and `visualise_methylation()`) support index annotation. This is implemented differently to `visualise_single_sequence()` because each line represents a different sequence/read, so it would not make sense to maintain a single base count. Instead, base indices are counted along each line and reset for each new line. To reduce redundancy, it is user-configurable which lines are annotated. 
+
+The full set of arguments controlling index annotations are:
+
+- `index_annotation_lines`: This is a ***key argument to change***. Controls which lines should have their indices annotated. Defaults to `1` i.e. only the first line will be annotated. Can be set to `1:length(sequences_vector)` to annotate all lines, or to a custom integer vector to annotate specific lines. With the default argument values of `extract_and_sort_sequences()`, `c(1, 23, 37)` annotates the first sequence from each family, which I personally find a useful setting. It may take some trial and error to find the ideal setting of this for each ordering/dataset. Can be set to `NA` or `numeric(0)` to disable index annotations.
+- `index_annotation_full_line`: Whether the annotations should always continue to the end of the longest sequence (`TRUE`, default) or whether they should end once the sequence along each annotated line ends (`FALSE`).
+- `index_annotation_colour`:  The colour used for the index numbers above/below the boxes. Defaults to dark red.
+- `index_annotation_size`: The size of the index numbers above/below the boxes. Can be set to `0` to disable index annotations. Defaults to `12.5`.
+- `index_annotation_interval`: The frequency at which index numbers should be listed. Defaults to `15`. Note that unlike `visualise_single_sequence()`, the count resets each line in `visualise_many_sequences()` and `visualise_methylation()` because each line is assumed to be a different sequence.
+- `index_annotations_above`: Boolean specifying whether index annotations should be drawn above or below each line of sequence. Defaults to `TRUE` (above).
+- `index_annotation_vertical_position`: How far annotation numbers should be rendered above (if `index_annotations_above = TRUE`) or below (if `index_annotations_above = FALSE`) each base. Defaults to `1/3`, not recommended to change generally.
+
+We will work through these arguments step by step to fully explain how they work.
+
+By default, annotations are drawn above the first line:
+
+```{r}
+## Extract sequences to a character vector, using all default settings
+sequences_for_visualisation <- extract_and_sort_sequences(example_many_sequences)
+
+## Use the character vector to make the image
+## index_annotation_lines = c(1) is the default value
+visualise_many_sequences(sequences_for_visualisation,
+                         filename = paste0(output_location, "many_sequences_08.png"),
+                         return = FALSE,
+                         sequence_colours = sequence_colour_palettes$bright_pale2,
+                         index_annotation_lines = c(1))
+
+## View image
+knitr::include_graphics(paste0(github_location, "many_sequences_08.png"))
+```
+
+However, any numerical vector can be used as `index_annotation_lines` to specify which lines should be annotated. For each selected line, an additional blank/spacer line will be inserted above (if `index_annotations_above = TRUE`) or below (if `index_annotations_below = FALSE`), and index annotations will be drawn in the new space. 
+
+*(Note: if `index_annotation_vertical_position` is more than 1, more than 1 additional blank line will be inserted, according to `ceiling(index_annotation_vertical_position)`).*
+
+Annotating above each line would look as follows:
+```{r}
+visualise_many_sequences(sequences_for_visualisation,
+                         filename = paste0(output_location, "many_sequences_09.png"),
+                         return = FALSE,
+                         sequence_colours = sequence_colour_palettes$bright_pale2,
+                         index_annotation_lines = c(1:51))
+
+## View image
+knitr::include_graphics(paste0(github_location, "many_sequences_09.png"))
+```
+
+To annotate below the final line of each family, we can look at the sequences vector:
+```{r}
+sequences_for_visualisation
+```
+We can see that lines 14, 28, and 51 are the last sequence in each family, so we will annotate below those lines:
+
+```{r}
+visualise_many_sequences(sequences_for_visualisation,
+                         filename = paste0(output_location, "many_sequences_10.png"),
+                         return = FALSE,
+                         sequence_colours = sequence_colour_palettes$bright_pale2,
+                         index_annotation_lines = c(14, 28, 51),
+                         index_annotations_above = FALSE)
+
+## View image
+knitr::include_graphics(paste0(github_location, "many_sequences_10.png"))
+```
+
+As with `visualise_single_sequence()`, the frequency of annotations along each line is controlled by `index_annotation_interval`. Additionally, it is configurable whether annotations continue to the end of the image (`index_annotation_full_line = TRUE`, default) or stop when each annotated sequence ends (`index_annotation_full_line = FALSE`).
+
+Annotating above every line every 3 bases until each sequence ends would look as follows:
+```{r}
+visualise_many_sequences(sequences_for_visualisation,
+                         filename = paste0(output_location, "many_sequences_11.png"),
+                         return = FALSE,
+                         sequence_colours = sequence_colour_palettes$bright_pale2,
+                         index_annotation_lines = c(1:51),
+                         index_annotations_above = TRUE,
+                         index_annotation_interval = 3,
+                         index_annotation_full_line = FALSE)
+
+## View image
+knitr::include_graphics(paste0(github_location, "many_sequences_11.png"))
+```
+
+And doing the same but annotating until the end of the image regardless of when each sequence ends would look as follows:
+
+Note that the blank/spacing lines are also annotated, but with `index_annotation_full_line = FALSE` they don't display anything as there is no sequence (however, the additional spacers are still inserted to make room for theoretical annotations).
+
+```{r}
+visualise_many_sequences(sequences_for_visualisation,
+                         filename = paste0(output_location, "many_sequences_12.png"),
+                         return = FALSE,
+                         sequence_colours = sequence_colour_palettes$bright_pale2,
+                         index_annotation_lines = c(1:51),
+                         index_annotations_above = TRUE,
+                         index_annotation_interval = 3,
+                         index_annotation_full_line = TRUE)
+
+## View image
+knitr::include_graphics(paste0(github_location, "many_sequences_12.png"))
+```
+
+Customising the colour, size, and vertical position of annotations works exactly the same as `visualise_single_sequence()` via `index_annotation_colour`, `index_annotation_size`, and `index_annotation_vertical_position` respectively:
+
+(if you make the text much bigger than this then the `margin` will also need increasing to prevent the top of the text being cut off).
+
+```{r}
+visualise_many_sequences(sequences_for_visualisation,
+                         filename = paste0(output_location, "many_sequences_13.png"),
+                         return = FALSE,
+                         sequence_colours = sequence_colour_palettes$bright_pale2,
+                         index_annotation_lines = c(1, 23, 37),
+                         index_annotations_above = TRUE,
+                         index_annotation_interval = 6,
+                         index_annotation_full_line = TRUE,
+                         index_annotation_colour = "green",
+                         index_annotation_size = 30,
+                         index_annotation_vertical_position = 1.5)
+
+## View image
+knitr::include_graphics(paste0(github_location, "many_sequences_13.png"))
+```
+
+Finally, index annotations can of course also be turned completely off if desired. The 'canonical' way of doing this is by setting `index_annotation_lines = NA` or `index_annotation_lines = numeric(0)`, but `index_annotation_size = 0` and `index_annotation_interval = 0` also work perfectly well:
+
+```{r}
+visualise_many_sequences(sequences_for_visualisation,
+                         filename = paste0(output_location, "many_sequences_14.png"),
+                         return = FALSE,
+                         sequence_colours = sequence_colour_palettes$bright_pale2,
+                         index_annotation_lines = NA)
+
+## View image
+knitr::include_graphics(paste0(github_location, "many_sequences_14.png"))
+```
+```{r}
+visualise_many_sequences(sequences_for_visualisation,
+                         filename = paste0(output_location, "many_sequences_15.png"),
+                         return = FALSE,
+                         sequence_colours = sequence_colour_palettes$bright_pale2,
+                         index_annotation_interval = 0)
+
+## View image
+knitr::include_graphics(paste0(github_location, "many_sequences_15.png"))
+```
+```{r}
+visualise_many_sequences(sequences_for_visualisation,
+                         filename = paste0(output_location, "many_sequences_16.png"),
+                         return = FALSE,
+                         sequence_colours = sequence_colour_palettes$bright_pale2,
+                         index_annotation_size = 0)
+
+## View image
+knitr::include_graphics(paste0(github_location, "many_sequences_16.png"))
+```
 
 
 ## Colour and layout customisation
-As with `visualise_single_sequence()`, colours in `visualise_many_sequences()` are highly customisable and can use the various palettes from `sequence_colour_palettes`. Additionally, margin, resolution, and text size are customisable (including turning text off by setting size to 0).
+As with `visualise_single_sequence()`, colours in `visualise_many_sequences()` are highly customisable and can use the various palettes from `sequence_colour_palettes`. Additionally, margin, resolution, and text size are customisable (including turning text off by setting size to `0`).
 
 Colour-related arguments:
 
@@ -1188,71 +1359,43 @@ Colour-related arguments:
 
 Layout-related arguments:
 
-- `index_annotation_lines`: This is a ***key argument to change***. Controls which lines should have their indices annotated. Defaults to 1 i.e. only the first line will be annotated. Can be set to `1:length(sequences_vector)` to annotate all lines, or to a custom integer vector to annotate specific lines. With the default argument values of `extract_and_sort_sequences()`, `c(1, 23, 37)` annotates the first sequence from each family, which I personally find a useful setting. It may take some trial and error to find the ideal setting of this for each ordering/dataset.
-- `index_annotation_full_line`: Whether the annotations should always continue to the end of the longest sequence (`TRUE`, default) or whether they should end once the sequence along each annotated line ends.
-- `index_annotation_size`: The size of the index numbers above/below the boxes. Should not be set to 0 to disable; instead disable via `index_annotation_interval = 0`. Defaults to 12.5.
-- `index_annotation_interval`: The frequency at which index numbers should be listed. Can be set to 0 to disable index annotations. Defaults to 15. Note that unlike `visualise_single_sequence()`, the count resets each line in `visualise_many_sequences()` and `visualise_methylation()` because each line is assumed to be a different sequence. Setting to `NA` disables index annotations.
-- `index_annotations_above`: Boolean specifying whether index annotations should be drawn above or below each line of sequence. Defaults to `TRUE` (above).
-- `index_annotation_vertical_position`: How far annotation numbers should be rendered above (if `index_annotations_above = TRUE`) or below (if `index_annotations_above = FALSE`) each base. Defaults to 1/3, not recommended to change generally.
-- `margin`: The margin around the image in terms of the size of base boxes (e.g. the default value of 0.5 adds a margin half the size of the base boxes, which is 50 px with the default `pixels_per_base = 100`).
-- `sequence_text_size`: The size of the text inside the boxes. Can be set to 0 to disable text inside boxes. Defaults to 16.
-- `outline_linewidth`: The thickness of the box outlines. Can be set to 0 to disable box outlines. Defaults to 3.
+- `margin`: The margin around the image in terms of the size of base boxes (e.g. the default value of `0.5` adds a margin half the size of the base boxes, which is 50 px with the default `pixels_per_base = 100`).
+- `sequence_text_size`: The size of the text inside the boxes. Can be set to `0` to disable text inside boxes. Defaults to `16`.
+- `index_text_size`: The 
+- `outline_linewidth`: The thickness of the box outlines. Can be set to `0` to disable box outlines. Defaults to `3`.
 - `outline_join`: Changes how the corners of the box outlines are handled. Must be one of `"mitre"`, `"bevel"`, or `"round"`. Defaults to `"mitre"`. It is unlikely that you would ever need to change this.
-- `pixels_per_base`: Resolution, as determined by number of pixels in the side length of one DNA base square. Everything else is scaled proportionally. Defaults to 100 (sensible for text, but can be set lower e.g. 10 or 20 if text is turned off).
+- `pixels_per_base`: Resolution, as determined by number of pixels in the side length of one DNA base square. Everything else is scaled proportionally. Defaults to `100` (sensible for text, but can be set lower e.g. `10` or `20` if text is turned off).
 - `render_device`: The device `ggsave` should use to render the plot. Defaults to `ragg::agg_png`, not recommended to change. Can be set to `NULL` to infer device based on `filename` extension.
 
-For example, a layout with increased margins, enlarged text, annotations every 3 bases ending once each sequence ends, and crazy colours might be:
-```{r}
-## Extract sequences to a character vector
-sequences_for_visualisation <- extract_and_sort_sequences(example_many_sequences)
+All colour-type arguments should accept `colour`, `color`, or `col` for the argument name.
 
-## Use the character vector to make the image
-visualise_many_sequences(sequences_for_visualisation,
-                         filename = paste0(output_location, "many_sequences_08.png"),
-                         return = FALSE,
-                         sequence_colours = c("orange", "#00FF00", "magenta", "black"),
-                         sequence_text_colour = "cyan",
-                         index_annotation_lines = c(1:51),
-                         index_annotation_interval = 3,
-                         index_annotation_size = 15,
-                         index_annotation_vertical_position = 1/2,
-                         index_annotation_full_line = FALSE,
-                         index_annotation_colour = "purple",
-                         background_colour = "yellow",
-                         outline_colour = "red",
-                         outline_join = "round",
-                         outline_linewidth = 15,
-                         sequence_text_size = 40,
-                         margin = 5)
-
-## View image
-knitr::include_graphics(paste0(github_location, "many_sequences_08.png"))
-```
-
-A layout with annotations below the last sequence in each family to the end of the image might be (also illustrating the use of American spellings):
-
+For example, a layout with increased margins, enlarged text, and crazy colours might be:
 ```{r}
 ## Extract sequences to a character vector
 sequences_for_visualization <- extract_and_sort_sequences(example_many_sequences)
 
 ## Use the character vector to make the image
 visualize_many_sequences(sequences_for_visualization,
-                         filename = paste0(output_location, "many_sequences_09.png"),
+                         filename = paste0(output_location, "many_sequences_17.png"),
                          return = FALSE,
-                         sequence_colors = sequence_color_palettes$bright_deep,
-                         sequence_text_col = "white",
-                         index_annotation_lines = c(14, 28, 51),
-                         index_annotations_above = FALSE,
-                         index_annotation_interval = 6,
+                         sequence_colors = c("orange", "#00FF00", "magenta", "black"),
+                         sequence_text_col = "cyan",
+                         index_annotation_colour = "purple",
+                         background_color = "yellow",
+                         outline_col = "red",
+                         outline_join = "round",
+                         outline_linewidth = 15,
+                         sequence_text_size = 40,
+                         index_annotation_lines = c(1, 11, 21, 31, 41, 51),
                          index_annotation_full_line = TRUE,
-                         background_col = "lightgrey",
-                         outline_color = "darkred",
+                         index_annotation_interval = 5,
+                         index_annotations_above = FALSE,
+                         index_annotation_size = 25,
                          margin = 5)
 
 ## View image
-knitr::include_graphics(paste0(github_location, "many_sequences_09.png"))
+knitr::include_graphics(paste0(github_location, "many_sequences_17.png"))
 ```
-
 
 As with `visualise_single_sequence()`, text can be turned off, in which case it is sensible to reduce the resolution:
 
@@ -1264,17 +1407,17 @@ sequences_for_visualisation <- extract_and_sort_sequences(example_many_sequences
 
 ## Use the character vector to make the image
 visualise_many_sequences(sequences_for_visualisation,
-                         filename = paste0(output_location, "many_sequences_10.png"),
+                         filename = paste0(output_location, "many_sequences_18.png"),
                          return = FALSE,
-                         sequence_colours = sequence_colour_palettes$bright_pale,
+                         sequence_colours = sequence_colour_palettes$bright_pale2,
                          sequence_text_size = 0,
-                         index_annotation_lines = NA,
-                         margin = 0.1,
-                         pixels_per_base = 20,
-                         outline_join = "round")
+                         index_annotation_size = 0,
+                         outline_linewidth = 0,
+                         margin = 0,
+                         pixels_per_base = 20)
 
 ## View image
-knitr::include_graphics(paste0(github_location, "many_sequences_10.png"))
+knitr::include_graphics(paste0(github_location, "many_sequences_18.png"))
 ```
 Note that the margin/outline warning is produced whenever the margin is ≤0.25 and the outline linewidth is >0. Getting the warning does not necessarily mean that the outlines are getting cut off (as this only happens if the half of the outline that falls outside the boxes is thicker than the margin), but if you get the warning you should check. In this case it's fine and the outlines are not getting cut off with 0.1 margin.
 
@@ -1314,7 +1457,7 @@ identical(merged_modification_data, example_many_sequences)
 github_table(head(merged_modification_data, 4))
 ```
 
-Once we have the dataframe with all forward modification columns, we can extract and sort them with `extract_methylation_from_dataframe()`. This function works extremely similarly to `extract_and_sort_sequences()` (as explained with examples previously in the [many sequences arrangement customisation](#52-sequence-arrangement-customisation) section), but instead of taking a single argument for the sequence column to extract, it takes three arguments for locations, probabilities, and sequence length colnames to extract:
+Once we have the dataframe with all forward modification columns, we can extract and sort them with `extract_methylation_from_dataframe()`. This function works extremely similarly to `extract_and_sort_sequences()` (as explained with examples previously in the [many sequences arrangement customisation](#52-sequence-arrangement-customisation) section), but instead of taking a single argument for the sequence column to extract, it takes four arguments for locations, probabilities, sequences, and sequence length colnames to extract:
 
 ```{r}
 ## Extract locations, probabilities, and lengths
@@ -1323,6 +1466,7 @@ methylation_data_for_visualisation <- extract_methylation_from_dataframe(
     example_many_sequences,
     locations_colname = "methylation_locations",
     probabilities_colname = "methylation_probabilities",
+    sequences_colname = "sequence",
     lengths_colname = "sequence_length",
     grouping_levels = c("family" = 8, "individual" = 2),
     sort_by = "sequence_length",
@@ -1331,7 +1475,7 @@ methylation_data_for_visualisation <- extract_methylation_from_dataframe(
 
 methylation_data_for_visualisation
 ```
-This returns a 3-item list, where each item in the list is a vector of either modification locations, probabilities, or sequence lengths. The modification locations are the indices (starting from 1) along each read at which modification was assessed, while the probabilities are 8-bit integers giving the probability of modification from 0 to 255. This is explained in more detail in the [introduction to `example_many_sequences`](#31-introduction-to-example_many_sequences) section.
+This returns a 4-item list, where each item in the list is a vector of either modification locations, probabilities, sequences, or sequence lengths. The modification locations are the indices (starting from 1) along each read at which modification was assessed, while the probabilities are 8-bit integers giving the probability of modification from 0 to 255. This is explained in more detail in the [introduction to `example_many_sequences`](#31-introduction-to-example_many_sequences) section.
 
 To use hydroxymethylation instead of methylation, we can simply change the colnames we read from:
 
@@ -1341,6 +1485,7 @@ hydroxymethylation_data_for_visualisation <- extract_methylation_from_dataframe(
     example_many_sequences,
     locations_colname = "hydroxymethylation_locations",
     probabilities_colname = "hydroxymethylation_probabilities",
+    sequences_colname = "sequence",
     lengths_colname = "sequence_length",
     grouping_levels = c("family" = 8, "individual" = 2),
     sort_by = "sequence_length",
@@ -1351,7 +1496,7 @@ hydroxymethylation_data_for_visualisation
 ```
 The hydroxymethylation locations are the same as the methylation locations (as they have both been assessed at all CpG sites), but the probabilities are different. This should work for any modification type in the MM and ML tags, though it has only been tested for `C+m?` CG methylation and `C+h?` CG hydroxymethylation.
 
-This list of locations, probabilities, and lengths can then be used as input for `visualise_methylation()`.
+This list of locations, probabilities, and sequences can then be used as input for `visualise_methylation()`. (Note: prior versions of `ggDNAvis` used sequence lengths instead of sequences as the third argument, but this has been changed as inputting sequences allows calculation of sequence lengths, while also enabling sequence visualisation).
 
 ```{r}
 ## Use saved methylation data for visualisation to make image
@@ -1391,7 +1536,8 @@ knitr::include_graphics(paste0(github_location, "modification_01_scalebar.png"))
 - `modification_data`: The data to be processed
 - `locations_colname`: The column locations should be extracted from.
 - `probabilities_colname`: The column probabilities should be extracted from.
-- `lengths_colname`: The column sequence lengths should be extracted from. All three of these just call `extract_and_sort_sequences()` to extract these columns, so they can technically be used to extract any three columns regardless of what they contain. However, if you are trying to extract and sort a non-DNA-information column, it would probably be more sensible to do that directly via `extract_and_sort_sequences()`.
+- `sequences_colname`: The column sequences should be extracted from.
+- `lengths_colname`: The column sequence lengths should be extracted from. All four of these just call `extract_and_sort_sequences()` to extract these columns, so they can technically be used to extract any three columns regardless of what they contain. However, if you are trying to extract and sort a non-DNA-information column, it would probably be more sensible to do that directly via `extract_and_sort_sequences()`.
 - `grouping_levels`: How the data should be grouped. This is a named numerical vector stating which variables/columns should be used to group the data, and how many lines should be left between groups at each level. For example, the default `c("family" = 8, "individual" = 2)` means the top-level grouping is done by categories in the `"family"` column and there are 8 blank lines between each family, and the second-level gropuing is done by the `"individual"` column and there are 2 blank lines between individuals within the same family. This is implemented recursively, so any number of grouping variables can be used (or this can be set to `NA` to turn off grouping entirely).
 - `sort_by`: The name of the column used to sort sequences within the lowest-level groups. This is generally the sequence length (but doesn't have to be).
 - `desc_sort`: Whether the sequences should be sorted by the `sort_by` variable descending (`desc_sort = TRUE`) or (`desc_sort = FALSE`).
@@ -1404,6 +1550,7 @@ methylation_data_for_visualisation <- extract_methylation_from_dataframe(
     example_many_sequences,
     locations_colname = "methylation_locations",
     probabilities_colname = "methylation_probabilities",
+    sequences_colname = "sequence",
     lengths_colname = "sequence_length",
     grouping_levels = c("individual" = 3),
     sort_by = "sequence_length",
@@ -1423,11 +1570,29 @@ knitr::include_graphics(paste0(github_location, "modification_02.png"))
 
 Here there is no grouping by family, 3 blank lines between each participant, and sequences are sorted in ascending length order within each participant.
 
+## Index annotation customisation
+
+Index annotations for `visualise_methylation()` work identically to `visualise_many_sequences()`, as explained in [index annotation customisation for `visualise_many_sequences()`](#53-index-annotation-customisation).
+
+Briefly:
+
+- `index_annotation_lines` controls which lines receive annotations
+- `index_annotation_interval` controls how frequently along each line index annotations are drawn
+- `index_annotation_full_line` controls whether annotations go to the end of the image or the end of each sequence
+- `index_annotations_above` controls whether annotations (and the blank lines they are drawn in) go above or below each annotated line
+- `index_annoation_vertical_position` controls how far above each annotated line numbers are drawn
+- `index_annotation_colour` controls the colour of the numbers
+- `index_annotation_size` controls the size of the numbers
+
+
+## Sequence text customisation
+
+
 ## Colour and layout customisation
 
 Colours in `visualise_methylation()` are controlled by setting the low and high end points of the modification colour mapping scale, as well as the colour to use for non-modification-assessed bases and the background. As before, margin and resolution are customisable. There is not currently support for having text rendered as well to avoid visual clutter, so the resolution defaults to a much lower 20 pixels per base.
 
-One important feature to note is that the box outlines can be controlled separately for modification-assessed (e.g. C of CpG) and non-modification assessed bases. The same global `outline_colour`, `outline_linewidth`, and `outline_join` parameters are available as for the single sequence and multiple sequences functions. However, there are also `modified_bases_outline_<parameter>` and `other_bases_outline_<parameter>` arguments that can be used to override the global setting, or set to `NA` to inherit the global setting.
+One important feature to note is that the box outlines can be controlled separately for modification-assessed (e.g. C of CpG) and non-modification assessed bases. The same global `outline_colour`, `outline_linewidth`, and `outline_join` parameters are available as for `visualise_single_sequence()` and `visualise_many_sequences()`. However, there are also `modified_bases_outline_<parameter>` and `other_bases_outline_<parameter>` arguments that can be used to override the global setting, or set to `NA` to inherit the global setting.
 
 One use of this might be to draw outlines only for modification-assessed bases (using the default black/3/mitre settings). This could be accomplished by setting `other_bases_outline_linewidth = 0` to disable outlines for non-modification-assessed bases, while allowing modification-assessed bases to inherit the global default outlines.
 
