@@ -415,6 +415,7 @@ convert_MM_vector_to_locations <- function(sequence, skips, target_base = "C") {
 #'
 #' @param dataframe Dataframe containing sequence information to write back to FASTQ. Must have columns for unique read ID and DNA sequence. Should also have a column for quality, unless wanting to fill in qualities with `"B"`.
 #' @inheritParams write_modified_fastq
+#' @inheritParams visualise_methylation
 #'
 #' @return `character vector`. The resulting FASTQ file as a character vector of its constituent lines (or `invisible(NULL)` if `return` is `FALSE`). This is probably mostly useful for debugging, as setting `filename` within this function directly writes to FASTQ via [writeLines()]. Therefore, defaults to returning `invisible(NULL)`.
 #'
@@ -441,7 +442,15 @@ convert_MM_vector_to_locations <- function(sequence, skips, target_base = "C") {
 #' )
 #'
 #' @export
-write_fastq <- function(dataframe, filename = NA, read_id_colname = "read", sequence_colname = "sequence", quality_colname = "quality", return = FALSE) {
+write_fastq <- function(
+    dataframe,
+    filename = NA,
+    read_id_colname = "read",
+    sequence_colname = "sequence",
+    quality_colname = "quality",
+    return = FALSE,
+    ...
+) {
     ## Process aliases
     ## ---------------------------------------------------------------------
     dots <- list(...)
@@ -558,6 +567,8 @@ write_fastq <- function(dataframe, filename = NA, read_id_colname = "read", sequ
 #' @param include_blank_tags `logical`. Boolean specifying what to do if a particular read has no assessed locations for a given modification type from `modification_prefixes`.\cr\cr If `TRUE` (default), blank tags will be written e.g. `"C+h?;"` (whereas a normal, non-blank tag looks like `"C+h?,0,0,0,0;"`). If `FALSE`, tags with no assessed locations in that read will not be written at all.
 #' @param return `logical`. Boolean specifying whether this function should return the FASTQ (as a character vector of each line in the FASTQ), otherwise it will return `invisible(NULL)`. Defaults to `FALSE`.
 #'
+#' @inheritParams visualise_methylation
+#'
 #' @return `character vector`. The resulting modified FASTQ file as a character vector of its constituent lines (or `invisible(NULL)` if `return` is `FALSE`). This is probably mostly useful for debugging, as setting `filename` within this function directly writes to FASTQ via [writeLines()]. Therefore, defaults to returning `invisible(NULL)`.
 #'
 #' @examples
@@ -591,7 +602,19 @@ write_fastq <- function(dataframe, filename = NA, read_id_colname = "read", sequ
 #' )
 #'
 #' @export
-write_modified_fastq <- function(dataframe, filename = NA, read_id_colname = "read", sequence_colname = "sequence", quality_colname = "quality", locations_colnames = c("hydroxymethylation_locations", "methylation_locations"), probabilities_colnames = c("hydroxymethylation_probabilities", "methylation_probabilities"), modification_prefixes = c("C+h?", "C+m?"), include_blank_tags = TRUE, return = FALSE) {
+write_modified_fastq <- function(
+    dataframe,
+    filename = NA,
+    read_id_colname = "read",
+    sequence_colname = "sequence",
+    quality_colname = "quality",
+    locations_colnames = c("hydroxymethylation_locations", "methylation_locations"),
+    probabilities_colnames = c("hydroxymethylation_probabilities", "methylation_probabilities"),
+    modification_prefixes = c("C+h?", "C+m?"),
+    include_blank_tags = TRUE,
+    return = FALSE,
+    ...
+) {
     ## Process aliases
     ## ---------------------------------------------------------------------
     dots <- list(...)

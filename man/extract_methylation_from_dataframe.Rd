@@ -12,7 +12,8 @@ extract_methylation_from_dataframe(
   lengths_colname = "sequence_length",
   grouping_levels = c(family = 8, individual = 2),
   sort_by = "sequence_length",
-  desc_sort = TRUE
+  desc_sort = TRUE,
+  ...
 )
 }
 \arguments{
@@ -31,6 +32,8 @@ extract_methylation_from_dataframe(
 \item{sort_by}{\code{character}. The name of the column within the dataframe that should be used to sort/order the rows within each lowest-level group. Set to \code{NA} to turn off sorting within groups.\cr\cr Recommended to be the length of the sequence information, as is the case for the default \code{"sequence_length"} which was generated via \code{example_many_sequences$sequence_length <- nchar(example_many_sequences$sequence)}.}
 
 \item{desc_sort}{\code{logical}. Boolean specifying whether rows within groups should be sorted by the \code{sort_by} variable descending (\code{TRUE}, default) or ascending (\code{FALSE}).}
+
+\item{...}{Used to recognise aliases e.g. American spellings or common misspellings - see \link{aliases}. If any American spellings do not work, please make a bug report at \url{https://github.com/ejade42/ggDNAvis/issues}.}
 }
 \value{
 \code{list}, containing \verb{$locations} (\verb{character vector}), \verb{$probabilities} (\verb{character vector}), \verb{$sequences} (\verb{character vector}), and \verb{$lengths} (\verb{integer vector}).

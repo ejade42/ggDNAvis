@@ -760,6 +760,7 @@ visualise_methylation_colour_scale <- function(
 #' @param lengths_colname `character`. The name of the column within the input dataframe that contains the length of each sequence. Defaults to `"sequence_length"`.\cr\cr Values within this column must be non-negative integers.
 #'
 #' @inheritParams extract_and_sort_sequences
+#' @inheritParams visualise_methylation
 #'
 #' @return `list`, containing `$locations` (`character vector`), `$probabilities` (`character vector`), `$sequences` (`character vector`), and `$lengths` (`integer vector`).
 #'
@@ -797,7 +798,8 @@ extract_methylation_from_dataframe <- function(
     lengths_colname = "sequence_length",
     grouping_levels = c("family" = 8, "individual" = 2),
     sort_by = "sequence_length",
-    desc_sort = TRUE
+    desc_sort = TRUE,
+    ...
 ) {
     ## Process aliases
     ## ---------------------------------------------------------------------
