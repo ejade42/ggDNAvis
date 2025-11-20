@@ -2,8 +2,9 @@
 
 /* 1. Reset the main sidebar container so it moves naturally with the page */
 .aside {
-  position: static !important; /* Overrides previous sticky settings */
-  display: block; /* Ensures standard block layout */
+  /* This ensures the sidebar "track" stretches the full height of the content */
+  display: flex;
+  flex-direction: column;
 }
 
 /* 2. Target the TOC specifically and make IT sticky */
