@@ -1,27 +1,34 @@
 /* pkgdown/extra.css */
 
-/* 1. Reset the main sidebar container so it moves naturally with the page */
-.aside {
-  /* This ensures the sidebar "track" stretches the full height of the content */
-  display: flex;
-  flex-direction: column;
+/* 1. Force the sidebar column to stretch to the full height of the document */
+/* This targets the standard bootstrap column that pkgdown uses for the sidebar */
+.row > aside,
+.row > div.col-md-3 {
+    display: flex;
+    flex-direction: column;
+    /* This is the magic line: */
+    min-height: 100%;
 }
 
 /* 2. Target the TOC specifically and make IT sticky */
 /* pkgdown usually renders the sidebar TOC as a <nav id="toc"> */
 .aside nav#table-of-contents {
-  position: -webkit-sticky;
-  position: sticky;
+  position: -webkit-sticky !important;
+    position: sticky !important;
 
-  /* Distance from top of screen when it locks */
-  top: 80px;
+    /* Adjust this to sit nicely under your top navbar */
+    top: 80px;
 
-  /* Add some spacing so it looks distinct from the authors list above it */
-  margin-top: 20px;
-  padding-top: 10px;
-  border-top: 1px solid #eee; /* Optional: adds a separator line */
+    /* Ensure it has its own scrollbar if it's too long for the screen */
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
 
-  /* Handle long TOCs */
-  max-height: calc(100vh - 100px);
-  overflow-y: auto;
+    /* OPTIONAL: Add a background so text doesn't bleed through */
+    background-color: white;
+    z-index: 1000;
+
+    /* OPTIONAL: Add some spacing from the items above it (like version history) */
+    margin-top: 20px;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
 }
