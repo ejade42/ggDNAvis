@@ -19,7 +19,6 @@ home:
       - citation
       - authors
       - dev
-      - toc
 
 navbar:
   structure:
