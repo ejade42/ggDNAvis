@@ -7,6 +7,9 @@ template:
 
 site:
   build_all_versions: false
+  
+toc:
+  depth: 3
 
 home:
   sidebar:
