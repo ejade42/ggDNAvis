@@ -6,29 +6,26 @@
 .row > div.col-md-3 {
     display: flex;
     flex-direction: column;
-    /* This is the magic line: */
-    min-height: 100%;
 }
 
 /* 2. Target the TOC specifically and make IT sticky */
 /* pkgdown usually renders the sidebar TOC as a <nav id="toc"> */
 .aside nav#table-of-contents {
-  position: -webkit-sticky !important;
+    /* Override the static position seen in your screenshot */
+    position: -webkit-sticky !important;
     position: sticky !important;
 
-    /* Adjust this to sit nicely under your top navbar */
+    /* Lock it 80px from the top (clearing your navbar) */
     top: 80px;
 
-    /* Ensure it has its own scrollbar if it's too long for the screen */
+    /* Push it to the bottom of the sidebar stack (below authors/badges) */
+    margin-top: auto;
+
+    /* Visual padding to separate it from the authors list */
+    padding-top: 20px;
+
+    /* Add a scrollbar if the TOC itself is too long */
     max-height: calc(100vh - 100px);
     overflow-y: auto;
-
-    /* OPTIONAL: Add a background so text doesn't bleed through */
-    background-color: white;
     z-index: 1000;
-
-    /* OPTIONAL: Add some spacing from the items above it (like version history) */
-    margin-top: 20px;
-    padding-top: 10px;
-    border-top: 1px solid #eee;
 }
