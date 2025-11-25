@@ -81,6 +81,7 @@ visualise_many_sequences <- function(
     outline_join = "mitre",
     return = TRUE,
     filename = NA,
+    force_raster = FALSE,
     render_device = ragg::agg_png,
     pixels_per_base = 100,
     ...
@@ -108,19 +109,19 @@ visualise_many_sequences <- function(
 
     ## Validate arguments
     ## ---------------------------------------------------------------------
-    not_null <- list(sequences_vector = sequences_vector, sequence_colours = sequence_colours, background_colour = background_colour, margin = margin, sequence_text_colour = sequence_text_colour, sequence_text_size = sequence_text_size, index_annotation_colour = index_annotation_colour, index_annotation_size = index_annotation_size, index_annotation_interval = index_annotation_interval, index_annotations_above = index_annotations_above, index_annotation_vertical_position = index_annotation_vertical_position, index_annotation_full_line = index_annotation_full_line, outline_colour = outline_colour, outline_linewidth = outline_linewidth, outline_join = outline_join, return = return, filename = filename, pixels_per_base = pixels_per_base)
+    not_null <- list(sequences_vector = sequences_vector, sequence_colours = sequence_colours, background_colour = background_colour, margin = margin, sequence_text_colour = sequence_text_colour, sequence_text_size = sequence_text_size, index_annotation_colour = index_annotation_colour, index_annotation_size = index_annotation_size, index_annotation_interval = index_annotation_interval, index_annotations_above = index_annotations_above, index_annotation_vertical_position = index_annotation_vertical_position, index_annotation_full_line = index_annotation_full_line, outline_colour = outline_colour, outline_linewidth = outline_linewidth, outline_join = outline_join, return = return, force_raster = force_raster, filename = filename, pixels_per_base = pixels_per_base)
     for (argument in names(not_null)) {
         if (any(is.null(not_null[[argument]]))) {bad_arg(argument, not_null, "must not be NULL.")}
     }
     not_null <- NULL
 
-    length_1 <- list(background_colour = background_colour, margin = margin, sequence_text_colour = sequence_text_colour, sequence_text_size = sequence_text_size, index_annotation_colour = index_annotation_colour, index_annotation_size = index_annotation_size, index_annotation_interval = index_annotation_interval, index_annotations_above = index_annotations_above, index_annotation_vertical_position = index_annotation_vertical_position, index_annotation_full_line = index_annotation_full_line, outline_colour = outline_colour, outline_linewidth = outline_linewidth, outline_join = outline_join, return = return, filename = filename, pixels_per_base = pixels_per_base)
+    length_1 <- list(background_colour = background_colour, margin = margin, sequence_text_colour = sequence_text_colour, sequence_text_size = sequence_text_size, index_annotation_colour = index_annotation_colour, index_annotation_size = index_annotation_size, index_annotation_interval = index_annotation_interval, index_annotations_above = index_annotations_above, index_annotation_vertical_position = index_annotation_vertical_position, index_annotation_full_line = index_annotation_full_line, outline_colour = outline_colour, outline_linewidth = outline_linewidth, outline_join = outline_join, return = return, filename = filename, force_raster = force_raster, pixels_per_base = pixels_per_base)
     for (argument in names(length_1)) {
         if (length(length_1[[argument]]) != 1) {bad_arg(argument, length_1, "must have length 1.")}
     }
     length_1 <- NULL
 
-    not_na <- list(sequences_vector = sequences_vector, sequence_colours = sequence_colours, background_colour = background_colour, margin = margin, sequence_text_colour = sequence_text_colour, sequence_text_size = sequence_text_size, index_annotation_colour = index_annotation_colour, index_annotation_size = index_annotation_size, index_annotation_interval = index_annotation_interval, index_annotations_above = index_annotations_above, index_annotation_vertical_position = index_annotation_vertical_position, index_annotation_full_line = index_annotation_full_line, outline_colour = outline_colour, outline_linewidth = outline_linewidth, outline_join = outline_join, return = return, pixels_per_base = pixels_per_base)
+    not_na <- list(sequences_vector = sequences_vector, sequence_colours = sequence_colours, background_colour = background_colour, margin = margin, sequence_text_colour = sequence_text_colour, sequence_text_size = sequence_text_size, index_annotation_colour = index_annotation_colour, index_annotation_size = index_annotation_size, index_annotation_interval = index_annotation_interval, index_annotations_above = index_annotations_above, index_annotation_vertical_position = index_annotation_vertical_position, index_annotation_full_line = index_annotation_full_line, outline_colour = outline_colour, outline_linewidth = outline_linewidth, outline_join = outline_join, return = return, force_raster = force_raster, pixels_per_base = pixels_per_base)
     for (argument in names(not_na)) {
         if (any(is.na(not_na[[argument]]))) {bad_arg(argument, not_na, "must not be NA.")}
     }
@@ -159,7 +160,7 @@ visualise_many_sequences <- function(
     }
     pos <- NULL
 
-    bools <- list(return = return, index_annotations_above = index_annotations_above, index_annotation_full_line = index_annotation_full_line)
+    bools <- list(return = return, index_annotations_above = index_annotations_above, index_annotation_full_line = index_annotation_full_line, force_raster = force_raster)
     for (argument in names(bools)) {
         if (!is.logical(bools[[argument]])) {bad_arg(argument, bools, "must be logical/boolean.")}
     }
@@ -220,40 +221,65 @@ visualise_many_sequences <- function(
     ## Name the sequence colours vector
     names(sequence_colours) <- as.character(1:4)
 
-    ## Calculate tile dimensions
-    tile_width  <- 1/max(nchar(new_sequences_vector))
-    tile_height <- 1/length(new_sequences_vector)
 
-    ## Generate actual plot
-    result <- ggplot(image_data, aes(x = .data$x, y = .data$y)) +
-        ## Background
-        geom_tile(data = filter(image_data, layer == 0), width = tile_width, height = tile_height, fill = background_colour) +
+    ## Determine whether to use geom_raster as a faster but more limited alternative to geom_tile
+    raster <- FALSE
+    if (sequence_text_size == 0 && length(index_annotation_lines) == 0 && outline_linewidth == 0) {
+        cli_alert_info("Automatically using geom_raster (much faster than geom_tile) as no sequence text, index annotations, or outlines are present.")
+        raster <- TRUE
+    } else if (force_raster) {
+        warn("Forcing geom_raster via force_raster = TRUE will remove all sequence text, index annotations (though any inserted blank lines/spacers will remain), and box outlines.", class = "raster_is_forced")
+        raster <- TRUE
+    }
 
-        ## Base boxes
-        geom_tile(data = filter(image_data, layer != 0), width = tile_width, height = tile_height, aes(fill = as.character(.data$layer)),
-                  col = outline_colour, linewidth = outline_linewidth, linejoin = tolower(outline_join)) +
-        scale_fill_manual(values = sequence_colours) +
+    ## Make actual plot
+    ## Fast rasterisation if possible
+    if (raster) {
+        mask_data <- image_data
+        mask_data$layer <- sapply(mask_data$layer, min, 0)
 
-        ## General plot setup
-        guides(x = "none", y = "none", fill = "none") +
+        result <- ggplot(image_data, aes(x = .data$x, y = .data$y, fill = as.character(.data$layer))) +
+            geom_raster() +
+            scale_fill_manual(values = c("0" = background_colour, sequence_colours))
+
+
+    ## Otherwise slow geom_tile
+    } else {
+
+        ## Calculate tile dimensions
+        tile_width  <- 1/max(nchar(new_sequences_vector))
+        tile_height <- 1/length(new_sequences_vector)
+
+        ## Generate actual plot
+        result <- ggplot(image_data, aes(x = .data$x, y = .data$y)) +
+            ## Background
+            geom_tile(data = filter(image_data, layer == 0), width = tile_width, height = tile_height, fill = background_colour) +
+
+            ## Base boxes
+            geom_tile(data = filter(image_data, layer != 0), width = tile_width, height = tile_height, aes(fill = as.character(.data$layer)),
+                      col = outline_colour, linewidth = outline_linewidth, linejoin = tolower(outline_join)) +
+            scale_fill_manual(values = sequence_colours)
+
+        ## Add sequence text if desired
+        if (sequence_text_size != 0) {
+            result <- result +
+                geom_text(data = sequence_text_data, aes(x = .data$x_position, y = .data$y_position, label = .data$annotation), col = sequence_text_colour, size = sequence_text_size, fontface = "bold", inherit.aes = F)
+        }
+
+        ## Add index annotations if desired
+        if (length(index_annotation_lines) > 0) {
+            result <- result +
+                geom_text(data = index_annotation_data, aes(x = .data$x_position, y = .data$y_position, label = .data$annotation), col = index_annotation_colour, size = index_annotation_size, fontface = "bold", inherit.aes = F)
+        }
+    }
+
+    ## Do general plot setup
+    result <- result +
         coord_cartesian(expand = FALSE, clip = "off") +
+        guides(x = "none", y = "none", fill = "none", col = "none", size = "none") +
         theme_void() +
         theme(plot.background = element_rect(fill = background_colour, colour = NA),
               axis.title = element_blank())
-
-    ## Add sequence text if desired
-    if (sequence_text_size != 0) {
-        result <- result +
-            geom_text(data = sequence_text_data, aes(x = .data$x_position, y = .data$y_position, label = .data$annotation), col = sequence_text_colour, size = sequence_text_size, fontface = "bold", inherit.aes = F) +
-            guides(col = "none", size = "none")
-    }
-
-    ## Add index annotations if desired
-    if (length(index_annotation_lines) > 0) {
-        result <- result +
-            geom_text(data = index_annotation_data, aes(x = .data$x_position, y = .data$y_position, label = .data$annotation), col = index_annotation_colour, size = index_annotation_size, fontface = "bold", inherit.aes = F) +
-            guides(col = "none", size = "none")
-    }
 
     ## Correctly set margin, taking into consideration extra blank lines for annotations
     extra_spaces <- ceiling(index_annotation_vertical_position)
