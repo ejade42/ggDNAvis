@@ -2539,7 +2539,8 @@ if:
 
 - `sequence_text_size` is `0`,
 - `index_annotation_lines` is `NA` or `numeric(0)`, or
-  `index_annotation_interval = 0`, or `index_annotation_size = 0`, and
+  `index_annotation_interval` is `0`, or `index_annotation_size` is `0`,
+  and
 - `outline_linewidth` is `0`
 
 For example:
@@ -4124,14 +4125,19 @@ knitr::include_graphics(paste0(github_location, "modification_15.png"))
 
 `visualise_methylation()` is identical to `visualise_many_sequences()`
 with respect to `geom_raster()` versus `geom_tile()`, so read
-[`visualise_many_sequences()` performance](#55-performance). The only
-difference to note is that because outlines can be controlled separately
-for assessed and non-assessed bases, outlines must be off for both
-assessed and non-assessed bases (i.e. either `outline_linewidth = 0`,
-`modified_bases_outline_linewidth = NA`, and
-`other_bases_outline_linewidth = NA` or
-`modified_bases_outline_linewidth = 0` and
-`other_bases_outline_linewidth = 0`).
+[`visualise_many_sequences()` performance](#55-performance).
+
+For `visualise_methylation()`, `geom_raster()` is automatically used if:
+
+- `sequence_text_type` is `"none"` or `sequence_text_size` is `0`,
+- `index_annotation_lines` is `NA` or `numeric(0)`, or
+  `index_annotation_interval` is `0`, or `index_annotation_size` is `0`,
+  and
+- either:
+  - `outline_linewidth` is `0`, `modified_bases_outline_linewidth` is
+    `NA`, and `other_bases_outline_linewidth` is `NA`, or
+  - `modified_bases_outline_linewidth` is `0` and
+    `other_bases_outline_linewidth` is `0`
 
 # 7 References
 
