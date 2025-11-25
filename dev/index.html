@@ -2714,7 +2714,7 @@
 <li>
 <code>sequence_text_size</code> is <code>0</code>,</li>
 <li>
-<code>index_annotation_lines</code> is <code>NA</code> or <code>numeric(0)</code>, or <code>index_annotation_interval = 0</code>, or <code>index_annotation_size = 0</code>, and</li>
+<code>index_annotation_lines</code> is <code>NA</code> or <code>numeric(0)</code>, or <code>index_annotation_interval</code> is <code>0</code>, or <code>index_annotation_size</code> is <code>0</code>, and</li>
 <li>
 <code>outline_linewidth</code> is <code>0</code>
 </li>
@@ -4029,7 +4029,23 @@
 <div class="section level2">
 <h2 id="id_69-performance">6.9 Performance<a class="anchor" aria-label="anchor" href="#id_69-performance"></a>
 </h2>
-<p><code><a href="reference/visualise_methylation.html">visualise_methylation()</a></code> is identical to <code><a href="reference/visualise_many_sequences.html">visualise_many_sequences()</a></code> with respect to <code><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_raster()</a></code> versus <code><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_tile()</a></code>, so read <a href="#id_55-performance"><code>visualise_many_sequences()</code> performance</a>. The only difference to note is that because outlines can be controlled separately for assessed and non-assessed bases, outlines must be off for both assessed and non-assessed bases (i.e. either <code>outline_linewidth = 0</code>, <code>modified_bases_outline_linewidth = NA</code>, and <code>other_bases_outline_linewidth = NA</code> or <code>modified_bases_outline_linewidth = 0</code> and <code>other_bases_outline_linewidth = 0</code>).</p>
+<p><code><a href="reference/visualise_methylation.html">visualise_methylation()</a></code> is identical to <code><a href="reference/visualise_many_sequences.html">visualise_many_sequences()</a></code> with respect to <code><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_raster()</a></code> versus <code><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_tile()</a></code>, so read <a href="#id_55-performance"><code>visualise_many_sequences()</code> performance</a>.</p>
+<p>For <code><a href="reference/visualise_methylation.html">visualise_methylation()</a></code>, <code><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_raster()</a></code> is automatically used if:</p>
+<ul>
+<li>
+<code>sequence_text_type</code> is <code>"none"</code> or <code>sequence_text_size</code> is <code>0</code>,</li>
+<li>
+<code>index_annotation_lines</code> is <code>NA</code> or <code>numeric(0)</code>, or <code>index_annotation_interval</code> is <code>0</code>, or <code>index_annotation_size</code> is <code>0</code>, and</li>
+<li>either:
+<ul>
+<li>
+<code>outline_linewidth</code> is <code>0</code>, <code>modified_bases_outline_linewidth</code> is <code>NA</code>, and <code>other_bases_outline_linewidth</code> is <code>NA</code>, or</li>
+<li>
+<code>modified_bases_outline_linewidth</code> is <code>0</code> and <code>other_bases_outline_linewidth</code> is <code>0</code>
+</li>
+</ul>
+</li>
+</ul>
 </div>
 </div>
 <div class="section level1">
