@@ -23,7 +23,8 @@ test_that("single sequence visualisation works with funky colours", {
 
 test_that("single sequence visualisation works with no text, via index_annotation_size", {
     filename <- "sone_2019_f1_1_expanded_test_03"
-    expect_message(expect_message(visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), outline_linewidth = 0, sequence_text_size = 0, index_annotation_size = 0, pixels_per_base = 30, index_annotations_above = FALSE, filename = paste0(root, filename, ".png"))))
+    expect_warning(expect_message(expect_message(visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), outline_linewidth = 0, sequence_text_size = 0, index_annotation_size = 0, pixels_per_base = 30, index_annotations_above = FALSE, filename = paste0(root, filename, ".png")))),
+                   class = "parameter_recommendation")
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -31,7 +32,8 @@ test_that("single sequence visualisation works with no text, via index_annotatio
 
 test_that("single sequence visualisation works with no text, via index_annotation_interval", {
     filename <- "sone_2019_f1_1_expanded_test_04"
-    expect_message(visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), outline_linewidth = 0, sequence_text_size = 0, index_annotation_interval = 0, pixels_per_base = 30, index_annotations_above = FALSE, filename = paste0(root, filename, ".png")))
+    expect_warning(expect_message(visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), outline_linewidth = 0, sequence_text_size = 0, index_annotation_interval = 0, pixels_per_base = 30, index_annotations_above = FALSE, filename = paste0(root, filename, ".png"))),
+                   class = "parameter_recommendation")
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)

@@ -235,6 +235,10 @@ visualise_many_sequences <- function(
     ## Make actual plot
     ## Fast rasterisation if possible
     if (raster) {
+        if (pixels_per_base > 10) {
+            warn(paste("When using geom_raster, it is recommended to use a smaller pixels_per_base e.g. 10, as there is no text/outlines that would benefit from higher resolution.\nCurrent value:", pixels_per_base), class = "parameter_recommendation")
+        }
+
         result <- ggplot(image_data, aes(x = .data$x, y = .data$y, fill = as.character(.data$layer))) +
             geom_raster() +
             scale_fill_manual(values = c("0" = background_colour, sequence_colours))

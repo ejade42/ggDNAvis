@@ -490,6 +490,10 @@ visualise_methylation <- function(
     ## Make actual plot
     ## Fast rasterisation if possible
     if (raster) {
+        if (pixels_per_base > 10) {
+            warn(paste("When using geom_raster, it is recommended to use a smaller pixels_per_base e.g. 10, as there is no text/outlines that would benefit from higher resolution.\nCurrent value:", pixels_per_base), class = "parameter_recommendation")
+        }
+
         mask_data <- image_data
         mask_data$layer <- sapply(mask_data$layer, min, 0)
 
