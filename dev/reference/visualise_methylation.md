@@ -369,7 +369,7 @@ visualise_methylation(
 - monitor_performance:
 
   `logical`. Boolean specifying whether verbose performance monitoring
-  should be messagsed to console. Defaults to `FALSE`.
+  should be messaged to console. Defaults to `FALSE`.
 
 - ...:
 

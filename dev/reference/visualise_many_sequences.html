@@ -88,6 +88,7 @@ lines. Colours and pixels per square when exported are configurable.</p>
 <span>  force_raster <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  render_device <span class="op">=</span> <span class="fu">ragg</span><span class="fu">::</span><span class="va"><a href="https://ragg.r-lib.org/reference/agg_png.html" class="external-link">agg_png</a></span>,</span>
 <span>  pixels_per_base <span class="op">=</span> <span class="fl">100</span>,</span>
+<span>  monitor_performance <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -178,6 +179,10 @@ lines. Colours and pixels per square when exported are configurable.</p>
 
 <dt id="arg-pixels-per-base">pixels_per_base<a class="anchor" aria-label="anchor" href="#arg-pixels-per-base"></a></dt>
 <dd><p><code>integer</code>. How large each box should be in pixels, if file output is turned on via setting <code>filename</code>. Corresponds to dpi of the exported image. Defaults to <code>100</code>.<br><br> Large values (e.g. 100) are required to render small text properly. Small values (e.g. 20) will work when sequence/annotation text is off, and very small values (e.g. 10) will work when sequence/annotation text and outlines are all off.</p></dd>
+
+
+<dt id="arg-monitor-performance">monitor_performance<a class="anchor" aria-label="anchor" href="#arg-monitor-performance"></a></dt>
+<dd><p><code>logical</code>. Boolean specifying whether verbose performance monitoring should be messaged to console. Defaults to <code>FALSE</code>.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>

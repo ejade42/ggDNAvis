@@ -33,6 +33,7 @@ visualise_methylation_colour_scale(
   side_scale_title = NULL,
   outline_colour = "black",
   outline_linewidth = 1,
+  monitor_performance = FALSE,
   ...
 )
 ```
@@ -117,6 +118,11 @@ visualise_methylation_colour_scale(
 
   `numeric`. The linewidth of the scalebar outline. Defaults to `1`. Set
   to `0` to disable scalebar outline.
+
+- monitor_performance:
+
+  `logical`. Boolean specifying whether verbose performance monitoring
+  should be messaged to console. Defaults to `FALSE`.
 
 - ...:
 
