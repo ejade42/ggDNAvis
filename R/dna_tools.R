@@ -66,7 +66,38 @@ resolve_alias <- function(
     }
 }
 
+debug_initialise <- function(debug, function_name) {
+    if (any(is.na(debug)) || any(is.null(debug)) || !is.logical(debug) || length(debug) != 1) {
+        bad_arg("debug", list(debug = debug), "must be a single logical/boolean value.")
+    }
+    start_time <- Sys.time()
+    if (debug) {
+        cli_alert_info("Verbose monitoring enabled")
+        cli_alert_info(paste(format(start_time, "(%Y-%m-%d %H:%M:%S)"), function_name, "start"))
+    }
+    return(start_time)
+}
 
+debug_monitor <- function(debug, start_time, previous_time, message) {
+    if (!debug) {return(invisible(NULL))}
+
+    current_time <- Sys.time()
+    time_since_start <- format_time_diff(current_time, start_time, 4)
+    time_since_prior <- format_time_diff(current_time, previous_time, 4)
+
+    cli_alert_info(paste0("(", time_since_prior, " secs elapsed; ",
+                          time_since_start, " secs total) ",
+                          message))
+    return(current_time)
+}
+
+format_time_diff <- function(new_time, old_time, characters_to_print) {
+    diff <- as.numeric(difftime(new_time, old_time, units = "secs"))
+    digits_before_decimal <- max(floor(log10(diff)) + 1, 1)
+    digits_after_decimal <- characters_to_print - digits_before_decimal
+    formatted_diff <- sprintf("%.*f", digits_after_decimal, diff)
+    return(formatted_diff)
+}
 
 #' Emit an error message for an invalid function argument (generic `ggDNAvis` helper)
 #'
@@ -138,12 +169,12 @@ bad_arg <- function(argument_name, arguments_list, message, class = "argument_va
     }
     ## ---------------------------------------------------------------------
 
-    error_message <- paste0("Argument '", argument_name, "' ", message,
-                            "\nCurrent value: ", paste(arguments_list[[argument_name]], collapse = ", "))
+    error_message <- paste0("Argument '", argument_name, "' ", message)
+    error_message <- paste0(error_message, "\nCurrent class: ", class(arguments_list[[argument_name]]))
+    error_message <- paste0(error_message, "\nCurrent value: ", paste(arguments_list[[argument_name]], collapse = ", "))
     if (!is.null(names(arguments_list[[argument_name]])) || force_names) {
         error_message <- paste0(error_message, "\nCurrent names: ", paste(names(arguments_list[[argument_name]]), collapse = ", "))
     }
-    error_message <- paste0(error_message, "\nCurrent class: ", class(arguments_list[[argument_name]]))
     abort(error_message, class = class, call = rlang::caller_env())
 }
 
