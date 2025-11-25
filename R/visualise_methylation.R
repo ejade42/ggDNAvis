@@ -1,7 +1,3 @@
-## FOR FUTURE - possibly add in overlaying sequence and/or numbers
-## onto methylation visualisation?
-
-
 #' Visualise methylation probabilities for many DNA sequences
 #'
 #' @aliases visualize_methylation
@@ -64,6 +60,7 @@
 #' @param margin `numeric`. The size of the margin relative to the size of each base square. Defaults to `0.5` (half the side length of each base square).\cr\cr Note that index annotations can require a minimum margin size at the top or bottom if present above the first/below the last row. This is handled automatically but can mean the top/bottom margin is sometimes larger than the `margin` setting.\cr\cr Very small margins (\eqn{\le}0.25) may cause thick outlines to be cut off at the edges of the plot. Recommended to either use a wider margin or a smaller `outline_linewidth`.
 #' @param return `logical`. Boolean specifying whether this function should return the ggplot object, otherwise it will return `invisible(NULL)`. Defaults to `TRUE`.
 #' @param filename `character`. Filename to which output should be saved. If set to `NA` (default), no file will be saved. Recommended to end with `".png"`, but can change if render device is changed.
+#' @param force_raster `logical`. Boolean specifying whether [ggplot2::geom_raster()] should be used even if it will remove text and outlines. Defaults to `FALSE`.\cr\cr To make the detailed plots with box outlines, sequence text, and index annotations, [ggplot2::geom_tile()] is used. However, `geom_tile` is unusuably slow for huge datasets, so there is an option to use `geom_raster` instead. `geom_raster` does not support box outlines, sequence text, or index annotations, but is much faster if only the colours are wanted.\cr\cr `geom_raster` is automatically used if it will not change the plot (i.e. if all extraneous elements are already off), but can be forced using this argument.
 #' @param render_device `function/character`. Device to use when rendering. See [ggplot2::ggsave()] documentation for options. Defaults to [`ragg::agg_png`]. Can be set to `NULL` to infer from file extension, but results may vary between systems.
 #' @param pixels_per_base `integer`. How large each box should be in pixels, if file output is turned on via setting `filename`. Corresponds to dpi of the exported image. Defaults to `100`.\cr\cr Large values (e.g. 100) are required to render small text properly. Small values (e.g. 20) will work when sequence/annotation text is off, and very small values (e.g. 10) will work when sequence/annotation text and outlines are all off.
 #' @param ... Used to recognise aliases e.g. American spellings or common misspellings - see [aliases]. If any American spellings do not work, please make a bug report at <`r packageDescription("ggDNAvis")$BugReports`>.
@@ -253,6 +250,7 @@ visualise_methylation <- function(
     margin = 0.5,
     return = TRUE,
     filename = NA,
+    force_raster = FALSE,
     render_device = ragg::agg_png,
     pixels_per_base = 100,
     ...
@@ -288,19 +286,19 @@ visualise_methylation <- function(
 
     ## Validate arguments
     ## ---------------------------------------------------------------------
-    not_null <- list(modification_locations = modification_locations, modification_probabilities = modification_probabilities, sequences = sequences, background_colour = background_colour, other_bases_colour = other_bases_colour, low_colour = low_colour, high_colour = high_colour, low_clamp = low_clamp, high_clamp = high_clamp, sequence_text_type = sequence_text_type, sequence_text_rounding = sequence_text_rounding, sequence_text_colour = sequence_text_colour, sequence_text_size = sequence_text_size, index_annotation_colour = index_annotation_colour, index_annotation_size = index_annotation_size, index_annotation_interval = index_annotation_interval, index_annotations_above = index_annotations_above, index_annotation_vertical_position = index_annotation_vertical_position, index_annotation_full_line = index_annotation_full_line, outline_linewidth = outline_linewidth, outline_colour = outline_colour, outline_join = outline_join, modified_bases_outline_linewidth = modified_bases_outline_linewidth, modified_bases_outline_colour = modified_bases_outline_colour, modified_bases_outline_join = modified_bases_outline_join, other_bases_outline_linewidth = other_bases_outline_linewidth, other_bases_outline_colour = other_bases_outline_colour, other_bases_outline_join = other_bases_outline_join, margin = margin, return = return, filename = filename, pixels_per_base = pixels_per_base)
+    not_null <- list(modification_locations = modification_locations, modification_probabilities = modification_probabilities, sequences = sequences, background_colour = background_colour, other_bases_colour = other_bases_colour, low_colour = low_colour, high_colour = high_colour, low_clamp = low_clamp, high_clamp = high_clamp, sequence_text_type = sequence_text_type, sequence_text_rounding = sequence_text_rounding, sequence_text_colour = sequence_text_colour, sequence_text_size = sequence_text_size, index_annotation_colour = index_annotation_colour, index_annotation_size = index_annotation_size, index_annotation_interval = index_annotation_interval, index_annotations_above = index_annotations_above, index_annotation_vertical_position = index_annotation_vertical_position, index_annotation_full_line = index_annotation_full_line, outline_linewidth = outline_linewidth, outline_colour = outline_colour, outline_join = outline_join, modified_bases_outline_linewidth = modified_bases_outline_linewidth, modified_bases_outline_colour = modified_bases_outline_colour, modified_bases_outline_join = modified_bases_outline_join, other_bases_outline_linewidth = other_bases_outline_linewidth, other_bases_outline_colour = other_bases_outline_colour, other_bases_outline_join = other_bases_outline_join, margin = margin, return = return, force_raster = force_raster, filename = filename, pixels_per_base = pixels_per_base)
     for (argument in names(not_null)) {
         if (any(is.null(not_null[[argument]]))) {bad_arg(argument, not_null, "must not be NULL.")}
     }
     not_null <- NULL
 
-    length_1 <- list(background_colour = background_colour, other_bases_colour = other_bases_colour, low_colour = low_colour, high_colour = high_colour, low_clamp = low_clamp, high_clamp = high_clamp,sequence_text_type = sequence_text_type, sequence_text_rounding = sequence_text_rounding, sequence_text_colour = sequence_text_colour, sequence_text_size = sequence_text_size, index_annotation_colour = index_annotation_colour, index_annotation_size = index_annotation_size, index_annotation_interval = index_annotation_interval, index_annotations_above = index_annotations_above, index_annotation_vertical_position = index_annotation_vertical_position, index_annotation_full_line = index_annotation_full_line, outline_linewidth = outline_linewidth, outline_colour = outline_colour, outline_join = outline_join, modified_bases_outline_linewidth = modified_bases_outline_linewidth, modified_bases_outline_colour = modified_bases_outline_colour, modified_bases_outline_join = modified_bases_outline_join, other_bases_outline_linewidth = other_bases_outline_linewidth, other_bases_outline_colour = other_bases_outline_colour, other_bases_outline_join = other_bases_outline_join, margin = margin, return = return, filename = filename, pixels_per_base = pixels_per_base)
+    length_1 <- list(background_colour = background_colour, other_bases_colour = other_bases_colour, low_colour = low_colour, high_colour = high_colour, low_clamp = low_clamp, high_clamp = high_clamp,sequence_text_type = sequence_text_type, sequence_text_rounding = sequence_text_rounding, sequence_text_colour = sequence_text_colour, sequence_text_size = sequence_text_size, index_annotation_colour = index_annotation_colour, index_annotation_size = index_annotation_size, index_annotation_interval = index_annotation_interval, index_annotations_above = index_annotations_above, index_annotation_vertical_position = index_annotation_vertical_position, index_annotation_full_line = index_annotation_full_line, outline_linewidth = outline_linewidth, outline_colour = outline_colour, outline_join = outline_join, modified_bases_outline_linewidth = modified_bases_outline_linewidth, modified_bases_outline_colour = modified_bases_outline_colour, modified_bases_outline_join = modified_bases_outline_join, other_bases_outline_linewidth = other_bases_outline_linewidth, other_bases_outline_colour = other_bases_outline_colour, other_bases_outline_join = other_bases_outline_join, margin = margin, return = return, force_raster = force_raster, filename = filename, pixels_per_base = pixels_per_base)
     for (argument in names(length_1)) {
         if (length(length_1[[argument]]) != 1) {bad_arg(argument, length_1, "must have length 1.")}
     }
     length_1 <- NULL
 
-    not_na <- list(modification_locations = modification_locations, modification_probabilities = modification_probabilities, sequence = sequences, background_colour = background_colour, other_bases_colour = other_bases_colour, low_colour = low_colour, high_colour = high_colour, low_clamp = low_clamp, high_clamp = high_clamp, sequence_text_type = sequence_text_type, sequence_text_rounding = sequence_text_rounding, sequence_text_colour = sequence_text_colour, sequence_text_size = sequence_text_size, index_annotation_colour = index_annotation_colour, index_annotation_size = index_annotation_size, index_annotation_interval = index_annotation_interval, index_annotations_above = index_annotations_above, index_annotation_vertical_position = index_annotation_vertical_position, index_annotation_full_line = index_annotation_full_line, margin = margin, return = return, pixels_per_base = pixels_per_base)
+    not_na <- list(modification_locations = modification_locations, modification_probabilities = modification_probabilities, sequence = sequences, background_colour = background_colour, other_bases_colour = other_bases_colour, low_colour = low_colour, high_colour = high_colour, low_clamp = low_clamp, high_clamp = high_clamp, sequence_text_type = sequence_text_type, sequence_text_rounding = sequence_text_rounding, sequence_text_colour = sequence_text_colour, sequence_text_size = sequence_text_size, index_annotation_colour = index_annotation_colour, index_annotation_size = index_annotation_size, index_annotation_interval = index_annotation_interval, index_annotations_above = index_annotations_above, index_annotation_vertical_position = index_annotation_vertical_position, index_annotation_full_line = index_annotation_full_line, margin = margin, return = return, force_raster = force_raster, pixels_per_base = pixels_per_base)
     for (argument in names(not_na)) {
         if (any(is.na(not_na[[argument]]))) {bad_arg(argument, not_na, "must not be NA.")}
     }
@@ -341,7 +339,7 @@ visualise_methylation <- function(
     }
     non_neg_num <- NULL
 
-    bool <- list(return = return, index_annotations_above = index_annotations_above, index_annotation_full_line = index_annotation_full_line)
+    bool <- list(return = return, index_annotations_above = index_annotations_above, index_annotation_full_line = index_annotation_full_line, force_raster = force_raster)
     for (argument in names(bool)) {
         if (!is.logical(bool[[argument]]) || length(bool[[argument]]) != 1) {bad_arg(argument, bool, "must be a single logical/boolean value.")}
     }
@@ -478,57 +476,88 @@ visualise_methylation <- function(
     image_data$clamped_layer <- pmin(pmax(image_data$layer, low_clamp), high_clamp)
 
 
-    ## Generate sequence text data based on the chosen setting
-    if (sequence_text_type == "sequence") {
-        sequence_text_data <- convert_sequences_to_annotations(sequences, line_length = max(nchar(sequences)), interval = 0)
-    } else if (sequence_text_type == "probability") {
-        probability_data <- convert_probabilities_to_annotations(modification_locations, modification_probabilities, sequences, sequence_text_scaling, sequence_text_rounding)
+    ## Determine whether to use geom_raster as a faster but more limited alternative to geom_tile
+    raster <- FALSE
+    if (sequence_text_type == "none" && length(index_annotation_lines) == 0 && modified_bases_outline_linewidth == 0 && other_bases_outline_linewidth == 0) {
+        cli_alert_info("Automatically using geom_raster (much faster than geom_tile) as no sequence text, index annotations, or outlines are present.")
+        raster <- TRUE
+    } else if (force_raster) {
+        warn("Forcing geom_raster via force_raster = TRUE will remove all sequence text, index annotations (though any inserted blank lines/spacers will remain), and box outlines.", class = "raster_is_forced")
+        raster <- TRUE
     }
 
 
-    ## Calculate width and height of tiles based on sequences
-    tile_width  <- 1/max(nchar(sequences))
-    tile_height <- 1/length(sequences)
+    ## Make actual plot
+    ## Fast rasterisation if possible
+    if (raster) {
+        mask_data <- image_data
+        mask_data$layer <- sapply(mask_data$layer, min, 0)
 
-    ## Make methylation visualisation plot
-    result <- ggplot(mapping = aes(x = .data$x, y = .data$y)) +
-        ## Background
-        geom_tile(data = filter(image_data, layer == -2), fill = background_colour, width = tile_width, height = tile_height) +
+        result <- ggplot(mapping = aes(x = .data$x, y = .data$y)) +
+            ## Modification-assessed bases
+            ## Non-assessed/background will be filled in as low_colour, but that's fine as we mask afterwards
+            geom_raster(data = image_data, aes(fill = .data$clamped_layer)) +
+            scale_fill_gradient(low = low_colour, high = high_colour, limits = c(low_clamp, high_clamp)) +
+            guides(fill = "none") +
 
-        ## Non-assessed bases
-        geom_tile(data = filter(image_data, layer == -1), fill = other_bases_colour, width = tile_width, height = tile_height,
-                  col = other_bases_outline_colour, linewidth = other_bases_outline_linewidth, linejoin = tolower(other_bases_outline_join)) +
+            ## Mask with background and other bases
+            new_scale_fill() +
+            geom_raster(data = mask_data, aes(fill = as.character(.data$layer))) +
+            scale_fill_manual(values = c("0" = alpha("white", 0), "-1" = other_bases_colour, "-2" = background_colour))
 
-        ## Modification-assessed bases
-        geom_tile(data = filter(image_data, layer >= 0), aes(fill = .data$clamped_layer), width = tile_width, height = tile_height,
-                  col = modified_bases_outline_colour, linewidth = modified_bases_outline_linewidth, linejoin = tolower(modified_bases_outline_join)) +
-        scale_fill_gradient(low = low_colour, high = high_colour, limits = c(low_clamp, high_clamp)) +
 
-        ## General plot setup
+    ## Otherwise slow geom_tile
+    } else {
+        ## Generate sequence text data based on the chosen setting
+        if (sequence_text_type == "sequence") {
+            sequence_text_data <- convert_sequences_to_annotations(sequences, line_length = max(nchar(sequences)), interval = 0)
+        } else if (sequence_text_type == "probability") {
+            probability_data <- convert_probabilities_to_annotations(modification_locations, modification_probabilities, sequences, sequence_text_scaling, sequence_text_rounding)
+        }
+
+
+        ## Calculate width and height of tiles based on sequences
+        tile_width  <- 1/max(nchar(sequences))
+        tile_height <- 1/length(sequences)
+
+
+        result <- ggplot(mapping = aes(x = .data$x, y = .data$y)) +
+            ## Background
+            geom_tile(data = filter(image_data, layer == -2), fill = background_colour, width = tile_width, height = tile_height) +
+
+            ## Non-assessed bases
+            geom_tile(data = filter(image_data, layer == -1), fill = other_bases_colour, width = tile_width, height = tile_height,
+                      col = other_bases_outline_colour, linewidth = other_bases_outline_linewidth, linejoin = tolower(other_bases_outline_join)) +
+
+            ## Modification-assessed bases
+            geom_tile(data = filter(image_data, layer >= 0), aes(fill = .data$clamped_layer), width = tile_width, height = tile_height,
+                      col = modified_bases_outline_colour, linewidth = modified_bases_outline_linewidth, linejoin = tolower(modified_bases_outline_join)) +
+            scale_fill_gradient(low = low_colour, high = high_colour, limits = c(low_clamp, high_clamp))
+
+
+        ## Add sequence text or probability labels if desired
+        if (sequence_text_type == "sequence") {
+            result <- result +
+                geom_text(data = sequence_text_data, aes(x = .data$x_position, y = .data$y_position, label = .data$annotation), col = sequence_text_colour, size = sequence_text_size, fontface = "bold", inherit.aes = F)
+        } else if (sequence_text_type == "probability") {
+            result <- result +
+                geom_text(data = probability_data, aes(x = .data$x_position, y = .data$y_position, label = .data$annotation), col = sequence_text_colour, size = sequence_text_size, fontface = "bold", inherit.aes = F)
+        }
+
+        ## Add index annotations if desired
+        if (length(index_annotation_lines) > 0) {
+            result <- result +
+                geom_text(data = index_annotation_data, aes(x = .data$x_position, y = .data$y_position, label = .data$annotation), col = index_annotation_colour, size = index_annotation_size, fontface = "bold", inherit.aes = F)
+        }
+    }
+
+    ## Do general plot setup
+    result <- result +
         coord_cartesian(expand = FALSE, clip = "off") +
-        guides(x = "none", y = "none", fill = "none") +
+        guides(x = "none", y = "none", fill = "none", col = "none", size = "none") +
         theme_void() +
         theme(plot.background = element_rect(fill = background_colour, colour = NA),
               axis.title = element_blank())
-
-    ## Add sequence text or probability labels if desired
-    if (sequence_text_type == "sequence") {
-        result <- result +
-            geom_text(data = sequence_text_data, aes(x = .data$x_position, y = .data$y_position, label = .data$annotation), col = sequence_text_colour, size = sequence_text_size, fontface = "bold", inherit.aes = F) +
-            guides(col = "none", size = "none")
-    } else if (sequence_text_type == "probability") {
-        result <- result +
-            geom_text(data = probability_data, aes(x = .data$x_position, y = .data$y_position, label = .data$annotation), col = sequence_text_colour, size = sequence_text_size, fontface = "bold", inherit.aes = F) +
-            guides(col = "none", size = "none")
-    }
-
-    ## Add index annotations if desired
-    if (length(index_annotation_lines) > 0) {
-        result <- result +
-            geom_text(data = index_annotation_data, aes(x = .data$x_position, y = .data$y_position, label = .data$annotation), col = index_annotation_colour, size = index_annotation_size, fontface = "bold", inherit.aes = F) +
-            guides(col = "none", size = "none")
-    }
-
 
     ## Correctly set margin, taking into consideration extra blank lines for annotations
     extra_spaces <- ceiling(index_annotation_vertical_position)
