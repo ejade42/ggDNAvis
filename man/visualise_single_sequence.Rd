@@ -24,6 +24,7 @@ visualise_single_sequence(
   outline_join = "mitre",
   return = TRUE,
   filename = NA,
+  force_raster = FALSE,
   render_device = ragg::agg_png,
   pixels_per_base = 100,
   ...
@@ -65,6 +66,8 @@ visualise_single_sequence(
 \item{return}{\code{logical}. Boolean specifying whether this function should return the ggplot object, otherwise it will return \code{invisible(NULL)}. Defaults to \code{TRUE}.}
 
 \item{filename}{\code{character}. Filename to which output should be saved. If set to \code{NA} (default), no file will be saved. Recommended to end with \code{".png"}, but can change if render device is changed.}
+
+\item{force_raster}{\code{logical}. Boolean specifying whether \code{\link[ggplot2:geom_tile]{ggplot2::geom_raster()}} should be used even if it will remove text and outlines. Defaults to \code{FALSE}.\cr\cr To make the detailed plots with box outlines, sequence text, and index annotations, \code{\link[ggplot2:geom_tile]{ggplot2::geom_tile()}} is used. However, \code{geom_tile} is unusuably slow for huge datasets, so there is an option to use \code{geom_raster} instead. \code{geom_raster} does not support box outlines, sequence text, or index annotations, but is much faster if only the colours are wanted.\cr\cr \code{geom_raster} is automatically used if it will not change the plot (i.e. if all extraneous elements are already off), but can be forced using this argument.}
 
 \item{render_device}{\verb{function/character}. Device to use when rendering. See \code{\link[ggplot2:ggsave]{ggplot2::ggsave()}} documentation for options. Defaults to \code{\link[ragg:agg_png]{ragg::agg_png}}. Can be set to \code{NULL} to infer from file extension, but results may vary between systems.}
 

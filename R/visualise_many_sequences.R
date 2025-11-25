@@ -235,9 +235,6 @@ visualise_many_sequences <- function(
     ## Make actual plot
     ## Fast rasterisation if possible
     if (raster) {
-        mask_data <- image_data
-        mask_data$layer <- sapply(mask_data$layer, min, 0)
-
         result <- ggplot(image_data, aes(x = .data$x, y = .data$y, fill = as.character(.data$layer))) +
             geom_raster() +
             scale_fill_manual(values = c("0" = background_colour, sequence_colours))
