@@ -2037,7 +2037,8 @@
 <span>    outline_linewidth <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>    index_annotation_interval <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>    sequence_text_size <span class="op">=</span> <span class="fl">0</span>,</span>
-<span>    pixels_per_base <span class="op">=</span> <span class="fl">10</span></span>
+<span>    pixels_per_base <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>    force_raster <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb85"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1" tabindex="-1"></a><span class="do">## ℹ Automatically using geom_raster (much faster than geom_tile) as no sequence text, index annotations, or outlines are present.</span></span></code></pre></div>
 <div class="sourceCode" id="cb86"><pre class="downlit sourceCode r">
@@ -4028,7 +4029,7 @@
 <div class="section level2">
 <h2 id="id_69-performance">6.9 Performance<a class="anchor" aria-label="anchor" href="#id_69-performance"></a>
 </h2>
-<p><code><a href="reference/visualise_methylation.html">visualise_methylation()</a></code> is identical to <code><a href="reference/visualise_many_sequences.html">visualise_many_sequences()</a></code> with respect to <code><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_raster()</a></code> versus <code><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_tile()</a></code>, so read <a href="#id_#55-performance"><code>visualise_many_sequences()</code> performance</a>. The only difference to note is that because outlines can be controlled separately for assessed and non-assessed bases, outlines must be off for both assessed and non-assessed bases (i.e. either <code>outline_linewidth = 0</code>, <code>modified_bases_outline_linewidth = NA</code>, and <code>other_bases_outline_linewidth = NA</code> or <code>modified_bases_outline_linewidth = 0</code> and <code>other_bases_outline_linewidth = 0</code>).</p>
+<p><code><a href="reference/visualise_methylation.html">visualise_methylation()</a></code> is identical to <code><a href="reference/visualise_many_sequences.html">visualise_many_sequences()</a></code> with respect to <code><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_raster()</a></code> versus <code><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_tile()</a></code>, so read <a href="#id_55-performance"><code>visualise_many_sequences()</code> performance</a>. The only difference to note is that because outlines can be controlled separately for assessed and non-assessed bases, outlines must be off for both assessed and non-assessed bases (i.e. either <code>outline_linewidth = 0</code>, <code>modified_bases_outline_linewidth = NA</code>, and <code>other_bases_outline_linewidth = NA</code> or <code>modified_bases_outline_linewidth = 0</code> and <code>other_bases_outline_linewidth = 0</code>).</p>
 </div>
 </div>
 <div class="section level1">

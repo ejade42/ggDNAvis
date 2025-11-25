@@ -1754,7 +1754,8 @@ visualise_single_sequence(
     outline_linewidth = 0,
     index_annotation_interval = 0,
     sequence_text_size = 0,
-    pixels_per_base = 10
+    pixels_per_base = 10,
+    force_raster = TRUE
 )
 ```
 
@@ -4294,7 +4295,7 @@ with respect to
 [`geom_raster()`](https://ggplot2.tidyverse.org/reference/geom_tile.html)
 versus
 [`geom_tile()`](https://ggplot2.tidyverse.org/reference/geom_tile.html),
-so read [`visualise_many_sequences()` performance](#id_#55-performance).
+so read [`visualise_many_sequences()` performance](#id_55-performance).
 The only difference to note is that because outlines can be controlled
 separately for assessed and non-assessed bases, outlines must be off for
 both assessed and non-assessed bases (i.e. either
