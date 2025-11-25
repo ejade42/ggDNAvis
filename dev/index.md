@@ -27,6 +27,7 @@
   - [4.1 Basic visualisation](#id_41-basic-visualisation)
   - [4.2 Colour customisation](#id_42-colour-customisation)
   - [4.3 Layout customisation](#id_43-layout-customisation)
+  - [4.4 Performance](#id_44-performance)
 - [5 Visualising many DNA/RNA
   sequences](#id_5-visualising-many-dnarna-sequences)
   - [5.1 Basic visualisation](#id_51-basic-visualisation)
@@ -113,13 +114,7 @@ library(ggDNAvis)
 ## These are ggDNAvis dependencies, so will always be installed when installing ggDNAvis
 library(dplyr)
 library(ggplot2)
-```
 
-``` R
-## Warning: package 'ggplot2' was built under R version 4.5.2
-```
-
-``` r
 ## Function for viewing tables throughout this document
 github_table <- function(data) {
     quoted <- as.data.frame(
@@ -140,7 +135,7 @@ cat("Loaded ggDNAvis version is:", as.character(packageVersion("ggDNAvis")))
 ```
 
 ``` R
-## Loaded ggDNAvis version is: 0.3.2.9001
+## Loaded ggDNAvis version is: 0.3.2.9002
 ```
 
 # 2 Summary/quickstart
@@ -825,11 +820,15 @@ We can also write from this dataframe to FASTQ using
 ``` r
 ## Use write_fastq with filename = NA and return = TRUE to create the FASTQ, 
 ## but return it as a character vector rather than writing to file.
-output_fastq <- write_fastq(merged_fastq_data, 
-                            filename = NA, return = TRUE,
-                            read_id_colname = "read", 
-                            sequence_colname = "sequence",
-                            quality_colname = "quality")
+output_fastq <- write_fastq(
+    merged_fastq_data, 
+    filename = NA, 
+    return = TRUE,
+    read_id_colname = "read", 
+    sequence_colname = "sequence",
+    quality_colname = "quality"
+)
+
 ## View first 16 lines
 for (i in 1:16) {
     cat(output_fastq[i], "\n")
@@ -1081,9 +1080,11 @@ with `example_many_sequences`.
 
 ``` r
 ## Merge fastq data with metadata, offsetting reversed locations by 1
-merged_methylation_data <- merge_methylation_with_metadata(methylation_data, 
-                                                           metadata, 
-                                                           reversed_location_offset = 1)
+merged_methylation_data <- merge_methylation_with_metadata(
+    methylation_data, 
+    metadata, 
+    reversed_location_offset = 1
+)
 
 ## View first 4 rows
 github_table(head(merged_methylation_data, 4))
@@ -1156,16 +1157,20 @@ And similarly to before, we can write back to a modified FASTQ file via
 ``` r
 ## Use write_modified_fastq with filename = NA and return = TRUE to create 
 ## the FASTQ, but return it as a character vector rather than writing to file.
-output_fastq <- write_modified_fastq(merged_methylation_data, 
-                                     filename = NA, return = TRUE,
-                                     read_id_colname = "read", 
-                                     sequence_colname = "sequence",
-                                     quality_colname = "quality",
-                                     locations_colnames = c("hydroxymethylation_locations",
-                                                            "methylation_locations"),
-                                     probabilities_colnames = c("hydroxymethylation_probabilities",
-                                                                "methylation_probabilities"),
-                                     modification_prefixes = c("C+h?", "C+m?"))
+output_fastq <- write_modified_fastq(
+    merged_methylation_data, 
+    filename = NA, 
+    return = TRUE,
+    read_id_colname = "read", 
+    sequence_colname = "sequence",
+    quality_colname = "quality",
+    locations_colnames = c("hydroxymethylation_locations",
+                        "methylation_locations"),
+    probabilities_colnames = c("hydroxymethylation_probabilities",
+                            "methylation_probabilities"),
+    modification_prefixes = c("C+h?", "C+m?")
+)
+
 ## View first 16 lines
 for (i in 1:16) {
     cat(output_fastq[i], "\n")
@@ -1235,9 +1240,11 @@ debugging, so we will also set `return = FALSE`.
 
 ``` r
 ## Create image
-visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added, 
-                          filename = paste0(output_location, "single_sequence_01.png"), 
-                          return = FALSE)
+visualise_single_sequence(
+    sone_2019_f1_1_expanded_ggt_added, 
+    filename = paste0(output_location, "single_sequence_01.png"), 
+    return = FALSE
+)
 
 ## View image
 knitr::include_graphics(paste0(github_location, "single_sequence_01.png"))
@@ -1259,10 +1266,12 @@ is often a happy medium.
 
 ``` r
 ## Create image
-visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added, 
-                          filename = paste0(output_location, "single_sequence_02.png"), 
-                          return = FALSE,
-                          pixels_per_base = 20)
+visualise_single_sequence(
+    sone_2019_f1_1_expanded_ggt_added, 
+    filename = paste0(output_location, "single_sequence_02.png"), 
+    return = FALSE,
+    pixels_per_base = 20
+)
 
 ## View image
 knitr::include_graphics(paste0(github_location, "single_sequence_02.png"))
@@ -1299,14 +1308,16 @@ For example, we can change all of the colours in an inadvisable way:
 
 ``` r
 ## Create image
-visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
-                          filename = paste0(output_location, "single_sequence_03.png"), 
-                          return = FALSE,
-                          sequence_colors = c("black", "white", "#00FFFF", "#00FF00"),
-                          sequence_text_col = "magenta",
-                          index_annotation_colour = "yellow",
-                          background_color = "red",
-                          outline_colour = "orange")
+visualise_single_sequence(
+    sone_2019_f1_1_expanded_ggt_added,
+    filename = paste0(output_location, "single_sequence_03.png"), 
+    return = FALSE,
+    sequence_colors = c("black", "white", "#00FFFF", "#00FF00"),
+    sequence_text_col = "magenta",
+    index_annotation_colour = "yellow",
+    background_color = "red",
+    outline_colour = "orange"
+)
 
 ## View image
 knitr::include_graphics(paste0(github_location, "single_sequence_03.png"))
@@ -1325,11 +1336,13 @@ depending on how much the text is desired to “pop”:
 
 ``` r
 ## Create image
-visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
-                          filename = paste0(output_location, "single_sequence_04.png"), 
-                          return = FALSE,
-                          sequence_colours = sequence_colour_palettes$bright_pale,
-                          sequence_text_colour = "white")
+visualise_single_sequence(
+    sone_2019_f1_1_expanded_ggt_added,
+    filename = paste0(output_location, "single_sequence_04.png"), 
+    return = FALSE,
+    sequence_colours = sequence_colour_palettes$bright_pale,
+    sequence_text_colour = "white"
+)
 
 ## View image
 knitr::include_graphics(paste0(github_location, "single_sequence_04.png"))
@@ -1339,11 +1352,13 @@ knitr::include_graphics(paste0(github_location, "single_sequence_04.png"))
 
 ``` r
 ## Create image
-visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
-                          filename = paste0(output_location, "single_sequence_05.png"), 
-                          return = FALSE,
-                          sequence_colours = sequence_colour_palettes$bright_pale,
-                          sequence_text_colour = "black")
+visualise_single_sequence(
+    sone_2019_f1_1_expanded_ggt_added,
+    filename = paste0(output_location, "single_sequence_05.png"), 
+    return = FALSE,
+    sequence_colours = sequence_colour_palettes$bright_pale,
+    sequence_text_colour = "black"
+)
 
 ## View image
 knitr::include_graphics(paste0(github_location, "single_sequence_05.png"))
@@ -1355,11 +1370,13 @@ knitr::include_graphics(paste0(github_location, "single_sequence_05.png"))
 
 ``` r
 ## Create image
-visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
-                          filename = paste0(output_location, "single_sequence_06.png"), 
-                          return = FALSE,
-                          sequence_colours = sequence_colour_palettes$bright_pale2,
-                          sequence_text_colour = "black")
+visualise_single_sequence(
+    sone_2019_f1_1_expanded_ggt_added,
+    filename = paste0(output_location, "single_sequence_06.png"), 
+    return = FALSE,
+    sequence_colours = sequence_colour_palettes$bright_pale2,
+    sequence_text_colour = "black"
+)
 
 ## View image
 knitr::include_graphics(paste0(github_location, "single_sequence_06.png"))
@@ -1371,11 +1388,13 @@ The `bright_deep` palette works best with white text:
 
 ``` r
 ## Create image
-visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
-                          filename = paste0(output_location, "single_sequence_07.png"), 
-                          return = FALSE,
-                          sequence_colours = sequence_colour_palettes$bright_deep,
-                          sequence_text_colour = "white")
+visualise_single_sequence(
+    sone_2019_f1_1_expanded_ggt_added,
+    filename = paste0(output_location, "single_sequence_07.png"), 
+    return = FALSE,
+    sequence_colours = sequence_colour_palettes$bright_deep,
+    sequence_text_colour = "white"
+)
 
 ## View image
 knitr::include_graphics(paste0(github_location, "single_sequence_07.png"))
@@ -1388,12 +1407,14 @@ readouts and works best with white text:
 
 ``` r
 ## Create image
-visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
-                          filename = paste0(output_location, "single_sequence_08.png"), 
-                          return = FALSE,
-                          sequence_colours = sequence_colour_palettes$sanger,
-                          sequence_text_colour = "white",
-                          outline_colour = "darkgrey")
+visualise_single_sequence(
+    sone_2019_f1_1_expanded_ggt_added,
+    filename = paste0(output_location, "single_sequence_08.png"), 
+    return = FALSE,
+    sequence_colours = sequence_colour_palettes$sanger,
+    sequence_text_colour = "white",
+    outline_colour = "darkgrey"
+)
 
 ## View image
 knitr::include_graphics(paste0(github_location, "single_sequence_08.png"))
@@ -1449,17 +1470,19 @@ A sensible example of how these might be changed is as follows:
 
 ``` r
 ## Create image
-visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
-                          filename = paste0(output_location, "single_sequence_09.png"), 
-                          return = FALSE,
-                          sequence_colours = sequence_colour_palettes$ggplot_style,
-                          margin = 2,
-                          spacing = 2,
-                          line_wrapping = 60,
-                          index_annotation_interval = 20,
-                          index_annotations_above = FALSE,
-                          index_annotation_vertical_position = 1/2,
-                          outline_linewidth = 0)
+visualise_single_sequence(
+    sone_2019_f1_1_expanded_ggt_added,
+    filename = paste0(output_location, "single_sequence_09.png"), 
+    return = FALSE,
+    sequence_colours = sequence_colour_palettes$ggplot_style,
+    margin = 2,
+    spacing = 2,
+    line_wrapping = 60,
+    index_annotation_interval = 20,
+    index_annotations_above = FALSE,
+    index_annotation_vertical_position = 1/2,
+    outline_linewidth = 0
+)
 
 ## View image
 knitr::include_graphics(paste0(github_location, "single_sequence_09.png"))
@@ -1474,17 +1497,19 @@ that would be rendered poorly at low resolutions:
 
 ``` r
 ## Create image
-visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
-                          filename = paste0(output_location, "single_sequence_10.png"), 
-                          return = FALSE,
-                          sequence_colours = sequence_colour_palettes$bright_pale,
-                          margin = 0,
-                          spacing = 0,
-                          line_wrapping = 45,
-                          sequence_text_size = 0,
-                          index_annotation_interval = 0,
-                          pixels_per_base = 20,
-                          outline_linewidth = 5)
+visualise_single_sequence(
+    sone_2019_f1_1_expanded_ggt_added,
+    filename = paste0(output_location, "single_sequence_10.png"), 
+    return = FALSE,
+    sequence_colours = sequence_colour_palettes$bright_pale,
+    margin = 0,
+    spacing = 0,
+    line_wrapping = 45,
+    sequence_text_size = 0,
+    index_annotation_interval = 0,
+    pixels_per_base = 20,
+    outline_linewidth = 5
+)
 ```
 
 ``` R
@@ -1504,17 +1529,19 @@ be used:
 
 ``` r
 ## Create image
-visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
-                          filename = paste0(output_location, "single_sequence_11.png"), 
-                          return = FALSE,
-                          sequence_colours = sequence_colour_palettes$bright_pale,
-                          margin = 0.3,
-                          spacing = 0,
-                          line_wrapping = 45,
-                          sequence_text_size = 0,
-                          index_annotation_interval = 0,
-                          pixels_per_base = 20,
-                          outline_linewidth = 3)
+visualise_single_sequence(
+    sone_2019_f1_1_expanded_ggt_added,
+    filename = paste0(output_location, "single_sequence_11.png"), 
+    return = FALSE,
+    sequence_colours = sequence_colour_palettes$bright_pale,
+    margin = 0.3,
+    spacing = 0,
+    line_wrapping = 45,
+    sequence_text_size = 0,
+    index_annotation_interval = 0,
+    pixels_per_base = 20,
+    outline_linewidth = 3
+)
 
 ## View image
 knitr::include_graphics(paste0(github_location, "single_sequence_11.png"))
@@ -1526,18 +1553,29 @@ Or the outlines can be turned off:
 
 ``` r
 ## Create image
-visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
-                          filename = paste0(output_location, "single_sequence_12.png"), 
-                          return = FALSE,
-                          sequence_colours = sequence_colour_palettes$bright_pale,
-                          margin = 0,
-                          spacing = 0,
-                          line_wrapping = 45,
-                          sequence_text_size = 0,
-                          index_annotation_interval = 0,
-                          pixels_per_base = 20,
-                          outline_linewidth = 0)
+visualise_single_sequence(
+    sone_2019_f1_1_expanded_ggt_added,
+    filename = paste0(output_location, "single_sequence_12.png"), 
+    return = FALSE,
+    sequence_colours = sequence_colour_palettes$bright_pale,
+    margin = 0,
+    spacing = 0,
+    line_wrapping = 45,
+    sequence_text_size = 0,
+    index_annotation_interval = 0,
+    pixels_per_base = 20,
+    outline_linewidth = 0
+)
+```
 
+``` R
+## ℹ Automatically using geom_raster (much faster than geom_tile) as no sequence text, index annotations, or outlines are present.
+
+## Warning: When using geom_raster, it is recommended to use a smaller pixels_per_base e.g. 10, as there is no text/outlines that would benefit from higher resolution.
+## Current value: 20
+```
+
+``` r
 ## View image
 knitr::include_graphics(paste0(github_location, "single_sequence_12.png"))
 ```
@@ -1557,13 +1595,15 @@ Here is an example where these guidelines are not followed:
 
 ``` r
 ## Create image
-visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
-                          filename = paste0(output_location, "single_sequence_13.png"), 
-                          return = FALSE,
-                          sequence_colours = sequence_colour_palettes$bright_deep,
-                          sequence_text_colour = "white",
-                          line_wrapping = 65,
-                          index_annotation_interval = 15)
+visualise_single_sequence(
+    sone_2019_f1_1_expanded_ggt_added,
+    filename = paste0(output_location, "single_sequence_13.png"), 
+    return = FALSE,
+    sequence_colours = sequence_colour_palettes$bright_deep,
+    sequence_text_colour = "white",
+    line_wrapping = 65,
+    index_annotation_interval = 15
+)
 
 ## View image
 knitr::include_graphics(paste0(github_location, "single_sequence_13.png"))
@@ -1577,14 +1617,16 @@ nowhere for them to render:
 
 ``` r
 ## Create image
-visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added,
-                          filename = paste0(output_location, "single_sequence_14.png"), 
-                          return = FALSE,
-                          sequence_colours = sequence_colour_palettes$sanger,
-                          sequence_text_colour = "white",
-                          index_annotation_colour = "magenta",
-                          spacing = 0,
-                          outline_colour = "magenta")
+visualise_single_sequence(
+    sone_2019_f1_1_expanded_ggt_added,
+    filename = paste0(output_location, "single_sequence_14.png"), 
+    return = FALSE,
+    sequence_colours = sequence_colour_palettes$sanger,
+    sequence_text_colour = "white",
+    index_annotation_colour = "magenta",
+    spacing = 0,
+    outline_colour = "magenta"
+)
 ```
 
 ``` R
@@ -1599,6 +1641,103 @@ knitr::include_graphics(paste0(github_location, "single_sequence_14.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_14.png)
+
+## 4.4 Performance
+
+Usually, visualisations in `ggDNAvis` are drawn via
+[`geom_tile()`](https://ggplot2.tidyverse.org/reference/geom_tile.html).
+This is highly customisable and allows box outlines, text
+superimposition, and index annotation. However, for very large datasets,
+rendering thousands or millions of tiles can become unusuably slow. A
+much faster alternative is
+[`geom_raster()`](https://ggplot2.tidyverse.org/reference/geom_tile.html),
+which does not allow for text/annotations/outlines but can draw much
+bigger images when needed.
+
+[`geom_raster()`](https://ggplot2.tidyverse.org/reference/geom_tile.html)
+is automatically used when it would not affect the output image
+(i.e. when sequence text, annotations, and outlines are already off), or
+can be forced by setting `force_raster = TRUE`. However, as forcing
+[`geom_raster()`](https://ggplot2.tidyverse.org/reference/geom_tile.html)
+necessitates removal of text/annotations/outlines, this produces a
+warning unless
+
+Furthermore, as
+[`geom_raster()`](https://ggplot2.tidyverse.org/reference/geom_tile.html)
+only draws simple boxes, a message is produced if `pixels_per_base` is
+greater than 10, as there is not really any benefit and it increases the
+file size of the image.
+
+An example where
+[`visualise_single_sequence()`](https://ejade42.github.io/ggDNAvis/reference/visualise_single_sequence.md)
+automatically switches to
+[`geom_raster()`](https://ggplot2.tidyverse.org/reference/geom_tile.html)
+and produces a warning for excessive resolution is as follows:
+
+``` r
+## Create image
+visualise_single_sequence(
+    sone_2019_f1_1_expanded_ggt_added,
+    filename = paste0(output_location, "single_sequence_15.png"),
+    return = FALSE,
+    sequence_colours = sequence_colour_palettes$bright_deep,
+    outline_linewidth = 0,
+    index_annotation_size = 0,
+    sequence_text_size = 0
+)
+```
+
+``` R
+## ℹ Automatically setting index_annotation_interval to 0 as index_annotation_size is 0
+
+## ℹ Automatically using geom_raster (much faster than geom_tile) as no sequence text, index annotations, or outlines are present.
+
+## Warning: When using geom_raster, it is recommended to use a smaller pixels_per_base e.g. 10, as there is no text/outlines that would benefit from higher resolution.
+## Current value: 100
+```
+
+``` r
+## View image
+knitr::include_graphics(paste0(github_location, "single_sequence_15.png"))
+```
+
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_15.png)
+
+An example of forcing rasterisation when there would otherwise be
+sequence text, index annotations, and outlines (thus producing a
+warning) is as follows:
+
+``` r
+## Create image
+visualise_single_sequence(
+    sone_2019_f1_1_expanded_ggt_added,
+    filename = paste0(output_location, "single_sequence_16.png"),
+    return = FALSE,
+    sequence_colours = sequence_colour_palettes$bright_deep,
+    outline_linewidth = 5,
+    outline_colour = "black",
+    index_annotation_interval = 3,
+    index_annotation_size = 12.5,
+    index_annotation_colour = "darkred",
+    sequence_text_size = 16,
+    sequence_text_colour = "white",
+    force_raster = TRUE,
+    pixels_per_base = 10
+)
+```
+
+``` R
+## Warning: Forcing geom_raster via force_raster = TRUE will remove all sequence
+## text, index annotations (though any inserted blank lines/spacers will remain),
+## and box outlines.
+```
+
+``` r
+## View image
+knitr::include_graphics(paste0(github_location, "single_sequence_16.png"))
+```
+
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_16.png)
 
 # 5 Visualising many DNA/RNA sequences
 
@@ -1712,9 +1851,11 @@ sequences_for_visualisation
 
 ``` r
 ## Use the character vector to make the image
-visualise_many_sequences(sequences_for_visualisation,
-                         filename = paste0(output_location, "many_sequences_01.png"),
-                         return = FALSE)
+visualise_many_sequences(
+    sequences_for_visualisation,
+    filename = paste0(output_location, "many_sequences_01.png"),
+    return = FALSE
+)
 
 ## View image
 knitr::include_graphics(paste0(github_location, "many_sequences_01.png"))
