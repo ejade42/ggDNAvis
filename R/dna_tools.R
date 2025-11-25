@@ -66,20 +66,20 @@ resolve_alias <- function(
     }
 }
 
-debug_initialise <- function(debug, function_name) {
-    if (any(is.na(debug)) || any(is.null(debug)) || !is.logical(debug) || length(debug) != 1) {
-        bad_arg("debug", list(debug = debug), "must be a single logical/boolean value.")
+monitor_start <- function(monitor_performance, function_name) {
+    if (any(is.na(monitor_performance)) || any(is.null(monitor_performance)) || !is.logical(monitor_performance) || length(monitor_performance) != 1) {
+        bad_arg("monitor_performance", list(monitor_performance = monitor_performance), "must be a single logical/boolean value.")
     }
     start_time <- Sys.time()
-    if (debug) {
+    if (monitor_performance) {
         cli_alert_info("Verbose monitoring enabled")
         cli_alert_info(paste(format(start_time, "(%Y-%m-%d %H:%M:%S)"), function_name, "start"))
     }
     return(start_time)
 }
 
-debug_monitor <- function(debug, start_time, previous_time, message) {
-    if (!debug) {return(invisible(NULL))}
+monitor <- function(monitor_performace, start_time, previous_time, message) {
+    if (!monitor_performace) {return(invisible(NULL))}
 
     current_time <- Sys.time()
     time_since_start <- format_time_diff(current_time, start_time, 4)

@@ -63,6 +63,7 @@
 #' @param force_raster `logical`. Boolean specifying whether [ggplot2::geom_raster()] should be used even if it will remove text and outlines. Defaults to `FALSE`.\cr\cr To make the detailed plots with box outlines, sequence text, and index annotations, [ggplot2::geom_tile()] is used. However, `geom_tile` is unusuably slow for huge datasets, so there is an option to use `geom_raster` instead. `geom_raster` does not support box outlines, sequence text, or index annotations, but is much faster if only the colours are wanted.\cr\cr `geom_raster` is automatically used if it will not change the plot (i.e. if all extraneous elements are already off), but can be forced using this argument.
 #' @param render_device `function/character`. Device to use when rendering. See [ggplot2::ggsave()] documentation for options. Defaults to [`ragg::agg_png`]. Can be set to `NULL` to infer from file extension, but results may vary between systems.
 #' @param pixels_per_base `integer`. How large each box should be in pixels, if file output is turned on via setting `filename`. Corresponds to dpi of the exported image. Defaults to `100`.\cr\cr Large values (e.g. 100) are required to render small text properly. Small values (e.g. 20) will work when sequence/annotation text is off, and very small values (e.g. 10) will work when sequence/annotation text and outlines are all off.
+#' @param monitor_performance `logical`. Boolean specifying whether verbose performance monitoring should be messagsed to console. Defaults to `FALSE`.
 #' @param ... Used to recognise aliases e.g. American spellings or common misspellings - see [aliases]. If any American spellings do not work, please make a bug report at <`r packageDescription("ggDNAvis")$BugReports`>.
 #'
 #' @return A ggplot object containing the full visualisation, or `invisible(NULL)` if `return = FALSE`. It is often more useful to use `filename = "myfilename.png"`, because then the visualisation is exported at the correct aspect ratio.
@@ -253,15 +254,15 @@ visualise_methylation <- function(
     force_raster = FALSE,
     render_device = ragg::agg_png,
     pixels_per_base = 100,
-    debug = FALSE,
+    monitor_performance = FALSE,
     ...
 ) {
-    ## Validate debug then store start time
-    start_time <- debug_initialise(debug, "visualise_methylation")
+    ## Validate monitor_performance then store start time
+    start_time <- monitor_start(monitor_performance, "visualise_methylation")
 
     ## Process aliases
     ## ---------------------------------------------------------------------
-    debug_time <- debug_monitor(debug, start_time, start_time, "resolving aliases")
+    monitor_time <- monitor(monitor_performance, start_time, start_time, "resolving aliases")
     dots <- list(...)
     low_colour <- resolve_alias("low_colour", low_colour, "low_color", dots[["low_color"]], "blue")
     low_colour <- resolve_alias("low_colour", low_colour, "low_col", dots[["low_col"]], "blue")
@@ -291,7 +292,7 @@ visualise_methylation <- function(
 
     ## Validate arguments
     ## ---------------------------------------------------------------------
-    debug_time <- debug_monitor(debug, start_time, debug_time, "validating arguments")
+    monitor_time <- monitor(monitor_performance, start_time, monitor_time, "validating arguments")
     not_null <- list(modification_locations = modification_locations, modification_probabilities = modification_probabilities, sequences = sequences, background_colour = background_colour, other_bases_colour = other_bases_colour, low_colour = low_colour, high_colour = high_colour, low_clamp = low_clamp, high_clamp = high_clamp, sequence_text_type = sequence_text_type, sequence_text_rounding = sequence_text_rounding, sequence_text_colour = sequence_text_colour, sequence_text_size = sequence_text_size, index_annotation_colour = index_annotation_colour, index_annotation_size = index_annotation_size, index_annotation_interval = index_annotation_interval, index_annotations_above = index_annotations_above, index_annotation_vertical_position = index_annotation_vertical_position, index_annotation_full_line = index_annotation_full_line, outline_linewidth = outline_linewidth, outline_colour = outline_colour, outline_join = outline_join, modified_bases_outline_linewidth = modified_bases_outline_linewidth, modified_bases_outline_colour = modified_bases_outline_colour, modified_bases_outline_join = modified_bases_outline_join, other_bases_outline_linewidth = other_bases_outline_linewidth, other_bases_outline_colour = other_bases_outline_colour, other_bases_outline_join = other_bases_outline_join, margin = margin, return = return, force_raster = force_raster, filename = filename, pixels_per_base = pixels_per_base)
     for (argument in names(not_null)) {
         if (any(is.null(not_null[[argument]]))) {bad_arg(argument, not_null, "must not be NULL.")}
@@ -456,13 +457,13 @@ visualise_methylation <- function(
 
 
     ## Set up original vectors, so I can then modify the ones with the direct argument names
-    debug_time <- debug_monitor(debug, start_time, debug_time, "duplicating original vectors")
+    monitor_time <- monitor(monitor_performance, start_time, monitor_time, "duplicating original vectors")
     modification_locations_original     <- modification_locations
     modification_probabilities_original <- modification_probabilities
     sequences_original <- sequences
 
     ## Insert blanks as required
-    debug_time <- debug_monitor(debug, start_time, debug_time, "inserting blank sequences at specified indices")
+    monitor_time <- monitor(monitor_performance, start_time, monitor_time, "inserting blank sequences at specified indices")
     modification_locations <- insert_at_indices(modification_locations_original, index_annotation_lines, insert_before = index_annotations_above, insert = "", vert = index_annotation_vertical_position)
     suppressWarnings({ ## suppress duplicate warnings about out-of-range indices
         modification_probabilities <- insert_at_indices(modification_probabilities_original, index_annotation_lines, insert_before = index_annotations_above, insert = "", vert = index_annotation_vertical_position)
@@ -472,7 +473,7 @@ visualise_methylation <- function(
 
 
     ## Generate rasterised dataframes of methylation and masking layer
-    debug_time <- debug_monitor(debug, start_time, debug_time, "rasterising image data")
+    monitor_time <- monitor(monitor_performance, start_time, monitor_time, "rasterising image data")
     max_length <- max(nchar(sequences))
     image_matrix <- matrix(NA, nrow = length(modification_locations), ncol = max_length)
     for (i in 1:length(modification_locations)) {
@@ -482,12 +483,12 @@ visualise_methylation <- function(
     image_data <- rasterise_matrix(image_matrix)
 
     ## Transform image data if clamping limits are set
-    debug_time <- debug_monitor(debug, start_time, debug_time, "clamping image data")
+    monitor_time <- monitor(monitor_performance, start_time, monitor_time, "clamping image data")
     image_data$clamped_layer <- pmin(pmax(image_data$layer, low_clamp), high_clamp)
 
 
     ## Determine whether to use geom_raster as a faster but more limited alternative to geom_tile
-    debug_time <- debug_monitor(debug, start_time, debug_time, "choosing rendering method")
+    monitor_time <- monitor(monitor_performance, start_time, monitor_time, "choosing rendering method")
     raster <- FALSE
     if (sequence_text_type == "none" && length(index_annotation_lines) == 0 && modified_bases_outline_linewidth == 0 && other_bases_outline_linewidth == 0) {
         cli_alert_info("Automatically using geom_raster (much faster than geom_tile) as no sequence text, index annotations, or outlines are present.")
@@ -505,11 +506,11 @@ visualise_methylation <- function(
             warn(paste("When using geom_raster, it is recommended to use a smaller pixels_per_base e.g. 10, as there is no text/outlines that would benefit from higher resolution.\nCurrent value:", pixels_per_base), class = "parameter_recommendation")
         }
 
-        debug_time <- debug_monitor(debug, start_time, debug_time, "creating mask data")
+        monitor_time <- monitor(monitor_performance, start_time, monitor_time, "creating mask data")
         mask_data <- image_data
         mask_data$layer <- sapply(mask_data$layer, min, 0)
 
-        debug_time <- debug_monitor(debug, start_time, debug_time, "creating basic plot via geom_raster")
+        monitor_time <- monitor(monitor_performance, start_time, monitor_time, "creating basic plot via geom_raster")
         result <- ggplot(mapping = aes(x = .data$x, y = .data$y)) +
             ## Modification-assessed bases
             ## Non-assessed/background will be filled in as low_colour, but that's fine as we mask afterwards
@@ -527,21 +528,21 @@ visualise_methylation <- function(
     } else {
         ## Generate sequence text data based on the chosen setting
         if (sequence_text_type == "sequence") {
-            debug_time <- debug_monitor(debug, start_time, debug_time, "generating sequence text (type 'sequence')")
+            monitor_time <- monitor(monitor_performance, start_time, monitor_time, "generating sequence text (type 'sequence')")
             sequence_text_data <- convert_sequences_to_annotations(sequences, line_length = max(nchar(sequences)), interval = 0)
         } else if (sequence_text_type == "probability") {
-            debug_time <- debug_monitor(debug, start_time, debug_time, "generating sequence text (type 'probability')")
+            monitor_time <- monitor(monitor_performance, start_time, monitor_time, "generating sequence text (type 'probability')")
             probability_data <- convert_probabilities_to_annotations(modification_locations, modification_probabilities, sequences, sequence_text_scaling, sequence_text_rounding)
         }
 
 
         ## Calculate width and height of tiles based on sequences
-        debug_time <- debug_monitor(debug, start_time, debug_time, "calculating tile sizes")
+        monitor_time <- monitor(monitor_performance, start_time, monitor_time, "calculating tile sizes")
         tile_width  <- 1/max(nchar(sequences))
         tile_height <- 1/length(sequences)
 
 
-        debug_time <- debug_monitor(debug, start_time, debug_time, "creating basic plot via geom_tile")
+        monitor_time <- monitor(monitor_performance, start_time, monitor_time, "creating basic plot via geom_tile")
         result <- ggplot(mapping = aes(x = .data$x, y = .data$y)) +
             ## Background
             geom_tile(data = filter(image_data, layer == -2), fill = background_colour, width = tile_width, height = tile_height) +
@@ -558,25 +559,25 @@ visualise_methylation <- function(
 
         ## Add sequence text or probability labels if desired
         if (sequence_text_type == "sequence") {
-            debug_time <- debug_monitor(debug, start_time, debug_time, "adding sequence text (type 'sequence')")
+            monitor_time <- monitor(monitor_performance, start_time, monitor_time, "adding sequence text (type 'sequence')")
             result <- result +
                 geom_text(data = sequence_text_data, aes(x = .data$x_position, y = .data$y_position, label = .data$annotation), col = sequence_text_colour, size = sequence_text_size, fontface = "bold", inherit.aes = F)
         } else if (sequence_text_type == "probability") {
-            debug_time <- debug_monitor(debug, start_time, debug_time, "adding sequence text (type 'probability')")
+            monitor_time <- monitor(monitor_performance, start_time, monitor_time, "adding sequence text (type 'probability')")
             result <- result +
                 geom_text(data = probability_data, aes(x = .data$x_position, y = .data$y_position, label = .data$annotation), col = sequence_text_colour, size = sequence_text_size, fontface = "bold", inherit.aes = F)
         }
 
         ## Add index annotations if desired
         if (length(index_annotation_lines) > 0) {
-            debug_time <- debug_monitor(debug, start_time, debug_time, "adding index annotations")
+            monitor_time <- monitor(monitor_performance, start_time, monitor_time, "adding index annotations")
             result <- result +
                 geom_text(data = index_annotation_data, aes(x = .data$x_position, y = .data$y_position, label = .data$annotation), col = index_annotation_colour, size = index_annotation_size, fontface = "bold", inherit.aes = F)
         }
     }
 
     ## Do general plot setup
-    debug_time <- debug_monitor(debug, start_time, debug_time, "adding general plot themes")
+    monitor_time <- monitor(monitor_performance, start_time, monitor_time, "adding general plot themes")
     result <- result +
         coord_cartesian(expand = FALSE, clip = "off") +
         guides(x = "none", y = "none", fill = "none", col = "none", size = "none") +
@@ -585,7 +586,7 @@ visualise_methylation <- function(
               axis.title = element_blank())
 
     ## Correctly set margin, taking into consideration extra blank lines for annotations
-    debug_time <- debug_monitor(debug, start_time, debug_time, "calculating margin")
+    monitor_time <- monitor(monitor_performance, start_time, monitor_time, "calculating margin")
     extra_spaces <- ceiling(index_annotation_vertical_position)
     if (1 %in% index_annotation_lines && index_annotations_above) {
         result <- result + theme(plot.margin = grid::unit(c(max(margin-extra_spaces, 0), margin, margin, margin), "inches"))
@@ -600,7 +601,7 @@ visualise_methylation <- function(
 
     ## Validate filename and export image
     if (is.na(filename) == FALSE) {
-        debug_time <- debug_monitor(debug, start_time, debug_time, "exporting file")
+        monitor_time <- monitor(monitor_performance, start_time, monitor_time, "exporting file")
         if (is.character(filename) == FALSE) {
             bad_arg("filename", list(filename = filename), "must be a character/string (or NA if no file export wanted).")
         }
@@ -611,7 +612,7 @@ visualise_methylation <- function(
     }
 
     ## Return either the plot object or NULL
-    debug_time <- debug_monitor(debug, start_time, debug_time, "done")
+    monitor_time <- monitor(monitor_performance, start_time, monitor_time, "done")
     if (return == TRUE) {
         return(result)
     }
