@@ -31,6 +31,7 @@ visualise_single_sequence(
   outline_join = "mitre",
   return = TRUE,
   filename = NA,
+  force_raster = FALSE,
   render_device = ragg::agg_png,
   pixels_per_base = 100,
   ...
@@ -172,6 +173,25 @@ visualise_single_sequence(
   `character`. Filename to which output should be saved. If set to `NA`
   (default), no file will be saved. Recommended to end with `".png"`,
   but can change if render device is changed.
+
+- force_raster:
+
+  `logical`. Boolean specifying whether
+  [`ggplot2::geom_raster()`](https://ggplot2.tidyverse.org/reference/geom_tile.html)
+  should be used even if it will remove text and outlines. Defaults to
+  `FALSE`.  
+    
+  To make the detailed plots with box outlines, sequence text, and index
+  annotations,
+  [`ggplot2::geom_tile()`](https://ggplot2.tidyverse.org/reference/geom_tile.html)
+  is used. However, `geom_tile` is unusuably slow for huge datasets, so
+  there is an option to use `geom_raster` instead. `geom_raster` does
+  not support box outlines, sequence text, or index annotations, but is
+  much faster if only the colours are wanted.  
+    
+  `geom_raster` is automatically used if it will not change the plot
+  (i.e. if all extraneous elements are already off), but can be forced
+  using this argument.
 
 - render_device:
 
