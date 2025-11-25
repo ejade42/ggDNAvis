@@ -84,6 +84,7 @@ visualise_single_sequence <- function(
     force_raster = FALSE,
     render_device = ragg::agg_png,
     pixels_per_base = 100,
+    monitor_performance = FALSE,
     ...
 ) {
     ## Process aliases

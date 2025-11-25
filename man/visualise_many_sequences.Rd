@@ -27,6 +27,7 @@ visualise_many_sequences(
   force_raster = FALSE,
   render_device = ragg::agg_png,
   pixels_per_base = 100,
+  monitor_performance = FALSE,
   ...
 )
 }
@@ -72,6 +73,8 @@ visualise_many_sequences(
 \item{render_device}{\verb{function/character}. Device to use when rendering. See \code{\link[ggplot2:ggsave]{ggplot2::ggsave()}} documentation for options. Defaults to \code{\link[ragg:agg_png]{ragg::agg_png}}. Can be set to \code{NULL} to infer from file extension, but results may vary between systems.}
 
 \item{pixels_per_base}{\code{integer}. How large each box should be in pixels, if file output is turned on via setting \code{filename}. Corresponds to dpi of the exported image. Defaults to \code{100}.\cr\cr Large values (e.g. 100) are required to render small text properly. Small values (e.g. 20) will work when sequence/annotation text is off, and very small values (e.g. 10) will work when sequence/annotation text and outlines are all off.}
+
+\item{monitor_performance}{\code{logical}. Boolean specifying whether verbose performance monitoring should be messaged to console. Defaults to \code{FALSE}.}
 
 \item{...}{Used to recognise aliases e.g. American spellings or common misspellings - see \link{aliases}. If any American spellings do not work, please make a bug report at \url{https://github.com/ejade42/ggDNAvis/issues}.}
 }

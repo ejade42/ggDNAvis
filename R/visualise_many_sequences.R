@@ -84,10 +84,15 @@ visualise_many_sequences <- function(
     force_raster = FALSE,
     render_device = ragg::agg_png,
     pixels_per_base = 100,
+    monitor_performance = FALSE,
     ...
 ) {
+    ## Validate monitor_performance then store start time
+    start_time <- monitor_start(monitor_performance, "visualise_methylation")
+
     ## Process aliases
     ## ---------------------------------------------------------------------
+    monitor_time <- monitor(monitor_performance, start_time, start_time, "resolving aliases")
     dots <- list(...)
     sequence_colours <- resolve_alias("sequence_colours", sequence_colours, "sequence_colors", dots[["sequence_colors"]], sequence_colour_palettes$ggplot_style)
     sequence_colours <- resolve_alias("sequence_colours", sequence_colours, "sequence_cols", dots[["sequence_cols"]], sequence_colour_palettes$ggplot_style)
@@ -109,6 +114,7 @@ visualise_many_sequences <- function(
 
     ## Validate arguments
     ## ---------------------------------------------------------------------
+    monitor_time <- monitor(monitor_performance, start_time, monitor_time, "validating arguments")
     not_null <- list(sequences_vector = sequences_vector, sequence_colours = sequence_colours, background_colour = background_colour, margin = margin, sequence_text_colour = sequence_text_colour, sequence_text_size = sequence_text_size, index_annotation_colour = index_annotation_colour, index_annotation_size = index_annotation_size, index_annotation_interval = index_annotation_interval, index_annotations_above = index_annotations_above, index_annotation_vertical_position = index_annotation_vertical_position, index_annotation_full_line = index_annotation_full_line, outline_colour = outline_colour, outline_linewidth = outline_linewidth, outline_join = outline_join, return = return, force_raster = force_raster, filename = filename, pixels_per_base = pixels_per_base)
     for (argument in names(not_null)) {
         if (any(is.null(not_null[[argument]]))) {bad_arg(argument, not_null, "must not be NULL.")}
@@ -209,20 +215,19 @@ visualise_many_sequences <- function(
 
 
     ## Insert additional blank lines for index annotations (nothing changes if length(index_annotation_lines) == 0)
+    monitor_time <- monitor(monitor_performance, start_time, monitor_time, "inserting blank sequences at specified indices")
     new_sequences_vector <- insert_at_indices(sequences_vector, index_annotation_lines, insert_before = index_annotations_above, insert = "", vert = index_annotation_vertical_position)
 
-
     ## Generate data for plotting
+    monitor_time <- monitor(monitor_performance, start_time, monitor_time, "rasterising image data")
     image_data <- create_image_data(new_sequences_vector)
-    sequence_text_data <- convert_sequences_to_annotations(new_sequences_vector, line_length = max(nchar(new_sequences_vector)), interval = 0)
-    index_annotation_data <- convert_many_sequences_to_index_annotations(new_sequences_vector, sequences_vector, index_annotation_lines, index_annotation_interval, index_annotation_full_line, index_annotations_above, index_annotation_vertical_position)
-
 
     ## Name the sequence colours vector
     names(sequence_colours) <- as.character(1:4)
 
 
     ## Determine whether to use geom_raster as a faster but more limited alternative to geom_tile
+    monitor_time <- monitor(monitor_performance, start_time, monitor_time, "choosing rendering method")
     raster <- FALSE
     if (sequence_text_size == 0 && length(index_annotation_lines) == 0 && outline_linewidth == 0) {
         cli_alert_info("Automatically using geom_raster (much faster than geom_tile) as no sequence text, index annotations, or outlines are present.")
@@ -239,6 +244,7 @@ visualise_many_sequences <- function(
             warn(paste("When using geom_raster, it is recommended to use a smaller pixels_per_base e.g. 10, as there is no text/outlines that would benefit from higher resolution.\nCurrent value:", pixels_per_base), class = "parameter_recommendation")
         }
 
+        monitor_time <- monitor(monitor_performance, start_time, monitor_time, "creating basic plot via geom_raster")
         result <- ggplot(image_data, aes(x = .data$x, y = .data$y, fill = as.character(.data$layer))) +
             geom_raster() +
             scale_fill_manual(values = c("0" = background_colour, sequence_colours))
@@ -248,10 +254,12 @@ visualise_many_sequences <- function(
     } else {
 
         ## Calculate tile dimensions
+        monitor_time <- monitor(monitor_performance, start_time, monitor_time, "calculating tile sizes")
         tile_width  <- 1/max(nchar(new_sequences_vector))
         tile_height <- 1/length(new_sequences_vector)
 
         ## Generate actual plot
+        monitor_time <- monitor(monitor_performance, start_time, monitor_time, "creating basic plot via geom_tile")
         result <- ggplot(image_data, aes(x = .data$x, y = .data$y)) +
             ## Background
             geom_tile(data = filter(image_data, layer == 0), width = tile_width, height = tile_height, fill = background_colour) +
@@ -263,18 +271,27 @@ visualise_many_sequences <- function(
 
         ## Add sequence text if desired
         if (sequence_text_size != 0) {
+            monitor_time <- monitor(monitor_performance, start_time, monitor_time, "generating sequence text")
+            sequence_text_data <- convert_sequences_to_annotations(new_sequences_vector, line_length = max(nchar(new_sequences_vector)), interval = 0)
+
+            monitor_time <- monitor(monitor_performance, start_time, monitor_time, "adding sequence text")
             result <- result +
                 geom_text(data = sequence_text_data, aes(x = .data$x_position, y = .data$y_position, label = .data$annotation), col = sequence_text_colour, size = sequence_text_size, fontface = "bold", inherit.aes = F)
         }
 
         ## Add index annotations if desired
         if (length(index_annotation_lines) > 0) {
+            monitor_time <- monitor(monitor_performance, start_time, monitor_time, "generating index annotations")
+            index_annotation_data <- convert_many_sequences_to_index_annotations(new_sequences_vector, sequences_vector, index_annotation_lines, index_annotation_interval, index_annotation_full_line, index_annotations_above, index_annotation_vertical_position)
+
+            monitor_time <- monitor(monitor_performance, start_time, monitor_time, "adding index annotations")
             result <- result +
                 geom_text(data = index_annotation_data, aes(x = .data$x_position, y = .data$y_position, label = .data$annotation), col = index_annotation_colour, size = index_annotation_size, fontface = "bold", inherit.aes = F)
         }
     }
 
     ## Do general plot setup
+    monitor_time <- monitor(monitor_performance, start_time, monitor_time, "adding general plot themes")
     result <- result +
         coord_cartesian(expand = FALSE, clip = "off") +
         guides(x = "none", y = "none", fill = "none", col = "none", size = "none") +
@@ -283,6 +300,7 @@ visualise_many_sequences <- function(
               axis.title = element_blank())
 
     ## Correctly set margin, taking into consideration extra blank lines for annotations
+    monitor_time <- monitor(monitor_performance, start_time, monitor_time, "calculating margin")
     extra_spaces <- ceiling(index_annotation_vertical_position)
     if (1 %in% index_annotation_lines && index_annotations_above) {
         result <- result + theme(plot.margin = grid::unit(c(max(margin-extra_spaces, 0), margin, margin, margin), "inches"))
@@ -298,6 +316,7 @@ visualise_many_sequences <- function(
 
     ## Check if filename is set and warn if not png, then export image
     if (is.na(filename) == FALSE) {
+        monitor_time <- monitor(monitor_performance, start_time, monitor_time, "exporting image file")
         if (is.character(filename) == FALSE) {
             bad_arg("filename", list(filename = filename), "must be a character/string (or NA if no file export wanted)")
         }
@@ -308,6 +327,7 @@ visualise_many_sequences <- function(
     }
 
     ## Return either the plot object or NULL
+    monitor_time <- monitor(monitor_performance, start_time, monitor_time, "done")
     if (return == TRUE) {
         return(result)
     }

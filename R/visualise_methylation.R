@@ -63,7 +63,7 @@
 #' @param force_raster `logical`. Boolean specifying whether [ggplot2::geom_raster()] should be used even if it will remove text and outlines. Defaults to `FALSE`.\cr\cr To make the detailed plots with box outlines, sequence text, and index annotations, [ggplot2::geom_tile()] is used. However, `geom_tile` is unusuably slow for huge datasets, so there is an option to use `geom_raster` instead. `geom_raster` does not support box outlines, sequence text, or index annotations, but is much faster if only the colours are wanted.\cr\cr `geom_raster` is automatically used if it will not change the plot (i.e. if all extraneous elements are already off), but can be forced using this argument.
 #' @param render_device `function/character`. Device to use when rendering. See [ggplot2::ggsave()] documentation for options. Defaults to [`ragg::agg_png`]. Can be set to `NULL` to infer from file extension, but results may vary between systems.
 #' @param pixels_per_base `integer`. How large each box should be in pixels, if file output is turned on via setting `filename`. Corresponds to dpi of the exported image. Defaults to `100`.\cr\cr Large values (e.g. 100) are required to render small text properly. Small values (e.g. 20) will work when sequence/annotation text is off, and very small values (e.g. 10) will work when sequence/annotation text and outlines are all off.
-#' @param monitor_performance `logical`. Boolean specifying whether verbose performance monitoring should be messagsed to console. Defaults to `FALSE`.
+#' @param monitor_performance `logical`. Boolean specifying whether verbose performance monitoring should be messaged to console. Defaults to `FALSE`.
 #' @param ... Used to recognise aliases e.g. American spellings or common misspellings - see [aliases]. If any American spellings do not work, please make a bug report at <`r packageDescription("ggDNAvis")$BugReports`>.
 #'
 #' @return A ggplot object containing the full visualisation, or `invisible(NULL)` if `return = FALSE`. It is often more useful to use `filename = "myfilename.png"`, because then the visualisation is exported at the correct aspect ratio.
@@ -469,7 +469,6 @@ visualise_methylation <- function(
         modification_probabilities <- insert_at_indices(modification_probabilities_original, index_annotation_lines, insert_before = index_annotations_above, insert = "", vert = index_annotation_vertical_position)
         sequences <- insert_at_indices(sequences_original, index_annotation_lines, insert_before = index_annotations_above, insert = "", vert = index_annotation_vertical_position)
     }, classes = "length_exceeded")
-    index_annotation_data <- convert_many_sequences_to_index_annotations(sequences, sequences_original, index_annotation_lines, index_annotation_interval, index_annotation_full_line, index_annotations_above, index_annotation_vertical_position)
 
 
     ## Generate rasterised dataframes of methylation and masking layer
@@ -526,16 +525,6 @@ visualise_methylation <- function(
 
     ## Otherwise slow geom_tile
     } else {
-        ## Generate sequence text data based on the chosen setting
-        if (sequence_text_type == "sequence") {
-            monitor_time <- monitor(monitor_performance, start_time, monitor_time, "generating sequence text (type 'sequence')")
-            sequence_text_data <- convert_sequences_to_annotations(sequences, line_length = max(nchar(sequences)), interval = 0)
-        } else if (sequence_text_type == "probability") {
-            monitor_time <- monitor(monitor_performance, start_time, monitor_time, "generating sequence text (type 'probability')")
-            probability_data <- convert_probabilities_to_annotations(modification_locations, modification_probabilities, sequences, sequence_text_scaling, sequence_text_rounding)
-        }
-
-
         ## Calculate width and height of tiles based on sequences
         monitor_time <- monitor(monitor_performance, start_time, monitor_time, "calculating tile sizes")
         tile_width  <- 1/max(nchar(sequences))
@@ -559,10 +548,17 @@ visualise_methylation <- function(
 
         ## Add sequence text or probability labels if desired
         if (sequence_text_type == "sequence") {
+            monitor_time <- monitor(monitor_performance, start_time, monitor_time, "generating sequence text (type 'sequence')")
+            sequence_text_data <- convert_sequences_to_annotations(sequences, line_length = max(nchar(sequences)), interval = 0)
+
             monitor_time <- monitor(monitor_performance, start_time, monitor_time, "adding sequence text (type 'sequence')")
             result <- result +
                 geom_text(data = sequence_text_data, aes(x = .data$x_position, y = .data$y_position, label = .data$annotation), col = sequence_text_colour, size = sequence_text_size, fontface = "bold", inherit.aes = F)
+
         } else if (sequence_text_type == "probability") {
+            monitor_time <- monitor(monitor_performance, start_time, monitor_time, "generating sequence text (type 'probability')")
+            probability_data <- convert_probabilities_to_annotations(modification_locations, modification_probabilities, sequences, sequence_text_scaling, sequence_text_rounding)
+
             monitor_time <- monitor(monitor_performance, start_time, monitor_time, "adding sequence text (type 'probability')")
             result <- result +
                 geom_text(data = probability_data, aes(x = .data$x_position, y = .data$y_position, label = .data$annotation), col = sequence_text_colour, size = sequence_text_size, fontface = "bold", inherit.aes = F)
@@ -570,6 +566,9 @@ visualise_methylation <- function(
 
         ## Add index annotations if desired
         if (length(index_annotation_lines) > 0) {
+            monitor_time <- monitor(monitor_performance, start_time, monitor_time, "generating index annotations")
+            index_annotation_data <- convert_many_sequences_to_index_annotations(sequences, sequences_original, index_annotation_lines, index_annotation_interval, index_annotation_full_line, index_annotations_above, index_annotation_vertical_position)
+
             monitor_time <- monitor(monitor_performance, start_time, monitor_time, "adding index annotations")
             result <- result +
                 geom_text(data = index_annotation_data, aes(x = .data$x_position, y = .data$y_position, label = .data$annotation), col = index_annotation_colour, size = index_annotation_size, fontface = "bold", inherit.aes = F)
@@ -601,7 +600,7 @@ visualise_methylation <- function(
 
     ## Validate filename and export image
     if (is.na(filename) == FALSE) {
-        monitor_time <- monitor(monitor_performance, start_time, monitor_time, "exporting file")
+        monitor_time <- monitor(monitor_performance, start_time, monitor_time, "exporting image file")
         if (is.character(filename) == FALSE) {
             bad_arg("filename", list(filename = filename), "must be a character/string (or NA if no file export wanted).")
         }
@@ -686,10 +685,15 @@ visualise_methylation_colour_scale <- function(
     side_scale_title = NULL,
     outline_colour = "black",
     outline_linewidth = 1,
+    monitor_performance = FALSE,
     ...
 ) {
+    ## Validate monitor_performance then store start time
+    start_time <- monitor_start(monitor_performance, "visualise_methylation_colour_scale")
+
     ## Process aliases
     ## ---------------------------------------------------------------------
+    monitor_time <- monitor(monitor_performance, start_time, start_time, "resolving aliases")
     dots <- list(...)
     low_colour <- resolve_alias("low_colour", low_colour, "low_color", dots[["low_color"]], "blue")
     low_colour <- resolve_alias("low_colour", low_colour, "low_col", dots[["low_col"]], "blue")
@@ -705,6 +709,7 @@ visualise_methylation_colour_scale <- function(
 
     ## Validate arguments
     ## ---------------------------------------------------------------------
+    monitor_time <- monitor(monitor_performance, start_time, monitor_time, "validating arguments")
     not_null_or_na <- list(low_colour = low_colour, high_colour = high_colour, low_clamp = low_clamp, high_clamp = high_clamp, full_range = full_range, precision = precision, background_colour = background_colour, do_x_ticks = do_x_ticks, do_side_scale = do_side_scale, outline_colour = outline_colour, outline_linewidth = outline_linewidth)
     for (argument in names(not_null_or_na)) {
         if (any(is.null(not_null_or_na[[argument]])) || any(is.na(not_null_or_na[[argument]]))) {bad_arg(argument, not_null_or_na, "must not be NULL or NA.")}
@@ -761,6 +766,7 @@ visualise_methylation_colour_scale <- function(
 
 
     ## Use arguments to calculate scales and evaluate at specified intervals
+    monitor_time <- monitor(monitor_performance, start_time, monitor_time, "calculating data to plot")
     x_scale <- seq(0, 1-1/precision, 1/precision)
     full_data_span <- full_range[2] - full_range[1]
     col_scale <- seq(0, 1, 1/(precision-1)) * full_data_span
@@ -770,6 +776,7 @@ visualise_methylation_colour_scale <- function(
     scale_data <- data.frame(xmin = x_scale, xmax = x_scale + 1/precision, col_scale = col_scale, col_scale_clamped = col_scale_clamped)
 
     ## Plot
+    monitor_time <- monitor(monitor_performance, start_time, monitor_time, "creating plot")
     result <- ggplot(scale_data) +
         geom_rect(aes(xmin = .data$xmin, xmax = .data$xmax, ymin = 0, ymax = 1, fill = .data$col_scale_clamped)) +
         scale_fill_gradient(low = low_colour, high = high_colour, limits = c(low_clamp, high_clamp)) +
@@ -789,6 +796,7 @@ visualise_methylation_colour_scale <- function(
     }
 
     ## Return plot
+    monitor_time <- monitor(monitor_performance, start_time, monitor_time, "done")
     return(result)
 }
 

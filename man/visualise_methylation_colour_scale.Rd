@@ -19,6 +19,7 @@ visualise_methylation_colour_scale(
   side_scale_title = NULL,
   outline_colour = "black",
   outline_linewidth = 1,
+  monitor_performance = FALSE,
   ...
 )
 }
@@ -48,6 +49,8 @@ visualise_methylation_colour_scale(
 \item{outline_colour}{\code{character}. The colour of the scalebar outline. Defaults to black.}
 
 \item{outline_linewidth}{\code{numeric}. The linewidth of the scalebar outline. Defaults to \code{1}. Set to \code{0} to disable scalebar outline.}
+
+\item{monitor_performance}{\code{logical}. Boolean specifying whether verbose performance monitoring should be messaged to console. Defaults to \code{FALSE}.}
 
 \item{...}{Used to recognise aliases e.g. American spellings or common misspellings - see \link{aliases}. If any American spellings do not work, please make a bug report at \url{https://github.com/ejade42/ggDNAvis/issues}.}
 }

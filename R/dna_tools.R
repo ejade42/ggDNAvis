@@ -67,14 +67,19 @@ resolve_alias <- function(
 }
 
 monitor_start <- function(monitor_performance, function_name) {
+    start_time <- Sys.time()
+
+    ## Validate arguments
     if (any(is.na(monitor_performance)) || any(is.null(monitor_performance)) || !is.logical(monitor_performance) || length(monitor_performance) != 1) {
         bad_arg("monitor_performance", list(monitor_performance = monitor_performance), "must be a single logical/boolean value.")
     }
-    start_time <- Sys.time()
+
+    ## If monitoring is on, start messaging
     if (monitor_performance) {
         cli_alert_info("Verbose monitoring enabled")
         cli_alert_info(paste(format(start_time, "(%Y-%m-%d %H:%M:%S)"), function_name, "start"))
     }
+
     return(start_time)
 }
 
@@ -91,7 +96,7 @@ monitor <- function(monitor_performace, start_time, previous_time, message) {
     return(current_time)
 }
 
-format_time_diff <- function(new_time, old_time, characters_to_print) {
+format_time_diff <- function(new_time, old_time, characters_to_print = 4) {
     diff <- as.numeric(difftime(new_time, old_time, units = "secs"))
     digits_before_decimal <- max(floor(log10(diff)) + 1, 1)
     digits_after_decimal <- characters_to_print - digits_before_decimal
