@@ -87,8 +87,12 @@ visualise_single_sequence <- function(
     monitor_performance = FALSE,
     ...
 ) {
+    ## Validate monitor_performance then store start time
+    start_time <- monitor_start(monitor_performance, "visualise_single_sequence")
+
     ## Process aliases
     ## ---------------------------------------------------------------------
+    monitor_time <- monitor(monitor_performance, start_time, start_time, "resolving aliases")
     dots <- list(...)
     sequence_colours <- resolve_alias("sequence_colours", sequence_colours, "sequence_colors", dots[["sequence_colors"]], sequence_colour_palettes$ggplot_style)
     sequence_colours <- resolve_alias("sequence_colours", sequence_colours, "sequence_cols", dots[["sequence_cols"]], sequence_colour_palettes$ggplot_style)
@@ -107,6 +111,7 @@ visualise_single_sequence <- function(
 
     ## Validate arguments
     ## ---------------------------------------------------------------------
+    monitor_time <- monitor(monitor_performance, start_time, monitor_time, "validating arguments")
     not_null <- list(sequence = sequence, sequence_colours = sequence_colours, background_colour = background_colour, line_wrapping = line_wrapping, spacing = spacing, margin = margin, sequence_text_colour = sequence_text_colour, sequence_text_size = sequence_text_size, index_annotation_colour = index_annotation_colour, index_annotation_size = index_annotation_size, index_annotation_interval = index_annotation_interval, index_annotations_above = index_annotations_above, index_annotation_vertical_position = index_annotation_vertical_position, outline_colour = outline_colour, outline_linewidth = outline_linewidth, outline_join = outline_join, return = return, force_raster = force_raster, filename = filename, pixels_per_base = pixels_per_base)
     for (argument in names(not_null)) {
         if (any(is.null(not_null[[argument]]))) {bad_arg(argument, not_null, "must not be NULL.")}
@@ -192,9 +197,11 @@ visualise_single_sequence <- function(
 
 
     ## Generate data for plotting
+    monitor_time <- monitor(monitor_performance, start_time, monitor_time, "splitting input seq to sequence vector")
     sequences <- convert_input_seq_to_sequence_list(sequence, line_wrapping, spacing, FALSE, FALSE)
 
     ## Add extra top/bottom blank lines if needed for index annotations
+    monitor_time <- monitor(monitor_performance, start_time, monitor_time, "adding extra top/bottom spacer if needed")
     extra_spaces <- 0
     if (index_annotation_interval != 0) {
         extra_spaces <- ceiling(index_annotation_vertical_position)
@@ -207,7 +214,11 @@ visualise_single_sequence <- function(
 
     # Finish generating data for plotting
     if (max(nchar(sequences)) < line_wrapping) {line_wrapping <- max(nchar(sequences))}
+
+    monitor_time <- monitor(monitor_performance, start_time, monitor_time, "generating sequence text and index annotations")
     annotations <- convert_sequences_to_annotations(sequences, line_wrapping, index_annotation_interval, index_annotations_above, index_annotation_vertical_position)
+
+    monitor_time <- monitor(monitor_performance, start_time, monitor_time, "rasterising image data")
     image_data <- create_image_data(sequences)
 
 
@@ -216,6 +227,7 @@ visualise_single_sequence <- function(
 
 
     ## Determine whether to use geom_raster as a faster but more limited alternative to geom_tile
+    monitor_time <- monitor(monitor_performance, start_time, monitor_time, "choosing rendering method")
     raster <- FALSE
     if (sequence_text_size == 0 && index_annotation_interval == 0 && outline_linewidth == 0) {
         cli_alert_info("Automatically using geom_raster (much faster than geom_tile) as no sequence text, index annotations, or outlines are present.")
@@ -232,6 +244,7 @@ visualise_single_sequence <- function(
             warn(paste("When using geom_raster, it is recommended to use a smaller pixels_per_base e.g. 10, as there is no text/outlines that would benefit from higher resolution.\nCurrent value:", pixels_per_base), class = "parameter_recommendation")
         }
 
+        monitor_time <- monitor(monitor_performance, start_time, monitor_time, "creating basic plot via geom_raster")
         result <- ggplot(image_data, aes(x = .data$x, y = .data$y, fill = as.character(.data$layer))) +
             geom_raster() +
             scale_fill_manual(values = c("0" = background_colour, sequence_colours))
@@ -241,10 +254,12 @@ visualise_single_sequence <- function(
     } else {
 
         ## Calculate tile dimensions
+        monitor_time <- monitor(monitor_performance, start_time, monitor_time, "calculating tile sizes")
         tile_width  <- 1/max(nchar(sequences))
         tile_height <- 1/length(sequences)
 
         ## Generate plot
+        monitor_time <- monitor(monitor_performance, start_time, monitor_time, "creating basic plot via geom_tile")
         result <- ggplot(image_data, aes(x = .data$x, y = .data$y)) +
             ## Background
             geom_tile(data = filter(image_data, layer == 0), width = tile_width, height = tile_height, fill = background_colour) +
@@ -261,6 +276,7 @@ visualise_single_sequence <- function(
     }
 
     ## Do general plot setup
+    monitor_time <- monitor(monitor_performance, start_time, monitor_time, "adding general plot themes")
     result <- result +
         coord_cartesian(expand = FALSE, clip = "off") +
         guides(x = "none", y = "none", fill = "none", col = "none", size = "none") +
@@ -270,6 +286,7 @@ visualise_single_sequence <- function(
 
     ## As long as the lines are spaced out, don't need a bottom margin as the blank spacer line does that
     ## But if spacing is turned off, need to add a bottom margin
+    monitor_time <- monitor(monitor_performance, start_time, monitor_time, "calculating margin")
     if (extra_spaces == 0) {
         result <- result + theme(plot.margin = grid::unit(c(margin, margin, margin, margin), "inches"))
         extra_height <- 2 * margin
@@ -285,6 +302,7 @@ visualise_single_sequence <- function(
 
     ## Check if filename is set and warn if not png, then export image
     if (is.na(filename) == FALSE) {
+        monitor_time <- monitor(monitor_performance, start_time, monitor_time, "exporting image file")
         if (is.character(filename) == FALSE) {
             abort("Filename must be a character/string (or NA if no file export wanted)", class = "argument_value_or_type")
         }
@@ -295,6 +313,7 @@ visualise_single_sequence <- function(
     }
 
     ## Return either the plot object or NULL
+    monitor_time <- monitor(monitor_performance, start_time, monitor_time, "done")
     if (return == TRUE) {
         return(result)
     }

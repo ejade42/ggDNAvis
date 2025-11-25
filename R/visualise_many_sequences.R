@@ -88,7 +88,7 @@ visualise_many_sequences <- function(
     ...
 ) {
     ## Validate monitor_performance then store start time
-    start_time <- monitor_start(monitor_performance, "visualise_methylation")
+    start_time <- monitor_start(monitor_performance, "visualise_many_sequences")
 
     ## Process aliases
     ## ---------------------------------------------------------------------
