@@ -199,7 +199,7 @@ test_that("main plotting function works with outlines and annnotations, grouped,
 test_that("main plotting function works with outlines and annnotations, all", {
     filename <- "visualise_many_sequences_test_22"
     sequences <- extract_and_sort_sequences(example_many_sequences, grouping_levels = NA, sort_by = NA)
-    visualize_many_sequences(sequences, sequence_cols = sequence_colour_palettes$bright_deep, pixels_per_base = 30, index_annotation_lines = c(1:23), index_annotation_interval = 1, index_annotation_size = 20, index_annotation_colour = "purple", sequence_text_colour = "cyan", background_colour = "orange", outline_colour = "red", index_annotation_vertical_position = 5/4, index_annotation_full_line = FALSE, filename = paste0(root, filename, ".png"))
+    visualize_many_sequences(sequences, sequence_cols = sequence_colour_palettes$bright_deep, pixels_per_base = 15, index_annotation_lines = c(1:23), index_annotation_interval = 1, index_annotation_size = 20, index_annotation_colour = "purple", sequence_text_colour = "cyan", background_colour = "orange", outline_colour = "red", index_annotation_vertical_position = 5/4, index_annotation_full_line = FALSE, filename = paste0(root, filename, ".png"))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -208,7 +208,7 @@ test_that("main plotting function works with outlines and annnotations, all", {
 test_that("main plotting function works with outlines and annnotations, all, below", {
     filename <- "visualise_many_sequences_test_23"
     sequences <- extract_and_sort_sequences(example_many_sequences, grouping_levels = NA, sort_by = NA)
-    visualise_many_sequences(sequences, sequence_colours = sequence_colour_palettes$bright_deep, pixels_per_base = 30, index_annotation_lines = c(1:23), index_annotation_interval = 1, index_annotation_size = 20, index_annotation_colour = "purple", sequence_text_colour = "cyan", background_colour = "orange", outline_colour = "red", index_annotation_vertical_position = 5/4, index_annotation_full_line = FALSE, index_annotations_above = FALSE, filename = paste0(root, filename, ".png"))
+    visualise_many_sequences(sequences, sequence_colours = sequence_colour_palettes$bright_deep, pixels_per_base = 15, index_annotation_lines = c(1:23), index_annotation_interval = 1, index_annotation_size = 20, index_annotation_colour = "purple", sequence_text_colour = "cyan", background_colour = "orange", outline_colour = "red", index_annotation_vertical_position = 5/4, index_annotation_full_line = FALSE, index_annotations_above = FALSE, filename = paste0(root, filename, ".png"))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)

@@ -72,7 +72,7 @@ test_that("single sequence visualisation works with reduced spacing, and gives w
 
 test_that("single sequence visualisation works exporting to jpg", {
     filename <- "sone_2019_f1_1_expanded_test_09"
-    expect_warning(visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), outline_linewidth = 0, pixels_per_base = 30, index_annotations_above = FALSE, filename = paste0(root, filename, ".jpg"), render_device = ragg::agg_jpeg),
+    expect_warning(visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), outline_linewidth = 0, pixels_per_base = 15, index_annotations_above = FALSE, filename = paste0(root, filename, ".jpg"), render_device = ragg::agg_jpeg),
                    class = "filetype_recommendation")
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".jpg")),
                                        image_read(paste0(reference, filename, ".jpg")),
@@ -82,7 +82,7 @@ test_that("single sequence visualisation works exporting to jpg", {
 
 test_that("single sequence visualisation works with spacing text clash and jpg warnings", {
     filename <- "sone_2019_f1_1_expanded_test_10"
-    expect_warning(expect_warning(visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), outline_linewidth = 0, spacing = 0, pixels_per_base = 30, index_annotations_above = FALSE, filename = paste0(root, filename, ".jpg"), render_device = ragg::agg_jpeg),
+    expect_warning(expect_warning(visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), outline_linewidth = 0, spacing = 0, pixels_per_base = 15, index_annotations_above = FALSE, filename = paste0(root, filename, ".jpg"), render_device = ragg::agg_jpeg),
                                   class = "filetype_recommendation"), class = "parameter_recommendation")
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".jpg")),
                                        image_read(paste0(reference, filename, ".jpg")),
