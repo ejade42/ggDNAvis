@@ -224,8 +224,8 @@ visualise_methylation(
     methylation_info$lengths
 )
 #> Error in visualise_methylation(methylation_info$locations, methylation_info$probabilities,     methylation_info$lengths): Argument 'sequences' must be a character vector.
-#> Current value: 102, 93, 87, 81, 63, 0, 0, 69, 63, 0, 0, 87, 84, 81, 0, 0, 0, 0, 0, 0, 0, 0, 93, 0, 0, 90, 87, 84, 0, 0, 0, 0, 0, 0, 0, 0, 96, 96, 0, 0, 93, 90, 87, 0, 0, 96, 0, 0, 96, 90, 81
 #> Current class: numeric
+#> Current value: 102, 93, 87, 81, 63, 0, 0, 69, 63, 0, 0, 87, 84, 81, 0, 0, 0, 0, 0, 0, 0, 0, 93, 0, 0, 90, 87, 84, 0, 0, 0, 0, 0, 0, 0, 0, 96, 96, 0, 0, 93, 90, 87, 0, 0, 96, 0, 0, 96, 90, 81
 
 ## Export with all defaults rather than returning
 visualise_methylation(
@@ -236,8 +236,8 @@ visualise_methylation(
     return = FALSE
 )
 #> Error in visualise_methylation(methylation_info$locations, methylation_info$probabilities,     methylation_info$lengths, filename = "example_vm_01.png",     return = FALSE): Argument 'sequences' must be a character vector.
-#> Current value: 102, 93, 87, 81, 63, 0, 0, 69, 63, 0, 0, 87, 84, 81, 0, 0, 0, 0, 0, 0, 0, 0, 93, 0, 0, 90, 87, 84, 0, 0, 0, 0, 0, 0, 0, 0, 96, 96, 0, 0, 93, 90, 87, 0, 0, 96, 0, 0, 96, 90, 81
 #> Current class: numeric
+#> Current value: 102, 93, 87, 81, 63, 0, 0, 69, 63, 0, 0, 87, 84, 81, 0, 0, 0, 0, 0, 0, 0, 0, 93, 0, 0, 90, 87, 84, 0, 0, 0, 0, 0, 0, 0, 0, 96, 96, 0, 0, 93, 90, 87, 0, 0, 96, 0, 0, 96, 90, 81
 ## View exported image
 image <- png::readPNG("example_vm_01.png")
 #> Error in png::readPNG("example_vm_01.png"): unable to open example_vm_01.png
@@ -265,8 +265,8 @@ visualise_methylation(
     margin = 0.3
 )
 #> Error in visualise_methylation(methylation_info$locations, methylation_info$probabilities,     methylation_info$lengths, filename = "example_vm_02.png",     return = FALSE, low_colour = "white", high_colour = "black",     low_clamp = 0.3 * 255, high_clamp = 0.7 * 255, other_bases_colour = "lightblue1",     other_bases_outline_linewidth = 1, other_bases_outline_colour = "grey",     modified_bases_outline_linewidth = 3, modified_bases_outline_colour = "black",     margin = 0.3): Argument 'sequences' must be a character vector.
-#> Current value: 102, 93, 87, 81, 63, 0, 0, 69, 63, 0, 0, 87, 84, 81, 0, 0, 0, 0, 0, 0, 0, 0, 93, 0, 0, 90, 87, 84, 0, 0, 0, 0, 0, 0, 0, 0, 96, 96, 0, 0, 93, 90, 87, 0, 0, 96, 0, 0, 96, 90, 81
 #> Current class: numeric
+#> Current value: 102, 93, 87, 81, 63, 0, 0, 69, 63, 0, 0, 87, 84, 81, 0, 0, 0, 0, 0, 0, 0, 0, 93, 0, 0, 90, 87, 84, 0, 0, 0, 0, 0, 0, 0, 0, 96, 96, 0, 0, 93, 90, 87, 0, 0, 96, 0, 0, 96, 90, 81
 ## View exported image
 image <- png::readPNG("example_vm_02.png")
 #> Error in png::readPNG("example_vm_02.png"): unable to open example_vm_02.png

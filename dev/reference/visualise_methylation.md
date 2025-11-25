@@ -74,6 +74,7 @@ visualise_methylation(
   force_raster = FALSE,
   render_device = ragg::agg_png,
   pixels_per_base = 100,
+  monitor_performance = FALSE,
   ...
 )
 ```
@@ -364,6 +365,11 @@ visualise_methylation(
   Small values (e.g. 20) will work when sequence/annotation text is off,
   and very small values (e.g. 10) will work when sequence/annotation
   text and outlines are all off.
+
+- monitor_performance:
+
+  `logical`. Boolean specifying whether verbose performance monitoring
+  should be messagsed to console. Defaults to `FALSE`.
 
 - ...:
 

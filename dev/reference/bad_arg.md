@@ -72,21 +72,21 @@ Nothing, but causes an error exit via
 positive_args <- list(number = -1)
 try(bad_arg("number", positive_args, "must be positive"))
 #> Error in eval(expr, envir) : Argument 'number' must be positive
-#> Current value: -1
 #> Current class: numeric
+#> Current value: -1
 
 ## Automatically detects named item and prints names
 named <- list(x = c("first item" = 1, "second item" = 7))
 try(bad_arg("x", named, "is not acceptable"))
 #> Error in eval(expr, envir) : Argument 'x' is not acceptable
+#> Current class: numeric
 #> Current value: 1, 7
 #> Current names: first item, second item
-#> Current class: numeric
 
 ## Can force name printing
 try(bad_arg("number", positive_args, "must be positive", force_names = TRUE))
 #> Error in eval(expr, envir) : Argument 'number' must be positive
+#> Current class: numeric
 #> Current value: -1
 #> Current names: 
-#> Current class: numeric
 ```
