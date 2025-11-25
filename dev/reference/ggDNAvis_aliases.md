@@ -73,6 +73,8 @@ visualise_methylation(
 #> 'low_colour' will be used.
 #>     Value: green
 #> ℹ Automatically using geom_raster (much faster than geom_tile) as no sequence text, index annotations, or outlines are present.
+#> Warning: When using geom_raster, it is recommended to use a smaller pixels_per_base e.g. 10, as there is no text/outlines that would benefit from higher resolution.
+#> Current value: 100
 
 
 ## The resulting low colour will be orange
@@ -92,6 +94,8 @@ visualise_methylation(
 #> 'low_colour' will be used.
 #>     Value: purple
 #> ℹ Automatically using geom_raster (much faster than geom_tile) as no sequence text, index annotations, or outlines are present.
+#> Warning: When using geom_raster, it is recommended to use a smaller pixels_per_base e.g. 10, as there is no text/outlines that would benefit from higher resolution.
+#> Current value: 100
 
 
 ## The resulting low colour will be purple
@@ -105,5 +109,7 @@ visualise_methylation(
     low_col = "purple"
 )
 #> ℹ Automatically using geom_raster (much faster than geom_tile) as no sequence text, index annotations, or outlines are present.
+#> Warning: When using geom_raster, it is recommended to use a smaller pixels_per_base e.g. 10, as there is no text/outlines that would benefit from higher resolution.
+#> Current value: 100
 
 ```
