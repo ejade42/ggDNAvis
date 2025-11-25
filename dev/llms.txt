@@ -37,6 +37,7 @@
     customisation](#id_53-index-annotation-customisation)
   - [5.4 Colour and layout
     customisation](#id_54-colour-and-layout-customisation)
+  - [5.5 Performance](#id_55-performance)
 - [6 Visualising DNA
   methylation/modification](#id_6-visualising-dna-methylationmodification)
   - [6.1 Basic visualisation](#id_61-basic-visualisation)
@@ -52,6 +53,7 @@
     customisation](#id_66-colour-mapping-customisation)
   - [6.7 Scalebar customisation](#id_67-scalebar-customisation)
   - [6.8 Think about the offset!](#id_68-think-about-the-offset)
+  - [6.9 Performance](#id_69-performance)
 - [7 References](#id_7-references)
 
 [](https://ejade42.github.io/ggDNAvis/)
@@ -1570,9 +1572,6 @@ visualise_single_sequence(
 
 ``` R
 ## ℹ Automatically using geom_raster (much faster than geom_tile) as no sequence text, index annotations, or outlines are present.
-
-## Warning: When using geom_raster, it is recommended to use a smaller pixels_per_base e.g. 10, as there is no text/outlines that would benefit from higher resolution.
-## Current value: 20
 ```
 
 ``` r
@@ -1660,12 +1659,12 @@ is automatically used when it would not affect the output image
 can be forced by setting `force_raster = TRUE`. However, as forcing
 [`geom_raster()`](https://ggplot2.tidyverse.org/reference/geom_tile.html)
 necessitates removal of text/annotations/outlines, this produces a
-warning unless
+warning unless they were all already turned off.
 
 Furthermore, as
 [`geom_raster()`](https://ggplot2.tidyverse.org/reference/geom_tile.html)
 only draws simple boxes, a message is produced if `pixels_per_base` is
-greater than 10, as there is not really any benefit and it increases the
+greater than 20, as there is not really any benefit and it increases the
 file size of the image.
 
 An example where
@@ -1738,6 +1737,37 @@ knitr::include_graphics(paste0(github_location, "single_sequence_16.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_16.png)
+
+If sequence text, annotations, and outlines are all already off
+(i.e. `sequence_text_size = 0`, either `index_annotation_size = 0` or
+`index_annotation_interval = 0`, and `outline_linewidth = 0`), then no
+warning is produced from `force_raster` (but it is redundant and doesn’t
+do anything):
+
+``` r
+## Create image
+visualise_single_sequence(
+    sone_2019_f1_1_expanded_ggt_added,
+    filename = paste0(output_location, "single_sequence_17.png"),
+    return = FALSE,
+    sequence_colours = sequence_colour_palettes$bright_deep,
+    outline_linewidth = 0,
+    index_annotation_interval = 0,
+    sequence_text_size = 0,
+    pixels_per_base = 10
+)
+```
+
+``` R
+## ℹ Automatically using geom_raster (much faster than geom_tile) as no sequence text, index annotations, or outlines are present.
+```
+
+``` r
+## View image
+knitr::include_graphics(paste0(github_location, "single_sequence_17.png"))
+```
+
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_17.png)
 
 # 5 Visualising many DNA/RNA sequences
 
@@ -1905,19 +1935,23 @@ Here is the same image but with the default arguments explicitly stated:
 ## Extract sequences to a character vector
 ## Remember that example_many_sequences is identical to the data 
 ## read from FASTQ and metadata CSV in the previous code section
-sequences_for_visualisation <- extract_and_sort_sequences(example_many_sequences,
-                                                          sequence_variable = "sequence",
-                                                          grouping_levels = c("family" = 8,
-                                                                              "individual" = 2),
-                                                          sort_by = "sequence_length",
-                                                          desc_sort = TRUE)
+sequences_for_visualisation <- extract_and_sort_sequences(
+    example_many_sequences,
+    sequence_variable = "sequence",
+    grouping_levels = c("family" = 8,
+                        "individual" = 2),
+    sort_by = "sequence_length",
+    desc_sort = TRUE
+)
 
 ## We will not view the character vector in the interests of avoiding clutter.
 
 ## Use the character vector to make the image
-visualise_many_sequences(sequences_for_visualisation,
-                         filename = paste0(output_location, "many_sequences_02.png"),
-                         return = FALSE)
+visualise_many_sequences(
+    sequences_for_visualisation,
+    filename = paste0(output_location, "many_sequences_02.png"),
+    return = FALSE
+)
 
 ## View image
 knitr::include_graphics(paste0(github_location, "many_sequences_02.png"))
@@ -1939,16 +1973,20 @@ individual, we could do the following:
 
 ``` r
 ## Extract sequences to a character vector
-sequences_for_visualisation <- extract_and_sort_sequences(example_many_sequences,
-                                                          sequence_variable = "sequence",
-                                                          grouping_levels = c("individual" = 1),
-                                                          sort_by = "sequence_length",
-                                                          desc_sort = FALSE)
+sequences_for_visualisation <- extract_and_sort_sequences(
+    example_many_sequences,
+    sequence_variable = "sequence",
+    grouping_levels = c("individual" = 1),
+    sort_by = "sequence_length",
+    desc_sort = FALSE
+)
 
 ## Use the character vector to make the image
-visualise_many_sequences(sequences_for_visualisation,
-                         filename = paste0(output_location, "many_sequences_03.png"),
-                         return = FALSE)
+visualise_many_sequences(
+    sequences_for_visualisation,
+    filename = paste0(output_location, "many_sequences_03.png"),
+    return = FALSE
+)
 
 ## View image
 knitr::include_graphics(paste0(github_location, "many_sequences_03.png"))
@@ -1964,16 +2002,20 @@ reads in length order, via `grouping_levels = NA`:
 
 ``` r
 ## Extract sequences to a character vector
-sequences_for_visualisation <- extract_and_sort_sequences(example_many_sequences,
-                                                          sequence_variable = "sequence",
-                                                          grouping_levels = NA,
-                                                          sort_by = "sequence_length",
-                                                          desc_sort = TRUE)
+sequences_for_visualisation <- extract_and_sort_sequences(
+    example_many_sequences,
+    sequence_variable = "sequence",
+    grouping_levels = NA,
+    sort_by = "sequence_length",
+    desc_sort = TRUE
+)
 
 ## Use the character vector to make the image
-visualise_many_sequences(sequences_for_visualisation,
-                         filename = paste0(output_location, "many_sequences_04.png"),
-                         return = FALSE)
+visualise_many_sequences(
+    sequences_for_visualisation,
+    filename = paste0(output_location, "many_sequences_04.png"),
+    return = FALSE
+)
 
 ## View image
 knitr::include_graphics(paste0(github_location, "many_sequences_04.png"))
@@ -1990,15 +2032,19 @@ doesn’t matter what it is set to.
 
 ``` r
 ## Extract sequences to a character vector
-sequences_for_visualisation <- extract_and_sort_sequences(example_many_sequences,
-                                                          sequence_variable = "sequence",
-                                                          grouping_levels = NA,
-                                                          sort_by = NA)
+sequences_for_visualisation <- extract_and_sort_sequences(
+    example_many_sequences,
+    sequence_variable = "sequence",
+    grouping_levels = NA,
+    sort_by = NA
+)
 
 ## Use the character vector to make the image
-visualise_many_sequences(sequences_for_visualisation,
-                         filename = paste0(output_location, "many_sequences_05.png"),
-                         return = FALSE)
+visualise_many_sequences(
+    sequences_for_visualisation,
+    filename = paste0(output_location, "many_sequences_05.png"),
+    return = FALSE
+)
 
 ## View image
 knitr::include_graphics(paste0(github_location, "many_sequences_05.png"))
@@ -2011,16 +2057,20 @@ desired:
 
 ``` r
 ## Extract sequences to a character vector
-sequences_for_visualisation <- extract_and_sort_sequences(example_many_sequences,
-                                                          sequence_variable = "sequence",
-                                                          grouping_levels = c("family" = 2,
-                                                                              "individual" = 1),
-                                                          sort_by = NA)
+sequences_for_visualisation <- extract_and_sort_sequences(
+    example_many_sequences,
+    sequence_variable = "sequence",
+    grouping_levels = c("family" = 2,
+                        "individual" = 1),
+    sort_by = NA
+)
 
 ## Use the character vector to make the image
-visualise_many_sequences(sequences_for_visualisation,
-                         filename = paste0(output_location, "many_sequences_06.png"),
-                         return = FALSE)
+visualise_many_sequences(
+    sequences_for_visualisation,
+    filename = paste0(output_location, "many_sequences_06.png"),
+    return = FALSE
+)
 
 ## View image
 knitr::include_graphics(paste0(github_location, "many_sequences_06.png"))
@@ -2038,21 +2088,27 @@ standard R fashion with `factor(x, levels = ...)`:
 ``` r
 ## Reorder families
 example_many_sequences_reordered <- example_many_sequences
-example_many_sequences_reordered$family_reordered <- factor(example_many_sequences_reordered$family,
-                                                            levels = c("Family 2", 
-                                                                       "Family 3", 
-                                                                       "Family 1"))
+example_many_sequences_reordered$family_reordered <- factor(
+    example_many_sequences_reordered$family,
+    levels = c("Family 2", 
+               "Family 3", 
+               "Family 1")
+)
 
 ## Extract sequences to a character vector
-sequences_for_visualisation <- extract_and_sort_sequences(example_many_sequences_reordered,
-                                                          sequence_variable = "sequence",
-                                                          grouping_levels = c("family_reordered" = 0),
-                                                          sort_by = "sequence_length")
+sequences_for_visualisation <- extract_and_sort_sequences(
+    example_many_sequences_reordered,
+    sequence_variable = "sequence",
+    grouping_levels = c("family_reordered" = 0),
+    sort_by = "sequence_length"
+)
 
 ## Use the character vector to make the image
-visualise_many_sequences(sequences_for_visualisation,
-                         filename = paste0(output_location, "many_sequences_07.png"),
-                         return = FALSE)
+visualise_many_sequences(
+    sequences_for_visualisation,
+    filename = paste0(output_location, "many_sequences_07.png"),
+    return = FALSE
+)
 
 ## View image
 knitr::include_graphics(paste0(github_location, "many_sequences_07.png"))
@@ -2072,11 +2128,13 @@ then it will be sorted alphabetically, just like using
 ``` r
 ## Extract qualities to character vector,
 ## sorted alphabetically by quality string
-extracted_and_sorted_qualities <- extract_and_sort_sequences(example_many_sequences,
-                                                             sequence_variable = "quality",
-                                                             grouping_levels = c("family" = 2),
-                                                             sort_by = "quality",
-                                                             desc_sort = FALSE)
+extracted_and_sorted_qualities <- extract_and_sort_sequences(
+    example_many_sequences,
+    sequence_variable = "quality",
+    grouping_levels = c("family" = 2),
+    sort_by = "quality",
+    desc_sort = FALSE
+)
 
 ## View character vector
 print(extracted_and_sorted_qualities, quote = F)
@@ -2177,11 +2235,13 @@ sequences_for_visualisation <- extract_and_sort_sequences(example_many_sequences
 
 ## Use the character vector to make the image
 ## index_annotation_lines = c(1) is the default value
-visualise_many_sequences(sequences_for_visualisation,
-                         filename = paste0(output_location, "many_sequences_08.png"),
-                         return = FALSE,
-                         sequence_colours = sequence_colour_palettes$bright_pale2,
-                         index_annotation_lines = c(1))
+visualise_many_sequences(
+    sequences_for_visualisation,
+    filename = paste0(output_location, "many_sequences_08.png"),
+    return = FALSE,
+    sequence_colours = sequence_colour_palettes$bright_pale2,
+    index_annotation_lines = c(1)
+)
 
 ## View image
 knitr::include_graphics(paste0(github_location, "many_sequences_08.png"))
@@ -2203,11 +2263,13 @@ than 1 additional blank line will be inserted, according to
 Annotating above each line would look as follows:
 
 ``` r
-visualise_many_sequences(sequences_for_visualisation,
-                         filename = paste0(output_location, "many_sequences_09.png"),
-                         return = FALSE,
-                         sequence_colours = sequence_colour_palettes$bright_pale2,
-                         index_annotation_lines = c(1:51))
+visualise_many_sequences(
+    sequences_for_visualisation,
+    filename = paste0(output_location, "many_sequences_09.png"),
+    return = FALSE,
+    sequence_colours = sequence_colour_palettes$bright_pale2,
+    index_annotation_lines = c(1:51)
+)
 
 ## View image
 knitr::include_graphics(paste0(github_location, "many_sequences_09.png"))
@@ -2280,12 +2342,14 @@ We can see that lines 14, 28, and 51 are the last sequence in each
 family, so we will annotate below those lines:
 
 ``` r
-visualise_many_sequences(sequences_for_visualisation,
-                         filename = paste0(output_location, "many_sequences_10.png"),
-                         return = FALSE,
-                         sequence_colours = sequence_colour_palettes$bright_pale2,
-                         index_annotation_lines = c(14, 28, 51),
-                         index_annotations_above = FALSE)
+visualise_many_sequences(
+    sequences_for_visualisation,
+    filename = paste0(output_location, "many_sequences_10.png"),
+    return = FALSE,
+    sequence_colours = sequence_colour_palettes$bright_pale2,
+    index_annotation_lines = c(14, 28, 51),
+    index_annotations_above = FALSE
+)
 
 ## View image
 knitr::include_graphics(paste0(github_location, "many_sequences_10.png"))
@@ -2305,14 +2369,16 @@ Annotating above every line every 3 bases until each sequence ends would
 look as follows:
 
 ``` r
-visualise_many_sequences(sequences_for_visualisation,
-                         filename = paste0(output_location, "many_sequences_11.png"),
-                         return = FALSE,
-                         sequence_colours = sequence_colour_palettes$bright_pale2,
-                         index_annotation_lines = c(1:51),
-                         index_annotations_above = TRUE,
-                         index_annotation_interval = 3,
-                         index_annotation_full_line = FALSE)
+visualise_many_sequences(
+    sequences_for_visualisation,
+    filename = paste0(output_location, "many_sequences_11.png"),
+    return = FALSE,
+    sequence_colours = sequence_colour_palettes$bright_pale2,
+    index_annotation_lines = c(1:51),
+    index_annotations_above = TRUE,
+    index_annotation_interval = 3,
+    index_annotation_full_line = FALSE
+)
 
 ## View image
 knitr::include_graphics(paste0(github_location, "many_sequences_11.png"))
@@ -2329,14 +2395,16 @@ there is no sequence (however, the additional spacers are still inserted
 to make room for theoretical annotations).
 
 ``` r
-visualise_many_sequences(sequences_for_visualisation,
-                         filename = paste0(output_location, "many_sequences_12.png"),
-                         return = FALSE,
-                         sequence_colours = sequence_colour_palettes$bright_pale2,
-                         index_annotation_lines = c(1:51),
-                         index_annotations_above = TRUE,
-                         index_annotation_interval = 3,
-                         index_annotation_full_line = TRUE)
+visualise_many_sequences(
+    sequences_for_visualisation,
+    filename = paste0(output_location, "many_sequences_12.png"),
+    return = FALSE,
+    sequence_colours = sequence_colour_palettes$bright_pale2,
+    index_annotation_lines = c(1:51),
+    index_annotations_above = TRUE,
+    index_annotation_interval = 3,
+    index_annotation_full_line = TRUE
+)
 
 ## View image
 knitr::include_graphics(paste0(github_location, "many_sequences_12.png"))
@@ -2354,17 +2422,19 @@ via `index_annotation_colour`, `index_annotation_size`, and
 need increasing to prevent the top of the text being cut off).
 
 ``` r
-visualise_many_sequences(sequences_for_visualisation,
-                         filename = paste0(output_location, "many_sequences_13.png"),
-                         return = FALSE,
-                         sequence_colours = sequence_colour_palettes$bright_pale2,
-                         index_annotation_lines = c(1, 23, 37),
-                         index_annotations_above = TRUE,
-                         index_annotation_interval = 6,
-                         index_annotation_full_line = TRUE,
-                         index_annotation_colour = "green",
-                         index_annotation_size = 30,
-                         index_annotation_vertical_position = 1.5)
+visualise_many_sequences(
+    sequences_for_visualisation,
+    filename = paste0(output_location, "many_sequences_13.png"),
+    return = FALSE,
+    sequence_colours = sequence_colour_palettes$bright_pale2,
+    index_annotation_lines = c(1, 23, 37),
+    index_annotations_above = TRUE,
+    index_annotation_interval = 6,
+    index_annotation_full_line = TRUE,
+    index_annotation_colour = "green",
+    index_annotation_size = 30,
+    index_annotation_vertical_position = 1.5
+)
 
 ## View image
 knitr::include_graphics(paste0(github_location, "many_sequences_13.png"))
@@ -2379,11 +2449,13 @@ but `index_annotation_size = 0` and `index_annotation_interval = 0` also
 work perfectly well:
 
 ``` r
-visualise_many_sequences(sequences_for_visualisation,
-                         filename = paste0(output_location, "many_sequences_14.png"),
-                         return = FALSE,
-                         sequence_colours = sequence_colour_palettes$bright_pale2,
-                         index_annotation_lines = NA)
+visualise_many_sequences(
+    sequences_for_visualisation,
+    filename = paste0(output_location, "many_sequences_14.png"),
+    return = FALSE,
+    sequence_colours = sequence_colour_palettes$bright_pale2,
+    index_annotation_lines = NA
+)
 
 ## View image
 knitr::include_graphics(paste0(github_location, "many_sequences_14.png"))
@@ -2392,11 +2464,13 @@ knitr::include_graphics(paste0(github_location, "many_sequences_14.png"))
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_14.png)
 
 ``` r
-visualise_many_sequences(sequences_for_visualisation,
-                         filename = paste0(output_location, "many_sequences_15.png"),
-                         return = FALSE,
-                         sequence_colours = sequence_colour_palettes$bright_pale2,
-                         index_annotation_interval = 0)
+visualise_many_sequences(
+    sequences_for_visualisation,
+    filename = paste0(output_location, "many_sequences_15.png"),
+    return = FALSE,
+    sequence_colours = sequence_colour_palettes$bright_pale2,
+    index_annotation_interval = 0
+)
 ```
 
 ``` R
@@ -2411,11 +2485,13 @@ knitr::include_graphics(paste0(github_location, "many_sequences_15.png"))
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_15.png)
 
 ``` r
-visualise_many_sequences(sequences_for_visualisation,
-                         filename = paste0(output_location, "many_sequences_16.png"),
-                         return = FALSE,
-                         sequence_colours = sequence_colour_palettes$bright_pale2,
-                         index_annotation_size = 0)
+visualise_many_sequences(
+    sequences_for_visualisation,
+    filename = paste0(output_location, "many_sequences_16.png"),
+    return = FALSE,
+    sequence_colours = sequence_colour_palettes$bright_pale2,
+    index_annotation_size = 0
+)
 ```
 
 ``` R
@@ -2488,23 +2564,25 @@ colours might be:
 sequences_for_visualization <- extract_and_sort_sequences(example_many_sequences)
 
 ## Use the character vector to make the image
-visualize_many_sequences(sequences_for_visualization,
-                         filename = paste0(output_location, "many_sequences_17.png"),
-                         return = FALSE,
-                         sequence_colors = c("orange", "#00FF00", "magenta", "black"),
-                         sequence_text_col = "cyan",
-                         index_annotation_colour = "purple",
-                         background_color = "yellow",
-                         outline_col = "red",
-                         outline_join = "round",
-                         outline_linewidth = 15,
-                         sequence_text_size = 40,
-                         index_annotation_lines = c(1, 11, 21, 31, 41, 51),
-                         index_annotation_full_line = TRUE,
-                         index_annotation_interval = 5,
-                         index_annotations_above = FALSE,
-                         index_annotation_size = 25,
-                         margin = 5)
+visualize_many_sequences(
+    sequences_for_visualization,
+    filename = paste0(output_location, "many_sequences_17.png"),
+    return = FALSE,
+    sequence_colors = c("orange", "#00FF00", "magenta", "black"),
+    sequence_text_col = "cyan",
+    index_annotation_colour = "purple",
+    background_color = "yellow",
+    outline_col = "red",
+    outline_join = "round",
+    outline_linewidth = 15,
+    sequence_text_size = 40,
+    index_annotation_lines = c(1, 11, 21, 31, 41, 51),
+    index_annotation_full_line = TRUE,
+    index_annotation_interval = 5,
+    index_annotations_above = FALSE,
+    index_annotation_size = 25,
+    margin = 5
+)
 
 ## View image
 knitr::include_graphics(paste0(github_location, "many_sequences_17.png"))
@@ -2519,19 +2597,23 @@ resolution:
 
 ``` r
 ## Extract sequences to a character vector
-sequences_for_visualisation <- extract_and_sort_sequences(example_many_sequences,
-                                                          grouping_levels = c("family" = 4,
-                                                                              "individual" = 1))
+sequences_for_visualisation <- extract_and_sort_sequences(
+    example_many_sequences,
+    grouping_levels = c("family" = 4,
+                      "individual" = 1)
+)
 
 ## Use the character vector to make the image
-visualise_many_sequences(sequences_for_visualisation,
-                         filename = paste0(output_location, "many_sequences_18.png"),
-                         return = FALSE,
-                         sequence_colours = sequence_colour_palettes$bright_pale2,
-                         sequence_text_size = 0,
-                         index_annotation_size = 0,
-                         margin = 0.1,
-                         pixels_per_base = 20)
+visualise_many_sequences(
+    sequences_for_visualisation,
+    filename = paste0(output_location, "many_sequences_18.png"),
+    return = FALSE,
+    sequence_colours = sequence_colour_palettes$bright_pale2,
+    sequence_text_size = 0,
+    index_annotation_size = 0,
+    margin = 0.1,
+    pixels_per_base = 20
+)
 ```
 
 ``` R
@@ -2555,6 +2637,93 @@ happens if the half of the outline that falls outside the boxes is
 thicker than the margin), but if you get the warning you should check.
 In this case it’s fine and the outlines are not getting cut off with 0.1
 margin.
+
+## 5.5 Performance
+
+As with
+[`visualise_single_sequence()`](https://ejade42.github.io/ggDNAvis/reference/visualise_single_sequence.md),
+[`visualise_many_sequences()`](https://ejade42.github.io/ggDNAvis/reference/visualise_many_sequences.md)
+primarily uses
+[`geom_tile()`](https://ggplot2.tidyverse.org/reference/geom_tile.html)
+but can use the faster
+[`geom_raster()`](https://ggplot2.tidyverse.org/reference/geom_tile.html)
+if the bells and whistles are not required. This is fully explained in
+[`visualise_single_sequence()` performance](#id_44-performance), but the
+following differences apply here:
+
+For
+[`visualise_many_sequences()`](https://ejade42.github.io/ggDNAvis/reference/visualise_many_sequences.md),
+[`geom_raster()`](https://ggplot2.tidyverse.org/reference/geom_tile.html)
+is automatically used if:
+
+- `sequence_text_size` is `0`,
+- `index_annotation_lines` is `NA` or `numeric(0)`, or
+  `index_annotation_interval = 0`, or `index_annotation_size = 0`, and
+- `outline_linewidth` is `0`
+
+For example:
+
+``` r
+sequences <- extract_and_sort_sequences(example_many_sequences)
+
+visualise_many_sequences(
+    sequences,
+    filename = paste0(output_location, "many_sequences_19.png"),
+    return = FALSE,
+    sequence_colours = sequence_colour_palettes$sanger,
+    sequence_text_size = 0,
+    index_annotation_lines = NA,
+    outline_linewidth = 0,
+    pixels_per_base = 20
+)
+```
+
+``` R
+## ℹ Automatically using geom_raster (much faster than geom_tile) as no sequence text, index annotations, or outlines are present.
+```
+
+``` r
+## View image
+knitr::include_graphics(paste0(github_location, "many_sequences_19.png"))
+```
+
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_19.png)
+
+One important thing to note (which also applies to
+[`visualise_methylation()`](https://ejade42.github.io/ggDNAvis/reference/visualise_methylation.md))
+is that if `force_raster` is set to `TRUE`, the index annotation text
+will not be drawn, but the blank rows inserted to make room for it will
+still be inserted (see [index annotation
+customisation](#id_53-index-annotation-customisation) for how blank rows
+are inserted). This means the outcome is not identical between forcing
+[`geom_raster()`](https://ggplot2.tidyverse.org/reference/geom_tile.html)
+and allowing it to be automatically applied by manually turning off
+text/annotations/outlines:
+
+``` r
+visualise_many_sequences(
+    sequences,
+    filename = paste0(output_location, "many_sequences_20.png"),
+    return = FALSE,
+    sequence_colours = sequence_colour_palettes$sanger,
+    index_annotation_lines = 1:51,
+    pixels_per_base = 20,
+    force_raster = TRUE
+)
+```
+
+``` R
+## Warning: Forcing geom_raster via force_raster = TRUE will remove all sequence
+## text, index annotations (though any inserted blank lines/spacers will remain),
+## and box outlines.
+```
+
+``` r
+## View image
+knitr::include_graphics(paste0(github_location, "many_sequences_20.png"))
+```
+
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_20.png)
 
 # 6 Visualising DNA methylation/modification
 
@@ -3016,11 +3185,13 @@ enabling sequence visualisation).
 
 ``` r
 ## Use saved methylation data for visualisation to make image
-visualise_methylation(modification_locations     = methylation_data_for_visualisation$locations,
-                      modification_probabilities = methylation_data_for_visualisation$probabilities,
-                      sequences                  = methylation_data_for_visualisation$sequences,
-                      filename = paste0(output_location, "modification_01.png"),
-                      return = FALSE)
+visualise_methylation(
+    modification_locations     = methylation_data_for_visualisation$locations,
+    modification_probabilities = methylation_data_for_visualisation$probabilities,
+    sequences                  = methylation_data_for_visualisation$sequences,
+    filename = paste0(output_location, "modification_01.png"),
+    return = FALSE
+)
 
 ## View image
 knitr::include_graphics(paste0(github_location, "modification_01.png"))
@@ -3114,11 +3285,13 @@ methylation_data_for_visualisation <- extract_methylation_from_dataframe(
 )
 
 ## Use saved methylation data for visualisation to make image
-visualise_methylation(modification_locations     = methylation_data_for_visualisation$locations,
-                      modification_probabilities = methylation_data_for_visualisation$probabilities,
-                      sequences                  = methylation_data_for_visualisation$sequences,
-                      filename = paste0(output_location, "modification_02.png"),
-                      return = FALSE)
+visualise_methylation(
+    modification_locations     = methylation_data_for_visualisation$locations,
+    modification_probabilities = methylation_data_for_visualisation$probabilities,
+    sequences                  = methylation_data_for_visualisation$sequences,
+    filename = paste0(output_location, "modification_02.png"),
+    return = FALSE
+)
 
 ## View image
 knitr::include_graphics(paste0(github_location, "modification_02.png"))
@@ -3160,18 +3333,20 @@ For example:
 methylation_data_for_visualisation <- extract_methylation_from_dataframe(example_many_sequences)
 
 ## Use saved methylation data for visualisation to make image
-visualise_methylation(modification_locations     = methylation_data_for_visualisation$locations,
-                      modification_probabilities = methylation_data_for_visualisation$probabilities,
-                      sequences                  = methylation_data_for_visualisation$sequences,
-                      filename = paste0(output_location, "modification_03.png"),
-                      return = FALSE,
-                      index_annotation_lines = c(14, 28, 51),
-                      index_annotations_above = FALSE,
-                      index_annotation_interval = 3,
-                      index_annotation_full_line = FALSE,
-                      index_annotation_colour = "purple",
-                      index_annotation_size = 16,
-                      index_annotation_vertical_position = 0.45)
+visualise_methylation(
+    modification_locations     = methylation_data_for_visualisation$locations,
+    modification_probabilities = methylation_data_for_visualisation$probabilities,
+    sequences                  = methylation_data_for_visualisation$sequences,
+    filename = paste0(output_location, "modification_03.png"),
+    return = FALSE,
+    index_annotation_lines = c(14, 28, 51),
+    index_annotations_above = FALSE,
+    index_annotation_interval = 3,
+    index_annotation_full_line = FALSE,
+    index_annotation_colour = "purple",
+    index_annotation_size = 16,
+    index_annotation_vertical_position = 0.45
+)
 
 ## View image
 knitr::include_graphics(paste0(github_location, "modification_03.png"))
@@ -3232,13 +3407,15 @@ An example drawing the sequences is:
 methylation_data_for_visualisation <- extract_methylation_from_dataframe(example_many_sequences)
 
 ## Use saved methylation data for visualisation to make image
-visualise_methylation(modification_locations     = methylation_data_for_visualisation$locations,
-                      modification_probabilities = methylation_data_for_visualisation$probabilities,
-                      sequences                  = methylation_data_for_visualisation$sequences,
-                      filename = paste0(output_location, "modification_04.png"),
-                      return = FALSE,
-                      index_annotation_lines = c(1, 23, 37),
-                      sequence_text_type = "sequence")
+visualise_methylation(
+    modification_locations     = methylation_data_for_visualisation$locations,
+    modification_probabilities = methylation_data_for_visualisation$probabilities,
+    sequences                  = methylation_data_for_visualisation$sequences,
+    filename = paste0(output_location, "modification_04.png"),
+    return = FALSE,
+    index_annotation_lines = c(1, 23, 37),
+    sequence_text_type = "sequence"
+)
                       
 
 ## View image
@@ -3253,13 +3430,15 @@ character per box) but is generally too large for probabilities (often
 
 ``` r
 ## Default sequence_text_scaling is c(-0.5, 256) to scale integers to 0-1.
-visualise_methylation(modification_locations     = methylation_data_for_visualisation$locations,
-                      modification_probabilities = methylation_data_for_visualisation$probabilities,
-                      sequences                  = methylation_data_for_visualisation$sequences,
-                      filename = paste0(output_location, "modification_05.png"),
-                      return = FALSE,
-                      index_annotation_lines = c(1, 23, 37),
-                      sequence_text_type = "probability")
+visualise_methylation(
+    modification_locations     = methylation_data_for_visualisation$locations,
+    modification_probabilities = methylation_data_for_visualisation$probabilities,
+    sequences                  = methylation_data_for_visualisation$sequences,
+    filename = paste0(output_location, "modification_05.png"),
+    return = FALSE,
+    index_annotation_lines = c(1, 23, 37),
+    sequence_text_type = "probability"
+)
 ```
 
 ``` R
@@ -3279,17 +3458,19 @@ default, but we will write the arguments explicitly for clarity) would
 be:
 
 ``` r
-visualise_methylation(modification_locations     = methylation_data_for_visualisation$locations,
-                      modification_probabilities = methylation_data_for_visualisation$probabilities,
-                      sequences                  = methylation_data_for_visualisation$sequences,
-                      filename = paste0(output_location, "modification_06.png"),
-                      return = FALSE,
-                      index_annotation_lines = c(1, 23, 37),
-                      sequence_text_type = "probability",
-                      sequence_text_scaling = c(-0.5, 256),
-                      sequence_text_rounding = 2,
-                      sequence_text_size = 10,
-                      sequence_text_colour = "white")
+visualise_methylation(
+    modification_locations     = methylation_data_for_visualisation$locations,
+    modification_probabilities = methylation_data_for_visualisation$probabilities,
+    sequences                  = methylation_data_for_visualisation$sequences,
+    filename = paste0(output_location, "modification_06.png"),
+    return = FALSE,
+    index_annotation_lines = c(1, 23, 37),
+    sequence_text_type = "probability",
+    sequence_text_scaling = c(-0.5, 256),
+    sequence_text_rounding = 2,
+    sequence_text_size = 10,
+    sequence_text_colour = "white"
+)
                       
 
 ## View image
@@ -3302,17 +3483,19 @@ If we instead wanted to see the integer scores from the original data we
 would turn off scaling and rounding:
 
 ``` r
-visualise_methylation(modification_locations     = methylation_data_for_visualisation$locations,
-                      modification_probabilities = methylation_data_for_visualisation$probabilities,
-                      sequences                  = methylation_data_for_visualisation$sequences,
-                      filename = paste0(output_location, "modification_07.png"),
-                      return = FALSE,
-                      index_annotation_lines = c(1, 23, 37),
-                      sequence_text_type = "probability",
-                      sequence_text_scaling = c(0, 1),
-                      sequence_text_rounding = 0,
-                      sequence_text_size = 10,
-                      sequence_text_colour = "white")
+visualise_methylation(
+    modification_locations     = methylation_data_for_visualisation$locations,
+    modification_probabilities = methylation_data_for_visualisation$probabilities,
+    sequences                  = methylation_data_for_visualisation$sequences,
+    filename = paste0(output_location, "modification_07.png"),
+    return = FALSE,
+    index_annotation_lines = c(1, 23, 37),
+    sequence_text_type = "probability",
+    sequence_text_scaling = c(0, 1),
+    sequence_text_rounding = 0,
+    sequence_text_size = 10,
+    sequence_text_colour = "white"
+)
                       
 
 ## View image
@@ -3436,23 +3619,25 @@ methylation_data_for_visualisation <- extract_methylation_from_dataframe(
 )
 
 ## Use saved methylation data for visualisation to make image
-visualise_methylation(modification_locations     = methylation_data_for_visualisation$locations,
-                      modification_probabilities = methylation_data_for_visualisation$probabilities,
-                      sequences                  = methylation_data_for_visualisation$sequences,
-                      filename = paste0(output_location, "modification_08.png"),
-                      return = FALSE,
-                      margin = 4, 
-                      sequence_text_type = "sequence",
-                      sequence_text_colour = "magenta",
-                      index_annotation_colour = "yellow",
-                      low_colour = "#00FF00",
-                      high_colour = "blue",
-                      modified_bases_outline_colour = "purple",
-                      modified_bases_outline_linewidth = 5,
-                      other_bases_colour = "white",
-                      other_bases_outline_colour = "darkgreen",
-                      other_bases_outline_linewidth = 0.5,
-                      background_colour = "red")
+visualise_methylation(
+    modification_locations     = methylation_data_for_visualisation$locations,
+    modification_probabilities = methylation_data_for_visualisation$probabilities,
+    sequences                  = methylation_data_for_visualisation$sequences,
+    filename = paste0(output_location, "modification_08.png"),
+    return = FALSE,
+    margin = 4, 
+    sequence_text_type = "sequence",
+    sequence_text_colour = "magenta",
+    index_annotation_colour = "yellow",
+    low_colour = "#00FF00",
+    high_colour = "blue",
+    modified_bases_outline_colour = "purple",
+    modified_bases_outline_linewidth = 5,
+    other_bases_colour = "white",
+    other_bases_outline_colour = "darkgreen",
+    other_bases_outline_linewidth = 0.5,
+    background_colour = "red"
+)
 
 ## View image
 knitr::include_graphics(paste0(github_location, "modification_08.png"))
@@ -3464,12 +3649,14 @@ knitr::include_graphics(paste0(github_location, "modification_08.png"))
 ## Create scalebar and save to object
 ## Text colour doesn't have an argument within the function
 ## but can be modified by adding to the ggplot object like normal
-scalebar <- visualise_methylation_colour_scale(x_axis_title = "Methylation probability",
-                                               low_colour = "green",
-                                               high_colour = "#0000FF",
-                                               background_colour = "#FF0000",
-                                               outline_colour = "darkgreen",
-                                               outline_linewidth = 1) +
+scalebar <- visualise_methylation_colour_scale(
+    x_axis_title = "Methylation probability",
+    low_colour = "green",
+    high_colour = "#0000FF",
+    background_colour = "#FF0000",
+    outline_colour = "darkgreen",
+    outline_linewidth = 1
+) +
     theme(axis.title = element_text(colour = "white"),
           axis.text  = element_text(colour = "white"))
 
@@ -3501,19 +3688,21 @@ methylation_data_for_visualisation <- extract_methylation_from_dataframe(
 )
 
 ## Use saved methylation data for visualisation to make image
-visualise_methylation(modification_locations     = methylation_data_for_visualisation$locations,
-                      modification_probabilities = methylation_data_for_visualisation$probabilities,
-                      sequences                  = methylation_data_for_visualisation$sequences,
-                      filename = paste0(output_location, "modification_09.png"),
-                      return = FALSE,
-                      margin = 0.1, 
-                      sequence_text_type = "none",
-                      low_colour = "white",
-                      high_colour = "black",
-                      other_bases_colour = "lightblue1",
-                      other_bases_outline_colour = "grey",
-                      other_bases_outline_linewidth = 1,
-                      background_colour = "white")
+visualise_methylation(
+    modification_locations     = methylation_data_for_visualisation$locations,
+    modification_probabilities = methylation_data_for_visualisation$probabilities,
+    sequences                  = methylation_data_for_visualisation$sequences,
+    filename = paste0(output_location, "modification_09.png"),
+    return = FALSE,
+    margin = 0.1, 
+    sequence_text_type = "none",
+    low_colour = "white",
+    high_colour = "black",
+    other_bases_colour = "lightblue1",
+    other_bases_outline_colour = "grey",
+    other_bases_outline_linewidth = 1,
+    background_colour = "white"
+)
 ```
 
 ``` R
@@ -3530,10 +3719,12 @@ knitr::include_graphics(paste0(github_location, "modification_09.png"))
 
 ``` r
 ## Create scalebar and save to object
-scalebar <- visualise_methylation_colour_scale(x_axis_title = "Methylation probability",
-                                               low_colour = "white",
-                                               high_colour = "black",
-                                               background_colour = "lightblue1")
+scalebar <- visualise_methylation_colour_scale(
+    x_axis_title = "Methylation probability",
+    low_colour = "white",
+    high_colour = "black",
+    background_colour = "lightblue1"
+)
 
 ## Write png from object
 ggsave(paste0(output_location, "modification_09_scalebar.png"), scalebar, dpi = 300, width = 5.25, height = 1.25, device = ragg::agg_png)
@@ -3586,21 +3777,23 @@ methylation_data_for_visualisation <- extract_methylation_from_dataframe(
 )
 
 ## Use saved methylation data for visualisation to make image
-visualise_methylation(modification_locations     = methylation_data_for_visualisation$locations,
-                      modification_probabilities = methylation_data_for_visualisation$probabilities,
-                      sequences                  = methylation_data_for_visualisation$sequences,
-                      filename = paste0(output_location, "modification_10.png"),
-                      return = FALSE,
-                      margin = 0.1, 
-                      sequence_text_type = "none",
-                      low_colour = "white",
-                      low_clamp = 127,
-                      high_colour = "black",
-                      high_clamp = 128,
-                      other_bases_colour = "lightblue1",
-                      other_bases_outline_colour = "grey",
-                      other_bases_outline_linewidth = 1,
-                      background_colour = "white")
+visualise_methylation(
+    modification_locations     = methylation_data_for_visualisation$locations,
+    modification_probabilities = methylation_data_for_visualisation$probabilities,
+    sequences                  = methylation_data_for_visualisation$sequences,
+    filename = paste0(output_location, "modification_10.png"),
+    return = FALSE,
+    margin = 0.1, 
+    sequence_text_type = "none",
+    low_colour = "white",
+    low_clamp = 127,
+    high_colour = "black",
+    high_clamp = 128,
+    other_bases_colour = "lightblue1",
+    other_bases_outline_colour = "grey",
+    other_bases_outline_linewidth = 1,
+    background_colour = "white"
+)
 ```
 
 ``` R
@@ -3617,12 +3810,14 @@ knitr::include_graphics(paste0(github_location, "modification_10.png"))
 
 ``` r
 ## Create scalebar and save to object
-scalebar <- visualise_methylation_colour_scale(x_axis_title = "Methylation probability",
-                                               low_colour = "white",
-                                               low_clamp = 127,
-                                               high_colour = "black",
-                                               high_clamp = 128,
-                                               background_colour = "lightblue1")
+scalebar <- visualise_methylation_colour_scale(
+    x_axis_title = "Methylation probability",
+    low_colour = "white",
+    low_clamp = 127,
+    high_colour = "black",
+    high_clamp = 128,
+    background_colour = "lightblue1"
+)
 
 ## Write png from object
 ggsave(paste0(output_location, "modification_10_scalebar.png"), scalebar, dpi = 300, width = 5.25, height = 1.25, device = ragg::agg_png)
@@ -3665,15 +3860,17 @@ methylation_data_for_visualisation <- extract_methylation_from_dataframe(
 )
 
 ## Use saved methylation data for visualisation to make image
-visualise_methylation(modification_locations     = methylation_data_for_visualisation$locations,
-                      modification_probabilities = methylation_data_for_visualisation$probabilities,
-                      sequences                  = methylation_data_for_visualisation$sequences,
-                      filename = paste0(output_location, "modification_11.png"),
-                      return = FALSE,
-                      sequence_text_type = "none",
-                      low_clamp = 0.3*255,
-                      high_clamp = 0.7*255,
-                      outline_linewidth = 0)
+visualise_methylation(
+    modification_locations     = methylation_data_for_visualisation$locations,
+    modification_probabilities = methylation_data_for_visualisation$probabilities,
+    sequences                  = methylation_data_for_visualisation$sequences,
+    filename = paste0(output_location, "modification_11.png"),
+    return = FALSE,
+    sequence_text_type = "none",
+    low_clamp = 0.3*255,
+    high_clamp = 0.7*255,
+    outline_linewidth = 0
+)
 
 ## View image
 knitr::include_graphics(paste0(github_location, "modification_11.png"))
@@ -3683,9 +3880,11 @@ knitr::include_graphics(paste0(github_location, "modification_11.png"))
 
 ``` r
 ## Create scalebar and save to object
-scalebar <- visualise_methylation_colour_scale(x_axis_title = "Methylation probability",
-                                               low_clamp = 0.3*255,
-                                               high_clamp = 0.7*255)
+scalebar <- visualise_methylation_colour_scale(
+    x_axis_title = "Methylation probability",
+    low_clamp = 0.3*255,
+    high_clamp = 0.7*255
+)
 
 ## Write png from object
 ggsave(paste0(output_location, "modification_11_scalebar.png"), scalebar, dpi = 300, width = 5.25, height = 1.25, device = ragg::agg_png)
@@ -3719,15 +3918,17 @@ hydroxymethylation_data_for_visualisation <- extract_methylation_from_dataframe(
 )
 
 ## Use saved methylation data for visualisation to make image
-visualise_methylation(modification_locations     = hydroxymethylation_data_for_visualisation$locations,
-                      modification_probabilities = hydroxymethylation_data_for_visualisation$probabilities,
-                      sequences                  = hydroxymethylation_data_for_visualisation$sequences,
-                      filename = paste0(output_location, "modification_12.png"),
-                      return = FALSE,
-                      sequence_text_type = "none",
-                      low_clamp = 0.1*255,
-                      high_clamp = 0.5*255,
-                      other_bases_outline_linewidth = 0)
+visualise_methylation(
+    modification_locations     = hydroxymethylation_data_for_visualisation$locations,
+    modification_probabilities = hydroxymethylation_data_for_visualisation$probabilities,
+    sequences                  = hydroxymethylation_data_for_visualisation$sequences,
+    filename = paste0(output_location, "modification_12.png"),
+    return = FALSE,
+    sequence_text_type = "none",
+    low_clamp = 0.1*255,
+    high_clamp = 0.5*255,
+    other_bases_outline_linewidth = 0
+)
 
 ## View image
 knitr::include_graphics(paste0(github_location, "modification_12.png"))
@@ -3821,8 +4022,10 @@ Disabling x axis ticks with intermediate precision gives the following:
 
 ``` r
 ## Create scalebar and save to object
-scalebar <- visualise_methylation_colour_scale(precision = 50,
-                                               do_x_ticks = FALSE)
+scalebar <- visualise_methylation_colour_scale(
+    precision = 50,
+    do_x_ticks = FALSE
+)
 
 ## Write png from object
 ggsave(paste0(output_location, "modification_scalebar_alone_02.png"), scalebar, dpi = 300, width = 5.25, height = 1.25, device = ragg::agg_png)
@@ -3840,18 +4043,20 @@ turned on and ticks customised:
 
 ``` r
 ## Create scalebar and save to object
-scalebar <- visualise_methylation_colour_scale(high_colour = "green",
-                                               low_colour = "yellow",
-                                               high_clamp = 0.8,
-                                               low_clamp = 0.5, 
-                                               full_range = c(0,1),
-                                               precision = 100,
-                                               do_x_ticks = TRUE,
-                                               x_axis_title = "some kind of title",
-                                               do_side_scale = TRUE,
-                                               side_scale_title = "some other title",
-                                               outline_colour = "red",
-                                               outline_linewidth = 3) +
+scalebar <- visualise_methylation_colour_scale(
+    high_colour = "green",
+    low_colour = "yellow",
+    high_clamp = 0.8,
+    low_clamp = 0.5, 
+    full_range = c(0,1),
+    precision = 100,
+    do_x_ticks = TRUE,
+    x_axis_title = "some kind of title",
+    do_side_scale = TRUE,
+    side_scale_title = "some other title",
+    outline_colour = "red",
+    outline_linewidth = 3
+) +
     scale_x_continuous(breaks = seq(0, 1, 0.1))
 
 ## Write png from object
@@ -3868,12 +4073,14 @@ scale turned on:
 
 ``` r
 ## Create scalebar and save to object
-scalebar <- visualise_methylation_colour_scale(low_clamp = 0.1*255,
-                                               high_clamp  = 0.9*255,
-                                               x_axis_title = "Methylation probability",
-                                               do_side_scale = TRUE,
-                                               side_scale_title = "Raw\nprobability\nscore",
-                                               outline_linewidth = 0)
+scalebar <- visualise_methylation_colour_scale(
+    low_clamp = 0.1*255,
+    high_clamp  = 0.9*255,
+    x_axis_title = "Methylation probability",
+    do_side_scale = TRUE,
+    side_scale_title = "Raw\nprobability\nscore",
+    outline_linewidth = 0
+)
 
 ## Write png from object
 ggsave(paste0(output_location, "modification_scalebar_alone_04.png"), scalebar, dpi = 300, width = 5.25, height = 2, device = ragg::agg_png)
@@ -3953,14 +4160,16 @@ methylation_data_for_visualisation <- extract_methylation_from_dataframe(
 )
 
 ## Use saved methylation data for visualisation to make image
-visualise_methylation(modification_locations     = methylation_data_for_visualisation$locations,
-                      modification_probabilities = methylation_data_for_visualisation$probabilities,
-                      sequences                  = methylation_data_for_visualisation$sequences,
-                      filename = paste0(output_location, "modification_13.png"),
-                      return = FALSE,
-                      sequence_text_type = "sequence",
-                      index_annotation_lines = c(1, 21, 33),
-                      index_annotation_interval = 3)
+visualise_methylation(
+    modification_locations     = methylation_data_for_visualisation$locations,
+    modification_probabilities = methylation_data_for_visualisation$probabilities,
+    sequences                  = methylation_data_for_visualisation$sequences,
+    filename = paste0(output_location, "modification_13.png"),
+    return = FALSE,
+    sequence_text_type = "sequence",
+    index_annotation_lines = c(1, 21, 33),
+    index_annotation_interval = 3
+)
 
 ## View image
 knitr::include_graphics(paste0(github_location, "modification_13.png"))
@@ -3980,8 +4189,11 @@ modified_fastq_data <- read_modified_fastq("inst/extdata/example_many_sequences_
 metadata            <- read.csv("inst/extdata/example_many_sequences_metadata.csv")
 
 ## Merge with offset = -1 (not recommended)
-merged_modification_data <- merge_methylation_with_metadata(modified_fastq_data, metadata,
-                                                            reversed_location_offset = -1)
+merged_modification_data <- merge_methylation_with_metadata(
+    modified_fastq_data, 
+    metadata,
+    reversed_location_offset = -1
+)
 ```
 
 ``` R
@@ -4004,14 +4216,16 @@ methylation_data_for_visualisation <- extract_methylation_from_dataframe(
 )
 
 ## Use saved methylation data for visualisation to make image
-visualise_methylation(modification_locations     = methylation_data_for_visualisation$locations,
-                      modification_probabilities = methylation_data_for_visualisation$probabilities,
-                      sequences                  = methylation_data_for_visualisation$sequences,
-                      filename = paste0(output_location, "modification_14.png"),
-                      return = FALSE,
-                      sequence_text_type = "sequence",
-                      index_annotation_lines = c(1, 21, 33),
-                      index_annotation_interval = 3)
+visualise_methylation(
+    modification_locations     = methylation_data_for_visualisation$locations,
+    modification_probabilities = methylation_data_for_visualisation$probabilities,
+    sequences                  = methylation_data_for_visualisation$sequences,
+    filename = paste0(output_location, "modification_14.png"),
+    return = FALSE,
+    sequence_text_type = "sequence",
+    index_annotation_lines = c(1, 21, 33),
+    index_annotation_interval = 3
+)
 
 ## View image
 knitr::include_graphics(paste0(github_location, "modification_14.png"))
@@ -4034,8 +4248,11 @@ modified_fastq_data <- read_modified_fastq("inst/extdata/example_many_sequences_
 metadata            <- read.csv("inst/extdata/example_many_sequences_metadata.csv")
 
 ## Merge with offset = 0 (but we aren't using the forward-ified information anyway)
-merged_modification_data <- merge_methylation_with_metadata(modified_fastq_data, metadata,
-                                                            reversed_location_offset = 0)
+merged_modification_data <- merge_methylation_with_metadata(
+    modified_fastq_data, 
+    metadata,
+    reversed_location_offset = 0
+)
 
 ## Extract information to list of character vectors
 methylation_data_for_visualisation <- extract_methylation_from_dataframe(
@@ -4051,20 +4268,40 @@ methylation_data_for_visualisation <- extract_methylation_from_dataframe(
 )
 
 ## Use saved methylation data for visualisation to make image
-visualise_methylation(modification_locations     = methylation_data_for_visualisation$locations,
-                      modification_probabilities = methylation_data_for_visualisation$probabilities,
-                      sequences                  = methylation_data_for_visualisation$sequences,
-                      filename = paste0(output_location, "modification_15.png"),
-                      return = FALSE,
-                      sequence_text_type = "sequence",
-                      index_annotation_lines = c(1, 21, 33),
-                      index_annotation_interval = 3)
+visualise_methylation(
+    modification_locations     = methylation_data_for_visualisation$locations,
+    modification_probabilities = methylation_data_for_visualisation$probabilities,
+    sequences                  = methylation_data_for_visualisation$sequences,
+    filename = paste0(output_location, "modification_15.png"),
+    return = FALSE,
+    sequence_text_type = "sequence",
+    index_annotation_lines = c(1, 21, 33),
+    index_annotation_interval = 3
+)
 
 ## View image
 knitr::include_graphics(paste0(github_location, "modification_15.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_15.png)
+
+## 6.9 Performance
+
+[`visualise_methylation()`](https://ejade42.github.io/ggDNAvis/reference/visualise_methylation.md)
+is identical to
+[`visualise_many_sequences()`](https://ejade42.github.io/ggDNAvis/reference/visualise_many_sequences.md)
+with respect to
+[`geom_raster()`](https://ggplot2.tidyverse.org/reference/geom_tile.html)
+versus
+[`geom_tile()`](https://ggplot2.tidyverse.org/reference/geom_tile.html),
+so read [`visualise_many_sequences()` performance](#id_#55-performance).
+The only difference to note is that because outlines can be controlled
+separately for assessed and non-assessed bases, outlines must be off for
+both assessed and non-assessed bases (i.e. either
+`outline_linewidth = 0`, `modified_bases_outline_linewidth = NA`, and
+`other_bases_outline_linewidth = NA` or
+`modified_bases_outline_linewidth = 0` and
+`other_bases_outline_linewidth = 0`).
 
 # 7 References
 
