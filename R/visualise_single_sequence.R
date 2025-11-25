@@ -227,7 +227,7 @@ visualise_single_sequence <- function(
     ## Make actual plot
     ## Fast rasterisation if possible
     if (raster) {
-        if (pixels_per_base > 10) {
+        if (pixels_per_base > 20) {
             warn(paste("When using geom_raster, it is recommended to use a smaller pixels_per_base e.g. 10, as there is no text/outlines that would benefit from higher resolution.\nCurrent value:", pixels_per_base), class = "parameter_recommendation")
         }
 
