@@ -1679,7 +1679,8 @@ visualise_single_sequence(
     outline_linewidth = 0,
     index_annotation_interval = 0,
     sequence_text_size = 0,
-    pixels_per_base = 10
+    pixels_per_base = 10,
+    force_raster = TRUE
 )
 ```
 
@@ -4123,7 +4124,7 @@ knitr::include_graphics(paste0(github_location, "modification_15.png"))
 
 `visualise_methylation()` is identical to `visualise_many_sequences()`
 with respect to `geom_raster()` versus `geom_tile()`, so read
-[`visualise_many_sequences()` performance](##55-performance). The only
+[`visualise_many_sequences()` performance](#55-performance). The only
 difference to note is that because outlines can be controlled separately
 for assessed and non-assessed bases, outlines must be off for both
 assessed and non-assessed bases (i.e. either `outline_linewidth = 0`,
