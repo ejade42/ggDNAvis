@@ -133,6 +133,7 @@ can be produced via <code><a href="visualise_methylation_colour_scale.html">visu
 <span>  margin <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>  return <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  filename <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>  force_raster <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  render_device <span class="op">=</span> <span class="fu">ragg</span><span class="fu">::</span><span class="va"><a href="https://ragg.r-lib.org/reference/agg_png.html" class="external-link">agg_png</a></span>,</span>
 <span>  pixels_per_base <span class="op">=</span> <span class="fl">100</span>,</span>
 <span>  <span class="va">...</span></span>
@@ -273,6 +274,10 @@ can be produced via <code><a href="visualise_methylation_colour_scale.html">visu
 
 <dt id="arg-filename">filename<a class="anchor" aria-label="anchor" href="#arg-filename"></a></dt>
 <dd><p><code>character</code>. Filename to which output should be saved. If set to <code>NA</code> (default), no file will be saved. Recommended to end with <code>".png"</code>, but can change if render device is changed.</p></dd>
+
+
+<dt id="arg-force-raster">force_raster<a class="anchor" aria-label="anchor" href="#arg-force-raster"></a></dt>
+<dd><p><code>logical</code>. Boolean specifying whether <code><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">ggplot2::geom_raster()</a></code> should be used even if it will remove text and outlines. Defaults to <code>FALSE</code>.<br><br> To make the detailed plots with box outlines, sequence text, and index annotations, <code><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">ggplot2::geom_tile()</a></code> is used. However, <code>geom_tile</code> is unusuably slow for huge datasets, so there is an option to use <code>geom_raster</code> instead. <code>geom_raster</code> does not support box outlines, sequence text, or index annotations, but is much faster if only the colours are wanted.<br><br><code>geom_raster</code> is automatically used if it will not change the plot (i.e. if all extraneous elements are already off), but can be forced using this argument.</p></dd>
 
 
 <dt id="arg-render-device">render_device<a class="anchor" aria-label="anchor" href="#arg-render-device"></a></dt>

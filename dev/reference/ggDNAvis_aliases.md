@@ -72,6 +72,7 @@ visualise_methylation(
 #>     Value: purple
 #> 'low_colour' will be used.
 #>     Value: green
+#> ℹ Automatically using geom_raster (much faster than geom_tile) as no sequence text, index annotations, or outlines are present.
 
 
 ## The resulting low colour will be orange
@@ -90,6 +91,7 @@ visualise_methylation(
 #>     Value: orange
 #> 'low_colour' will be used.
 #>     Value: purple
+#> ℹ Automatically using geom_raster (much faster than geom_tile) as no sequence text, index annotations, or outlines are present.
 
 
 ## The resulting low colour will be purple
@@ -102,5 +104,6 @@ visualise_methylation(
     high_colour = "white",
     low_col = "purple"
 )
+#> ℹ Automatically using geom_raster (much faster than geom_tile) as no sequence text, index annotations, or outlines are present.
 
 ```
