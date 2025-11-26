@@ -571,6 +571,44 @@ convert_sequences_to_annotations <- function(
 }
 
 
+convert_sequences_to_matrix <- function(
+    sequences,
+    line_length,
+    blank_value = NA
+) {
+    ## Validate arguments
+    ## ---------------------------------------------------------------------
+    not_null_or_na <- list(sequences = sequences, line_length = line_length)
+    for (argument in names(not_null_or_na)) {
+        if (any(is.null(not_null_or_na[[argument]])) || any(is.na(not_null_or_na[[argument]]))) {bad_arg(argument, not_null_or_na, "must not be NULL or NA.")}
+    }
+    not_null_or_na <- NULL
+
+    length_1 <- list(line_length = line_length, blank_value = blank_value)
+    for (argument in names(length_1)) {
+        if (length(length_1[[argument]]) != 1) {bad_arg(argument, length_1, "must have length 1.")}
+    }
+    length_1 <- NULL
+
+    pos_int <- list(line_length = line_length)
+    for (argument in names(pos_int)) {
+        if (!is.numeric(pos_int[[argument]]) || any(pos_int[[argument]] %% 1 != 0) || any(pos_int[[argument]] < 1)) {bad_arg(argument, pos_int, "must be a positive integer.")}
+    }
+    pos_int <- NULL
+
+    char <- list(sequences = sequences)
+    for (argument in names(char)) {
+        if (!is.character(char[[argument]])) {bad_arg(argument, char, "must be a character vector.")}
+    }
+    char <- NULL
+    ## ---------------------------------------------------------------------
+
+
+    split_sequences <- strsplit(sequences, split = "")
+    split_sequences <- t(sapply(split_sequences, function(x) {c(x, rep(blank_value, line_length - length(x)))}))
+    return(split_sequences)
+}
+
 ## Define alias
 #' @rdname visualise_single_sequence
 #' @usage NULL

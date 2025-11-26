@@ -7,7 +7,7 @@
 #' @importFrom utils packageDescription
 #' @importFrom ggnewscale new_scale_fill
 #' @importFrom stringr str_locate_all
-#' @importFrom tidyr replace_na
+#' @importFrom tidyr replace_na drop_na
 #' @importFrom rlang abort warn
 #' @importFrom cli cli_alert_info
 #' @importFrom magick image_read image_compare

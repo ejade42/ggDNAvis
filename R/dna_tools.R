@@ -511,6 +511,7 @@ create_image_data <- function(sequences) {
 #' of the matrix.
 #'
 #' @param image_matrix `matrix`. A matrix (or anything that can be coerced to a matrix via [base::as.matrix()]).
+#' @param drop_na `logical`. A boolean specifying whether missing values should be dropped via [tidyr::drop_na] (`TRUE`, default) or kept (`FALSE`).
 #' @return `dataframe`. A dataframe containing x and y coordinates for the centre of a rectangle per element of the matrix, such that the whole matrix occupies the space from (0, 0) to (1, 1). Additionally contains a layer column storing the value of each element of the matrix.
 #'
 #' @examples
@@ -555,8 +556,29 @@ create_image_data <- function(sequences) {
 #' ## Rasterise
 #' rasterise_matrix(dna_matrix)
 #'
+#'
+#' ## Create matrix with missing values
+#' incomplete_matrix <- matrix(
+#'     c(1, 2, 3, NA,
+#'       5, NA, 7, 8),
+#'     nrow = 2, ncol = 4, byrow = TRUE
+#' )
+#'
+#' ## View
+#' incomplete_matrix
+#'
+#' ## Rasterise, dropping NAs (default)
+#' rasterise_matrix(incomplete_matrix, drop_na = TRUE)
+#'
+#' ## Rasterise, keeping NAs
+#' rasterise_matrix(incomplete_matrix, drop_na = FALSE)
+#'
 #' @export
-rasterise_matrix <- function(image_matrix) {
+rasterise_matrix <- function(image_matrix, drop_na = TRUE) {
+    if (any(is.na(drop_na)) || any(is.null(drop_na)) || !is.logical(drop_na) || length(drop_na) != 1) {
+        bad_arg("drop_na", list(drop_na = drop_na), "must be a single logical/boolean value.")
+    }
+
     image_matrix <- as.matrix(image_matrix)
 
     n <- nrow(image_matrix)
@@ -575,6 +597,11 @@ rasterise_matrix <- function(image_matrix) {
 
     ## Collect into dataframe
     output_dataframe <- data.frame(x = x_vec, y = y_vec, layer = layer_vec)
+
+    ## Drop NA rows if desired
+    if (drop_na) {output_dataframe <- drop_na(output_dataframe)}
+
+    ## Return
     return(output_dataframe)
 }
 

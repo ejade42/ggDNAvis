@@ -15,7 +15,7 @@ New features:
 
     * Every instance of `visualise` should now also work with `visualize` e.g. `visualize_single_sequence()`.
     * Every instance of `colour` should now also work with `color` and `col` e.g. `sequence_text_color` or `background_col`. 
-    * There is a minor exception in that `visualise_methylation_colour_scale()` has a valid alias `visualize_methylation_color_scale()` but does not accept `col` in the function name (and does not accept mixing `visualise` with `color` or `visualize` with `colour`.
+    * There is a minor exception in that `visualise_methylation_colour_scale()` accepts `visualize_methylation_color_scale()` but does not accept `col` in the function name (and does not accept mixing `visualise` with `color` or `visualize` with `colour`).
     * Some aliases are set up for common typos, especially regarding pluralisation. In particular, `index_annotations_above` also accepts `index_annotation_above`, and `index_annotation_full_line` accepts any combination of `annotation` and `line` being plural or single.
     * If any aliases which ought to work don't, please raise an issue at https://github.com/ejade42/ggDNAvis/issues and they can be easily added.
 

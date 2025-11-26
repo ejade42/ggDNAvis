@@ -5,10 +5,12 @@
 \alias{rasterize_matrix}
 \title{Rasterise a matrix to an x/y/layer dataframe (generic \code{ggDNAvis} helper)}
 \usage{
-rasterise_matrix(image_matrix)
+rasterise_matrix(image_matrix, drop_na = TRUE)
 }
 \arguments{
 \item{image_matrix}{\code{matrix}. A matrix (or anything that can be coerced to a matrix via \code{\link[base:matrix]{base::as.matrix()}}).}
+
+\item{drop_na}{\code{logical}. A boolean specifying whether missing values should be dropped via \link[tidyr:drop_na]{tidyr::drop_na} (\code{TRUE}, default) or kept (\code{FALSE}).}
 }
 \value{
 \code{dataframe}. A dataframe containing x and y coordinates for the centre of a rectangle per element of the matrix, such that the whole matrix occupies the space from (0, 0) to (1, 1). Additionally contains a layer column storing the value of each element of the matrix.
@@ -63,5 +65,22 @@ dna_matrix
 
 ## Rasterise
 rasterise_matrix(dna_matrix)
+
+
+## Create matrix with missing values
+incomplete_matrix <- matrix(
+    c(1, 2, 3, NA,
+      5, NA, 7, 8),
+    nrow = 2, ncol = 4, byrow = TRUE
+)
+
+## View
+incomplete_matrix
+
+## Rasterise, dropping NAs (default)
+rasterise_matrix(incomplete_matrix, drop_na = TRUE)
+
+## Rasterise, keeping NAs
+rasterise_matrix(incomplete_matrix, drop_na = FALSE)
 
 }
