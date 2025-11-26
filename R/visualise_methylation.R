@@ -472,13 +472,15 @@ visualise_methylation <- function(
 
 
     ## Generate rasterised dataframes of methylation and masking layer
-    monitor_time <- monitor(monitor_performance, start_time, monitor_time, "rasterising image data")
+    monitor_time <- monitor(monitor_performance, start_time, monitor_time, "creating image matrix")
     max_length <- max(nchar(sequences))
     image_matrix <- matrix(NA, nrow = length(modification_locations), ncol = max_length)
     for (i in 1:length(modification_locations)) {
         numeric_sequence_representation <- convert_modification_to_number_vector(modification_locations[i], modification_probabilities[i], max_length, nchar(sequences[i]))
         image_matrix[i, ] <- numeric_sequence_representation
     }
+
+    monitor_time <- monitor(monitor_performance, start_time, monitor_time, "rasterising image matrix")
     image_data <- rasterise_matrix(image_matrix)
 
     ## Transform image data if clamping limits are set

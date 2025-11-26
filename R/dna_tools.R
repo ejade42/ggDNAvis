@@ -562,17 +562,19 @@ rasterise_matrix <- function(image_matrix) {
     n <- nrow(image_matrix)
     k <- ncol(image_matrix)
 
-    blank <- rep(0, length(image_matrix))
-    output_dataframe <- data.frame(x = blank, y = blank, layer = blank)
-    count <- 1L
-    for (i in 1:n) {
-        for (j in 1:k) {
-            output_dataframe[count, "x"] <- (j-0.5)/k
-            output_dataframe[count, "y"] <- 1 - (i-0.5)/n
-            output_dataframe[count, "layer"] <- image_matrix[i,j]
-            count <- count + 1L
-        }
-    }
+    ## Instead of for-looping, make repeated vectors of i and j indices with loop "built in"
+    j_vals <- rep(1:k, times = n)
+    i_vals <- rep(1:n, each = k)
+
+    ## Calculate coordinates of centre of each box
+    x_vec <- (j_vals - 0.5) / k
+    y_vec <- 1 - (i_vals - 0.5) / n
+
+    ## Flatten matrix by row to get values
+    layer_vec <- as.vector(t(image_matrix))
+
+    ## Collect into dataframe
+    output_dataframe <- data.frame(x = x_vec, y = y_vec, layer = layer_vec)
     return(output_dataframe)
 }
 
