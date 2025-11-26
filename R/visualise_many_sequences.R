@@ -813,52 +813,36 @@ convert_many_sequences_to_index_annotations <- function(
     ## (assuming each insertion is only one line - seq_along term is scaled if needed)
     annotated_sequence_indices <- original_indices_to_annotate + seq_along(original_indices_to_annotate)*ceiling(annotation_vertical_position) - as.numeric(!annotations_above)*ceiling(annotation_vertical_position)
 
-
-    ## Calculate scaling factors
-    x_interval <- 1 / max(nchar(new_sequences_vector))
-    y_interval <- 1 / length(new_sequences_vector)
-
-
-    ## Create actual data
-    ## Make sure we don't iterate further than lines exist
-    annotation_data <- data.frame("x_position" = numeric(), "y_position" = numeric(), "annotation" = character(), "type" = character())
-    for (i in 1:min(length(annotated_sequence_indices), length(original_sequences_vector))) {
-        annotated_sequence_index <- annotated_sequence_indices[i]
-
-        ## Set max length along the line to annotate up to
-        ## Either from overall max length, or from length of annotated sequence
-        if (!annotate_full_lines) {
-            line_length <- nchar(new_sequences_vector[annotated_sequence_index])
-            if (is.na(line_length)) {
-                abort(paste("Provided indices go out of range, please avoid doing this.\nIndex:", annotated_sequence_index, "\nnew_sequences_vector length:", length(new_sequences_vector)), class = "out_of_range")
-            }
-        } else {
-            line_length <- max(nchar(new_sequences_vector))
-        }
-
-        ## Iterate along line and create dataframe observations for annotations
-        ## Need to avoid 1:0 situation with blank lines and !annotate_full_lines,
-        ## as that stretches out the plot by rendering to the left of the 1st box
-        for (j in 1:max(line_length, 1)) {
-            if (j %% annotation_interval == 0) {
-                x_position <- x_interval * (j - 1/2)
-
-                if (annotations_above == TRUE) {
-                    y_position <- 1 - y_interval * (annotated_sequence_index - 1 - annotation_vertical_position)
-                } else if (annotations_above == FALSE) {
-                    y_position <- 1 - y_interval * (annotated_sequence_index + annotation_vertical_position)
-                }
-
-                annotation <- as.character(j)
-                type <- "Number"
-                annotation_data <- rbind(annotation_data, data.frame(x_position, y_position, annotation, type))
-            }
-        }
+    ## Remove out-of-range indices
+    ## As original indices to annotate are sorted, positive, and unique, this will exclusively remove out-of-range indices
+    if (length(annotated_sequence_indices) > length(original_sequences_vector)) {
+        annotated_sequence_indices <- annotated_sequence_indices[1:length(original_sequences_vector)]
     }
 
-    colnames(annotation_data) <- c("x_position", "y_position", "annotation", "type")
-    annotation_data$x_position <- as.numeric(annotation_data$x_position)
-    annotation_data$y_position <- as.numeric(annotation_data$y_position)
+    ## Calculate scaling factors
+    n <- length(new_sequences_vector)
+    k <- max(nchar(new_sequences_vector))
+
+    ## Create lists of i and j indices for all annotated bases
+    ## Equivalent to for (i in 1:length(annotated_sequence_indices)) {for (j in 1:line_length)}
+    ## where line_length is either the length of each sequence, or the length (k) of the longest sequence
+    if (annotate_full_lines) {
+        j_vals <- rep(seq(annotation_interval, k, annotation_interval), times = length(annotated_sequence_indices))
+        i_vals <- rep(annotated_sequence_indices, each = floor(k / annotation_interval))
+    } else {
+        j_vals <- unlist(lapply(nchar(new_sequences_vector[annotated_sequence_indices]), function(x) {if (x>0) {seq(annotation_interval, x, annotation_interval)}}))
+        i_vals <- rep(annotated_sequence_indices, times = floor(nchar(new_sequences_vector[annotated_sequence_indices]) / annotation_interval))
+    }
+
+    x_vec <- (j_vals - 0.5) / k
+    if (annotations_above) {
+        y_vec <- 1 - (i_vals - 1 - annotation_vertical_position) / n
+    } else {
+        y_vec <- 1 - (i_vals + annotation_vertical_position) / n
+    }
+
+
+    annotation_data <- data.frame("x_position" = x_vec, "y_position" = y_vec, "annotation" = as.character(j_vals), type = "Number")
     return(annotation_data)
 }
 
