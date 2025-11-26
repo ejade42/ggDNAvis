@@ -198,26 +198,20 @@ visualise_single_sequence <- function(
 
     ## Generate data for plotting
     monitor_time <- monitor(monitor_performance, start_time, monitor_time, "splitting input seq to sequence vector")
-    sequences <- convert_input_seq_to_sequence_list(sequence, line_wrapping, spacing, FALSE, FALSE)
+    starts <- seq(1, nchar(sequence), line_wrapping)
+    ends   <- seq(line_wrapping, nchar(sequence) + line_wrapping - 1, line_wrapping)
+    split_sequences <- substring(sequence, starts, ends)
 
-    ## Add extra top/bottom blank lines if needed for index annotations
-    monitor_time <- monitor(monitor_performance, start_time, monitor_time, "adding extra top/bottom spacer if needed")
-    extra_spaces <- 0
-    if (index_annotation_interval != 0) {
-        extra_spaces <- ceiling(index_annotation_vertical_position)
-        if (index_annotations_above) {
-            sequences <- c(rep("", extra_spaces), sequences)
-        } else {
-            sequences <- c(sequences, rep("", extra_spaces))
-        }
+    ## Check if last line should be annotated or not
+    if (nchar(sequence) %% line_wrapping >= index_annotation_interval) {
+        index_annotation_lines <- 1:length(split_sequences)
+    } else {
+        index_annotation_lines <- 1:(length(split_sequences)-1)
     }
+    sequences <- insert_at_indices(split_sequences, index_annotation_lines, index_annotations_above, insert = "", vert = spacing)
 
     # Finish generating data for plotting
     if (max(nchar(sequences)) < line_wrapping) {line_wrapping <- max(nchar(sequences))}
-
-    monitor_time <- monitor(monitor_performance, start_time, monitor_time, "generating sequence text and index annotations")
-    annotations <- convert_sequences_to_annotations(sequences, line_wrapping, index_annotation_interval, index_annotations_above, index_annotation_vertical_position)
-
     monitor_time <- monitor(monitor_performance, start_time, monitor_time, "rasterising image data")
     image_data <- create_image_data(sequences)
 
@@ -267,12 +261,29 @@ visualise_single_sequence <- function(
             ## Base boxes
             geom_tile(data = filter(image_data, layer != 0), width = tile_width, height = tile_height, aes(fill = as.character(.data$layer)),
                       col = outline_colour, linewidth = outline_linewidth, linejoin = tolower(outline_join)) +
-            scale_fill_manual(values = sequence_colours) +
+            scale_fill_manual(values = sequence_colours)
 
-            ## Text (sequence and annotations)
-            geom_text(data = annotations, aes(x = .data$x_position, y = .data$y_position, label = .data$annotation, col = .data$type, size = .data$type), fontface = "bold", inherit.aes = F) +
-            scale_colour_manual(values = c("Number" = index_annotation_colour, "Sequence" = sequence_text_colour)) +
-            scale_discrete_manual("size", values = c("Number" = index_annotation_size, "Sequence" = sequence_text_size))
+
+        ## Add sequence text if desired
+        if (sequence_text_size > 0) {
+            monitor_time <- monitor(monitor_performance, start_time, monitor_time, "generating sequence text")
+            sequence_text_matrix <- convert_sequences_to_matrix(sequences, line_wrapping)
+            sequence_text_data <- rasterise_matrix(sequence_text_matrix)
+
+            monitor_time <- monitor(monitor_performance, start_time, monitor_time, "adding sequence text")
+            result <- result +
+                geom_text(data = sequence_text_data, aes(x = .data$x, y = .data$y, label = .data$layer), col = sequence_text_colour, size = sequence_text_size, fontface = "bold", inherit.aes = F)
+        }
+
+        ## Add index annotations if desired
+        if (index_annotation_interval > 0) {
+            monitor_time <- monitor(monitor_performance, start_time, monitor_time, "generating index annotations")
+            index_annotation_data <- convert_many_sequences_to_index_annotations(sequences, split_sequences, index_annotation_lines, index_annotation_interval, FALSE, index_annotations_above, index_annotation_vertical_position, spacing)
+
+            monitor_time <- monitor(monitor_performance, start_time, monitor_time, "adding index annotations")
+            result <- result +
+                geom_text(data = index_annotation_data, aes(x = .data$x_position, y = .data$y_position, label = .data$annotation), col = index_annotation_colour, size = index_annotation_size, fontface = "bold", inherit.aes = F)
+        }
     }
 
     ## Do general plot setup
@@ -287,17 +298,16 @@ visualise_single_sequence <- function(
     ## As long as the lines are spaced out, don't need a bottom margin as the blank spacer line does that
     ## But if spacing is turned off, need to add a bottom margin
     monitor_time <- monitor(monitor_performance, start_time, monitor_time, "calculating margin")
-    if (extra_spaces == 0) {
-        result <- result + theme(plot.margin = grid::unit(c(margin, margin, margin, margin), "inches"))
-        extra_height <- 2 * margin
-    } else if (index_annotations_above == TRUE) {
+    extra_spaces <- spacing
+    if (1 %in% index_annotation_lines && index_annotations_above) {
         result <- result + theme(plot.margin = grid::unit(c(max(margin-extra_spaces, 0), margin, margin, margin), "inches"))
         extra_height <- margin + max(margin-extra_spaces, 0)
-    } else if (index_annotations_above == FALSE) {
+    } else if (length(split_sequences) %in% index_annotation_lines && !index_annotations_above) {
         result <- result + theme(plot.margin = grid::unit(c(margin, margin, max(margin-extra_spaces, 0), margin), "inches"))
         extra_height <- margin + max(margin-extra_spaces, 0)
     } else {
-        abort("Unexpected value of spacing and/or index_annotations_above. Should have been caught by previous test. Please report.")
+        result <- result + theme(plot.margin = grid::unit(c(margin, margin, margin, margin), "inches"))
+        extra_height <- 2 * margin
     }
 
     ## Check if filename is set and warn if not png, then export image

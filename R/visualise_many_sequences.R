@@ -270,7 +270,7 @@ visualise_many_sequences <- function(
             scale_fill_manual(values = sequence_colours)
 
         ## Add sequence text if desired
-        if (sequence_text_size != 0) {
+        if (sequence_text_size > 0) {
             monitor_time <- monitor(monitor_performance, start_time, monitor_time, "generating sequence text")
             sequence_text_data <- convert_sequences_to_annotations(new_sequences_vector, line_length = max(nchar(new_sequences_vector)), interval = 0)
 
@@ -687,6 +687,7 @@ insert_at_indices <- function(
 #' @param annotate_full_lines `logical`. Whether annotations should be calculated up to the end of the longest line (`TRUE`, default) or to the end of each line being annotated (`FALSE`).
 #' @param annotations_above `logical`. Whether annotations should be drawn above (`TRUE`, default) or below (`FALSE`) each annotated line. Must also have been used as input to [insert_at_indices()] to create `new_sequences_vector`.
 #' @param annotation_vertical_position `numeric`. The vertical position above/below each annotated line that annotations should be drawn. Must also have been used as input to [insert_at_indices()] to create `new_sequences_vector`.
+#' @param spacing `integer`. The number of blank lines inserted for each index annotation. Set to `NA` (default) to infer from `annotation_vertical_position`.
 #'
 #' @return `dataframe`. A dataframe with columns `x_position`, `y_position`, `annotation`, and `type`, with one observation per annotation number that needs to be drawn onto the ggplot.
 #'
@@ -737,7 +738,8 @@ convert_many_sequences_to_index_annotations <- function(
     annotation_interval = 15,
     annotate_full_lines = TRUE,
     annotations_above = TRUE,
-    annotation_vertical_position = 1/3
+    annotation_vertical_position = 1/3,
+    spacing = NA
 ) {
     ## Validate arguments
     ## ---------------------------------------------------------------------
@@ -747,7 +749,7 @@ convert_many_sequences_to_index_annotations <- function(
     }
     not_na <- NULL
 
-    not_null <- list(new_sequences_vector = new_sequences_vector, original_sequences_vector = original_sequences_vector, original_indices_to_annotate = original_indices_to_annotate, annotation_interval = annotation_interval, annotate_full_lines = annotate_full_lines, annotations_above = annotations_above, annotation_vertical_position = annotation_vertical_position)
+    not_null <- list(new_sequences_vector = new_sequences_vector, original_sequences_vector = original_sequences_vector, original_indices_to_annotate = original_indices_to_annotate, annotation_interval = annotation_interval, annotate_full_lines = annotate_full_lines, annotations_above = annotations_above, annotation_vertical_position = annotation_vertical_position, spacing = spacing)
     for (argument in names(not_null)) {
         if (any(is.null(not_null[[argument]]))) {bad_arg(argument, not_null, "must not be NULL.")}
     }
@@ -759,7 +761,7 @@ convert_many_sequences_to_index_annotations <- function(
     }
     vectors <- NULL
 
-    length_1 <- list(annotation_interval = annotation_interval, annotate_full_lines = annotate_full_lines, annotations_above = annotations_above, annotation_vertical_position = annotation_vertical_position)
+    length_1 <- list(annotation_interval = annotation_interval, annotate_full_lines = annotate_full_lines, annotations_above = annotations_above, annotation_vertical_position = annotation_vertical_position, spacing = spacing)
     for (argument in names(length_1)) {
         if (length(length_1[[argument]]) != 1) {bad_arg(argument, length_1, "must have length 1.")}
     }
@@ -771,11 +773,22 @@ convert_many_sequences_to_index_annotations <- function(
     }
     non_neg_numeric <- NULL
 
-    integers <- list(original_indices_to_annotate = original_indices_to_annotate, annotation_interval = annotation_interval)
+    ## If spacing if NA or NULL, infer from vertical position
+    if (is.na(spacing)) {
+        spacing <- ceiling(annotation_vertical_position)
+    }
+
+    integers <- list(original_indices_to_annotate = original_indices_to_annotate, annotation_interval = annotation_interval, spacing = spacing)
     for (argument in names(integers)) {
-        if (any(integers[[argument]] %% 1 != 0)) {bad_arg(argument, integers, "must be integer only.")}
+        if (!is.numeric(integers[[argument]]) || any(integers[[argument]] %% 1 != 0)) {bad_arg(argument, integers, "must be integer only.")}
     }
     integers <- NULL
+
+    non_neg <- list(spacing = spacing)
+    for (argument in names(non_neg)) {
+        if (any(non_neg[[argument]] < 0)) {bad_arg(argument, non_neg, "must be non-negative only.")}
+    }
+    non_neg <- NULL
 
     positive <- list(original_indices_to_annotate = original_indices_to_annotate)
     for (argument in names(positive)) {
@@ -811,7 +824,7 @@ convert_many_sequences_to_index_annotations <- function(
     ## - 2, 4, and 7 if insertions went before
     ## - 1, 3, and 6 if insertions went after
     ## (assuming each insertion is only one line - seq_along term is scaled if needed)
-    annotated_sequence_indices <- original_indices_to_annotate + seq_along(original_indices_to_annotate)*ceiling(annotation_vertical_position) - as.numeric(!annotations_above)*ceiling(annotation_vertical_position)
+    annotated_sequence_indices <- original_indices_to_annotate + seq_along(original_indices_to_annotate)*spacing - as.numeric(!annotations_above)*spacing
 
     ## Remove out-of-range indices
     ## As original indices to annotate are sorted, positive, and unique, this will exclusively remove out-of-range indices
