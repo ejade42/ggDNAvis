@@ -209,18 +209,26 @@ visualise_single_sequence <- function(
     split_sequences <- substring(sequence, starts, ends)
 
     ## Check if last line should be annotated or not
-    if (nchar(sequence) %% line_wrapping >= index_annotation_interval) {
+    extra_spaces_start <- 0
+    extra_spaces_end   <- 0
+    if (nchar(tail(split_sequences, 1)) >= index_annotation_interval) {
         index_annotation_lines <- 1:length(split_sequences)
+        annotation_lines_trimmed <- FALSE
     } else {
         index_annotation_lines <- 1:(length(split_sequences)-1)
+        annotation_lines_trimmed <- TRUE
     }
 
     ## But, if annotations are above, we need to insert the spacers for the last line anyway
     ## So override the previous setting and use 1:length anyway
     if (index_annotations_above) {
         sequences <- insert_at_indices(split_sequences, 1:length(split_sequences), index_annotations_above, insert = "", vert = spacing)
+        extra_spaces_start <- extra_spaces_start + spacing
     } else {
         sequences <- insert_at_indices(split_sequences, index_annotation_lines, index_annotations_above, insert = "", vert = spacing)
+        if (!annotation_lines_trimmed) {
+            extra_spaces_end <- extra_spaces_end + spacing
+        }
     }
 
     offset_start <- 0
@@ -229,11 +237,13 @@ visualise_single_sequence <- function(
         if (index_annotations_above) {
             offset_start <- spacing - ceiling(index_annotation_vertical_position)
             sequences <- sequences[(offset_start+1):length(sequences)]
+            extra_spaces_start <- extra_spaces_start - offset_start
 
         ## Remove extra lines at end, but if the last line is too short to be annotated then there's nothing to remove
         } else if (nchar(sequence) %% line_wrapping >= index_annotation_interval) {
             offset_end <- spacing - ceiling(index_annotation_vertical_position)
             sequences <- sequences[1:(length(sequences)-offset_end)]
+            extra_spaces_end <- extra_spaces_end - offset_end
         }
     }
 
@@ -330,17 +340,12 @@ visualise_single_sequence <- function(
     ## As long as the lines are spaced out, don't need a bottom margin as the blank spacer line does that
     ## But if spacing is turned off, need to add a bottom margin
     monitor_time <- monitor(monitor_performance, start_time, monitor_time, "calculating margin")
-    extra_spaces <- max(spacing, ceiling(index_annotation_vertical_position))
-    if (1 %in% index_annotation_lines && index_annotations_above && index_annotation_interval != 0) {
-        result <- result + theme(plot.margin = grid::unit(c(max(margin-extra_spaces, 0), margin, margin, margin), "inches"))
-        extra_height <- margin + max(margin-extra_spaces, 0)
-    } else if (length(split_sequences) %in% index_annotation_lines && !index_annotations_above && index_annotation_interval != 0) {
-        result <- result + theme(plot.margin = grid::unit(c(margin, margin, max(margin-extra_spaces, 0), margin), "inches"))
-        extra_height <- margin + max(margin-extra_spaces, 0)
-    } else {
-        result <- result + theme(plot.margin = grid::unit(c(margin, margin, margin, margin), "inches"))
-        extra_height <- 2 * margin
-    }
+    result <- result + theme(plot.margin = grid::unit(c(max(margin-extra_spaces_start, 0), margin, max(margin-extra_spaces_end, 0), margin), "inches"))
+    extra_height <- max(margin-extra_spaces_start, 0) + max(margin-extra_spaces_end, 0)
+    print(paste("Extra spaces start:", extra_spaces_start))
+    print(paste("Extra spaces end:", extra_spaces_end))
+    print(paste("Top margin:", max(margin-extra_spaces_start, 0)))
+    print(paste("Bottom margin:", max(margin-extra_spaces_end, 0)))
 
     ## Check if filename is set and warn if not png, then export image
     if (is.na(filename) == FALSE) {
