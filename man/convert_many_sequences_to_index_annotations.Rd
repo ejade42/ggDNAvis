@@ -11,7 +11,10 @@ convert_many_sequences_to_index_annotations(
   annotation_interval = 15,
   annotate_full_lines = TRUE,
   annotations_above = TRUE,
-  annotation_vertical_position = 1/3
+  annotation_vertical_position = 1/3,
+  sum_indices = FALSE,
+  spacing = NA,
+  offset_start = 0
 )
 }
 \arguments{
@@ -28,6 +31,12 @@ convert_many_sequences_to_index_annotations(
 \item{annotations_above}{\code{logical}. Whether annotations should be drawn above (\code{TRUE}, default) or below (\code{FALSE}) each annotated line. Must also have been used as input to \code{\link[=insert_at_indices]{insert_at_indices()}} to create \code{new_sequences_vector}.}
 
 \item{annotation_vertical_position}{\code{numeric}. The vertical position above/below each annotated line that annotations should be drawn. Must also have been used as input to \code{\link[=insert_at_indices]{insert_at_indices()}} to create \code{new_sequences_vector}.}
+
+\item{sum_indices}{\code{logical}. Whether indices should be counted separately along each line (\code{FALSE}, default) or summed along all annotated lines (\code{TRUE}). May behave unexpectedly if \code{TRUE} when \code{annotate_full_lines} is also \code{TRUE}.}
+
+\item{spacing}{\code{integer}. The number of blank lines inserted for each index annotation. Set to \code{NA} (default) to infer from \code{annotation_vertical_position}.}
+
+\item{offset_start}{\code{integer}. The number of blank lines not present at the start, that otherwise would be expected based on \code{spacing} or \code{annotation_vertical_position}. Defaults to \code{0}.}
 }
 \value{
 \code{dataframe}. A dataframe with columns \code{x_position}, \code{y_position}, \code{annotation}, and \code{type}, with one observation per annotation number that needs to be drawn onto the ggplot.

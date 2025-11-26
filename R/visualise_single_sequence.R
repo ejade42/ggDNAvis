@@ -211,6 +211,8 @@ visualise_single_sequence <- function(
     ## Check if last line should be annotated or not
     extra_spaces_start <- 0
     extra_spaces_end   <- 0
+    offset_start <- 0
+    offset_end   <- 0
     if (nchar(tail(split_sequences, 1)) >= index_annotation_interval) {
         index_annotation_lines <- 1:length(split_sequences)
         annotation_lines_trimmed <- FALSE
@@ -221,18 +223,32 @@ visualise_single_sequence <- function(
 
     ## But, if annotations are above, we need to insert the spacers for the last line anyway
     ## So override the previous setting and use 1:length anyway
+    ## Use special case when spacing is 0 and index annotations are on to insert one line if needed
     if (index_annotations_above) {
-        sequences <- insert_at_indices(split_sequences, 1:length(split_sequences), index_annotations_above, insert = "", vert = spacing)
-        extra_spaces_start <- extra_spaces_start + spacing
+        if (spacing > 0 || index_annotation_interval == 0) {
+            sequences <- insert_at_indices(split_sequences, 1:length(split_sequences), index_annotations_above, insert = "", vert = spacing)
+            extra_spaces_start <- extra_spaces_start + spacing
+        } else {
+            sequences <- insert_at_indices(split_sequences, 1, index_annotations_above, insert = "", vert = index_annotation_vertical_position)
+            extra_spaces_start <- extra_spaces_start + ceiling(index_annotation_vertical_position)
+            offset_start <- ceiling(index_annotation_vertical_position)
+            index_annotation_lines <- 1:length(split_sequences) + offset_start
+        }
     } else {
-        sequences <- insert_at_indices(split_sequences, index_annotation_lines, index_annotations_above, insert = "", vert = spacing)
-        if (!annotation_lines_trimmed) {
-            extra_spaces_end <- extra_spaces_end + spacing
+        if (spacing > 0 || index_annotation_interval == 0 || annotation_lines_trimmed) {
+            sequences <- insert_at_indices(split_sequences, index_annotation_lines, index_annotations_above, insert = "", vert = spacing)
+            if (!annotation_lines_trimmed) {
+                extra_spaces_end <- extra_spaces_end + spacing
+            }
+        } else {
+            sequences <- insert_at_indices(split_sequences, length(split_sequences), index_annotations_above, insert = "", vert = index_annotation_vertical_position)
+            if (!annotation_lines_trimmed) {
+                extra_spaces_end <- extra_spaces_end + ceiling(index_annotation_vertical_position)
+                offset_end <- ceiling(index_annotation_vertical_position)
+            }
         }
     }
 
-    offset_start <- 0
-    offset_end   <- 0
     if (spacing > ceiling(index_annotation_vertical_position)) {
         if (index_annotations_above) {
             offset_start <- spacing - ceiling(index_annotation_vertical_position)
@@ -342,10 +358,6 @@ visualise_single_sequence <- function(
     monitor_time <- monitor(monitor_performance, start_time, monitor_time, "calculating margin")
     result <- result + theme(plot.margin = grid::unit(c(max(margin-extra_spaces_start, 0), margin, max(margin-extra_spaces_end, 0), margin), "inches"))
     extra_height <- max(margin-extra_spaces_start, 0) + max(margin-extra_spaces_end, 0)
-    print(paste("Extra spaces start:", extra_spaces_start))
-    print(paste("Extra spaces end:", extra_spaces_end))
-    print(paste("Top margin:", max(margin-extra_spaces_start, 0)))
-    print(paste("Bottom margin:", max(margin-extra_spaces_end, 0)))
 
     ## Check if filename is set and warn if not png, then export image
     if (is.na(filename) == FALSE) {
