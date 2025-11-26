@@ -5,20 +5,69 @@
 New features:
 
 - [`visualise_many_sequences()`](https://ejade42.github.io/ggDNAvis/reference/visualise_many_sequences.md)
-  now has index annotations! Arguments are the same as for
-  [`visualise_single_sequence()`](https://ejade42.github.io/ggDNAvis/reference/visualise_single_sequence.md),
-  except with the additional `index_annotation_lines` (specifies any
-  combination of lines to annotate, counting down from the top) and
-  `index_annotation_full_lines` (specifies whether annotations should go
-  up to the maximum line length, or stop for each line when that line’s
-  sequence ends) arguments. Of course, because each line is a different
-  sequence, indices here “reset” each line rather than counting the
-  total number of bases across lines.
+  and
+  [`visualise_methylation()`](https://ejade42.github.io/ggDNAvis/reference/visualise_methylation.md)
+  now have index annotations!
 
-- Added
-  [`bad_arg()`](https://ejade42.github.io/ggDNAvis/reference/bad_arg.md)
-  function to streamline argument validation. May be useful for argument
-  validation in other packages so exported.
+  - Arguments controlling size, colour, position, and frequency are the
+    same as for
+    [`visualise_single_sequence()`](https://ejade42.github.io/ggDNAvis/reference/visualise_single_sequence.md).
+  - `index_annotation_lines` controls which lines (counting down from
+    the top) have annotations.
+  - `index_annotation_full_line` controls whether annotations go to the
+    end of each annotated sequence, or all the way to the end of the
+    image.
+  - Unlike
+    [`visualise_single_sequence()`](https://ejade42.github.io/ggDNAvis/reference/visualise_single_sequence.md),
+    index annotations in
+    [`visualise_many_sequences()`](https://ejade42.github.io/ggDNAvis/reference/visualise_many_sequences.md)
+    and
+    [`visualise_methylation()`](https://ejade42.github.io/ggDNAvis/reference/visualise_methylation.md)
+    reset each line as each line is a different sequence.
+
+- [`visualise_methylation()`](https://ejade42.github.io/ggDNAvis/reference/visualise_methylation.md)
+  now has the ability to draw sequence and probability text!
+
+- All function, argument, and data names now have aliases i.e. accept
+  American spellings
+
+  - Every instance of `visualise` should now also work with `visualize`
+    e.g. [`visualize_single_sequence()`](https://ejade42.github.io/ggDNAvis/reference/visualise_single_sequence.md).
+  - Every instance of `colour` should now also work with `color` and
+    `col` e.g. `sequence_text_color` or `background_col`.
+  - There is a minor exception in that
+    [`visualise_methylation_colour_scale()`](https://ejade42.github.io/ggDNAvis/reference/visualise_methylation_colour_scale.md)
+    has a valid alias
+    [`visualize_methylation_color_scale()`](https://ejade42.github.io/ggDNAvis/reference/visualise_methylation_colour_scale.md)
+    but does not accept `col` in the function name (and does not accept
+    mixing `visualise` with `color` or `visualize` with `colour`.
+  - Some aliases are set up for common typos, especially regarding
+    pluralisation. In particular, `index_annotations_above` also accepts
+    `index_annotation_above`, and `index_annotation_full_line` accepts
+    any combination of `annotation` and `line` being plural or single.
+  - If any aliases which ought to work don’t, please raise an issue at
+    <https://github.com/ejade42/ggDNAvis/issues> and they can be easily
+    added.
+
+- [`visualise_single_sequence()`](https://ejade42.github.io/ggDNAvis/reference/visualise_single_sequence.md),
+  [`visualise_many_sequences()`](https://ejade42.github.io/ggDNAvis/reference/visualise_many_sequences.md),
+  and
+  [`visualise_methylation()`](https://ejade42.github.io/ggDNAvis/reference/visualise_methylation.md)
+  can now use
+  [`geom_raster()`](https://ggplot2.tidyverse.org/reference/geom_tile.html)
+  instead of
+  [`geom_tile()`](https://ggplot2.tidyverse.org/reference/geom_tile.html)
+  when sequence text, index annotations, and box outlines are off. This
+  provides a moderate performance improvement and can be forced via
+  `force_raster = TRUE`.
+
+- [`visualise_single_sequence()`](https://ejade42.github.io/ggDNAvis/reference/visualise_single_sequence.md),
+  [`visualise_many_sequences()`](https://ejade42.github.io/ggDNAvis/reference/visualise_many_sequences.md),
+  [`visualise_methylation()`](https://ejade42.github.io/ggDNAvis/reference/visualise_methylation.md),
+  and
+  [`visualise_methylation_colour_scale()`](https://ejade42.github.io/ggDNAvis/reference/visualise_methylation_colour_scale.md)
+  all now have a `monitor_performance` argument which prints the time
+  taken for each step. This is mostly for internal debugging purposes.
 
 User-facing changes:
 
@@ -27,7 +76,7 @@ User-facing changes:
   to now return a list of 4 vectors instead of 3, with `sequences`
   added. `sequence_lengths` is still returned just in case it’s useful
   for anything, but it is no longer used in
-  [`visualise_methylation()`](https://ejade42.github.io/ggDNAvis/reference/visualise_methylation.md)
+  [`visualise_methylation()`](https://ejade42.github.io/ggDNAvis/reference/visualise_methylation.md),
   which now takes the sequences directly rather than their lengths.
 
 - Removed warning for “incorrectly” removing index annotations. Now
@@ -36,17 +85,39 @@ User-facing changes:
   `index_annotation_lines = numeric(0)`) will automatically change the
   “main” one to remove annotations.
 
+- Massively improved
+  [`rasterise_matrix()`](https://ejade42.github.io/ggDNAvis/reference/rasterise_matrix.md)
+  performance by vectorising calculations.
+
+- Changed default `pixels_per_base` from `20` to `100` for
+  [`visualise_methylation()`](https://ejade42.github.io/ggDNAvis/reference/visualise_methylation.md)
+  because there is now the option for index and sequence text, which
+  requires a higher resolution to be legible.
+
+New helper functions:
+
+- [`bad_arg()`](https://ejade42.github.io/ggDNAvis/reference/bad_arg.md) -
+  throws an error with information (e.g. name, class, value) about a
+  problematic argument.
+
+- [`insert_at_indices()`](https://ejade42.github.io/ggDNAvis/reference/insert_at_indices.md) -
+  inserts blank lines for index annotations in
+  [`visualise_many_sequences()`](https://ejade42.github.io/ggDNAvis/reference/visualise_many_sequences.md)
+  and
+  [`visualise_methylation()`](https://ejade42.github.io/ggDNAvis/reference/visualise_methylation.md).
+
+- `create_many_sequence_index_annotations()` - calculates coordinates
+  and labels for index annotations in
+  [`visualise_many_sequences()`](https://ejade42.github.io/ggDNAvis/reference/visualise_many_sequences.md)
+  and
+  [`visualise_methylation()`](https://ejade42.github.io/ggDNAvis/reference/visualise_methylation.md).
+
 Background changes:
 
-- Added new helper functions:
-  [`insert_at_indices()`](https://ejade42.github.io/ggDNAvis/reference/insert_at_indices.md)
-  and `create_many_sequence_index_annotations()`
-
 - Starting changing all argument validation to use
-  [`bad_arg()`](https://ejade42.github.io/ggDNAvis/reference/bad_arg.md)
-  rather than copy pasting.
+  [`bad_arg()`](https://ejade42.github.io/ggDNAvis/reference/bad_arg.md).
 
-- Enforced version requirement for ggplot2 (\>= 4.0.0)
+- Enforced version requirement for ggplot2 (\>= 4.0.0).
 
 ## ggDNAvis 0.3.2
 
