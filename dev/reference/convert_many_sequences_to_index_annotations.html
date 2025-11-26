@@ -79,7 +79,10 @@ because each line is a different sequence.</p>
 <span>  annotation_interval <span class="op">=</span> <span class="fl">15</span>,</span>
 <span>  annotate_full_lines <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  annotations_above <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  annotation_vertical_position <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">3</span></span>
+<span>  annotation_vertical_position <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">3</span>,</span>
+<span>  sum_indices <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  spacing <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>  offset_start <span class="op">=</span> <span class="fl">0</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -113,6 +116,18 @@ because each line is a different sequence.</p>
 
 <dt id="arg-annotation-vertical-position">annotation_vertical_position<a class="anchor" aria-label="anchor" href="#arg-annotation-vertical-position"></a></dt>
 <dd><p><code>numeric</code>. The vertical position above/below each annotated line that annotations should be drawn. Must also have been used as input to <code><a href="insert_at_indices.html">insert_at_indices()</a></code> to create <code>new_sequences_vector</code>.</p></dd>
+
+
+<dt id="arg-sum-indices">sum_indices<a class="anchor" aria-label="anchor" href="#arg-sum-indices"></a></dt>
+<dd><p><code>logical</code>. Whether indices should be counted separately along each line (<code>FALSE</code>, default) or summed along all annotated lines (<code>TRUE</code>). May behave unexpectedly if <code>TRUE</code> when <code>annotate_full_lines</code> is also <code>TRUE</code>.</p></dd>
+
+
+<dt id="arg-spacing">spacing<a class="anchor" aria-label="anchor" href="#arg-spacing"></a></dt>
+<dd><p><code>integer</code>. The number of blank lines inserted for each index annotation. Set to <code>NA</code> (default) to infer from <code>annotation_vertical_position</code>.</p></dd>
+
+
+<dt id="arg-offset-start">offset_start<a class="anchor" aria-label="anchor" href="#arg-offset-start"></a></dt>
+<dd><p><code>integer</code>. The number of blank lines not present at the start, that otherwise would be expected based on <code>spacing</code> or <code>annotation_vertical_position</code>. Defaults to <code>0</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">

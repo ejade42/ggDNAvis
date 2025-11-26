@@ -185,10 +185,10 @@ visualise_single_sequence(
   To make the detailed plots with box outlines, sequence text, and index
   annotations,
   [`ggplot2::geom_tile()`](https://ggplot2.tidyverse.org/reference/geom_tile.html)
-  is used. However, `geom_tile` is unusuably slow for huge datasets, so
-  there is an option to use `geom_raster` instead. `geom_raster` does
-  not support box outlines, sequence text, or index annotations, but is
-  much faster if only the colours are wanted.  
+  is used. However, `geom_tile` is slower for huge datasets, so there is
+  an option to use `geom_raster` instead. `geom_raster` does not support
+  box outlines, sequence text, or index annotations, but is much faster
+  if only the colours are wanted.  
     
   `geom_raster` is automatically used if it will not change the plot
   (i.e. if all extraneous elements are already off), but can be forced

@@ -29,7 +29,10 @@ convert_many_sequences_to_index_annotations(
   annotation_interval = 15,
   annotate_full_lines = TRUE,
   annotations_above = TRUE,
-  annotation_vertical_position = 1/3
+  annotation_vertical_position = 1/3,
+  sum_indices = FALSE,
+  spacing = NA,
+  offset_start = 0
 )
 ```
 
@@ -89,6 +92,25 @@ convert_many_sequences_to_index_annotations(
   annotations should be drawn. Must also have been used as input to
   [`insert_at_indices()`](https://ejade42.github.io/ggDNAvis/reference/insert_at_indices.md)
   to create `new_sequences_vector`.
+
+- sum_indices:
+
+  `logical`. Whether indices should be counted separately along each
+  line (`FALSE`, default) or summed along all annotated lines (`TRUE`).
+  May behave unexpectedly if `TRUE` when `annotate_full_lines` is also
+  `TRUE`.
+
+- spacing:
+
+  `integer`. The number of blank lines inserted for each index
+  annotation. Set to `NA` (default) to infer from
+  `annotation_vertical_position`.
+
+- offset_start:
+
+  `integer`. The number of blank lines not present at the start, that
+  otherwise would be expected based on `spacing` or
+  `annotation_vertical_position`. Defaults to `0`.
 
 ## Value
 
