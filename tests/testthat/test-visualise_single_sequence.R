@@ -244,7 +244,7 @@ test_that("single_sequence_visualisation works with outlines, no spacing", {
 
 test_that("extra margin works with bigger vert pos", {
     filename <- "sone_2019_f1_1_expanded_test_29"
-    expect_warning(expect_warning(expect_warning(visualise_single_sequence(
+    expect_warning(expect_warning(visualise_single_sequence(
         sone_2019_f1_1_expanded,
         filename = paste0(root, filename, ".png"),
         sequence_colours = c("green", "red", "yellow", "blue"),
@@ -261,7 +261,7 @@ test_that("extra margin works with bigger vert pos", {
         index_annotation_vertical_position = 2,
         index_annotation_size = 20,
         pixels_per_base = 30
-    ))))
+    )))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)

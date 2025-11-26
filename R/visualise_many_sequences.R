@@ -687,7 +687,9 @@ insert_at_indices <- function(
 #' @param annotate_full_lines `logical`. Whether annotations should be calculated up to the end of the longest line (`TRUE`, default) or to the end of each line being annotated (`FALSE`).
 #' @param annotations_above `logical`. Whether annotations should be drawn above (`TRUE`, default) or below (`FALSE`) each annotated line. Must also have been used as input to [insert_at_indices()] to create `new_sequences_vector`.
 #' @param annotation_vertical_position `numeric`. The vertical position above/below each annotated line that annotations should be drawn. Must also have been used as input to [insert_at_indices()] to create `new_sequences_vector`.
+#' @param sum_indices `logical`. Whether indices should be counted separately along each line (`FALSE`, default) or summed along all annotated lines (`TRUE`). May behave unexpectedly if `TRUE` when `annotate_full_lines` is also `TRUE`.
 #' @param spacing `integer`. The number of blank lines inserted for each index annotation. Set to `NA` (default) to infer from `annotation_vertical_position`.
+#' @param offset_start `integer`. The number of blank lines not present at the start, that otherwise would be expected based on `spacing` or `annotation_vertical_position`. Defaults to `0`.
 #'
 #' @return `dataframe`. A dataframe with columns `x_position`, `y_position`, `annotation`, and `type`, with one observation per annotation number that needs to be drawn onto the ggplot.
 #'
@@ -739,37 +741,37 @@ convert_many_sequences_to_index_annotations <- function(
     annotate_full_lines = TRUE,
     annotations_above = TRUE,
     annotation_vertical_position = 1/3,
+    sum_indices = FALSE,
     spacing = NA,
-    offset_start = 0,
-    offset_end = 0
+    offset_start = 0
 ) {
     ## Validate arguments
     ## ---------------------------------------------------------------------
-    not_na <- list(new_sequences_vector = new_sequences_vector, original_sequences_vector = original_sequences_vector, original_indices_to_annotate = original_indices_to_annotate, annotation_interval = annotation_interval, annotate_full_lines = annotate_full_lines, annotations_above = annotations_above, annotation_vertical_position = annotation_vertical_position, offset_start = offset_start, offset_end = offset_end)
+    not_na <- list(new_sequences_vector = new_sequences_vector, original_sequences_vector = original_sequences_vector, original_indices_to_annotate = original_indices_to_annotate, annotation_interval = annotation_interval, annotate_full_lines = annotate_full_lines, annotations_above = annotations_above, annotation_vertical_position = annotation_vertical_position, sum_indices = sum_indices, offset_start = offset_start)
     for (argument in names(not_na)) {
         if (any(is.na(not_na[[argument]]))) {bad_arg(argument, not_na, "must not be NA.")}
     }
     not_na <- NULL
 
-    not_null <- list(new_sequences_vector = new_sequences_vector, original_sequences_vector = original_sequences_vector, original_indices_to_annotate = original_indices_to_annotate, annotation_interval = annotation_interval, annotate_full_lines = annotate_full_lines, annotations_above = annotations_above, annotation_vertical_position = annotation_vertical_position, spacing = spacing, offset_start = offset_start, offset_end = offset_end)
+    not_null <- list(new_sequences_vector = new_sequences_vector, original_sequences_vector = original_sequences_vector, original_indices_to_annotate = original_indices_to_annotate, annotation_interval = annotation_interval, annotate_full_lines = annotate_full_lines, annotations_above = annotations_above, annotation_vertical_position = annotation_vertical_position, spacing = spacing, sum_indices = sum_indices, offset_start = offset_start)
     for (argument in names(not_null)) {
         if (any(is.null(not_null[[argument]]))) {bad_arg(argument, not_null, "must not be NULL.")}
     }
     not_null <- NULL
 
-    vectors <- list(new_sequences_vector = new_sequences_vector, original_sequences_vector = original_sequences_vector, offset_start = offset_start, offset_end = offset_end)
+    vectors <- list(new_sequences_vector = new_sequences_vector, original_sequences_vector = original_sequences_vector)
     for (argument in names(vectors)) {
         if (is.vector(vectors[[argument]]) == FALSE) {bad_arg(argument, vectors, "must be a vector.")}
     }
     vectors <- NULL
 
-    length_1 <- list(annotation_interval = annotation_interval, annotate_full_lines = annotate_full_lines, annotations_above = annotations_above, annotation_vertical_position = annotation_vertical_position, spacing = spacing, offset_start = offset_start, offset_end = offset_end)
+    length_1 <- list(annotation_interval = annotation_interval, annotate_full_lines = annotate_full_lines, annotations_above = annotations_above, annotation_vertical_position = annotation_vertical_position, spacing = spacing, sum_indices = sum_indices, offset_start = offset_start)
     for (argument in names(length_1)) {
         if (length(length_1[[argument]]) != 1) {bad_arg(argument, length_1, "must have length 1.")}
     }
     length_1 <- NULL
 
-    non_neg_numeric <- list(original_indices_to_annotate = original_indices_to_annotate, annotation_interval = annotation_interval, annotation_vertical_position = annotation_vertical_position, offset_start = offset_start, offset_end = offset_end)
+    non_neg_numeric <- list(original_indices_to_annotate = original_indices_to_annotate, annotation_interval = annotation_interval, annotation_vertical_position = annotation_vertical_position, offset_start = offset_start)
     for (argument in names(non_neg_numeric)) {
         if (is.numeric(non_neg_numeric[[argument]]) == FALSE || any(non_neg_numeric[[argument]] < 0)) {bad_arg(argument, non_neg_numeric, "must be numeric and non-negative.")}
     }
@@ -780,7 +782,7 @@ convert_many_sequences_to_index_annotations <- function(
         spacing <- ceiling(annotation_vertical_position)
     }
 
-    integers <- list(original_indices_to_annotate = original_indices_to_annotate, annotation_interval = annotation_interval, spacing = spacing, offset_start = offset_start, offset_end = offset_end)
+    integers <- list(original_indices_to_annotate = original_indices_to_annotate, annotation_interval = annotation_interval, spacing = spacing, offset_start = offset_start)
     for (argument in names(integers)) {
         if (!is.numeric(integers[[argument]]) || any(integers[[argument]] %% 1 != 0)) {bad_arg(argument, integers, "must be integer only.")}
     }
@@ -798,7 +800,7 @@ convert_many_sequences_to_index_annotations <- function(
     }
     positive <- NULL
 
-    bools <- list(annotate_full_lines = annotate_full_lines, annotations_above = annotations_above)
+    bools <- list(annotate_full_lines = annotate_full_lines, annotations_above = annotations_above, sum_indices = sum_indices)
     for (argument in names(bools)) {
         if (is.logical(bools[[argument]]) == FALSE) {bad_arg(argument, bools, "must be logical/boolean.")}
     }
@@ -816,6 +818,11 @@ convert_many_sequences_to_index_annotations <- function(
     if (length(unique(original_indices_to_annotate)) != length(original_indices_to_annotate)) {
         bad_arg("original_indices_to_annotate", list(original_indices_to_annotate = original_indices_to_annotate), "must be unique.")
     }
+
+    ## Warn about unexpected combination
+    if (annotate_full_lines && sum_indices) {
+        warn("Unexpected behaviour (e.g. incorrect counts) might arise from annotating full lines *and* using a cumulative-sum index.", class = "parameter_recommendation")
+    }
     ## ---------------------------------------------------------------------
 
 
@@ -826,7 +833,7 @@ convert_many_sequences_to_index_annotations <- function(
     ## - 2, 4, and 7 if insertions went before
     ## - 1, 3, and 6 if insertions went after
     ## (assuming each insertion is only one line - seq_along term is scaled if needed)
-    annotated_sequence_indices <- original_indices_to_annotate + seq_along(original_indices_to_annotate)*spacing - offset_start - as.numeric(!annotations_above)*spacing
+    annotated_sequence_indices <- original_indices_to_annotate + seq_along(original_indices_to_annotate)*spacing - as.numeric(!annotations_above)*spacing - offset_start
 
     ## Remove out-of-range indices
     ## As original indices to annotate are sorted, positive, and unique, this will exclusively remove out-of-range indices
@@ -841,14 +848,18 @@ convert_many_sequences_to_index_annotations <- function(
     ## Create lists of i and j indices for all annotated bases
     ## Equivalent to for (i in 1:length(annotated_sequence_indices)) {for (j in 1:line_length)}
     ## where line_length is either the length of each sequence, or the length (k) of the longest sequence
+    length_per_line <- nchar(new_sequences_vector[annotated_sequence_indices])
     if (annotate_full_lines) {
+        annotations_per_line <- k %/% annotation_interval
         j_vals <- rep(seq(annotation_interval, k, annotation_interval), times = length(annotated_sequence_indices))
-        i_vals <- rep(annotated_sequence_indices, each = floor(k / annotation_interval))
+        i_vals <- rep(annotated_sequence_indices, each = annotations_per_line)
     } else {
-        j_vals <- unlist(lapply(nchar(new_sequences_vector[annotated_sequence_indices]), function(x) {if (x>0) {seq(annotation_interval, x, annotation_interval)}}))
-        i_vals <- rep(annotated_sequence_indices, times = floor(nchar(new_sequences_vector[annotated_sequence_indices]) / annotation_interval))
+        annotations_per_line <- length_per_line %/% annotation_interval
+        j_vals <- unlist(lapply(length_per_line, function(x) {if (x>0) {seq(annotation_interval, x, annotation_interval)}}))
+        i_vals <- rep(annotated_sequence_indices, times = annotations_per_line)
     }
 
+    ## Calculate x and y positions based on the indices and the box sizes
     x_vec <- (j_vals - 0.5) / k
     if (annotations_above) {
         y_vec <- 1 - (i_vals - 1 - annotation_vertical_position) / n
@@ -856,8 +867,23 @@ convert_many_sequences_to_index_annotations <- function(
         y_vec <- 1 - (i_vals + annotation_vertical_position) / n
     }
 
+    ## Determine annotations (index along line, or index along line + previous sum)
+    if (sum_indices) {
+        ## Warn about unexpected combination
+        if (annotate_full_lines) {
+            warn("Unexpected behaviour (e.g. incorrect counts) might arise from annotating full lines *and* using a cumulative-sum index.", class = "parameter_recommendation")
+        }
 
-    annotation_data <- data.frame("x_position" = x_vec, "y_position" = y_vec, "annotation" = as.character(j_vals), type = "Number")
+        ## Current behaviour is to sum indices only along annotated sequences
+        ## Maybe in future I could add an option for summing along all sequences, but why would anyone want this?
+        prior_line_sums <- c(0, head(cumsum(length_per_line), -1))
+        annotations <- sequence(annotations_per_line) * annotation_interval + rep(prior_line_sums, annotations_per_line)
+    } else {
+        annotations <- j_vals
+    }
+
+    ## Create and return dataframe
+    annotation_data <- data.frame("x_position" = x_vec, "y_position" = y_vec, "annotation" = as.character(annotations), type = "Number")
     return(annotation_data)
 }
 

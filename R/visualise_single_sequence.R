@@ -179,6 +179,12 @@ visualise_single_sequence <- function(
         cli_alert_info("Automatically setting index_annotation_interval to 0 as index_annotation_size is 0", class = "atypical_turn_off")
         index_annotation_interval <- 0
     }
+    ## If annotations are off, set vertical position to 0
+    ## This helps with calculating margin later
+    if (index_annotation_interval == 0) {
+        index_annotation_vertical_position <- 0
+    }
+
     if (spacing == 0 && index_annotation_interval != 0) {
         warn("Using spacing = 0 without disabling index annotation is not recommended.\nIt is likely to draw the annotations overlapping the sequence.\nRecommended to set index_annotation_interval = 0 to disable index annotations.", class = "parameter_recommendation")
     }
@@ -208,7 +214,14 @@ visualise_single_sequence <- function(
     } else {
         index_annotation_lines <- 1:(length(split_sequences)-1)
     }
-    sequences <- insert_at_indices(split_sequences, index_annotation_lines, index_annotations_above, insert = "", vert = spacing)
+
+    ## But, if annotations are above, we need to insert the spacers for the last line anyway
+    ## So override the previous setting and use 1:length anyway
+    if (index_annotations_above) {
+        sequences <- insert_at_indices(split_sequences, 1:length(split_sequences), index_annotations_above, insert = "", vert = spacing)
+    } else {
+        sequences <- insert_at_indices(split_sequences, index_annotation_lines, index_annotations_above, insert = "", vert = spacing)
+    }
 
     offset_start <- 0
     offset_end   <- 0
@@ -244,6 +257,10 @@ visualise_single_sequence <- function(
     } else if (force_raster) {
         warn("Forcing geom_raster via force_raster = TRUE will remove all sequence text, index annotations (though any inserted blank lines/spacers will remain), and box outlines.", class = "raster_is_forced")
         raster <- TRUE
+        sequence_text_size <- 0
+        index_annotation_interval <- 0
+        index_annotation_vertical_position <- 0
+        outline_linewidth = 0
     }
 
     ## Make actual plot
@@ -293,7 +310,7 @@ visualise_single_sequence <- function(
         ## Add index annotations if desired
         if (index_annotation_interval > 0) {
             monitor_time <- monitor(monitor_performance, start_time, monitor_time, "generating index annotations")
-            index_annotation_data <- convert_many_sequences_to_index_annotations(sequences, split_sequences, index_annotation_lines, index_annotation_interval, FALSE, index_annotations_above, index_annotation_vertical_position, spacing, offset_start, offset_end)
+            index_annotation_data <- convert_many_sequences_to_index_annotations(sequences, split_sequences, index_annotation_lines, index_annotation_interval, FALSE, index_annotations_above, index_annotation_vertical_position, TRUE, spacing, offset_start)
 
             monitor_time <- monitor(monitor_performance, start_time, monitor_time, "adding index annotations")
             result <- result +
@@ -313,11 +330,11 @@ visualise_single_sequence <- function(
     ## As long as the lines are spaced out, don't need a bottom margin as the blank spacer line does that
     ## But if spacing is turned off, need to add a bottom margin
     monitor_time <- monitor(monitor_performance, start_time, monitor_time, "calculating margin")
-    extra_spaces <- spacing
-    if (1 %in% index_annotation_lines && index_annotations_above) {
+    extra_spaces <- max(spacing, ceiling(index_annotation_vertical_position))
+    if (1 %in% index_annotation_lines && index_annotations_above && index_annotation_interval != 0) {
         result <- result + theme(plot.margin = grid::unit(c(max(margin-extra_spaces, 0), margin, margin, margin), "inches"))
         extra_height <- margin + max(margin-extra_spaces, 0)
-    } else if (length(split_sequences) %in% index_annotation_lines && !index_annotations_above) {
+    } else if (length(split_sequences) %in% index_annotation_lines && !index_annotations_above && index_annotation_interval != 0) {
         result <- result + theme(plot.margin = grid::unit(c(margin, margin, max(margin-extra_spaces, 0), margin), "inches"))
         extra_height <- margin + max(margin-extra_spaces, 0)
     } else {
