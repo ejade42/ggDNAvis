@@ -353,8 +353,8 @@ visualise_single_sequence <- function(
         theme(plot.background = element_rect(fill = background_colour, colour = NA),
               axis.title = element_blank())
 
-    ## As long as the lines are spaced out, don't need a bottom margin as the blank spacer line does that
-    ## But if spacing is turned off, need to add a bottom margin
+    ## Calculate margins
+    ## single_sequence just keeps a tally of when lines at the top and bottom are removed so this is easy
     monitor_time <- monitor(monitor_performance, start_time, monitor_time, "calculating margin")
     result <- result + theme(plot.margin = grid::unit(c(max(margin-extra_spaces_start, 0), margin, max(margin-extra_spaces_end, 0), margin), "inches"))
     extra_height <- max(margin-extra_spaces_start, 0) + max(margin-extra_spaces_end, 0)

@@ -27,7 +27,7 @@ fetch_acceptable_distortion <- function(verbose = TRUE) {
 
     if (Sys.info()[["sysname"]] == "Darwin" && Sys.info()[["user"]] == "evelyn") {
         if (verbose) {cli_alert_info("Evelyn's macbook detected, using extremely strict matching")}
-        acceptable_distortion <- 0.0005
+        acceptable_distortion <- 0.000001
     } else if (Sys.getenv("NOT_CRAN") == "false" || Sys.getenv("GITHUB_ACTIONS") == "true") {
         if (verbose) {cli_alert_info("GitHub actions/CRAN environment detected. Allowing lenience in plot matching.")}
 
