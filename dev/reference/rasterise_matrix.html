@@ -63,7 +63,7 @@ of the matrix.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">rasterise_matrix</span><span class="op">(</span><span class="va">image_matrix</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">rasterise_matrix</span><span class="op">(</span><span class="va">image_matrix</span>, drop_na <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -72,6 +72,10 @@ of the matrix.</p>
 
 <dl><dt id="arg-image-matrix">image_matrix<a class="anchor" aria-label="anchor" href="#arg-image-matrix"></a></dt>
 <dd><p><code>matrix</code>. A matrix (or anything that can be coerced to a matrix via <code><a href="https://rdrr.io/r/base/matrix.html" class="external-link">base::as.matrix()</a></code>).</p></dd>
+
+
+<dt id="arg-drop-na">drop_na<a class="anchor" aria-label="anchor" href="#arg-drop-na"></a></dt>
+<dd><p><code>logical</code>. A boolean specifying whether missing values should be dropped via <a href="https://tidyr.tidyverse.org/reference/drop_na.html" class="external-link">tidyr::drop_na</a> (<code>TRUE</code>, default) or kept (<code>FALSE</code>).</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -195,6 +199,42 @@ of the matrix.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 30 0.6875 0.125     0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 31 0.8125 0.125     0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 32 0.9375 0.125     0</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## Create matrix with missing values</span></span></span>
+<span class="r-in"><span><span class="va">incomplete_matrix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="cn">NA</span>,</span></span>
+<span class="r-in"><span>      <span class="fl">5</span>, <span class="cn">NA</span>, <span class="fl">7</span>, <span class="fl">8</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    nrow <span class="op">=</span> <span class="fl">2</span>, ncol <span class="op">=</span> <span class="fl">4</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## View</span></span></span>
+<span class="r-in"><span><span class="va">incomplete_matrix</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      [,1] [,2] [,3] [,4]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]    1    2    3   NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]    5   NA    7    8</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## Rasterise, dropping NAs (default)</span></span></span>
+<span class="r-in"><span><span class="fu">rasterise_matrix</span><span class="op">(</span><span class="va">incomplete_matrix</span>, drop_na <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       x    y layer</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.125 0.75     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 0.375 0.75     2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 0.625 0.75     3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 0.125 0.25     5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 0.625 0.25     7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 0.875 0.25     8</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## Rasterise, keeping NAs</span></span></span>
+<span class="r-in"><span><span class="fu">rasterise_matrix</span><span class="op">(</span><span class="va">incomplete_matrix</span>, drop_na <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       x    y layer</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.125 0.75     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 0.375 0.75     2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 0.625 0.75     3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 0.875 0.75    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 0.125 0.25     5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 0.375 0.25    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7 0.625 0.25     7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8 0.875 0.25     8</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

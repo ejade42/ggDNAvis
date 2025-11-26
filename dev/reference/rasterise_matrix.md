@@ -11,7 +11,7 @@ dataframe is simply the value of each element of the matrix.
 ## Usage
 
 ``` r
-rasterise_matrix(image_matrix)
+rasterise_matrix(image_matrix, drop_na = TRUE)
 ```
 
 ## Arguments
@@ -20,6 +20,13 @@ rasterise_matrix(image_matrix)
 
   `matrix`. A matrix (or anything that can be coerced to a matrix via
   [`base::as.matrix()`](https://rdrr.io/r/base/matrix.html)).
+
+- drop_na:
+
+  `logical`. A boolean specifying whether missing values should be
+  dropped via
+  [tidyr::drop_na](https://tidyr.tidyverse.org/reference/drop_na.html)
+  (`TRUE`, default) or kept (`FALSE`).
 
 ## Value
 
@@ -145,4 +152,40 @@ rasterise_matrix(dna_matrix)
 #> 30 0.6875 0.125     0
 #> 31 0.8125 0.125     0
 #> 32 0.9375 0.125     0
+
+
+## Create matrix with missing values
+incomplete_matrix <- matrix(
+    c(1, 2, 3, NA,
+      5, NA, 7, 8),
+    nrow = 2, ncol = 4, byrow = TRUE
+)
+
+## View
+incomplete_matrix
+#>      [,1] [,2] [,3] [,4]
+#> [1,]    1    2    3   NA
+#> [2,]    5   NA    7    8
+
+## Rasterise, dropping NAs (default)
+rasterise_matrix(incomplete_matrix, drop_na = TRUE)
+#>       x    y layer
+#> 1 0.125 0.75     1
+#> 2 0.375 0.75     2
+#> 3 0.625 0.75     3
+#> 4 0.125 0.25     5
+#> 5 0.625 0.25     7
+#> 6 0.875 0.25     8
+
+## Rasterise, keeping NAs
+rasterise_matrix(incomplete_matrix, drop_na = FALSE)
+#>       x    y layer
+#> 1 0.125 0.75     1
+#> 2 0.375 0.75     2
+#> 3 0.625 0.75     3
+#> 4 0.875 0.75    NA
+#> 5 0.125 0.25     5
+#> 6 0.375 0.25    NA
+#> 7 0.625 0.25     7
+#> 8 0.875 0.25     8
 ```

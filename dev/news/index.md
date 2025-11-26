@@ -37,10 +37,10 @@ New features:
     `col` e.g. `sequence_text_color` or `background_col`.
   - There is a minor exception in that
     [`visualise_methylation_colour_scale()`](https://ejade42.github.io/ggDNAvis/reference/visualise_methylation_colour_scale.md)
-    has a valid alias
+    accepts
     [`visualize_methylation_color_scale()`](https://ejade42.github.io/ggDNAvis/reference/visualise_methylation_colour_scale.md)
     but does not accept `col` in the function name (and does not accept
-    mixing `visualise` with `color` or `visualize` with `colour`.
+    mixing `visualise` with `color` or `visualize` with `colour`).
   - Some aliases are set up for common typos, especially regarding
     pluralisation. In particular, `index_annotations_above` also accepts
     `index_annotation_above`, and `index_annotation_full_line` accepts
