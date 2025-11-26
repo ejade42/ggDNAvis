@@ -210,6 +210,20 @@ visualise_single_sequence <- function(
     }
     sequences <- insert_at_indices(split_sequences, index_annotation_lines, index_annotations_above, insert = "", vert = spacing)
 
+    offset_start <- 0
+    offset_end   <- 0
+    if (spacing > ceiling(index_annotation_vertical_position)) {
+        if (index_annotations_above) {
+            offset_start <- spacing - ceiling(index_annotation_vertical_position)
+            sequences <- sequences[(offset_start+1):length(sequences)]
+
+        } else {
+            offset_end <- spacing - ceiling(index_annotation_vertical_position)
+            sequences <- sequences[1:(length(sequences)-offset_end)]
+        }
+    }
+
+
     # Finish generating data for plotting
     if (max(nchar(sequences)) < line_wrapping) {line_wrapping <- max(nchar(sequences))}
     monitor_time <- monitor(monitor_performance, start_time, monitor_time, "rasterising image data")
@@ -278,7 +292,7 @@ visualise_single_sequence <- function(
         ## Add index annotations if desired
         if (index_annotation_interval > 0) {
             monitor_time <- monitor(monitor_performance, start_time, monitor_time, "generating index annotations")
-            index_annotation_data <- convert_many_sequences_to_index_annotations(sequences, split_sequences, index_annotation_lines, index_annotation_interval, FALSE, index_annotations_above, index_annotation_vertical_position, spacing)
+            index_annotation_data <- convert_many_sequences_to_index_annotations(sequences, split_sequences, index_annotation_lines, index_annotation_interval, FALSE, index_annotations_above, index_annotation_vertical_position, spacing, offset_start, offset_end)
 
             monitor_time <- monitor(monitor_performance, start_time, monitor_time, "adding index annotations")
             result <- result +

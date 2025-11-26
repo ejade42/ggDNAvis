@@ -739,35 +739,37 @@ convert_many_sequences_to_index_annotations <- function(
     annotate_full_lines = TRUE,
     annotations_above = TRUE,
     annotation_vertical_position = 1/3,
-    spacing = NA
+    spacing = NA,
+    offset_start = 0,
+    offset_end = 0
 ) {
     ## Validate arguments
     ## ---------------------------------------------------------------------
-    not_na <- list(new_sequences_vector = new_sequences_vector, original_sequences_vector = original_sequences_vector, original_indices_to_annotate = original_indices_to_annotate, annotation_interval = annotation_interval, annotate_full_lines = annotate_full_lines, annotations_above = annotations_above, annotation_vertical_position = annotation_vertical_position)
+    not_na <- list(new_sequences_vector = new_sequences_vector, original_sequences_vector = original_sequences_vector, original_indices_to_annotate = original_indices_to_annotate, annotation_interval = annotation_interval, annotate_full_lines = annotate_full_lines, annotations_above = annotations_above, annotation_vertical_position = annotation_vertical_position, offset_start = offset_start, offset_end = offset_end)
     for (argument in names(not_na)) {
         if (any(is.na(not_na[[argument]]))) {bad_arg(argument, not_na, "must not be NA.")}
     }
     not_na <- NULL
 
-    not_null <- list(new_sequences_vector = new_sequences_vector, original_sequences_vector = original_sequences_vector, original_indices_to_annotate = original_indices_to_annotate, annotation_interval = annotation_interval, annotate_full_lines = annotate_full_lines, annotations_above = annotations_above, annotation_vertical_position = annotation_vertical_position, spacing = spacing)
+    not_null <- list(new_sequences_vector = new_sequences_vector, original_sequences_vector = original_sequences_vector, original_indices_to_annotate = original_indices_to_annotate, annotation_interval = annotation_interval, annotate_full_lines = annotate_full_lines, annotations_above = annotations_above, annotation_vertical_position = annotation_vertical_position, spacing = spacing, offset_start = offset_start, offset_end = offset_end)
     for (argument in names(not_null)) {
         if (any(is.null(not_null[[argument]]))) {bad_arg(argument, not_null, "must not be NULL.")}
     }
     not_null <- NULL
 
-    vectors <- list(new_sequences_vector = new_sequences_vector, original_sequences_vector = original_sequences_vector)
+    vectors <- list(new_sequences_vector = new_sequences_vector, original_sequences_vector = original_sequences_vector, offset_start = offset_start, offset_end = offset_end)
     for (argument in names(vectors)) {
         if (is.vector(vectors[[argument]]) == FALSE) {bad_arg(argument, vectors, "must be a vector.")}
     }
     vectors <- NULL
 
-    length_1 <- list(annotation_interval = annotation_interval, annotate_full_lines = annotate_full_lines, annotations_above = annotations_above, annotation_vertical_position = annotation_vertical_position, spacing = spacing)
+    length_1 <- list(annotation_interval = annotation_interval, annotate_full_lines = annotate_full_lines, annotations_above = annotations_above, annotation_vertical_position = annotation_vertical_position, spacing = spacing, offset_start = offset_start, offset_end = offset_end)
     for (argument in names(length_1)) {
         if (length(length_1[[argument]]) != 1) {bad_arg(argument, length_1, "must have length 1.")}
     }
     length_1 <- NULL
 
-    non_neg_numeric <- list(original_indices_to_annotate = original_indices_to_annotate, annotation_interval = annotation_interval, annotation_vertical_position = annotation_vertical_position)
+    non_neg_numeric <- list(original_indices_to_annotate = original_indices_to_annotate, annotation_interval = annotation_interval, annotation_vertical_position = annotation_vertical_position, offset_start = offset_start, offset_end = offset_end)
     for (argument in names(non_neg_numeric)) {
         if (is.numeric(non_neg_numeric[[argument]]) == FALSE || any(non_neg_numeric[[argument]] < 0)) {bad_arg(argument, non_neg_numeric, "must be numeric and non-negative.")}
     }
@@ -778,7 +780,7 @@ convert_many_sequences_to_index_annotations <- function(
         spacing <- ceiling(annotation_vertical_position)
     }
 
-    integers <- list(original_indices_to_annotate = original_indices_to_annotate, annotation_interval = annotation_interval, spacing = spacing)
+    integers <- list(original_indices_to_annotate = original_indices_to_annotate, annotation_interval = annotation_interval, spacing = spacing, offset_start = offset_start, offset_end = offset_end)
     for (argument in names(integers)) {
         if (!is.numeric(integers[[argument]]) || any(integers[[argument]] %% 1 != 0)) {bad_arg(argument, integers, "must be integer only.")}
     }
@@ -824,7 +826,7 @@ convert_many_sequences_to_index_annotations <- function(
     ## - 2, 4, and 7 if insertions went before
     ## - 1, 3, and 6 if insertions went after
     ## (assuming each insertion is only one line - seq_along term is scaled if needed)
-    annotated_sequence_indices <- original_indices_to_annotate + seq_along(original_indices_to_annotate)*spacing - as.numeric(!annotations_above)*spacing
+    annotated_sequence_indices <- original_indices_to_annotate + seq_along(original_indices_to_annotate)*spacing - offset_start - as.numeric(!annotations_above)*spacing
 
     ## Remove out-of-range indices
     ## As original indices to annotate are sorted, positive, and unique, this will exclusively remove out-of-range indices
