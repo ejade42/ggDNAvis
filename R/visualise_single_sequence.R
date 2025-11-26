@@ -217,7 +217,8 @@ visualise_single_sequence <- function(
             offset_start <- spacing - ceiling(index_annotation_vertical_position)
             sequences <- sequences[(offset_start+1):length(sequences)]
 
-        } else {
+        ## Remove extra lines at end, but if the last line is too short to be annotated then there's nothing to remove
+        } else if (nchar(sequence) %% line_wrapping >= index_annotation_interval) {
             offset_end <- spacing - ceiling(index_annotation_vertical_position)
             sequences <- sequences[1:(length(sequences)-offset_end)]
         }

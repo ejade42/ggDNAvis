@@ -276,6 +276,14 @@ test_that("forcing raster works", {
                                        metric = "MAE"))$distortion, acceptable_distortion)
 })
 
+test_that("logic for large spaces underneath works", {
+    filename <- "sone_2019_f1_1_expanded_test_31"
+    visualise_single_sequence(sone_2019_f1_1_expanded, spacing = 3, line_wrapping = 60, index_annotations_above = FALSE, filename = paste0(root, filename, ".png"), pixels_per_base = 25)
+    expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
+                                       image_read(paste0(reference, filename, ".png")),
+                                       metric = "MAE"))$distortion, acceptable_distortion)
+})
+
 
 ## Test fail cases/invalid arguments to main single sequence visualisation function
 test_that("single sequence visualisation fails when arguments are invalid", {
