@@ -54,16 +54,14 @@ reference:
     Helper functions that are mostly called by other functions; users shouldn't need these for normal use cases (but they could be helpful if you need to do similar data processing steps for other workflows, so they are available if needed)
   contents:
   - convert_base_to_number
-  - convert_input_seq_to_sequence_list
   - convert_locations_to_MM_vector
-  - convert_many_sequences_to_index_annotations
   - convert_MM_vector_to_locations
   - convert_modification_to_number_vector
   - convert_probabilities_to_annotations
   - convert_sequence_to_numbers
-  - convert_sequences_to_annotations
   - create_image_data
   - insert_at_indices
+  - rasterise_index_annotations
   - rasterise_matrix
   - reverse_sequence_if_needed
   - reverse_quality_if_needed

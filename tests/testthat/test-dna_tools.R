@@ -116,12 +116,12 @@ test_that("creating image data from sequences vector works", {
     expect_equal(create_image_data(c("ATCG", "", "GGGG", "")),
                  data.frame(x = c(0.125, 0.375, 0.625, 0.875, 0.125, 0.375, 0.625, 0.875, 0.125, 0.375, 0.625, 0.875, 0.125, 0.375, 0.625, 0.875),
                             y = c(0.875, 0.875, 0.875, 0.875, 0.625, 0.625, 0.625, 0.625, 0.375, 0.375, 0.375, 0.375, 0.125, 0.125, 0.125, 0.125),
-                            layer = c(1, 4, 2, 3, 0, 0, 0, 0, 3, 3, 3, 3, 0, 0, 0, 0))
+                            value = c(1, 4, 2, 3, 0, 0, 0, 0, 3, 3, 3, 3, 0, 0, 0, 0))
                  )
     expect_equal(create_image_data(c("A", "", "", "", "UG")),
                  data.frame(x = c(0.25, 0.75, 0.25, 0.75, 0.25, 0.75, 0.25, 0.75, 0.25, 0.75),
                             y = c(0.9, 0.9, 0.7, 0.7, 0.5, 0.5, 0.3, 0.3, 0.1, 0.1),
-                            layer = c(1, 0, 0, 0, 0, 0, 0, 0, 4, 3))
+                            value = c(1, 0, 0, 0, 0, 0, 0, 0, 4, 3))
                  )
 })
 
@@ -136,13 +136,13 @@ test_that("rasterising matrices works", {
     expect_equal(rasterise_matrix(example_matrix),
                  data.frame(x = c(0.125, 0.375, 0.625, 0.875, 0.125, 0.375, 0.625, 0.875, 0.125, 0.375, 0.625, 0.875, 0.125, 0.375, 0.625, 0.875),
                             y = c(0.875, 0.875, 0.875, 0.875, 0.625, 0.625, 0.625, 0.625, 0.375, 0.375, 0.375, 0.375, 0.125, 0.125, 0.125, 0.125),
-                            layer = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16)))
+                            value = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16)))
 
     example_matrix <- matrix(c("A", "B", "C", "D", "E", "F", "G", "H", "I", "J"), nrow = 2, ncol = 5, byrow = TRUE)
     expect_equal(rasterise_matrix(example_matrix),
                  data.frame(x = c(0.1, 0.3, 0.5, 0.7, 0.9, 0.1, 0.3, 0.5, 0.7, 0.9),
                             y = c(0.75, 0.75, 0.75, 0.75, 0.75, 0.25, 0.25, 0.25, 0.25, 0.25),
-                            layer = c("A", "B", "C", "D", "E", "F", "G", "H", "I", "J")))
+                            value = c("A", "B", "C", "D", "E", "F", "G", "H", "I", "J")))
 
     dna_matrix <- matrix(
         c(0, 0, 0, 0, 0, 0, 0, 0,
@@ -154,5 +154,240 @@ test_that("rasterising matrices works", {
     expect_equal(rasterise_matrix(dna_matrix),
                  data.frame(x = c(0.0625, 0.1875, 0.3125, 0.4375, 0.5625, 0.6875, 0.8125, 0.9375, 0.0625, 0.1875, 0.3125, 0.4375, 0.5625, 0.6875, 0.8125, 0.9375, 0.0625, 0.1875, 0.3125, 0.4375, 0.5625, 0.6875, 0.8125, 0.9375, 0.0625, 0.1875, 0.3125, 0.4375, 0.5625, 0.6875, 0.8125, 0.9375),
                             y = c(0.875, 0.875, 0.875, 0.875, 0.875, 0.875, 0.875, 0.875, 0.625, 0.625, 0.625, 0.625, 0.625, 0.625, 0.625, 0.625, 0.375, 0.375, 0.375, 0.375, 0.375, 0.375, 0.375, 0.375, 0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 0.125),
-                            layer = c(0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 2, 3, 3, 2, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1, 4, 1, 0, 0, 0, 0)))
+                            value = c(0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 2, 3, 3, 2, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1, 4, 1, 0, 0, 0, 0)))
+})
+
+
+
+
+test_that("inserting blanks works as expected", {
+    expect_equal(insert_at_indices(c("A", "B", "C", "D", "E"), c(2, 4)),
+                 c("A", "", "B", "C", "", "D", "E"))
+    expect_equal(insert_at_indices(c("A", "B", "C", "D", "E"), c(2, 4), insert_before = TRUE, insert = 0),
+                 c("A", "0", "B", "C", "0", "D", "E"))
+    expect_equal(insert_at_indices(c("A", "B", "C", "D", "E"), c(2, 4), insert_before = FALSE, insert = 0),
+                 c("A", "B", "0", "C", "D", "0", "E"))
+    expect_warning(expect_equal(insert_at_indices(c("A", "B", "C", "D", "E"), c(1, 4, 6), insert_before = TRUE, insert = c("X", "Y")),
+                                c("X", "Y", "A", "B", "C", "X", "Y", "D", "E")),
+                   class = "length_exceeded")
+
+    expect_warning(expect_equal(insert_at_indices(NA, c(1, 2)),
+                                c("", NA)),
+                   class = "length_exceeded")
+
+    expect_equal(insert_at_indices(c("A", "B", "C", "D", "E"), c(2, 4), insert = TRUE),
+                 c("A", "TRUE", "B", "C", "TRUE", "D", "E"))
+
+    expect_equal(insert_at_indices(list("A", "B", "C", "D", "E"), c(2, 4), insert = TRUE),
+                 list("A", TRUE, "B", "C", TRUE, "D", "E"))
+
+    expect_equal(insert_at_indices(list("A", c("B1", "B2"), "C", "D", "E"), c(2, 4), insert = list(TRUE, 7)),
+                 list("A", TRUE, 7, c("B1", "B2"), "C", TRUE, 7, "D", "E"))
+})
+
+test_that("inserting blanks fails when required", {
+    bad_param_value_for_sorted_unique_pos_int_vec <- list("X", TRUE, NA, NULL, list(1), -1, c(2, 0), c(2, 1), c(1, 1, 2), 0.5)
+    for (param in bad_param_value_for_sorted_unique_pos_int_vec) {
+        expect_error(insert_at_indices(c("A", "B", "C", "D", "E"), param), class = "argument_value_or_type")
+    }
+
+    bad_param_value_for_vec <- list(NULL)
+    for (param in bad_param_value_for_vec) {
+        expect_error(insert_at_indices(param, 1), class = "argument_value_or_type")
+    }
+
+    bad_param_value_for_bool <- list("X", 1, c(TRUE, FALSE), list(TRUE, FALSE), NA, NULL, -1)
+    for (param in bad_param_value_for_bool) {
+        expect_error(insert_at_indices(c("A", "B", "C", "D", "E"), c(1, 2), param), class = "argument_value_or_type")
+    }
+})
+
+
+
+test_that("rasterising index annotations, full example", {
+    ## Set up arguments (e.g. from visualise_many_sequences() call)
+    sequences_data <- example_many_sequences
+    index_annotation_lines <- c(1, 23, 37)
+    index_annotation_interval <- 10
+    index_annotations_above <- TRUE
+    index_annotation_full_line <- FALSE
+    index_annotation_vertical_position <- 1/3
+
+    ## Create sequences vector
+    sequences <- extract_and_sort_sequences(
+        example_many_sequences,
+        grouping_levels = c("family" = 8, "individual" = 2)
+    )
+
+    ## Insert blank rows as needed
+    new_sequences <- insert_at_indices(
+        sequences,
+        insertion_indices = index_annotation_lines,
+        insert_before = index_annotations_above,
+        insert = "",
+        vert = index_annotation_vertical_position
+    )
+
+    ## Create annnotation dataframe
+    d <- rasterise_index_annotations(
+        new_sequences_vector = new_sequences,
+        original_sequences_vector = sequences,
+        original_indices_to_annotate = index_annotation_lines,
+        annotation_interval = 10,
+        annotate_full_lines = index_annotation_full_line,
+        annotations_above = index_annotations_above,
+        annotation_vertical_position = index_annotation_vertical_position
+    )
+
+    ## Test
+    expect_equal(d, data.frame(
+        x = c(0.0931372549019608, 0.191176470588235, 0.28921568627451, 0.387254901960784, 0.485294117647059, 0.583333333333333, 0.681372549019608, 0.779411764705882, 0.877450980392157, 0.975490196078431, 0.0931372549019608, 0.191176470588235, 0.28921568627451, 0.387254901960784, 0.485294117647059, 0.583333333333333, 0.681372549019608, 0.779411764705882, 0.877450980392157, 0.0931372549019608, 0.191176470588235, 0.28921568627451, 0.387254901960784, 0.485294117647059, 0.583333333333333, 0.681372549019608, 0.779411764705882, 0.877450980392157),
+        y = c(0.987654320987654, 0.987654320987654, 0.987654320987654, 0.987654320987654, 0.987654320987654, 0.987654320987654, 0.987654320987654, 0.987654320987654, 0.987654320987654, 0.987654320987654, 0.561728395061728, 0.561728395061728, 0.561728395061728, 0.561728395061728, 0.561728395061728, 0.561728395061728, 0.561728395061728, 0.561728395061728, 0.561728395061728, 0.283950617283951, 0.283950617283951, 0.283950617283951, 0.283950617283951, 0.283950617283951, 0.283950617283951, 0.283950617283951, 0.283950617283951, 0.283950617283951),
+        value = c("10", "20", "30", "40", "50", "60", "70", "80", "90", "100", "10", "20", "30", "40", "50", "60", "70", "80", "90", "10", "20", "30", "40", "50", "60", "70", "80", "90")
+    ))
+
+
+    ## Extra tests for returning blank dataframe
+    blank_data <- data.frame("x_position" = numeric(), "y_position" = numeric(), "annotation" = character(), "type" = character())
+    expect_equal(rasterise_index_annotations(new_sequences, sequences, annotation_interval = 0, original_indices_to_annotate = numeric()), blank_data)
+    expect_equal(rasterise_index_annotations(new_sequences, sequences, annotation_interval = 10, original_indices_to_annotate = numeric()), blank_data)
+    expect_equal(rasterise_index_annotations(new_sequences, sequences, annotation_interval = 0, original_indices_to_annotate = c(1, 2, 3)), blank_data)
+})
+
+
+test_that("rasterising index annotations works, offset and spacing", {
+    ## Set up arguments (e.g. from visualise_many_sequences() call)
+    sequences_data <- example_many_sequences
+    index_annotation_lines <- c(1, 23, 37)
+    index_annotation_interval <- 10
+    index_annotations_above <- TRUE
+    index_annotation_full_line <- FALSE
+    index_annotation_vertical_position <- 1/3
+    offset <- 1
+    spacing <- 2
+
+    ## Create sequences vector
+    sequences <- extract_and_sort_sequences(
+        example_many_sequences,
+        grouping_levels = c("family" = 8, "individual" = 2)
+    )
+
+    ## Insert blank rows as needed
+    new_sequences <- insert_at_indices(
+        sequences,
+        insertion_indices = index_annotation_lines,
+        insert_before = index_annotations_above,
+        insert = "",
+        vert = spacing
+    )
+
+    ## Offset start by 1
+    new_sequences <- tail(new_sequences, -offset)
+
+    ## Create annnotation dataframe
+    d <- rasterise_index_annotations(
+        new_sequences_vector = new_sequences,
+        original_sequences_vector = sequences,
+        original_indices_to_annotate = index_annotation_lines,
+        annotation_interval = 10,
+        annotate_full_lines = index_annotation_full_line,
+        annotations_above = index_annotations_above,
+        annotation_vertical_position = index_annotation_vertical_position,
+        sum_indices = TRUE,
+        spacing = 2,
+        offset_start = 1
+    )
+
+    expect_equal(d, data.frame(
+        x = c(0.0931372549019608, 0.191176470588235, 0.28921568627451, 0.387254901960784, 0.485294117647059, 0.583333333333333, 0.681372549019608, 0.779411764705882, 0.877450980392157, 0.975490196078431, 0.0931372549019608, 0.191176470588235, 0.28921568627451, 0.387254901960784, 0.485294117647059, 0.583333333333333, 0.681372549019608, 0.779411764705882, 0.877450980392157, 0.0931372549019608, 0.191176470588235, 0.28921568627451, 0.387254901960784, 0.485294117647059, 0.583333333333333, 0.681372549019608, 0.779411764705882, 0.877450980392157),
+        y = c(0.988095238095238, 0.988095238095238, 0.988095238095238, 0.988095238095238, 0.988095238095238, 0.988095238095238, 0.988095238095238, 0.988095238095238, 0.988095238095238, 0.988095238095238, 0.55952380952381, 0.55952380952381, 0.55952380952381, 0.55952380952381, 0.55952380952381, 0.55952380952381, 0.55952380952381, 0.55952380952381, 0.55952380952381, 0.273809523809524, 0.273809523809524, 0.273809523809524, 0.273809523809524, 0.273809523809524, 0.273809523809524, 0.273809523809524, 0.273809523809524, 0.273809523809524),
+        value = c("10", "20", "30", "40", "50", "60", "70", "80", "90", "100", "112", "122", "132", "142", "152", "162", "172", "182", "192", "205", "215", "225", "235", "245", "255", "265", "275", "285")
+    ))
+})
+
+test_that("rasterising index annotations works, below", {
+    ## Set up arguments (e.g. from visualise_many_sequences() call)
+    sequences_data <- example_many_sequences
+    index_annotation_lines <- c(1, 23, 37)
+    index_annotation_interval <- 10
+    index_annotations_above <- FALSE
+    index_annotation_full_line <- TRUE
+    index_annotation_vertical_position <- 1/3
+
+    ## Create sequences vector
+    sequences <- extract_and_sort_sequences(
+        example_many_sequences,
+        grouping_levels = c("family" = 8, "individual" = 2)
+    )
+
+    ## Insert blank rows as needed
+    new_sequences <- insert_at_indices(
+        sequences,
+        insertion_indices = index_annotation_lines,
+        insert_before = index_annotations_above,
+        insert = "",
+        vert = index_annotation_vertical_position
+    )
+
+    ## Create annnotation dataframe
+    d <- rasterise_index_annotations(
+        new_sequences_vector = new_sequences,
+        original_sequences_vector = sequences,
+        original_indices_to_annotate = index_annotation_lines,
+        annotation_interval = 10,
+        annotate_full_lines = index_annotation_full_line,
+        annotations_above = index_annotations_above,
+        annotation_vertical_position = index_annotation_vertical_position
+    )
+
+    ## Test
+    expect_equal(d, data.frame(
+        x = c(0.0931372549019608, 0.191176470588235, 0.28921568627451, 0.387254901960784, 0.485294117647059, 0.583333333333333, 0.681372549019608, 0.779411764705882, 0.877450980392157, 0.975490196078431, 0.0931372549019608, 0.191176470588235, 0.28921568627451, 0.387254901960784, 0.485294117647059, 0.583333333333333, 0.681372549019608, 0.779411764705882, 0.877450980392157, 0.975490196078431, 0.0931372549019608, 0.191176470588235, 0.28921568627451, 0.387254901960784, 0.485294117647059, 0.583333333333333, 0.681372549019608, 0.779411764705882, 0.877450980392157, 0.975490196078431),
+        y = c(0.975308641975309, 0.975308641975309, 0.975308641975309, 0.975308641975309, 0.975308641975309, 0.975308641975309, 0.975308641975309, 0.975308641975309, 0.975308641975309, 0.975308641975309, 0.549382716049383, 0.549382716049383, 0.549382716049383, 0.549382716049383, 0.549382716049383, 0.549382716049383, 0.549382716049383, 0.549382716049383, 0.549382716049383, 0.549382716049383, 0.271604938271605, 0.271604938271605, 0.271604938271605, 0.271604938271605, 0.271604938271605, 0.271604938271605, 0.271604938271605, 0.271604938271605, 0.271604938271605, 0.271604938271605),
+        value = c("10", "20", "30", "40", "50", "60", "70", "80", "90", "100", "10", "20", "30", "40", "50", "60", "70", "80", "90", "100", "10", "20", "30", "40", "50", "60", "70", "80", "90", "100")
+    ))
+})
+
+
+test_that("rasterising index annotations fails when needed", {
+    ## Create sequences vector
+    sequences <- extract_and_sort_sequences(
+        example_many_sequences,
+        grouping_levels = c("family" = 8, "individual" = 2)
+    )
+
+    ## Insert blank rows as needed
+    new_sequences <- insert_at_indices(
+        sequences,
+        insertion_indices = c(1, 23, 37)
+    )
+
+
+    bad_param_value_for_sorted_unique_pos_int_vec <- list("X", TRUE, NA, list(0), -1, 0, c(2, 0), c(2, 1), c(1, 1, 2), 0.5)
+    for (param in bad_param_value_for_sorted_unique_pos_int_vec) {
+        expect_error(rasterise_index_annotations(sequences, new_sequences, original_indices_to_annotate = param, annotation_interval = 1), class = "argument_value_or_type")
+    }
+
+    bad_param_value_for_bool <- list("X", 1, c(TRUE, FALSE), list(TRUE, FALSE), NA, NULL, -1)
+    for (param in bad_param_value_for_bool) {
+        expect_error(rasterise_index_annotations(sequences, new_sequences, annotate_full_lines = param, original_indices_to_annotate = 1, annotation_interval = 1), class = "argument_value_or_type")
+        expect_error(rasterise_index_annotations(sequences, new_sequences, annotations_above = param, original_indices_to_annotate = 1, annotation_interval = 1), class = "argument_value_or_type")
+        expect_error(rasterise_index_annotations(sequences, new_sequences, sum_indices = param, original_indices_to_annotate = 1, annotation_interval = 1), class = "argument_value_or_type")
+    }
+
+    bad_param_value_for_non_neg_int <- list("X", TRUE, NA, list(1), -1, c(2, 0), c(2, 1), c(1, 1, 2), 0.5, NULL)
+    for (param in bad_param_value_for_non_neg_int) {
+        expect_error(rasterise_index_annotations(sequences, new_sequences, original_indices_to_annotate = 1, annotation_interval = param), class = "argument_value_or_type")
+        expect_error(rasterise_index_annotations(sequences, new_sequences, original_indices_to_annotate = 1, offset_start = param), class = "argument_value_or_type")
+    }
+
+    bad_param_value_for_non_neg_int_na_allowed <- list("X", TRUE, list(1), -1, c(2, 0), c(2, 1), c(1, 1, 2), 0.5, NULL)
+    for (param in bad_param_value_for_non_neg_int_na_allowed) {
+        expect_error(rasterise_index_annotations(sequences, new_sequences, original_indices_to_annotate = 1, spacing = param), class = "argument_value_or_type")
+    }
+
+    bad_param_value_for_non_neg_num <- list("X", TRUE, NA, list(1), -1, c(2, 0), c(2, 1), c(1, 1, 2))
+    for (param in bad_param_value_for_non_neg_num) {
+        expect_error(rasterise_index_annotations(sequences, new_sequences, annotation_vertical_position = param, original_indices_to_annotate = 1, annotation_interval = 1), class = "argument_value_or_type")
+    }
 })

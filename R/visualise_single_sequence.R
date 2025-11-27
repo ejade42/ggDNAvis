@@ -297,7 +297,7 @@ visualise_single_sequence <- function(
         }
 
         monitor_time <- monitor(monitor_performance, start_time, monitor_time, "creating basic plot via geom_raster")
-        result <- ggplot(image_data, aes(x = .data$x, y = .data$y, fill = as.character(.data$layer))) +
+        result <- ggplot(image_data, aes(x = .data$x, y = .data$y, fill = as.character(.data$value))) +
             geom_raster() +
             scale_fill_manual(values = c("0" = background_colour, sequence_colours))
 
@@ -314,10 +314,10 @@ visualise_single_sequence <- function(
         monitor_time <- monitor(monitor_performance, start_time, monitor_time, "creating basic plot via geom_tile")
         result <- ggplot(image_data, aes(x = .data$x, y = .data$y)) +
             ## Background
-            geom_tile(data = filter(image_data, layer == 0), width = tile_width, height = tile_height, fill = background_colour) +
+            geom_tile(data = filter(image_data, value == 0), width = tile_width, height = tile_height, fill = background_colour) +
 
             ## Base boxes
-            geom_tile(data = filter(image_data, layer != 0), width = tile_width, height = tile_height, aes(fill = as.character(.data$layer)),
+            geom_tile(data = filter(image_data, value != 0), width = tile_width, height = tile_height, aes(fill = as.character(.data$value)),
                       col = outline_colour, linewidth = outline_linewidth, linejoin = tolower(outline_join)) +
             scale_fill_manual(values = sequence_colours)
 
@@ -330,17 +330,17 @@ visualise_single_sequence <- function(
 
             monitor_time <- monitor(monitor_performance, start_time, monitor_time, "adding sequence text")
             result <- result +
-                geom_text(data = sequence_text_data, aes(x = .data$x, y = .data$y, label = .data$layer), col = sequence_text_colour, size = sequence_text_size, fontface = "bold", inherit.aes = F)
+                geom_text(data = sequence_text_data, aes(x = .data$x, y = .data$y, label = .data$value), col = sequence_text_colour, size = sequence_text_size, fontface = "bold", inherit.aes = F)
         }
 
         ## Add index annotations if desired
         if (index_annotation_interval > 0) {
             monitor_time <- monitor(monitor_performance, start_time, monitor_time, "generating index annotations")
-            index_annotation_data <- convert_many_sequences_to_index_annotations(sequences, split_sequences, index_annotation_lines, index_annotation_interval, FALSE, index_annotations_above, index_annotation_vertical_position, TRUE, spacing, offset_start)
+            index_annotation_data <- rasterise_index_annotations(sequences, split_sequences, index_annotation_lines, index_annotation_interval, FALSE, index_annotations_above, index_annotation_vertical_position, TRUE, spacing, offset_start)
 
             monitor_time <- monitor(monitor_performance, start_time, monitor_time, "adding index annotations")
             result <- result +
-                geom_text(data = index_annotation_data, aes(x = .data$x_position, y = .data$y_position, label = .data$annotation), col = index_annotation_colour, size = index_annotation_size, fontface = "bold", inherit.aes = F)
+                geom_text(data = index_annotation_data, aes(x = .data$x, y = .data$y, label = .data$value), col = index_annotation_colour, size = index_annotation_size, fontface = "bold", inherit.aes = F)
         }
     }
 
@@ -377,295 +377,6 @@ visualise_single_sequence <- function(
         return(result)
     }
     return(invisible(NULL))
-}
-
-
-
-#' Split a single input sequence into a vector of "lines" for visualisation ([visualise_single_sequence()] helper)
-#'
-#' Takes a single input sequence and an integer line length, and splits the input
-#' sequence into lines of that length (with the last line potentially being shorter). \cr\cr
-#' Optionally inserts empty strings `""` after each line to space them out.
-#'
-#' @param input_seq `character`. A DNA/RNA sequence (or for the purposes of this function, any string, though only DNA/RNA will work with later functions) to be split up.
-#' @param line_length `integer`. How long each line (split-up section) should be.
-#' @param spacing `integer`. How many blank lines to leave before/after each line of sequence. Defaults to `0`.
-#' @param start_spaces `logical`. Whether blank lines should also be present before the first line of sequence. Defaults to `FALSE`.
-#' @param end_spaces `logical`. Whether blank lines should also be present after the last line of sequence. Defaults to `FALSE`.
-#'
-#' @return `character vector`. The input sequence split into multiple lines, with specified spacing in between.
-#'
-#' @examples
-#' convert_input_seq_to_sequence_list(
-#'     "GGCGGCGGC",
-#'     line_length = 6,
-#'     spacing = 1,
-#'     start_spaces = TRUE,
-#'     end_spaces = TRUE
-#' )
-#'
-#' convert_input_seq_to_sequence_list(
-#'     "GGCGGCGGC",
-#'     line_length = 3,
-#'     spacing = 2
-#' )
-#'
-#' convert_input_seq_to_sequence_list(
-#'     "GGCGGCGGC",
-#'     line_length = 3,
-#'     spacing = 2,
-#'     end_spaces = TRUE
-#' )
-#'
-#' convert_input_seq_to_sequence_list(
-#'     "GGCGGCGGC",
-#'     line_length = 6,
-#'     spacing = 0,
-#'     start_spaces = TRUE,
-#'     end_spaces = FALSE
-#' )
-#'
-#' @export
-convert_input_seq_to_sequence_list <- function(
-    input_seq,
-    line_length,
-    spacing = 1,
-    start_spaces = FALSE,
-    end_spaces = FALSE
-) {
-    ## Validate arguments
-    ## ---------------------------------------------------------------------
-    not_null_or_na <- list(input_seq = input_seq, line_length = line_length, spacing = spacing, start_spaces = start_spaces, end_spaces = end_spaces)
-    for (argument in names(not_null_or_na)) {
-        if (any(is.null(not_null_or_na[[argument]])) || any(is.na(not_null_or_na[[argument]]))) {bad_arg(argument, not_null_or_na, "must not be NA or NULL.")}
-    }
-    not_null_or_na <- NULL
-
-    length_1 <- list(input_seq = input_seq, line_length = line_length, spacing = spacing, start_spaces = start_spaces, end_spaces = end_spaces)
-    for (argument in names(length_1)) {
-        if (length(length_1[[argument]]) != 1) {bad_arg(argument, length_1, "must have length 1.")}
-    }
-    length_1 <- NULL
-
-    non_neg_int <- list(spacing = spacing)
-    for (argument in names(non_neg_int)) {
-        if (!is.numeric(non_neg_int[[argument]]) || any(non_neg_int[[argument]] %% 1 != 0) || any(non_neg_int[[argument]] < 0)) {bad_arg(argument, non_neg_int, "must be a non-negative integer.")}
-    }
-    non_neg_int <- NULL
-
-    pos_int <- list(line_length = line_length)
-    for (argument in names(pos_int)) {
-        if (!is.numeric(pos_int[[argument]]) || any(pos_int[[argument]] %% 1 != 0) || any(pos_int[[argument]] < 1)) {bad_arg(argument, pos_int, "must be a positive integer.")}
-    }
-    pos_int <- NULL
-
-    char <- list(input_seq = input_seq)
-    for (argument in names(char)) {
-        if (!is.character(char[[argument]])) {bad_arg(argument, char, "must be a character/string.")}
-    }
-    char <- NULL
-
-    bool <- list(start_spaces = start_spaces, end_spaces = end_spaces)
-    for (argument in names(bool)) {
-        if (!is.logical(bool[[argument]])) {bad_arg(argument, bool, "must be a logical/boolean value.")}
-    }
-    bool <- NULL
-    ## ---------------------------------------------------------------------
-
-
-
-    ## Split sequences into a vector, without breaks
-    starts <- seq(1, nchar(input_seq), line_length)
-    ends   <- seq(line_length, nchar(input_seq) + line_length - 1, line_length)
-    split_sequences <- substring(input_seq, starts, ends)
-
-    interleaved_sequences <- as.vector(
-        ## rbind creates matrix
-        rbind(split_sequences, matrix("", nrow = spacing, ncol = length(split_sequences)))
-    )
-    if (start_spaces) {
-        interleaved_sequences <- c(rep("", spacing), interleaved_sequences)
-    }
-    if (!end_spaces) {
-        interleaved_sequences <- interleaved_sequences[1:(length(interleaved_sequences) - spacing)]
-    }
-
-    return(interleaved_sequences)
-}
-
-
-
-#' Convert a vector of sequences to a dataframe for plotting sequence contents and index annotations ([visualise_single_sequence()] helper)
-#'
-#' Takes the sequence list output from [convert_input_seq_to_sequence_list()] and creates a dataframe
-#' specifying x and y coordinates and the character to plot at each coordinate. This applies to both
-#' the sequence itself (e.g. determining where on the plot to place an `"A"`) and the periodicit
-#' annotations of index number (e.g. determining where on the plot to annotate base number `15`).
-#'
-#' @param sequences `character vector`. Sequence to be plotted, split into lines and optionally including blank spacer lines. Output of [convert_input_seq_to_sequence_list()].
-#' @param line_length `integer`. How long each line should be.
-#' @param interval `integer`. How frequently bases should be annotated with their index. Defaults to `15`.
-#' @param annotations_above `logical`. Whether annotations should go above (`TRUE`, default) or below (`FALSE`) each line of sequence.
-#' @param annotation_vertical_position `numeric`. How far annotation numbers should be rendered above (if `index_annotations_above = TRUE`) or below (if `index_annotations_above = FALSE`) each base. Defaults to `1/3`. Not recommended to change at all. Strongly discouraged to set below 0 or above 1.
-#'
-#' @return `dataframe` Dataframe of coordinates and labels (e.g. `"A"` or `"15`), readable by geom_text.
-#'
-#' @examples
-#' convert_sequences_to_annotations(
-#'     c("GGCGGC", "", "ATCG", ""),
-#'     line_length = 6,
-#'     interval = 3,
-#'     annotations_above = TRUE,
-#'     annotation_vertical_position = 1/3
-#' )
-#'
-#' convert_sequences_to_annotations(
-#'     c("GGCGGC", "", "ATCG", ""),
-#'     line_length = 6,
-#'     interval = 0
-#')
-#'
-#' @export
-convert_sequences_to_annotations <- function(
-    sequences,
-    line_length,
-    interval = 15,
-    annotations_above = TRUE,
-    annotation_vertical_position = 1/3
-) {
-    ## Validate arguments
-    ## ---------------------------------------------------------------------
-    not_null_or_na <- list(sequences = sequences, line_length = line_length, interval = interval, annotations_above = annotations_above, annotation_vertical_position = annotation_vertical_position)
-    for (argument in names(not_null_or_na)) {
-        if (any(is.null(not_null_or_na[[argument]])) || any(is.na(not_null_or_na[[argument]]))) {bad_arg(argument, not_null_or_na, "must not be NULL or NA.")}
-    }
-    not_null_or_na <- NULL
-
-    length_1 <- list(line_length = line_length, interval = interval, annotations_above = annotations_above, annotation_vertical_position = annotation_vertical_position)
-    for (argument in names(length_1)) {
-        if (length(length_1[[argument]]) != 1) {bad_arg(argument, length_1, "must have length 1.")}
-    }
-    length_1 <- NULL
-
-    non_neg_int <- list(interval = interval)
-    for (argument in names(non_neg_int)) {
-        if (!is.numeric(non_neg_int[[argument]]) || any(non_neg_int[[argument]] %% 1 != 0) || any(non_neg_int[[argument]] < 0)) {bad_arg(argument, non_neg_int, "must be a non-negative integer.")}
-    }
-    non_neg_int <- NULL
-
-    pos_int <- list(line_length = line_length)
-    for (argument in names(pos_int)) {
-        if (!is.numeric(pos_int[[argument]]) || any(pos_int[[argument]] %% 1 != 0) || any(pos_int[[argument]] < 1)) {bad_arg(argument, pos_int, "must be a positive integer.")}
-    }
-    pos_int <- NULL
-
-    bool <- list(annotations_above = annotations_above)
-    for (argument in names(bool)) {
-        if (!is.logical(bool[[argument]])) {bad_arg(argument, bool, "must be a logical/boolean value.")}
-    }
-    bool <- NULL
-
-    nums <- list(annotation_vertical_position = annotation_vertical_position)
-    for (argument in names(nums)) {
-        if (!is.numeric(nums[[argument]])) {bad_arg(argument, nums, "must be numeric.")}
-    }
-    nums <- NULL
-
-
-    if (annotation_vertical_position < 0 || annotation_vertical_position > 1) {
-        warn(paste("Not recommended to set index annotation vertical position outside range 0-1\n(though if spacing is much higher than 1, it is possible that values >1 might be acceptable).\nCurrent value:", annotation_vertical_position), class = "parameter_recommendation")
-    }
-
-    char <- list(sequences = sequences)
-    for (argument in names(char)) {
-        if (!is.character(char[[argument]])) {bad_arg(argument, char, "must be a character vector.")}
-    }
-    char <- NULL
-    ## ---------------------------------------------------------------------
-
-    x_interval <- 1 / line_length
-    y_interval <- 1 / length(sequences)
-
-    annotation_data <- data.frame(NULL)
-
-    i_values_to_ignore <- 0
-    for (i in 1:length(sequences)) {
-        ## Don't count blank/spacer rows when adding up numbers
-        if (sequences[i] == "") {
-            i_values_to_ignore <- i_values_to_ignore + 1
-        }
-
-        if (sequences[i] != "") {
-            for (j in 1:nchar(sequences[i])) {
-                ## Annotate actual sequence
-                x_position <- x_interval * (j - 1/2)
-                y_position <- 1 - y_interval * (i - 1/2)
-                annotation <- substr(sequences[i], j, j)
-                type <- "Sequence"
-                annotation_data <- rbind(annotation_data, c(x_position, y_position, annotation, type))
-
-                ## Annotate numbers every <interval> bases
-                if (interval != 0 && j %% interval == 0) {
-                    x_position <- x_interval * (j - 1/2)
-
-                    if (annotations_above == TRUE) {
-                        y_position <- 1 - y_interval * (i - 1 - annotation_vertical_position)
-                    } else if (annotations_above == FALSE) {
-                        y_position <- 1 - y_interval * (i + annotation_vertical_position)
-                    } else {
-                        abort("spaces_first must be a logical value.", class = "argument_value_or_type")
-                    }
-
-                    annotation <- as.character((i-1-i_values_to_ignore)*line_length + j)
-                    type <- "Number"
-                    annotation_data <- rbind(annotation_data, c(x_position, y_position, annotation, type))
-                }
-            }
-        }
-    }
-    colnames(annotation_data) <- c("x_position", "y_position", "annotation", "type")
-    annotation_data$x_position <- as.numeric(annotation_data$x_position)
-    annotation_data$y_position <- as.numeric(annotation_data$y_position)
-    return(annotation_data)
-}
-
-
-convert_sequences_to_matrix <- function(
-    sequences,
-    line_length,
-    blank_value = NA
-) {
-    ## Validate arguments
-    ## ---------------------------------------------------------------------
-    not_null_or_na <- list(sequences = sequences, line_length = line_length)
-    for (argument in names(not_null_or_na)) {
-        if (any(is.null(not_null_or_na[[argument]])) || any(is.na(not_null_or_na[[argument]]))) {bad_arg(argument, not_null_or_na, "must not be NULL or NA.")}
-    }
-    not_null_or_na <- NULL
-
-    length_1 <- list(line_length = line_length, blank_value = blank_value)
-    for (argument in names(length_1)) {
-        if (length(length_1[[argument]]) != 1) {bad_arg(argument, length_1, "must have length 1.")}
-    }
-    length_1 <- NULL
-
-    pos_int <- list(line_length = line_length)
-    for (argument in names(pos_int)) {
-        if (!is.numeric(pos_int[[argument]]) || any(pos_int[[argument]] %% 1 != 0) || any(pos_int[[argument]] < 1)) {bad_arg(argument, pos_int, "must be a positive integer.")}
-    }
-    pos_int <- NULL
-
-    char <- list(sequences = sequences)
-    for (argument in names(char)) {
-        if (!is.character(char[[argument]])) {bad_arg(argument, char, "must be a character vector.")}
-    }
-    char <- NULL
-    ## ---------------------------------------------------------------------
-
-
-    split_sequences <- strsplit(sequences, split = "")
-    split_sequences <- t(sapply(split_sequences, function(x) {c(x, rep(blank_value, line_length - length(x)))}))
-    return(split_sequences)
 }
 
 ## Define alias

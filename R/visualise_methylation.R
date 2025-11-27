@@ -485,7 +485,7 @@ visualise_methylation <- function(
 
     ## Transform image data if clamping limits are set
     monitor_time <- monitor(monitor_performance, start_time, monitor_time, "clamping image data")
-    image_data$clamped_layer <- pmin(pmax(image_data$layer, low_clamp), high_clamp)
+    image_data$clamped_value <- pmin(pmax(image_data$value, low_clamp), high_clamp)
 
 
     ## Determine whether to use geom_raster as a faster but more limited alternative to geom_tile
@@ -509,19 +509,19 @@ visualise_methylation <- function(
 
         monitor_time <- monitor(monitor_performance, start_time, monitor_time, "creating mask data")
         mask_data <- image_data
-        mask_data$layer <- sapply(mask_data$layer, min, 0)
+        mask_data$value <- sapply(mask_data$value, min, 0)
 
         monitor_time <- monitor(monitor_performance, start_time, monitor_time, "creating basic plot via geom_raster")
         result <- ggplot(mapping = aes(x = .data$x, y = .data$y)) +
             ## Modification-assessed bases
             ## Non-assessed/background will be filled in as low_colour, but that's fine as we mask afterwards
-            geom_raster(data = image_data, aes(fill = .data$clamped_layer)) +
+            geom_raster(data = image_data, aes(fill = .data$clamped_value)) +
             scale_fill_gradient(low = low_colour, high = high_colour, limits = c(low_clamp, high_clamp)) +
             guides(fill = "none") +
 
             ## Mask with background and other bases
             new_scale_fill() +
-            geom_raster(data = mask_data, aes(fill = as.character(.data$layer))) +
+            geom_raster(data = mask_data, aes(fill = as.character(.data$value))) +
             scale_fill_manual(values = c("0" = alpha("white", 0), "-1" = other_bases_colour, "-2" = background_colour))
 
 
@@ -536,14 +536,14 @@ visualise_methylation <- function(
         monitor_time <- monitor(monitor_performance, start_time, monitor_time, "creating basic plot via geom_tile")
         result <- ggplot(mapping = aes(x = .data$x, y = .data$y)) +
             ## Background
-            geom_tile(data = filter(image_data, layer == -2), fill = background_colour, width = tile_width, height = tile_height) +
+            geom_tile(data = filter(image_data, value == -2), fill = background_colour, width = tile_width, height = tile_height) +
 
             ## Non-assessed bases
-            geom_tile(data = filter(image_data, layer == -1), fill = other_bases_colour, width = tile_width, height = tile_height,
+            geom_tile(data = filter(image_data, value == -1), fill = other_bases_colour, width = tile_width, height = tile_height,
                       col = other_bases_outline_colour, linewidth = other_bases_outline_linewidth, linejoin = tolower(other_bases_outline_join)) +
 
             ## Modification-assessed bases
-            geom_tile(data = filter(image_data, layer >= 0), aes(fill = .data$clamped_layer), width = tile_width, height = tile_height,
+            geom_tile(data = filter(image_data, value >= 0), aes(fill = .data$clamped_value), width = tile_width, height = tile_height,
                       col = modified_bases_outline_colour, linewidth = modified_bases_outline_linewidth, linejoin = tolower(modified_bases_outline_join)) +
             scale_fill_gradient(low = low_colour, high = high_colour, limits = c(low_clamp, high_clamp))
 
@@ -555,7 +555,7 @@ visualise_methylation <- function(
 
             monitor_time <- monitor(monitor_performance, start_time, monitor_time, "adding sequence text (type 'sequence')")
             result <- result +
-                geom_text(data = sequence_text_data, aes(x = .data$x, y = .data$y, label = .data$layer), col = sequence_text_colour, size = sequence_text_size, fontface = "bold", inherit.aes = F)
+                geom_text(data = sequence_text_data, aes(x = .data$x, y = .data$y, label = .data$value), col = sequence_text_colour, size = sequence_text_size, fontface = "bold", inherit.aes = F)
 
         } else if (sequence_text_type == "probability") {
             monitor_time <- monitor(monitor_performance, start_time, monitor_time, "generating sequence text (type 'probability')")
@@ -569,11 +569,11 @@ visualise_methylation <- function(
         ## Add index annotations if desired
         if (length(index_annotation_lines) > 0) {
             monitor_time <- monitor(monitor_performance, start_time, monitor_time, "generating index annotations")
-            index_annotation_data <- convert_many_sequences_to_index_annotations(sequences, sequences_original, index_annotation_lines, index_annotation_interval, index_annotation_full_line, index_annotations_above, index_annotation_vertical_position)
+            index_annotation_data <- rasterise_index_annotations(sequences, sequences_original, index_annotation_lines, index_annotation_interval, index_annotation_full_line, index_annotations_above, index_annotation_vertical_position)
 
             monitor_time <- monitor(monitor_performance, start_time, monitor_time, "adding index annotations")
             result <- result +
-                geom_text(data = index_annotation_data, aes(x = .data$x_position, y = .data$y_position, label = .data$annotation), col = index_annotation_colour, size = index_annotation_size, fontface = "bold", inherit.aes = F)
+                geom_text(data = index_annotation_data, aes(x = .data$x, y = .data$y, label = .data$value), col = index_annotation_colour, size = index_annotation_size, fontface = "bold", inherit.aes = F)
         }
     }
 

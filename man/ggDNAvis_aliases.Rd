@@ -12,14 +12,19 @@ If any American spellings don't work, I most likely overlooked them and can easi
 so please submit a bug report by creating a github issue
 (\url{https://github.com/ejade42/ggDNAvis/issues}).
 
-There are currently five functions and one dataset with aliases configured:
+There are currently four major functions and one dataset with aliases configured:
 \itemize{
-\item \code{\link[=rasterise_matrix]{rasterise_matrix()}} (\code{\link[=rasterize_matrix]{rasterize_matrix()}})
 \item \code{\link{sequence_colour_palettes}} (\code{\link{sequence_color_palettes}} & \code{\link{sequence_col_palettes}})
 \item \code{\link[=visualise_many_sequences]{visualise_many_sequences()}} (\code{\link[=visualize_many_sequences]{visualize_many_sequences()}})
 \item \code{\link[=visualise_methylation]{visualise_methylation()}} (\code{\link[=visualize_methylation]{visualize_methylation()}})
 \item \code{\link[=visualise_methylation_colour_scale]{visualise_methylation_colour_scale()}} (\code{\link[=visualize_methylation_color_scale]{visualize_methylation_color_scale()}})
 \item \code{\link[=visualise_single_sequence]{visualise_single_sequence()}} (\code{\link[=visualize_single_sequence]{visualize_single_sequence()}})
+}
+
+Additionally there are two helper functions with aliases:
+\itemize{
+\item \code{\link[=rasterise_matrix]{rasterise_matrix()}} (\code{\link[=rasterize_matrix]{rasterize_matrix()}})
+\item \code{\link[=rasterise_index_annotations]{rasterise_index_annotations()}} (\code{\link[=rasterize_index_annotations]{rasterize_index_annotations()}})
 }
 
 All arguments should have aliases configured. In particular, any \verb{_colour} arguments

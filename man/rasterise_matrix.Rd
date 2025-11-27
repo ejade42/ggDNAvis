@@ -10,7 +10,7 @@ rasterise_matrix(image_matrix, drop_na = TRUE)
 \arguments{
 \item{image_matrix}{\code{matrix}. A matrix (or anything that can be coerced to a matrix via \code{\link[base:matrix]{base::as.matrix()}}).}
 
-\item{drop_na}{\code{logical}. A boolean specifying whether missing values should be dropped via \link[tidyr:drop_na]{tidyr::drop_na} (\code{TRUE}, default) or kept (\code{FALSE}).}
+\item{drop_na}{\code{logical}. A boolean specifying whether missing values should be dropped via \code{\link[tidyr:drop_na]{tidyr::drop_na()}} (\code{TRUE}, default) or kept (\code{FALSE}).}
 }
 \value{
 \code{dataframe}. A dataframe containing x and y coordinates for the centre of a rectangle per element of the matrix, such that the whole matrix occupies the space from (0, 0) to (1, 1). Additionally contains a layer column storing the value of each element of the matrix.
