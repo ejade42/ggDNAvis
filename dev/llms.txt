@@ -4474,6 +4474,12 @@ they are available if needed)
 
   Map a sequence to a vector of numbers (generic `ggDNAvis` helper)
 
+- [`convert_sequences_to_matrix()`](https://ejade42.github.io/ggDNAvis/reference/convert_sequences_to_matrix.md)
+  :
+
+  Convert vector of sequences to character matrix (generic `ggDNAvis`
+  helper)
+
 - [`create_image_data()`](https://ejade42.github.io/ggDNAvis/reference/create_image_data.md)
   :
 

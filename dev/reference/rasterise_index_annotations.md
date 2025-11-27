@@ -1,5 +1,8 @@
 # Process index annotations and rasterise to a x/y/layer dataframe (generic `ggDNAvis` helper)
 
+`rasterize_index_annotations()` is an alias for
+`rasterise_index_annotations()`.
+
 This function is called by
 [`visualise_many_sequences()`](https://ejade42.github.io/ggDNAvis/reference/visualise_many_sequences.md),
 [`visualise_methylation()`](https://ejade42.github.io/ggDNAvis/reference/visualise_methylation.md),

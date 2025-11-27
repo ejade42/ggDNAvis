@@ -1,6 +1,6 @@
 # Rasterise a matrix to an x/y/layer dataframe (generic `ggDNAvis` helper)
 
-`rasterize_matrix()` is an alias for this function.
+`rasterize_matrix()` is an alias for `rasterise_matrix()`.
 
 This function takes a matrix and rasterises it to a dataframe of x and y
 coordinates, such that the matrix occupies the space from (0, 0) to
