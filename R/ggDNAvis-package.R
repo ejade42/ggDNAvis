@@ -4,7 +4,7 @@
 ## usethis namespace: start
 #' @import ggplot2
 #' @import dplyr
-#' @importFrom utils packageDescription
+#' @importFrom utils packageDescription head tail
 #' @importFrom ggnewscale new_scale_fill
 #' @importFrom stringr str_locate_all
 #' @importFrom tidyr replace_na drop_na

@@ -211,7 +211,7 @@ test_that("rasterising index annotations, full example", {
     index_annotation_interval <- 10
     index_annotations_above <- TRUE
     index_annotation_full_line <- FALSE
-    index_annotation_vertical_position <- 1/3
+    index_index_annotation_vertical_position <- 1/3
 
     ## Create sequences vector
     sequences <- extract_and_sort_sequences(
@@ -225,18 +225,18 @@ test_that("rasterising index annotations, full example", {
         insertion_indices = index_annotation_lines,
         insert_before = index_annotations_above,
         insert = "",
-        vert = index_annotation_vertical_position
+        vert = index_index_annotation_vertical_position
     )
 
     ## Create annnotation dataframe
     d <- rasterise_index_annotations(
         new_sequences_vector = new_sequences,
         original_sequences_vector = sequences,
-        original_indices_to_annotate = index_annotation_lines,
-        annotation_interval = 10,
-        annotate_full_lines = index_annotation_full_line,
-        annotations_above = index_annotations_above,
-        annotation_vertical_position = index_annotation_vertical_position
+        index_annotation_lines= index_annotation_lines,
+        index_annotation_interval = 10,
+        index_annotation_full_line = index_annotation_full_line,
+        index_annotations_above = index_annotations_above,
+        index_annotation_vertical_position = index_index_annotation_vertical_position
     )
 
     ## Test
@@ -249,9 +249,9 @@ test_that("rasterising index annotations, full example", {
 
     ## Extra tests for returning blank dataframe
     blank_data <- data.frame("x_position" = numeric(), "y_position" = numeric(), "annotation" = character(), "type" = character())
-    expect_equal(rasterise_index_annotations(new_sequences, sequences, annotation_interval = 0, original_indices_to_annotate = numeric()), blank_data)
-    expect_equal(rasterise_index_annotations(new_sequences, sequences, annotation_interval = 10, original_indices_to_annotate = numeric()), blank_data)
-    expect_equal(rasterise_index_annotations(new_sequences, sequences, annotation_interval = 0, original_indices_to_annotate = c(1, 2, 3)), blank_data)
+    expect_equal(rasterise_index_annotations(new_sequences, sequences, index_annotation_interval = 0, index_annotation_lines= numeric()), blank_data)
+    expect_equal(rasterise_index_annotations(new_sequences, sequences, index_annotation_interval = 10, index_annotation_lines= numeric()), blank_data)
+    expect_equal(rasterise_index_annotations(new_sequences, sequences, index_annotation_interval = 0, index_annotation_lines= c(1, 2, 3)), blank_data)
 })
 
 
@@ -262,7 +262,7 @@ test_that("rasterising index annotations works, offset and spacing", {
     index_annotation_interval <- 10
     index_annotations_above <- TRUE
     index_annotation_full_line <- FALSE
-    index_annotation_vertical_position <- 1/3
+    index_index_annotation_vertical_position <- 1/3
     offset <- 1
     spacing <- 2
 
@@ -288,11 +288,11 @@ test_that("rasterising index annotations works, offset and spacing", {
     d <- rasterise_index_annotations(
         new_sequences_vector = new_sequences,
         original_sequences_vector = sequences,
-        original_indices_to_annotate = index_annotation_lines,
-        annotation_interval = 10,
-        annotate_full_lines = index_annotation_full_line,
-        annotations_above = index_annotations_above,
-        annotation_vertical_position = index_annotation_vertical_position,
+        index_annotation_lines= index_annotation_lines,
+        index_annotation_interval = 10,
+        index_annotation_full_line = index_annotation_full_line,
+        index_annotations_above = index_annotations_above,
+        index_annotation_vertical_position = index_index_annotation_vertical_position,
         sum_indices = TRUE,
         spacing = 2,
         offset_start = 1
@@ -312,7 +312,7 @@ test_that("rasterising index annotations works, below", {
     index_annotation_interval <- 10
     index_annotations_above <- FALSE
     index_annotation_full_line <- TRUE
-    index_annotation_vertical_position <- 1/3
+    index_index_annotation_vertical_position <- 1/3
 
     ## Create sequences vector
     sequences <- extract_and_sort_sequences(
@@ -326,18 +326,18 @@ test_that("rasterising index annotations works, below", {
         insertion_indices = index_annotation_lines,
         insert_before = index_annotations_above,
         insert = "",
-        vert = index_annotation_vertical_position
+        vert = index_index_annotation_vertical_position
     )
 
     ## Create annnotation dataframe
     d <- rasterise_index_annotations(
         new_sequences_vector = new_sequences,
         original_sequences_vector = sequences,
-        original_indices_to_annotate = index_annotation_lines,
-        annotation_interval = 10,
-        annotate_full_lines = index_annotation_full_line,
-        annotations_above = index_annotations_above,
-        annotation_vertical_position = index_annotation_vertical_position
+        index_annotation_lines = index_annotation_lines,
+        index_annotation_interval = 10,
+        index_annotation_full_line = index_annotation_full_line,
+        index_annotations_above = index_annotations_above,
+        index_annotation_vertical_position = index_index_annotation_vertical_position
     )
 
     ## Test
@@ -365,29 +365,29 @@ test_that("rasterising index annotations fails when needed", {
 
     bad_param_value_for_sorted_unique_pos_int_vec <- list("X", TRUE, NA, list(0), -1, 0, c(2, 0), c(2, 1), c(1, 1, 2), 0.5)
     for (param in bad_param_value_for_sorted_unique_pos_int_vec) {
-        expect_error(rasterise_index_annotations(sequences, new_sequences, original_indices_to_annotate = param, annotation_interval = 1), class = "argument_value_or_type")
+        expect_error(rasterise_index_annotations(sequences, new_sequences, index_annotation_lines = param, index_annotation_interval = 1), class = "argument_value_or_type")
     }
 
     bad_param_value_for_bool <- list("X", 1, c(TRUE, FALSE), list(TRUE, FALSE), NA, NULL, -1)
     for (param in bad_param_value_for_bool) {
-        expect_error(rasterise_index_annotations(sequences, new_sequences, annotate_full_lines = param, original_indices_to_annotate = 1, annotation_interval = 1), class = "argument_value_or_type")
-        expect_error(rasterise_index_annotations(sequences, new_sequences, annotations_above = param, original_indices_to_annotate = 1, annotation_interval = 1), class = "argument_value_or_type")
-        expect_error(rasterise_index_annotations(sequences, new_sequences, sum_indices = param, original_indices_to_annotate = 1, annotation_interval = 1), class = "argument_value_or_type")
+        expect_error(rasterise_index_annotations(sequences, new_sequences, index_annotation_full_line = param, index_annotation_lines = 1, index_annotation_interval = 1), class = "argument_value_or_type")
+        expect_error(rasterise_index_annotations(sequences, new_sequences, index_annotations_above = param, index_annotation_lines = 1, index_annotation_interval = 1), class = "argument_value_or_type")
+        expect_error(rasterise_index_annotations(sequences, new_sequences, sum_indices = param, index_annotation_lines= 1, index_annotation_interval = 1), class = "argument_value_or_type")
     }
 
     bad_param_value_for_non_neg_int <- list("X", TRUE, NA, list(1), -1, c(2, 0), c(2, 1), c(1, 1, 2), 0.5, NULL)
     for (param in bad_param_value_for_non_neg_int) {
-        expect_error(rasterise_index_annotations(sequences, new_sequences, original_indices_to_annotate = 1, annotation_interval = param), class = "argument_value_or_type")
-        expect_error(rasterise_index_annotations(sequences, new_sequences, original_indices_to_annotate = 1, offset_start = param), class = "argument_value_or_type")
+        expect_error(rasterise_index_annotations(sequences, new_sequences, index_annotation_lines = 1, index_annotation_interval = param), class = "argument_value_or_type")
+        expect_error(rasterise_index_annotations(sequences, new_sequences, index_annotation_lines = 1, offset_start = param), class = "argument_value_or_type")
     }
 
     bad_param_value_for_non_neg_int_na_allowed <- list("X", TRUE, list(1), -1, c(2, 0), c(2, 1), c(1, 1, 2), 0.5, NULL)
     for (param in bad_param_value_for_non_neg_int_na_allowed) {
-        expect_error(rasterise_index_annotations(sequences, new_sequences, original_indices_to_annotate = 1, spacing = param), class = "argument_value_or_type")
+        expect_error(rasterise_index_annotations(sequences, new_sequences, index_annotation_lines = 1, spacing = param), class = "argument_value_or_type")
     }
 
     bad_param_value_for_non_neg_num <- list("X", TRUE, NA, list(1), -1, c(2, 0), c(2, 1), c(1, 1, 2))
     for (param in bad_param_value_for_non_neg_num) {
-        expect_error(rasterise_index_annotations(sequences, new_sequences, annotation_vertical_position = param, original_indices_to_annotate = 1, annotation_interval = 1), class = "argument_value_or_type")
+        expect_error(rasterise_index_annotations(sequences, new_sequences, index_annotation_vertical_position = param, index_annotation_lines = 1, index_annotation_interval = 1), class = "argument_value_or_type")
     }
 })
