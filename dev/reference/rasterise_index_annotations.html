@@ -69,11 +69,11 @@ values are the index annotations.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">rasterise_index_annotations</span><span class="op">(</span></span>
 <span>  <span class="va">new_sequences_vector</span>,</span>
 <span>  <span class="va">original_sequences_vector</span>,</span>
-<span>  <span class="va">original_indices_to_annotate</span>,</span>
-<span>  annotation_interval <span class="op">=</span> <span class="fl">15</span>,</span>
-<span>  annotate_full_lines <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  annotations_above <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  annotation_vertical_position <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">3</span>,</span>
+<span>  <span class="va">index_annotation_lines</span>,</span>
+<span>  index_annotation_interval <span class="op">=</span> <span class="fl">15</span>,</span>
+<span>  index_annotation_full_line <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  index_annotations_above <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  index_annotation_vertical_position <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">3</span>,</span>
 <span>  sum_indices <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  spacing <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  offset_start <span class="op">=</span> <span class="fl">0</span></span>
@@ -85,31 +85,31 @@ values are the index annotations.</p>
 
 
 <dl><dt id="arg-new-sequences-vector">new_sequences_vector<a class="anchor" aria-label="anchor" href="#arg-new-sequences-vector"></a></dt>
-<dd><p><code>vector</code>. The output of <code><a href="insert_at_indices.html">insert_at_indices()</a></code> when used with identical arguments.</p></dd>
+<dd><p><code>vector</code>. The output of <code><a href="insert_at_indices.html">insert_at_indices()</a></code> when used with identical arguments. Should be <code>original_sequences_vector</code> with some additional blank lines inserted.</p></dd>
 
 
 <dt id="arg-original-sequences-vector">original_sequences_vector<a class="anchor" aria-label="anchor" href="#arg-original-sequences-vector"></a></dt>
 <dd><p><code>vector</code>. The vector of sequences used for plotting, that was originally given to <code><a href="visualise_many_sequences.html">visualise_many_sequences()</a></code>/<code><a href="visualise_methylation.html">visualise_methylation()</a></code> or split from the input sequence to <code><a href="visualise_single_sequence.html">visualise_single_sequence()</a></code>. Must also have been used as input to <code><a href="insert_at_indices.html">insert_at_indices()</a></code> to create <code>new_sequences_vector</code>.</p></dd>
 
 
-<dt id="arg-original-indices-to-annotate">original_indices_to_annotate<a class="anchor" aria-label="anchor" href="#arg-original-indices-to-annotate"></a></dt>
-<dd><p><code>positive integer vector</code>. The vector of lines (i.e. indices) of <code>original_vector</code> to be annotated. Read from <code>index_annotation_lines</code> argument to <code><a href="visualise_many_sequences.html">visualise_many_sequences()</a></code>/<code><a href="visualise_methylation.html">visualise_methylation()</a></code> (but after processing, so is assumed to be unique and sorted). Must also have been used as input to <code><a href="insert_at_indices.html">insert_at_indices()</a></code> to create <code>new_sequences_vector</code>. Setting to a length-0 value (e.g. <code>numeric(0)</code>) causes this function to return an empty dataframe.</p></dd>
+<dt id="arg-index-annotation-lines">index_annotation_lines<a class="anchor" aria-label="anchor" href="#arg-index-annotation-lines"></a></dt>
+<dd><p><code>integer vector</code>. The lines (i.e. elements of <code>sequences_vector</code>) that should have their base incides annotated. 1-indexed e.g. <code>c(1, 10)</code> would annotate the first and tenth elements of <code>sequences_vector</code>.<br><br> Extra lines are inserted above or below (depending on <code>index_annotations_above</code>) the selected lines - note that the line numbers come from <code>sequences_vector</code>, so are unaffected by these insertions.<br><br> Setting to <code>NA</code> disables index annotations (and prevents adding additional blank lines). Defaults to <code>c(1)</code> i.e. first sequence is annotated.</p></dd>
 
 
-<dt id="arg-annotation-interval">annotation_interval<a class="anchor" aria-label="anchor" href="#arg-annotation-interval"></a></dt>
-<dd><p><code>integer</code>. The frequency at which numbers should be placed underneath indicating base index, starting counting from the leftmost base. Setting to <code>0</code> causes this function to return an empty dataframe. Defaults to <code>15</code>.</p></dd>
+<dt id="arg-index-annotation-interval">index_annotation_interval<a class="anchor" aria-label="anchor" href="#arg-index-annotation-interval"></a></dt>
+<dd><p><code>integer</code>. The frequency at which numbers should be placed underneath indicating base index, starting counting from the leftmost base. Defaults to <code>15</code> (every 15 bases along each row).<br><br> Setting to <code>0</code> disables index annotations (and prevents adding additional blank lines).</p></dd>
 
 
-<dt id="arg-annotate-full-lines">annotate_full_lines<a class="anchor" aria-label="anchor" href="#arg-annotate-full-lines"></a></dt>
-<dd><p><code>logical</code>. Whether annotations should be calculated up to the end of the longest line (<code>TRUE</code>, default) or to the end of each line being annotated (<code>FALSE</code>).</p></dd>
+<dt id="arg-index-annotation-full-line">index_annotation_full_line<a class="anchor" aria-label="anchor" href="#arg-index-annotation-full-line"></a></dt>
+<dd><p><code>logical</code>. Whether index annotations should continue to the end of the longest sequence (<code>TRUE</code>, default) or should only continue as far as each selected line does (<code>FALSE</code>).</p></dd>
 
 
-<dt id="arg-annotations-above">annotations_above<a class="anchor" aria-label="anchor" href="#arg-annotations-above"></a></dt>
-<dd><p><code>logical</code>. Whether annotations should be drawn above (<code>TRUE</code>, default) or below (<code>FALSE</code>) each annotated line. Must also have been used as input to <code><a href="insert_at_indices.html">insert_at_indices()</a></code> to create <code>new_sequences_vector</code>.</p></dd>
+<dt id="arg-index-annotations-above">index_annotations_above<a class="anchor" aria-label="anchor" href="#arg-index-annotations-above"></a></dt>
+<dd><p><code>logical</code>. Whether index annotations should go above (<code>TRUE</code>, default) or below (<code>FALSE</code>) each line of sequence.</p></dd>
 
 
-<dt id="arg-annotation-vertical-position">annotation_vertical_position<a class="anchor" aria-label="anchor" href="#arg-annotation-vertical-position"></a></dt>
-<dd><p><code>numeric</code>. The vertical position above/below each annotated line that annotations should be drawn. Must also have been used as input to <code><a href="insert_at_indices.html">insert_at_indices()</a></code> to create <code>new_sequences_vector</code>.</p></dd>
+<dt id="arg-index-annotation-vertical-position">index_annotation_vertical_position<a class="anchor" aria-label="anchor" href="#arg-index-annotation-vertical-position"></a></dt>
+<dd><p><code>numeric</code>. How far annotation numbers should be rendered above (if <code>index_annotations_above = TRUE</code>) or below (if <code>index_annotations_above = FALSE</code>) each base. Defaults to <code>1/3</code>.<br><br> Not recommended to change at all. Strongly discouraged to set below 0 or above 1.</p></dd>
 
 
 <dt id="arg-sum-indices">sum_indices<a class="anchor" aria-label="anchor" href="#arg-sum-indices"></a></dt>
@@ -131,7 +131,182 @@ values are the index annotations.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">## Set up arguments (e.g. from visualise_many_sequences() call)</span></span></span>
+<span class="r-in"><span><span class="va">sequences_data</span> <span class="op">&lt;-</span> <span class="va">example_many_sequences</span></span></span>
+<span class="r-in"><span><span class="va">index_annotation_lines</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">23</span>, <span class="fl">37</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">index_annotation_interval</span> <span class="op">&lt;-</span> <span class="fl">10</span></span></span>
+<span class="r-in"><span><span class="va">index_annotations_above</span> <span class="op">&lt;-</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span><span class="va">index_annotation_full_line</span> <span class="op">&lt;-</span> <span class="cn">FALSE</span></span></span>
+<span class="r-in"><span><span class="va">index_annotation_vertical_position</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">/</span><span class="fl">3</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## Create sequences vector</span></span></span>
+<span class="r-in"><span><span class="va">sequences</span> <span class="op">&lt;-</span> <span class="fu"><a href="extract_and_sort_sequences.html">extract_and_sort_sequences</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="va">example_many_sequences</span>,</span></span>
+<span class="r-in"><span>    grouping_levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"family"</span> <span class="op">=</span> <span class="fl">8</span>, <span class="st">"individual"</span> <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">sequences</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2] "GGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA"         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA"               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA"                     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA"                                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6] ""                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] ""                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGAGGCGGCGGAGGAGGAGGCGGCGGA"                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGAGGCGGCGGAGGAGGAGGCGGCGGA"                                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10] ""                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11] ""                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [12] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA"               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGA"                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [14] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGCGGA"                     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15] ""                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [16] ""                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [17] ""                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [18] ""                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19] ""                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [20] ""                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [21] ""                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [22] ""                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [23] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGA"         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [24] ""                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [25] ""                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [26] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGA"            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [27] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGA"               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [28] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGA"                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [29] ""                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [30] ""                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [31] ""                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [32] ""                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [33] ""                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [34] ""                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [35] ""                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [36] ""                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [37] "GGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGA"      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [38] "GGCGGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGA"      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [39] ""                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [40] ""                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [41] "GGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGA"         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [42] "GGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGA"            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [43] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGCGGCGGA"               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [44] ""                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [45] ""                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [46] "GGCGGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGA"      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [47] ""                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [48] ""                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [49] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGA"      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [50] "GGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGCGGA"            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [51] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGCGGCGGA"                     </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## Insert blank rows as needed</span></span></span>
+<span class="r-in"><span><span class="va">new_sequences</span> <span class="op">&lt;-</span> <span class="fu"><a href="insert_at_indices.html">insert_at_indices</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="va">sequences</span>,</span></span>
+<span class="r-in"><span>    insertion_indices <span class="op">=</span> <span class="va">index_annotation_lines</span>,</span></span>
+<span class="r-in"><span>    insert_before <span class="op">=</span> <span class="va">index_annotations_above</span>,</span></span>
+<span class="r-in"><span>    insert <span class="op">=</span> <span class="st">""</span>,</span></span>
+<span class="r-in"><span>    vert <span class="op">=</span> <span class="va">index_annotation_vertical_position</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">new_sequences</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] ""                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3] "GGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA"         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA"               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA"                     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA"                                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] ""                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] ""                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGAGGCGGCGGAGGAGGAGGCGGCGGA"                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGAGGCGGCGGAGGAGGAGGCGGCGGA"                                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11] ""                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [12] ""                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA"               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [14] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGA"                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGCGGA"                     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [16] ""                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [17] ""                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [18] ""                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19] ""                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [20] ""                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [21] ""                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [22] ""                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [23] ""                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [24] ""                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [25] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGA"         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [26] ""                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [27] ""                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [28] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGA"            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [29] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGA"               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [30] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGA"                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [31] ""                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [32] ""                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [33] ""                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [34] ""                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [35] ""                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [36] ""                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [37] ""                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [38] ""                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [39] ""                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [40] "GGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGA"      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [41] "GGCGGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGA"      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [42] ""                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [43] ""                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [44] "GGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGA"         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [45] "GGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGA"            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [46] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGCGGCGGA"               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [47] ""                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [48] ""                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [49] "GGCGGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGA"      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [50] ""                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [51] ""                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [52] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGA"      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [53] "GGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGCGGA"            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [54] "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGCGGCGGA"                     </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## Create annnotation dataframe</span></span></span>
+<span class="r-in"><span><span class="fu">rasterise_index_annotations</span><span class="op">(</span></span></span>
+<span class="r-in"><span>    new_sequences_vector <span class="op">=</span> <span class="va">new_sequences</span>,</span></span>
+<span class="r-in"><span>    original_sequences_vector <span class="op">=</span> <span class="va">sequences</span>,</span></span>
+<span class="r-in"><span>    index_annotation_lines <span class="op">=</span> <span class="va">index_annotation_lines</span>,</span></span>
+<span class="r-in"><span>    index_annotation_interval <span class="op">=</span> <span class="fl">10</span>,</span></span>
+<span class="r-in"><span>    index_annotation_full_line <span class="op">=</span> <span class="va">index_annotation_full_line</span>,</span></span>
+<span class="r-in"><span>    index_annotations_above <span class="op">=</span> <span class="va">index_annotations_above</span>,</span></span>
+<span class="r-in"><span>    index_annotation_vertical_position <span class="op">=</span> <span class="va">index_annotation_vertical_position</span>,</span></span>
+<span class="r-in"><span>    sum_indices <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
+<span class="r-in"><span>    spacing <span class="op">=</span> <span class="cn">NA</span>, <span class="co">## infer from vertical position</span></span></span>
+<span class="r-in"><span>    offset_start <span class="op">=</span> <span class="fl">0</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             x         y value</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  0.09313725 0.9876543    10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  0.19117647 0.9876543    20</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  0.28921569 0.9876543    30</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  0.38725490 0.9876543    40</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  0.48529412 0.9876543    50</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  0.58333333 0.9876543    60</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7  0.68137255 0.9876543    70</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  0.77941176 0.9876543    80</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9  0.87745098 0.9876543    90</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 0.97549020 0.9876543   100</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 0.09313725 0.5617284    10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12 0.19117647 0.5617284    20</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13 0.28921569 0.5617284    30</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14 0.38725490 0.5617284    40</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15 0.48529412 0.5617284    50</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16 0.58333333 0.5617284    60</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17 0.68137255 0.5617284    70</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18 0.77941176 0.5617284    80</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19 0.87745098 0.5617284    90</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20 0.09313725 0.2839506    10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21 0.19117647 0.2839506    20</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22 0.28921569 0.2839506    30</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23 0.38725490 0.2839506    40</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24 0.48529412 0.2839506    50</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25 0.58333333 0.2839506    60</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26 0.68137255 0.2839506    70</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27 0.77941176 0.2839506    80</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28 0.87745098 0.2839506    90</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
