@@ -551,11 +551,11 @@ visualise_methylation <- function(
         ## Add sequence text or probability labels if desired
         if (sequence_text_type == "sequence") {
             monitor_time <- monitor(monitor_performance, start_time, monitor_time, "generating sequence text (type 'sequence')")
-            sequence_text_data <- convert_sequences_to_annotations(sequences, line_length = max(nchar(sequences)), interval = 0)
+            sequence_text_data <- rasterise_matrix(convert_sequences_to_matrix(sequences, line_length = max(nchar(sequences))))
 
             monitor_time <- monitor(monitor_performance, start_time, monitor_time, "adding sequence text (type 'sequence')")
             result <- result +
-                geom_text(data = sequence_text_data, aes(x = .data$x_position, y = .data$y_position, label = .data$annotation), col = sequence_text_colour, size = sequence_text_size, fontface = "bold", inherit.aes = F)
+                geom_text(data = sequence_text_data, aes(x = .data$x, y = .data$y, label = .data$layer), col = sequence_text_colour, size = sequence_text_size, fontface = "bold", inherit.aes = F)
 
         } else if (sequence_text_type == "probability") {
             monitor_time <- monitor(monitor_performance, start_time, monitor_time, "generating sequence text (type 'probability')")

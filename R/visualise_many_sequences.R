@@ -272,11 +272,11 @@ visualise_many_sequences <- function(
         ## Add sequence text if desired
         if (sequence_text_size > 0) {
             monitor_time <- monitor(monitor_performance, start_time, monitor_time, "generating sequence text")
-            sequence_text_data <- convert_sequences_to_annotations(new_sequences_vector, line_length = max(nchar(new_sequences_vector)), interval = 0)
+            sequence_text_data <- rasterise_matrix(convert_sequences_to_matrix(new_sequences_vector, line_length = max(nchar(new_sequences_vector))))
 
             monitor_time <- monitor(monitor_performance, start_time, monitor_time, "adding sequence text")
             result <- result +
-                geom_text(data = sequence_text_data, aes(x = .data$x_position, y = .data$y_position, label = .data$annotation), col = sequence_text_colour, size = sequence_text_size, fontface = "bold", inherit.aes = F)
+                geom_text(data = sequence_text_data, aes(x = .data$x, y = .data$y, label = .data$layer), col = sequence_text_colour, size = sequence_text_size, fontface = "bold", inherit.aes = F)
         }
 
         ## Add index annotations if desired
