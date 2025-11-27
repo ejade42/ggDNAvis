@@ -59,6 +59,7 @@ reference:
   - convert_modification_to_number_vector
   - convert_probabilities_to_annotations
   - convert_sequence_to_numbers
+  - convert_sequences_to_matrix
   - create_image_data
   - insert_at_indices
   - rasterise_index_annotations

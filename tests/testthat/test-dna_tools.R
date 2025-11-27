@@ -203,6 +203,38 @@ test_that("inserting blanks fails when required", {
 })
 
 
+test_that("creating sequence matrix works", {
+    expect_equal(convert_sequences_to_matrix(c("GGCGGC", "", "ACGT", "")),
+                 matrix(c("G", "G", "C", "G", "G", "C",
+                          NA, NA, NA, NA, NA, NA,
+                          "A", "C", "G", "T", NA, NA,
+                          NA, NA, NA, NA, NA, NA),
+                        nrow = 4, ncol = 6, byrow = TRUE))
+
+    expect_equal(convert_sequences_to_matrix(c("GGCGGC", "", "ACGT", ""), 8, "X"),
+                 matrix(c("G", "G", "C", "G", "G", "C", "X", "X",
+                          "X", "X", "X", "X", "X", "X", "X", "X",
+                          "A", "C", "G", "T", "X", "X", "X", "X",
+                          "X", "X", "X", "X", "X", "X", "X", "X"),
+                        nrow = 4, ncol = 8, byrow = TRUE))
+})
+
+test_that("creating sequence matrix rejects bad arguments", {
+    bad_param_value_for_char <- list(list("x"), TRUE, NA, NULL, c(NA, "X"), 1, 0.5, -1)
+    for (param in bad_param_value_for_char) {
+        expect_error(convert_sequences_to_matrix(param), class = "argument_value_or_type")
+    }
+
+    bad_param_value_for_pos_int_na_allowed <- list(list(1), 0, 0.5, -1, c(1, 2), TRUE)
+    for (param in bad_param_value_for_pos_int_na_allowed) {
+        expect_error(convert_sequences_to_matrix("GGC", param))
+    }
+
+    bad_param_value_for_single <- list(c(1, 2), c("x", "y"))
+    for (param in bad_param_value_for_single) {
+        expect_error(convert_sequences_to_matrix("GGC", blank_value = param))
+    }
+})
 
 test_that("rasterising index annotations, full example", {
     ## Set up arguments (e.g. from visualise_many_sequences() call)

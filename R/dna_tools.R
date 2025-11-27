@@ -498,19 +498,54 @@ create_image_data <- function(sequences) {
 
 
 
-
+#' Convert vector of sequences to character matrix (generic `ggDNAvis` helper)
+#'
+#' @description
+#' This function takes a vector of sequences (e.g. input to [visualise_many_sequences()]
+#' or [visualise_methylation()], or vector split from input to [visualise_single_sequence()]).
+#' It converts it into a matrix e.g. `c("GGCGGC", "", "ACGT", "")` would become:
+#' \preformatted{G  G  C  G  G  C
+#' NA NA NA NA NA NA
+#' A  C  G  T  NA NA
+#' NA NA NA NA NA NA
+#' }
+#'
+#' The resulting matrix can then be rasterised into a coordinate-value dataframe via [rasterise_matrix()].
+#'
+#' @param sequences `character vector`. The sequences to transform into a matrix
+#' @param line_length `integer`. The width of the matrix. Set to `NA` (default) to automatically use the length of the longest sequence in `sequences`.
+#' @param blank_value `value`. The value that should be used to fill in blank/missing points of the matrix.
+#'
+#' @return `matrix`. A matrix of the sequences with one line per sequence, ready for rasterisation via [rasterise_matrix()].
+#' @export
+#'
+#' @examples
+#' convert_sequences_to_matrix(
+#'     sequences = c("GGCGGC", "", "ACGT", "")
+#' )
+#'
+#' convert_sequences_to_matrix(
+#'     sequences = c("GGCGGC", "", "ACGT", ""),
+#'     line_length = 10,
+#'     blank_value = "X"
+#' )
+#'
 convert_sequences_to_matrix <- function(
     sequences,
-    line_length,
+    line_length = NA,
     blank_value = NA
 ) {
     ## Validate arguments
     ## ---------------------------------------------------------------------
-    not_null_or_na <- list(sequences = sequences, line_length = line_length)
+    not_null_or_na <- list(sequences = sequences)
     for (argument in names(not_null_or_na)) {
         if (any(is.null(not_null_or_na[[argument]])) || any(is.na(not_null_or_na[[argument]]))) {bad_arg(argument, not_null_or_na, "must not be NULL or NA.")}
     }
     not_null_or_na <- NULL
+
+    if (any(is.na(line_length)) || any(is.null(line_length))) {
+        line_length <- max(nchar(sequences))
+    }
 
     length_1 <- list(line_length = line_length, blank_value = blank_value)
     for (argument in names(length_1)) {
@@ -543,7 +578,7 @@ convert_sequences_to_matrix <- function(
 #' @aliases rasterize_matrix
 #'
 #' @description
-#' `rasterize_matrix()` is an alias for this function.
+#' `rasterize_matrix()` is an alias for `rasterise_matrix()`.
 #'
 #' This function takes a matrix and rasterises it to a dataframe of x and y
 #' coordinates, such that the matrix occupies the space from (0, 0) to (1, 1) and each
@@ -648,6 +683,11 @@ rasterise_matrix <- function(image_matrix, drop_na = TRUE) {
 
 
 #' Process index annotations and rasterise to a x/y/layer dataframe (generic `ggDNAvis` helper)
+#'
+#' @aliases visualize_index_annotations
+#'
+#' @description
+#' `rasterize_index_annotations()` is an alias for `rasterise_index_annotations()`.
 #'
 #' This function is called by
 #' [visualise_many_sequences()], [visualise_methylation()], and [visualise_single_sequence()]

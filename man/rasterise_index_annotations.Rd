@@ -2,6 +2,7 @@
 % Please edit documentation in R/dna_tools.R
 \name{rasterise_index_annotations}
 \alias{rasterise_index_annotations}
+\alias{visualize_index_annotations}
 \alias{rasterize_index_annotations}
 \title{Process index annotations and rasterise to a x/y/layer dataframe (generic \code{ggDNAvis} helper)}
 \usage{
@@ -43,6 +44,8 @@ rasterise_index_annotations(
 \code{dataframe}. A dataframe with columns \code{x}, \code{y}, and \code{value}, with one observation per annotation number that needs to be drawn onto the ggplot.
 }
 \description{
+\code{rasterize_index_annotations()} is an alias for \code{rasterise_index_annotations()}.
+
 This function is called by
 \code{\link[=visualise_many_sequences]{visualise_many_sequences()}}, \code{\link[=visualise_methylation]{visualise_methylation()}}, and \code{\link[=visualise_single_sequence]{visualise_single_sequence()}}
 to create the x/y position data for placing the index annotations on the graph.

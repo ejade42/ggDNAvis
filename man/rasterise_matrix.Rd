@@ -16,7 +16,7 @@ rasterise_matrix(image_matrix, drop_na = TRUE)
 \code{dataframe}. A dataframe containing x and y coordinates for the centre of a rectangle per element of the matrix, such that the whole matrix occupies the space from (0, 0) to (1, 1). Additionally contains a layer column storing the value of each element of the matrix.
 }
 \description{
-\code{rasterize_matrix()} is an alias for this function.
+\code{rasterize_matrix()} is an alias for \code{rasterise_matrix()}.
 
 This function takes a matrix and rasterises it to a dataframe of x and y
 coordinates, such that the matrix occupies the space from (0, 0) to (1, 1) and each
