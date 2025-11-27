@@ -146,9 +146,7 @@ Changes:
   [`rasterise_matrix()`](https://ejade42.github.io/ggDNAvis/reference/rasterise_matrix.md)
   function to do rasterisation
 
-- Changed
-  [`convert_input_seq_to_sequence_list()`](https://ejade42.github.io/ggDNAvis/reference/convert_input_seq_to_sequence_list.md)
-  behaviour:
+- Changed `convert_input_seq_to_sequence_list()` behaviour:
 
   - Instead of additional spacing lines always being added before or
     after first line of sequence, there are now independent boolean

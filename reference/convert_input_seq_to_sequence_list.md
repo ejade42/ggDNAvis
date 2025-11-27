@@ -60,14 +60,14 @@ convert_input_seq_to_sequence_list(
     start_spaces = TRUE,
     end_spaces = TRUE
 )
-#> [1] ""       "GGCGGC" ""       "GGC"    ""      
+#> Error in convert_input_seq_to_sequence_list("GGCGGCGGC", line_length = 6,     spacing = 1, start_spaces = TRUE, end_spaces = TRUE): could not find function "convert_input_seq_to_sequence_list"
 
 convert_input_seq_to_sequence_list(
     "GGCGGCGGC",
     line_length = 3,
     spacing = 2
 )
-#> [1] "GGC" ""    ""    "GGC" ""    ""    "GGC"
+#> Error in convert_input_seq_to_sequence_list("GGCGGCGGC", line_length = 3,     spacing = 2): could not find function "convert_input_seq_to_sequence_list"
 
 convert_input_seq_to_sequence_list(
     "GGCGGCGGC",
@@ -75,7 +75,7 @@ convert_input_seq_to_sequence_list(
     spacing = 2,
     end_spaces = TRUE
 )
-#> [1] "GGC" ""    ""    "GGC" ""    ""    "GGC" ""    ""   
+#> Error in convert_input_seq_to_sequence_list("GGCGGCGGC", line_length = 3,     spacing = 2, end_spaces = TRUE): could not find function "convert_input_seq_to_sequence_list"
 
 convert_input_seq_to_sequence_list(
     "GGCGGCGGC",
@@ -84,5 +84,5 @@ convert_input_seq_to_sequence_list(
     start_spaces = TRUE,
     end_spaces = FALSE
 )
-#> [1] "GGCGGC" "GGC"   
+#> Error in convert_input_seq_to_sequence_list("GGCGGCGGC", line_length = 6,     spacing = 0, start_spaces = TRUE, end_spaces = FALSE): could not find function "convert_input_seq_to_sequence_list"
 ```

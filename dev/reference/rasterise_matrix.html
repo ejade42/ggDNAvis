@@ -75,7 +75,7 @@ of the matrix.</p>
 
 
 <dt id="arg-drop-na">drop_na<a class="anchor" aria-label="anchor" href="#arg-drop-na"></a></dt>
-<dd><p><code>logical</code>. A boolean specifying whether missing values should be dropped via <a href="https://tidyr.tidyverse.org/reference/drop_na.html" class="external-link">tidyr::drop_na</a> (<code>TRUE</code>, default) or kept (<code>FALSE</code>).</p></dd>
+<dd><p><code>logical</code>. A boolean specifying whether missing values should be dropped via <code><a href="https://tidyr.tidyverse.org/reference/drop_na.html" class="external-link">tidyr::drop_na()</a></code> (<code>TRUE</code>, default) or kept (<code>FALSE</code>).</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -98,7 +98,7 @@ of the matrix.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Rasterise</span></span></span>
 <span class="r-in"><span><span class="fu">rasterise_matrix</span><span class="op">(</span><span class="va">example_matrix</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        x     y layer</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        x     y value</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1  0.125 0.875     1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2  0.375 0.875     2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3  0.625 0.875     3</span>
@@ -133,7 +133,7 @@ of the matrix.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Rasterise</span></span></span>
 <span class="r-in"><span><span class="fu">rasterise_matrix</span><span class="op">(</span><span class="va">example_matrix</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      x    y layer</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      x    y value</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1  0.1 0.75     A</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2  0.3 0.75     B</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3  0.5 0.75     C</span>
@@ -166,7 +166,7 @@ of the matrix.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Rasterise</span></span></span>
 <span class="r-in"><span><span class="fu">rasterise_matrix</span><span class="op">(</span><span class="va">dna_matrix</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         x     y layer</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         x     y value</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1  0.0625 0.875     0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2  0.1875 0.875     0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3  0.3125 0.875     0</span>
@@ -216,7 +216,7 @@ of the matrix.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Rasterise, dropping NAs (default)</span></span></span>
 <span class="r-in"><span><span class="fu">rasterise_matrix</span><span class="op">(</span><span class="va">incomplete_matrix</span>, drop_na <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       x    y layer</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       x    y value</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.125 0.75     1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 0.375 0.75     2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3 0.625 0.75     3</span>
@@ -226,7 +226,7 @@ of the matrix.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Rasterise, keeping NAs</span></span></span>
 <span class="r-in"><span><span class="fu">rasterise_matrix</span><span class="op">(</span><span class="va">incomplete_matrix</span>, drop_na <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       x    y layer</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       x    y value</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.125 0.75     1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 0.375 0.75     2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3 0.625 0.75     3</span>

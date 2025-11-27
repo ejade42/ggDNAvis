@@ -28,7 +28,7 @@ readable by
 
 ``` r
 create_image_data(c("ATCG", "", "GGCGGC", ""))
-#>             x     y layer
+#>             x     y value
 #> 1  0.08333333 0.875     1
 #> 2  0.25000000 0.875     4
 #> 3  0.41666667 0.875     2

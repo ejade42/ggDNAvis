@@ -42,7 +42,7 @@ example_matrix
 
 ## Rasterise
 rasterise_matrix(example_matrix)
-#>        x     y layer
+#>        x     y value
 #> 1  0.125 0.875     1
 #> 2  0.375 0.875     2
 #> 3  0.625 0.875     3
@@ -77,7 +77,7 @@ example_matrix
 
 ## Rasterise
 rasterise_matrix(example_matrix)
-#>      x    y layer
+#>      x    y value
 #> 1  0.1 0.75     A
 #> 2  0.3 0.75     B
 #> 3  0.5 0.75     C
@@ -110,7 +110,7 @@ dna_matrix
 
 ## Rasterise
 rasterise_matrix(dna_matrix)
-#>         x     y layer
+#>         x     y value
 #> 1  0.0625 0.875     0
 #> 2  0.1875 0.875     0
 #> 3  0.3125 0.875     0

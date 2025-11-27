@@ -115,27 +115,11 @@ they are available if needed)
   Map a single base to the corresponding number (generic `ggDNAvis`
   helper)
 
-- [`convert_input_seq_to_sequence_list()`](https://ejade42.github.io/ggDNAvis/reference/convert_input_seq_to_sequence_list.md)
-  :
-
-  Split a single input sequence into a vector of "lines" for
-  visualisation
-  ([`visualise_single_sequence()`](https://ejade42.github.io/ggDNAvis/reference/visualise_single_sequence.md)
-  helper)
-
 - [`convert_locations_to_MM_vector()`](https://ejade42.github.io/ggDNAvis/reference/convert_locations_to_MM_vector.md)
   :
 
   Convert absolute index locations to MM tag
   ([`write_modified_fastq()`](https://ejade42.github.io/ggDNAvis/reference/write_modified_fastq.md)
-  helper)
-
-- [`convert_many_sequences_to_index_annotations()`](https://ejade42.github.io/ggDNAvis/reference/convert_many_sequences_to_index_annotations.md)
-  :
-
-  Create index annotations at variable line positions in many sequences
-  data
-  ([`visualise_many_sequences()`](https://ejade42.github.io/ggDNAvis/reference/visualise_many_sequences.md)
   helper)
 
 - [`convert_MM_vector_to_locations()`](https://ejade42.github.io/ggDNAvis/reference/convert_MM_vector_to_locations.md)
@@ -165,14 +149,6 @@ they are available if needed)
 
   Map a sequence to a vector of numbers (generic `ggDNAvis` helper)
 
-- [`convert_sequences_to_annotations()`](https://ejade42.github.io/ggDNAvis/reference/convert_sequences_to_annotations.md)
-  :
-
-  Convert a vector of sequences to a dataframe for plotting sequence
-  contents and index annotations
-  ([`visualise_single_sequence()`](https://ejade42.github.io/ggDNAvis/reference/visualise_single_sequence.md)
-  helper)
-
 - [`create_image_data()`](https://ejade42.github.io/ggDNAvis/reference/create_image_data.md)
   :
 
@@ -185,6 +161,12 @@ they are available if needed)
   Insert blank items at specified indices in a vector
   ([`visualise_many_sequences()`](https://ejade42.github.io/ggDNAvis/reference/visualise_many_sequences.md)
   helper)
+
+- [`rasterise_index_annotations()`](https://ejade42.github.io/ggDNAvis/reference/rasterise_index_annotations.md)
+  :
+
+  Process index annotations and rasterise to a x/y/layer dataframe
+  (generic `ggDNAvis` helper)
 
 - [`rasterise_matrix()`](https://ejade42.github.io/ggDNAvis/reference/rasterise_matrix.md)
   :

@@ -25,7 +25,7 @@ rasterise_matrix(image_matrix, drop_na = TRUE)
 
   `logical`. A boolean specifying whether missing values should be
   dropped via
-  [tidyr::drop_na](https://tidyr.tidyverse.org/reference/drop_na.html)
+  [`tidyr::drop_na()`](https://tidyr.tidyverse.org/reference/drop_na.html)
   (`TRUE`, default) or kept (`FALSE`).
 
 ## Value
@@ -51,7 +51,7 @@ example_matrix
 
 ## Rasterise
 rasterise_matrix(example_matrix)
-#>        x     y layer
+#>        x     y value
 #> 1  0.125 0.875     1
 #> 2  0.375 0.875     2
 #> 3  0.625 0.875     3
@@ -86,7 +86,7 @@ example_matrix
 
 ## Rasterise
 rasterise_matrix(example_matrix)
-#>      x    y layer
+#>      x    y value
 #> 1  0.1 0.75     A
 #> 2  0.3 0.75     B
 #> 3  0.5 0.75     C
@@ -119,7 +119,7 @@ dna_matrix
 
 ## Rasterise
 rasterise_matrix(dna_matrix)
-#>         x     y layer
+#>         x     y value
 #> 1  0.0625 0.875     0
 #> 2  0.1875 0.875     0
 #> 3  0.3125 0.875     0
@@ -169,7 +169,7 @@ incomplete_matrix
 
 ## Rasterise, dropping NAs (default)
 rasterise_matrix(incomplete_matrix, drop_na = TRUE)
-#>       x    y layer
+#>       x    y value
 #> 1 0.125 0.75     1
 #> 2 0.375 0.75     2
 #> 3 0.625 0.75     3
@@ -179,7 +179,7 @@ rasterise_matrix(incomplete_matrix, drop_na = TRUE)
 
 ## Rasterise, keeping NAs
 rasterise_matrix(incomplete_matrix, drop_na = FALSE)
-#>       x    y layer
+#>       x    y value
 #> 1 0.125 0.75     1
 #> 2 0.375 0.75     2
 #> 3 0.625 0.75     3

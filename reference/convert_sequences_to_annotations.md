@@ -65,35 +65,12 @@ convert_sequences_to_annotations(
     annotations_above = TRUE,
     annotation_vertical_position = 1/3
 )
-#>    x_position y_position annotation     type
-#> 1  0.08333333  0.8750000          G Sequence
-#> 2  0.25000000  0.8750000          G Sequence
-#> 3  0.41666667  0.8750000          C Sequence
-#> 4  0.41666667  1.0833333          3   Number
-#> 5  0.58333333  0.8750000          G Sequence
-#> 6  0.75000000  0.8750000          G Sequence
-#> 7  0.91666667  0.8750000          C Sequence
-#> 8  0.91666667  1.0833333          6   Number
-#> 9  0.08333333  0.3750000          A Sequence
-#> 10 0.25000000  0.3750000          T Sequence
-#> 11 0.41666667  0.3750000          C Sequence
-#> 12 0.41666667  0.5833333          9   Number
-#> 13 0.58333333  0.3750000          G Sequence
+#> Error in convert_sequences_to_annotations(c("GGCGGC", "", "ATCG", ""),     line_length = 6, interval = 3, annotations_above = TRUE,     annotation_vertical_position = 1/3): could not find function "convert_sequences_to_annotations"
 
 convert_sequences_to_annotations(
     c("GGCGGC", "", "ATCG", ""),
     line_length = 6,
     interval = 0
 )
-#>    x_position y_position annotation     type
-#> 1  0.08333333      0.875          G Sequence
-#> 2  0.25000000      0.875          G Sequence
-#> 3  0.41666667      0.875          C Sequence
-#> 4  0.58333333      0.875          G Sequence
-#> 5  0.75000000      0.875          G Sequence
-#> 6  0.91666667      0.875          C Sequence
-#> 7  0.08333333      0.375          A Sequence
-#> 8  0.25000000      0.375          T Sequence
-#> 9  0.41666667      0.375          C Sequence
-#> 10 0.58333333      0.375          G Sequence
+#> Error in convert_sequences_to_annotations(c("GGCGGC", "", "ATCG", ""),     line_length = 6, interval = 0): could not find function "convert_sequences_to_annotations"
 ```

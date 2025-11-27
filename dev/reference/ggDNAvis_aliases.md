@@ -9,11 +9,8 @@ If any American spellings don't work, I most likely overlooked them and
 can easily fix, so please submit a bug report by creating a github issue
 (<https://github.com/ejade42/ggDNAvis/issues>).
 
-There are currently five functions and one dataset with aliases
+There are currently four major functions and one dataset with aliases
 configured:
-
-- [`rasterise_matrix()`](https://ejade42.github.io/ggDNAvis/reference/rasterise_matrix.md)
-  ([`rasterize_matrix()`](https://ejade42.github.io/ggDNAvis/reference/rasterise_matrix.md))
 
 - [`sequence_colour_palettes`](https://ejade42.github.io/ggDNAvis/reference/sequence_colour_palettes.md)
   ([`sequence_color_palettes`](https://ejade42.github.io/ggDNAvis/reference/sequence_colour_palettes.md)
@@ -31,6 +28,14 @@ configured:
 
 - [`visualise_single_sequence()`](https://ejade42.github.io/ggDNAvis/reference/visualise_single_sequence.md)
   ([`visualize_single_sequence()`](https://ejade42.github.io/ggDNAvis/reference/visualise_single_sequence.md))
+
+Additionally there are two helper functions with aliases:
+
+- [`rasterise_matrix()`](https://ejade42.github.io/ggDNAvis/reference/rasterise_matrix.md)
+  ([`rasterize_matrix()`](https://ejade42.github.io/ggDNAvis/reference/rasterise_matrix.md))
+
+- [`rasterise_index_annotations()`](https://ejade42.github.io/ggDNAvis/reference/rasterise_index_annotations.md)
+  ([`rasterize_index_annotations()`](https://ejade42.github.io/ggDNAvis/reference/rasterise_index_annotations.md))
 
 All arguments should have aliases configured. In particular, any
 `_colour` arguments should also accept `_color` or `_col`.
