@@ -111,8 +111,10 @@ visualise_single_sequence(
     outline_join = "mitre",
     return = FALSE,
     filename = paste0(output_location, "summary_single_sequence.png"),
+    force_raster = FALSE,
     render_device = ragg::agg_png,
-    pixels_per_base = 100
+    pixels_per_base = 100,
+    monitor_performance = FALSE
 )
 
 ## View image
@@ -157,8 +159,10 @@ visualise_many_sequences(
     outline_join = "mitre",
     return = FALSE,
     filename = paste0(output_location, "summary_many_sequences.png"),
+    force_raster = FALSE,
     render_device = ragg::agg_png,
-    pixels_per_base = 100
+    pixels_per_base = 100,
+    monitor_performance = FALSE
 )
 
 ## View image
@@ -214,8 +218,10 @@ visualise_methylation(
     margin = 0.5,
     return = FALSE,
     filename = paste0(output_location, "summary_methylation_none.png"),
+    force_raster = FALSE,
     render_device = ragg::agg_png,
-    pixels_per_base = 100
+    pixels_per_base = 100,
+    monitor_performance = FALSE
 )
 
 ## View image
