@@ -32,7 +32,7 @@ configured:
 Additionally there are three helper functions with aliases:
 
 - [`rasterise_matrix()`](https://ejade42.github.io/ggDNAvis/reference/rasterise_matrix.md)
-  ([`rasterize_matrix()`](https://ejade42.github.io/ggDNAvis/reference/rasterise_matrix.html))
+  ([`rasterize_matrix()`](https://ejade42.github.io/ggDNAvis/reference/rasterise_matrix.md))
 
 - [`rasterise_index_annotations()`](https://ejade42.github.io/ggDNAvis/reference/rasterise_index_annotations.md)
   ([`rasterize_index_annotations()`](https://ejade42.github.io/ggDNAvis/reference/rasterise_index_annotations.md))
