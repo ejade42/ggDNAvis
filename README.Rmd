@@ -1022,6 +1022,24 @@ knitr::include_graphics(paste0(github_location, "single_sequence_14.png"))
 ```
 
 ## Performance
+### Performance monitoring
+The four major `visualise` functions in `ggDNAvis` can track the time taken for each step of the visualisation processing. When the `monitor_performance` argument is set to `TRUE`, the date and timestamp will be printed along with the function name (obtained via `Sys.time()`). Then at the start of each processing step, the time since the start of the previous step (i.e. the time that the previous step took) will be printed along with total time since the start of the function.
+
+For example:
+```{r}
+## Create image
+visualise_single_sequence(
+    sone_2019_f1_1_expanded_ggt_added,
+    filename = paste0(output_location, "single_sequence_15.png"),
+    return = FALSE,
+    monitor_performance = TRUE
+)
+
+## View image
+knitr::include_graphics(paste0(github_location, "single_sequence_15.png"))
+```
+
+### Raster versus tile rendering
 Usually, visualisations in `ggDNAvis` are drawn via `geom_tile()`. This is highly customisable and allows box outlines, text superimposition, and index annotation. However, for very large datasets, rendering thousands or millions of tiles can become unusuably slow. A much faster alternative is `geom_raster()`, which does not allow for text/annotations/outlines but can draw much bigger images when needed. 
 
 `geom_raster()` is automatically used when it would not affect the output image (i.e. when sequence text, annotations, and outlines are already off), or can be forced by setting `force_raster = TRUE`. However, as forcing `geom_raster()` necessitates removal of text/annotations/outlines, this produces a warning unless they were all already turned off.
@@ -1033,16 +1051,17 @@ An example where `visualise_single_sequence()` automatically switches to `geom_r
 ## Create image
 visualise_single_sequence(
     sone_2019_f1_1_expanded_ggt_added,
-    filename = paste0(output_location, "single_sequence_15.png"),
+    filename = paste0(output_location, "single_sequence_16.png"),
     return = FALSE,
     sequence_colours = sequence_colour_palettes$bright_deep,
     outline_linewidth = 0,
     index_annotation_size = 0,
-    sequence_text_size = 0
+    sequence_text_size = 0,
+    monitor_performance = TRUE
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_15.png"))
+knitr::include_graphics(paste0(github_location, "single_sequence_16.png"))
 ```
 
 An example of forcing rasterisation when there would otherwise be sequence text, index annotations, and outlines (thus producing a warning) is as follows:
@@ -1051,7 +1070,7 @@ An example of forcing rasterisation when there would otherwise be sequence text,
 ## Create image
 visualise_single_sequence(
     sone_2019_f1_1_expanded_ggt_added,
-    filename = paste0(output_location, "single_sequence_16.png"),
+    filename = paste0(output_location, "single_sequence_17.png"),
     return = FALSE,
     sequence_colours = sequence_colour_palettes$bright_deep,
     outline_linewidth = 5,
@@ -1062,11 +1081,12 @@ visualise_single_sequence(
     sequence_text_size = 16,
     sequence_text_colour = "white",
     force_raster = TRUE,
-    pixels_per_base = 10
+    pixels_per_base = 10,
+    monitor_performance = TRUE
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_16.png"))
+knitr::include_graphics(paste0(github_location, "single_sequence_17.png"))
 ```
 
 If sequence text, annotations, and outlines are all already off (i.e. `sequence_text_size = 0`, either `index_annotation_size = 0` or `index_annotation_interval = 0`, and `outline_linewidth = 0`), then no warning is produced from `force_raster` (but it is redundant and doesn't do anything):
@@ -1075,18 +1095,19 @@ If sequence text, annotations, and outlines are all already off (i.e. `sequence_
 ## Create image
 visualise_single_sequence(
     sone_2019_f1_1_expanded_ggt_added,
-    filename = paste0(output_location, "single_sequence_17.png"),
+    filename = paste0(output_location, "single_sequence_18.png"),
     return = FALSE,
     sequence_colours = sequence_colour_palettes$bright_deep,
     outline_linewidth = 0,
     index_annotation_interval = 0,
     sequence_text_size = 0,
     pixels_per_base = 10,
-    force_raster = TRUE
+    force_raster = TRUE,
+    monitor_performance = TRUE
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_17.png"))
+knitr::include_graphics(paste0(github_location, "single_sequence_18.png"))
 ```
 
 
@@ -1600,7 +1621,8 @@ visualise_many_sequences(
     sequence_text_size = 0,
     index_annotation_lines = NA,
     outline_linewidth = 0,
-    pixels_per_base = 20
+    pixels_per_base = 20,
+    monitor_performance = TRUE
 )
 
 ## View image
@@ -1617,7 +1639,8 @@ visualise_many_sequences(
     sequence_colours = sequence_colour_palettes$sanger,
     index_annotation_lines = 1:51,
     pixels_per_base = 20,
-    force_raster = TRUE
+    force_raster = TRUE,
+    monitor_performance = TRUE
 )
 
 ## View image
