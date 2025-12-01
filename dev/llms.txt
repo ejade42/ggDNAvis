@@ -4462,13 +4462,6 @@ they are available if needed)
   ([`visualise_methylation()`](https://ejade42.github.io/ggDNAvis/reference/visualise_methylation.md)
   helper)
 
-- [`convert_probabilities_to_annotations()`](https://ejade42.github.io/ggDNAvis/reference/convert_probabilities_to_annotations.md)
-  :
-
-  Create dataframe of locations and rendered probabilities
-  ([`visualise_methylation()`](https://ejade42.github.io/ggDNAvis/reference/visualise_methylation.md)
-  helper)
-
 - [`convert_sequence_to_numbers()`](https://ejade42.github.io/ggDNAvis/reference/convert_sequence_to_numbers.md)
   :
 
@@ -4503,6 +4496,13 @@ they are available if needed)
   :
 
   Rasterise a matrix to an x/y/layer dataframe (generic `ggDNAvis`
+  helper)
+
+- [`rasterise_probabilities()`](https://ejade42.github.io/ggDNAvis/reference/rasterise_probabilities.md)
+  :
+
+  Create dataframe of locations and rendered probabilities
+  ([`visualise_methylation()`](https://ejade42.github.io/ggDNAvis/reference/visualise_methylation.md)
   helper)
 
 - [`reverse_sequence_if_needed()`](https://ejade42.github.io/ggDNAvis/reference/reverse_sequence_if_needed.md)

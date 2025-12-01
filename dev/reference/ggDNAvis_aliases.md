@@ -29,13 +29,16 @@ configured:
 - [`visualise_single_sequence()`](https://ejade42.github.io/ggDNAvis/reference/visualise_single_sequence.md)
   ([`visualize_single_sequence()`](https://ejade42.github.io/ggDNAvis/reference/visualise_single_sequence.md))
 
-Additionally there are two helper functions with aliases:
+Additionally there are three helper functions with aliases:
 
 - [`rasterise_matrix()`](https://ejade42.github.io/ggDNAvis/reference/rasterise_matrix.md)
-  ([`rasterize_matrix()`](https://ejade42.github.io/ggDNAvis/reference/rasterise_matrix.md))
+  ([`rasterize_matrix()`](https://ejade42.github.io/ggDNAvis/reference/rasterise_matrix.html))
 
 - [`rasterise_index_annotations()`](https://ejade42.github.io/ggDNAvis/reference/rasterise_index_annotations.md)
   ([`rasterize_index_annotations()`](https://ejade42.github.io/ggDNAvis/reference/rasterise_index_annotations.md))
+
+- [`rasterise_probabilities()`](https://ejade42.github.io/ggDNAvis/reference/rasterise_probabilities.md)
+  ([`rasterize_probabilities()`](https://ejade42.github.io/ggDNAvis/reference/rasterise_probabilities.md))
 
 All arguments should have aliases configured. In particular, any
 `_colour` arguments should also accept `_color` or `_col`.
