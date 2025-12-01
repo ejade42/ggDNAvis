@@ -57,13 +57,13 @@ reference:
   - convert_locations_to_MM_vector
   - convert_MM_vector_to_locations
   - convert_modification_to_number_vector
-  - convert_probabilities_to_annotations
   - convert_sequence_to_numbers
   - convert_sequences_to_matrix
   - create_image_data
   - insert_at_indices
   - rasterise_index_annotations
   - rasterise_matrix
+  - rasterise_probabilities
   - reverse_sequence_if_needed
   - reverse_quality_if_needed
   - reverse_locations_if_needed

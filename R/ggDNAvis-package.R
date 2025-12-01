@@ -73,10 +73,11 @@ fetch_acceptable_distortion <- function(verbose = TRUE) {
 #' - [visualise_methylation_colour_scale()] ([visualize_methylation_color_scale()])
 #' - [visualise_single_sequence()] ([visualize_single_sequence()])
 #'
-#' Additionally there are two helper functions with aliases:
+#' Additionally there are three helper functions with aliases:
 #'
 #' - [rasterise_matrix()] ([rasterize_matrix()])
 #' - [rasterise_index_annotations()] ([rasterize_index_annotations()])
+#' - [rasterise_probabilities()] ([rasterize_probabilities()])
 #'
 #' All arguments should have aliases configured. In particular, any `_colour` arguments
 #' should also accept `_color` or `_col`.

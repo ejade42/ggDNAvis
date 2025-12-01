@@ -21,10 +21,11 @@ There are currently four major functions and one dataset with aliases configured
 \item \code{\link[=visualise_single_sequence]{visualise_single_sequence()}} (\code{\link[=visualize_single_sequence]{visualize_single_sequence()}})
 }
 
-Additionally there are two helper functions with aliases:
+Additionally there are three helper functions with aliases:
 \itemize{
 \item \code{\link[=rasterise_matrix]{rasterise_matrix()}} (\code{\link[=rasterize_matrix]{rasterize_matrix()}})
 \item \code{\link[=rasterise_index_annotations]{rasterise_index_annotations()}} (\code{\link[=rasterize_index_annotations]{rasterize_index_annotations()}})
+\item \code{\link[=rasterise_probabilities]{rasterise_probabilities()}} (\code{\link[=rasterize_probabilities]{rasterize_probabilities()}})
 }
 
 All arguments should have aliases configured. In particular, any \verb{_colour} arguments
