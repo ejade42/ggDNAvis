@@ -536,14 +536,14 @@ visualise_methylation <- function(
         monitor_time <- monitor(monitor_performance, start_time, monitor_time, "creating basic plot via geom_tile")
         result <- ggplot(mapping = aes(x = .data$x, y = .data$y)) +
             ## Background
-            geom_tile(data = filter(image_data, value == -2), fill = background_colour, width = tile_width, height = tile_height) +
+            geom_tile(data = filter(image_data, .data$value == -2), fill = background_colour, width = tile_width, height = tile_height) +
 
             ## Non-assessed bases
-            geom_tile(data = filter(image_data, value == -1), fill = other_bases_colour, width = tile_width, height = tile_height,
+            geom_tile(data = filter(image_data, .data$value == -1), fill = other_bases_colour, width = tile_width, height = tile_height,
                       col = other_bases_outline_colour, linewidth = other_bases_outline_linewidth, linejoin = tolower(other_bases_outline_join)) +
 
             ## Modification-assessed bases
-            geom_tile(data = filter(image_data, value >= 0), aes(fill = .data$clamped_value), width = tile_width, height = tile_height,
+            geom_tile(data = filter(image_data, .data$value >= 0), aes(fill = .data$clamped_value), width = tile_width, height = tile_height,
                       col = modified_bases_outline_colour, linewidth = modified_bases_outline_linewidth, linejoin = tolower(modified_bases_outline_join)) +
             scale_fill_gradient(low = low_colour, high = high_colour, limits = c(low_clamp, high_clamp))
 
@@ -1118,4 +1118,4 @@ visualize_methylation_color_scale <- visualise_methylation_colour_scale
 #' @rdname rasterise_probabilities
 #' @usage NULL
 #' @export
-rasterize_matrix <- rasterise_matrix
+rasterize_probabilities <- rasterise_probabilities

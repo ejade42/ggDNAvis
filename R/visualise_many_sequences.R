@@ -262,10 +262,10 @@ visualise_many_sequences <- function(
         monitor_time <- monitor(monitor_performance, start_time, monitor_time, "creating basic plot via geom_tile")
         result <- ggplot(image_data, aes(x = .data$x, y = .data$y)) +
             ## Background
-            geom_tile(data = filter(image_data, value == 0), width = tile_width, height = tile_height, fill = background_colour) +
+            geom_tile(data = filter(image_data, .data$value == 0), width = tile_width, height = tile_height, fill = background_colour) +
 
             ## Base boxes
-            geom_tile(data = filter(image_data, value != 0), width = tile_width, height = tile_height, aes(fill = as.character(.data$value)),
+            geom_tile(data = filter(image_data, .data$value != 0), width = tile_width, height = tile_height, aes(fill = as.character(.data$value)),
                       col = outline_colour, linewidth = outline_linewidth, linejoin = tolower(outline_join)) +
             scale_fill_manual(values = sequence_colours)
 

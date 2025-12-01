@@ -3,7 +3,6 @@
 \name{rasterise_probabilities}
 \alias{rasterise_probabilities}
 \alias{rasterize_probabilities}
-\alias{rasterize_matrix}
 \title{Create dataframe of locations and rendered probabilities (\code{\link[=visualise_methylation]{visualise_methylation()}} helper)}
 \usage{
 rasterise_probabilities(
