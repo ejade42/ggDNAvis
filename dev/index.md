@@ -28,6 +28,9 @@
   - [4.2 Colour customisation](#id_42-colour-customisation)
   - [4.3 Layout customisation](#id_43-layout-customisation)
   - [4.4 Performance](#id_44-performance)
+    - [4.4.1 Performance monitoring](#id_441-performance-monitoring)
+    - [4.4.2 Raster versus tile
+      rendering](#id_442-raster-versus-tile-rendering)
 - [5 Visualising many DNA/RNA
   sequences](#id_5-visualising-many-dnarna-sequences)
   - [5.1 Basic visualisation](#id_51-basic-visualisation)
@@ -1643,6 +1646,74 @@ knitr::include_graphics(paste0(github_location, "single_sequence_14.png"))
 
 ## 4.4 Performance
 
+### 4.4.1 Performance monitoring
+
+The four major `visualise` functions in `ggDNAvis` can track the time
+taken for each step of the visualisation processing. When the
+`monitor_performance` argument is set to `TRUE`, the date and timestamp
+will be printed along with the function name (obtained via
+[`Sys.time()`](https://rdrr.io/r/base/Sys.time.html)). Then at the start
+of each processing step, the time since the start of the previous step
+(i.e. the time that the previous step took) will be printed along with
+total time since the start of the function.
+
+For example:
+
+``` r
+## Create image
+visualise_single_sequence(
+    sone_2019_f1_1_expanded_ggt_added,
+    filename = paste0(output_location, "single_sequence_15.png"),
+    return = FALSE,
+    monitor_performance = TRUE
+)
+```
+
+``` R
+## ℹ Verbose monitoring enabled
+
+## ℹ (2025-12-01 16:03:36) visualise_single_sequence start
+
+## ℹ (0.005 secs elapsed; 0.005 secs total) resolving aliases
+
+## ℹ (0.001 secs elapsed; 0.006 secs total) validating arguments
+
+## ℹ (0.001 secs elapsed; 0.007 secs total) splitting input seq to sequence vector
+
+## ℹ (0.001 secs elapsed; 0.008 secs total) rasterising image data
+
+## ℹ (0.002 secs elapsed; 0.011 secs total) choosing rendering method
+
+## ℹ (0.001 secs elapsed; 0.012 secs total) calculating tile sizes
+
+## ℹ (0.001 secs elapsed; 0.013 secs total) creating basic plot via geom_tile
+
+## ℹ (0.006 secs elapsed; 0.019 secs total) generating sequence text
+
+## ℹ (0.001 secs elapsed; 0.020 secs total) adding sequence text
+
+## ℹ (0.002 secs elapsed; 0.023 secs total) generating index annotations
+
+## ℹ (0.001 secs elapsed; 0.024 secs total) adding index annotations
+
+## ℹ (0.002 secs elapsed; 0.026 secs total) adding general plot themes
+
+## ℹ (0.008 secs elapsed; 0.034 secs total) calculating margin
+
+## ℹ (0.002 secs elapsed; 0.036 secs total) exporting image file
+
+## ℹ (0.992 secs elapsed; 1.029 secs total) done
+```
+
+``` r
+## View image
+knitr::include_graphics(paste0(github_location, "single_sequence_15.png"))
+```
+
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_15.png)
+
+### 4.4.2 Raster versus tile rendering
+
 Usually, visualisations in `ggDNAvis` are drawn via
 [`geom_tile()`](https://ggplot2.tidyverse.org/reference/geom_tile.html).
 This is highly customisable and allows box outlines, text
@@ -1677,30 +1748,55 @@ and produces a warning for excessive resolution is as follows:
 ## Create image
 visualise_single_sequence(
     sone_2019_f1_1_expanded_ggt_added,
-    filename = paste0(output_location, "single_sequence_15.png"),
+    filename = paste0(output_location, "single_sequence_16.png"),
     return = FALSE,
     sequence_colours = sequence_colour_palettes$bright_deep,
     outline_linewidth = 0,
     index_annotation_size = 0,
-    sequence_text_size = 0
+    sequence_text_size = 0,
+    monitor_performance = TRUE
 )
 ```
 
 ``` R
+## ℹ Verbose monitoring enabled
+
+## ℹ (2025-12-01 16:03:38) visualise_single_sequence start
+
+## ℹ (0.005 secs elapsed; 0.005 secs total) resolving aliases
+
+## ℹ (0.002 secs elapsed; 0.007 secs total) validating arguments
+
 ## ℹ Automatically setting index_annotation_interval to 0 as index_annotation_size is 0
+
+## ℹ (0.003 secs elapsed; 0.010 secs total) splitting input seq to sequence vector
+
+## ℹ (0.002 secs elapsed; 0.012 secs total) rasterising image data
+
+## ℹ (0.004 secs elapsed; 0.016 secs total) choosing rendering method
 
 ## ℹ Automatically using geom_raster (much faster than geom_tile) as no sequence text, index annotations, or outlines are present.
 
 ## Warning: When using geom_raster, it is recommended to use a smaller pixels_per_base e.g. 10, as there is no text/outlines that would benefit from higher resolution.
 ## Current value: 100
+
+## ℹ (0.004 secs elapsed; 0.020 secs total) creating basic plot via geom_raster
+
+## ℹ (0.006 secs elapsed; 0.025 secs total) adding general plot themes
+
+## ℹ (0.018 secs elapsed; 0.044 secs total) calculating margin
+
+## ℹ (0.003 secs elapsed; 0.046 secs total) exporting image file
+
+## ℹ (0.942 secs elapsed; 0.988 secs total) done
 ```
 
 ``` r
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_15.png"))
+knitr::include_graphics(paste0(github_location, "single_sequence_16.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_15.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_16.png)
 
 An example of forcing rasterisation when there would otherwise be
 sequence text, index annotations, and outlines (thus producing a
@@ -1710,7 +1806,7 @@ warning) is as follows:
 ## Create image
 visualise_single_sequence(
     sone_2019_f1_1_expanded_ggt_added,
-    filename = paste0(output_location, "single_sequence_16.png"),
+    filename = paste0(output_location, "single_sequence_17.png"),
     return = FALSE,
     sequence_colours = sequence_colour_palettes$bright_deep,
     outline_linewidth = 5,
@@ -1721,22 +1817,47 @@ visualise_single_sequence(
     sequence_text_size = 16,
     sequence_text_colour = "white",
     force_raster = TRUE,
-    pixels_per_base = 10
+    pixels_per_base = 10,
+    monitor_performance = TRUE
 )
 ```
 
 ``` R
+## ℹ Verbose monitoring enabled
+
+## ℹ (2025-12-01 16:03:39) visualise_single_sequence start
+
+## ℹ (0.004 secs elapsed; 0.004 secs total) resolving aliases
+
+## ℹ (0.002 secs elapsed; 0.005 secs total) validating arguments
+
+## ℹ (0.002 secs elapsed; 0.007 secs total) splitting input seq to sequence vector
+
+## ℹ (0.002 secs elapsed; 0.009 secs total) rasterising image data
+
+## ℹ (0.004 secs elapsed; 0.013 secs total) choosing rendering method
+
 ## Warning: Forcing geom_raster via force_raster = TRUE will remove all sequence
 ## text, index annotations (though any inserted blank lines/spacers will remain),
 ## and box outlines.
+
+## ℹ (0.002 secs elapsed; 0.015 secs total) creating basic plot via geom_raster
+
+## ℹ (0.006 secs elapsed; 0.020 secs total) adding general plot themes
+
+## ℹ (0.016 secs elapsed; 0.036 secs total) calculating margin
+
+## ℹ (0.003 secs elapsed; 0.039 secs total) exporting image file
+
+## ℹ (0.241 secs elapsed; 0.279 secs total) done
 ```
 
 ``` r
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_16.png"))
+knitr::include_graphics(paste0(github_location, "single_sequence_17.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_16.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_17.png)
 
 If sequence text, annotations, and outlines are all already off
 (i.e. `sequence_text_size = 0`, either `index_annotation_size = 0` or
@@ -1748,27 +1869,52 @@ do anything):
 ## Create image
 visualise_single_sequence(
     sone_2019_f1_1_expanded_ggt_added,
-    filename = paste0(output_location, "single_sequence_17.png"),
+    filename = paste0(output_location, "single_sequence_18.png"),
     return = FALSE,
     sequence_colours = sequence_colour_palettes$bright_deep,
     outline_linewidth = 0,
     index_annotation_interval = 0,
     sequence_text_size = 0,
     pixels_per_base = 10,
-    force_raster = TRUE
+    force_raster = TRUE,
+    monitor_performance = TRUE
 )
 ```
 
 ``` R
+## ℹ Verbose monitoring enabled
+
+## ℹ (2025-12-01 16:03:39) visualise_single_sequence start
+
+## ℹ (0.004 secs elapsed; 0.004 secs total) resolving aliases
+
+## ℹ (0.002 secs elapsed; 0.006 secs total) validating arguments
+
+## ℹ (0.002 secs elapsed; 0.008 secs total) splitting input seq to sequence vector
+
+## ℹ (0.002 secs elapsed; 0.010 secs total) rasterising image data
+
+## ℹ (0.004 secs elapsed; 0.014 secs total) choosing rendering method
+
 ## ℹ Automatically using geom_raster (much faster than geom_tile) as no sequence text, index annotations, or outlines are present.
+
+## ℹ (0.003 secs elapsed; 0.017 secs total) creating basic plot via geom_raster
+
+## ℹ (0.006 secs elapsed; 0.023 secs total) adding general plot themes
+
+## ℹ (0.014 secs elapsed; 0.036 secs total) calculating margin
+
+## ℹ (0.003 secs elapsed; 0.039 secs total) exporting image file
+
+## ℹ (0.111 secs elapsed; 0.150 secs total) done
 ```
 
 ``` r
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_17.png"))
+knitr::include_graphics(paste0(github_location, "single_sequence_18.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_17.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_18.png)
 
 # 5 Visualising many DNA/RNA sequences
 
@@ -2676,12 +2822,37 @@ visualise_many_sequences(
     sequence_text_size = 0,
     index_annotation_lines = NA,
     outline_linewidth = 0,
-    pixels_per_base = 20
+    pixels_per_base = 20,
+    monitor_performance = TRUE
 )
 ```
 
 ``` R
+## ℹ Verbose monitoring enabled
+
+## ℹ (2025-12-01 16:04:12) visualise_many_sequences start
+
+## ℹ (0.003 secs elapsed; 0.003 secs total) resolving aliases
+
+## ℹ (0.002 secs elapsed; 0.005 secs total) validating arguments
+
+## ℹ (0.003 secs elapsed; 0.008 secs total) inserting blank sequences at specified indices
+
+## ℹ (0.002 secs elapsed; 0.010 secs total) rasterising image data
+
+## ℹ (0.008 secs elapsed; 0.018 secs total) choosing rendering method
+
 ## ℹ Automatically using geom_raster (much faster than geom_tile) as no sequence text, index annotations, or outlines are present.
+
+## ℹ (0.003 secs elapsed; 0.021 secs total) creating basic plot via geom_raster
+
+## ℹ (0.005 secs elapsed; 0.026 secs total) adding general plot themes
+
+## ℹ (0.011 secs elapsed; 0.036 secs total) calculating margin
+
+## ℹ (0.002 secs elapsed; 0.039 secs total) exporting image file
+
+## ℹ (0.482 secs elapsed; 0.520 secs total) done
 ```
 
 ``` r
@@ -2710,14 +2881,39 @@ visualise_many_sequences(
     sequence_colours = sequence_colour_palettes$sanger,
     index_annotation_lines = 1:51,
     pixels_per_base = 20,
-    force_raster = TRUE
+    force_raster = TRUE,
+    monitor_performance = TRUE
 )
 ```
 
 ``` R
+## ℹ Verbose monitoring enabled
+
+## ℹ (2025-12-01 16:04:12) visualise_many_sequences start
+
+## ℹ (0.003 secs elapsed; 0.003 secs total) resolving aliases
+
+## ℹ (0.002 secs elapsed; 0.005 secs total) validating arguments
+
+## ℹ (0.002 secs elapsed; 0.007 secs total) inserting blank sequences at specified indices
+
+## ℹ (0.002 secs elapsed; 0.008 secs total) rasterising image data
+
+## ℹ (0.009 secs elapsed; 0.018 secs total) choosing rendering method
+
 ## Warning: Forcing geom_raster via force_raster = TRUE will remove all sequence
 ## text, index annotations (though any inserted blank lines/spacers will remain),
 ## and box outlines.
+
+## ℹ (0.002 secs elapsed; 0.020 secs total) creating basic plot via geom_raster
+
+## ℹ (0.005 secs elapsed; 0.024 secs total) adding general plot themes
+
+## ℹ (0.012 secs elapsed; 0.036 secs total) calculating margin
+
+## ℹ (0.002 secs elapsed; 0.038 secs total) exporting image file
+
+## ℹ (0.706 secs elapsed; 0.744 secs total) done
 ```
 
 ``` r
