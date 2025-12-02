@@ -164,22 +164,26 @@ read_modified_fastq <- function(filename = file.choose(), debug = FALSE) {
             }
         }))
 
+        modification_skips_named <- Map(setNames, modification_skips, modification_types)
 
-        ## Convert MM tags into absolute vectors of locations
-        ## This is a double for loop, but the internal one is generally small (e.g. 2 modification types)
-        modification_locations <- list()
-        for (i in 1:length(read_ids)) {
-            read_locations <- character()
-            for (j in 1:length(modification_skips[[i]])) {
-                this_type       <- modification_types[[i]][j]
-                this_type_skips <- modification_skips[[i]][j]
-                target_base <- substr(this_type, 1, 1)
+        ## Create map of all locations of target bases
+        unique_modification_types <- unique(unlist(modification_types))
+        unique_modified_bases <- unique(substr(unique_modification_types, 1, 1))
+        base_locations <- lapply(unique_modified_bases, function(base) {
+            lapply(str_locate_all(sequences, base), function(x) {x[,1]})
+        })
+        names(base_locations) <- unique_modified_bases
 
-                this_type_locations <- convert_MM_vector_to_locations(sequences[i], string_to_vector(this_type_skips), target_base)
-                read_locations <- c(read_locations, vector_to_string(this_type_locations))
-            }
-            modification_locations[[i]] <- read_locations
-        }
+
+        ## Convert MM tags (skips) into absolute vectors of locations
+        modification_locations <- lapply(seq_along(modification_skips_named), function(i) {
+            sapply(names(modification_skips_named[[i]]), function(type) {
+                indices_from_target_base <- cumsum(string_to_vector(modification_skips_named[[i]][type]) + 1)
+                target_base_locations <- base_locations[[substr(type, 1, 1)]][[i]]
+                locations <- target_base_locations[indices_from_target_base]
+                return(vector_to_string(locations))
+            })
+        })
 
         ## WORKING ON ML:
         ## Calculate how many CpGs (or other bases) were assessed for each type of modification along each read
