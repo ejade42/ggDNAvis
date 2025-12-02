@@ -1,4 +1,4 @@
-# Convert MM tag to absolute index locations ([`read_modified_fastq()`](https://ejade42.github.io/ggDNAvis/reference/read_modified_fastq.md) helper)
+# Convert MM tag to absolute index locations (deprecated helper)
 
 This function takes a sequence, a SAM-style vector of number of
 potential target bases to skip in between each target base that was
@@ -84,6 +84,7 @@ convert_MM_vector_to_locations(
     skips = c(0, 0, 0, 0),
     target_base = "C"
 )
+#> Warning: convert_MM_vector_to_locations is no longer used so may be removed in future updates
 #> [1]  3  6  9 12
 
 convert_MM_vector_to_locations(
@@ -91,6 +92,7 @@ convert_MM_vector_to_locations(
     skips = c(1, 1, 1, 1),
     target_base = "G"
 )
+#> Warning: convert_MM_vector_to_locations is no longer used so may be removed in future updates
 #> [1]  2  5  8 11
 
 convert_MM_vector_to_locations(
@@ -98,5 +100,6 @@ convert_MM_vector_to_locations(
     skips = c(0, 0, 2, 1, 0),
     target_base = "G"
 )
+#> Warning: convert_MM_vector_to_locations is no longer used so may be removed in future updates
 #> [1]  1  2  7 10 11
 ```

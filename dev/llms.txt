@@ -4650,11 +4650,7 @@ they are available if needed)
   helper)
 
 - [`convert_MM_vector_to_locations()`](https://ejade42.github.io/ggDNAvis/reference/convert_MM_vector_to_locations.md)
-  :
-
-  Convert MM tag to absolute index locations
-  ([`read_modified_fastq()`](https://ejade42.github.io/ggDNAvis/reference/read_modified_fastq.md)
-  helper)
+  : Convert MM tag to absolute index locations (deprecated helper)
 
 - [`convert_modification_to_number_vector()`](https://ejade42.github.io/ggDNAvis/reference/convert_modification_to_number_vector.md)
   :
