@@ -164,7 +164,8 @@ read_modified_fastq <- function(filename = file.choose(), debug = FALSE) {
             }
         }))
 
-        modification_skips_named <- Map(setNames, modification_skips, modification_types)
+        ## Use 'types' to name 'skips'
+        modification_skips <- Map(setNames, modification_skips, modification_types)
 
         ## Create map of all locations of target bases
         unique_modification_types <- unique(unlist(modification_types))
@@ -176,9 +177,9 @@ read_modified_fastq <- function(filename = file.choose(), debug = FALSE) {
 
 
         ## Convert MM tags (skips) into absolute vectors of locations
-        modification_locations <- lapply(seq_along(modification_skips_named), function(i) {
-            sapply(names(modification_skips_named[[i]]), function(type) {
-                indices_from_target_base <- cumsum(string_to_vector(modification_skips_named[[i]][type]) + 1)
+        modification_locations <- lapply(seq_along(modification_skips), function(i) {
+            sapply(names(modification_skips[[i]]), function(type) {
+                indices_from_target_base <- cumsum(string_to_vector(modification_skips[[i]][type]) + 1)
                 target_base_locations <- base_locations[[substr(type, 1, 1)]][[i]]
                 locations <- target_base_locations[indices_from_target_base]
                 return(vector_to_string(locations))
@@ -186,33 +187,24 @@ read_modified_fastq <- function(filename = file.choose(), debug = FALSE) {
         })
 
         ## WORKING ON ML:
-        ## Calculate how many CpGs (or other bases) were assessed for each type of modification along each read
-        modification_lengths <- lapply(modification_skips, function(x) {
-            sapply(x, function(y) length(string_to_vector(y)))
-        })
+        ## Use lengths of skips vectors (i.e. number of assessed bases per read)
+        ## to split up probability list correctly.
+        modification_probabilities <- lapply(seq_along(modification_skips), function(i) {
+            lengths <- sapply(modification_skips[[i]], function(x) length(string_to_vector(x)))
 
-        ## Go along the ML tag and extract the relevant indices of probabilities
-        modification_probabilities <- list()
-        for (i in 1:length(read_ids)) {
-            read_probabilities <- character()
+            starts <- cumsum(c(0, head(lengths, -1))) + 1
+            ends   <- cumsum(lengths)
 
-            start <- 1
-            end <- 0
-            for (length in modification_lengths[[i]]) {
-                end <- end + length
-
-                if (length != 0) {
-                    this_type_probabilities <- string_to_vector(ML_tags[i])[start:end]
+            ## For each modification type, return the relevant slice of the probabilities list (ML tag)
+            ## if length > 0, or "" if length == 0.
+            sapply(seq_along(modification_skips[[i]]), function(j) {
+                if (lengths[j] != 0) {
+                    return(vector_to_string(string_to_vector(ML_tags[[i]])[starts[j]:ends[j]]))
                 } else {
-                    this_type_probabilities <- ""
+                    return("")
                 }
-
-                read_probabilities <- c(read_probabilities, vector_to_string(this_type_probabilities))
-                start <- start + length
-            }
-
-            modification_probabilities[[i]] <- read_probabilities
-        }
+            })
+        })
 
         ## Return important values in list
         if (debug == TRUE) {

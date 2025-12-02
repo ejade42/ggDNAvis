@@ -18,6 +18,7 @@ Imports:
     png,
     ragg,
     rlang,
+    stats,
     stringr,
     tidyr,
     utils
