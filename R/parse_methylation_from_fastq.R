@@ -276,7 +276,7 @@ read_modified_fastq <- function(filename = file.choose(), debug = FALSE) {
 
 
 
-#' Convert MM tag to absolute index locations ([read_modified_fastq()] helper)
+#' Convert MM tag to absolute index locations (deprecated helper)
 #'
 #' This function takes a sequence, a SAM-style vector of number of potential
 #' target bases to skip in between each target base that was actually assessed,
@@ -336,6 +336,8 @@ read_modified_fastq <- function(filename = file.choose(), debug = FALSE) {
 #'
 #' @export
 convert_MM_vector_to_locations <- function(sequence, skips, target_base = "C") {
+    warn("convert_MM_vector_to_locations is no longer used so may be removed in future updates", class = "deprecated")
+
     ## Validate arguments
     ## ---------------------------------------------------------------------
     not_na_or_null <- list(sequence = sequence, target_base = target_base)

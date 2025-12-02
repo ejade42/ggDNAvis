@@ -2,7 +2,7 @@
 % Please edit documentation in R/parse_methylation_from_fastq.R
 \name{convert_MM_vector_to_locations}
 \alias{convert_MM_vector_to_locations}
-\title{Convert MM tag to absolute index locations (\code{\link[=read_modified_fastq]{read_modified_fastq()}} helper)}
+\title{Convert MM tag to absolute index locations (deprecated helper)}
 \usage{
 convert_MM_vector_to_locations(sequence, skips, target_base = "C")
 }

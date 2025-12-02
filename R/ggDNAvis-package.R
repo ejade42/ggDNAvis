@@ -6,6 +6,8 @@
 #' @import dplyr
 #' @importFrom utils packageDescription head tail
 #' @importFrom stats setNames
+#' @importFrom png readPNG
+#' @importFrom grid grid.newpage grid.raster
 #' @importFrom ggnewscale new_scale_fill
 #' @importFrom stringr str_locate_all
 #' @importFrom tidyr replace_na drop_na
