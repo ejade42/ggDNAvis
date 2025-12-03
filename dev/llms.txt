@@ -2987,7 +2987,7 @@ github_table(head(merged_modification_data, 4))
 
 Once we have the dataframe with all forward modification columns, we can
 extract and sort them with
-[`extract_methylation_from_dataframe()`](https://ejade42.github.io/ggDNAvis/reference/extract_methylation_from_dataframe.md).
+[`extract_methylation_from_dataframe()`](https://ejade42.github.io/ggDNAvis/reference/extract_and_sort_methylation.md).
 This function works extremely similarly to
 [`extract_and_sort_sequences()`](https://ejade42.github.io/ggDNAvis/reference/extract_and_sort_sequences.md)
 (as explained with examples previously in the [many sequences
@@ -3432,7 +3432,7 @@ knitr::include_graphics(paste0(github_location, "modification_01_scalebar.png"))
 
 ## 6.2 Sequence arrangement customisation
 
-[`extract_methylation_from_dataframe()`](https://ejade42.github.io/ggDNAvis/reference/extract_methylation_from_dataframe.md)
+[`extract_methylation_from_dataframe()`](https://ejade42.github.io/ggDNAvis/reference/extract_and_sort_methylation.md)
 is customisable in all the same ways as
 [`extract_and_sort_sequences()`](https://ejade42.github.io/ggDNAvis/reference/extract_and_sort_sequences.md),
 as discussed in detail in the [many sequences arrangement
@@ -3440,7 +3440,7 @@ customisation](#id_52-sequence-arrangement-customisation) section. This
 section will provide a brief reminder, but follow that link for a full
 explanation.
 
-[`extract_methylation_from_dataframe()`](https://ejade42.github.io/ggDNAvis/reference/extract_methylation_from_dataframe.md)
+[`extract_methylation_from_dataframe()`](https://ejade42.github.io/ggDNAvis/reference/extract_and_sort_methylation.md)
 arguments:
 
 - `modification_data`: The data to be processed
@@ -4572,7 +4572,7 @@ Frequently used functions for importing and processing
   : Merge methylation with metadata
 - [`extract_and_sort_sequences()`](https://ejade42.github.io/ggDNAvis/reference/extract_and_sort_sequences.md)
   : Extract, sort, and add spacers between sequences in a dataframe
-- [`extract_methylation_from_dataframe()`](https://ejade42.github.io/ggDNAvis/reference/extract_methylation_from_dataframe.md)
+- [`extract_and_sort_methylation()`](https://ejade42.github.io/ggDNAvis/reference/extract_and_sort_methylation.md)
   : Extract methylation information from dataframe for visualisation
 
 ### Included data

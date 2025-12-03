@@ -72,7 +72,7 @@ New features:
 User-facing changes:
 
 - Changed
-  [`extract_methylation_from_dataframe()`](https://ejade42.github.io/ggDNAvis/reference/extract_methylation_from_dataframe.md)
+  [`extract_methylation_from_dataframe()`](https://ejade42.github.io/ggDNAvis/reference/extract_and_sort_methylation.md)
   to now return a list of 4 vectors instead of 3, with `sequences`
   added. `sequence_lengths` is still returned just in case it’s useful
   for anything, but it is no longer used in

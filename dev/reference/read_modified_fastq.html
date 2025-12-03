@@ -104,10 +104,10 @@ to \(\frac{p+1}{256}\).<br><br>
 To extract the numbers from these columns as numeric vectors to analyse, use <code><a href="string_to_vector.html">string_to_vector()</a></code> e.g.
 <code>list_of_locations &lt;- lapply(test_01$`C+h?_locations`, string_to_vector)</code>. Be aware that the SAM
 modification types often contain special characters, meaning the colname may need to be enclosed in
-backticks as in this example. Alternatively, use <code><a href="extract_methylation_from_dataframe.html">extract_methylation_from_dataframe()</a></code> to
+backticks as in this example. Alternatively, use <code><a href="extract_and_sort_methylation.html">extract_methylation_from_dataframe()</a></code> to
 create a list of locations, probabilities, and lengths ready for visualisation in
 <code><a href="visualise_methylation.html">visualise_methylation()</a></code>. This works with any modification type extracted in this function,
-just provide the relevant colname when calling <code><a href="extract_methylation_from_dataframe.html">extract_methylation_from_dataframe()</a></code>.<br><br>
+just provide the relevant colname when calling <code><a href="extract_and_sort_methylation.html">extract_methylation_from_dataframe()</a></code>.<br><br>
 Optionally (by specifying <code>debug = TRUE</code>), the dataframe will also contain columns of
 the raw MM and ML tags (<code>&lt;MM/ML&gt;_raw</code>) and of the same tags with the initial label
 trimmed out (<code>&lt;MM/ML&gt;_tags</code>). This is not recommended in most situations but may help

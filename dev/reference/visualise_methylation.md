@@ -6,7 +6,7 @@ see
 
 This function takes vectors of modifications locations, modification
 probabilities, and sequence lengths (e.g. created by
-[`extract_methylation_from_dataframe()`](https://ejade42.github.io/ggDNAvis/reference/extract_methylation_from_dataframe.md))
+[`extract_and_sort_methylation()`](https://ejade42.github.io/ggDNAvis/reference/extract_and_sort_methylation.md))
 and visualises the probability of methylation (or other modification)
 across each read.
 
@@ -391,7 +391,7 @@ exported at the correct aspect ratio.
 ``` r
 # \donttest{
 ## Extract info from dataframe
-methylation_info <- extract_methylation_from_dataframe(example_many_sequences)
+methylation_info <- extract_and_sort_methylation(example_many_sequences)
 
 ## Visualise example_many_sequences with all defaults
 ## This looks ugly because it isn't at the right scale/aspect ratio

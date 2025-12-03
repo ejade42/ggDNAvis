@@ -174,7 +174,11 @@ methylation_data <- read_modified_fastq(modified_fastq_file)
 metadata <- read.csv(metadata_file)
 
 ## Merge data (including reversing if needed)
-merge_methylation_with_metadata(methylation_data, metadata, reversed_location_offset = 0)
+merge_methylation_with_metadata(
+    methylation_data,
+    metadata,
+    reversed_location_offset = 0
+)
 #>     read   family individual direction
 #> 1  F1-1a Family 1       F1-1   forward
 #> 2  F1-1b Family 1       F1-1   forward
@@ -537,7 +541,11 @@ merge_methylation_with_metadata(methylation_data, metadata, reversed_location_of
 #> 23                                       161,156,9,65,198,255,245,191,174,63,155,146,13,95,228,100,132,45,49
 
 ## Merge data with offset = 1
-merge_methylation_with_metadata(methylation_data, metadata, reversed_location_offset = 1)
+merge_methylation_with_metadata(
+    methylation_data,
+    metadata,
+    reversed_location_offset = 1
+)
 #>     read   family individual direction
 #> 1  F1-1a Family 1       F1-1   forward
 #> 2  F1-1b Family 1       F1-1   forward
@@ -900,7 +908,12 @@ merge_methylation_with_metadata(methylation_data, metadata, reversed_location_of
 #> 23                                       161,156,9,65,198,255,245,191,174,63,155,146,13,95,228,100,132,45,49
 
 ## Merge data with offset = 1 but without complementing
-merge_methylation_with_metadata(methylation_data, metadata, reversed_location_offset = 1, reverse_complement_mode = "reverse_only")
+merge_methylation_with_metadata(
+    methylation_data,
+    metadata,
+    reversed_location_offset = 1,
+    reverse_complement_mode = "reverse_only"
+)
 #> Warning: It is not recommended to use reverse_complement_mode = reverse_only with an offset value other than 0, as this will make the locations not match the sequence.
 #> Current reversed_location_offset value: 1
 #>     read   family individual direction

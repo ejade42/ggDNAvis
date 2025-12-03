@@ -69,4 +69,11 @@ reverse_sequence_if_needed(
     output_mode = "RNA"
 )
 #> [1] "GCCUUA" "UAAGGC"
+
+reverse_sequence_if_needed(
+    sequence_vector = c("TAAGGC", "TAAGGC"),
+    direction_vector = c("reverse", "forward"),
+    output_mode = "reverse_only"
+)
+#> [1] "CGGAAT" "TAAGGC"
 ```

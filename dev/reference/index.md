@@ -45,7 +45,7 @@ Frequently used functions for importing and processing
   : Merge methylation with metadata
 - [`extract_and_sort_sequences()`](https://ejade42.github.io/ggDNAvis/reference/extract_and_sort_sequences.md)
   : Extract, sort, and add spacers between sequences in a dataframe
-- [`extract_methylation_from_dataframe()`](https://ejade42.github.io/ggDNAvis/reference/extract_methylation_from_dataframe.md)
+- [`extract_and_sort_methylation()`](https://ejade42.github.io/ggDNAvis/reference/extract_and_sort_methylation.md)
   : Extract methylation information from dataframe for visualisation
 
 ### Included data

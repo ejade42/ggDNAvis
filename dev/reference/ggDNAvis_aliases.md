@@ -9,13 +9,8 @@ If any American spellings don't work, I most likely overlooked them and
 can easily fix, so please submit a bug report by creating a github issue
 (<https://github.com/ejade42/ggDNAvis/issues>).
 
-There are currently four major functions and one dataset with aliases
-configured:
-
-- [`sequence_colour_palettes`](https://ejade42.github.io/ggDNAvis/reference/sequence_colour_palettes.md)
-  ([`sequence_color_palettes`](https://ejade42.github.io/ggDNAvis/reference/sequence_colour_palettes.md)
-  &
-  [`sequence_col_palettes`](https://ejade42.github.io/ggDNAvis/reference/sequence_colour_palettes.md))
+All four major `visualise_` functions have aliases to also accept
+`visualize_`:
 
 - [`visualise_many_sequences()`](https://ejade42.github.io/ggDNAvis/reference/visualise_many_sequences.md)
   ([`visualize_many_sequences()`](https://ejade42.github.io/ggDNAvis/reference/visualise_many_sequences.md))
@@ -29,7 +24,32 @@ configured:
 - [`visualise_single_sequence()`](https://ejade42.github.io/ggDNAvis/reference/visualise_single_sequence.md)
   ([`visualize_single_sequence()`](https://ejade42.github.io/ggDNAvis/reference/visualise_single_sequence.md))
 
-Additionally there are three helper functions with aliases:
+As of v1.0.0,
+[`extract_methylation_from_dataframe()`](https://ejade42.github.io/ggDNAvis/reference/extract_and_sort_methylation.md)
+has been renamed
+[`extract_and_sort_methylation()`](https://ejade42.github.io/ggDNAvis/reference/extract_and_sort_methylation.md)
+for consistency with
+[`extract_and_sort_sequences()`](https://ejade42.github.io/ggDNAvis/reference/extract_and_sort_sequences.md).
+To preserve compatibility and ensure consistency, both functions now
+accept either name formulation:
+
+- [`extract_and_sort_sequences()`](https://ejade42.github.io/ggDNAvis/reference/extract_and_sort_sequences.md)
+  ([`extract_sequences_from_dataframe()`](https://ejade42.github.io/ggDNAvis/reference/extract_and_sort_sequences.md))
+
+- [`extract_and_sort_methylation()`](https://ejade42.github.io/ggDNAvis/reference/extract_and_sort_methylation.md)
+  ([`extract_methylation_from_dataframe()`](https://ejade42.github.io/ggDNAvis/reference/extract_and_sort_methylation.md))
+
+The builtin dataset
+[`sequence_colour_palettes`](https://ejade42.github.io/ggDNAvis/reference/sequence_colour_palettes.md),
+like all `colour` arguments, also accepts `color` or `col`:
+
+- [`sequence_colour_palettes`](https://ejade42.github.io/ggDNAvis/reference/sequence_colour_palettes.md)
+  ([`sequence_color_palettes`](https://ejade42.github.io/ggDNAvis/reference/sequence_colour_palettes.md)
+  &
+  [`sequence_col_palettes`](https://ejade42.github.io/ggDNAvis/reference/sequence_colour_palettes.md))
+
+Additionally, the three `rasterise_` helper functions also accept
+`rasterize_`:
 
 - [`rasterise_matrix()`](https://ejade42.github.io/ggDNAvis/reference/rasterise_matrix.md)
   ([`rasterize_matrix()`](https://ejade42.github.io/ggDNAvis/reference/rasterise_matrix.md))

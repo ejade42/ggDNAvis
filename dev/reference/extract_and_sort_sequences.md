@@ -1,19 +1,23 @@
 # Extract, sort, and add spacers between sequences in a dataframe
 
+`extract_sequences_from_dataframe()` is an alias for
+`extract_and_sort_sequences()` - see
+[aliases](https://ejade42.github.io/ggDNAvis/reference/ggDNAvis_aliases.md).
+
 This function takes a dataframe that contains sequences and metadata,
 recursively splits it into multiple levels of groups defined by
 `grouping_levels`, and adds breaks between each level of group as
 defined by `grouping_levels`. Within each lowest-level group, reads are
-sorted by `sort_by`, with order determined by `desc_sort`.  
-  
+sorted by `sort_by`, with order determined by `desc_sort`.
+
 Default values are set up to work with the included dataset
-[`example_many_sequences`](https://ejade42.github.io/ggDNAvis/reference/example_many_sequences.md).  
-  
+[`example_many_sequences`](https://ejade42.github.io/ggDNAvis/reference/example_many_sequences.md).
+
 The returned sequences vector is ideal input for
-[`visualise_many_sequences()`](https://ejade42.github.io/ggDNAvis/reference/visualise_many_sequences.md).  
-  
+[`visualise_many_sequences()`](https://ejade42.github.io/ggDNAvis/reference/visualise_many_sequences.md).
+
 Also called by
-[`extract_methylation_from_dataframe()`](https://ejade42.github.io/ggDNAvis/reference/extract_methylation_from_dataframe.md)
+[`extract_methylation_from_dataframe()`](https://ejade42.github.io/ggDNAvis/reference/extract_and_sort_methylation.md)
 to produce input for
 [`visualise_methylation()`](https://ejade42.github.io/ggDNAvis/reference/visualise_methylation.md).
 

@@ -114,7 +114,10 @@ fastq_data <- read_fastq(fastq_file)
 metadata   <- read.csv(metadata_file)
 
 ## Merge data (including reversing if needed)
-merge_fastq_with_metadata(fastq_data, metadata)
+merge_fastq_with_metadata(
+    fastq_data,
+    metadata
+)
 #>     read   family individual direction
 #> 1  F1-1a Family 1       F1-1   forward
 #> 2  F1-1b Family 1       F1-1   forward
@@ -261,7 +264,11 @@ merge_fastq_with_metadata(fastq_data, metadata)
 #> 23             5@<733';9+3BB)=69,3!.2B*86'8E>@3?!(36:<002/4>:1.43A!+;<.3G*G8?0*991,B(C/"I9*1-86)8.;;5-0+=
 
 ## Merge data reversing but not complementing sequences
-merge_fastq_with_metadata(fastq_data, metadata, reverse_complement_mode = "reverse_only")
+merge_fastq_with_metadata(
+    fastq_data,
+    metadata,
+    reverse_complement_mode = "reverse_only"
+)
 #>     read   family individual direction
 #> 1  F1-1a Family 1       F1-1   forward
 #> 2  F1-1b Family 1       F1-1   forward

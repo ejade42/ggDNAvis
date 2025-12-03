@@ -302,7 +302,7 @@
 <span></span>
 <span><span class="co">## Extract list of character vectors</span></span>
 <span><span class="co">## These arguments should all be considered, as they are highly specific to your data</span></span>
-<span><span class="va">methylation_for_visualisation</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/extract_methylation_from_dataframe.html">extract_methylation_from_dataframe</a></span><span class="op">(</span></span>
+<span><span class="va">methylation_for_visualisation</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/extract_and_sort_methylation.html">extract_methylation_from_dataframe</a></span><span class="op">(</span></span>
 <span>    modification_data <span class="op">=</span> <span class="va">merged_modification_data</span>,</span>
 <span>    locations_colname <span class="op">=</span> <span class="st">"forward_C+m?_locations"</span>,</span>
 <span>    probabilities_colname <span class="op">=</span> <span class="st">"forward_C+m?_probabilities"</span>,</span>
@@ -3056,11 +3056,11 @@
 </tr>
 </tbody>
 </table>
-<p>Once we have the dataframe with all forward modification columns, we can extract and sort them with <code><a href="reference/extract_methylation_from_dataframe.html">extract_methylation_from_dataframe()</a></code>. This function works extremely similarly to <code><a href="reference/extract_and_sort_sequences.html">extract_and_sort_sequences()</a></code> (as explained with examples previously in the <a href="#id_52-sequence-arrangement-customisation">many sequences arrangement customisation</a> section), but instead of taking a single argument for the sequence column to extract, it takes four arguments for locations, probabilities, sequences, and sequence length colnames to extract:</p>
+<p>Once we have the dataframe with all forward modification columns, we can extract and sort them with <code><a href="reference/extract_and_sort_methylation.html">extract_methylation_from_dataframe()</a></code>. This function works extremely similarly to <code><a href="reference/extract_and_sort_sequences.html">extract_and_sort_sequences()</a></code> (as explained with examples previously in the <a href="#id_52-sequence-arrangement-customisation">many sequences arrangement customisation</a> section), but instead of taking a single argument for the sequence column to extract, it takes four arguments for locations, probabilities, sequences, and sequence length colnames to extract:</p>
 <div class="sourceCode" id="cb133"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Extract locations, probabilities, and lengths</span></span>
 <span><span class="co">## Remember that example_many_sequences is identical to merged_modification_data</span></span>
-<span><span class="va">methylation_data_for_visualisation</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/extract_methylation_from_dataframe.html">extract_methylation_from_dataframe</a></span><span class="op">(</span></span>
+<span><span class="va">methylation_data_for_visualisation</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/extract_and_sort_methylation.html">extract_methylation_from_dataframe</a></span><span class="op">(</span></span>
 <span>    <span class="va">example_many_sequences</span>,</span>
 <span>    locations_colname <span class="op">=</span> <span class="st">"methylation_locations"</span>,</span>
 <span>    probabilities_colname <span class="op">=</span> <span class="st">"methylation_probabilities"</span>,</span>
@@ -3239,7 +3239,7 @@
 <p>To use hydroxymethylation instead of methylation, we can simply change the colnames we read from:</p>
 <div class="sourceCode" id="cb135"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Extract locations, probabilities, and lengths</span></span>
-<span><span class="va">hydroxymethylation_data_for_visualisation</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/extract_methylation_from_dataframe.html">extract_methylation_from_dataframe</a></span><span class="op">(</span></span>
+<span><span class="va">hydroxymethylation_data_for_visualisation</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/extract_and_sort_methylation.html">extract_methylation_from_dataframe</a></span><span class="op">(</span></span>
 <span>    <span class="va">example_many_sequences</span>,</span>
 <span>    locations_colname <span class="op">=</span> <span class="st">"hydroxymethylation_locations"</span>,</span>
 <span>    probabilities_colname <span class="op">=</span> <span class="st">"hydroxymethylation_probabilities"</span>,</span>
@@ -3445,8 +3445,8 @@
 <div class="section level2">
 <h2 id="id_62-sequence-arrangement-customisation">6.2 Sequence arrangement customisation<a class="anchor" aria-label="anchor" href="#id_62-sequence-arrangement-customisation"></a>
 </h2>
-<p><code><a href="reference/extract_methylation_from_dataframe.html">extract_methylation_from_dataframe()</a></code> is customisable in all the same ways as <code><a href="reference/extract_and_sort_sequences.html">extract_and_sort_sequences()</a></code>, as discussed in detail in the <a href="#id_52-sequence-arrangement-customisation">many sequences arrangement customisation</a> section. This section will provide a brief reminder, but follow that link for a full explanation.</p>
-<p><code><a href="reference/extract_methylation_from_dataframe.html">extract_methylation_from_dataframe()</a></code> arguments:</p>
+<p><code><a href="reference/extract_and_sort_methylation.html">extract_methylation_from_dataframe()</a></code> is customisable in all the same ways as <code><a href="reference/extract_and_sort_sequences.html">extract_and_sort_sequences()</a></code>, as discussed in detail in the <a href="#id_52-sequence-arrangement-customisation">many sequences arrangement customisation</a> section. This section will provide a brief reminder, but follow that link for a full explanation.</p>
+<p><code><a href="reference/extract_and_sort_methylation.html">extract_methylation_from_dataframe()</a></code> arguments:</p>
 <ul>
 <li>
 <code>modification_data</code>: The data to be processed</li>
@@ -3468,7 +3468,7 @@
 <p>A single example of how the arrangement might be customised:</p>
 <div class="sourceCode" id="cb139"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Extract information to list of character vectors</span></span>
-<span><span class="va">methylation_data_for_visualisation</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/extract_methylation_from_dataframe.html">extract_methylation_from_dataframe</a></span><span class="op">(</span></span>
+<span><span class="va">methylation_data_for_visualisation</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/extract_and_sort_methylation.html">extract_methylation_from_dataframe</a></span><span class="op">(</span></span>
 <span>    <span class="va">example_many_sequences</span>,</span>
 <span>    locations_colname <span class="op">=</span> <span class="st">"methylation_locations"</span>,</span>
 <span>    probabilities_colname <span class="op">=</span> <span class="st">"methylation_probabilities"</span>,</span>
@@ -3517,7 +3517,7 @@
 <p>For example:</p>
 <div class="sourceCode" id="cb140"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Extract information to list of character vectors using all default settings</span></span>
-<span><span class="va">methylation_data_for_visualisation</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/extract_methylation_from_dataframe.html">extract_methylation_from_dataframe</a></span><span class="op">(</span><span class="va">example_many_sequences</span><span class="op">)</span></span>
+<span><span class="va">methylation_data_for_visualisation</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/extract_and_sort_methylation.html">extract_methylation_from_dataframe</a></span><span class="op">(</span><span class="va">example_many_sequences</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## Use saved methylation data for visualisation to make image</span></span>
 <span><span class="fu"><a href="reference/visualise_methylation.html">visualise_methylation</a></span><span class="op">(</span></span>
@@ -3560,7 +3560,7 @@
 <p>An example drawing the sequences is:</p>
 <div class="sourceCode" id="cb141"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Extract information to list of character vectors using all default settings</span></span>
-<span><span class="va">methylation_data_for_visualisation</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/extract_methylation_from_dataframe.html">extract_methylation_from_dataframe</a></span><span class="op">(</span><span class="va">example_many_sequences</span><span class="op">)</span></span>
+<span><span class="va">methylation_data_for_visualisation</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/extract_and_sort_methylation.html">extract_methylation_from_dataframe</a></span><span class="op">(</span><span class="va">example_many_sequences</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## Use saved methylation data for visualisation to make image</span></span>
 <span><span class="fu"><a href="reference/visualise_methylation.html">visualise_methylation</a></span><span class="op">(</span></span>
@@ -3688,7 +3688,7 @@
 <p>Here is an example with wild colours:</p>
 <div class="sourceCode" id="cb147"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Extract information to list of character vectors</span></span>
-<span><span class="va">methylation_data_for_visualisation</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/extract_methylation_from_dataframe.html">extract_methylation_from_dataframe</a></span><span class="op">(</span></span>
+<span><span class="va">methylation_data_for_visualisation</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/extract_and_sort_methylation.html">extract_methylation_from_dataframe</a></span><span class="op">(</span></span>
 <span>    <span class="va">example_many_sequences</span>,</span>
 <span>    locations_colname <span class="op">=</span> <span class="st">"methylation_locations"</span>,</span>
 <span>    probabilities_colname <span class="op">=</span> <span class="st">"methylation_probabilities"</span>,</span>
@@ -3748,7 +3748,7 @@
 <p>One way this might be used in practice is for making a graphic in the “lollipop” style where methylated/modified CGs are black and unmodified CGs are white:</p>
 <div class="sourceCode" id="cb149"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Extract information to list of character vectors</span></span>
-<span><span class="va">methylation_data_for_visualisation</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/extract_methylation_from_dataframe.html">extract_methylation_from_dataframe</a></span><span class="op">(</span></span>
+<span><span class="va">methylation_data_for_visualisation</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/extract_and_sort_methylation.html">extract_methylation_from_dataframe</a></span><span class="op">(</span></span>
 <span>    <span class="va">example_many_sequences</span>,</span>
 <span>    locations_colname <span class="op">=</span> <span class="st">"methylation_locations"</span>,</span>
 <span>    probabilities_colname <span class="op">=</span> <span class="st">"methylation_probabilities"</span>,</span>
@@ -3813,7 +3813,7 @@
 <p>Here is the lollipop scale but with <code>low_clamp = 127</code> and <code>high_clamp = 128</code> to make all values binary white/black depending on whether they are below or above the equivalent of 0.5 methylation probability:</p>
 <div class="sourceCode" id="cb153"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Extract information to list of character vectors</span></span>
-<span><span class="va">methylation_data_for_visualisation</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/extract_methylation_from_dataframe.html">extract_methylation_from_dataframe</a></span><span class="op">(</span></span>
+<span><span class="va">methylation_data_for_visualisation</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/extract_and_sort_methylation.html">extract_methylation_from_dataframe</a></span><span class="op">(</span></span>
 <span>    <span class="va">example_many_sequences</span>,</span>
 <span>    locations_colname <span class="op">=</span> <span class="st">"methylation_locations"</span>,</span>
 <span>    probabilities_colname <span class="op">=</span> <span class="st">"methylation_probabilities"</span>,</span>
@@ -3870,7 +3870,7 @@
 <p>This means one approach is to define clamping values as <code>proportion*255</code>, as that can be easier than working out which integer to use. Using the standard blue/red colour scheme with the hydroxymethylation data but clamping at 30% and 70% probability gives the following:</p>
 <div class="sourceCode" id="cb157"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Extract information to list of character vectors</span></span>
-<span><span class="va">methylation_data_for_visualisation</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/extract_methylation_from_dataframe.html">extract_methylation_from_dataframe</a></span><span class="op">(</span></span>
+<span><span class="va">methylation_data_for_visualisation</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/extract_and_sort_methylation.html">extract_methylation_from_dataframe</a></span><span class="op">(</span></span>
 <span>    <span class="va">example_many_sequences</span>,</span>
 <span>    locations_colname <span class="op">=</span> <span class="st">"methylation_locations"</span>,</span>
 <span>    probabilities_colname <span class="op">=</span> <span class="st">"methylation_probabilities"</span>,</span>
@@ -3915,7 +3915,7 @@
 <p>The clamping does not need to be symmetrical. One use for this is if the data is skewed. For example, the methylation scores were randomly generated from <code>0</code> to <code>255</code> for each CpG in <code>example_many_sequences</code>, but the hydroxymethylation scores were generated from <code>0</code> to <code>(255 - methylation score)</code> for each CpG to avoid &gt;100% total modification probability, so they tend to be lower. Here is the hydroxymethylation data visualised with clamping at 10% and 50%:</p>
 <div class="sourceCode" id="cb159"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Extract information to list of character vectors</span></span>
-<span><span class="va">hydroxymethylation_data_for_visualisation</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/extract_methylation_from_dataframe.html">extract_methylation_from_dataframe</a></span><span class="op">(</span></span>
+<span><span class="va">hydroxymethylation_data_for_visualisation</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/extract_and_sort_methylation.html">extract_methylation_from_dataframe</a></span><span class="op">(</span></span>
 <span>    <span class="va">example_many_sequences</span>,</span>
 <span>    locations_colname <span class="op">=</span> <span class="st">"hydroxymethylation_locations"</span>,</span>
 <span>    probabilities_colname <span class="op">=</span> <span class="st">"hydroxymethylation_probabilities"</span>,</span>
@@ -4108,7 +4108,7 @@
 <span><span class="co">## Extract information to list of character vectors</span></span>
 <span><span class="co">## Note that this time we read from merged_modification_data,</span></span>
 <span><span class="co">## rather than example_many_sequences</span></span>
-<span><span class="va">methylation_data_for_visualisation</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/extract_methylation_from_dataframe.html">extract_methylation_from_dataframe</a></span><span class="op">(</span></span>
+<span><span class="va">methylation_data_for_visualisation</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/extract_and_sort_methylation.html">extract_methylation_from_dataframe</a></span><span class="op">(</span></span>
 <span>    <span class="va">merged_modification_data</span>,</span>
 <span>    locations_colname <span class="op">=</span> <span class="st">"forward_C+m?_locations"</span>,</span>
 <span>    probabilities_colname <span class="op">=</span> <span class="st">"forward_C+m?_probabilities"</span>,</span>
@@ -4150,7 +4150,7 @@
 <span id="cb168-2"><a href="#cb168-2" tabindex="-1"></a><span class="do">## advanced use. Make sure this is intentional.</span></span></code></pre></div>
 <div class="sourceCode" id="cb169"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Extract information to list of character vectors</span></span>
-<span><span class="va">methylation_data_for_visualisation</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/extract_methylation_from_dataframe.html">extract_methylation_from_dataframe</a></span><span class="op">(</span></span>
+<span><span class="va">methylation_data_for_visualisation</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/extract_and_sort_methylation.html">extract_methylation_from_dataframe</a></span><span class="op">(</span></span>
 <span>    <span class="va">merged_modification_data</span>,</span>
 <span>    locations_colname <span class="op">=</span> <span class="st">"forward_C+m?_locations"</span>,</span>
 <span>    probabilities_colname <span class="op">=</span> <span class="st">"forward_C+m?_probabilities"</span>,</span>
@@ -4190,7 +4190,7 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## Extract information to list of character vectors</span></span>
-<span><span class="va">methylation_data_for_visualisation</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/extract_methylation_from_dataframe.html">extract_methylation_from_dataframe</a></span><span class="op">(</span></span>
+<span><span class="va">methylation_data_for_visualisation</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/extract_and_sort_methylation.html">extract_methylation_from_dataframe</a></span><span class="op">(</span></span>
 <span>    <span class="va">merged_modification_data</span>,</span>
 <span>    locations_colname <span class="op">=</span> <span class="st">"C+m?_locations"</span>,</span>
 <span>    probabilities_colname <span class="op">=</span> <span class="st">"C+m?_probabilities"</span>,</span>

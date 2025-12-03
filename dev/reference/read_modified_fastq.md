@@ -28,13 +28,13 @@ e.g.
 Be aware that the SAM modification types often contain special
 characters, meaning the colname may need to be enclosed in backticks as
 in this example. Alternatively, use
-[`extract_methylation_from_dataframe()`](https://ejade42.github.io/ggDNAvis/reference/extract_methylation_from_dataframe.md)
+[`extract_methylation_from_dataframe()`](https://ejade42.github.io/ggDNAvis/reference/extract_and_sort_methylation.md)
 to create a list of locations, probabilities, and lengths ready for
 visualisation in
 [`visualise_methylation()`](https://ejade42.github.io/ggDNAvis/reference/visualise_methylation.md).
 This works with any modification type extracted in this function, just
 provide the relevant colname when calling
-[`extract_methylation_from_dataframe()`](https://ejade42.github.io/ggDNAvis/reference/extract_methylation_from_dataframe.md).  
+[`extract_methylation_from_dataframe()`](https://ejade42.github.io/ggDNAvis/reference/extract_and_sort_methylation.md).  
   
 Optionally (by specifying `debug = TRUE`), the dataframe will also
 contain columns of the raw MM and ML tags (`<MM/ML>_raw`) and of the
