@@ -89,7 +89,7 @@ Called by <code><a href="merge_methylation_with_metadata.html">merge_methylation
 
 
 <dt id="arg-output-mode">output_mode<a class="anchor" aria-label="anchor" href="#arg-output-mode"></a></dt>
-<dd><p><code>character</code>. Whether reverse-complemented sequences should be converted to DNA (i.e. A complements to T) or RNA (i.e. A complements to U). Must be either <code>"DNA"</code> or <code>"RNA"</code>. <em>Only affects reverse-complemented sequences. Sequences that were forward to begin with are not altered.</em></p></dd>
+<dd><p><code>character</code>. Whether reverse-complemented sequences should be converted to DNA (i.e. A complements to T), RNA (i.e. A complements to U), or not complemented at all. Must be <code>"DNA"</code> (default), <code>"RNA"</code>, or <code>"reverse_only"</code> to reverse sequence order without complementing. <em>Only affects reverse-complemented sequences. Sequences that were forward to begin with are not altered.</em></p></dd>
 
 </dl></div>
     <div class="section level2">

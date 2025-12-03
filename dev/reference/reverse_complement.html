@@ -4,12 +4,14 @@ the reverse complement. Either DNA (A/C/G/T) or RNA (A/C/G/U) input is accepted.
 By default, output is DNA (so A is reverse-complemented to T), but it can be set
 to output RNA (so A is reverse-complemented to U).
 Alternatively, if output_mode is set to "reverse_only" then the sequence will be
-reversed as-is without being complemented.'><meta property="og:description" content='This function takes a string/character representing a DNA/RNA sequence and returns
+reversed as-is without being complemented. Note that this also skips sequence validation,
+meaning any string can be reversed even if it contains non-A/C/G/T/U characters.'><meta property="og:description" content='This function takes a string/character representing a DNA/RNA sequence and returns
 the reverse complement. Either DNA (A/C/G/T) or RNA (A/C/G/U) input is accepted.
 By default, output is DNA (so A is reverse-complemented to T), but it can be set
 to output RNA (so A is reverse-complemented to U).
 Alternatively, if output_mode is set to "reverse_only" then the sequence will be
-reversed as-is without being complemented.'><meta property="og:image" content="https://ejade42.github.io/ggDNAvis/logo.png"></head><body>
+reversed as-is without being complemented. Note that this also skips sequence validation,
+meaning any string can be reversed even if it contains non-A/C/G/T/U characters.'><meta property="og:image" content="https://ejade42.github.io/ggDNAvis/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -58,7 +60,8 @@ the reverse complement. Either DNA (<code>A/C/G/T</code>) or RNA (<code>A/C/G/U<
 <p>By default, output is DNA (so <code>A</code> is reverse-complemented to <code>T</code>), but it can be set
 to output RNA (so <code>A</code> is reverse-complemented to <code>U</code>).</p>
 <p>Alternatively, if <code>output_mode</code> is set to <code>"reverse_only"</code> then the sequence will be
-reversed as-is without being complemented.</p>
+reversed as-is without being complemented. Note that this also skips sequence validation,
+meaning any string can be reversed even if it contains non-A/C/G/T/U characters.</p>
     </div>
 
     <div class="section level2">

@@ -43,10 +43,11 @@ reverse_sequence_if_needed(
 - output_mode:
 
   `character`. Whether reverse-complemented sequences should be
-  converted to DNA (i.e. A complements to T) or RNA (i.e. A complements
-  to U). Must be either `"DNA"` or `"RNA"`. *Only affects
-  reverse-complemented sequences. Sequences that were forward to begin
-  with are not altered.*
+  converted to DNA (i.e. A complements to T), RNA (i.e. A complements to
+  U), or not complemented at all. Must be `"DNA"` (default), `"RNA"`, or
+  `"reverse_only"` to reverse sequence order without complementing.
+  *Only affects reverse-complemented sequences. Sequences that were
+  forward to begin with are not altered.*
 
 ## Value
 

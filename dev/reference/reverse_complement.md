@@ -8,7 +8,9 @@ By default, output is DNA (so `A` is reverse-complemented to `T`), but
 it can be set to output RNA (so `A` is reverse-complemented to `U`).
 
 Alternatively, if `output_mode` is set to `"reverse_only"` then the
-sequence will be reversed as-is without being complemented.
+sequence will be reversed as-is without being complemented. Note that
+this also skips sequence validation, meaning any string can be reversed
+even if it contains non-A/C/G/T/U characters.
 
 ## Usage
 
