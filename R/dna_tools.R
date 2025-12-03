@@ -296,17 +296,23 @@ debug_join_vector_str <- function(vector) {cat('"', paste(vector, collapse = '",
 
 #' Reverse complement a DNA/RNA sequence (generic `ggDNAvis` helper)
 #'
+#' @description
 #' This function takes a string/character representing a DNA/RNA sequence and returns
-#' the reverse complement. Either DNA (`A/C/G/T`) or RNA (`A/C/G/U`) input is accepted. \cr\cr
+#' the reverse complement. Either DNA (`A/C/G/T`) or RNA (`A/C/G/U`) input is accepted.
+#'
 #' By default, output is DNA (so `A` is reverse-complemented to `T`), but it can be set
 #' to output RNA (so `A` is reverse-complemented to `U`).
 #'
+#' Alternatively, if `output_mode` is set to `"reverse_only"` then the sequence will be
+#' reversed as-is without being complemented.
+#'
 #' @param sequence `character`. A DNA/RNA sequence (`A/C/G/T/U`) to be reverse-complemented. No other characters allowed. Only one sequence allowed.
-#' @param output_mode `character`. Either `"DNA"` (default) or `"RNA"`, to determine whether `A` should be reverse-complemented to `T` or to `U`.
+#' @param output_mode `character`. `"DNA"` (default) or `"RNA"` to determine whether `A` should be reverse-complemented to `T` or `U` respectively, or `"reverse_only"` to reverse the order of the characters without complementing.
 #' @return `character`. The reverse-complement of the input sequence.
 #'
 #' @examples
 #' reverse_complement("ATGCTAG")
+#' reverse_complement("ATGCTAG", output_mode = "reverse_only")
 #' reverse_complement("UUAUUAGC", output_mode = "RNA")
 #' reverse_complement("AcGtU", output_mode = "DNA")
 #' reverse_complement("aCgTU", output_mode = "RNA")
@@ -325,7 +331,7 @@ reverse_complement <- function(sequence, output_mode = "DNA") {
         bad_arg("sequence", list(sequence = sequence), "must have length 1. Try sapply(input_vector, reverse_complement) to use on more than one sequence.", class = "argument_length")
     }
     if (length(output_mode) != 1) {
-        bad_arg("output_mode", list(output_mode = output_mode), "must be a single value (either 'DNA' or 'RNA')", class = "argument_length")
+        bad_arg("output_mode", list(output_mode = output_mode), "must be a single value (either 'DNA', 'RNA', or 'reverse_only')", class = "argument_length")
     }
 
     chars <- list(sequence = sequence, output_mode = output_mode)
@@ -339,32 +345,34 @@ reverse_complement <- function(sequence, output_mode = "DNA") {
         return("")
     }
 
-    sequence_vector     <- strsplit(toupper(sequence), split = "")[[1]]
-    reversed_vector     <- rev(sequence_vector)
-    new_sequence_vector <- rep(NA, length(reversed_vector))
+    sequence_vector <- strsplit(toupper(sequence), split = "")[[1]]
+    reversed_vector <- rev(sequence_vector)
 
-    for (i in 1:length(reversed_vector)) {
-        if (reversed_vector[i] == "A") {
-            if (toupper(output_mode) == "DNA") {
-                new_sequence_vector[i] <- "T"
-            } else if (toupper(output_mode) == "RNA") {
-                new_sequence_vector[i] <- "U"
-            } else {
-                bad_arg("output_mode", list(output_mode = output_mode), "must be either 'DNA' (default) or 'RNA'.")
-            }
-        } else if (reversed_vector[i] == "C") {
-            new_sequence_vector[i] <- "G"
-        } else if (reversed_vector[i] == "G") {
-            new_sequence_vector[i] <- "C"
-        } else if (reversed_vector[i] %in% c("T", "U")) {
-            new_sequence_vector[i] <- "A"
-        } else {
-            abort(paste0("Cannot reverse sequence for non-A/C/G/T/U.\nNon-compliant character: ", reversed_vector[i]), class = "argument_value_or_type")
-        }
+    ## Reverse vector without complementing if so desired
+    if (tolower(output_mode) == "reverse_only") {
+        return(paste(reversed_vector, collapse = ""))
     }
 
-    new_sequence <- paste(new_sequence_vector, collapse = "")
-    return(new_sequence)
+    ## Otherwise complement the reversed vector
+    reversed_vector <- sapply(reversed_vector, function(base) {
+        switch(
+            base,
+            "A" = {
+                switch(
+                    toupper(output_mode),
+                    "DNA" = "T",
+                    "RNA" = "U",
+                    bad_arg("output_mode", list(output_mode = output_mode), "must be 'DNA' (default), 'RNA', or 'reverse_only'.")
+                )
+            },
+            "C" = "G",
+            "G" = "C",
+            "T" = "A",
+            "U" = "A",
+            abort(paste0("Cannot reverse sequence for non-A/C/G/T/U.\nNon-compliant character: ", base), class = "argument_value_or_type")
+        )
+    })
+    return(paste(reversed_vector, collapse = ""))
 }
 
 

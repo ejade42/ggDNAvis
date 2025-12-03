@@ -9,19 +9,24 @@ reverse_complement(sequence, output_mode = "DNA")
 \arguments{
 \item{sequence}{\code{character}. A DNA/RNA sequence (\code{A/C/G/T/U}) to be reverse-complemented. No other characters allowed. Only one sequence allowed.}
 
-\item{output_mode}{\code{character}. Either \code{"DNA"} (default) or \code{"RNA"}, to determine whether \code{A} should be reverse-complemented to \code{T} or to \code{U}.}
+\item{output_mode}{\code{character}. \code{"DNA"} (default) or \code{"RNA"} to determine whether \code{A} should be reverse-complemented to \code{T} or \code{U} respectively, or \code{"reverse_only"} to reverse the order of the characters without complementing.}
 }
 \value{
 \code{character}. The reverse-complement of the input sequence.
 }
 \description{
 This function takes a string/character representing a DNA/RNA sequence and returns
-the reverse complement. Either DNA (\code{A/C/G/T}) or RNA (\code{A/C/G/U}) input is accepted. \cr\cr
+the reverse complement. Either DNA (\code{A/C/G/T}) or RNA (\code{A/C/G/U}) input is accepted.
+
 By default, output is DNA (so \code{A} is reverse-complemented to \code{T}), but it can be set
 to output RNA (so \code{A} is reverse-complemented to \code{U}).
+
+Alternatively, if \code{output_mode} is set to \code{"reverse_only"} then the sequence will be
+reversed as-is without being complemented.
 }
 \examples{
 reverse_complement("ATGCTAG")
+reverse_complement("ATGCTAG", output_mode = "reverse_only")
 reverse_complement("UUAUUAGC", output_mode = "RNA")
 reverse_complement("AcGtU", output_mode = "DNA")
 reverse_complement("aCgTU", output_mode = "RNA")
