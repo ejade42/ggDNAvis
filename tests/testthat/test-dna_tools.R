@@ -3,6 +3,7 @@ test_that("reverse complementing works when expected to", {
     expect_equal(reverse_complement("ATUCG"), "CGAAT")
     expect_equal(reverse_complement("ATUCG", "RNA"), "CGAAU")
     expect_equal(reverse_complement("atagc", "dNa"), "GCTAT")
+    expect_equal(reverse_complement("atAgcUX5", "rEverSe_oNly"), "5XUCGATA")
 })
 
 test_that("reverse complementing fails with expected errors", {

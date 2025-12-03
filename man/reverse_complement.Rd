@@ -22,7 +22,8 @@ By default, output is DNA (so \code{A} is reverse-complemented to \code{T}), but
 to output RNA (so \code{A} is reverse-complemented to \code{U}).
 
 Alternatively, if \code{output_mode} is set to \code{"reverse_only"} then the sequence will be
-reversed as-is without being complemented.
+reversed as-is without being complemented. Note that this also skips sequence validation,
+meaning any string can be reversed even if it contains non-A/C/G/T/U characters.
 }
 \examples{
 reverse_complement("ATGCTAG")

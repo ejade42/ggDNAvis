@@ -15,7 +15,7 @@ reverse_sequence_if_needed(
 
 \item{direction_vector}{\verb{character vector}. Whether each sequence is forward or reverse. Must contain only \code{"forward"} and \code{"reverse"}, but is not case sensitive. Must be the same length as \code{sequence_vector}.}
 
-\item{output_mode}{\code{character}. Whether reverse-complemented sequences should be converted to DNA (i.e. A complements to T) or RNA (i.e. A complements to U). Must be either \code{"DNA"} or \code{"RNA"}. \emph{Only affects reverse-complemented sequences. Sequences that were forward to begin with are not altered.}}
+\item{output_mode}{\code{character}. Whether reverse-complemented sequences should be converted to DNA (i.e. A complements to T), RNA (i.e. A complements to U), or not complemented at all. Must be \code{"DNA"} (default), \code{"RNA"}, or \code{"reverse_only"} to reverse sequence order without complementing. \emph{Only affects reverse-complemented sequences. Sequences that were forward to begin with are not altered.}}
 }
 \value{
 \verb{character vector}. A vector of all forward versions of the input sequence vector.

@@ -18,7 +18,7 @@ merge_methylation_with_metadata(
 
 \item{reversed_location_offset}{\code{integer}. How much modification locations should be shifted by. Defaults to \code{0}. This is important because if a CpG is assessed for methylation at the C, then reverse complementing it will give a methylation score at the G on the reverse-complemented strand. This is the most biologically accurate, but for visualising methylation it may be desired to shift the locations by 1 i.e. to correspond with the C in the reverse-complemented CpG rather than the G, which allows for consistent visualisation between forward and reverse strands. Setting (integer) values other than 0 or 1 will work, but may be biologically misleading so it is not recommended.\cr\cr \strong{Highly recommended:} if considering using this option, read the \code{\link[=reverse_locations_if_needed]{reverse_locations_if_needed()}} documentation to fully understand how it works.}
 
-\item{reverse_complement_mode}{\code{character}. Whether reverse-complemented sequences should be converted to DNA (i.e. A complements to T) or RNA (i.e. A complements to U). Must be either \code{"DNA"} or \code{"RNA"}. \emph{Only affects reverse-complemented sequences. Sequences that were forward to begin with are not altered.}\cr\cr Uses \code{\link[=reverse_complement]{reverse_complement()}} via \code{\link[=reverse_sequence_if_needed]{reverse_sequence_if_needed()}}.}
+\item{reverse_complement_mode}{\code{character}. Whether reverse-complemented sequences should be converted to DNA (i.e. A complements to T), RNA (i.e. A complements to U), or not complemented at all. Must be \code{"DNA"} (default), \code{"RNA"}, or \code{"reverse_only"} to reverse sequence order without complementing. \emph{Only affects reverse-complemented sequences. Sequences that were forward to begin with are not altered.}\cr\cr Uses \code{\link[=reverse_complement]{reverse_complement()}} via \code{\link[=reverse_sequence_if_needed]{reverse_sequence_if_needed()}}.}
 }
 \value{
 \code{dataframe}. A merged dataframe containing all columns from the input dataframes, as well as forward versions of sequences, qualities, modification locations, and modification probabilities (with separate locations and probabilities columns created for each modification type in the modification data).
@@ -83,5 +83,8 @@ merge_methylation_with_metadata(methylation_data, metadata, reversed_location_of
 
 ## Merge data with offset = 1
 merge_methylation_with_metadata(methylation_data, metadata, reversed_location_offset = 1)
+
+## Merge data with offset = 1 but without complementing
+merge_methylation_with_metadata(methylation_data, metadata, reversed_location_offset = 1, reverse_complement_mode = "reverse_only")
 
 }

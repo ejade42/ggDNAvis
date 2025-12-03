@@ -304,7 +304,8 @@ debug_join_vector_str <- function(vector) {cat('"', paste(vector, collapse = '",
 #' to output RNA (so `A` is reverse-complemented to `U`).
 #'
 #' Alternatively, if `output_mode` is set to `"reverse_only"` then the sequence will be
-#' reversed as-is without being complemented.
+#' reversed as-is without being complemented. Note that this also skips sequence validation,
+#' meaning any string can be reversed even if it contains non-A/C/G/T/U characters.
 #'
 #' @param sequence `character`. A DNA/RNA sequence (`A/C/G/T/U`) to be reverse-complemented. No other characters allowed. Only one sequence allowed.
 #' @param output_mode `character`. `"DNA"` (default) or `"RNA"` to determine whether `A` should be reverse-complemented to `T` or `U` respectively, or `"reverse_only"` to reverse the order of the characters without complementing.

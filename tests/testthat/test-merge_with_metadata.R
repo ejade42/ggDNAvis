@@ -7,6 +7,7 @@ test_that("merging fastq and metadata works", {
     merged_data <- merge_fastq_with_metadata(fastq_data, metadata)
     expect_equal(nrow(merged_data), 23)
     expect_equal(colnames(merged_data), c("read", "family", "individual", "direction", "sequence", "quality", "sequence_length","forward_sequence", "forward_quality"))
+    expect_equal(merged_data[3, "forward_sequence"], "TCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCGCCGCCGCCGCCGCCGCC")
 
     filename <- "example_many_sequences_unmodified_directional.fastq"
     write_fastq(merged_data, paste0(root, filename), sequence_colname = "forward_sequence", quality_colname = "forward_quality")
@@ -17,6 +18,11 @@ test_that("merging fastq and metadata works", {
     double_reversed_extracted <- select(double_reversed, c(family, individual, read, forward_sequence, sequence_length, forward_quality))
     colnames(double_reversed_extracted)[c(4,6)] <- c("sequence", "quality")
     expect_equal(double_reversed_extracted, example_many_sequences[,1:6])
+
+
+    ## Check that using reverse_only works as expected
+    merged_data2 <- merge_fastq_with_metadata(fastq_data, metadata, reverse_complement_mode = "reverse_only")
+    expect_equal(merged_data2[3, "forward_sequence"], "AGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGCGGCGGCGGCGGCGGCGG")
 })
 
 
@@ -26,6 +32,7 @@ test_that("merging methylation and metadata works", {
     merged_data <- merge_methylation_with_metadata(methylation_data, metadata, reversed_location_offset = 1)
     expect_equal(nrow(merged_data), 23)
     expect_equal(colnames(merged_data), c("read", "family", "individual", "direction", "sequence", "sequence_length", "quality", "modification_types", "C+h?_locations", "C+h?_probabilities", "C+m?_locations", "C+m?_probabilities", "forward_sequence", "forward_quality", "forward_C+h?_locations", "forward_C+h?_probabilities", "forward_C+m?_locations", "forward_C+m?_probabilities"))
+    expect_equal(merged_data[3, "forward_sequence"], "TCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCGCCGCCGCCGCCGCCGCC")
 
     filename <- "example_many_sequences_directional.fastq"
     write_modified_fastq(merged_data, paste0(root, filename), sequence_colname = "forward_sequence", quality_colname = "forward_quality", locations_colnames = c("forward_C+h?_locations", "forward_C+m?_locations"), probabilities_colnames = c("forward_C+h?_probabilities", "forward_C+m?_probabilities"))
@@ -36,6 +43,12 @@ test_that("merging methylation and metadata works", {
     double_reversed_extracted <- select(double_reversed, c(family, individual, read, forward_sequence, sequence_length, forward_quality, `forward_C+m?_locations`, `forward_C+m?_probabilities`, `forward_C+h?_locations`, `forward_C+h?_probabilities`))
     colnames(double_reversed_extracted)[c(4,6:10)] <- c("sequence", "quality", "methylation_locations", "methylation_probabilities", "hydroxymethylation_locations", "hydroxymethylation_probabilities")
     expect_equal(double_reversed_extracted, example_many_sequences)
+
+
+    ## Check that using reverse_only works as expected, including producing warning with offset != 0
+    expect_warning(expect_warning(merged_data2 <- merge_methylation_with_metadata(methylation_data, metadata, reversed_location_offset = 2, reverse_complement_mode = "reverse_only"),
+                class = "parameter_recommendation"), class = "parameter_recommendation")
+    expect_equal(merged_data2[3, "forward_sequence"], "AGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGCGGCGGCGGCGGCGGCGG")
 })
 
 
@@ -99,6 +112,7 @@ test_that("reversing sequences works", {
     expect_equal(reverse_sequence_if_needed(c("AuGC", "AtCg", "ATCG"), c("reverse", "forwaRd", "REVERSE"), "RNA"),
                  c("GCAU", "AtCg", "CGAU"))
     expect_equal(reverse_sequence_if_needed("", "reverse"), "")
+    expect_equal(reverse_sequence_if_needed("XYZ5@%", "reverse", "reverSE_onLy"), "%@5ZYX")
 })
 
 test_that("reversing sequences fails", {

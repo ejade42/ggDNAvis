@@ -28,7 +28,7 @@
 #'
 #' @param fastq_data `dataframe`. A dataframe contaning sequence and quality data, as produced by [read_fastq()].\cr\cr Must contain a read id column (must be called `"read"`), a sequence column (`"sequence"`), and a quality column (`"quality"`). Additional columns are fine and will simply be included unaltered in the merged dataframe.
 #' @param metadata `dataframe`. A dataframe containing metadata for each read in `fastq_data`.\cr\cr Must contain a `"read"` column identical to the column of the same name in `fastq_data`, containing unique read IDs (this is used to merge the dataframes). Must also contain a `"direction"` column of `"forward"` and `"reverse"` (e.g. `c("forward", "forward", "reverse")`) indicating the direction of each read.\cr\cr **Important:** Reverse reads will have their sequence and quality scores reversed such that every output read is now forward. These will be stored in columns called `"forward_sequence"` and `"forward_quality"`.\cr\cr See [reverse_sequence_if_needed()] and [reverse_quality_if_needed()] documentation for details of how the reversing is implemented.
-#' @param reverse_complement_mode `character`. Whether reverse-complemented sequences should be converted to DNA (i.e. A complements to T) or RNA (i.e. A complements to U). Must be either `"DNA"` or `"RNA"`. *Only affects reverse-complemented sequences. Sequences that were forward to begin with are not altered.*\cr\cr Uses [reverse_complement()] via [reverse_sequence_if_needed()].
+#' @param reverse_complement_mode `character`. Whether reverse-complemented sequences should be converted to DNA (i.e. A complements to T), RNA (i.e. A complements to U), or not complemented at all. Must be `"DNA"` (default), `"RNA"`, or `"reverse_only"` to reverse sequence order without complementing. *Only affects reverse-complemented sequences. Sequences that were forward to begin with are not altered.*\cr\cr Uses [reverse_complement()] via [reverse_sequence_if_needed()].
 #'
 #' @return `dataframe`. A merged dataframe containing all columns from the input dataframes, as well as forward versions of sequences and qualities.
 #'
@@ -48,12 +48,15 @@
 #' ## Merge data (including reversing if needed)
 #' merge_fastq_with_metadata(fastq_data, metadata)
 #'
+#' ## Merge data reversing but not complementing sequences
+#' merge_fastq_with_metadata(fastq_data, metadata, reverse_complement_mode = "reverse_only")
+#'
 #' @export
 merge_fastq_with_metadata <- function(fastq_data, metadata, reverse_complement_mode = "DNA") {
     ## Validate arguments
     ## ---------------------------------------------------------------------
-    if (length(reverse_complement_mode) != 1 || is.na(reverse_complement_mode) || !is.character(reverse_complement_mode) || !(reverse_complement_mode %in% c("DNA", "RNA"))) {
-        bad_arg("reverse_complement_mode", list(reverse_complement_mode = reverse_complement_mode), "must be a single character value, either 'DNA' or 'RNA'.")
+    if (length(reverse_complement_mode) != 1 || is.na(reverse_complement_mode) || !is.character(reverse_complement_mode) || !(tolower(reverse_complement_mode) %in% c("dna", "rna", "reverse_only"))) {
+        bad_arg("reverse_complement_mode", list(reverse_complement_mode = reverse_complement_mode), "must be a single character value, either 'DNA', 'RNA', or 'reverse_only'.")
     }
     if (nrow(metadata) != nrow(fastq_data)) {
         abort(paste("FASTQ and metadata dataframes must have the same number of rows, one row per read.\n'fastq_data' rows:", nrow(fastq_data), "\n'metadata' rows:", nrow(metadata)), class = "argument_value_or_type")
@@ -131,7 +134,7 @@ merge_fastq_with_metadata <- function(fastq_data, metadata, reverse_complement_m
 #' @param methylation_data `dataframe`. A dataframe contaning methylation/modification data, as produced by [read_modified_fastq()].\cr\cr Must contain a read id column (must be called `"read"`), a sequence column (`"sequence"`), a quality column (`"quality"`), a sequence length column (`"sequence_length"`), a modification types column (`"modification_types"`), and, for each modification type listed in `modification_types`, a column of locations (`"<modification_type>_locations"`) and a column of probabilities (`"<modification_type>_probabilities"`). Additional columns are fine and will simply be included unaltered in the merged dataframe. \cr\cr See [read_modified_fastq()] documentation for more details about the expected dataframe format.
 #' @param metadata `dataframe`. A dataframe containing metadata for each read in `methylation_data`.\cr\cr Must contain a `"read"` column identical to the column of the same name in `methylation_data`, containing unique read IDs (this is used to merge the dataframes). Must also contain a `"direction"` column of `"forward"` and `"reverse"` (e.g. `c("forward", "forward", "reverse")`) indicating the direction of each read.\cr\cr **Important:** Reverse reads will have their sequence, quality scores, modification locations, and modification probabilities reversed such that every output read is now forward. These will be stored in columns called `"forward_sequence"`, `"forward_quality"`, `"forward_<modification_type>_locations"`, and `"forward_<modification_type>_probabilities"`. If multiple modification types are present, multiple locations and probabilities columns will be created.\cr\cr See [reverse_sequence_if_needed()], [reverse_quality_if_needed()], [reverse_locations_if_needed()], and [reverse_probabilities_if_needed()] documentation for details of how the reversing is implemented.
 #' @param reversed_location_offset `integer`. How much modification locations should be shifted by. Defaults to `0`. This is important because if a CpG is assessed for methylation at the C, then reverse complementing it will give a methylation score at the G on the reverse-complemented strand. This is the most biologically accurate, but for visualising methylation it may be desired to shift the locations by 1 i.e. to correspond with the C in the reverse-complemented CpG rather than the G, which allows for consistent visualisation between forward and reverse strands. Setting (integer) values other than 0 or 1 will work, but may be biologically misleading so it is not recommended.\cr\cr **Highly recommended:** if considering using this option, read the [reverse_locations_if_needed()] documentation to fully understand how it works.
-#' @param reverse_complement_mode `character`. Whether reverse-complemented sequences should be converted to DNA (i.e. A complements to T) or RNA (i.e. A complements to U). Must be either `"DNA"` or `"RNA"`. *Only affects reverse-complemented sequences. Sequences that were forward to begin with are not altered.*\cr\cr Uses [reverse_complement()] via [reverse_sequence_if_needed()].
+#' @param reverse_complement_mode `character`. Whether reverse-complemented sequences should be converted to DNA (i.e. A complements to T), RNA (i.e. A complements to U), or not complemented at all. Must be `"DNA"` (default), `"RNA"`, or `"reverse_only"` to reverse sequence order without complementing. *Only affects reverse-complemented sequences. Sequences that were forward to begin with are not altered.*\cr\cr Uses [reverse_complement()] via [reverse_sequence_if_needed()].
 #'
 #' @return `dataframe`. A merged dataframe containing all columns from the input dataframes, as well as forward versions of sequences, qualities, modification locations, and modification probabilities (with separate locations and probabilities columns created for each modification type in the modification data).
 #'
@@ -154,6 +157,9 @@ merge_fastq_with_metadata <- function(fastq_data, metadata, reverse_complement_m
 #' ## Merge data with offset = 1
 #' merge_methylation_with_metadata(methylation_data, metadata, reversed_location_offset = 1)
 #'
+#' ## Merge data with offset = 1 but without complementing
+#' merge_methylation_with_metadata(methylation_data, metadata, reversed_location_offset = 1, reverse_complement_mode = "reverse_only")
+#'
 #' @export
 merge_methylation_with_metadata <- function(methylation_data, metadata, reversed_location_offset = 0, reverse_complement_mode = "DNA") {
     ## Validate arguments
@@ -161,8 +167,11 @@ merge_methylation_with_metadata <- function(methylation_data, metadata, reversed
     if (length(reversed_location_offset) != 1 || is.na(reversed_location_offset) || !is.numeric(reversed_location_offset) || reversed_location_offset %% 1 != 0) {
         bad_arg("reverse_location_offset", list(reversed_location_offset = reversed_location_offset), "must be a single integer value.")
     }
-    if (length(reverse_complement_mode) != 1 || is.na(reverse_complement_mode) || !is.character(reverse_complement_mode) || !(reverse_complement_mode %in% c("DNA", "RNA"))) {
-        bad_arg("reverse_complement_mode", list(reverse_complement_mode = reverse_complement_mode), "must be a single character value, either 'DNA' or 'RNA'.")
+    if (length(reverse_complement_mode) != 1 || is.na(reverse_complement_mode) || !is.character(reverse_complement_mode) || !(tolower(reverse_complement_mode) %in% c("dna", "rna", "reverse_only"))) {
+        bad_arg("reverse_complement_mode", list(reverse_complement_mode = reverse_complement_mode), "must be a single character value, either 'DNA', 'RNA', or 'reverse_only'.")
+    }
+    if (tolower(reverse_complement_mode) == "reverse_only" && reversed_location_offset != 0) {
+        warn(paste("It is not recommended to use reverse_complement_mode = reverse_only with an offset value other than 0, as this will make the locations not match the sequence.\nCurrent reversed_location_offset value:", reversed_location_offset), class = "parameter_recommendation")
     }
     if (nrow(metadata) != nrow(methylation_data)) {
         abort(paste("Methylation and metadata dataframes must have the same number of rows, one row per read.\n'methylation_data' rows:", nrow(methylation_data), "\n'metadata' rows:", nrow(metadata)), class = "argument_value_or_type")
@@ -229,7 +238,7 @@ merge_methylation_with_metadata <- function(methylation_data, metadata, reversed
 #'
 #' @param sequence_vector `character vector`. The DNA or RNA sequences to be reversed, e.g. `c("ATCG", "GGCGGC", "AUUAUA")`. Accepts DNA, RNA, or mixed input.
 #' @param direction_vector `character vector`. Whether each sequence is forward or reverse. Must contain only `"forward"` and `"reverse"`, but is not case sensitive. Must be the same length as `sequence_vector`.
-#' @param output_mode `character`. Whether reverse-complemented sequences should be converted to DNA (i.e. A complements to T) or RNA (i.e. A complements to U). Must be either `"DNA"` or `"RNA"`. *Only affects reverse-complemented sequences. Sequences that were forward to begin with are not altered.*
+#' @param output_mode `character`. Whether reverse-complemented sequences should be converted to DNA (i.e. A complements to T), RNA (i.e. A complements to U), or not complemented at all. Must be `"DNA"` (default), `"RNA"`, or `"reverse_only"` to reverse sequence order without complementing. *Only affects reverse-complemented sequences. Sequences that were forward to begin with are not altered.*
 #'
 #' @return `character vector`. A vector of all forward versions of the input sequence vector.
 #'
@@ -262,7 +271,7 @@ reverse_sequence_if_needed <- function(sequence_vector, direction_vector, output
     char <- NULL
 
     if (length(output_mode) != 1) {
-        bad_arg("output_mode", list(output_mode = output_mode), "must be of length 1 (and be either 'DNA' or 'RNA').")
+        bad_arg("output_mode", list(output_mode = output_mode), "must be of length 1 (and be 'DNA', 'RNA', or 'reverse_only').")
     }
     if (length(sequence_vector) != length(direction_vector)) {
         abort(paste0("Sequence and direction vectors need to be same length.\n'sequence_vector' length: ", length(sequence_vector), "\n'direction_vector' length: ", length(direction_vector)), class = "argument_value_or_type")
@@ -271,16 +280,16 @@ reverse_sequence_if_needed <- function(sequence_vector, direction_vector, output
 
 
     ## Main function
-    new_sequence_vector <- rep(NA, length(sequence_vector))
-    for (i in 1:length(sequence_vector)) {
+    new_sequence_vector <- sapply(seq_along(sequence_vector), function(i) {
         if (tolower(direction_vector[i]) == "forward") {
-            new_sequence_vector[i] <- sequence_vector[i]
+            return(sequence_vector[i])
         } else if (tolower(direction_vector[i]) == "reverse") {
-            new_sequence_vector[i] <- reverse_complement(sequence_vector[i], toupper(output_mode))
+            return(reverse_complement(sequence_vector[i], toupper(output_mode)))
         } else {
             abort(paste0("direction vector must contain only 'forward' and 'reverse' (not case sensitive).\nIllegal value: ", direction_vector[i]), class = "argument_value_or_type")
         }
-    }
+    })
+
     return(new_sequence_vector)
 }
 
@@ -333,16 +342,15 @@ reverse_quality_if_needed <- function(quality_vector, direction_vector) {
 
 
     ## Main function
-    new_quality_vector <- rep(NA, length(quality_vector))
-    for (i in 1:length(quality_vector)) {
+    new_quality_vector <- sapply(seq_along(quality_vector), function(i) {
         if (tolower(direction_vector[i]) == "forward") {
-            new_quality_vector[i] <- quality_vector[i]
+            return(quality_vector[i])
         } else if (tolower(direction_vector[i]) == "reverse") {
-            new_quality_vector[i] <- paste(rev(strsplit(quality_vector[i], "")[[1]]), collapse = "")
+            return(paste(rev(strsplit(quality_vector[i], "")[[1]]), collapse = ""))
         } else {
             abort(paste0("direction vector must contain only 'forward' and 'reverse' (not case sensitive)\nIllegal value: ", direction_vector[i]), class = "argument_value_or_type")
         }
-    }
+    })
     return(new_quality_vector)
 }
 
@@ -460,7 +468,7 @@ reverse_locations_if_needed <- function(locations_vector, direction_vector, leng
         abort(paste0("Locations, direction, and length vectors need to be the same length.\n'locations_vector' length: ", length(locations_vector), "\n'direction_vector' length: ", length(direction_vector), "\n'length_vector' length: ", length(length_vector)), class = "argument_value_or_type")
     }
     if (!(offset %in% c(0, 1))) {
-        warn("Setting location reversal offset to anything other than 0 or 1 is advanced use. Make sure this is intentional.", class = "parameter_recommendation")
+        warn(paste("Setting location reversal offset to anything other than 0 or 1 is advanced use. Make sure this is intentional.\nCurrent value:", offset), class = "parameter_recommendation")
     }
     ## ---------------------------------------------------------------------
 
