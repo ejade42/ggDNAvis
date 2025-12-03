@@ -20,5 +20,6 @@
 ^_pkgdown_main\.yml$
 ^_pkgdown_reference\.yml$
 ^docs$
+^manuscript$
 ^pkgdown$
 ^CRAN-SUBMISSION$
