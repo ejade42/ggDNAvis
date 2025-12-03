@@ -2,10 +2,13 @@
 
 This function takes a string/character representing a DNA/RNA sequence
 and returns the reverse complement. Either DNA (`A/C/G/T`) or RNA
-(`A/C/G/U`) input is accepted.  
-  
+(`A/C/G/U`) input is accepted.
+
 By default, output is DNA (so `A` is reverse-complemented to `T`), but
 it can be set to output RNA (so `A` is reverse-complemented to `U`).
+
+Alternatively, if `output_mode` is set to `"reverse_only"` then the
+sequence will be reversed as-is without being complemented.
 
 ## Usage
 
@@ -23,8 +26,10 @@ reverse_complement(sequence, output_mode = "DNA")
 
 - output_mode:
 
-  `character`. Either `"DNA"` (default) or `"RNA"`, to determine whether
-  `A` should be reverse-complemented to `T` or to `U`.
+  `character`. `"DNA"` (default) or `"RNA"` to determine whether `A`
+  should be reverse-complemented to `T` or `U` respectively, or
+  `"reverse_only"` to reverse the order of the characters without
+  complementing.
 
 ## Value
 
@@ -35,6 +40,8 @@ reverse_complement(sequence, output_mode = "DNA")
 ``` r
 reverse_complement("ATGCTAG")
 #> [1] "CTAGCAT"
+reverse_complement("ATGCTAG", output_mode = "reverse_only")
+#> [1] "GATCGTA"
 reverse_complement("UUAUUAGC", output_mode = "RNA")
 #> [1] "GCUAAUAA"
 reverse_complement("AcGtU", output_mode = "DNA")
