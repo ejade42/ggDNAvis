@@ -2,6 +2,7 @@
 % Please edit documentation in R/visualise_many_sequences.R
 \name{extract_and_sort_sequences}
 \alias{extract_and_sort_sequences}
+\alias{extract_sequences_from_dataframe}
 \title{Extract, sort, and add spacers between sequences in a dataframe}
 \usage{
 extract_and_sort_sequences(
@@ -27,14 +28,19 @@ extract_and_sort_sequences(
 \verb{character vector}. The sequences ordered and grouped as specified, with blank sequences (\code{""}) inserted as spacers as specified.
 }
 \description{
+\code{extract_sequences_from_dataframe()} is an alias for \code{extract_and_sort_sequences()} - see \link{aliases}.
+
 This function takes a dataframe that contains sequences and metadata,
 recursively splits it into multiple levels of groups defined by \code{grouping_levels},
 and adds breaks between each level of group as defined by \code{grouping_levels}.
 Within each lowest-level group, reads are sorted by \code{sort_by}, with order determined
-by \code{desc_sort}. \cr\cr Default values are set up to work with the included dataset
-\code{\link{example_many_sequences}}. \cr\cr The returned sequences vector is ideal input for
-\code{\link[=visualise_many_sequences]{visualise_many_sequences()}}.\cr\cr Also called by \code{\link[=extract_methylation_from_dataframe]{extract_methylation_from_dataframe()}}
-to produce input for \code{\link[=visualise_methylation]{visualise_methylation()}}.
+by \code{desc_sort}.
+
+Default values are set up to work with the included dataset \code{\link{example_many_sequences}}.
+
+The returned sequences vector is ideal input for \code{\link[=visualise_many_sequences]{visualise_many_sequences()}}.
+
+Also called by \code{\link[=extract_methylation_from_dataframe]{extract_methylation_from_dataframe()}} to produce input for \code{\link[=visualise_methylation]{visualise_methylation()}}.
 }
 \examples{
 extract_and_sort_sequences(

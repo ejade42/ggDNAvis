@@ -60,9 +60,16 @@ fastq_data <- read_fastq(fastq_file)
 metadata   <- read.csv(metadata_file)
 
 ## Merge data (including reversing if needed)
-merge_fastq_with_metadata(fastq_data, metadata)
+merge_fastq_with_metadata(
+    fastq_data,
+    metadata
+)
 
 ## Merge data reversing but not complementing sequences
-merge_fastq_with_metadata(fastq_data, metadata, reverse_complement_mode = "reverse_only")
+merge_fastq_with_metadata(
+    fastq_data,
+    metadata,
+    reverse_complement_mode = "reverse_only"
+)
 
 }

@@ -96,7 +96,7 @@ test_that("main plotting function works with grouped family data, boxes only, no
 
 test_that("main plotting function works with grouped family data, boxes only, no sorting", {
     filename <- "visualise_many_sequences_test_11"
-    sequences <- extract_and_sort_sequences(example_many_sequences, sort_by = NA)
+    sequences <- extract_sequences_from_dataframe(example_many_sequences, sort_by = NA)
     expect_message(visualise_many_sequences(sequences, sequence_colours = c("#FFAA00", "#00BC00", "#0000DC", "#FF1E1E"), outline_linewidth = 0, index_annotation_lines = NA, sequence_text_size = 0, margin = 0, pixels_per_base = 10, filename = paste0(root, filename, ".png")))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),

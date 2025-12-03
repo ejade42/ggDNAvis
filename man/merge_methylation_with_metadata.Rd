@@ -79,12 +79,25 @@ methylation_data <- read_modified_fastq(modified_fastq_file)
 metadata <- read.csv(metadata_file)
 
 ## Merge data (including reversing if needed)
-merge_methylation_with_metadata(methylation_data, metadata, reversed_location_offset = 0)
+merge_methylation_with_metadata(
+    methylation_data,
+    metadata,
+    reversed_location_offset = 0
+)
 
 ## Merge data with offset = 1
-merge_methylation_with_metadata(methylation_data, metadata, reversed_location_offset = 1)
+merge_methylation_with_metadata(
+    methylation_data,
+    metadata,
+    reversed_location_offset = 1
+)
 
 ## Merge data with offset = 1 but without complementing
-merge_methylation_with_metadata(methylation_data, metadata, reversed_location_offset = 1, reverse_complement_mode = "reverse_only")
+merge_methylation_with_metadata(
+    methylation_data,
+    metadata,
+    reversed_location_offset = 1,
+    reverse_complement_mode = "reverse_only"
+)
 
 }

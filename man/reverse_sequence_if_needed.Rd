@@ -42,4 +42,10 @@ reverse_sequence_if_needed(
     output_mode = "RNA"
 )
 
+reverse_sequence_if_needed(
+    sequence_vector = c("TAAGGC", "TAAGGC"),
+    direction_vector = c("reverse", "forward"),
+    output_mode = "reverse_only"
+)
+
 }

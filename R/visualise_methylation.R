@@ -6,7 +6,7 @@
 #' `visualize_methylation()` is an alias for `visualise_methylation()` - see [aliases].
 #'
 #' This function takes vectors of modifications locations, modification probabilities,
-#' and sequence lengths (e.g. created by [extract_methylation_from_dataframe()]) and
+#' and sequence lengths (e.g. created by [extract_and_sort_methylation()]) and
 #' visualises the probability of methylation (or other modification) across each read.
 #'
 #' Assumes that the three main input vectors are of equal length \eqn{n} and represent \eqn{n} sequences
@@ -71,7 +71,7 @@
 #' @examples
 #' \donttest{
 #' ## Extract info from dataframe
-#' methylation_info <- extract_methylation_from_dataframe(example_many_sequences)
+#' methylation_info <- extract_and_sort_methylation(example_many_sequences)
 #'
 #' ## Visualise example_many_sequences with all defaults
 #' ## This looks ugly because it isn't at the right scale/aspect ratio
@@ -808,17 +808,25 @@ visualise_methylation_colour_scale <- function(
 
 #' Extract methylation information from dataframe for visualisation
 #'
+#' @aliases extract_methylation_from_dataframe
+#'
+#' @description
+#' `extract_methylation_from_dataframe()` is an alias for `extract_and_sort_methylation()` - see [aliases].
+#'
 #' This function takes a dataframe that contains methylation information in the form of
 #' locations (indices along the read signifying bases at which modification probability
 #' was assessed) and  probabilities (the probability of modification at each assessed
-#' location, as an integer from 0 to 255).\cr\cr
+#' location, as an integer from 0 to 255).
+#'
 #' Each observation/row in the dataframe represents one sequence (e.g. a Nanopore read).
 #' In the locations and probabilities column, each sequence (row) has many numbers associated.
 #' These are stored as one string per observation e.g. `"3,6,9,12"`, with the column representing
-#' a character vector of such strings (e.g. `c("3,6,9,12", "1,2,3,4")`).\cr\cr
+#' a character vector of such strings (e.g. `c("3,6,9,12", "1,2,3,4")`).
+#'
 #' This function calls [extract_and_sort_sequences()] on the relevant columns and returns
 #' a list of vectors stored in `$locations`, `$probabilities`, `$sequences`, and `$lengths`.
-#' These can then be used as input for [visualise_methylation()]. \cr\cr
+#' These can then be used as input for [visualise_methylation()].
+#'
 #' Default arguments are set up to work with the included [`example_many_sequences`] data.
 #'
 #' @param modification_data `dataframe`. A dataframe that must contain columns for methylation locations, methylation probabilities, and sequence length for each read. The former two should be condensed strings as produced by [vector_to_string()] e.g. `"1,2,3,4"`. The latter should be integer.\cr\cr See [`example_many_sequences`] for an example of a compatible dataframe.
@@ -835,7 +843,7 @@ visualise_methylation_colour_scale <- function(
 #' @examples
 #' ## See documentation for extract_and_sort_sequences()
 #' ## for more examples of changing sorting/grouping
-#' extract_methylation_from_dataframe(
+#' extract_and_sort_methylation(
 #'     example_many_sequences,
 #'     locations_colname = "methylation_locations",
 #'     probabilities_colname = "methylation_probabilities",
@@ -846,7 +854,7 @@ visualise_methylation_colour_scale <- function(
 #'     desc_sort = TRUE
 #' )
 #'
-#' extract_methylation_from_dataframe(
+#' extract_and_sort_methylation(
 #'     example_many_sequences,
 #'     locations_colname = "hydroxymethylation_locations",
 #'     probabilities_colname = "hydroxymethylation_probabilities",
@@ -858,7 +866,7 @@ visualise_methylation_colour_scale <- function(
 #' )
 #'
 #' @export
-extract_methylation_from_dataframe <- function(
+extract_and_sort_methylation <- function(
     modification_data,
     locations_colname = "methylation_locations",
     probabilities_colname = "methylation_probabilities",
@@ -1000,7 +1008,7 @@ convert_modification_to_number_vector <- function(
 #' @return `dataframe`. Dataframe of `x`, `y`, and `value` (i.e. probability to draw).
 #'
 #' @examples
-#' d <- extract_methylation_from_dataframe(example_many_sequences)
+#' d <- extract_and_sort_methylation(example_many_sequences)
 #'
 #' ## Unscaled i.e. integers
 #' rasterise_probabilities(
@@ -1119,3 +1127,8 @@ visualize_methylation_color_scale <- visualise_methylation_colour_scale
 #' @usage NULL
 #' @export
 rasterize_probabilities <- rasterise_probabilities
+
+#' @rdname extract_and_sort_methylation
+#' @usage NULL
+#' @export
+extract_methylation_from_dataframe <- extract_and_sort_methylation

@@ -46,10 +46,17 @@
 #' metadata   <- read.csv(metadata_file)
 #'
 #' ## Merge data (including reversing if needed)
-#' merge_fastq_with_metadata(fastq_data, metadata)
+#' merge_fastq_with_metadata(
+#'     fastq_data,
+#'     metadata
+#' )
 #'
 #' ## Merge data reversing but not complementing sequences
-#' merge_fastq_with_metadata(fastq_data, metadata, reverse_complement_mode = "reverse_only")
+#' merge_fastq_with_metadata(
+#'     fastq_data,
+#'     metadata,
+#'     reverse_complement_mode = "reverse_only"
+#' )
 #'
 #' @export
 merge_fastq_with_metadata <- function(fastq_data, metadata, reverse_complement_mode = "DNA") {
@@ -152,13 +159,26 @@ merge_fastq_with_metadata <- function(fastq_data, metadata, reverse_complement_m
 #' metadata <- read.csv(metadata_file)
 #'
 #' ## Merge data (including reversing if needed)
-#' merge_methylation_with_metadata(methylation_data, metadata, reversed_location_offset = 0)
+#' merge_methylation_with_metadata(
+#'     methylation_data,
+#'     metadata,
+#'     reversed_location_offset = 0
+#' )
 #'
 #' ## Merge data with offset = 1
-#' merge_methylation_with_metadata(methylation_data, metadata, reversed_location_offset = 1)
+#' merge_methylation_with_metadata(
+#'     methylation_data,
+#'     metadata,
+#'     reversed_location_offset = 1
+#' )
 #'
 #' ## Merge data with offset = 1 but without complementing
-#' merge_methylation_with_metadata(methylation_data, metadata, reversed_location_offset = 1, reverse_complement_mode = "reverse_only")
+#' merge_methylation_with_metadata(
+#'     methylation_data,
+#'     metadata,
+#'     reversed_location_offset = 1,
+#'     reverse_complement_mode = "reverse_only"
+#' )
 #'
 #' @export
 merge_methylation_with_metadata <- function(methylation_data, metadata, reversed_location_offset = 0, reverse_complement_mode = "DNA") {
@@ -252,6 +272,12 @@ merge_methylation_with_metadata <- function(methylation_data, metadata, reversed
 #'     sequence_vector = c("UAAGGC", "UAAGGC"),
 #'     direction_vector = c("reverse", "forward"),
 #'     output_mode = "RNA"
+#' )
+#'
+#' reverse_sequence_if_needed(
+#'     sequence_vector = c("TAAGGC", "TAAGGC"),
+#'     direction_vector = c("reverse", "forward"),
+#'     output_mode = "reverse_only"
 #' )
 #'
 #' @export

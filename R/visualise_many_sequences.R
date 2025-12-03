@@ -339,14 +339,22 @@ visualise_many_sequences <- function(
 
 #' Extract, sort, and add spacers between sequences in a dataframe
 #'
+#' @aliases extract_sequences_from_dataframe
+#'
+#' @description
+#' `extract_sequences_from_dataframe()` is an alias for `extract_and_sort_sequences()` - see [aliases].
+#'
 #' This function takes a dataframe that contains sequences and metadata,
 #' recursively splits it into multiple levels of groups defined by `grouping_levels`,
 #' and adds breaks between each level of group as defined by `grouping_levels`.
 #' Within each lowest-level group, reads are sorted by `sort_by`, with order determined
-#' by `desc_sort`. \cr\cr Default values are set up to work with the included dataset
-#' [`example_many_sequences`]. \cr\cr The returned sequences vector is ideal input for
-#' [visualise_many_sequences()].\cr\cr Also called by [extract_methylation_from_dataframe()]
-#' to produce input for [visualise_methylation()].
+#' by `desc_sort`.
+#'
+#' Default values are set up to work with the included dataset [`example_many_sequences`].
+#'
+#' The returned sequences vector is ideal input for [visualise_many_sequences()].
+#'
+#' Also called by [extract_methylation_from_dataframe()] to produce input for [visualise_methylation()].
 #'
 #' @param sequence_dataframe `dataframe`. A dataframe containing the sequence information and all required meta-data. See [`example_many_sequences`] for an example of a compatible dataframe.
 #' @param sequence_variable `character`. The name of the column within the dataframe containing the sequence information to be output. Defaults to `"sequence"`.
@@ -671,3 +679,8 @@ insert_at_indices <- function(
 #' @usage NULL
 #' @export
 visualize_many_sequences <- visualise_many_sequences
+
+#' @rdname extract_and_sort_sequences
+#' @usage NULL
+#' @export
+extract_sequences_from_dataframe <- extract_and_sort_sequences

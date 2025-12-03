@@ -163,7 +163,7 @@ test_that("methylation visualisation works with sequence, fancy", {
 
 test_that("methylation visualisation works with scaled probabilities, default", {
     filename <- "visualise_methylation_test_16"
-    d <- extract_methylation_from_dataframe(example_many_sequences)
+    d <- extract_and_sort_methylation(example_many_sequences)
     visualise_methylation(d$locations, d$probabilities, d$sequences, filename = paste0(root, filename, ".png"), sequence_text_type = "probability", sequence_text_size = 10, sequence_text_col = "white", other_bases_outline_linewidth = 0, index_annotation_lines = c(1, 23, 37), pixels_per_base = 15)
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),

@@ -68,15 +68,26 @@ fetch_acceptable_distortion <- function(verbose = TRUE) {
 #' so please submit a bug report by creating a github issue
 #'  (<`r packageDescription("ggDNAvis")$BugReports`>).
 #'
-#' There are currently four major functions and one dataset with aliases configured:
+#' All four major `visualise_` functions have aliases to also accept `visualize_`:
 #'
-#' - [`sequence_colour_palettes`] ([`sequence_color_palettes`] & [`sequence_col_palettes`])
 #' - [visualise_many_sequences()] ([visualize_many_sequences()])
 #' - [visualise_methylation()] ([visualize_methylation()])
 #' - [visualise_methylation_colour_scale()] ([visualize_methylation_color_scale()])
 #' - [visualise_single_sequence()] ([visualize_single_sequence()])
 #'
-#' Additionally there are three helper functions with aliases:
+#' As of v1.0.0, `extract_methylation_from_dataframe()` has been renamed `extract_and_sort_methylation()`
+#' for consistency with `extract_and_sort_sequences()`. To preserve compatibility and ensure consistency,
+#' both functions now accept either name formulation:
+#'
+#' - [extract_and_sort_sequences()] ([extract_sequences_from_dataframe()])
+#' - [extract_and_sort_methylation()] ([extract_methylation_from_dataframe()])
+#'
+#' The builtin dataset [`sequence_colour_palettes`], like all `colour` arguments, also accepts
+#' `color` or `col`:
+#'
+#' - [`sequence_colour_palettes`] ([`sequence_color_palettes`] & [`sequence_col_palettes`])
+#'
+#' Additionally, the three `rasterise_` helper functions also accept `rasterize_`:
 #'
 #' - [rasterise_matrix()] ([rasterize_matrix()])
 #' - [rasterise_index_annotations()] ([rasterize_index_annotations()])

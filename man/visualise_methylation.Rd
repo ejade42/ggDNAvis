@@ -130,7 +130,7 @@ A ggplot object containing the full visualisation, or \code{invisible(NULL)} if 
 \code{visualize_methylation()} is an alias for \code{visualise_methylation()} - see \link{aliases}.
 
 This function takes vectors of modifications locations, modification probabilities,
-and sequence lengths (e.g. created by \code{\link[=extract_methylation_from_dataframe]{extract_methylation_from_dataframe()}}) and
+and sequence lengths (e.g. created by \code{\link[=extract_and_sort_methylation]{extract_and_sort_methylation()}}) and
 visualises the probability of methylation (or other modification) across each read.
 
 Assumes that the three main input vectors are of equal length \eqn{n} and represent \eqn{n} sequences
@@ -154,7 +154,7 @@ can be produced via \code{\link[=visualise_methylation_colour_scale]{visualise_m
 \examples{
 \donttest{
 ## Extract info from dataframe
-methylation_info <- extract_methylation_from_dataframe(example_many_sequences)
+methylation_info <- extract_and_sort_methylation(example_many_sequences)
 
 ## Visualise example_many_sequences with all defaults
 ## This looks ugly because it isn't at the right scale/aspect ratio

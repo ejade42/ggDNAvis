@@ -35,7 +35,7 @@ and produces a dataframe of the x and y coordinates to draw each probability at
 and the probability text to draw inside each box.
 }
 \examples{
-d <- extract_methylation_from_dataframe(example_many_sequences)
+d <- extract_and_sort_methylation(example_many_sequences)
 
 ## Unscaled i.e. integers
 rasterise_probabilities(

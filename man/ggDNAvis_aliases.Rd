@@ -12,16 +12,29 @@ If any American spellings don't work, I most likely overlooked them and can easi
 so please submit a bug report by creating a github issue
 (\url{https://github.com/ejade42/ggDNAvis/issues}).
 
-There are currently four major functions and one dataset with aliases configured:
+All four major \code{visualise_} functions have aliases to also accept \code{visualize_}:
 \itemize{
-\item \code{\link{sequence_colour_palettes}} (\code{\link{sequence_color_palettes}} & \code{\link{sequence_col_palettes}})
 \item \code{\link[=visualise_many_sequences]{visualise_many_sequences()}} (\code{\link[=visualize_many_sequences]{visualize_many_sequences()}})
 \item \code{\link[=visualise_methylation]{visualise_methylation()}} (\code{\link[=visualize_methylation]{visualize_methylation()}})
 \item \code{\link[=visualise_methylation_colour_scale]{visualise_methylation_colour_scale()}} (\code{\link[=visualize_methylation_color_scale]{visualize_methylation_color_scale()}})
 \item \code{\link[=visualise_single_sequence]{visualise_single_sequence()}} (\code{\link[=visualize_single_sequence]{visualize_single_sequence()}})
 }
 
-Additionally there are three helper functions with aliases:
+As of v1.0.0, \code{extract_methylation_from_dataframe()} has been renamed \code{extract_and_sort_methylation()}
+for consistency with \code{extract_and_sort_sequences()}. To preserve compatibility and ensure consistency,
+both functions now accept either name formulation:
+\itemize{
+\item \code{\link[=extract_and_sort_sequences]{extract_and_sort_sequences()}} (\code{\link[=extract_sequences_from_dataframe]{extract_sequences_from_dataframe()}})
+\item \code{\link[=extract_and_sort_methylation]{extract_and_sort_methylation()}} (\code{\link[=extract_methylation_from_dataframe]{extract_methylation_from_dataframe()}})
+}
+
+The builtin dataset \code{\link{sequence_colour_palettes}}, like all \code{colour} arguments, also accepts
+\code{color} or \code{col}:
+\itemize{
+\item \code{\link{sequence_colour_palettes}} (\code{\link{sequence_color_palettes}} & \code{\link{sequence_col_palettes}})
+}
+
+Additionally, the three \code{rasterise_} helper functions also accept \code{rasterize_}:
 \itemize{
 \item \code{\link[=rasterise_matrix]{rasterise_matrix()}} (\code{\link[=rasterize_matrix]{rasterize_matrix()}})
 \item \code{\link[=rasterise_index_annotations]{rasterise_index_annotations()}} (\code{\link[=rasterize_index_annotations]{rasterize_index_annotations()}})
