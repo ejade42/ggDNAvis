@@ -834,7 +834,7 @@ rasterise_index_annotations <- function(
 
     ## Instantly return empty dataframe if interval or indices is blank
     if (index_annotation_interval == 0 || length(index_annotation_lines) == 0) {
-        return(data.frame("x_position" = numeric(), "y_position" = numeric(), "annotation" = character(), "type" = character()))
+        return(data.frame("x" = numeric(), "y" = numeric(), "value" = character()))
     }
 
     ## Check sorting and uniqueness
@@ -876,12 +876,18 @@ rasterise_index_annotations <- function(
     ## where line_length is either the length of each sequence, or the length (k) of the longest sequence
     length_per_line <- nchar(new_sequences_vector[annotated_sequence_indices])
     if (index_annotation_full_line) {
-        annotations_per_line <- k %/% index_annotation_interval
-        j_vals <- rep(seq(index_annotation_interval, k, index_annotation_interval), times = length(annotated_sequence_indices))
-        i_vals <- rep(annotated_sequence_indices, each = annotations_per_line)
+        if (k >= index_annotation_interval) {
+            annotations_per_line <- k %/% index_annotation_interval
+            j_vals <- rep(seq(index_annotation_interval, k, index_annotation_interval), times = length(annotated_sequence_indices))
+            i_vals <- rep(annotated_sequence_indices, each = annotations_per_line)
+        ## Can't annotate if interval is greater than max line length
+        } else {
+            j_vals <- numeric()
+            i_vals <- numeric()
+        }
     } else {
         annotations_per_line <- length_per_line %/% index_annotation_interval
-        j_vals <- unlist(lapply(length_per_line, function(x) {if (x>0) {seq(index_annotation_interval, x, index_annotation_interval)}}))
+        j_vals <- unlist(lapply(length_per_line, function(x) {if (x>index_annotation_interval) {seq(index_annotation_interval, x, index_annotation_interval)}}))
         i_vals <- rep(annotated_sequence_indices, times = annotations_per_line)
     }
 

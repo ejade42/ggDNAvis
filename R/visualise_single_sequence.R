@@ -179,6 +179,11 @@ visualise_single_sequence <- function(
         cli_alert_info("Automatically setting index_annotation_interval to 0 as index_annotation_size is 0", class = "atypical_turn_off")
         index_annotation_interval <- 0
     }
+    if (index_annotation_interval > min(nchar(sequence), line_wrapping)) {
+        cli_alert_info("Automatically disabling index annotations as index_annotation_interval is greater than the maximum line length")
+        index_annotation_interval <- 0
+    }
+
     ## If annotations are off, set vertical position to 0
     ## This helps with calculating margin later
     if (index_annotation_interval == 0) {
@@ -214,10 +219,10 @@ visualise_single_sequence <- function(
     offset_start <- 0
     offset_end   <- 0
     if (nchar(tail(split_sequences, 1)) >= index_annotation_interval) {
-        index_annotation_lines <- 1:length(split_sequences)
+        index_annotation_lines <- seq_along(split_sequences)
         annotation_lines_trimmed <- FALSE
     } else {
-        index_annotation_lines <- 1:(length(split_sequences)-1)
+        index_annotation_lines <- head(seq_along(split_sequences), -1)
         annotation_lines_trimmed <- TRUE
     }
 
@@ -226,13 +231,13 @@ visualise_single_sequence <- function(
     ## Use special case when spacing is 0 and index annotations are on to insert one line if needed
     if (index_annotations_above) {
         if (spacing > 0 || index_annotation_interval == 0) {
-            sequences <- insert_at_indices(split_sequences, 1:length(split_sequences), index_annotations_above, insert = "", vert = spacing)
+            sequences <- insert_at_indices(split_sequences, seq_along(split_sequences), index_annotations_above, insert = "", vert = spacing)
             extra_spaces_start <- extra_spaces_start + spacing
         } else {
             sequences <- insert_at_indices(split_sequences, 1, index_annotations_above, insert = "", vert = index_annotation_vertical_position)
             extra_spaces_start <- extra_spaces_start + ceiling(index_annotation_vertical_position)
             offset_start <- ceiling(index_annotation_vertical_position)
-            index_annotation_lines <- 1:length(split_sequences) + offset_start
+            index_annotation_lines <- seq_along(split_sequences) + offset_start
         }
     } else {
         if (spacing > 0 || index_annotation_interval == 0 || annotation_lines_trimmed) {

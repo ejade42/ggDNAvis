@@ -27,7 +27,7 @@ reference:
   - merge_fastq_with_metadata
   - merge_methylation_with_metadata
   - extract_and_sort_sequences
-  - extract_methylation_from_dataframe
+  - extract_and_sort_methylation
 
 - subtitle: Included data
   desc: >

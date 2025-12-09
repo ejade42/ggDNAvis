@@ -521,16 +521,19 @@ extract_and_sort_sequences <- function(
 
         group_vals <- unique(pull(df, !!current_group))
         for (i in seq_along(group_vals)) {
+            ## Create subset dataframe of only a particular level of the current grouping variable
             group_val <- group_vals[[i]]
             df_sub <- df %>% filter(!!current_group == group_val)
 
+            ## Add sequences for this group to the vector
+            ## If this isn't the lowest level, recursively put gaps in at the lower levels first
             if (level < length(group_syms)) {
                 sequences <- c(sequences, extract_sequences(df_sub, level + 1))
             } else {
                 sequences <- c(sequences, pull(df_sub, !!sequence_variable))
             }
 
-            # Add gap only if this is not the last subgroup
+            ## Add gap afterwards only if this is not the last subgroup
             if (i < length(group_vals)) {
                 sequences <- c(sequences, rep("", current_gap))
             }
@@ -658,7 +661,7 @@ insert_at_indices <- function(
 
     ## Insert blanks
     new_vector <- NULL
-    for (i in 1:length(original_vector)) {
+    for (i in seq_along(original_vector)) {
         if (i %in% insertion_indices) {
             if (insert_before == TRUE) {
                 new_vector <- c(new_vector, insert, original_vector[i])

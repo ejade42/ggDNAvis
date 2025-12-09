@@ -116,5 +116,5 @@ visualise_methylation(
     geom_text(data = directions, aes(x = x, y = y, label = text), size = 15, col = "darkred", fontface = "bold") +
     geom_text(data = titles, aes(x = x, y = y, label = text), hjust = 0, size = 16)
 
-ggsave("location_reversing_example.png", dpi = 100, width = k + 2 + 2*margin, height = n + 2*margin)
+ggsave("location_reversing_example.png", dpi = 100, width = k + 2 + 2*margin, height = n + 2*margin, device = ragg::agg_png)
 

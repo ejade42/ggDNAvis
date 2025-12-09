@@ -281,7 +281,7 @@ test_that("rasterising index annotations, full example", {
 
 
     ## Extra tests for returning blank dataframe
-    blank_data <- data.frame("x_position" = numeric(), "y_position" = numeric(), "annotation" = character(), "type" = character())
+    blank_data <- data.frame("x" = numeric(), "y" = numeric(), "value" = character())
     expect_equal(rasterise_index_annotations(new_sequences, sequences, index_annotation_interval = 0, index_annotation_lines= numeric()), blank_data)
     expect_equal(rasterise_index_annotations(new_sequences, sequences, index_annotation_interval = 10, index_annotation_lines= numeric()), blank_data)
     expect_equal(rasterise_index_annotations(new_sequences, sequences, index_annotation_interval = 0, index_annotation_lines= c(1, 2, 3)), blank_data)

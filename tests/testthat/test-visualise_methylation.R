@@ -209,6 +209,22 @@ test_that("forcing rasterisation works and produces a warning", {
                                        metric = "MAE"))$distortion, acceptable_distortion)
 })
 
+test_that("one sequence methylation works, spacing", {
+    filename <- "visualise_methylation_test_21"
+    visualise_methylation("2", "255", "ACGT", filename = paste0(root, filename, ".png"), sequence_text_type = "sequence", pixels_per_base = 30)
+    expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
+                                       image_read(paste0(reference, filename, ".png")),
+                                       metric = "MAE"))$distortion, acceptable_distortion)
+})
+
+test_that("one sequence methylation works, no spacing", {
+    filename <- "visualise_methylation_test_22"
+    expect_message(visualise_methylation("2", "255", "ACGT", filename = paste0(root, filename, ".png"), sequence_text_type = "sequence", index_annotation_size = 0, pixels_per_base = 30))
+    expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
+                                       image_read(paste0(reference, filename, ".png")),
+                                       metric = "MAE"))$distortion, acceptable_distortion)
+})
+
 
 test_that("argument validation rejects bad arguments for methylation visualisation", {
     d <- extract_methylation_from_dataframe(example_many_sequences)

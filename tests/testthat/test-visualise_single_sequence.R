@@ -284,6 +284,14 @@ test_that("logic for large spaces underneath works", {
                                        metric = "MAE"))$distortion, acceptable_distortion)
 })
 
+test_that("very short sequences visualise correctly", {
+    filename <- "sone_2019_f1_1_expanded_test_32"
+    expect_message(visualise_single_sequence("ACGT", sequence_colours = sequence_col_palettes$bright_pale2, filename = paste0(root, filename, ".png"), pixels_per_base = 25))
+    expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
+                                       image_read(paste0(reference, filename, ".png")),
+                                       metric = "MAE"))$distortion, acceptable_distortion)
+})
+
 
 ## Test fail cases/invalid arguments to main single sequence visualisation function
 test_that("single sequence visualisation fails when arguments are invalid", {

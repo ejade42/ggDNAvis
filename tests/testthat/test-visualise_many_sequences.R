@@ -224,6 +224,22 @@ test_that("forcing raster works", {
                                        metric = "MAE"))$distortion, acceptable_distortion)
 })
 
+test_that("single sequence works with space but no annotation text", {
+    filename <- "visualise_many_sequences_test_25"
+    visualise_many_sequences("ACGT", sequence_colours = sequence_colour_palettes$bright_deep, pixels_per_base = 25, filename = paste0(root, filename, ".png"))
+    expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
+                                       image_read(paste0(reference, filename, ".png")),
+                                       metric = "MAE"))$distortion, acceptable_distortion)
+})
+
+test_that("single sequence works with no space but no annotation text", {
+    filename <- "visualise_many_sequences_test_26"
+    visualise_many_sequences("ACGT", sequence_colours = sequence_colour_palettes$bright_deep, index_annotation_lines = NA, pixels_per_base = 25, filename = paste0(root, filename, ".png"))
+    expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
+                                       image_read(paste0(reference, filename, ".png")),
+                                       metric = "MAE"))$distortion, acceptable_distortion)
+})
+
 
 
 ## Test fail cases/invalid arguments to main multiple sequence visualisation function
