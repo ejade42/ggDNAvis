@@ -475,7 +475,7 @@ visualise_methylation <- function(
     monitor_time <- monitor(monitor_performance, start_time, monitor_time, "creating image matrix")
     max_length <- max(nchar(sequences))
     image_matrix <- matrix(NA, nrow = length(modification_locations), ncol = max_length)
-    for (i in 1:length(modification_locations)) {
+    for (i in seq_along(modification_locations)) {
         numeric_sequence_representation <- convert_modification_to_number_vector(modification_locations[i], modification_probabilities[i], max_length, nchar(sequences[i]))
         image_matrix[i, ] <- numeric_sequence_representation
     }
@@ -1091,7 +1091,7 @@ rasterise_probabilities <- function(
 
     ## Calculate coordinates
     locations_list <- lapply(modification_locations, string_to_vector)
-    i_vals <- rep(1:length(locations_list), times = lengths(locations_list))
+    i_vals <- rep(seq_along(locations_list), times = lengths(locations_list))
     j_vals <- unlist(locations_list)
 
     x_vec <- (j_vals - 0.5) / k

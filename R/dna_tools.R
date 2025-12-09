@@ -496,7 +496,7 @@ create_image_data <- function(sequences) {
 
     max_length <- max(nchar(sequences))
     image_matrix <- matrix(NA, nrow = length(sequences), ncol = max_length)
-    for (i in 1:length(sequences)) {
+    for (i in seq_along(sequences)) {
         numeric_sequence_representation <- convert_sequence_to_numbers(sequences[i], max_length)
         image_matrix[i, ] <- numeric_sequence_representation
     }
@@ -864,7 +864,7 @@ rasterise_index_annotations <- function(
     ## Remove out-of-range indices
     ## As original indices to annotate are sorted, positive, and unique, this will exclusively remove out-of-range indices
     if (length(annotated_sequence_indices) > length(original_sequences_vector)) {
-        annotated_sequence_indices <- annotated_sequence_indices[1:length(original_sequences_vector)]
+        annotated_sequence_indices <- annotated_sequence_indices[seq_along(original_sequences_vector)]
     }
 
     ## Calculate scaling factors

@@ -502,7 +502,7 @@ reverse_locations_if_needed <- function(locations_vector, direction_vector, leng
 
     ## Main function
     new_locations_vector <- rep(NA, length(locations_vector))
-    for (i in 1:length(locations_vector)) {
+    for (i in seq_along(locations_vector)) {
         if (tolower(direction_vector[i]) == "forward") {
             new_locations_vector[i] <- locations_vector[i]
         } else if (tolower(direction_vector[i]) == "reverse") {
@@ -583,7 +583,7 @@ reverse_probabilities_if_needed <- function(probabilities_vector, direction_vect
 
     ## Main function
     new_probabilities_vector <- rep(NA, length(probabilities_vector))
-    for (i in 1:length(probabilities_vector)) {
+    for (i in seq_along(probabilities_vector)) {
         if (tolower(direction_vector[i]) == "forward") {
             new_probabilities_vector[i] <- probabilities_vector[i]
         } else if (tolower(direction_vector[i]) == "reverse") {

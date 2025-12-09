@@ -55,9 +55,9 @@ read_fastq <- function(filename = file.choose(), calculate_length = TRUE) {
     ## Read and parse FASTQ
     input_fastq <- readLines(filename)
 
-    headers   <- input_fastq[1:length(input_fastq) %% 4 == 1]
-    sequences <- input_fastq[1:length(input_fastq) %% 4 == 2]
-    qualities <- input_fastq[1:length(input_fastq) %% 4 == 0]
+    headers   <- input_fastq[seq_along(input_fastq) %% 4 == 1]
+    sequences <- input_fastq[seq_along(input_fastq) %% 4 == 2]
+    qualities <- input_fastq[seq_along(input_fastq) %% 4 == 0]
 
     ## Create dataframe
     output_data <- data.frame(read = headers, sequence = sequences, quality = qualities)
@@ -237,9 +237,9 @@ read_modified_fastq <- function(filename = file.choose(), debug = FALSE) {
     ## Read and parse FASTQ
     input_fastq <- readLines(filename)
 
-    headers   <- input_fastq[1:length(input_fastq) %% 4 == 1]
-    sequences <- input_fastq[1:length(input_fastq) %% 4 == 2]
-    qualities <- input_fastq[1:length(input_fastq) %% 4 == 0]
+    headers   <- input_fastq[seq_along(input_fastq) %% 4 == 1]
+    sequences <- input_fastq[seq_along(input_fastq) %% 4 == 2]
+    qualities <- input_fastq[seq_along(input_fastq) %% 4 == 0]
 
     header_info <- parse_fastq_header(headers, sequences, debug)
     modification_data <- data.frame(read = header_info$read_id,
@@ -677,7 +677,7 @@ write_modified_fastq <- function(
     construct_header <- function(read_id, sequence, locations_list, probabilities_list, modification_prefixes, include_blank_tags) {
         MM <- "MM:Z:"
         ML <- "ML:B:C"
-        for (i in 1:length(modification_prefixes)) {
+        for (i in seq_along(modification_prefixes)) {
             modification_type <- modification_prefixes[i]
             locations         <- string_to_vector(locations_list[[i]])
             target_base       <- substr(modification_type, 1, 1)
