@@ -29,6 +29,7 @@ visualise_many_sequences(
   index_annotations_above = TRUE,
   index_annotation_vertical_position = 1/3,
   index_annotation_full_line = TRUE,
+  index_annotation_always_first_base = FALSE,
   outline_colour = "black",
   outline_linewidth = 3,
   outline_join = "mitre",
@@ -152,6 +153,12 @@ visualise_many_sequences(
   `logical`. Whether index annotations should continue to the end of the
   longest sequence (`TRUE`, default) or should only continue as far as
   each selected line does (`FALSE`).
+
+- index_annotation_always_first_base:
+
+  `logical`. Whether to force the first base in each line to always be
+  annotated regardless of whether it occurs at the
+  `index_annotation_interval`. Defaults to `FALSE`.
 
 - outline_colour:
 

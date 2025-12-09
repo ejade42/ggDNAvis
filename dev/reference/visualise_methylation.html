@@ -121,6 +121,7 @@ can be produced via <code><a href="visualise_methylation_colour_scale.html">visu
 <span>  index_annotations_above <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  index_annotation_vertical_position <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">3</span>,</span>
 <span>  index_annotation_full_line <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  index_annotation_always_first_base <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  outline_colour <span class="op">=</span> <span class="st">"black"</span>,</span>
 <span>  outline_linewidth <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>  outline_join <span class="op">=</span> <span class="st">"mitre"</span>,</span>
@@ -227,6 +228,10 @@ can be produced via <code><a href="visualise_methylation_colour_scale.html">visu
 
 <dt id="arg-index-annotation-full-line">index_annotation_full_line<a class="anchor" aria-label="anchor" href="#arg-index-annotation-full-line"></a></dt>
 <dd><p><code>logical</code>. Whether index annotations should continue to the end of the longest sequence (<code>TRUE</code>, default) or should only continue as far as each selected line does (<code>FALSE</code>).</p></dd>
+
+
+<dt id="arg-index-annotation-always-first-base">index_annotation_always_first_base<a class="anchor" aria-label="anchor" href="#arg-index-annotation-always-first-base"></a></dt>
+<dd><p><code>logical</code>. Whether to force the first base in each line to always be annotated regardless of whether it occurs at the <code>index_annotation_interval</code>. Defaults to <code>FALSE</code>.</p></dd>
 
 
 <dt id="arg-outline-colour">outline_colour<a class="anchor" aria-label="anchor" href="#arg-outline-colour"></a></dt>
