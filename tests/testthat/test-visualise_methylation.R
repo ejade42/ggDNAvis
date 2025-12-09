@@ -225,6 +225,23 @@ test_that("one sequence methylation works, no spacing", {
                                        metric = "MAE"))$distortion, acceptable_distortion)
 })
 
+test_that("forcing first base annotation works", {
+    filename <- "visualise_methylation_test_23"
+    d <- extract_and_sort_methylation(example_many_sequences)
+    expect_message(visualise_methylation(d$locations, d$probabilities, d$sequences, filename = paste0(root, filename, ".png"), sequence_text_type = "probability", sequence_text_size = 0, index_annotation_lines = seq_along(d$sequences), index_annotation_always_first_base = TRUE, pixels_per_base = 10))
+    expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
+                                       image_read(paste0(reference, filename, ".png")),
+                                       metric = "MAE"))$distortion, acceptable_distortion)
+})
+
+test_that("forcing first base annotation works, not full lines", {
+    filename <- "visualise_methylation_test_24"
+    d <- extract_and_sort_methylation(example_many_sequences)
+    visualise_methylation(d$locations, d$probabilities, d$sequences, filename = paste0(root, filename, ".png"), index_annotation_lines = seq_along(d$sequences), index_annotation_always_first_base = TRUE, index_annotation_full_lines = F, pixels_per_base = 10)
+    expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
+                                       image_read(paste0(reference, filename, ".png")),
+                                       metric = "MAE"))$distortion, acceptable_distortion)
+})
 
 test_that("argument validation rejects bad arguments for methylation visualisation", {
     d <- extract_methylation_from_dataframe(example_many_sequences)

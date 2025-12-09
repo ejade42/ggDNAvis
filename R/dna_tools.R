@@ -896,7 +896,7 @@ rasterise_index_annotations <- function(
     } else {
         annotations_per_line <- length_per_line %/% index_annotation_interval
         if (index_annotation_always_first_base) {
-            annotations_per_line[annotations_per_line > 0] <- annotations_per_line[annotations_per_line > 0] + 1
+            annotations_per_line[length_per_line > 0] <- annotations_per_line[length_per_line > 0] + 1
         }
 
         j_vals <- unlist(lapply(length_per_line, function(l) {
@@ -940,14 +940,14 @@ rasterise_index_annotations <- function(
         ## Current behaviour is to sum indices only along annotated sequences
         ## Maybe in future I could add an option for summing along all sequences, but why would anyone want this?
         prior_line_sums <- c(0, head(cumsum(length_per_line), -1))
-        annotations <- sequence(annotations_per_line) * index_annotation_interval + rep(prior_line_sums, annotations_per_line)
+        annotations <- j_vals + rep(prior_line_sums, annotations_per_line)
     } else {
         annotations <- j_vals
     }
 
     ## Create and return dataframe
     annotation_data <- data.frame("x" = x_vec, "y" = y_vec, "value" = as.character(annotations))
-    return(annotation_data)
+    return(unique(annotation_data))
 }
 
 

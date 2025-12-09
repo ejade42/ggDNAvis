@@ -240,7 +240,23 @@ test_that("single sequence works with no space but no annotation text", {
                                        metric = "MAE"))$distortion, acceptable_distortion)
 })
 
+test_that("forcing first line annotation works", {
+    filename <- "visualise_many_sequences_test_27"
+    sequences <- extract_and_sort_sequences(example_many_sequences)
+    visualise_many_sequences(sequences, sequence_colours = sequence_colour_palettes$bright_deep, index_annotation_always_first_base = TRUE, index_annotation_lines = seq_along(sequences), pixels_per_base = 25, filename = paste0(root, filename, ".png"))
+    expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
+                                       image_read(paste0(reference, filename, ".png")),
+                                       metric = "MAE"))$distortion, acceptable_distortion)
+})
 
+test_that("forcing first line annotation works, not full lines", {
+    filename <- "visualise_many_sequences_test_28"
+    sequences <- extract_and_sort_sequences(example_many_sequences)
+    visualise_many_sequences(sequences, sequence_colours = sequence_colour_palettes$bright_deep, index_annotation_always_first_base = TRUE, index_annotation_lines = seq_along(sequences), index_annotation_full_line = FALSE, pixels_per_base = 25, filename = paste0(root, filename, ".png"))
+    expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
+                                       image_read(paste0(reference, filename, ".png")),
+                                       metric = "MAE"))$distortion, acceptable_distortion)
+})
 
 ## Test fail cases/invalid arguments to main multiple sequence visualisation function
 test_that("single sequence visualisation fails when arguments are invalid", {

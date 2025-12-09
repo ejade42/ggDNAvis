@@ -219,7 +219,7 @@ visualise_single_sequence <- function(
     extra_spaces_end   <- 0
     offset_start <- 0
     offset_end   <- 0
-    if (nchar(tail(split_sequences, 1)) >= index_annotation_interval) {
+    if (nchar(tail(split_sequences, 1)) >= index_annotation_interval || index_annotation_always_first_base) {
         index_annotation_lines <- seq_along(split_sequences)
         annotation_lines_trimmed <- FALSE
     } else {
