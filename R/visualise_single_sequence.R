@@ -198,6 +198,11 @@ visualise_single_sequence <- function(
         bad_arg("outline_join", list(outline_join = outline_join), "must be one of 'mitre', 'round', or 'bevel'.")
     }
 
+    ## Error out if sequence length is 0
+    if (nchar(sequence) == 0) {
+        bad_arg("sequence", list(sequence = sequence), "must contain at least 1 base.")
+    }
+
     ## Warn about outlines getting cut off
     if (margin <= 0.25 && outline_linewidth > 0) {
         warn(paste("If margin is small and outlines are on (outline_linewidth > 0), outlines may be cut off at the edges of the plot. Check if this is happening and consider using a bigger margin.\nCurrent margin:", margin), class = "parameter_recommendation")
