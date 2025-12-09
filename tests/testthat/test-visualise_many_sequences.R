@@ -277,6 +277,7 @@ test_that("single sequence visualisation fails when arguments are invalid", {
         expect_error(visualise_many_sequences(sequence_vector_1, return = param), class = "argument_value_or_type")
         expect_error(visualise_many_sequences(sequence_vector_1, index_annotations_above = param), class = "argument_value_or_type")
         expect_error(visualise_many_sequences(sequence_vector_1, index_annotation_full_line = param), class = "argument_value_or_type")
+        expect_error(visualise_many_sequences(sequence_vector_1, index_annotation_always_first_base = param), class = "argument_value_or_type")
         expect_error(visualise_many_sequences(sequence_vector_1, force_raster = param), class = "argument_value_or_type")
     }
 

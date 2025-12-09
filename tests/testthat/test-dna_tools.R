@@ -405,6 +405,7 @@ test_that("rasterising index annotations fails when needed", {
     for (param in bad_param_value_for_bool) {
         expect_error(rasterise_index_annotations(sequences, new_sequences, index_annotation_full_line = param, index_annotation_lines = 1, index_annotation_interval = 1), class = "argument_value_or_type")
         expect_error(rasterise_index_annotations(sequences, new_sequences, index_annotations_above = param, index_annotation_lines = 1, index_annotation_interval = 1), class = "argument_value_or_type")
+        expect_error(rasterise_index_annotations(sequences, new_sequences, index_annotation_always_first_base = param, index_annotation_lines= 1, index_annotation_interval = 1), class = "argument_value_or_type")
         expect_error(rasterise_index_annotations(sequences, new_sequences, sum_indices = param, index_annotation_lines= 1, index_annotation_interval = 1), class = "argument_value_or_type")
     }
 

@@ -290,6 +290,7 @@ test_that("argument validation rejects bad arguments for methylation visualisati
         expect_error(visualise_methylation(d$locations, d$probabilities, d$sequences, return = param), class = "argument_value_or_type")
         expect_error(visualise_methylation(d$locations, d$probabilities, d$sequences, index_annotations_above = param), class = "argument_value_or_type")
         expect_error(visualise_methylation(d$locations, d$probabilities, d$sequences, index_annotation_full_line = param), class = "argument_value_or_type")
+        expect_error(visualise_methylation(d$locations, d$probabilities, d$sequences, index_annotation_always_first_base = param), class = "argument_value_or_type")
         expect_error(visualise_methylation(d$locations, d$probabilities, d$sequences, force_raster = param), class = "argument_value_or_type")
     }
 

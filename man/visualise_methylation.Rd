@@ -27,6 +27,7 @@ visualise_methylation(
   index_annotations_above = TRUE,
   index_annotation_vertical_position = 1/3,
   index_annotation_full_line = TRUE,
+  index_annotation_always_first_base = FALSE,
   outline_colour = "black",
   outline_linewidth = 3,
   outline_join = "mitre",
@@ -88,6 +89,8 @@ visualise_methylation(
 \item{index_annotation_vertical_position}{\code{numeric}. How far annotation numbers should be rendered above (if \code{index_annotations_above = TRUE}) or below (if \code{index_annotations_above = FALSE}) each base. Defaults to \code{1/3}.\cr\cr Not recommended to change at all. Strongly discouraged to set below 0 or above 1.}
 
 \item{index_annotation_full_line}{\code{logical}. Whether index annotations should continue to the end of the longest sequence (\code{TRUE}, default) or should only continue as far as each selected line does (\code{FALSE}).}
+
+\item{index_annotation_always_first_base}{\code{logical}. Whether to force the first base in each line to always be annotated regardless of whether it occurs at the \code{index_annotation_interval}. Defaults to \code{FALSE}.}
 
 \item{outline_colour}{\code{character}. The colour of the box outlines. Defaults to black.}
 
