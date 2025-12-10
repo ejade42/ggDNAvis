@@ -180,7 +180,7 @@ visualise_single_sequence <- function(
         cli_alert_info("Automatically setting index_annotation_interval to 0 as index_annotation_size is 0", class = "atypical_turn_off")
         index_annotation_interval <- 0
     }
-    if (index_annotation_interval > min(nchar(sequence), line_wrapping)) {
+    if (index_annotation_interval > min(nchar(sequence), line_wrapping) && !index_annotation_always_first_base) {
         cli_alert_info("Automatically disabling index annotations as index_annotation_interval is greater than the maximum line length")
         index_annotation_interval <- 0
     }
@@ -194,6 +194,11 @@ visualise_single_sequence <- function(
     if (spacing == 0 && index_annotation_interval != 0) {
         warn("Using spacing = 0 without disabling index annotation is not recommended.\nIt is likely to draw the annotations overlapping the sequence.\nRecommended to set index_annotation_interval = 0 to disable index annotations.", class = "parameter_recommendation")
     }
+    if (index_annotation_interval == 0 && index_annotation_always_first_base) {
+        warn("Disabling index annotations via index_annotation_interval = 0 or index_annotation_size = 0 overrides the index_annotation_always_first_base setting.\nIf you want the first base in each line to be annotated but no other bases, set index_annotation_interval greater than line_wrapping.", class = "parameter_recommendation")
+    }
+
+
     if (!(tolower(outline_join) %in% c("mitre", "round", "bevel"))) {
         bad_arg("outline_join", list(outline_join = outline_join), "must be one of 'mitre', 'round', or 'bevel'.")
     }
@@ -209,6 +214,9 @@ visualise_single_sequence <- function(
     }
     ## Accept NA as NULL for render_device
     if (is.atomic(render_device) && any(is.na(render_device))) {render_device <- NULL}
+
+    ## Strip whitespace from sequence
+    sequence <- gsub("\\s+", "", sequence)
     ## ---------------------------------------------------------------------
 
 
