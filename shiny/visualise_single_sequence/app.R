@@ -1,97 +1,122 @@
 library(shiny)
 library(rlang)
 library(bslib)
+library(jsonlite)
 library(colourpicker)
 library(ggDNAvis)
 
-ui <- fluidPage(
+ui <- page_sidebar(
     theme = bs_theme(version = 5),
-    headerPanel("ggDNAvis single sequence visualisation"),
-    sidebarLayout(
-        sidebarPanel(
-            tabsetPanel(
-                id = "input_mode",
-                tabPanel(
-                    "Text input",
-                    textInput("sequence", "Sequence to visualise:", placeholder = "ACGT", value = "ACGT")
-                ),
-                tabPanel(
-                    "Upload",
-                    fileInput("sequence_file", "Upload FASTA/text:", accept = c(".fasta", ".fa", ".txt"), placeholder = "No file selected"),
-                    div(
-                        style = "margin-bottom: 15px;",
-                        actionLink("fasta_upload_details", "View file requirements", icon = icon("info-circle"), class = "mt-0 mb-3")
-                    )
-                )
-            ),
+    title = "ggDNAvis single sequence visualisation",
+    sidebar = sidebar(
+        title = "Settings",
+        accordion(
+            id = "acc",
+            open = c("Input"),
 
-
-            accordion(
-                id = "acc",
-                open = FALSE,
-
-                accordion_panel(
-                    title = "Layout",
-                    numericInput("line_wrapping", "Bases per line:", 75, min = 1, step = 5),
-                    numericInput("spacing", "Line spacing:", 1, min = 0, step = 1),
-                    numericInput("margin", "Margin:", 0.5, min = 0, step = 0.5),
-                    numericInput("pixels_per_base", "Pixels per base:", 100, min = 1, step = 10)
-                ),
-
-
-                accordion_panel(
-                    title = "Colours",
-
-                    selectInput("sequence_colour_palette", "Sequence colour palette:", choices = c(names(sequence_colour_palettes), "custom")),
-                    conditionalPanel(
-                        condition = "input.sequence_colour_palette == 'custom'",
-                        fluidRow(
-                            colourInput("custom_A", "A", value = "#000000"),
-                            colourInput("custom_C", "C", value = "#000000"),
-                            colourInput("custom_G", "G", value = "#000000"),
-                            colourInput("custom_T", "T/U", value = "#000000")
-                        )
+            accordion_panel(
+                title = "Input",
+                tabsetPanel(
+                    id = "input_mode",
+                    tabPanel(
+                        "Text input",
+                        textInput("txt_sequence", "Sequence to visualise:", placeholder = "ACGT", value = "ACGT")
                     ),
+                    tabPanel(
+                        "Upload",
+                        fileInput("fil_sequence_file", "Upload FASTA/text:", accept = c(".fasta", ".fa", ".txt"), placeholder = "No file selected"),
+                        div(
+                            style = "margin-bottom: 15px;",
+                            actionLink("fasta_upload_details", "View file requirements", icon = icon("info-circle"), class = "mt-0 mb-3")
+                        )
+                    )
+                ),
+            ),
 
-                    colourInput("background_colour", "Background colour:", value = "#FFFFFF"),
-                    colourInput("sequence_text_colour", "Sequence text colour:", value = "#000000"),
-                    colourInput("index_annotation_colour", "Index annotation colour:", value = "darkred"),
-                    colourInput("outline_colour", "Outline colour:", value = "#000000")
+            accordion_panel(
+                title = "Layout",
+                numericInput("num_line_wrapping", "Bases per line:", 75, min = 1, step = 5),
+                numericInput("num_spacing", "Line spacing:", 1, min = 0, step = 1),
+                numericInput("num_margin", "Margin:", 0.5, min = 0, step = 0.5),
+                numericInput("num_pixels_per_base", "Pixels per base:", 100, min = 1, step = 10)
+            ),
+
+
+            accordion_panel(
+                title = "Colours",
+
+                selectInput("sel_sequence_colour_palette", "Sequence colour palette:", choices = c(names(sequence_colour_palettes), "custom")),
+                conditionalPanel(
+                    condition = "input.sel_sequence_colour_palette == 'custom'",
+                    fluidRow(
+                        colourInput("col_custom_A", "A", value = "#000000"),
+                        colourInput("col_custom_C", "C", value = "#000000"),
+                        colourInput("col_custom_G", "G", value = "#000000"),
+                        colourInput("col_custom_T", "T/U", value = "#000000")
+                    )
                 ),
 
-                accordion_panel(
-                    title = "Sizes and positions",
-                    numericInput("sequence_text_size", "Sequence text size:", value = 16, step = 1),
-                    numericInput("index_annotation_size", "Index annotation size:", value = 12.5, min = 0, step = 1),
-                    numericInput("index_annotation_interval", "Index annotation interval:", value = 15, min = 0, step = 3),
-                    numericInput("index_annotation_vertical_position", "Index annotation height:", value = 1/3, step = 1/6),
-                    checkboxInput("index_annotations_above", "Index annotations above boxes", value = TRUE),
-                    checkboxInput("index_annotation_always_first_base", "Always annotate first base", value = FALSE),
-                    numericInput("outline_linewidth", "Outline thickness:", value = 3, min = 0, step = 0.5),
-                    selectInput("outline_join", "Outline corner style:", choices = c("mitre", "round", "bevel"))
-                )
+                colourInput("col_background_colour", "Background colour:", value = "#FFFFFF"),
+                colourInput("col_sequence_text_colour", "Sequence text colour:", value = "#000000"),
+                colourInput("col_index_annotation_colour", "Index annotation colour:", value = "darkred"),
+                colourInput("col_outline_colour", "Outline colour:", value = "#000000")
             ),
-            downloadButton("download_image", label = "Download image", class = "mt-3 w-100")
-        ),
-        mainPanel(
+
+            accordion_panel(
+                title = "Sizes and positions",
+                numericInput("num_sequence_text_size", "Sequence text size:", value = 16, step = 1),
+                numericInput("num_index_annotation_size", "Index annotation size:", value = 12.5, min = 0, step = 1),
+                numericInput("num_index_annotation_interval", "Index annotation interval:", value = 15, min = 0, step = 3),
+                numericInput("num_index_annotation_vertical_position", "Index annotation height:", value = 1/3, step = 1/6),
+                checkboxInput("chk_index_annotations_above", "Index annotations above boxes", value = TRUE),
+                checkboxInput("chk_index_annotation_always_first_base", "Always annotate first base", value = FALSE),
+                numericInput("num_outline_linewidth", "Outline thickness:", value = 3, min = 0, step = 0.5),
+                selectInput("sel_outline_join", "Outline corner style:", choices = c("mitre", "round", "bevel"))
+            ),
+
+            accordion_panel(
+                title = "Restore settings",
+
+                ## Import button is set up as a dummy actionButton linked to a fileInput
+                actionButton("import_settings_proxy", "Import settings", class = "mt-0 w-100", icon = icon("upload"),
+                             onclick = "document.getElementById('import_settings').click()"),
+                div(style = "display: none",
+                    fileInput("import_settings", NULL, accept = ".json")),
+
+                downloadButton("export_settings", "Export settings", class = "mt-2 mb-2 w-100"),
+
+                checkboxInput("chk_restore_sequence", span("Export sequence text input value (will override current value when imported)", style = "font-size: 14px"), value = FALSE)
+            ),
+
+            downloadButton("download_image", "Download image", class = "mt-3 w-100"),
+
+
+
+
+
+        )
+    ),
+    card(
+        card_body(
             # Use imageOutput to place the image on the page
-            imageOutput("visualisation", width = "100%", height = "auto")
+            imageOutput("visualisation", width = "100%", height = "auto"),
         )
     )
 )
 
 server <- function(input, output, session) {
+    ## Create visualisation
     current_image_path <- reactive({
 
         ## Process sequence input
         if (input$input_mode == "Text input") {
-            sequence <- input$sequence
+            sequence <- input$txt_sequence
         } else if (input$input_mode == "Upload") {
-            if (is.null(input$sequence_file)) {
+            if (is.null(input$fil_sequence_file)) {
                 abort("Please upload a file...")
             }
 
-            lines <- readLines(input$sequence_file$datapath)
+            lines <- readLines(input$fil_sequence_file$datapath)
             sequence <- paste(lines[!grepl("^>", lines)], collapse = "\n")
         }
 
@@ -102,46 +127,46 @@ server <- function(input, output, session) {
             bad_chars <- unique(unlist(regmatches(sequence, gregexpr("[^ACGTUacgtu\\s]", sequence))))
 
             # Stop everything and show this error
-            abort(paste("Input must contain only A/C/G/T/U and whitespace (not counting FASTA header lines).\nIllegal characters:", paste(bad_chars, collapse = ", ")))
+            abort(paste("Input must contain only A/C/G/T/U and whitespace (not counting FASTA header lines).\nIllegal characters:", paste(sort(bad_chars), collapse = ", ")))
         }
 
         ## Process sequence colours
-        if (input$sequence_colour_palette == "custom") {
-            sequence_colours = c(input$custom_A, input$custom_C, input$custom_G, input$custom_T)
+        if (input$sel_sequence_colour_palette == "custom") {
+            sequence_colours = c(input$col_custom_A, input$col_custom_C, input$col_custom_G, input$col_custom_T)
         } else {
-            sequence_colours = sequence_colour_palettes[[input$sequence_colour_palette]]
-            updateColourInput(session, "custom_A", value = sequence_colours[1])
-            updateColourInput(session, "custom_C", value = sequence_colours[2])
-            updateColourInput(session, "custom_G", value = sequence_colours[3])
-            updateColourInput(session, "custom_T", value = sequence_colours[4])
+            sequence_colours = sequence_colour_palettes[[input$sel_sequence_colour_palette]]
+            bases <- c("A", "C", "G", "T")
+            for (i in seq_along(sequence_colours)) {
+                updateColourInput(session, paste0("col_custom_", bases[i]), value = sequence_colours[i])
+            }
         }
+
 
         ## Create visualisation
         outfile <- tempfile(fileext = ".png")
-
         visualise_single_sequence(
             sequence = sequence,
             sequence_colours = sequence_colours,
-            background_colour = input$background_colour,
-            line_wrapping = input$line_wrapping,
-            spacing = input$spacing,
-            margin = input$margin,
-            sequence_text_colour = input$sequence_text_colour,
-            sequence_text_size = input$sequence_text_size,
-            index_annotation_colour = input$index_annotation_colour,
-            index_annotation_size = input$index_annotation_size,
-            index_annotation_interval = input$index_annotation_interval,
-            index_annotations_above = input$index_annotations_above,
-            index_annotation_vertical_position = input$index_annotation_vertical_position,
-            index_annotation_always_first_base = input$index_annotation_always_first_base,
-            outline_colour = input$outline_colour,
-            outline_linewidth = input$outline_linewidth,
-            outline_join = input$outline_join,
+            background_colour = input$col_background_colour,
+            line_wrapping = input$num_line_wrapping,
+            spacing = input$num_spacing,
+            margin = input$num_margin,
+            sequence_text_colour = input$col_sequence_text_colour,
+            sequence_text_size = input$num_sequence_text_size,
+            index_annotation_colour = input$col_index_annotation_colour,
+            index_annotation_size = input$num_index_annotation_size,
+            index_annotation_interval = input$num_index_annotation_interval,
+            index_annotations_above = input$chk_index_annotations_above,
+            index_annotation_vertical_position = input$num_index_annotation_vertical_position,
+            index_annotation_always_first_base = input$chk_index_annotation_always_first_base,
+            outline_colour = input$col_outline_colour,
+            outline_linewidth = input$num_outline_linewidth,
+            outline_join = input$sel_outline_join,
             return = FALSE,
             filename = outfile,
             force_raster = FALSE,
             render_device = ragg::agg_png,
-            pixels_per_base = input$pixels_per_base,
+            pixels_per_base = input$num_pixels_per_base,
             monitor_performance = FALSE
         )
 
@@ -150,6 +175,7 @@ server <- function(input, output, session) {
     })
 
 
+    ## Outputs
     output$visualisation <- renderImage({
         list(src = current_image_path(),
              contentType = 'image/png',
@@ -160,13 +186,84 @@ server <- function(input, output, session) {
 
     output$download_image <- downloadHandler(
         filename = function() {
-            paste("ggDNAvis_visualise-single-sequence_", format(Sys.time(), "%y%m%d-%H.%M.%S"), ".png", sep="")
+            paste0("ggDNAvis_visualise-single-sequence_", format(Sys.time(), "%y%m%d-%H.%M.%S"), ".png")
         },
         content = function(file) {
             file.copy(current_image_path(), file)
         }
     )
 
+
+    ## Export settings
+    output$export_settings <- downloadHandler(
+        filename = function() {
+            paste0("ggDNAvis-settings_visualise-single-sequence_", format(Sys.time(), "%y%m%d-%H.%M.%S"), ".json")
+        },
+        content = function(file) {
+            settings <- list(
+                ## Layout
+                num_line_wrapping = input$num_line_wrapping,
+                num_spacing = input$num_spacing,
+                num_margin = input$num_margin,
+                num_pixels_per_base = input$num_pixels_per_base,
+
+                ## Colours
+                sel_sequence_colour_palette = input$sel_sequence_colour_palette,
+                col_custom_A = input$col_custom_A,
+                col_custom_C = input$col_custom_C,
+                col_custom_G = input$col_custom_G,
+                col_custom_T = input$col_custom_T,
+                col_background_colour = input$col_background_colour,
+                col_sequence_text_colour = input$col_sequence_text_colour,
+                col_index_annotation_colour = input$col_index_annotation_colour,
+                col_outline_colour = input$col_outline_colour,
+
+                ## Sizes and positions
+                num_sequence_text_size = input$num_sequence_text_size,
+                num_index_annotation_size = input$num_index_annotation_size,
+                num_index_annotation_interval = input$num_index_annotation_interval,
+                num_index_annotation_height = input$num_index_annotation_height,
+                chk_index_annotations_above = input$chk_index_annotations_above,
+                chk_index_annotation_always_first_base = input$chk_index_annotation_always_first_base,
+                num_outline_linewidth = input$num_outline_linewidth,
+                sel_outline_join = input$sel_outline_join,
+
+                ## Restore settings
+                chk_restore_sequence = input$chk_restore_sequence
+            )
+
+            if (input$chk_restore_sequence) {
+                sequences <- append(
+                    list(
+                        ## Input
+                        txt_sequence = input$txt_sequence
+                        #fil_sequence_file = input$fil_sequence_file,
+                    ),
+                    sequences
+                )
+            }
+
+            write_json(settings, file, pretty = TRUE, auto_unbox = TRUE)
+        }
+    )
+
+    ## Import settings
+    observeEvent(input$import_settings, {
+        tryCatch({
+            settings <- read_json(input$import_settings$datapath)
+            lapply(names(settings), function(id) {
+                val <- settings[[id]]
+
+                if (startsWith(id, "num_")) {updateNumericInput(session, id, value = val)}
+                if (startsWith(id, "col_")) {updateColourInput(session, id, value = val)}
+                if (startsWith(id, "sel_")) {updateSelectInput(session, id, selected = val)}
+                if (startsWith(id, "chk_")) {updateCheckboxInput(session, id, value = val)}
+                if (startsWith(id, "txt_")) {updateTextInput(session, id, value = val)}
+            })
+        }, error = function(e) {
+            abort(paste("Settings file invalid. Error when parsing:\n", e))
+        })
+    })
 
 
     ## Helper popup
