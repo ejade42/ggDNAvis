@@ -4,8 +4,7 @@ library(bslib)
 library(jsonlite)
 library(colourpicker)
 library(ggDNAvis)
-#source("mod_visualise_single_sequence.R")
-source("visualise_single_sequence/app.R")
+source("mod_visualise_single_sequence.R")
 
 ui <- page_navbar(
     title = "ggDNAvis interactive tools",
