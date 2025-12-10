@@ -48,6 +48,11 @@ like all `colour` arguments, also accepts `color` or `col`:
   &
   [`sequence_col_palettes`](https://ejade42.github.io/ggDNAvis/reference/sequence_colour_palettes.md))
 
+The interactive shinyapp can be called via
+[`ggDNAvis_shinyapp()`](https://ejade42.github.io/ggDNAvis/reference/ggDNAvis_shinyapp.md)
+or
+[`ggDNAvis_shiny()`](https://ejade42.github.io/ggDNAvis/reference/ggDNAvis_shinyapp.md).
+
 Additionally, the three `rasterise_` helper functions also accept
 `rasterize_`:
 
