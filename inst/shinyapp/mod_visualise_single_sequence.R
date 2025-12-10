@@ -1,8 +1,7 @@
 single_sequence_ui <- function(id) {
     ns <- NS(id)
 
-    page_sidebar(
-        theme = bs_theme(version = 5),
+    layout_sidebar(
         sidebar = sidebar(
             title = "Settings",
             accordion(
