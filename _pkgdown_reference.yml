@@ -11,6 +11,7 @@ reference:
   desc: >
     Main functions for visualising DNA/RNA/methylation information
   contents:
+  - ggDNAvis_shinyapp
   - visualise_single_sequence
   - visualise_many_sequences
   - visualise_methylation

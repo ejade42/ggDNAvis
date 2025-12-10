@@ -34,6 +34,8 @@ The builtin dataset \code{\link{sequence_colour_palettes}}, like all \code{colou
 \item \code{\link{sequence_colour_palettes}} (\code{\link{sequence_color_palettes}} & \code{\link{sequence_col_palettes}})
 }
 
+The interactive shinyapp can be called via \code{\link[=ggDNAvis_shinyapp]{ggDNAvis_shinyapp()}} or \code{\link[=ggDNAvis_shiny]{ggDNAvis_shiny()}}.
+
 Additionally, the three \code{rasterise_} helper functions also accept \code{rasterize_}:
 \itemize{
 \item \code{\link[=rasterise_matrix]{rasterise_matrix()}} (\code{\link[=rasterize_matrix]{rasterize_matrix()}})

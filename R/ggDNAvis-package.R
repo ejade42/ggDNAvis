@@ -87,6 +87,8 @@ fetch_acceptable_distortion <- function(verbose = TRUE) {
 #'
 #' - [`sequence_colour_palettes`] ([`sequence_color_palettes`] & [`sequence_col_palettes`])
 #'
+#' The interactive shinyapp can be called via [ggDNAvis_shinyapp()] or [ggDNAvis_shiny()].
+#'
 #' Additionally, the three `rasterise_` helper functions also accept `rasterize_`:
 #'
 #' - [rasterise_matrix()] ([rasterize_matrix()])
@@ -276,3 +278,46 @@ NULL
 #' @examples
 #' fastq_quality_scores
 "fastq_quality_scores"
+
+
+
+
+#' Run the interactive `ggDNAvis` shinyapp
+#'
+#' @aliases ggDNAvis_shiny
+#'
+#' @description
+#' `ggDNAvis_shiny()` is an alias for `ggDNAvis_shinyapp()` - see [aliases].
+#'
+#' The `ggDNAvis` shinyapp is an interactive frontend for the `ggDNAvis` functions.
+#' Arguments can be configured via text/numerical/colour/checkbox entry rather than
+#' on the command line. In the future it will be hosted online, but is
+#' currently accessible only by running the shinyapp locally.
+#'
+#' This function checks 'suggests' packages are present
+#' (not needed for main package, but needed for the shinyapp)
+#' and then runs the shinyapp in the `inst/shinyapp` directory.
+#'
+#' @export
+#' @examples
+#' \dontrun{
+#' ggDNAvis_shinyapp()
+#' }
+ggDNAvis_shinyapp <- function() {
+    ## Check additional packages required for shinyapp but not main package are installed
+    rlang::check_installed(c("bslib","colourpicker", "jsonlite", "shiny"), reason = "for ggDNAvis interactive shinyapp.")
+
+    ## Identify app directory
+    app_dir <- system.file("shinyapp", package = "ggDNAvis")
+    if (app_dir == "") {
+        abort(paste("ggDNAvis shinyapp installation not found. Please file a bug report at", packageDescription("ggDNAvis")$BugReports), class = "shinyapp_dir_missing")
+    }
+
+    ##
+    shiny::runApp(app_dir)
+}
+
+#' @rdname ggDNAvis_shinyapp
+#' @usage NULL
+#' @export
+ggDNAvis_shiny <- ggDNAvis_shinyapp
