@@ -42,6 +42,7 @@ single_sequence_ui <- function(id) {
 
                     selectInput(ns("sel_sequence_colour_palette"), "Sequence colour palette:", choices = c(names(sequence_colour_palettes), "custom")),
                     conditionalPanel(
+                        ns = ns,
                         condition = "input.sel_sequence_colour_palette == 'custom'",
                         fluidRow(
                             colourInput(ns("col_custom_A"), "A", value = "#000000"),
@@ -128,16 +129,7 @@ single_sequence_server <- function(id) {
             }
 
             ## Process sequence colours
-            if (input$sel_sequence_colour_palette == "custom") {
-                sequence_colours = c(input$col_custom_A, input$col_custom_C, input$col_custom_G, input$col_custom_T)
-            } else {
-                sequence_colours = sequence_colour_palettes[[input$sel_sequence_colour_palette]]
-                bases <- c("A", "C", "G", "T")
-                for (i in seq_along(sequence_colours)) {
-                    updateColourInput(session, paste0("col_custom_", bases[i]), value = sequence_colours[i])
-                }
-            }
-
+            sequence_colours <- process_sequence_colours(input, session, "sel_sequence_colour_palette", "col_custom_")
 
             ## Create visualisation
             outfile <- tempfile(fileext = ".png")
@@ -173,94 +165,62 @@ single_sequence_server <- function(id) {
 
 
         ## Outputs
-        output$visualisation <- renderImage({
-            list(src = current_image_path(),
-                 contentType = 'image/png',
-                 width = "100%",
-                 height = "auto",
-                 alt = "DNA sequence visualisation")
-        }, deleteFile = FALSE)
+        output$visualisation <- enable_live_visualisation(current_image_path)
 
-        output$download_image <- downloadHandler(
-            filename = function() {
-                paste0("ggDNAvis_visualise-single-sequence_", format(Sys.time(), "%y%m%d-%H.%M.%S"), ".png")
-            },
-            content = function(file) {
-                file.copy(current_image_path(), file)
-            }
-        )
+        output$download_image <- enable_image_download(id, current_image_path)
 
 
         ## Export settings
-        output$export_settings <- downloadHandler(
-            filename = function() {
-                paste0("ggDNAvis-settings_visualise-single-sequence_", format(Sys.time(), "%y%m%d-%H.%M.%S"), ".json")
-            },
-            content = function(file) {
-                settings <- list(
-                    ## Layout
-                    num_line_wrapping = input$num_line_wrapping,
-                    num_spacing = input$num_spacing,
-                    num_margin = input$num_margin,
-                    num_pixels_per_base = input$num_pixels_per_base,
+        settings <- reactive({
+            settings <- list(
+                ## Layout
+                num_line_wrapping = input$num_line_wrapping,
+                num_spacing = input$num_spacing,
+                num_margin = input$num_margin,
+                num_pixels_per_base = input$num_pixels_per_base,
 
-                    ## Colours
-                    sel_sequence_colour_palette = input$sel_sequence_colour_palette,
-                    col_custom_A = input$col_custom_A,
-                    col_custom_C = input$col_custom_C,
-                    col_custom_G = input$col_custom_G,
-                    col_custom_T = input$col_custom_T,
-                    col_background_colour = input$col_background_colour,
-                    col_sequence_text_colour = input$col_sequence_text_colour,
-                    col_index_annotation_colour = input$col_index_annotation_colour,
-                    col_outline_colour = input$col_outline_colour,
+                ## Colours
+                sel_sequence_colour_palette = input$sel_sequence_colour_palette,
+                col_custom_A = input$col_custom_A,
+                col_custom_C = input$col_custom_C,
+                col_custom_G = input$col_custom_G,
+                col_custom_T = input$col_custom_T,
+                col_background_colour = input$col_background_colour,
+                col_sequence_text_colour = input$col_sequence_text_colour,
+                col_index_annotation_colour = input$col_index_annotation_colour,
+                col_outline_colour = input$col_outline_colour,
 
-                    ## Sizes and positions
-                    num_sequence_text_size = input$num_sequence_text_size,
-                    num_index_annotation_size = input$num_index_annotation_size,
-                    num_index_annotation_interval = input$num_index_annotation_interval,
-                    num_index_annotation_vertical_position = input$num_index_annotation_vertical_position,
-                    chk_index_annotations_above = input$chk_index_annotations_above,
-                    chk_index_annotation_always_first_base = input$chk_index_annotation_always_first_base,
-                    num_outline_linewidth = input$num_outline_linewidth,
-                    sel_outline_join = input$sel_outline_join,
+                ## Sizes and positions
+                num_sequence_text_size = input$num_sequence_text_size,
+                num_index_annotation_size = input$num_index_annotation_size,
+                num_index_annotation_interval = input$num_index_annotation_interval,
+                num_index_annotation_vertical_position = input$num_index_annotation_vertical_position,
+                chk_index_annotations_above = input$chk_index_annotations_above,
+                chk_index_annotation_always_first_base = input$chk_index_annotation_always_first_base,
+                num_outline_linewidth = input$num_outline_linewidth,
+                sel_outline_join = input$sel_outline_join,
 
-                    ## Restore settings
-                    chk_restore_sequence = input$chk_restore_sequence
+                ## Restore settings
+                chk_restore_sequence = input$chk_restore_sequence
+            )
+
+            if (input$chk_restore_sequence) {
+                settings <- append(
+                    list(
+                        ## Input
+                        txt_sequence = input$txt_sequence
+                        #fil_sequence_file = input$fil_sequence_file,
+                    ),
+                    settings
                 )
-
-                if (input$chk_restore_sequence) {
-                    settings <- append(
-                        list(
-                            ## Input
-                            txt_sequence = input$txt_sequence
-                            #fil_sequence_file = input$fil_sequence_file,
-                        ),
-                        settings
-                    )
-                }
-
-                write_json(settings, file, pretty = TRUE, auto_unbox = TRUE)
             }
-        )
+
+            return(settings)
+        })
+        output$export_settings <- enable_settings_export(settings, id)
 
         ## Import settings
-        observeEvent(input$import_settings, {
-            tryCatch({
-                settings <- read_json(input$import_settings$datapath)
-                lapply(names(settings), function(id) {
-                    val <- settings[[id]]
-
-                    if (startsWith(id, "num_")) {updateNumericInput(session, id, value = val)}
-                    if (startsWith(id, "col_")) {updateColourInput(session, id, value = val)}
-                    if (startsWith(id, "sel_")) {updateSelectInput(session, id, selected = val)}
-                    if (startsWith(id, "chk_")) {updateCheckboxInput(session, id, value = val)}
-                    if (startsWith(id, "txt_")) {updateTextInput(session, id, value = val)}
-                })
-            }, error = function(e) {
-                abort(paste("Settings file invalid. Error when parsing:\n", e))
-            })
-        })
+        enable_settings_import(input, session, id, "import_settings")
 
 
         ## Helper popup
