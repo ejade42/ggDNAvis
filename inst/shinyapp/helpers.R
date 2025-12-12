@@ -64,6 +64,19 @@ enable_live_visualisation <- function(image_path, alt = "ggDNAvis DNA visualisat
 
 ## INPUT PROCESSING
 ## ------------------------------------------------------------------------------
+validate_sequence <- function(sequence, message) {
+    ## Validate sequence input
+    if (grepl("[^ACGTUacgtu\\s \t\r\n]", sequence)) {
+
+        # Optional: Find the specific bad characters to show the user
+        bad_chars <- unique(unlist(regmatches(sequence, gregexpr("[^ACGTUacgtu\\s]", sequence))))
+
+        # Stop everything and show this error
+        abort(paste0(message, "\nIllegal characters: ", paste(sort(bad_chars), collapse = ", ")))
+    }
+}
+
+
 process_sequence_colours <- function(input, session, col_palette_name = "sel_sequence_colour_palette", col_prefix = "col_custom_") {
     if (input[[col_palette_name]] == "custom") {
         sequence_colours = c(input[[paste0(col_prefix, "A")]], input[[paste0(col_prefix, "C")]], input[[paste0(col_prefix, "G")]], input[[paste0(col_prefix, "T")]])
@@ -75,5 +88,51 @@ process_sequence_colours <- function(input, session, col_palette_name = "sel_seq
         }
     }
     return(sequence_colours)
+}
+## ------------------------------------------------------------------------------
+
+
+
+
+## INPUT MODULES
+## ------------------------------------------------------------------------------
+panel_sequence_vis_colours <- function(ns) {
+    accordion_panel(
+        title = "Colours",
+
+        selectInput(ns("sel_sequence_colour_palette"), "Sequence colour palette:", choices = c("bright_pale", "bright_pale2", "bright_deep", "ggplot_style", "sanger", "custom")),
+        conditionalPanel(
+            ns = ns,
+            condition = "input.sel_sequence_colour_palette == 'custom'",
+            fluidRow(
+                colourInput(ns("col_custom_A"), "A", value = "#000000"),
+                colourInput(ns("col_custom_C"), "C", value = "#000000"),
+                colourInput(ns("col_custom_G"), "G", value = "#000000"),
+                colourInput(ns("col_custom_T"), "T/U", value = "#000000")
+            )
+        ),
+
+        colourInput(ns("col_background_colour"), "Background colour:", value = "#FFFFFF"),
+        colourInput(ns("col_sequence_text_colour"), "Sequence text colour:", value = "#000000"),
+        colourInput(ns("col_index_annotation_colour"), "Index annotation colour:", value = "darkred"),
+        colourInput(ns("col_outline_colour"), "Outline colour:", value = "#000000")
+    )
+}
+
+
+panel_restore_settings <- function(ns) {
+    accordion_panel(
+        title = "Restore settings",
+
+        ## Import button is set up as a dummy actionButton linked to a fileInput
+        actionButton(ns("import_settings_proxy"), "Import settings", class = "mt-0 w-100", icon = icon("upload"),
+                     onclick = paste0("document.getElementById('", ns("import_settings"), "').click()")),
+        div(style = "display: none",
+            fileInput(ns("import_settings"), NULL, accept = ".json")),
+
+        downloadButton(ns("export_settings"), "Export settings", class = "mt-2 mb-2 w-100"),
+
+        checkboxInput(ns("chk_restore_sequence"), span("Export sequence text input value (will override current value when imported)", style = "font-size: 14px"), value = FALSE)
+    )
 }
 ## ------------------------------------------------------------------------------

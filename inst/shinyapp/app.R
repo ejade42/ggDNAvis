@@ -7,13 +7,27 @@ library(ggDNAvis)
 
 source("helpers.R")
 source("mod_visualise_single_sequence.R")
+source("mod_visualise_many_sequences.R")
+
 
 ggDNAvis_icon <- "https://raw.githubusercontent.com/ejade42/ggDNAvis/main/pkgdown/favicon/favicon-96x96.png"
 
 ui <- page_navbar(
 
-    ## Icon in browser tab
-    header = tags$head(tags$link(rel = "icon", type = "image/png", href = ggDNAvis_icon)),
+    header = tags$head(
+        ## Icon in browser tab
+        tags$link(rel = "icon", type = "image/png", href = ggDNAvis_icon),
+
+        ## CSS
+        tags$style(HTML("
+            /* Target ONLY the input box inside the wrapper */
+            .seq-input .form-control {
+                font-family: 'Courier New', Courier, monospace !important;
+                font-weight: bold; /* Optional: makes DNA easier to read */
+                letter-spacing: 1px; /* Optional: adds breathing room */
+            }
+        "))
+    ),
 
     ## Title
     title = tagList(img(src = ggDNAvis_icon, height = "30px"), "ggDNAvis interactive suite"),
@@ -24,18 +38,22 @@ ui <- page_navbar(
 
     ## Main tool tabs
     nav_panel(
+        title = "Instructions",
+        h4("Instructions placeholder")
+    ),
+
+    nav_panel(
         title = "Single sequence",
         single_sequence_ui("visualise_single_sequence")
     ),
 
     nav_panel(title = "Multiple sequences",
-              # many_sequences_ui("align_app")
-              h4("Multiple Sequences Placeholder")
+        many_sequences_ui("visualise_many_sequences")
     ),
 
     nav_panel(title = "Methylation/modification",
-              # methylation_ui("analysis_app")
-              h4("Methylation Placeholder")
+        # methylation_ui("analysis_app")
+        h4("Methylation Placeholder")
     ),
 
 
@@ -63,6 +81,7 @@ server <- function(input, output, session) {
     #bs_themer()  ## Uncomment to check out different themes
 
     single_sequence_server("visualise_single_sequence")
+    many_sequences_server("visualise_many_sequences")
 }
 
 

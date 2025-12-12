@@ -14,7 +14,9 @@ single_sequence_ui <- function(id) {
                         id = ns("input_mode"),
                         tabPanel(
                             "Text input",
-                            textInput(ns("txt_sequence"), "Sequence to visualise:", placeholder = "ACGT", value = "ACGT")
+                            div(class = "seq-input",
+                                textInput(ns("txt_sequence"), "Sequence to visualise:", placeholder = "ACGT", value = "ACGT")
+                            )
                         ),
                         tabPanel(
                             "Upload",
@@ -36,26 +38,7 @@ single_sequence_ui <- function(id) {
                 ),
 
 
-                accordion_panel(
-                    title = "Colours",
-
-                    selectInput(ns("sel_sequence_colour_palette"), "Sequence colour palette:", choices = c(names(sequence_colour_palettes), "custom")),
-                    conditionalPanel(
-                        ns = ns,
-                        condition = "input.sel_sequence_colour_palette == 'custom'",
-                        fluidRow(
-                            colourInput(ns("col_custom_A"), "A", value = "#000000"),
-                            colourInput(ns("col_custom_C"), "C", value = "#000000"),
-                            colourInput(ns("col_custom_G"), "G", value = "#000000"),
-                            colourInput(ns("col_custom_T"), "T/U", value = "#000000")
-                        )
-                    ),
-
-                    colourInput(ns("col_background_colour"), "Background colour:", value = "#FFFFFF"),
-                    colourInput(ns("col_sequence_text_colour"), "Sequence text colour:", value = "#000000"),
-                    colourInput(ns("col_index_annotation_colour"), "Index annotation colour:", value = "darkred"),
-                    colourInput(ns("col_outline_colour"), "Outline colour:", value = "#000000")
-                ),
+                panel_sequence_vis_colours(ns),
 
                 accordion_panel(
                     title = "Sizes and positions",
@@ -69,19 +52,7 @@ single_sequence_ui <- function(id) {
                     selectInput(ns("sel_outline_join"), "Outline corner style:", choices = c("mitre", "round", "bevel"))
                 ),
 
-                accordion_panel(
-                    title = "Restore settings",
-
-                    ## Import button is set up as a dummy actionButton linked to a fileInput
-                    actionButton(ns("import_settings_proxy"), "Import settings", class = "mt-0 w-100", icon = icon("upload"),
-                                 onclick = paste0("document.getElementById('", ns("import_settings"), "').click()")),
-                    div(style = "display: none",
-                        fileInput(ns("import_settings"), NULL, accept = ".json")),
-
-                    downloadButton(ns("export_settings"), "Export settings", class = "mt-2 mb-2 w-100"),
-
-                    checkboxInput(ns("chk_restore_sequence"), span("Export sequence text input value (will override current value when imported)", style = "font-size: 14px"), value = FALSE)
-                ),
+                panel_restore_settings(ns),
 
                 downloadButton(ns("download_image"), "Download image", class = "mt-3 w-100"),
 
@@ -117,15 +88,7 @@ single_sequence_server <- function(id) {
                 sequence <- paste(lines[!grepl("^>", lines)], collapse = "\n")
             }
 
-            ## Validate sequence input
-            if (grepl("[^ACGTUacgtu\\s \t\r\n]", sequence)) {
-
-                # Optional: Find the specific bad characters to show the user
-                bad_chars <- unique(unlist(regmatches(sequence, gregexpr("[^ACGTUacgtu\\s]", sequence))))
-
-                # Stop everything and show this error
-                abort(paste("Input must contain only A/C/G/T/U and whitespace (not counting FASTA header lines).\nIllegal characters:", paste(sort(bad_chars), collapse = ", ")))
-            }
+            validate_sequence(sequence, "Input must contain only A/C/G/T/U and whitespace (not counting FASTA header lines).")
 
             ## Process sequence colours
             sequence_colours <- process_sequence_colours(input, session, "sel_sequence_colour_palette", "col_custom_")
