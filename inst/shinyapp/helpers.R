@@ -96,6 +96,7 @@ process_sequence_colours <- function(input, session, col_palette_name = "sel_seq
 
 ## INPUT MODULES
 ## ------------------------------------------------------------------------------
+## Panel for single sequence/multiple sequences colour selection
 panel_sequence_vis_colours <- function(ns) {
     accordion_panel(
         title = "Colours",
@@ -119,7 +120,7 @@ panel_sequence_vis_colours <- function(ns) {
     )
 }
 
-
+## Panel for settings import/export
 panel_restore_settings <- function(ns) {
     accordion_panel(
         title = "Restore settings",
@@ -135,4 +136,46 @@ panel_restore_settings <- function(ns) {
         checkboxInput(ns("chk_restore_sequence"), span("Export sequence text input value (will override current value when imported)", style = "font-size: 14px"), value = FALSE)
     )
 }
+
+## Dynamically inserted panel for FASTQ parsing settings
+panel_dynamic_fastq_parsing <- function(
+    input,
+    session,
+    panel_content,
+    accordion_id = "acc",
+    target_panel = "Input",
+    trigger_var = "input_mode"
+) {
+    observeEvent(input[[trigger_var]], {
+        panel_id <- "fastq_parsing_settings"
+        if (input[[trigger_var]] == "Upload") {
+            tryCatch({
+                ## Insert FASTQ parsing panel with specified content
+                accordion_panel_insert(
+                    id = accordion_id,
+
+                    panel = accordion_panel(
+                        title = "FASTQ parsing",
+                        value = panel_id,
+                        panel_content
+                    ),
+
+                    target = target_panel,
+                    position = "after"
+                )
+
+                ## Automatically open the new panel
+                accordion_panel_open(
+                    id = accordion_id,
+                    values = panel_id
+                )
+
+            }, error = function(e) message(paste("accordion insert failed:", e)))
+        } else {
+            ## Remove panel when close
+            accordion_panel_remove(id = accordion_id, target = panel_id)
+        }
+    })
+}
+
 ## ------------------------------------------------------------------------------

@@ -106,28 +106,9 @@ many_sequences_server <- function(id) {
         
         
         ## Logic for adding FASTQ parsing settings panel
-        observeEvent(input$input_mode, {
-            panel_id <- "fastq_parsing_settings"
-            if (input$input_mode == "Upload") {
-                tryCatch({
-                    print("inserting panel")
-                    accordion_panel_insert(
-                        id = "acc",
-                        
-                        panel = accordion_panel(
-                            title = "FASTQ parsing",
-                            value = panel_id,
-                            selectInput(session$ns("sel_reverse_mode"), "Reverse sequence processing:", choices = c("Reverse-complement DNA", "Reverse-complement RNA", "Reverse without complementing", "Don't reverse"))
-                        ),
-                        
-                        target = "Input",
-                        position = "after"
-                    )
-                }, error = function(e) message(paste("accordion insert failed:", e)))
-            } else {
-                print('removing panel')
-                accordion_panel_remove(id = "acc", target = panel_id)
-            }
-        })
+        fastq_parsing_panel <- tagList(
+            selectInput(session$ns("sel_reverse_mode"), "Reverse sequence processing:", choices = c("Reverse-complement DNA", "Reverse-complement RNA", "Reverse without complementing", "Don't reverse"))
+        )
+        panel_dynamic_fastq_parsing(input, session, panel_content = fastq_parsing_panel)
     })
 }
