@@ -82,11 +82,23 @@ many_sequences_ui <- function(id) {
 
 many_sequences_server <- function(id) {
     moduleServer(id, function(input, output, session) {
-        ## Create visualisation
-        current_image_path <- reactive({
+        ## Logic for adding FASTQ parsing settings panel
+        fastq_parsing_panel <- tagList(
+            checkboxInput(session$ns("chk_fastq_is_modified"), "FASTQ header contains modification information", value = FALSE),
+            actionLink(session$ns("fastq_header_details"), "View FASTQ header explanation", icon = icon("info-circle"), class = "mt-0 mb-3"),
+            selectInput(session$ns("sel_reverse_mode"), "Reverse sequence processing:", choices = c("Reverse-complement to DNA", "Reverse-complement to RNA", "Reverse without complementing", "Don't reverse"))
+        
+        )
+        panel_dynamic_fastq_parsing(input, session, panel_content = fastq_parsing_panel)
+        
+        
+        parsed_sequences <- reactive({
             ## Process input
             if (input$input_mode == "Text input") {
                 sequences <- strsplit(input$txt_sequence, split = " ")
+                return(sequences)
+                
+            
             } else if (input$input_mode == "Upload") {
                 if (is.null(input$fil_fastq_file)) {
                     abort("Please upload a FASTQ file...")
@@ -95,9 +107,38 @@ many_sequences_server <- function(id) {
                     abort("Please upload a metadata CSV file...")
                 }
                 
-                lines <- readLines(input$fil_fastq_file$datapath)
-                sequence <- paste(lines[!grepl("^>", lines)], collapse = "\n")
+                
+                ## If file is modified use read_modified_fastq, else use read_fastq
+                if (input$chk_fastq_is_modified) {
+                    fastq_data <- read_modified_fastq(input$fil_fastq_file$datapath)
+                } else {
+                    fastq_data <- read_fastq(input$fil_fastq_file$datapath)
+                }
+                metadata <- read.csv(input$fil_metadata_file$datapath)
+                
+                
+                
+                ## Determine which reversing mode to use
+                reverse = TRUE
+                reverse_complement_mode <- switch(
+                    input$sel_reverse_mode,
+                    "Reverse-complement to DNA" = "DNA",
+                    "Reverse-complement to RNA" = "RNA",
+                    "Reverse without complementing" = "reverse_only",
+                    "Don't reverse" = {
+                        reverse <- FALSE
+                        "DNA"
+                    }
+                )
+                
+                merged_fastq_data <- merge_fastq_with_metadata(fastq_data, metadata)
+                
             }
+        })
+        
+        ## Create visualisation
+        current_image_path <- reactive({
+            
         })
         
         
@@ -105,10 +146,6 @@ many_sequences_server <- function(id) {
         
         
         
-        ## Logic for adding FASTQ parsing settings panel
-        fastq_parsing_panel <- tagList(
-            selectInput(session$ns("sel_reverse_mode"), "Reverse sequence processing:", choices = c("Reverse-complement DNA", "Reverse-complement RNA", "Reverse without complementing", "Don't reverse"))
-        )
-        panel_dynamic_fastq_parsing(input, session, panel_content = fastq_parsing_panel)
+        
     })
 }

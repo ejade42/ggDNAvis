@@ -73,10 +73,9 @@ single_sequence_ui <- function(id) {
 
 single_sequence_server <- function(id) {
     moduleServer(id, function(input, output, session) {
-        ## Create visualisation
-        current_image_path <- reactive({
 
-            ## Process sequence input
+        ## Process sequence input
+        sequence <- reactive({
             if (input$input_mode == "Text input") {
                 sequence <- input$txt_sequence
             } else if (input$input_mode == "Upload") {
@@ -89,15 +88,24 @@ single_sequence_server <- function(id) {
             }
 
             validate_sequence(sequence, "Input must contain only A/C/G/T/U and whitespace (not counting FASTA header lines).")
+            return(sequence)
+        })
 
-            ## Process sequence colours
+
+
+        ## Process sequence colours
+        sequence_colours <- reactive({
             sequence_colours <- process_sequence_colours(input, session, "sel_sequence_colour_palette", "col_custom_")
+            return(sequence_colours)
+        })
 
-            ## Create visualisation
+
+        ## Create visualisation
+        current_image_path <- reactive({
             outfile <- tempfile(fileext = ".png")
             visualise_single_sequence(
-                sequence = sequence,
-                sequence_colours = sequence_colours,
+                sequence = sequence(),
+                sequence_colours = sequence_colours(),
                 background_colour = input$col_background_colour,
                 line_wrapping = input$num_line_wrapping,
                 spacing = input$num_spacing,
@@ -128,7 +136,6 @@ single_sequence_server <- function(id) {
 
         ## Outputs
         output$visualisation <- enable_live_visualisation(current_image_path)
-
         output$download_image <- enable_image_download(id, current_image_path)
 
 
