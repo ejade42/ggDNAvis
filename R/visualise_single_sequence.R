@@ -274,8 +274,8 @@ visualise_single_sequence <- function(
             sequences <- sequences[(offset_start+1):length(sequences)]
             extra_spaces_start <- extra_spaces_start - offset_start
 
-        ## Remove extra lines at end, but if the last line is too short to be annotated then there's nothing to remove
-        } else if (nchar(sequence) %% line_wrapping >= index_annotation_interval) {
+        ## Remove extra lines at end, but if the last line isn't annotated then there's nothing to remove
+        } else if (!annotation_lines_trimmed) {
             offset_end <- spacing - ceiling(index_annotation_vertical_position)
             sequences <- sequences[1:(length(sequences)-offset_end)]
             extra_spaces_end <- extra_spaces_end - offset_end

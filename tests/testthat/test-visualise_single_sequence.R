@@ -325,6 +325,13 @@ test_that("very short sequences visualise correctly with first annotation forced
                                        metric = "MAE"))$distortion, acceptable_distortion)
 })
 
+test_that("forced first base annotation on last line that wouldn't normally get one with annotations under doesn't accidentally double the margin", {
+    filename <- "sone_2019_f1_1_expanded_test_37"
+    visualise_single_sequence(sone_2019_f1_1_expanded, sequence_colours = sequence_col_palettes$bright_pale2, spacing = 3, filename = paste0(root, filename, ".png"), index_annotation_above = FALSE, pixels_per_base = 20, index_annotation_always_first_base = TRUE)
+    expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
+                                       image_read(paste0(reference, filename, ".png")),
+                                       metric = "MAE"))$distortion, acceptable_distortion)
+})
 
 ## Test fail cases/invalid arguments to main single sequence visualisation function
 test_that("single sequence visualisation fails when arguments are invalid", {
