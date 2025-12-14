@@ -86,11 +86,71 @@ many_sequences_server <- function(id) {
         fastq_parsing_panel <- tagList(
             checkboxInput(session$ns("chk_fastq_is_modified"), "FASTQ header contains modification information", value = FALSE),
             actionLink(session$ns("fastq_header_details"), "View FASTQ header explanation", icon = icon("info-circle"), class = "mt-0 mb-3"),
-            selectInput(session$ns("sel_reverse_mode"), "Reverse sequence processing:", choices = c("Reverse-complement to DNA", "Reverse-complement to RNA", "Reverse without complementing", "Don't reverse"))
-        
+            selectInput(session$ns("sel_reverse_mode"), "Reverse sequence processing:", choices = c("Reverse-complement to DNA", "Reverse-complement to RNA", "Reverse without complementing", "Don't reverse")),
+            uiOutput(session$ns("ui_grouping_level_1")),
+            selectInput(session$ns("sel_sort_by"), "Column to sort by:", choices = NULL),
+            checkboxInput(session$ns("chk_desc_sort"), "Sort descending", value = TRUE)
         )
         panel_dynamic_fastq_parsing(input, session, panel_content = fastq_parsing_panel)
         
+        
+        ## Logic for creating fastq dataframe
+        merged_fastq_reactive <- reactive({
+            req(input$input_mode == "Upload")
+            req(input$fil_fastq_file, input$fil_metadata_file)
+            
+            ## Read FASTQ
+            fastq_data <- if (isTRUE(input$chk_fastq_is_modified)) {
+                tryCatch({
+                    read_modified_fastq(input$fil_fastq_file$datapath)
+                }, error = function(e) {
+                    showNotification(paste("Modified FASTQ invalid. Error when parsing:\n", e), type = "error")
+                    NULL
+                })
+            } else {
+                tryCatch({
+                    read_fastq(input$fil_fastq_file$datapath)
+                }, error = function(e) {
+                    showNotification(paste("FASTQ invalid. Error when parsing:\n", e), type = "error")
+                    NULL
+                })
+            }
+            
+            ## Read metadata
+            metadata <- tryCatch({
+                read.csv(input$fil_metadata_file$datapath)
+            }, error = function(e) {
+                showNotification(paste("Metadata invalid. Error when parsing:\n", e), type = "error")
+                NULL
+            })
+            
+            ## Check it read properly
+            req(fastq_data)  
+            req(metadata)
+                
+                
+            ## Determine which reversing mode to use
+            reverse_complement_mode <- switch(
+                input$sel_reverse_mode,
+                "Reverse-complement to DNA" = "DNA",
+                "Reverse-complement to RNA" = "RNA",
+                "Reverse without complementing" = "reverse_only",
+                "Don't reverse" = "DNA"
+            )
+            
+            ## Merge and return dataframe
+            return(merge_fastq_with_metadata(fastq_data, metadata, reverse_complement_mode = reverse_complement_mode))
+        })
+        
+        ## Logic for updating sort_by choices
+        observeEvent(merged_fastq_reactive(), {
+            df <- merged_fastq_reactive()
+            
+            updateSelectInput(session, "sel_sort_by",
+                              choices = c("Don't sort", colnames(df)))
+        })
+        
+       
         
         parsed_sequences <- reactive({
             ## Process input
@@ -107,32 +167,32 @@ many_sequences_server <- function(id) {
                     abort("Please upload a metadata CSV file...")
                 }
                 
+                ## Check sort_by choices are updated (no longer NULL)
+                req(input$sel_sort_by)
                 
-                ## If file is modified use read_modified_fastq, else use read_fastq
-                if (input$chk_fastq_is_modified) {
-                    fastq_data <- read_modified_fastq(input$fil_fastq_file$datapath)
+                ## Choose whether to use forward-ified or original sequence
+                if (input$sel_reverse_mode == "Don't reverse") {
+                    sequence_variable <- "sequence"
                 } else {
-                    fastq_data <- read_fastq(input$fil_fastq_file$datapath)
+                    sequence_variable <- "forward_sequence"
                 }
-                metadata <- read.csv(input$fil_metadata_file$datapath)
                 
+                ## Choose column (or NA) to sort by
+                if (input$sel_sort_by == "Don't sort") {
+                    sort_by <- NA
+                } else {
+                    sort_by <- input$sel_sort_by
+                }
                 
-                
-                ## Determine which reversing mode to use
-                reverse = TRUE
-                reverse_complement_mode <- switch(
-                    input$sel_reverse_mode,
-                    "Reverse-complement to DNA" = "DNA",
-                    "Reverse-complement to RNA" = "RNA",
-                    "Reverse without complementing" = "reverse_only",
-                    "Don't reverse" = {
-                        reverse <- FALSE
-                        "DNA"
-                    }
+                ## Extract sequences vector
+                sequences <- extract_and_sort_sequences(
+                    merged_fastq_reactive(),
+                    sequence_variable = sequence_variable,
+                    grouping_levels = NA,
+                    sort_by = sort_by,
+                    desc_sort = input$chk_desc_sort
                 )
-                
-                merged_fastq_data <- merge_fastq_with_metadata(fastq_data, metadata)
-                
+                return(sequences)
             }
         })
         
