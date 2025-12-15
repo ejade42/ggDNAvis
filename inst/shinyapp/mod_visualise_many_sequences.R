@@ -87,9 +87,9 @@ many_sequences_server <- function(id) {
             checkboxInput(session$ns("chk_fastq_is_modified"), "FASTQ header contains modification information", value = FALSE),
             actionLink(session$ns("fastq_header_details"), "View FASTQ header explanation", icon = icon("info-circle"), class = "mt-0 mb-3"),
             selectInput(session$ns("sel_reverse_mode"), "Reverse sequence processing:", choices = c("Reverse-complement to DNA", "Reverse-complement to RNA", "Reverse without complementing", "Don't reverse")),
-            uiOutput(session$ns("ui_grouping_level_1")),
             selectInput(session$ns("sel_sort_by"), "Column to sort by:", choices = NULL),
-            checkboxInput(session$ns("chk_desc_sort"), "Sort descending", value = TRUE)
+            checkboxInput(session$ns("chk_desc_sort"), "Sort descending", value = TRUE),
+            uiOutput(session$ns("ui_grouping_level_1"))
         )
         panel_dynamic_fastq_parsing(input, session, panel_content = fastq_parsing_panel)
         
@@ -150,8 +150,67 @@ many_sequences_server <- function(id) {
                               choices = c("Don't sort", colnames(df)))
         })
         
-       
+        ## Logic for updating grouping choices
+        ## We loop 1:max_grouping_depth and create a renderer for each level.
+        ## Each level renders:
+        ##   1. Its own integer input (if not End)
+        ##   2. The SelectInput for the NEXT level (if not End)
+        ##   3. The uiOutput placeholder for the NEXT level's children
+        max_grouping_depth <- 10
+        termination_value <- "End"
+        lapply(1:max_grouping_depth, function(i) {
+            output[[paste0("ui_grouping_level_", i)]] <- renderUI({
+                df <- merged_fastq_reactive()
+                req(df)
+                cols <- colnames(df)
+                
+                ## Check previous level
+                if (i > 1) {
+                    prev_sel <- input[[paste0("sel_grouping_col_", i-1)]]
+                    ## If previous selection is missing or "End", stop rendering this branch
+                    if (is.null(prev_sel) || prev_sel == termination_value) {return(NULL)}
+                }
+                
+                ## Define inputs for this level
+                current_selected_value <- input[[paste0("sel_grouping_col_", i)]]
+                if (!is.null(current_selected_value) && current_selected_value %in% c(termination_value, cols)) {
+                    selected_value <- current_selected_value
+                } else {
+                    selected_value <- termination_value
+                }
+                
+                select_input <- selectInput(
+                    session$ns(paste0("sel_grouping_col_", i)),
+                    label = if(i==1) {"First group by column:"} else {"Then group by column:"},
+                    choices = c(termination_value, cols),
+                    selected = selected_value
+                )
+                
+                current_col <- input[[paste0("sel_grouping_col_", i)]]
+                
+                ## Content to return
+                tagList(
+                    div(class = "grouping-level-wrapper", style = "",
+                        select_input,
+                        
+                        if (!is.null(current_col) && current_col != termination_value) {
+                            tagList(
+                                numericInput(session$ns(paste0("num_grouping_int_", i)),
+                                             paste0("Lines between each value of ", current_col, ":"),
+                                             value = 1),
+                            
+                                # RECURSION POINT: The slot for Level i+1
+                                uiOutput(session$ns(paste0("ui_grouping_level_", i + 1)))
+                            )
+                        })
+                )
+            })
+        })
         
+        ## Logic for constructing vector out of selected choices
+        
+        
+        ## Logic for constructing actual input sequences vector
         parsed_sequences <- reactive({
             ## Process input
             if (input$input_mode == "Text input") {
