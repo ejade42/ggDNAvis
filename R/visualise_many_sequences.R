@@ -210,6 +210,11 @@ visualise_many_sequences <- function(
         cli_alert_info(paste0("Automatically making index_annotation_lines unique.\nBefore: ", paste(index_annotation_lines, collapse = ", "), "\nAfter: ", paste(unique_index_annotation_lines, collapse = ", ")), class = "sanitising_index_annotation_lines")
         index_annotation_lines <- unique_index_annotation_lines
     }
+    inrange_index_annotation_lines <- index_annotation_lines[index_annotation_lines >= 1 & index_annotation_lines <= length(sequences_vector)]
+    if (length(inrange_index_annotation_lines) != length(index_annotation_lines)) {
+        cli_alert_info(paste0("Automatically removing out-of-range values of index_annotation_lines.\nLength of input sequences vector: ", length(sequences_vector), "\nIndex lines before: ", paste(index_annotation_lines, collapse = ", "), "\nIndex lines after: ", paste(inrange_index_annotation_lines, collapse = ", ")), class = "sanitising_index_annotation_lines")
+        index_annotation_lines <- inrange_index_annotation_lines
+    }
     ## ---------------------------------------------------------------------
 
 

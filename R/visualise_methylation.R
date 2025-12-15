@@ -442,6 +442,11 @@ visualise_methylation <- function(
         cli_alert_info(paste0("Automatically making index_annotation_lines unique.\nBefore: ", paste(index_annotation_lines, collapse = ", "), "\nAfter: ", paste(unique_index_annotation_lines, collapse = ", ")), class = "sanitising_index_annotation_lines")
         index_annotation_lines <- unique_index_annotation_lines
     }
+    inrange_index_annotation_lines <- index_annotation_lines[index_annotation_lines >= 1 & index_annotation_lines <= length(sequences)]
+    if (length(inrange_index_annotation_lines) != length(index_annotation_lines)) {
+        cli_alert_info(paste0("Automatically removing out-of-range values of index_annotation_lines.\nLength of input sequences vector: ", length(sequences), "\nIndex lines before: ", paste(index_annotation_lines, collapse = ", "), "\nIndex lines after: ", paste(inrange_index_annotation_lines, collapse = ", ")), class = "sanitising_index_annotation_lines")
+        index_annotation_lines <- inrange_index_annotation_lines
+    }
 
     ## Automatically turn off sequences if size is 0
     if (sequence_text_size == 0 && sequence_text_type != "none") {

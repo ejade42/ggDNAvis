@@ -195,11 +195,6 @@ many_sequences_server <- function(id) {
             })
         })
         
-        ## Logic for 
-        
-        
-        
-        
         ## Logic for constructing vector out of selected choices
         grouping_levels_vector <- reactive({
             req(merged_fastq_reactive())
