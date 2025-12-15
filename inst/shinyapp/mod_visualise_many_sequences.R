@@ -279,7 +279,7 @@ many_sequences_server <- function(id) {
             }
             
             ## Validate and return sequences vector
-            validate_sequence(sequences, "Sequences vector for visualisation must contain only A/C/G/T/U and whitespace.", TRUE)
+            validate_sequence(sequences, "Sequences vector for visualisation must contain only A/C/G/T/U and whitespace.")
             return(sequences)
         })
         
@@ -327,7 +327,68 @@ many_sequences_server <- function(id) {
         
         
         
+        ## Export settings
+        settings <- reactive({
+            settings <- list(
+                ## Layout
+                num_margin = input$num_margin,
+                num_pixels_per_base = input$num_pixels_per_base,
+                
+                ## Colours
+                sel_sequence_colour_palette = input$sel_sequence_colour_palette,
+                col_custom_A = input$col_custom_A,
+                col_custom_C = input$col_custom_C,
+                col_custom_G = input$col_custom_G,
+                col_custom_T = input$col_custom_T,
+                col_background_colour = input$col_background_colour,
+                col_sequence_text_colour = input$col_sequence_text_colour,
+                col_index_annotation_colour = input$col_index_annotation_colour,
+                col_outline_colour = input$col_outline_colour,
+                
+                ## Sizes and positions
+                num_sequence_text_size = input$num_sequence_text_size,
+                num_index_annotation_size = input$num_index_annotation_size,
+                txt_index_annotation_lines = input$txt_index_annotation_lines,
+                num_index_annotation_interval = input$num_index_annotation_interval,
+                num_index_annotation_vertical_position = input$num_index_annotation_vertical_position,
+                chk_index_annotations_above = input$chk_index_annotations_above,
+                chk_index_annotation_full_line = input$chk_index_annotation_full_line,
+                chk_index_annotation_always_first_base = input$chk_index_annotation_always_first_base,
+                num_outline_linewidth = input$num_outline_linewidth,
+                sel_outline_join = input$sel_outline_join,
+                
+                ## Restore settings
+                chk_restore_sequence = input$chk_restore_sequence,
+                
+                ## FASTQ parsing
+                chk_fastq_is_modified = input$chk_fastq_is_modified,
+                sel_reverse_mode = input$sel_reverse_mode,
+                sel_sort_by = input$sel_sort_by,
+                chk_desc_sort = input$chk_desc_sort
+            )
+            
+            for (i in 1:length(grouping_levels_vector())) {
+                settings[[paste0("sel_grouping_col_", i)]] <- input[[paste0("sel_grouping_col_", i)]]
+                settings[[paste0("num_grouping_int_", i)]] <- input[[paste0("num_grouping_int_", i)]]
+            }
+            
+            if (input$chk_restore_sequence) {
+                settings <- append(
+                    list(
+                        ## Input
+                        txt_sequence = input$txt_sequence
+                        #fil_sequence_file = input$fil_sequence_file,
+                    ),
+                    settings
+                )
+            }
+            
+            return(settings)
+        })
+        output$export_settings <- enable_settings_export(settings, id)
         
+        ## Import settings
+        enable_settings_import(input, session, id, "import_settings")
         
     })
 }

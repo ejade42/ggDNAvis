@@ -64,12 +64,8 @@ enable_live_visualisation <- function(image_path, alt = "ggDNAvis DNA visualisat
 
 ## INPUT PROCESSING
 ## ------------------------------------------------------------------------------
-validate_sequence <- function(sequence, message, message_full_seq = TRUE) {
+validate_sequence <- function(sequence, message) {
     sequence <- paste(sequence, collapse = "")
-
-    if (message_full_seq) {
-        message(sequence)
-    }
 
     ## Validate sequence input
     if (grepl("[^ACGTUacgtu\\s \t\r\n]", sequence)) {
