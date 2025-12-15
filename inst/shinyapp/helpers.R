@@ -105,6 +105,40 @@ process_index_annotation_lines <- function(input_lines, message) {
 
     as.integer(strsplit(input_lines, split = " ")[[1]])
 }
+
+
+## Logic for constructing vector out of selected choices
+process_grouping_levels <- function(input, merged_data, termination_value, max_grouping_depth) {
+    reactive({
+        req(merged_data())
+
+        collected_levels <- integer()
+        for (i in 1:max_grouping_depth) {
+            col_name <- input[[paste0("sel_grouping_col_", i)]]
+
+            ## Exit if column is NULL or End
+            if (is.null(col_name) || col_name == termination_value) {
+                break
+            }
+
+            int_val <- input[[paste0("num_grouping_int_", i)]]
+
+            ## Safety check: ensure integer exists (might be NULL during rendering split-second)
+            if (is.null(int_val)) {
+                int_val <- NA
+            }
+
+            ## Append to vector
+            collected_levels[col_name] <- int_val
+        }
+
+        if (length(collected_levels) == 0) {
+            return(NA)
+        } else {
+            return(collected_levels)
+        }
+    })
+}
 ## ------------------------------------------------------------------------------
 
 
@@ -196,4 +230,66 @@ panel_dynamic_fastq_parsing <- function(
     })
 }
 
+## Recursive conditional panels for grouping levels
+panel_grouping_levels <- function(session, termination_value, max_grouping_depth) {
+    lapply(1:max_grouping_depth, function(i) {
+        ## Create previous-layer condition string to use for javascript flow
+        if (i == 1) {
+            cond_string <- "true"
+        } else {
+            cond_string <- sprintf("input['%s'] != '%s'", session$ns(paste0("sel_grouping_col_", i-1)), termination_value)
+        }
+
+        conditionalPanel(
+            condition = cond_string,
+            selectInput(
+                session$ns(paste0("sel_grouping_col_", i)),
+                label = if (i==1) {"(1) Firstly, group by column:"} else {paste0("(", i, ") Then, group by column:")},
+                choices = c(termination_value)
+            ),
+            conditionalPanel(
+                condition = sprintf("input['%s'] != '%s'", session$ns(paste0("sel_grouping_col_", i)), termination_value),
+                numericInput(
+                    session$ns(paste0("num_grouping_int_", i)),
+                    label = "Lines between each value:",
+                    value = 1,
+                    step = 1,
+                    min = 0
+                )
+            )
+
+        )
+    })
+}
+
+## Logic for updating sort_by and grouping_levels choices
+panel_update_sorting_grouping_from_colnames <- function(input, session, data_to_read_cols, termination_value, max_grouping_depth) {
+    observeEvent(data_to_read_cols(), {
+        df <- data_to_read_cols()
+        req(df)
+        cols <- colnames(df)
+
+        updateSelectInput(session, "sel_sort_by",
+                          choices = c("Don't sort", cols),
+                          selected = "sequence_length")
+
+        lapply(1:max_grouping_depth, function(i) {
+
+            # Important: Preserve current selection if it exists and is valid
+            current_val <- input[[paste0("sel_grouping_col_", i)]]
+            if (!is.null(current_val) && current_val %in% cols) {
+                selected <- current_val
+            } else {
+                selected <- termination_value
+            }
+
+            updateSelectInput(
+                session,
+                paste0("sel_grouping_col_", i),
+                choices = c(termination_value, cols),
+                selected = selected
+            )
+        })
+    })
+}
 ## ------------------------------------------------------------------------------

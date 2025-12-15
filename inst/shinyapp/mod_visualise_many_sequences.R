@@ -86,34 +86,7 @@ many_sequences_server <- function(id) {
             selectInput(session$ns("sel_reverse_mode"), "Reverse sequence processing:", choices = c("Reverse-complement to DNA", "Reverse-complement to RNA", "Reverse without complementing", "Don't reverse")),
             selectInput(session$ns("sel_sort_by"), "Column to sort by:", choices = NULL),
             checkboxInput(session$ns("chk_desc_sort"), "Sort descending", value = TRUE),
-            lapply(1:max_grouping_depth, function(i) {
-                ## Create previous-layer condition string to use for javascript flow
-                if (i == 1) {
-                    cond_string <- "true"
-                } else {
-                    cond_string <- sprintf("input['%s'] != '%s'", session$ns(paste0("sel_grouping_col_", i-1)), termination_value)
-                }
-                
-                conditionalPanel(
-                    condition = cond_string,
-                    selectInput(
-                        session$ns(paste0("sel_grouping_col_", i)),
-                        label = if (i==1) {"(1) Firstly, group by column:"} else {paste0("(", i, ") Then, group by column:")},
-                        choices = c(termination_value)
-                    ),
-                    conditionalPanel(
-                        condition = sprintf("input['%s'] != '%s'", session$ns(paste0("sel_grouping_col_", i)), termination_value),
-                        numericInput(
-                            session$ns(paste0("num_grouping_int_", i)),
-                            label = "Lines between each value:",
-                            value = 1,
-                            step = 1,
-                            min = 0
-                        )
-                    )
-                    
-                )
-            })
+            panel_grouping_levels(session, termination_value, max_grouping_depth)
         )
         panel_dynamic_fastq_parsing(input, session, panel_content = fastq_parsing_panel)
         
@@ -166,65 +139,12 @@ many_sequences_server <- function(id) {
             return(merge_fastq_with_metadata(fastq_data, metadata, reverse_complement_mode = reverse_complement_mode))
         })
         
-        ## Logic for updating sort_by and grouping_levels choices
-        observeEvent(merged_fastq_reactive(), {
-            df <- merged_fastq_reactive()
-            req(df)
-            cols <- colnames(df)
-            
-            updateSelectInput(session, "sel_sort_by",
-                              choices = c("Don't sort", cols),
-                              selected = "sequence_length")
-            
-            lapply(1:max_grouping_depth, function(i) {
-                
-                # Important: Preserve current selection if it exists and is valid
-                current_val <- input[[paste0("sel_grouping_col_", i)]]
-                if (!is.null(current_val) && current_val %in% cols) {
-                    selected <- current_val
-                } else {
-                    selected <- termination_value
-                }
-                
-                updateSelectInput(
-                    session, 
-                    paste0("sel_grouping_col_", i),
-                    choices = c(termination_value, cols),
-                    selected = selected
-                )
-            })
-        })
         
-        ## Logic for constructing vector out of selected choices
-        grouping_levels_vector <- reactive({
-            req(merged_fastq_reactive())
-            
-            collected_levels <- integer()
-            for (i in 1:max_grouping_depth) {
-                col_name <- input[[paste0("sel_grouping_col_", i)]]
-                
-                ## Exit if column is NULL or End
-                if (is.null(col_name) || col_name == termination_value) {
-                    break
-                }
-                
-                int_val <- input[[paste0("num_grouping_int_", i)]]
-                
-                ## Safety check: ensure integer exists (might be NULL during rendering split-second)
-                if (is.null(int_val)) {
-                    int_val <- NA 
-                }
-                
-                ## Append to vector
-                collected_levels[col_name] <- int_val
-            }
-            
-            if (length(collected_levels) == 0) {
-                return(NA)
-            } else {
-                return(collected_levels)
-            }
-        })
+        ## Update sort_by and grouping_levels options from data colnames
+        panel_update_sorting_grouping_from_colnames(input, session, merged_fastq_reactive, termination_value, max_grouping_depth)
+        
+        ## Extract grouping levels vector
+        grouping_levels_vector <- process_grouping_levels(input, merged_fastq_reactive, termination_value, max_grouping_depth)
         
         ## Logic for constructing actual input sequences vector
         parsed_sequences <- reactive({
@@ -276,7 +196,7 @@ many_sequences_server <- function(id) {
         sequence_colours <- reactive({process_sequence_colours(input, session, "sel_sequence_colour_palette", "col_custom_")})
         
         ## Process index annotation lines
-        index_annotation_lines <- reactive({process_index_annotation_lines(input$txt_index_annotation_lines, "Index annotation lines must contain only 0123456789 arranged as space-separated positive integers")})
+        index_annotation_lines <- reactive({process_index_annotation_lines(input$txt_index_annotation_lines, "Index annotation lines must contain only the characters 1/2/3/4/5/6/7/8/9/0 arranged as space-separated positive integers")})
         
         ## Create visualisation
         current_image_path <- reactive({
