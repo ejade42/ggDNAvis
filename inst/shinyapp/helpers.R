@@ -64,7 +64,13 @@ enable_live_visualisation <- function(image_path, alt = "ggDNAvis DNA visualisat
 
 ## INPUT PROCESSING
 ## ------------------------------------------------------------------------------
-validate_sequence <- function(sequence, message) {
+validate_sequence <- function(sequence, message, message_full_seq = TRUE) {
+    sequence <- paste(sequence, collapse = "")
+
+    if (message_full_seq) {
+        message(sequence)
+    }
+
     ## Validate sequence input
     if (grepl("[^ACGTUacgtu\\s \t\r\n]", sequence)) {
 
@@ -88,6 +94,20 @@ process_sequence_colours <- function(input, session, col_palette_name = "sel_seq
         }
     }
     return(sequence_colours)
+}
+
+process_index_annotation_lines <- function(input_lines, message) {
+    ## Validate index annotation input
+    if (grepl("[^0123456789\\s \t\r\n]", input_lines)) {
+
+        # Optional: Find the specific bad characters to show the user
+        bad_chars <- unique(unlist(regmatches(input_lines, gregexpr("[^0123456789\\s]", input_lines))))
+
+        # Stop everything and show this error
+        abort(paste0(message, "\nIllegal characters: ", paste(sort(bad_chars), collapse = ", ")))
+    }
+
+    as.integer(strsplit(input_lines, split = " ")[[1]])
 }
 ## ------------------------------------------------------------------------------
 

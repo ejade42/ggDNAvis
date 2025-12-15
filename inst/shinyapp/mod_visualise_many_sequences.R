@@ -36,8 +36,6 @@ many_sequences_ui <- function(id) {
                 
                 accordion_panel(
                     title = "Layout",
-                    numericInput(ns("num_line_wrapping"), "Bases per line:", 75, min = 1, step = 5),
-                    numericInput(ns("num_spacing"), "Line spacing:", 1, min = 0, step = 1),
                     numericInput(ns("num_margin"), "Margin:", 0.5, min = 0, step = 0.5),
                     numericInput(ns("num_pixels_per_base"), "Pixels per base:", 100, min = 1, step = 10)
                 ),
@@ -48,13 +46,13 @@ many_sequences_ui <- function(id) {
                 accordion_panel(
                     title = "Sizes and positions",
                     numericInput(ns("num_sequence_text_size"), "Sequence text size:", value = 16, step = 1),
-                    textInput(ns("txt_index_annotation_lines"), "Index annotation lines:", value = "1"),
                     numericInput(ns("num_index_annotation_size"), "Index annotation size:", value = 12.5, min = 0, step = 1),
+                    textInput(ns("txt_index_annotation_lines"), "Lines to annotate with indices (space-separated integers):", value = "1 2"),
                     numericInput(ns("num_index_annotation_interval"), "Index annotation interval:", value = 15, min = 0, step = 3),
                     numericInput(ns("num_index_annotation_vertical_position"), "Index annotation height:", value = 1/3, step = 1/6),
                     checkboxInput(ns("chk_index_annotations_above"), "Index annotations above boxes", value = TRUE),
                     checkboxInput(ns("chk_index_annotation_full_line"), "Index annotations always go to the end of the line", value = TRUE),
-                    checkboxInput(ns("chk_index_annotation_always_first_base"), "Always annotate first base", value = FALSE),
+                    checkboxInput(ns("chk_index_annotation_always_first_base"), "Always annotate first base", value = TRUE),
                     numericInput(ns("num_outline_linewidth"), "Outline thickness:", value = 3, min = 0, step = 0.5),
                     selectInput(ns("sel_outline_join"), "Outline corner style:", choices = c("mitre", "round", "bevel"))
                 ),
@@ -147,7 +145,8 @@ many_sequences_server <- function(id) {
             df <- merged_fastq_reactive()
             
             updateSelectInput(session, "sel_sort_by",
-                              choices = c("Don't sort", colnames(df)))
+                              choices = c("Don't sort", colnames(df)),
+                              selected = "sequence_length")
         })
         
         ## Logic for updating grouping choices
@@ -181,7 +180,7 @@ many_sequences_server <- function(id) {
                 
                 select_input <- selectInput(
                     session$ns(paste0("sel_grouping_col_", i)),
-                    label = if(i==1) {"First group by column:"} else {"Then group by column:"},
+                    label = if(i==1) {"Firstly, group by column:"} else {"Then, group by column:"},
                     choices = c(termination_value, cols),
                     selected = selected_value
                 )
@@ -199,7 +198,7 @@ many_sequences_server <- function(id) {
                                              paste0("Lines between each value of ", current_col, ":"),
                                              value = 1),
                             
-                                # RECURSION POINT: The slot for Level i+1
+                                ## RECURSION POINT: The slot for Level i+1
                                 uiOutput(session$ns(paste0("ui_grouping_level_", i + 1)))
                             )
                         })
@@ -208,16 +207,42 @@ many_sequences_server <- function(id) {
         })
         
         ## Logic for constructing vector out of selected choices
-        
+        grouping_levels_vector <- reactive({
+            req(merged_fastq_reactive())
+            
+            collected_levels <- integer()
+            for (i in 1:max_grouping_depth) {
+                col_name <- input[[paste0("sel_grouping_col_", i)]]
+                
+                ## Exit if column is NULL or End
+                if (is.null(col_name) || col_name == termination_value) {
+                    break
+                }
+                
+                int_val <- input[[paste0("num_grouping_int_", i)]]
+                
+                ## Safety check: ensure integer exists (might be NULL during rendering split-second)
+                if (is.null(int_val)) {
+                    int_val <- NA 
+                }
+                
+                ## Append to vector
+                collected_levels[col_name] <- int_val
+            }
+            
+            if (length(collected_levels) == 0) {
+                return(NA)
+            } else {
+                return(collected_levels)
+            }
+        })
         
         ## Logic for constructing actual input sequences vector
         parsed_sequences <- reactive({
             ## Process input
             if (input$input_mode == "Text input") {
-                sequences <- strsplit(input$txt_sequence, split = " ")
-                return(sequences)
+                sequences <- strsplit(input$txt_sequence, split = " ")[[1]]
                 
-            
             } else if (input$input_mode == "Upload") {
                 if (is.null(input$fil_fastq_file)) {
                     abort("Please upload a FASTQ file...")
@@ -247,20 +272,58 @@ many_sequences_server <- function(id) {
                 sequences <- extract_and_sort_sequences(
                     merged_fastq_reactive(),
                     sequence_variable = sequence_variable,
-                    grouping_levels = NA,
+                    grouping_levels = grouping_levels_vector(),
                     sort_by = sort_by,
                     desc_sort = input$chk_desc_sort
                 )
-                return(sequences)
             }
+            
+            ## Validate and return sequences vector
+            validate_sequence(sequences, "Sequences vector for visualisation must contain only A/C/G/T/U and whitespace.", TRUE)
+            return(sequences)
         })
+        
+        ## Process sequence colours
+        sequence_colours <- reactive({process_sequence_colours(input, session, "sel_sequence_colour_palette", "col_custom_")})
+        
+        ## Process index annotation lines
+        index_annotation_lines <- reactive({process_index_annotation_lines(input$txt_index_annotation_lines, "Index annotation lines must contain only 0123456789 arranged as space-separated positive integers")})
         
         ## Create visualisation
         current_image_path <- reactive({
+            outfile <- tempfile(fileext = ".png")
+            visualise_many_sequences(
+                sequences_vector = parsed_sequences(),
+                sequence_colours = sequence_colours(),
+                background_colour = input$col_background_colour,
+                margin = input$num_margin,
+                sequence_text_colour = input$col_sequence_text_colour,
+                sequence_text_size = input$num_sequence_text_size,
+                index_annotation_lines = index_annotation_lines(),
+                index_annotation_colour = input$col_index_annotation_colour,
+                index_annotation_size = input$num_index_annotation_size,
+                index_annotation_interval = input$num_index_annotation_interval,
+                index_annotations_above = input$chk_index_annotations_above,
+                index_annotation_vertical_position = input$num_index_annotation_vertical_position,
+                index_annotation_full_line = input$chk_index_annotation_full_line,
+                index_annotation_always_first_base = input$chk_index_annotation_always_first_base,
+                outline_colour = input$col_outline_colour,
+                outline_linewidth = input$num_outline_linewidth,
+                outline_join = input$sel_outline_join,
+                return = FALSE,
+                filename = outfile,
+                force_raster = FALSE,
+                render_device = ragg::agg_png,
+                pixels_per_base = input$num_pixels_per_base,
+                monitor_performance = FALSE
+            )
             
+            ## Return file
+            return(outfile)
         })
         
-        
+        output$visualisation <- enable_live_visualisation(current_image_path)
+        output$download_image <- enable_image_download(id, current_image_path)
         
         
         
