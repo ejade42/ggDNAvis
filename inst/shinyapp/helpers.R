@@ -137,9 +137,11 @@ panel_sequence_vis_colours <- function(ns) {
 }
 
 ## Panel for settings import/export
-panel_restore_settings <- function(ns) {
+panel_restore_settings <- function(ns, help_message =  NULL) {
     accordion_panel(
         title = "Restore settings",
+
+        p(HTML(help_message), style = "font-size: 14px"),
 
         ## Import button is set up as a dummy actionButton linked to a fileInput
         actionButton(ns("import_settings_proxy"), "Import settings", class = "mt-0 w-100", icon = icon("upload"),

@@ -25,7 +25,7 @@ many_sequences_ui <- function(id) {
                         tabPanel(
                             "Upload",
                             fileInput(ns("fil_fastq_file"), "Upload FASTQ:", accept = c(".fastq", ".fq"), placeholder = "No file selected"),
-                            fileInput(ns("fil_metadata_file"), "Upload metadata csv:", accept = c(".csv"), placeholder = "No file selected"),
+                            fileInput(ns("fil_metadata_file"), "Upload metadata CSV:", accept = c(".csv"), placeholder = "No file selected"),
                             div(
                                 style = "margin-bottom: 15px;",
                                 actionLink(ns("fastq_upload_details"), "View file requirements", icon = icon("info-circle"), class = "mt-0 mb-3")
@@ -57,14 +57,9 @@ many_sequences_ui <- function(id) {
                     selectInput(ns("sel_outline_join"), "Outline corner style:", choices = c("mitre", "round", "bevel"))
                 ),
                 
-                panel_restore_settings(ns),
+                panel_restore_settings(ns, "Note: if reading from a FASTQ+CSV, make sure you upload the files first <i>then</i> import the settings, otherwise grouping settings will not import properly."),
                 
                 downloadButton(ns("download_image"), "Download image", class = "mt-3 w-100"),
-                
-                
-                
-                
-                
             )
         ),
         card(
@@ -80,6 +75,10 @@ many_sequences_ui <- function(id) {
 
 many_sequences_server <- function(id) {
     moduleServer(id, function(input, output, session) {
+        max_grouping_depth <- 10
+        termination_value <- "END GROUPING"
+        
+        
         ## Logic for adding FASTQ parsing settings panel
         fastq_parsing_panel <- tagList(
             checkboxInput(session$ns("chk_fastq_is_modified"), "FASTQ header contains modification information", value = FALSE),
@@ -87,7 +86,34 @@ many_sequences_server <- function(id) {
             selectInput(session$ns("sel_reverse_mode"), "Reverse sequence processing:", choices = c("Reverse-complement to DNA", "Reverse-complement to RNA", "Reverse without complementing", "Don't reverse")),
             selectInput(session$ns("sel_sort_by"), "Column to sort by:", choices = NULL),
             checkboxInput(session$ns("chk_desc_sort"), "Sort descending", value = TRUE),
-            uiOutput(session$ns("ui_grouping_level_1"))
+            lapply(1:max_grouping_depth, function(i) {
+                ## Create previous-layer condition string to use for javascript flow
+                if (i == 1) {
+                    cond_string <- "true"
+                } else {
+                    cond_string <- sprintf("input['%s'] != '%s'", session$ns(paste0("sel_grouping_col_", i-1)), termination_value)
+                }
+                
+                conditionalPanel(
+                    condition = cond_string,
+                    selectInput(
+                        session$ns(paste0("sel_grouping_col_", i)),
+                        label = if (i==1) {"(1) Firstly, group by column:"} else {paste0("(", i, ") Then, group by column:")},
+                        choices = c(termination_value)
+                    ),
+                    conditionalPanel(
+                        condition = sprintf("input['%s'] != '%s'", session$ns(paste0("sel_grouping_col_", i)), termination_value),
+                        numericInput(
+                            session$ns(paste0("num_grouping_int_", i)),
+                            label = "Lines between each value:",
+                            value = 1,
+                            step = 1,
+                            min = 0
+                        )
+                    )
+                    
+                )
+            })
         )
         panel_dynamic_fastq_parsing(input, session, panel_content = fastq_parsing_panel)
         
@@ -140,71 +166,39 @@ many_sequences_server <- function(id) {
             return(merge_fastq_with_metadata(fastq_data, metadata, reverse_complement_mode = reverse_complement_mode))
         })
         
-        ## Logic for updating sort_by choices
+        ## Logic for updating sort_by and grouping_levels choices
         observeEvent(merged_fastq_reactive(), {
             df <- merged_fastq_reactive()
+            req(df)
+            cols <- colnames(df)
             
             updateSelectInput(session, "sel_sort_by",
-                              choices = c("Don't sort", colnames(df)),
+                              choices = c("Don't sort", cols),
                               selected = "sequence_length")
-        })
-        
-        ## Logic for updating grouping choices
-        ## We loop 1:max_grouping_depth and create a renderer for each level.
-        ## Each level renders:
-        ##   1. Its own integer input (if not End)
-        ##   2. The SelectInput for the NEXT level (if not End)
-        ##   3. The uiOutput placeholder for the NEXT level's children
-        max_grouping_depth <- 10
-        termination_value <- "End"
-        lapply(1:max_grouping_depth, function(i) {
-            output[[paste0("ui_grouping_level_", i)]] <- renderUI({
-                df <- merged_fastq_reactive()
-                req(df)
-                cols <- colnames(df)
+            
+            lapply(1:max_grouping_depth, function(i) {
                 
-                ## Check previous level
-                if (i > 1) {
-                    prev_sel <- input[[paste0("sel_grouping_col_", i-1)]]
-                    ## If previous selection is missing or "End", stop rendering this branch
-                    if (is.null(prev_sel) || prev_sel == termination_value) {return(NULL)}
-                }
-                
-                ## Define inputs for this level
-                current_selected_value <- input[[paste0("sel_grouping_col_", i)]]
-                if (!is.null(current_selected_value) && current_selected_value %in% c(termination_value, cols)) {
-                    selected_value <- current_selected_value
+                # Important: Preserve current selection if it exists and is valid
+                current_val <- input[[paste0("sel_grouping_col_", i)]]
+                if (!is.null(current_val) && current_val %in% cols) {
+                    selected <- current_val
                 } else {
-                    selected_value <- termination_value
+                    selected <- termination_value
                 }
                 
-                select_input <- selectInput(
-                    session$ns(paste0("sel_grouping_col_", i)),
-                    label = if(i==1) {"Firstly, group by column:"} else {"Then, group by column:"},
+                updateSelectInput(
+                    session, 
+                    paste0("sel_grouping_col_", i),
                     choices = c(termination_value, cols),
-                    selected = selected_value
-                )
-                
-                current_col <- input[[paste0("sel_grouping_col_", i)]]
-                
-                ## Content to return
-                tagList(
-                    div(class = "grouping-level-wrapper", style = "",
-                        select_input,
-                        
-                        if (!is.null(current_col) && current_col != termination_value) {
-                            tagList(
-                                numericInput(session$ns(paste0("num_grouping_int_", i)),
-                                             paste0("Lines between each value of ", current_col, ":"),
-                                             value = 1),
-                            
-                                ## RECURSION POINT: The slot for Level i+1
-                                uiOutput(session$ns(paste0("ui_grouping_level_", i + 1)))
-                            )
-                        })
+                    selected = selected
                 )
             })
         })
+        
+        ## Logic for 
+        
+        
+        
         
         ## Logic for constructing vector out of selected choices
         grouping_levels_vector <- reactive({
