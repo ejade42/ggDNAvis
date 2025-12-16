@@ -169,16 +169,61 @@ methylation_server <- function(id) {
 
         ## Logic for adding FASTQ parsing settings panel - NEED TO UPDATE FOR METHYLATION
         fastq_parsing_panel <- tagList(
-            checkboxInput(session$ns("chk_fastq_is_modified"), "FASTQ header contains modification information", value = FALSE),
-            actionLink(session$ns("fastq_header_details"), "View FASTQ header explanation", icon = icon("info-circle"), class = "mt-0 mb-3"),
             selectInput(session$ns("sel_reverse_mode"), "Reverse sequence processing:", choices = c("Reverse-complement to DNA", "Reverse-complement to RNA", "Reverse without complementing", "Don't reverse")),
+            conditionalPanel(
+                condition = sprintf("input['%s'].indexOf('Reverse-complement to') == 0", session$ns("sel_reverse_mode")),
+                numericInput(session$ns("num_reverse_offset"), "Offset reverse-complemented modification locations by:", value = 0, min = 0, max = 1, step = 1), ## Need to make sure to override offset to 0 if 'reverse_only'
+                actionLink(session$ns("offset_details"), "View reverse-complementing offset explanation", icon = icon("info-circle"), class = "mt-0 mb-3"),
+            ),
             selectInput(session$ns("sel_sort_by"), "Column to sort by:", choices = NULL),
             checkboxInput(session$ns("chk_desc_sort"), "Sort descending", value = TRUE),
             panel_grouping_levels(session, termination_value, max_grouping_depth)
         )
         panel_dynamic_fastq_parsing(input, session, panel_content = fastq_parsing_panel)
 
+        ## Logic for creating fastq dataframe
+        merged_fastq_reactive <- reactive({
+            req(input$input_mode == "Upload")
+            req(input$fil_fastq_file, input$fil_metadata_file)
 
+            ## Read FASTQ
+            fastq_data <- tryCatch({
+                read_modified_fastq(input$fil_fastq_file$datapath)
+            }, error = function(e) {
+                showNotification(paste("Modified FASTQ invalid. Error when parsing:\n", e), type = "error")
+                NULL
+            })
+
+            ## Read metadata
+            metadata <- tryCatch({
+                read.csv(input$fil_metadata_file$datapath)
+            }, error = function(e) {
+                showNotification(paste("Metadata invalid. Error when parsing:\n", e), type = "error")
+                NULL
+            })
+
+            ## Check it read properly
+            req(fastq_data)
+            req(metadata)
+
+            ## Determine which reversing mode to use
+            reverse_complement_mode <- switch(
+                input$sel_reverse_mode,
+                "Reverse-complement to DNA" = "DNA",
+                "Reverse-complement to RNA" = "RNA",
+                "Reverse without complementing" = "reverse_only",
+                "Don't reverse" = "DNA"
+            )
+
+            ## Merge and return dataframe
+            return(merge_fastq_with_metadata(fastq_data, metadata, reverse_complement_mode = reverse_complement_mode))
+        })
+
+        ## Update sort_by and grouping_levels options from data colnames
+        panel_update_sorting_grouping_from_colnames(input, session, merged_fastq_reactive, termination_value, max_grouping_depth)
+
+        ## Extract grouping levels vector
+        grouping_levels_vector <- process_grouping_levels(input, merged_fastq_reactive, termination_value, max_grouping_depth)
 
         ## HELP PANELS
         ## - methylation_input_details
