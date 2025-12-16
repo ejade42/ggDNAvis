@@ -21,6 +21,7 @@ csl: README_files/apa.csl
 <!-- badges: end -->
 
 # ggDNAvis
+## Introduction
 
 <a href="https://ejade42.github.io/ggDNAvis/"><img src="man/figures/logo.png" align="right" height="139" alt="ggDNAvis website" class="pkgdown-hide" /></a>
 
@@ -38,6 +39,7 @@ Additionally, ggDNAvis contains a built-in example dataset (`example_many_sequen
 
 As of v1.0.0, aliases are now fully configured so either American or British spellings should work. "Colour" and "visualise" remain the spellings used throughout the code and documentation but "color", "col", and "visualize" should also work in all function and argument names (e.g. `visualize_single_sequence()`). If any American spellings don't work then please submit a bug report at https://github.com/ejade42/ggDNAvis/issues.
 
+## Installation
 The latest release of ggDNAvis is available from CRAN or via github releases. Alternatively, the latest in-development version can be installed directly from the github repository, but may have unexpected bugs.
 
 ```{r, eval = FALSE}
@@ -80,6 +82,17 @@ knitr::opts_chunk$set(fig.path = output_location)
 ## Print current ggDNAvis version
 cat("Loaded ggDNAvis version is:", as.character(packageVersion("ggDNAvis")))
 ```
+
+## Interactive suite
+An interactive GUI-based version of ggDNAvis that runs in a browser is under development. Hosting details are still being established.
+
+This is implemented via a Shiny app, which can also be launched from R on any local computer that has `ggDNAvis` installed, via the `ggDNAvis_shinyapp()` function:
+
+```{r, eval = FALSE}
+ggDNAvis_shiny()
+```
+
+The files for the app are stored in `inst/shinyapp`.
 
 # Summary/quickstart
 This section contains one example for each type of visualisation. See the relevant full sections for more details and customisation options.
@@ -182,7 +195,7 @@ merged_modification_data <- merge_methylation_with_metadata(
 
 ## Extract list of character vectors
 ## These arguments should all be considered, as they are highly specific to your data
-methylation_for_visualisation <- extract_methylation_from_dataframe(
+methylation_for_visualisation <- extract_and_sort_methylation(
     modification_data = merged_modification_data,
     locations_colname = "forward_C+m?_locations",
     probabilities_colname = "forward_C+m?_probabilities",
@@ -504,7 +517,15 @@ constructed_metadata <- data.frame(
 )
 ```
 
-In any case, once we have metadata with the `read` and `direction` columns, we can use `merge_fastq_with_metadata()` to combine the metadata and the fastq data. Crucially, this function uses the `direction` column of the metadata to determine which reads are reverse, and reverse-complements these reverse reads only to produce a new column containing the forward version of all reads:
+In any case, once we have metadata with the `read` and `direction` columns, we can use `merge_fastq_with_metadata()` to combine the metadata and the fastq data. Crucially, this function uses the `direction` column of the metadata to determine which reads are reverse, and reverse-complements these reverse reads only to produce a new column containing the forward version of all reads.
+
+Note that there are three options for how to manage these reverse reads:
+
+- `reverse_complement_mode = "DNA"` reverse-complements, with A being mapped to T. This is the default.
+- `reverse_complement_mode = "RNA"` reverse-complements, with A being mapped to U.
+- `reverse_complement_mode = "reverse_only"` reverses but does not complement, meaning reverse reads will be shown 3'-5' (i.e. complementary to the 5'-3' forward reads) as opposed to being complemented into the 5'-3' forward reads.
+
+This example with proceed with the default `reverse_complement_mode = "DNA"`, but be aware that `"reverse_only"` is an option if reverse reads want to be visualised aligned with forward reads without complementing.
 
 ```{r}
 ## Merge fastq data with metadata
@@ -901,6 +922,7 @@ Many aspects of the sequence layout are also customisable via arguments:
 - `index_annotation_interval`: The frequency at which index numbers should be listed. Can be set to `0` to disable index annotations. Defaults to `15`.
 - `index_annotations_above`: Boolean specifying whether index annotations should be drawn above or below each line of sequence. Defaults to `TRUE` (above).
 - `index_annotation_vertical_position`: How far annotation numbers should be rendered above (if `index_annotations_above = TRUE`) or below (if `index_annotations_above = FALSE`) each base. Defaults to `1/3`, not recommended to change generally. If spacing is much larger than `1`, setting this to a slightly higher value might be appropriate.
+- - `index_annotation_always_first_base`: Boolean specifying whether the first base should always be annotated even if it would not usually be (i.e. `index_annotation_interval > 1`).
 - `outline_linewidth`: The thickness of the box outlines. Can be set to `0` to disable box outlines. Defaults to `3`.
 - `outline_join`: Changes how the corners of the box outlines are handled. Must be one of `"mitre"`, `"bevel"`, or `"round"`. Defaults to `"mitre"`. It is unlikely that you would ever need to change this.
 
@@ -918,6 +940,7 @@ visualise_single_sequence(
     index_annotation_interval = 20,
     index_annotations_above = FALSE,
     index_annotation_vertical_position = 1/2,
+    index_annotation_always_first_base = TRUE,
     outline_linewidth = 0
 )
 
@@ -1002,7 +1025,8 @@ visualise_single_sequence(
     sequence_colours = sequence_colour_palettes$bright_deep,
     sequence_text_colour = "white",
     line_wrapping = 65,
-    index_annotation_interval = 15
+    index_annotation_interval = 15,
+    index_annotation_always_first_base = TRUE,
 )
 
 ## View image
@@ -1362,6 +1386,7 @@ The full set of arguments controlling index annotations are:
 - `index_annotation_size`: The size of the index numbers above/below the boxes. Can be set to `0` to disable index annotations. Defaults to `12.5`.
 - `index_annotation_interval`: The frequency at which index numbers should be listed. Defaults to `15`. Note that unlike `visualise_single_sequence()`, the count resets each line in `visualise_many_sequences()` and `visualise_methylation()` because each line is assumed to be a different sequence.
 - `index_annotations_above`: Boolean specifying whether index annotations should be drawn above or below each line of sequence. Defaults to `TRUE` (above).
+- `index_annotation_always_first_base`: Boolean specifying whether the first base should always be annotated even if it would not usually be (i.e. `index_annotation_interval > 1`). Note that this only applies to lines where annotations would be drawn, so not if they are excluded by `index_annotation_lines` or disabled via `index_annotation_interval = 0` or `index_annotation_size = 0`. If the goal is to annotate the first base and no others in each line, turn this on but set `index_annotation_interval` to a value greater than the maximum sequence length.
 - `index_annotation_vertical_position`: How far annotation numbers should be rendered above (if `index_annotations_above = TRUE`) or below (if `index_annotations_above = FALSE`) each base. Defaults to `1/3`, not recommended to change generally.
 
 We will work through these arguments step by step to fully explain how they work.
@@ -1408,7 +1433,7 @@ To annotate below the final line of each family, we can look at the sequences ve
 ```{r}
 sequences_for_visualisation
 ```
-We can see that lines 14, 28, and 51 are the last sequence in each family, so we will annotate below those lines:
+We can see that lines 14, 28, and 51 are the last sequence in each family, so we will annotate below those lines (and also enable annotating the first base in each line):
 
 ```{r}
 visualise_many_sequences(
@@ -1417,7 +1442,8 @@ visualise_many_sequences(
     return = FALSE,
     sequence_colours = sequence_colour_palettes$bright_pale2,
     index_annotation_lines = c(14, 28, 51),
-    index_annotations_above = FALSE
+    index_annotations_above = FALSE,
+    index_annotation_always_first_base = TRUE
 )
 
 ## View image
@@ -1477,6 +1503,7 @@ visualise_many_sequences(
     index_annotations_above = TRUE,
     index_annotation_interval = 6,
     index_annotation_full_line = TRUE,
+    index_annotation_always_first_base = TRUE,
     index_annotation_colour = "green",
     index_annotation_size = 30,
     index_annotation_vertical_position = 1.5
@@ -1688,12 +1715,12 @@ identical(merged_modification_data, example_many_sequences)
 github_table(head(merged_modification_data, 4))
 ```
 
-Once we have the dataframe with all forward modification columns, we can extract and sort them with `extract_methylation_from_dataframe()`. This function works extremely similarly to `extract_and_sort_sequences()` (as explained with examples previously in the [many sequences arrangement customisation](#52-sequence-arrangement-customisation) section), but instead of taking a single argument for the sequence column to extract, it takes four arguments for locations, probabilities, sequences, and sequence length colnames to extract:
+Once we have the dataframe with all forward modification columns, we can extract and sort them with `extract_and_sort_methylation()`. This function works extremely similarly to `extract_and_sort_sequences()` (as explained with examples previously in the [many sequences arrangement customisation](#52-sequence-arrangement-customisation) section), but instead of taking a single argument for the sequence column to extract, it takes four arguments for locations, probabilities, sequences, and sequence length colnames to extract:
 
 ```{r}
 ## Extract locations, probabilities, and lengths
 ## Remember that example_many_sequences is identical to merged_modification_data
-methylation_data_for_visualisation <- extract_methylation_from_dataframe(
+methylation_data_for_visualisation <- extract_and_sort_methylation(
     example_many_sequences,
     locations_colname = "methylation_locations",
     probabilities_colname = "methylation_probabilities",
@@ -1712,7 +1739,7 @@ To use hydroxymethylation instead of methylation, we can simply change the colna
 
 ```{r}
 ## Extract locations, probabilities, and lengths
-hydroxymethylation_data_for_visualisation <- extract_methylation_from_dataframe(
+hydroxymethylation_data_for_visualisation <- extract_and_sort_methylation(
     example_many_sequences,
     locations_colname = "hydroxymethylation_locations",
     probabilities_colname = "hydroxymethylation_probabilities",
@@ -1762,9 +1789,9 @@ knitr::include_graphics(paste0(github_location, "modification_01_scalebar.png"))
 
 
 ## Sequence arrangement customisation
-`extract_methylation_from_dataframe()` is customisable in all the same ways as `extract_and_sort_sequences()`, as discussed in detail in the [many sequences arrangement customisation](#52-sequence-arrangement-customisation) section. This section will provide a brief reminder, but follow that link for a full explanation.
+`extract_and_sort_methylation()` is customisable in all the same ways as `extract_and_sort_sequences()`, as discussed in detail in the [many sequences arrangement customisation](#52-sequence-arrangement-customisation) section. This section will provide a brief reminder, but follow that link for a full explanation.
 
-`extract_methylation_from_dataframe()` arguments:
+`extract_and_sort_methylation()` arguments:
 
 - `modification_data`: The data to be processed
 - `locations_colname`: The column locations should be extracted from.
@@ -1779,7 +1806,7 @@ A single example of how the arrangement might be customised:
 
 ```{r}
 ## Extract information to list of character vectors
-methylation_data_for_visualisation <- extract_methylation_from_dataframe(
+methylation_data_for_visualisation <- extract_and_sort_methylation(
     example_many_sequences,
     locations_colname = "methylation_locations",
     probabilities_colname = "methylation_probabilities",
@@ -1822,7 +1849,7 @@ Briefly:
 For example:
 ```{r}
 ## Extract information to list of character vectors using all default settings
-methylation_data_for_visualisation <- extract_methylation_from_dataframe(example_many_sequences)
+methylation_data_for_visualisation <- extract_and_sort_methylation(example_many_sequences)
 
 ## Use saved methylation data for visualisation to make image
 visualise_methylation(
@@ -1835,6 +1862,7 @@ visualise_methylation(
     index_annotations_above = FALSE,
     index_annotation_interval = 3,
     index_annotation_full_line = FALSE,
+    index_annotation_always_first_base = TRUE,
     index_annotation_colour = "purple",
     index_annotation_size = 16,
     index_annotation_vertical_position = 0.45
@@ -1861,7 +1889,7 @@ An example drawing the sequences is:
 
 ```{r}
 ## Extract information to list of character vectors using all default settings
-methylation_data_for_visualisation <- extract_methylation_from_dataframe(example_many_sequences)
+methylation_data_for_visualisation <- extract_and_sort_methylation(example_many_sequences)
 
 ## Use saved methylation data for visualisation to make image
 visualise_methylation(
@@ -1981,7 +2009,7 @@ Here is an example with wild colours:
 
 ```{r}
 ## Extract information to list of character vectors
-methylation_data_for_visualisation <- extract_methylation_from_dataframe(
+methylation_data_for_visualisation <- extract_and_sort_methylation(
     example_many_sequences,
     locations_colname = "methylation_locations",
     probabilities_colname = "methylation_probabilities",
@@ -2043,7 +2071,7 @@ One way this might be used in practice is for making a graphic in the "lollipop"
 
 ```{r}
 ## Extract information to list of character vectors
-methylation_data_for_visualisation <- extract_methylation_from_dataframe(
+methylation_data_for_visualisation <- extract_and_sort_methylation(
     example_many_sequences,
     locations_colname = "methylation_locations",
     probabilities_colname = "methylation_probabilities",
@@ -2105,7 +2133,7 @@ Here is the lollipop scale but with `low_clamp = 127` and `high_clamp = 128` to 
 
 ```{r}
 ## Extract information to list of character vectors
-methylation_data_for_visualisation <- extract_methylation_from_dataframe(
+methylation_data_for_visualisation <- extract_and_sort_methylation(
     example_many_sequences,
     locations_colname = "methylation_locations",
     probabilities_colname = "methylation_probabilities",
@@ -2163,7 +2191,7 @@ This means one approach is to define clamping values as `proportion*255`, as tha
 
 ```{r}
 ## Extract information to list of character vectors
-methylation_data_for_visualisation <- extract_methylation_from_dataframe(
+methylation_data_for_visualisation <- extract_and_sort_methylation(
     example_many_sequences,
     locations_colname = "methylation_locations",
     probabilities_colname = "methylation_probabilities",
@@ -2210,7 +2238,7 @@ The clamping does not need to be symmetrical. One use for this is if the data is
 
 ```{r}
 ## Extract information to list of character vectors
-hydroxymethylation_data_for_visualisation <- extract_methylation_from_dataframe(
+hydroxymethylation_data_for_visualisation <- extract_and_sort_methylation(
     example_many_sequences,
     locations_colname = "hydroxymethylation_locations",
     probabilities_colname = "hydroxymethylation_probabilities",
@@ -2395,131 +2423,157 @@ cat("       *  *  *  *  *      \n")
 }
 ```
 
-The visualisations thus far in this section have all used `offset = 1` so that methylated Cs in CGs on the reverse strand are mapped to Cs of CGs in the forward strand when reverse complemented, ensuring consistency with reads that were forward to begin with. If we used `offset = 0` to show the true biochemical locations of the modifications, we would get the following:
+The visualisations thus far in this section have all used `offset = 1` so that methylated Cs in CGs on the reverse strand are mapped to Cs of CGs in the forward strand when reverse complemented, ensuring consistency with reads that were forward to begin with. 
+
+However, there are actually four ways reverse read may be displayed:
+- All reads 5'-3', with reverse reads running the opposite direction to forward reads (accomplished by *not* using the `forward_<sequence/locations/probabilities>` columns in `extract_and_sort_methylation()`, so that the raw unreversed reads are shown).
+- Reverse reads flipped to 3'-5' so that they are complementary to the forward reads (accomplished by setting `reverse_complement_mode = "reverse_only"` and `offset = 0` in `merge_methylation_with_metadata()`)
+- Reverse reads reverse-complemented to the corresponding 5'-3' so that they match the forward reads, but leaving modifications in the original locations i.e. G of the reversed CG dinucleotides (accomplished by setting `reverse_complement_mode = "DNA"` and `offset = 0` in `merge_methylation_with_metadata()`).
+- Reverse reads reverse-complemented to the corresponding 5'-3' so that they match the forward reads, and offsetting the modification locations by 1 to always be on the C of CG dinucleotides even after reverse-complementing (accomplished by setting `reverse_complement_mode = "DNA"` and `offset = 1` in `merge_methylation_with_metadata()`).
+
+To illustrate this, we will create a dataset of two reads over the same region but in opposite directions, and apply each of these four extraction options. This will also serve to illustrate how `ggDNAvis` visualisations can be returned as `ggplot` objects and further modified:
 
 ```{r}
-modified_fastq_data <- read_modified_fastq("inst/extdata/example_many_sequences_raw_modified.fastq")
-metadata            <- read.csv("inst/extdata/example_many_sequences_metadata.csv")
+## Create random methylation probabilities
+set.seed(1234)
+random_probabilities <- sample(0:255, size = 12, replace = TRUE)
 
-## Merge with offset = 0 (map C to G of palindromic CG sites when reversing)
-## See the reading from modified FASTQ section for a full discussion
-merged_modification_data <- merge_methylation_with_metadata(modified_fastq_data, metadata,
-                                                            reversed_location_offset = 0)
-
-## Extract information to list of character vectors
-## Note that this time we read from merged_modification_data,
-## rather than example_many_sequences
-methylation_data_for_visualisation <- extract_methylation_from_dataframe(
-    merged_modification_data,
-    locations_colname = "forward_C+m?_locations",
-    probabilities_colname = "forward_C+m?_probabilities",
-    sequences_colname = "forward_sequence",
-    lengths_colname = "sequence_length",
-    grouping_levels = c("family" = 6, 
-                        "individual" = 2),
-    sort_by = "sequence_length",
-    desc_sort = FALSE
+## Set up original dataframe with reads always 5'-3'
+location_reversing_example <- data.frame(
+    read = c("example_f", "example_r"),
+    sequence = c("GGCGGCGGCGGCGGAGGAGGCGGCGGAGGAA", "TTCCTCCGCCGCCTCCTCCGCCGCCGCCGCC"),
+    quality  = rep("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB", 2),
+    sequence_length = rep(31, 2),
+    modification_types = rep("methylation", 2),
+    methylation_locations = c("3,6,9,12,21,24", "7,10,19,22,25,28"),
+    methylation_probabilities = c(vector_to_string(random_probabilities[1:6]), vector_to_string(random_probabilities[7:12]))
 )
 
-## Use saved methylation data for visualisation to make image
-visualise_methylation(
-    modification_locations     = methylation_data_for_visualisation$locations,
-    modification_probabilities = methylation_data_for_visualisation$probabilities,
-    sequences                  = methylation_data_for_visualisation$sequences,
-    filename = paste0(output_location, "modification_13.png"),
-    return = FALSE,
+## Set up metadata
+location_reversing_metadata <- data.frame(
+    read = c("example_f", "example_r"),
+    direction = c("forward", "reverse")
+)
+
+## Create new dataframes with various reversal settings and save all to list
+## Use c(list(original_dataframe), new_list) to make list of original then the three new ones
+offsets <- c(0, 0, 1)
+modes <- c("reverse_only", "DNA", "DNA")
+dataframes <- c(list(location_reversing_example), lapply(seq_along(offsets), function(i) {
+    reversed_data <- merge_methylation_with_metadata(
+        location_reversing_example,
+        location_reversing_metadata,
+        reversed_location_offset = offsets[i],
+        reverse_complement_mode = modes[i]
+    )
+
+    ## Overwrite "sequence" with "forward_sequence" etc in the returned dataframe
+    ## This means "sequence" will hold the original sequences for the original dataframe,
+    ## but hold the reversed/forwardified sequences for the following three dataframes
+    reversed_data$sequence = reversed_data$forward_sequence
+    reversed_data$methylation_locations = reversed_data$forward_methylation_locations
+    reversed_data$methylation_probabilities = reversed_data$forward_methylation_probabilities
+
+    return(reversed_data)
+}))
+
+## Extract locations/probabilities/sequences vectors from each dataframe
+## Because of the overwriting at the previous step, "sequence", "modification_locations" etc
+## hold the original values for the first (unmodified) dataset, but the forward-ified versions
+## for the three later datasets
+vectors_for_plotting <- lapply(dataframes, function(x) {
+    extract_methylation_from_dataframe(
+        x,
+        locations_colname = "methylation_locations",
+        probabilities_colname = "methylation_probabilities",
+        sequences_colname = "sequence",
+        lengths_colname = "sequence_length",
+        grouping_levels = NA,
+        sort_by = NA
+    )
+})
+
+## Merge vectors across dataframes, with padding in between to visually separate the examples
+blanks <- 3
+input <- lapply(c("locations", "probabilities", "sequences"), function(x) {
+    lapply(vectors_for_plotting, function(y) c(y[[x]], rep("", blanks))) %>%
+        unlist() %>%
+        head(-blanks) %>%
+        c("", .)
+})
+
+
+
+## Calculate the tile width and height that we will end up with
+lines_to_annotate <- 0:3*blanks + 1:4*2
+margin = 0.5
+
+k <- max(nchar(input[[3]]))
+n <- length(input[[3]]) + length(lines_to_annotate)
+
+## Create dataframe for titles
+titles <- data.frame(
+    text = c("(a) Original sequences, both 5'-3' (e.g. original reads):",
+             "(b) Reversed to be 3'-5', offset 0:",
+             "(c) Reverse-complemented to 5'-3' of other strand, offset 0:",
+             "(d) Reverse-complemented to 5'-3' of other strand, offset 1:"),
+    lines = lines_to_annotate - 1,
+    x = 0
+)
+titles$y = 1 - (titles$lines - 0.66) / length(input[[1]])
+
+## Create dataframe for 1 extra tile on each edge
+## and for 5' and 3' direction indicators
+lines_for_tiles <- sort(
+    rep(seq_along(lines_to_annotate) + lines_to_annotate - 2, times = 2) +
+    rep(0:1, each = length(lines_to_annotate)),
+    decreasing = TRUE
+)
+directions <- data.frame(
+    x = rep(c(-0.5, k+0.5) / k, each = length(lines_for_tiles)),
+    y = rep((lines_for_tiles - 0.5 ) / n, times = 2),
+    width = 1 / k,
+    height = 1 / n,
+    text = c(rep("5'", 2), "5'", "3'", rep("5'", 4),
+             rep("3'", 2), "3'", "5'", rep("3'", 4))
+)
+
+## Create visualisation
+output <- visualise_methylation(
+    input[[1]],
+    input[[2]],
+    input[[3]],
+    index_annotation_lines = lines_to_annotate,
+    index_annotation_interval = 6,
+    other_bases_outline_linewidth = 1,
+    other_bases_outline_colour = "darkgrey",
     sequence_text_type = "sequence",
-    index_annotation_lines = c(1, 21, 33),
-    index_annotation_interval = 3
+    low_clamp = 255*0.4,
+    high_clamp = 255*0.6,
+    margin = margin
+) +
+    ## Add titles and 5'/3' directions
+    geom_tile(data = directions, aes(x = x, y = y, width = width, height = height), fill = alpha("white", 0), linewidth = 0) +
+    geom_text(data = directions, aes(x = x, y = y, label = text), size = 15, col = "darkred", fontface = "bold") +
+    geom_text(data = titles, aes(x = x, y = y, label = text), hjust = 0, size = 16)
+
+
+## Save visualisation
+ggsave(
+    paste0(output_location, "modification_reversing_example.png"),
+    plot = output,
+    dpi = 100,
+    ## k is the width in bases of the original visualisation
+    ## We added 2 new squares, and need to account for the margin
+    width = k + 2 + 2*margin,
+    ## n is the height in bases of the original visualisation
+    ## We didn't add any new lines, but still need to account for the margin
+    height = n + 2*margin,
+    device = ragg::agg_png
 )
 
-## View image
-knitr::include_graphics(paste0(github_location, "modification_13.png"))
-```
-We can see here that some methylation-assessed sites are now offset by 1, as the location is now assigned to the G of each CG site rather than the C. This is perhaps more biochemically accurate, as these Gs are complementary to the Cs on the reverse strands where the modification actually occurred.
-
-Other offset values are theoretically possible, e.g. -1 here:
-```{r}
-modified_fastq_data <- read_modified_fastq("inst/extdata/example_many_sequences_raw_modified.fastq")
-metadata            <- read.csv("inst/extdata/example_many_sequences_metadata.csv")
-
-## Merge with offset = -1 (not recommended)
-merged_modification_data <- merge_methylation_with_metadata(
-    modified_fastq_data, 
-    metadata,
-    reversed_location_offset = -1
-)
-
-## Extract information to list of character vectors
-methylation_data_for_visualisation <- extract_methylation_from_dataframe(
-    merged_modification_data,
-    locations_colname = "forward_C+m?_locations",
-    probabilities_colname = "forward_C+m?_probabilities",
-    sequences_colname = "forward_sequence",
-    lengths_colname = "sequence_length",
-    grouping_levels = c("family" = 6, 
-                        "individual" = 2),
-    sort_by = "sequence_length",
-    desc_sort = FALSE
-)
-
-## Use saved methylation data for visualisation to make image
-visualise_methylation(
-    modification_locations     = methylation_data_for_visualisation$locations,
-    modification_probabilities = methylation_data_for_visualisation$probabilities,
-    sequences                  = methylation_data_for_visualisation$sequences,
-    filename = paste0(output_location, "modification_14.png"),
-    return = FALSE,
-    sequence_text_type = "sequence",
-    index_annotation_lines = c(1, 21, 33),
-    index_annotation_interval = 3
-)
-
-## View image
-knitr::include_graphics(paste0(github_location, "modification_14.png"))
-```
-However, this is strongly discouraged and produces a warning. Offset values other than 0 and 1 have not been tested so results may be unpredictable and aspects of the visualisation may break.
-
-Finally, it is of course possible to read from the columns that weren't reversed/forward-ified. However, ***this is likely to be misleading*** as it implies positional equivalence between bases at opposite ends of the region but on opposite strands. This is not recommended either, but there is no way to identify that you are doing this so no warning is produced.
-
-```{r}
-modified_fastq_data <- read_modified_fastq("inst/extdata/example_many_sequences_raw_modified.fastq")
-metadata            <- read.csv("inst/extdata/example_many_sequences_metadata.csv")
-
-## Merge with offset = 0 (but we aren't using the forward-ified information anyway)
-merged_modification_data <- merge_methylation_with_metadata(
-    modified_fastq_data, 
-    metadata,
-    reversed_location_offset = 0
-)
-
-## Extract information to list of character vectors
-methylation_data_for_visualisation <- extract_methylation_from_dataframe(
-    merged_modification_data,
-    locations_colname = "C+m?_locations",
-    probabilities_colname = "C+m?_probabilities",
-    sequences_colname = "sequence",
-    lengths_colname = "sequence_length",
-    grouping_levels = c("family" = 6, 
-                        "individual" = 2),
-    sort_by = "sequence_length",
-    desc_sort = FALSE
-)
-
-## Use saved methylation data for visualisation to make image
-visualise_methylation(
-    modification_locations     = methylation_data_for_visualisation$locations,
-    modification_probabilities = methylation_data_for_visualisation$probabilities,
-    sequences                  = methylation_data_for_visualisation$sequences,
-    filename = paste0(output_location, "modification_15.png"),
-    return = FALSE,
-    sequence_text_type = "sequence",
-    index_annotation_lines = c(1, 21, 33),
-    index_annotation_interval = 3
-)
-
-## View image
-knitr::include_graphics(paste0(github_location, "modification_15.png"))
+## View visualisation
+knitr::include_graphics(paste0(github_location, "modification_reversing_example.png"))
 ```
 
 ## Performance

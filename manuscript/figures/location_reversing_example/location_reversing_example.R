@@ -24,6 +24,7 @@ location_reversing_metadata <- data.frame(
 )
 
 ## Create new dataframes with various reversal settings and save all to list
+## Use c(list(original_dataframe), new_list) to make list of original then the three new ones
 offsets <- c(0, 0, 1)
 modes <- c("reverse_only", "DNA", "DNA")
 dataframes <- c(list(location_reversing_example), lapply(seq_along(offsets), function(i) {
@@ -33,6 +34,10 @@ dataframes <- c(list(location_reversing_example), lapply(seq_along(offsets), fun
         reversed_location_offset = offsets[i],
         reverse_complement_mode = modes[i]
     )
+
+    ## Overwrite "sequence" with "forward_sequence" etc in the returned dataframe
+    ## This means "sequence" will hold the original sequences for the original dataframe,
+    ## but hold the reversed/forwardified sequences for the following three dataframes
     reversed_data$sequence = reversed_data$forward_sequence
     reversed_data$methylation_locations = reversed_data$forward_methylation_locations
     reversed_data$methylation_probabilities = reversed_data$forward_methylation_probabilities
@@ -41,6 +46,9 @@ dataframes <- c(list(location_reversing_example), lapply(seq_along(offsets), fun
 }))
 
 ## Extract locations/probabilities/sequences vectors from each dataframe
+## Because of the overwriting at the previous step, "sequence", "modification_locations" etc
+## hold the original values for the first (unmodified) dataset, but the forward-ified versions
+## for the three later datasets
 vectors_for_plotting <- lapply(dataframes, function(x) {
     extract_methylation_from_dataframe(
         x,
@@ -53,7 +61,7 @@ vectors_for_plotting <- lapply(dataframes, function(x) {
     )
 })
 
-## Merge vectors across dataframes, with padding in between
+## Merge vectors across dataframes, with padding in between to visually separate the examples
 blanks <- 3
 input <- lapply(c("locations", "probabilities", "sequences"), function(x) {
     lapply(vectors_for_plotting, function(y) c(y[[x]], rep("", blanks))) %>%
@@ -83,6 +91,7 @@ titles <- data.frame(
 titles$y = 1 - (titles$lines - 0.66) / length(input[[1]])
 
 ## Create dataframe for 1 extra tile on each edge
+## and for 5' and 3' direction indicators
 lines_for_tiles <- sort(
     rep(seq_along(lines_to_annotate) + lines_to_annotate - 2, times = 2) +
     rep(0:1, each = length(lines_to_annotate)),
@@ -116,5 +125,17 @@ visualise_methylation(
     geom_text(data = directions, aes(x = x, y = y, label = text), size = 15, col = "darkred", fontface = "bold") +
     geom_text(data = titles, aes(x = x, y = y, label = text), hjust = 0, size = 16)
 
-ggsave("location_reversing_example.png", dpi = 100, width = k + 2 + 2*margin, height = n + 2*margin, device = ragg::agg_png)
+
+## Save visualisation
+ggsave(
+    "location_reversing_example.png",
+    dpi = 100,
+    ## k is the width in bases of the original visualisation
+    ## We added 2 new squares, and need to account for the margin
+    width = k + 2 + 2*margin,
+    ## n is the height in bases of the original visualisation
+    ## We didn't add any new lines, but still need to account for the margin
+    height = n + 2*margin,
+    device = ragg::agg_png
+)
 
