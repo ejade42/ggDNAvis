@@ -8,6 +8,8 @@ library(ggDNAvis)
 source("helpers.R")
 source("mod_visualise_single_sequence.R")
 source("mod_visualise_many_sequences.R")
+source("mod_visualise_methylation.R")
+
 
 
 ggDNAvis_icon <- "https://raw.githubusercontent.com/ejade42/ggDNAvis/main/pkgdown/favicon/favicon-96x96.png"
@@ -52,8 +54,7 @@ ui <- page_navbar(
     ),
 
     nav_panel(title = "Methylation/modification",
-        # methylation_ui("analysis_app")
-        h4("Methylation Placeholder")
+        methylation_ui("visualise_methylation")
     ),
 
 
@@ -82,6 +83,7 @@ server <- function(input, output, session) {
 
     single_sequence_server("visualise_single_sequence")
     many_sequences_server("visualise_many_sequences")
+    methylation_server("visualise_methylation")
 }
 
 

@@ -15,7 +15,7 @@ many_sequences_ui <- function(id) {
                         tabPanel(
                             "Text input",
                             div(class = "seq-input", 
-                                textInput(ns("txt_sequence"), "Space-separated sequences to visualise:", placeholder = "GGCGGC ACGT", value = "GGCGGC ACGT")
+                                textInput(ns("txt_sequences"), "Space-separated sequences to visualise:", placeholder = "GGCGGC ACGT", value = "GGCGGC ACGT")
                             ),
                             div(
                                 style = "margin-bottom: 15px;",
@@ -150,7 +150,7 @@ many_sequences_server <- function(id) {
         parsed_sequences <- reactive({
             ## Process input
             if (input$input_mode == "Text input") {
-                sequences <- strsplit(input$txt_sequence, split = " ")[[1]]
+                sequences <- strsplit(input$txt_sequences, split = " ")[[1]]
                 
             } else if (input$input_mode == "Upload") {
                 if (is.null(input$fil_fastq_file)) {
@@ -285,7 +285,7 @@ many_sequences_server <- function(id) {
                 settings <- append(
                     list(
                         ## Input
-                        txt_sequence = input$txt_sequence
+                        txt_sequences = input$txt_sequences
                         #fil_sequence_file = input$fil_sequence_file,
                     ),
                     settings
