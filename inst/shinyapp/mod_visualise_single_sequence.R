@@ -14,7 +14,8 @@ single_sequence_ui <- function(id) {
                         id = ns("input_mode"),
                         tabPanel(
                             "Text input",
-                            div(class = "seq-input",
+                            div(
+                                class = "seq-input",
                                 textInput(ns("txt_sequence"), "Sequence to visualise:", placeholder = "ACGT", value = "ACGT")
                             )
                         ),
@@ -42,14 +43,27 @@ single_sequence_ui <- function(id) {
 
                 accordion_panel(
                     title = "Sizes and positions",
-                    numericInput(ns("num_sequence_text_size"), "Sequence text size:", value = 16, step = 1),
-                    numericInput(ns("num_index_annotation_size"), "Index annotation size:", value = 12.5, min = 0, step = 1),
-                    numericInput(ns("num_index_annotation_interval"), "Index annotation interval:", value = 15, min = 0, step = 3),
-                    numericInput(ns("num_index_annotation_vertical_position"), "Index annotation height:", value = 1/3, step = 1/6),
-                    checkboxInput(ns("chk_index_annotations_above"), "Index annotations above boxes", value = TRUE),
-                    checkboxInput(ns("chk_index_annotation_always_first_base"), "Always annotate first base", value = FALSE),
-                    numericInput(ns("num_outline_linewidth"), "Outline thickness:", value = 3, min = 0, step = 0.5),
-                    selectInput(ns("sel_outline_join"), "Outline corner style:", choices = c("mitre", "round", "bevel"))
+                    accordion(
+                        id = ns("acc_sizes_positions"),
+                        open = c("Sequence text", "Index annotations", "Outlines"),
+                        accordion_panel(
+                            title = "Sequence text",
+                            numericInput(ns("num_sequence_text_size"), "Sequence text size:", value = 16, step = 1)
+                        ),
+                        accordion_panel(
+                            title = "Index annotations",
+                            numericInput(ns("num_index_annotation_size"), "Index annotation size:", value = 12.5, min = 0, step = 1),
+                            numericInput(ns("num_index_annotation_interval"), "Index annotation interval:", value = 15, min = 0, step = 3),
+                            numericInput(ns("num_index_annotation_vertical_position"), "Index annotation height:", value = 1/3, step = 1/6),
+                            checkboxInput(ns("chk_index_annotations_above"), "Index annotations above boxes", value = TRUE),
+                            checkboxInput(ns("chk_index_annotation_always_first_base"), "Always annotate first base", value = FALSE)
+                        ),
+                        accordion_panel(
+                            title = "Outlines",
+                            numericInput(ns("num_outline_linewidth"), "Outline thickness:", value = 3, min = 0, step = 0.5),
+                            selectInput(ns("sel_outline_join"), "Outline corner style:", choices = c("mitre", "round", "bevel"))
+                        )
+                    ),
                 ),
 
                 panel_restore_settings(ns),

@@ -1,20 +1,21 @@
 many_sequences_ui <- function(id) {
     ns <- NS(id)
-    
+
     layout_sidebar(
         sidebar = sidebar(
             title = "Settings",
             accordion(
                 id = ns("acc"),
                 open = c("Input", "FASTQ parsing"),
-                
+
                 accordion_panel(
                     title = "Input",
                     tabsetPanel(
                         id = ns("input_mode"),
                         tabPanel(
                             "Text input",
-                            div(class = "seq-input", 
+                            div(
+                                class = "seq-input",
                                 textInput(ns("txt_sequences"), "Space-separated sequences to visualise:", placeholder = "GGCGGC ACGT", value = "GGCGGC ACGT")
                             ),
                             div(
@@ -33,32 +34,45 @@ many_sequences_ui <- function(id) {
                         )
                     ),
                 ),
-                
+
                 accordion_panel(
                     title = "Layout",
                     numericInput(ns("num_margin"), "Margin:", 0.5, min = 0, step = 0.5),
                     numericInput(ns("num_pixels_per_base"), "Pixels per base:", 100, min = 1, step = 10)
                 ),
-                
-                
+
+
                 panel_sequence_vis_colours(ns),
-                
+
                 accordion_panel(
                     title = "Sizes and positions",
-                    numericInput(ns("num_sequence_text_size"), "Sequence text size:", value = 16, step = 1),
-                    numericInput(ns("num_index_annotation_size"), "Index annotation size:", value = 12.5, min = 0, step = 1),
-                    textInput(ns("txt_index_annotation_lines"), "Lines to annotate with indices (space-separated integers):", value = "1 2"),
-                    numericInput(ns("num_index_annotation_interval"), "Index annotation interval:", value = 15, min = 0, step = 3),
-                    numericInput(ns("num_index_annotation_vertical_position"), "Index annotation height:", value = 1/3, step = 1/6),
-                    checkboxInput(ns("chk_index_annotations_above"), "Index annotations above boxes", value = TRUE),
-                    checkboxInput(ns("chk_index_annotation_full_line"), "Index annotations always go to the end of the line", value = TRUE),
-                    checkboxInput(ns("chk_index_annotation_always_first_base"), "Always annotate first base", value = TRUE),
-                    numericInput(ns("num_outline_linewidth"), "Outline thickness:", value = 3, min = 0, step = 0.5),
-                    selectInput(ns("sel_outline_join"), "Outline corner style:", choices = c("mitre", "round", "bevel"))
+                    accordion(
+                        id = ns("acc_sizes_positions"),
+                        open = c("Sequence text", "Index annotations", "Outlines"),
+                        accordion_panel(
+                            title = "Sequence text",
+                            numericInput(ns("num_sequence_text_size"), "Sequence text size:", value = 16, step = 1)
+                        ),
+                        accordion_panel(
+                            title = "Index annotations",
+                            textInput(ns("txt_index_annotation_lines"), "Lines to annotate with indices (space-separated integers):", value = "1 2"),
+                            numericInput(ns("num_index_annotation_size"), "Index annotation size:", value = 12.5, min = 0, step = 1),
+                            numericInput(ns("num_index_annotation_interval"), "Index annotation interval:", value = 15, min = 0, step = 3),
+                            numericInput(ns("num_index_annotation_vertical_position"), "Index annotation height:", value = 1/3, step = 1/6),
+                            checkboxInput(ns("chk_index_annotations_above"), "Index annotations above boxes", value = TRUE),
+                            checkboxInput(ns("chk_index_annotation_full_line"), "Index annotations always go to the end of the line", value = TRUE),
+                            checkboxInput(ns("chk_index_annotation_always_first_base"), "Always annotate first base", value = TRUE)
+                        ),
+                        accordion_panel(
+                            title = "Outlines",
+                            numericInput(ns("num_outline_linewidth"), "Outline thickness:", value = 3, min = 0, step = 0.5),
+                            selectInput(ns("sel_outline_join"), "Outline corner style:", choices = c("mitre", "round", "bevel"))
+                        )
+                    ),
                 ),
-                
+
                 panel_restore_settings(ns, "Note: if reading from a FASTQ+CSV, make sure you upload the files first <i>then</i> import the settings, otherwise grouping settings will not import properly."),
-                
+
                 downloadButton(ns("download_image"), "Download image", class = "mt-3 w-100"),
             )
         ),
@@ -77,8 +91,8 @@ many_sequences_server <- function(id) {
     moduleServer(id, function(input, output, session) {
         max_grouping_depth <- 10
         termination_value <- "END GROUPING"
-        
-        
+
+
         ## Logic for adding FASTQ parsing settings panel
         fastq_parsing_panel <- tagList(
             checkboxInput(session$ns("chk_fastq_is_modified"), "FASTQ header contains modification information", value = FALSE),
@@ -89,13 +103,13 @@ many_sequences_server <- function(id) {
             panel_grouping_levels(session, termination_value, max_grouping_depth)
         )
         panel_dynamic_fastq_parsing(input, session, panel_content = fastq_parsing_panel)
-        
-        
+
+
         ## Logic for creating fastq dataframe
         merged_fastq_reactive <- reactive({
             req(input$input_mode == "Upload")
             req(input$fil_fastq_file, input$fil_metadata_file)
-            
+
             ## Read FASTQ
             fastq_data <- if (isTRUE(input$chk_fastq_is_modified)) {
                 tryCatch({
@@ -112,7 +126,7 @@ many_sequences_server <- function(id) {
                     NULL
                 })
             }
-            
+
             ## Read metadata
             metadata <- tryCatch({
                 read.csv(input$fil_metadata_file$datapath)
@@ -120,12 +134,12 @@ many_sequences_server <- function(id) {
                 showNotification(paste("Metadata invalid. Error when parsing:\n", e), type = "error")
                 NULL
             })
-            
+
             ## Check it read properly
-            req(fastq_data)  
+            req(fastq_data)
             req(metadata)
-                
-                
+
+
             ## Determine which reversing mode to use
             reverse_complement_mode <- switch(
                 input$sel_reverse_mode,
@@ -134,24 +148,24 @@ many_sequences_server <- function(id) {
                 "Reverse without complementing" = "reverse_only",
                 "Don't reverse" = "DNA"
             )
-            
+
             ## Merge and return dataframe
             return(merge_fastq_with_metadata(fastq_data, metadata, reverse_complement_mode = reverse_complement_mode))
         })
-        
-        
+
+
         ## Update sort_by and grouping_levels options from data colnames
         panel_update_sorting_grouping_from_colnames(input, session, merged_fastq_reactive, termination_value, max_grouping_depth)
-        
+
         ## Extract grouping levels vector
         grouping_levels_vector <- process_grouping_levels(input, merged_fastq_reactive, termination_value, max_grouping_depth)
-        
+
         ## Logic for constructing actual input sequences vector
         parsed_sequences <- reactive({
             ## Process input
             if (input$input_mode == "Text input") {
                 sequences <- strsplit(input$txt_sequences, split = " ")[[1]]
-                
+
             } else if (input$input_mode == "Upload") {
                 if (is.null(input$fil_fastq_file)) {
                     abort("Please upload a FASTQ file...")
@@ -159,24 +173,24 @@ many_sequences_server <- function(id) {
                 if (is.null(input$fil_metadata_file)) {
                     abort("Please upload a metadata CSV file...")
                 }
-                
+
                 ## Check sort_by choices are updated (no longer NULL)
                 req(input$sel_sort_by)
-                
+
                 ## Choose whether to use forward-ified or original sequence
                 if (input$sel_reverse_mode == "Don't reverse") {
                     sequence_variable <- "sequence"
                 } else {
                     sequence_variable <- "forward_sequence"
                 }
-                
+
                 ## Choose column (or NA) to sort by
                 if (input$sel_sort_by == "Don't sort") {
                     sort_by <- NA
                 } else {
                     sort_by <- input$sel_sort_by
                 }
-                
+
                 ## Extract sequences vector
                 sequences <- extract_and_sort_sequences(
                     merged_fastq_reactive(),
@@ -186,18 +200,18 @@ many_sequences_server <- function(id) {
                     desc_sort = input$chk_desc_sort
                 )
             }
-            
+
             ## Validate and return sequences vector
             validate_sequence(sequences, "Sequences vector for visualisation must contain only A/C/G/T/U and whitespace.")
             return(sequences)
         })
-        
+
         ## Process sequence colours
         sequence_colours <- reactive({process_sequence_colours(input, session, "sel_sequence_colour_palette", "col_custom_")})
-        
+
         ## Process index annotation lines
         index_annotation_lines <- reactive({process_index_annotation_lines(input$txt_index_annotation_lines, "Index annotation lines must contain only the characters 1/2/3/4/5/6/7/8/9/0 arranged as space-separated positive integers")})
-        
+
         ## Create visualisation
         current_image_path <- reactive({
             outfile <- tempfile(fileext = ".png")
@@ -226,23 +240,23 @@ many_sequences_server <- function(id) {
                 pixels_per_base = input$num_pixels_per_base,
                 monitor_performance = FALSE
             )
-            
+
             ## Return file
             return(outfile)
         })
-        
+
         output$visualisation <- enable_live_visualisation(current_image_path)
         output$download_image <- enable_image_download(id, current_image_path)
-        
-        
-        
+
+
+
         ## Export settings
         settings <- reactive({
             settings <- list(
                 ## Layout
                 num_margin = input$num_margin,
                 num_pixels_per_base = input$num_pixels_per_base,
-                
+
                 ## Colours
                 sel_sequence_colour_palette = input$sel_sequence_colour_palette,
                 col_custom_A = input$col_custom_A,
@@ -253,7 +267,7 @@ many_sequences_server <- function(id) {
                 col_sequence_text_colour = input$col_sequence_text_colour,
                 col_index_annotation_colour = input$col_index_annotation_colour,
                 col_outline_colour = input$col_outline_colour,
-                
+
                 ## Sizes and positions
                 num_sequence_text_size = input$num_sequence_text_size,
                 num_index_annotation_size = input$num_index_annotation_size,
@@ -265,22 +279,22 @@ many_sequences_server <- function(id) {
                 chk_index_annotation_always_first_base = input$chk_index_annotation_always_first_base,
                 num_outline_linewidth = input$num_outline_linewidth,
                 sel_outline_join = input$sel_outline_join,
-                
+
                 ## Restore settings
                 chk_restore_sequence = input$chk_restore_sequence,
-                
+
                 ## FASTQ parsing
                 chk_fastq_is_modified = input$chk_fastq_is_modified,
                 sel_reverse_mode = input$sel_reverse_mode,
                 sel_sort_by = input$sel_sort_by,
                 chk_desc_sort = input$chk_desc_sort
             )
-            
+
             for (i in 1:length(grouping_levels_vector())) {
                 settings[[paste0("sel_grouping_col_", i)]] <- input[[paste0("sel_grouping_col_", i)]]
                 settings[[paste0("num_grouping_int_", i)]] <- input[[paste0("num_grouping_int_", i)]]
             }
-            
+
             if (input$chk_restore_sequence) {
                 settings <- append(
                     list(
@@ -291,18 +305,18 @@ many_sequences_server <- function(id) {
                     settings
                 )
             }
-            
+
             return(settings)
         })
         output$export_settings <- enable_settings_export(settings, id)
-        
+
         ## Import settings
         enable_settings_import(input, session, id, "import_settings")
-        
-        
-        
-        
-        
+
+
+
+
+
         ## Helper popups
         observeEvent(input$sequence_input_details, {
             showModal(modalDialog(
@@ -310,12 +324,12 @@ many_sequences_server <- function(id) {
                 tags$p("Multiple sequence visualisation operates on a character vector of sequences, where each element of the vector is drawn on a new line."),
                 tags$p("For interactive text input, the entered text is split into a vector via", code('strsplit(input_text, split = " ")[[1]]'), "i.e. every space delineates a new line, and multiple spaces in a row allow insertion of blank lines for spacing."),
                 tags$p("Valid characters in the input text are A/C/G/T/U (uppercase or lowercase) and spaces for separation. Any other characters will trigger an error."),
-                
+
                 easyClose = TRUE,
                 footer = modalButton("Close")
             ))
         })
-        
+
         observeEvent(input$fastq_upload_details, {
             showModal(modalDialog(
                 title = "Multiple sequence file upload requirements",
@@ -325,19 +339,19 @@ many_sequences_server <- function(id) {
                     tags$li(strong("FASTQ:"), "A FASTQ file with 4-line entries consisting of: header line, sequence line, spacer line, quality line. If the FASTQ contains modification information in the header lines, it will make the read IDs not match, so special modified FASTQ parsing must be enabled by checking the checkbox."),
                     tags$li(strong("CSV:"), "A CSV spreadsheet containing additional information about each row.", strong("Must"), "have a", code("'read'"), "column that exactly matches the read IDs in the FASTQ to allow merging, and a", code("'direction'"), "column indicating whether each read is 'forward' or 'reverse'. Can contain any other columns e.g. which participant from which family each read came from - any such columns can then be used to sort and group the sequences, which can greatly enhance visualisation effectiveness. See 'Loading from FASTQ and metadata file' section of", HTML("<a href='https://ejade42.github.io/ggDNAvis/'>documentation</a>"), "for instructions on how to generate a starter metadata file.")
                 ),
-                
+
                 easyClose = TRUE,
                 footer = modalButton("Close")
             ))
         })
-        
+
         observeEvent(input$fastq_header_details, {
             showModal(modalDialog(
                 title = "FASTQ header information",
                 tags$p("For methylation visualisation", code("ggDNAvis"), "is able to read modified FASTQ files that have modification information from the MM and ML SAMtools tags stored in each header row. These modified FASTQs can be created from SAM/BAM via", code('samtools fastq -T MM,ML ${input_bam_file} > "modified_fastq_file.fastq"')),
                 tags$p("If these tags are in each header row, they need special parsing to be interpreted correctly, otherwise they will be interpreted as one giant read ID that will not match the metadata read IDs. Therefore, if a modified FASTQ is uploaded, modification-capable parsing must be enabled via this checkbox."),
                 tags$p("See", HTML("<a href='https://ejade42.github.io/ggDNAvis/'>documentation</a>"), "for more information on modified FASTQ format and parsing."),
-                
+
                 easyClose = TRUE,
                 footer = modalButton("Close")
             ))
