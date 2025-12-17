@@ -181,43 +181,8 @@ methylation_server <- function(id) {
         )
         panel_dynamic_fastq_parsing(input, session, panel_content = fastq_parsing_panel)
 
-        ## Logic for creating fastq dataframe
-        merged_fastq_reactive <- reactive({
-            req(input$input_mode == "Upload")
-            req(input$fil_fastq_file, input$fil_metadata_file)
-
-            ## Read FASTQ
-            fastq_data <- tryCatch({
-                read_modified_fastq(input$fil_fastq_file$datapath)
-            }, error = function(e) {
-                showNotification(paste("Modified FASTQ invalid. Error when parsing:\n", e), type = "error")
-                NULL
-            })
-
-            ## Read metadata
-            metadata <- tryCatch({
-                read.csv(input$fil_metadata_file$datapath)
-            }, error = function(e) {
-                showNotification(paste("Metadata invalid. Error when parsing:\n", e), type = "error")
-                NULL
-            })
-
-            ## Check it read properly
-            req(fastq_data)
-            req(metadata)
-
-            ## Determine which reversing mode to use
-            reverse_complement_mode <- switch(
-                input$sel_reverse_mode,
-                "Reverse-complement to DNA" = "DNA",
-                "Reverse-complement to RNA" = "RNA",
-                "Reverse without complementing" = "reverse_only",
-                "Don't reverse" = "DNA"
-            )
-
-            ## Merge and return dataframe
-            return(merge_fastq_with_metadata(fastq_data, metadata, reverse_complement_mode = reverse_complement_mode))
-        })
+        ## Create FASTQ dataframe
+        merged_fastq_reactive <- process_merge_input_files(input, fastq_modified_control = TRUE)
 
         ## Update sort_by and grouping_levels options from data colnames
         panel_update_sorting_grouping_from_colnames(input, session, merged_fastq_reactive, termination_value, max_grouping_depth)

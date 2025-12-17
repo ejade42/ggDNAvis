@@ -107,6 +107,72 @@ process_index_annotation_lines <- function(input_lines, message) {
 }
 
 
+## Logic for creating fastq dataframe
+process_merge_input_files <- function(input, fastq_modified_control = FALSE) {
+    reactive({
+        req(input$input_mode == "Upload")
+        req(input$fil_fastq_file, input$fil_metadata_file)
+
+        ## If control argument is a Bool, use that for T/F selecting modified parsing
+        ## If it is a Char, look for an input with that name.
+        if (is.logical(fastq_modified_control)) {
+            do_modified <- fastq_modified_control
+        } else if (is.character(fastq_modified_control) && fastq_modified_control %in% names(input)) {
+            do_modified <- isTRUE(input[[fastq_modified_control]])
+        } else {
+            abort("Invalid fastq_modified_control value passed to process_merge_input_files")
+        }
+
+        ## Read FASTQ
+        fastq_data <- if (do_modified) {
+            tryCatch({
+                read_modified_fastq(input$fil_fastq_file$datapath)
+            }, error = function(e) {
+                showNotification(paste("Modified FASTQ invalid. Error when parsing:\n", e), type = "error")
+                NULL
+            })
+        } else {
+            tryCatch({
+                read_fastq(input$fil_fastq_file$datapath)
+            }, error = function(e) {
+                showNotification(paste("FASTQ invalid. Error when parsing:\n", e), type = "error")
+                NULL
+            })
+        }
+
+        ## Read metadata
+        metadata <- tryCatch({
+            read.csv(input$fil_metadata_file$datapath)
+        }, error = function(e) {
+            showNotification(paste("Metadata invalid. Error when parsing:\n", e), type = "error")
+            NULL
+        })
+
+        ## Check it read properly
+        req(fastq_data)
+        req(metadata)
+
+
+        ## Determine which reversing mode to use
+        reverse_complement_mode <- switch(
+            input$sel_reverse_mode,
+            "Reverse-complement to DNA" = "DNA",
+            "Reverse-complement to RNA" = "RNA",
+            "Reverse without complementing" = "reverse_only",
+            "Don't reverse" = "DNA"
+        )
+
+        ## Merge and return dataframe
+        merged_data <- merge_fastq_with_metadata(fastq_data, metadata, reverse_complement_mode = reverse_complement_mode)
+        if (nrow(merged_data) == 0) {
+            showNotification(paste0("0 read IDs present in both input FASTQ and metadata CSV.\nFirst 3 input FASTQ read IDs: ", paste(head(fastq_data$read, 3), collapse = " "),
+                                    "\nFirst 3 metadata read IDs: ", paste(head(metadata$read, 3), collapse = " ")),
+                             type = "error")
+        }
+        return(merged_data)
+    })
+}
+
 ## Logic for constructing vector out of selected choices
 process_grouping_levels <- function(input, merged_data, termination_value, max_grouping_depth) {
     reactive({
