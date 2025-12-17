@@ -24,7 +24,7 @@ methylation_ui <- function(id) {
                             ),
                             div(
                                 class = "seq-input",
-                                textInput(ns("txt_probabilities"), "Space-separated lists of modification probabilities", placeholder = "228,12,127,194,50 2,86", value = "228,12,127,194,50 2,86")
+                                textInput(ns("txt_probabilities"), "Space-separated lists of modification probabilities", placeholder = "228,12,127,194 2,86", value = "228,12,127,194 2,86")
                             ),
                             div(
                                 style = "margin-bottom: 15px;",
