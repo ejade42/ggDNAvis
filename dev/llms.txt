@@ -4627,11 +4627,6 @@ ggDNAvis
 
 Main functions for visualising DNA/RNA/methylation information
 
-- [`ggDNAvis_shinyapp()`](https://ejade42.github.io/ggDNAvis/reference/ggDNAvis_shinyapp.md)
-  :
-
-  Run the interactive `ggDNAvis` shinyapp
-
 - [`visualise_single_sequence()`](https://ejade42.github.io/ggDNAvis/reference/visualise_single_sequence.md)
   : Visualise a single DNA/RNA sequence
 
@@ -4643,6 +4638,11 @@ Main functions for visualising DNA/RNA/methylation information
 
 - [`visualise_methylation_colour_scale()`](https://ejade42.github.io/ggDNAvis/reference/visualise_methylation_colour_scale.md)
   : Visualise methylation colour scalebar
+
+- [`ggDNAvis_shinyapp()`](https://ejade42.github.io/ggDNAvis/reference/ggDNAvis_shinyapp.md)
+  :
+
+  Run the interactive `ggDNAvis` shinyapp
 
 ### Key data processing functions
 
