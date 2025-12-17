@@ -298,6 +298,7 @@ NULL
 #' (not needed for main package, but needed for the shinyapp)
 #' and then runs the shinyapp in the `inst/shinyapp` directory.
 #'
+#' @return Nothing.
 #' @export
 #' @examples
 #' \dontrun{

@@ -7,6 +7,9 @@
 \usage{
 ggDNAvis_shinyapp()
 }
+\value{
+Nothing.
+}
 \description{
 \code{ggDNAvis_shiny()} is an alias for \code{ggDNAvis_shinyapp()} - see \link{aliases}.
 
