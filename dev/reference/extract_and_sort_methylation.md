@@ -48,10 +48,11 @@ extract_and_sort_methylation(
 - modification_data:
 
   `dataframe`. A dataframe that must contain columns for methylation
-  locations, methylation probabilities, and sequence length for each
-  read. The former two should be condensed strings as produced by
+  locations, methylation probabilities, sequence, and sequence length
+  for each read. The former two should be condensed strings as produced
+  by
   [`vector_to_string()`](https://ejade42.github.io/ggDNAvis/reference/vector_to_string.md)
-  e.g. `"1,2,3,4"`. The latter should be integer.  
+  e.g. `"1,2,3,4"`.  
     
   See
   [`example_many_sequences`](https://ejade42.github.io/ggDNAvis/reference/example_many_sequences.md)
