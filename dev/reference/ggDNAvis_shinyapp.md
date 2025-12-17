@@ -19,6 +19,10 @@ the `inst/shinyapp` directory.
 ggDNAvis_shinyapp()
 ```
 
+## Value
+
+Nothing.
+
 ## Examples
 
 ``` r
