@@ -108,7 +108,7 @@ process_index_annotation_lines <- function(input_lines, message) {
 
 
 ## Logic for creating fastq dataframe
-process_merge_input_files <- function(input, fastq_modified_control = FALSE) {
+process_merge_input_files <- function(input, fastq_modified_control = FALSE, merge_methylation = FALSE) {
     reactive({
         req(input$input_mode == "Upload")
         req(input$fil_fastq_file, input$fil_metadata_file)
@@ -162,8 +162,20 @@ process_merge_input_files <- function(input, fastq_modified_control = FALSE) {
             "Don't reverse" = "DNA"
         )
 
-        ## Merge and return dataframe
-        merged_data <- merge_fastq_with_metadata(fastq_data, metadata, reverse_complement_mode = reverse_complement_mode)
+        ## Merge dataframe
+        if (merge_methylation) {
+            ## Determine which offset to use
+            if (input$num_reverse_offset == 0 || reverse_complement_mode == "reverse_only") {
+                reversed_location_offset <- 0
+            } else {
+                reversed_location_offset <- input$num_reverse_offset
+            }
+            merged_data <- merge_methylation_with_metadata(fastq_data, metadata, reversed_location_offset = reversed_location_offset, reverse_complement_mode = reverse_complement_mode)
+        } else {
+            merged_data <- merge_fastq_with_metadata(fastq_data, metadata, reverse_complement_mode = reverse_complement_mode)
+        }
+
+        ## Validate and return dataframe
         if (nrow(merged_data) == 0) {
             showNotification(paste0("0 read IDs present in both input FASTQ and metadata CSV.\nFirst 3 input FASTQ read IDs: ", paste(head(fastq_data$read, 3), collapse = " "),
                                     "\nFirst 3 metadata read IDs: ", paste(head(metadata$read, 3), collapse = " ")),
@@ -328,34 +340,50 @@ panel_grouping_levels <- function(session, termination_value, max_grouping_depth
     })
 }
 
+## Helper-helper function for updating selectInput based on colnames
+update_selection_if_null <- function(current_val, cols, default) {
+    if (!is.null(current_val) && current_val %in% cols) {
+        return(current_val)
+    } else {
+        return(default)
+    }
+}
+
 ## Logic for updating sort_by and grouping_levels choices
-panel_update_sorting_grouping_from_colnames <- function(input, session, data_to_read_cols, termination_value, max_grouping_depth) {
+panel_update_sorting_grouping_from_colnames <- function(input, session, data_to_read_cols, termination_value, max_grouping_depth, do_modification_types = FALSE) {
     observeEvent(data_to_read_cols(), {
         df <- data_to_read_cols()
         req(df)
         cols <- colnames(df)
 
+        ## Update sort_by choices
+
         updateSelectInput(session, "sel_sort_by",
                           choices = c("Don't sort", cols),
-                          selected = "sequence_length")
+                          selected = update_selection_if_null(input[["sel_sort_by"]], cols, "sequence_length"))
 
+        ## If desired, update modification types choices
+        if (do_modification_types) {
+            modification_types <- sort(unique(string_to_vector(df[["modification_types"]], type = "character")))
+            ## Default to 5-cytosine-methylation if available
+            methylation_types <- sort(modification_types[substr(modification_types, 1, 3) == "C+m"])
+            default_modification_type <- ifelse(length(methylation_types) >= 1, methylation_types[1], modification_types[1])
+            updateSelectInput(session, "sel_modification_type",
+                              choices = modification_types,
+                              selected = update_selection_if_null(input[["sel_modification_type"]], cols, default_modification_type))
+        }
+
+        ## Update grouping levels choices
         lapply(1:max_grouping_depth, function(i) {
-
-            # Important: Preserve current selection if it exists and is valid
-            current_val <- input[[paste0("sel_grouping_col_", i)]]
-            if (!is.null(current_val) && current_val %in% cols) {
-                selected <- current_val
-            } else {
-                selected <- termination_value
-            }
-
             updateSelectInput(
                 session,
                 paste0("sel_grouping_col_", i),
                 choices = c(termination_value, cols),
-                selected = selected
+                selected = update_selection_if_null(input[[paste0("sel_grouping_col_", i)]], cols, termination_value)
             )
         })
     })
 }
+
+
 ## ------------------------------------------------------------------------------

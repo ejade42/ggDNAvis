@@ -131,14 +131,17 @@ methylation_ui <- function(id) {
                     numericInput(ns("num_scalebar_precision"), "Gradient precision:", value = 1000, step = 100),
                     colourInput(ns("col_scalebar_background"), "Background colour:", value = "white"),
                     colourInput(ns("col_scalebar_outline_colour"), "Outline colour:", value = "black"),
-                    numericInput(ns("sel_scalebar_outline_colour"), "Outline thickness", value = 1, min = 0, step = 0.25),
-                    textInput(ns("txt_scalebar_x_axis_title"), "x-axis title:", value = NULL, placeholder = "Title (optional)"),
+                    numericInput(ns("num_scalebar_outline_linewidth"), "Outline thickness", value = 1, min = 0, step = 0.25),
+                    textInput(ns("txt_scalebar_x_axis_title"), "x-axis title:", value = "Modification probability", placeholder = "Title (optional)"),
                     checkboxInput(ns("chk_scalebar_do_x_ticks"), "Display ticks on x axis", value = TRUE),
                     checkboxInput(ns("chk_scalebar_do_side_scale"), "Show scale in side legend", value = FALSE),
                     conditionalPanel(
                         condition = sprintf("input['%s'] == true", ns("chk_scalebar_do_side_scale")),
                         textInput(ns("txt_scalebar_side_scale_title"), "Side legend title", value = NULL, placeholder = "Title (optional)")
-                    )
+                    ),
+                    numericInput(ns("num_scalebar_width"), "Scalebar width:", value = 6, step = 0.5),
+                    numericInput(ns("num_scalebar_height"), "Scalebar height:", value = 1.5, step = 0.25),
+                    numericInput(ns("num_scalebar_dpi"), "Scalebar dpi:", value = 300, step = 100)
                 ),
 
                 panel_restore_settings(ns, "Note: if reading from a FASTQ+CSV, make sure you upload the files first <i>then</i> import the settings, otherwise grouping settings will not import properly."),
@@ -149,11 +152,16 @@ methylation_ui <- function(id) {
         ),
         card(
             card_body(
-                # Use imageOutput to place the image on the page
-                imageOutput(ns("main_visualisation"), width = "100%", height = "auto"),
+                imageOutput(ns("main_visualisation"), width = "100%", height = "auto")
             ),
+        ),
+        card(
+            fill = FALSE,
             card_body(
-                imageOutput(ns("scalebar_visualisation"), width = "50%", height = "auto"),
+                div(
+                    style = "display: block; margin: 0 auto; width: 50%",
+                    imageOutput(ns("scalebar_visualisation"), width = "100%", height = "auto")
+                )
             )
         )
     )
@@ -167,12 +175,13 @@ methylation_server <- function(id) {
         termination_value <- "END GROUPING"
 
 
-        ## Logic for adding FASTQ parsing settings panel - NEED TO UPDATE FOR METHYLATION
+        ## Logic for adding FASTQ parsing settings panel
         fastq_parsing_panel <- tagList(
+            selectInput(session$ns("sel_modification_type"), "Modification type to visualise", choices = NULL),
             selectInput(session$ns("sel_reverse_mode"), "Reverse sequence processing:", choices = c("Reverse-complement to DNA", "Reverse-complement to RNA", "Reverse without complementing", "Don't reverse")),
             conditionalPanel(
                 condition = sprintf("input['%s'].indexOf('Reverse-complement to') == 0", session$ns("sel_reverse_mode")),
-                numericInput(session$ns("num_reverse_offset"), "Offset reverse-complemented modification locations by:", value = 0, min = 0, max = 1, step = 1), ## Need to make sure to override offset to 0 if 'reverse_only'
+                numericInput(session$ns("num_reverse_offset"), "Offset reverse-complemented modification locations by:", value = 0, min = 0, max = 1, step = 1),
                 actionLink(session$ns("offset_details"), "View reverse-complementing offset explanation", icon = icon("info-circle"), class = "mt-0 mb-3"),
             ),
             selectInput(session$ns("sel_sort_by"), "Column to sort by:", choices = NULL),
@@ -182,10 +191,10 @@ methylation_server <- function(id) {
         panel_dynamic_fastq_parsing(input, session, panel_content = fastq_parsing_panel)
 
         ## Create FASTQ dataframe
-        merged_fastq_reactive <- process_merge_input_files(input, fastq_modified_control = TRUE)
+        merged_fastq_reactive <- process_merge_input_files(input, fastq_modified_control = TRUE, merge_methylation = TRUE)
 
         ## Update sort_by and grouping_levels options from data colnames
-        panel_update_sorting_grouping_from_colnames(input, session, merged_fastq_reactive, termination_value, max_grouping_depth)
+        panel_update_sorting_grouping_from_colnames(input, session, merged_fastq_reactive, termination_value, max_grouping_depth, do_modification_types = TRUE)
 
         ## Extract grouping levels vector
         grouping_levels_vector <- process_grouping_levels(input, merged_fastq_reactive, termination_value, max_grouping_depth)
@@ -195,13 +204,51 @@ methylation_server <- function(id) {
                 sequences <- strsplit(input$txt_sequences, split = " ")[[1]]
                 locations <- strsplit(input$txt_locations, split = " ")[[1]]
                 probabilities <- strsplit(input$txt_probabilities, split = " ")[[1]]
+                result <- list(locations = locations, probabilities = probabilities, sequences = sequences)
 
             } else if (input$input_mode == "Upload") {
-                x_x <- "x"
+                if (is.null(input$fil_fastq_file)) {
+                    abort("Please upload a modified FASTQ file...")
+                }
+                if (is.null(input$fil_metadata_file)) {
+                    abort("Please upload a metadata CSV file...")
+                }
+
+                ## Check sort_by choices are updated (no longer NULL)
+                req(input$sel_sort_by)
+
+                ## Choose whether to use forward-ified or original sequence
+                if (input$sel_reverse_mode == "Don't reverse") {
+                    sequence_variable <- "sequence"
+                    locations_variable <- paste0(input$sel_modification_type, "_locations")
+                    probabilities_variable <- paste0(input$sel_modification_type, "_probabilities")
+                } else {
+                    sequence_variable <- "forward_sequence"
+                    locations_variable <- paste0("forward_", input$sel_modification_type, "_locations")
+                    probabilities_variable <- paste0("forward_", input$sel_modification_type, "_probabilities")
+                }
+
+                ## Choose column (or NA) to sort by
+                if (input$sel_sort_by == "Don't sort") {
+                    sort_by <- NA
+                } else {
+                    sort_by <- input$sel_sort_by
+                }
+
+                ## Extract sequences vector
+                result <- extract_and_sort_methylation(
+                    merged_fastq_reactive(),
+                    locations_colname = locations_variable,
+                    probabilities_colname = probabilities_variable,
+                    sequences_colname = sequence_variable,
+                    grouping_levels = grouping_levels_vector(),
+                    sort_by = sort_by,
+                    desc_sort = input$chk_desc_sort
+                )
             }
 
-            validate_sequence(sequences, "Sequences vector for visualisation must contain only A/C/G/T/U and whitespace.")
-            return(list(locations = locations, probabilities = probabilities, sequences = sequences))
+            validate_sequence(result$sequences, "Sequences vector for visualisation must contain only A/C/G/T/U and whitespace.")
+            return(result)
         })
 
         ## Process index annotation lines
@@ -234,10 +281,7 @@ methylation_server <- function(id) {
             sequence_text_scaling <- c(input$num_sequence_text_scaling_min, input$num_sequence_text_scaling_max)
 
             ## Make actual visualisation
-            outfile <- tempfile(fileext = ".png")
-
-            message(parsed_inputs())
-            print(sequence_text_scaling)
+            main_outfile <- tempfile(fileext = ".png")
             visualise_methylation(
                 modification_locations = parsed_inputs()$locations,
                 modification_probabilities = parsed_inputs()$probabilities,
@@ -272,7 +316,7 @@ methylation_server <- function(id) {
                 other_bases_outline_join = other_bases_outline_join,
                 margin = input$num_margin,
                 return = FALSE,
-                filename = outfile,
+                filename = main_outfile,
                 force_raster = FALSE,
                 render_device = ragg::agg_png,
                 pixels_per_base = input$num_pixels_per_base,
@@ -280,11 +324,47 @@ methylation_server <- function(id) {
             )
 
             ## Return file
-            return(outfile)
+            return(main_outfile)
         })
 
+
+        ## Create scalebar visualisation
+        scalebar_image_path <- reactive({
+            scalebar_outfile <- tempfile(fileext = ".png")
+
+            scalebar <- visualise_methylation_colour_scale(
+                low_colour = input$col_low_colour,
+                high_colour = input$col_high_colour,
+                low_clamp = input$num_low_clamp,
+                high_clamp = input$num_high_clamp,
+                full_range = c(0, 255), ## Currently hard-coded
+                precision = input$num_scalebar_precision,
+                background_colour = input$col_scalebar_background,
+                x_axis_title = input$txt_scalebar_x_axis_title,
+                do_x_ticks = input$chk_scalebar_do_x_ticks,
+                do_side_scale = input$chk_scalebar_do_side_scale,
+                side_scale_title = input$txt_scalebar_side_scale_title,
+                outline_colour = input$col_scalebar_outline_colour,
+                outline_linewidth = input$num_scalebar_outline_linewidth
+            )
+
+            ggsave(
+                scalebar_outfile,
+                plot = scalebar,
+                width = input$num_scalebar_width,
+                height = input$num_scalebar_height,
+                dpi = input$num_scalebar_dpi,
+                device = ragg::agg_png
+            )
+
+            return(scalebar_outfile)
+        })
+
+        ## Enable visualisation and downloads
         output$main_visualisation <- enable_live_visualisation(main_image_path)
+        output$scalebar_visualisation <- enable_live_visualisation(scalebar_image_path)
         output$download_main_image <- enable_image_download(id, main_image_path)
+        output$download_scalebar <- enable_image_download(paste0(id, "-scalebar"), scalebar_image_path)
 
         ## HELP PANELS
         ## - methylation_input_details

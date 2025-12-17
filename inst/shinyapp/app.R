@@ -3,6 +3,8 @@ library(rlang)
 library(bslib)
 library(jsonlite)
 library(colourpicker)
+library(stringr)
+library(ggplot2)
 library(ggDNAvis)
 
 source("helpers.R")
@@ -46,15 +48,15 @@ ui <- page_navbar(
 
     nav_panel(
         title = "Single sequence",
-        single_sequence_ui("visualise_single_sequence")
+        single_sequence_ui("visualise-single-sequence")
     ),
 
     nav_panel(title = "Multiple sequences",
-        many_sequences_ui("visualise_many_sequences")
+        many_sequences_ui("visualise-many-sequences")
     ),
 
     nav_panel(title = "Methylation/modification",
-        methylation_ui("visualise_methylation")
+        methylation_ui("visualise-methylation")
     ),
 
 
@@ -81,9 +83,9 @@ ui <- page_navbar(
 server <- function(input, output, session) {
     #bs_themer()  ## Uncomment to check out different themes
 
-    single_sequence_server("visualise_single_sequence")
-    many_sequences_server("visualise_many_sequences")
-    methylation_server("visualise_methylation")
+    single_sequence_server("visualise-single-sequence")
+    many_sequences_server("visualise-many-sequences")
+    methylation_server("visualise-methylation")
 }
 
 

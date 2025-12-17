@@ -105,7 +105,7 @@ many_sequences_server <- function(id) {
         panel_dynamic_fastq_parsing(input, session, panel_content = fastq_parsing_panel)
 
         ## Create FASTQ dataframe
-        merged_fastq_reactive <- process_merge_input_files(input, fastq_modified_control = "chk_fastq_is_modified")
+        merged_fastq_reactive <- process_merge_input_files(input, fastq_modified_control = "chk_fastq_is_modified", merge_methylation = FALSE)
 
         ## Update sort_by and grouping_levels options from data colnames
         panel_update_sorting_grouping_from_colnames(input, session, merged_fastq_reactive, termination_value, max_grouping_depth)
