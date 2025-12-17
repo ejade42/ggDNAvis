@@ -1113,6 +1113,10 @@ rasterise_probabilities <- function(
 
 
     ## Return data frame
+    if (length(x_vec) != length(rounded_probabilities)) {
+        abort(paste("The total number of locations does not match the total number of probabilities.\nNumber of locations:", length(x_vec), "\nNumber of probabilities:", length(rounded_probabilities)))
+    }
+
     probability_data <- data.frame(x = x_vec, y = y_vec, value = rounded_probabilities)
     return(probability_data)
 }

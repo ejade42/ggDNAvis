@@ -105,7 +105,7 @@ methylation_ui <- function(id) {
                         accordion_panel(
                             title = "Outlines",
                             tabsetPanel(
-                                id = ns("outline_size_mode"),
+                                id = ns("outline_style_mode"),
                                 tabPanel(
                                     "Unified outline style",
                                     numericInput(ns("num_outline_linewidth"), "Outline thickness:", value = 3, min = 0, step = 0.5),
@@ -190,10 +190,107 @@ methylation_server <- function(id) {
         ## Extract grouping levels vector
         grouping_levels_vector <- process_grouping_levels(input, merged_fastq_reactive, termination_value, max_grouping_depth)
 
+        parsed_inputs <- reactive({
+            if (input$input_mode == "Text input") {
+                sequences <- strsplit(input$txt_sequences, split = " ")[[1]]
+                locations <- strsplit(input$txt_locations, split = " ")[[1]]
+                probabilities <- strsplit(input$txt_probabilities, split = " ")[[1]]
+
+            } else if (input$input_mode == "Upload") {
+                x_x <- "x"
+            }
+
+            validate_sequence(sequences, "Sequences vector for visualisation must contain only A/C/G/T/U and whitespace.")
+            return(list(locations = locations, probabilities = probabilities, sequences = sequences))
+        })
+
+        ## Process index annotation lines
+        index_annotation_lines <- reactive({process_index_annotation_lines(input$txt_index_annotation_lines, "Index annotation lines must contain only the characters 1/2/3/4/5/6/7/8/9/0 arranged as space-separated positive integers")})
+
+        ## Create visualisation
+        main_image_path <- reactive({
+            ## Process outline
+            if (input$outline_colour_mode == "Unified outline colour") {
+                modified_bases_outline_colour <- NA
+                other_bases_outline_colour <- NA
+            } else if (input$outline_colour_mode == "Split outline colours") {
+                modified_bases_outline_colour <- input$col_modified_bases_outline_colour
+                other_bases_outline_colour <- input$col_other_bases_outline_colour
+            }
+
+            if (input$outline_style_mode == "Unified outline style") {
+                modified_bases_outline_linewidth <- NA
+                modified_bases_outline_join <- NA
+                other_bases_outline_linewidth <- NA
+                other_bases_outline_join <- NA
+            } else if (input$outline_style_mode == "Split outline styles") {
+                modified_bases_outline_linewidth <- input$num_modified_bases_outline_linewidth
+                modified_bases_outline_join <- input$sel_modified_bases_outline_join
+                other_bases_outline_linewidth <- input$num_other_bases_outline_linewidth
+                other_bases_outline_join <- input$sel_other_bases_outline_join
+            }
+
+            ## Process scaling
+            sequence_text_scaling <- c(input$num_sequence_text_scaling_min, input$num_sequence_text_scaling_max)
+
+            ## Make actual visualisation
+            outfile <- tempfile(fileext = ".png")
+
+            message(parsed_inputs())
+            print(sequence_text_scaling)
+            visualise_methylation(
+                modification_locations = parsed_inputs()$locations,
+                modification_probabilities = parsed_inputs()$probabilities,
+                sequences = parsed_inputs()$sequences,
+                low_colour = input$col_low_colour,
+                high_colour = input$col_high_colour,
+                low_clamp = input$num_low_clamp,
+                high_clamp = input$num_high_clamp,
+                background_colour = input$col_background_colour,
+                other_bases_colour = input$col_other_bases_colour,
+                sequence_text_type = input$sel_sequence_text_type,
+                sequence_text_scaling = sequence_text_scaling,
+                sequence_text_rounding = input$num_sequence_text_rounding,
+                sequence_text_colour = input$col_sequence_text_colour,
+                sequence_text_size = input$num_sequence_text_size,
+                index_annotation_lines = index_annotation_lines(),
+                index_annotation_colour = input$col_index_annotation_colour,
+                index_annotation_size = input$num_index_annotation_size,
+                index_annotation_interval = input$num_index_annotation_interval,
+                index_annotations_above = input$chk_index_annotations_above,
+                index_annotation_vertical_position = input$num_index_annotation_vertical_position,
+                index_annotation_full_line = input$chk_index_annotation_full_line,
+                index_annotation_always_first_base = input$chk_index_annotation_always_first_base,
+                outline_colour = input$col_outline_colour,
+                outline_linewidth = input$num_outline_linewidth,
+                outline_join = input$sel_outline_join,
+                modified_bases_outline_colour = modified_bases_outline_colour,
+                modified_bases_outline_linewidth = modified_bases_outline_linewidth,
+                modified_bases_outline_join = modified_bases_outline_join,
+                other_bases_outline_colour = other_bases_outline_colour,
+                other_bases_outline_linewidth = other_bases_outline_linewidth,
+                other_bases_outline_join = other_bases_outline_join,
+                margin = input$num_margin,
+                return = FALSE,
+                filename = outfile,
+                force_raster = FALSE,
+                render_device = ragg::agg_png,
+                pixels_per_base = input$num_pixels_per_base,
+                monitor_performance = FALSE
+            )
+
+            ## Return file
+            return(outfile)
+        })
+
+        output$main_visualisation <- enable_live_visualisation(main_image_path)
+        output$download_main_image <- enable_image_download(id, main_image_path)
+
         ## HELP PANELS
         ## - methylation_input_details
         ## - methylation_upload_details
         ## - clamping_details
         ## - scaling_details
+        ## - offset_details
     })
 }
