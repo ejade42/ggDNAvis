@@ -419,11 +419,16 @@ methylation_server <- function(id) {
                 col_other_bases_outline_colour = input$col_other_bases_outline_colour,
 
                 ## Sizes and positions
-                num_sequence_text_size = input$num_sequence_text_size,
                 sel_sequence_text_type = input$sel_sequence_text_type,
+                num_sequence_text_size_sequence = input$num_sequence_text_size_sequence,
+                num_sequence_text_size_integers = input$num_sequence_text_size_integers,
+                num_sequence_text_size_probabilities = input$num_sequence_text_size_probabilities,
+                num_sequence_text_size_custom = input$num_sequence_text_size_custom,
+                sel_sequence_text_probability_type = input$sel_sequence_text_probability_type,
+                num_sequence_text_rounding_probabilities = input$num_sequence_text_rounding_probabilities,
+                num_sequence_text_rounding_custom = input$num_sequence_text_rounding_custom,
                 num_sequence_text_scaling_max = input$num_sequence_text_scaling_max,
                 num_sequence_text_scaling_min = input$num_sequence_text_scaling_min,
-                num_sequence_text_rounding = input$num_sequence_text_rounding,
 
                 txt_index_annotation_lines = input$txt_index_annotation_lines,
                 num_index_annotation_size = input$num_index_annotation_size,
