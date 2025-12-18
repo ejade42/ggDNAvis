@@ -11,7 +11,7 @@ many_sequences_ui <- function(id) {
                 accordion_panel(
                     title = "Input",
                     tabsetPanel(
-                        id = ns("input_mode"),
+                        id = ns("tab_input_mode"),
                         tabPanel(
                             "Text input",
                             div(
@@ -116,10 +116,10 @@ many_sequences_server <- function(id) {
         ## Logic for constructing actual input sequences vector
         parsed_sequences <- reactive({
             ## Process input
-            if (input$input_mode == "Text input") {
+            if (input$tab_input_mode == "Text input") {
                 sequences <- strsplit(input$txt_sequences, split = " ")[[1]]
 
-            } else if (input$input_mode == "Upload") {
+            } else if (input$tab_input_mode == "Upload") {
                 if (is.null(input$fil_fastq_file)) {
                     abort("Please upload a FASTQ file...")
                 }
@@ -234,29 +234,25 @@ many_sequences_server <- function(id) {
                 sel_outline_join = input$sel_outline_join,
 
                 ## Restore settings
-                chk_restore_sequence = input$chk_restore_sequence,
-
-                ## FASTQ parsing
-                chk_fastq_is_modified = input$chk_fastq_is_modified,
-                sel_reverse_mode = input$sel_reverse_mode,
-                sel_sort_by = input$sel_sort_by,
-                chk_desc_sort = input$chk_desc_sort
+                chk_restore_sequence = input$chk_restore_sequence
             )
 
-            for (i in 1:length(grouping_levels_vector())) {
-                settings[[paste0("sel_grouping_col_", i)]] <- input[[paste0("sel_grouping_col_", i)]]
-                settings[[paste0("num_grouping_int_", i)]] <- input[[paste0("num_grouping_int_", i)]]
+            if (input$tab_input_mode == "Upload") {
+                ## FASTQ parsing
+                settings[["chk_fastq_is_modified"]] = input$chk_fastq_is_modified
+                settings[["sel_reverse_mode"]] = input$sel_reverse_mode
+                settings[["sel_sort_by"]] = input$sel_sort_by
+                settings[["chk_desc_sort"]] = input$chk_desc_sort
+
+                for (i in 1:length(grouping_levels_vector())) {
+                    settings[[paste0("sel_grouping_col_", i)]] <- input[[paste0("sel_grouping_col_", i)]]
+                    settings[[paste0("num_grouping_int_", i)]] <- input[[paste0("num_grouping_int_", i)]]
+                }
             }
 
             if (input$chk_restore_sequence) {
-                settings <- append(
-                    list(
-                        ## Input
-                        txt_sequences = input$txt_sequences
-                        #fil_sequence_file = input$fil_sequence_file,
-                    ),
-                    settings
-                )
+                settings <- append(list(tab_input_mode = input$tab_input_mode,
+                                        txt_sequences = input$txt_sequences), settings)
             }
 
             return(settings)

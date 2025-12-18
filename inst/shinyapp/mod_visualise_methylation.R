@@ -11,7 +11,7 @@ methylation_ui <- function(id) {
                 accordion_panel(
                     title = "Input",
                     tabsetPanel(
-                        id = ns("input_mode"),
+                        id = ns("tab_input_mode"),
                         tabPanel(
                             "Text input",
                             div(
@@ -62,7 +62,7 @@ methylation_ui <- function(id) {
                     colourInput(ns("col_sequence_text_colour"), "Sequence text colour:", value = "#000000"),
                     colourInput(ns("col_index_annotation_colour"), "Index annotation colour:", value = "darkred"),
                     tabsetPanel(
-                        id = ns("outline_colour_mode"),
+                        id = ns("tab_outline_colour_mode"),
                         tabPanel(
                             "Unified outline colour",
                             colourInput(ns("col_outline_colour"), "Outline colour:", value = "#000000")
@@ -105,7 +105,7 @@ methylation_ui <- function(id) {
                         accordion_panel(
                             title = "Outlines",
                             tabsetPanel(
-                                id = ns("outline_style_mode"),
+                                id = ns("tab_outline_style_mode"),
                                 tabPanel(
                                     "Unified outline style",
                                     numericInput(ns("num_outline_linewidth"), "Outline thickness:", value = 3, min = 0, step = 0.5),
@@ -144,7 +144,7 @@ methylation_ui <- function(id) {
                     numericInput(ns("num_scalebar_dpi"), "Scalebar dpi:", value = 300, step = 100)
                 ),
 
-                panel_restore_settings(ns, "Note: if reading from a FASTQ+CSV, make sure you upload the files first <i>then</i> import the settings, otherwise grouping settings will not import properly."),
+                panel_restore_settings(ns, "Note: if reading from a FASTQ+CSV, make sure you upload the files first <i>then</i> import the settings, otherwise grouping settings will not import properly.", modification_too = TRUE),
 
                 downloadButton(ns("download_main_image"), "Download main image", class = "mt-3 w-100"),
                 downloadButton(ns("download_scalebar"), "Download scalebar", class = "mt-3 w-100")
@@ -200,13 +200,13 @@ methylation_server <- function(id) {
         grouping_levels_vector <- process_grouping_levels(input, merged_fastq_reactive, termination_value, max_grouping_depth)
 
         parsed_inputs <- reactive({
-            if (input$input_mode == "Text input") {
+            if (input$tab_input_mode == "Text input") {
                 sequences <- strsplit(input$txt_sequences, split = " ")[[1]]
                 locations <- strsplit(input$txt_locations, split = " ")[[1]]
                 probabilities <- strsplit(input$txt_probabilities, split = " ")[[1]]
                 result <- list(locations = locations, probabilities = probabilities, sequences = sequences)
 
-            } else if (input$input_mode == "Upload") {
+            } else if (input$tab_input_mode == "Upload") {
                 if (is.null(input$fil_fastq_file)) {
                     abort("Please upload a modified FASTQ file...")
                 }
@@ -257,20 +257,20 @@ methylation_server <- function(id) {
         ## Create visualisation
         main_image_path <- reactive({
             ## Process outline
-            if (input$outline_colour_mode == "Unified outline colour") {
+            if (input$tab_outline_colour_mode == "Unified outline colour") {
                 modified_bases_outline_colour <- NA
                 other_bases_outline_colour <- NA
-            } else if (input$outline_colour_mode == "Split outline colours") {
+            } else if (input$tab_outline_colour_mode == "Split outline colours") {
                 modified_bases_outline_colour <- input$col_modified_bases_outline_colour
                 other_bases_outline_colour <- input$col_other_bases_outline_colour
             }
 
-            if (input$outline_style_mode == "Unified outline style") {
+            if (input$tab_outline_style_mode == "Unified outline style") {
                 modified_bases_outline_linewidth <- NA
                 modified_bases_outline_join <- NA
                 other_bases_outline_linewidth <- NA
                 other_bases_outline_join <- NA
-            } else if (input$outline_style_mode == "Split outline styles") {
+            } else if (input$tab_outline_style_mode == "Split outline styles") {
                 modified_bases_outline_linewidth <- input$num_modified_bases_outline_linewidth
                 modified_bases_outline_join <- input$sel_modified_bases_outline_join
                 other_bases_outline_linewidth <- input$num_other_bases_outline_linewidth
@@ -365,6 +365,101 @@ methylation_server <- function(id) {
         output$scalebar_visualisation <- enable_live_visualisation(scalebar_image_path)
         output$download_main_image <- enable_image_download(id, main_image_path)
         output$download_scalebar <- enable_image_download(paste0(id, "-scalebar"), scalebar_image_path)
+
+
+
+        ## Export settings
+        settings <- reactive({
+            settings <- list(
+                ## Layout
+                num_low_clamp = input$num_low_clamp,
+                num_high_clamp = input$num_high_clamp,
+                num_margin = input$num_margin,
+                num_pixels_per_base = input$num_pixels_per_base,
+
+                ## Colours
+                col_low_colour = input$col_low_colour,
+                col_high_colour = input$col_high_colour,
+                col_other_bases_colour = input$col_other_bases_colour,
+                col_background_colour = input$col_background_colour,
+                col_sequence_text_colour = input$col_sequence_text_colour,
+                col_index_annotation_colour = input$col_index_annotation_colour,
+                tab_outline_colour_mode = input$tab_outline_colour_mode,
+                col_outline_colour = input$col_outline_colour,
+                col_modified_bases_outline_colour = input$col_modified_bases_outline_colour,
+                col_other_bases_outline_colour = input$col_other_bases_outline_colour,
+
+                ## Sizes and positions
+                num_sequence_text_size = input$num_sequence_text_size,
+                sel_sequence_text_type = input$sel_sequence_text_type,
+                num_sequence_text_scaling_max = input$num_sequence_text_scaling_max,
+                num_sequence_text_scaling_min = input$num_sequence_text_scaling_min,
+                num_sequence_text_rounding = input$num_sequence_text_rounding,
+
+                txt_index_annotation_lines = input$txt_index_annotation_lines,
+                num_index_annotation_size = input$num_index_annotation_size,
+                num_index_annotation_interval = input$num_index_annotation_interval,
+                num_index_annotation_vertical_position = input$num_index_annotation_vertical_position,
+                chk_index_annotations_above = input$chk_index_annotations_above,
+                chk_index_annotation_full_line = input$chk_index_annotation_full_line,
+                chk_index_annotation_always_first_base = input$chk_index_annotation_always_first_base,
+
+                tab_outline_style_mode = input$tab_outline_style_mode,
+                num_outline_linewidth = input$num_outline_linewidth,
+                num_modified_bases_outline_linewidth = input$num_modified_bases_outline_linewidth,
+                num_other_bases_outline_linewidth = input$num_other_bases_outline_linewidth,
+                sel_outline_join = input$sel_outline_join,
+                sel_modified_bases_outline_join = input$sel_modified_bases_outline_join,
+                sel_other_bases_outline_join = input$sel_other_bases_outline_join,
+
+                ## Scalebar
+                num_scalebar_precision = input$num_scalebar_precision,
+                col_scalebar_background = input$col_scalebar_background,
+                col_scalebar_outline_colour = input$col_scalebar_outline_colour,
+                num_scalebar_outline_linewidth = input$num_scalebar_outline_linewidth,
+                txt_scalebar_x_axis_title = input$txt_scalebar_x_axis_title,
+                chk_scalebar_do_x_ticks = input$chk_scalebar_do_x_ticks,
+                chk_scalebar_do_side_scale = input$chk_scalebar_do_side_scale,
+                txt_scalebar_side_scale_title = input$txt_scalebar_side_scale_title,
+                num_scalebar_width = input$num_scalebar_width,
+                num_scalebar_height = input$num_scalebar_height,
+                num_scalebar_dpi = input$num_scalebar_dpi,
+
+                ## Restore settings
+                chk_restore_sequence = input$chk_restore_sequence
+            )
+
+            if (input$tab_input_mode == "Upload") {
+                ## FASTQ parsing
+                settings[["sel_modification_type"]] = input$sel_modification_type
+                settings[["sel_reverse_mode"]] = input$sel_reverse_mode
+                settings[["num_reverse_offset"]] = input$num_reverse_offset
+                settings[["sel_sort_by"]] = input$sel_sort_by
+                settings[["chk_desc_sort"]] = input$chk_desc_sort
+
+
+                for (i in 1:length(grouping_levels_vector())) {
+                    settings[[paste0("sel_grouping_col_", i)]] <- input[[paste0("sel_grouping_col_", i)]]
+                    settings[[paste0("num_grouping_int_", i)]] <- input[[paste0("num_grouping_int_", i)]]
+                }
+            }
+
+            if (input$chk_restore_sequence) {
+                settings <- append(list(txt_sequences = input$txt_sequences,
+                                        txt_locations = input$txt_locations,
+                                        txt_probabilities = input$txt_probabilities),
+                                   settings)
+            }
+
+            return(settings)
+        })
+        output$export_settings <- enable_settings_export(settings, id)
+
+        ## Import settings
+        enable_settings_import(input, session, id, "import_settings")
+
+
+
 
         ## HELP PANELS
         ## - methylation_input_details

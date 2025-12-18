@@ -16,6 +16,7 @@ enable_settings_import <- function(input, session, id, import_name = "import_set
                 if (startsWith(id, "sel_")) {updateSelectInput(session, id, selected = val)}
                 if (startsWith(id, "chk_")) {updateCheckboxInput(session, id, value = val)}
                 if (startsWith(id, "txt_")) {updateTextInput(session, id, value = val)}
+                if (startsWith(id, "tab_")) {updateTabsetPanel(session, id, selected = val)}
             })
         }, error = function(e) {
             showNotification(paste("Settings file invalid. Error when parsing:\n", e), type = "error")
@@ -110,7 +111,7 @@ process_index_annotation_lines <- function(input_lines, message) {
 ## Logic for creating fastq dataframe
 process_merge_input_files <- function(input, fastq_modified_control = FALSE, merge_methylation = FALSE) {
     reactive({
-        req(input$input_mode == "Upload")
+        req(input$tab_input_mode == "Upload")
         req(input$fil_fastq_file, input$fil_metadata_file)
 
         ## If control argument is a Bool, use that for T/F selecting modified parsing
@@ -249,7 +250,13 @@ panel_sequence_vis_colours <- function(ns) {
 }
 
 ## Panel for settings import/export
-panel_restore_settings <- function(ns, help_message =  NULL) {
+panel_restore_settings <- function(ns, help_message = NULL, modification_too = FALSE) {
+    if (modification_too) {
+        span_message <- "Export sequence / locations / probabilities text input value (will override current value when imported)"
+    } else {
+        span_message <- "Export sequence text input value (will override current value when imported)"
+    }
+
     accordion_panel(
         title = "Restore settings",
 
@@ -263,7 +270,7 @@ panel_restore_settings <- function(ns, help_message =  NULL) {
 
         downloadButton(ns("export_settings"), "Export settings", class = "mt-2 mb-2 w-100"),
 
-        checkboxInput(ns("chk_restore_sequence"), span("Export sequence text input value (will override current value when imported)", style = "font-size: 14px"), value = FALSE)
+        checkboxInput(ns("chk_restore_sequence"), span(span_message, style = "font-size: 14px"), value = FALSE)
     )
 }
 
@@ -274,7 +281,7 @@ panel_dynamic_fastq_parsing <- function(
     panel_content,
     accordion_id = "acc",
     target_panel = "Input",
-    trigger_var = "input_mode"
+    trigger_var = "tab_input_mode"
 ) {
     observeEvent(input[[trigger_var]], {
         panel_id <- "fastq_parsing_settings"

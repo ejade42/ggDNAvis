@@ -11,7 +11,7 @@ single_sequence_ui <- function(id) {
                 accordion_panel(
                     title = "Input",
                     tabsetPanel(
-                        id = ns("input_mode"),
+                        id = ns("tab_input_mode"),
                         tabPanel(
                             "Text input",
                             div(
@@ -90,9 +90,9 @@ single_sequence_server <- function(id) {
 
         ## Process sequence input
         sequence <- reactive({
-            if (input$input_mode == "Text input") {
+            if (input$tab_input_mode == "Text input") {
                 sequence <- input$txt_sequence
-            } else if (input$input_mode == "Upload") {
+            } else if (input$tab_input_mode == "Upload") {
                 if (is.null(input$fil_sequence_file)) {
                     abort("Please upload a file...")
                 }
@@ -188,14 +188,8 @@ single_sequence_server <- function(id) {
             )
 
             if (input$chk_restore_sequence) {
-                settings <- append(
-                    list(
-                        ## Input
-                        txt_sequence = input$txt_sequence
-                        #fil_sequence_file = input$fil_sequence_file,
-                    ),
-                    settings
-                )
+                settings <- append(list(tab_input_mode = input$tab_input_mode,
+                                        txt_sequence = input$txt_sequence), settings)
             }
 
             return(settings)
