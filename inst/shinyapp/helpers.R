@@ -218,6 +218,41 @@ process_grouping_levels <- function(input, merged_data, termination_value, max_g
         }
     })
 }
+
+process_sequence_text_options <- function(input, session) {
+    reactive({
+        if (input$sel_sequence_text_type != "Probability") {
+            scaling <- c(0, 1)
+            size <- input$num_sequence_text_size_sequence
+            rounding <- 0
+
+        } else if (input$sel_sequence_text_probability_type == "Integers") {
+            scaling <- c(0, 1)
+            size <- input$num_sequence_text_size_integers
+            rounding <- 0
+            updateNumericInput(session, "num_sequence_text_scaling_min", value = scaling[1])
+            updateNumericInput(session, "num_sequence_text_scaling_max", value = scaling[2])
+            updateNumericInput(session, "num_sequence_text_size_custom", value = size)
+            updateNumericInput(session, "num_sequence_text_rounding_custom", value = rounding)
+
+        } else if (input$sel_sequence_text_probability_type == "Probabilities") {
+            scaling <- c(-0.5, 256)
+            size <- input$num_sequence_text_size_probabilities
+            rounding <- input$num_sequence_text_rounding_probabilities
+            updateNumericInput(session, "num_sequence_text_scaling_min", value = scaling[1])
+            updateNumericInput(session, "num_sequence_text_scaling_max", value = scaling[2])
+            updateNumericInput(session, "num_sequence_text_size_custom", value = size)
+            updateNumericInput(session, "num_sequence_text_rounding_custom", value = rounding)
+
+        } else if (input$sel_sequence_text_probability_type == "Custom") {
+            scaling <- c(input$num_sequence_text_scaling_min, input$num_sequence_text_scaling_max)
+            size <- input$num_sequence_text_size_custom
+            rounding <- input$num_sequence_text_rounding_custom
+        }
+
+        return(list(scaling = scaling, size = size, rounding = rounding))
+    })
+}
 ## ------------------------------------------------------------------------------
 
 

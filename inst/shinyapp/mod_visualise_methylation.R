@@ -82,15 +82,47 @@ methylation_ui <- function(id) {
                         open = c("Sequence text", "Index annotations", "Outlines"),
                         accordion_panel(
                             title = "Sequence text",
-                            numericInput(ns("num_sequence_text_size"), "Sequence text size:", value = 16, step = 1),
                             selectInput(ns("sel_sequence_text_type"), "Sequence text type:", choices = c("Sequence", "Probability", "None")),
+
+                            ## Give different size options behind the scenes to have proper defaults for different sequence text types
+                            conditionalPanel(
+                                condition = sprintf("input['%s'] == 'Sequence'", ns("sel_sequence_text_type")),
+                                numericInput(ns("num_sequence_text_size_sequence"), "Sequence text size:", value = 16, step = 1),
+                            ),
+                            conditionalPanel(
+                                condition = sprintf("input['%s'] == 'Probability' && input['%s'] == 'Integers'", ns("sel_sequence_text_type"), ns("sel_sequence_text_probability_type")),
+                                numericInput(ns("num_sequence_text_size_integers"), "Sequence text size:", value = 11, step = 1)
+                            ),
+                            conditionalPanel(
+                                condition = sprintf("input['%s'] == 'Probability' && input['%s'] == 'Probabilities'", ns("sel_sequence_text_type"), ns("sel_sequence_text_probability_type")),
+                                numericInput(ns("num_sequence_text_size_probabilities"), "Sequence text size:", value = 10, step = 1)
+                            ),
+                            conditionalPanel(
+                                condition = sprintf("input['%s'] == 'Probability' && input['%s'] == 'Custom'", ns("sel_sequence_text_type"), ns("sel_sequence_text_probability_type")),
+                                numericInput(ns("num_sequence_text_size_custom"), "Sequence text size:", value = 10, step = 1)
+                            ),
+
+                            ## If type is probability, give options for how to scale
                             conditionalPanel(
                                 condition = sprintf("input['%s'] == 'Probability'", ns("sel_sequence_text_type")),
-                                numericInput(ns("num_sequence_text_scaling_min"), "Minimum value for scaling probabilities:", value = -0.5, step = 0.5),
-                                numericInput(ns("num_sequence_text_scaling_max"), "Maximum value for scaling probabilities:", value = 256, step = 5),
-                                actionLink(ns("scaling_details"), "View probability scaling explanation", icon = icon("info-circle"), class = "mt-0 mb-3"),
-                                numericInput(ns("num_sequence_text_rounding"), "Decimal places to display:", value = 2, min = 0, step = 1)
+                                selectInput(ns("sel_sequence_text_probability_type"), "Probability scaling:", choices = c("Integers", "Probabilities", "Custom"), selected = "Probabilities"),
+
+                                conditionalPanel(
+                                    condition = sprintf("input['%s'] == 'Probabilities'", ns("sel_sequence_text_probability_type")),
+                                    numericInput(ns("num_sequence_text_rounding_probabilities"), "Decimal places to display:", value = 2, min = 0, step = 1)
+                                ),
+                                conditionalPanel(
+                                    condition = sprintf("input['%s'] == 'Custom'", ns("sel_sequence_text_probability_type")),
+                                    numericInput(ns("num_sequence_text_rounding_custom"), "Decimal places to display:", value = 2, min = 0, step = 1),
+                                    numericInput(ns("num_sequence_text_scaling_min"), "Minimum value for scaling probabilities:", value = -0.5, step = 0.5),
+                                    numericInput(ns("num_sequence_text_scaling_max"), "Maximum value for scaling probabilities:", value = 256, step = 5),
+                                    actionLink(ns("scaling_details"), "View probability scaling explanation", icon = icon("info-circle"), class = "mt-0 mb-3")
+                                )
+
                             )
+
+
+
                         ),
                         accordion_panel(
                             title = "Index annotations",
@@ -134,11 +166,6 @@ methylation_ui <- function(id) {
                     numericInput(ns("num_scalebar_outline_linewidth"), "Outline thickness", value = 1, min = 0, step = 0.25),
                     textInput(ns("txt_scalebar_x_axis_title"), "x-axis title:", value = "Modification probability", placeholder = "Title (optional)"),
                     checkboxInput(ns("chk_scalebar_do_x_ticks"), "Display ticks on x axis", value = TRUE),
-                    checkboxInput(ns("chk_scalebar_do_side_scale"), "Show scale in side legend", value = FALSE),
-                    conditionalPanel(
-                        condition = sprintf("input['%s'] == true", ns("chk_scalebar_do_side_scale")),
-                        textInput(ns("txt_scalebar_side_scale_title"), "Side legend title", value = NULL, placeholder = "Title (optional)")
-                    ),
                     numericInput(ns("num_scalebar_width"), "Scalebar width:", value = 6, step = 0.5),
                     numericInput(ns("num_scalebar_height"), "Scalebar height:", value = 1.5, step = 0.25),
                     numericInput(ns("num_scalebar_dpi"), "Scalebar dpi:", value = 300, step = 100)
@@ -254,6 +281,9 @@ methylation_server <- function(id) {
         ## Process index annotation lines
         index_annotation_lines <- reactive({process_index_annotation_lines(input$txt_index_annotation_lines, "Index annotation lines must contain only the characters 1/2/3/4/5/6/7/8/9/0 arranged as space-separated positive integers")})
 
+        ## Process sequence text size and probability scaling
+        sequence_text_options <- process_sequence_text_options(input, session)
+
         ## Create visualisation
         main_image_path <- reactive({
             ## Process outline
@@ -278,7 +308,7 @@ methylation_server <- function(id) {
             }
 
             ## Process scaling
-            sequence_text_scaling <- c(input$num_sequence_text_scaling_min, input$num_sequence_text_scaling_max)
+
 
             ## Make actual visualisation
             main_outfile <- tempfile(fileext = ".png")
@@ -293,10 +323,10 @@ methylation_server <- function(id) {
                 background_colour = input$col_background_colour,
                 other_bases_colour = input$col_other_bases_colour,
                 sequence_text_type = input$sel_sequence_text_type,
-                sequence_text_scaling = sequence_text_scaling,
-                sequence_text_rounding = input$num_sequence_text_rounding,
+                sequence_text_scaling = sequence_text_options()$scaling,
+                sequence_text_rounding = sequence_text_options()$rounding,
                 sequence_text_colour = input$col_sequence_text_colour,
-                sequence_text_size = input$num_sequence_text_size,
+                sequence_text_size = sequence_text_options()$size,
                 index_annotation_lines = index_annotation_lines(),
                 index_annotation_colour = input$col_index_annotation_colour,
                 index_annotation_size = input$num_index_annotation_size,
@@ -342,8 +372,7 @@ methylation_server <- function(id) {
                 background_colour = input$col_scalebar_background,
                 x_axis_title = input$txt_scalebar_x_axis_title,
                 do_x_ticks = input$chk_scalebar_do_x_ticks,
-                do_side_scale = input$chk_scalebar_do_side_scale,
-                side_scale_title = input$txt_scalebar_side_scale_title,
+                do_side_scale = FALSE,  ## this looks dumb so not exposing it as an option
                 outline_colour = input$col_scalebar_outline_colour,
                 outline_linewidth = input$num_scalebar_outline_linewidth
             )
@@ -419,8 +448,6 @@ methylation_server <- function(id) {
                 num_scalebar_outline_linewidth = input$num_scalebar_outline_linewidth,
                 txt_scalebar_x_axis_title = input$txt_scalebar_x_axis_title,
                 chk_scalebar_do_x_ticks = input$chk_scalebar_do_x_ticks,
-                chk_scalebar_do_side_scale = input$chk_scalebar_do_side_scale,
-                txt_scalebar_side_scale_title = input$txt_scalebar_side_scale_title,
                 num_scalebar_width = input$num_scalebar_width,
                 num_scalebar_height = input$num_scalebar_height,
                 num_scalebar_dpi = input$num_scalebar_dpi,
