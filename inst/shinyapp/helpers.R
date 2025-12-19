@@ -428,4 +428,15 @@ panel_update_sorting_grouping_from_colnames <- function(input, session, data_to_
 }
 
 
+## Show helper popup from markdown
+popup_markdown <- function(input, button_name, title, filename) {
+    observeEvent(input[[button_name]], {
+        showModal(modalDialog(
+            title = title,
+            withMathJax(includeMarkdown(paste0("help/", filename))),
+            easyClose = TRUE,
+            footer = modalButton("Close")
+        ))
+    })
+}
 ## ------------------------------------------------------------------------------

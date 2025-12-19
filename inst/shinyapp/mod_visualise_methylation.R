@@ -490,8 +490,10 @@ methylation_server <- function(id) {
         ## Import settings
         enable_settings_import(input, session, id, "import_settings")
 
-
-
+        ## Help panels
+        popup_markdown(input, "methylation_input_details", "Methylation text input requirements", "popup_methylation_input_details.md")
+        popup_markdown(input, "methylation_upload_details", "Methylation file upload requirements", "popup_methylation_upload_details.md")
+        popup_markdown(input, "clamping_details", "Methylation probability clamping", "popup_methylation_clamping_details.md")
 
         ## HELP PANELS
         ## - methylation_input_details
