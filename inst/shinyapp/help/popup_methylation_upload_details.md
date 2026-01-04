@@ -19,6 +19,5 @@ and a `"direction"` column indicating whether each read is `"forward"` or `"reve
 Can contain any other columns e.g. which participant from which family each read 
 came from - any such columns can then be used to sort and group the sequences, 
 which can greatly enhance visualisation effectiveness. 
-See 'Loading from FASTQ and metadata file' section of
-[documentation](https://ejade42.github.io/ggDNAvis/)
+See ['Loading from FASTQ and metadata file' section of documentation][link_fastq_reading]
 for instructions on how to generate a starter metadata file.

@@ -19,8 +19,7 @@ there is exactly one modification probability per CpG site, and the offset can b
 as deciding whether it is always visualised at the C of the CpG or if it should be visualised
 at the G of the CpG in the case of reverse-complemented reverse reads.
 
-See the 
-[offset section of the documentation](https://ejade42.github.io/ggDNAvis/dev/#id_68-think-about-the-offset)
+See the [offset section of the documentation][link_methylation_offset]
 for a more thorough explanation accompanied by a helpful visualisation image.
 
 A text-based visualisation is as follows:

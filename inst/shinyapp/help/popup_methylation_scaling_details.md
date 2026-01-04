@@ -10,7 +10,7 @@ integers, $\frac{p-0}{1}$ is used ($min = 0$ and $max = 1$).
 $\frac{p+0.5}{256}$ is used ($min = -0.5$ and $max = 256$). 
 This is because each integer $p$ represents the probability space from
 $\frac{p}{256}$ to $\frac{p+1}{256}$ 
-(see [SAMtools tag specifications](https://samtools.github.io/hts-specs/SAMtags.pdf)),
+(see [SAMtools tag specifications][link_samtools_tag_specs]),
 so $\frac{p+0.5}{256}$ takes the centre of each integer's probability space.
 
 If custom scaling is desired, $min$ and $max$ can be set to arbitrary numeric values,

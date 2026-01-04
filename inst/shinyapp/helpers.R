@@ -429,11 +429,17 @@ panel_update_sorting_grouping_from_colnames <- function(input, session, data_to_
 
 
 ## Show helper popup from markdown
-popup_markdown <- function(input, button_name, title, filename) {
+popup_markdown <- function(input, button_name, title, filename, links_file = "links.md") {
+    content <- readLines(paste0("help/", filename), warn = FALSE)
+    links   <- readLines(paste0("help/", links_file), warn = FALSE)
+
+    combined_text <- paste(c(content, "\n", links), collapse = "\n")
+    combined_html <- markdown::markdownToHTML(text = combined_text, fragment.only = TRUE)
+
     observeEvent(input[[button_name]], {
         showModal(modalDialog(
             title = title,
-            withMathJax(includeMarkdown(paste0("help/", filename))),
+            withMathJax(HTML(combined_html)),
             easyClose = TRUE,
             footer = modalButton("Close")
         ))

@@ -306,7 +306,7 @@ NULL
 #' }
 ggDNAvis_shinyapp <- function() {
     ## Check additional packages required for shinyapp but not main package are installed
-    rlang::check_installed(c("bslib","colourpicker", "jsonlite", "shiny"), reason = "for ggDNAvis interactive shinyapp.")
+    rlang::check_installed(c("bslib","colourpicker", "jsonlite", "markdown", "shiny"), reason = "for ggDNAvis interactive shinyapp.")
 
     ## Identify app directory
     app_dir <- system.file("shinyapp", package = "ggDNAvis")
