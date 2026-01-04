@@ -435,6 +435,7 @@ popup_markdown <- function(input, button_name, title, filename, links_file = "li
 
     combined_text <- paste(c(content, "\n", links), collapse = "\n")
     combined_html <- markdown::markdownToHTML(text = combined_text, fragment.only = TRUE)
+    combined_html <- gsub("<a ", "<a target='_blank' rel='noopener noreferrer' ", combined_html)
 
     observeEvent(input[[button_name]], {
         showModal(modalDialog(
