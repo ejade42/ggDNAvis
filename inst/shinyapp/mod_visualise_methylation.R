@@ -494,6 +494,8 @@ methylation_server <- function(id) {
         popup_markdown(input, "methylation_input_details", "Methylation text input requirements", "popup_methylation_input_details.md")
         popup_markdown(input, "methylation_upload_details", "Methylation file upload requirements", "popup_methylation_upload_details.md")
         popup_markdown(input, "clamping_details", "Methylation probability clamping", "popup_methylation_clamping_details.md")
+        popup_markdown(input, "scaling_details", "Methylation custom probability scaling", "popup_methylation_scaling_details.md")
+        popup_markdown(input, "offset_details", "Methylation location-reversing offset", "popup_methylation_offset_details.md")
 
         ## HELP PANELS
         ## - methylation_input_details
