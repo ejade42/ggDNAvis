@@ -26,7 +26,8 @@ visualise_single_sequence(
   index_annotation_interval = 15,
   index_annotations_above = TRUE,
   index_annotation_vertical_position = 1/3,
-  index_annotation_always_first_base = FALSE,
+  index_annotation_always_first_base = TRUE,
+  index_annotation_always_last_base = TRUE,
   outline_colour = "black",
   outline_linewidth = 3,
   outline_join = "mitre",
@@ -153,7 +154,13 @@ visualise_single_sequence(
 
   `logical`. Whether to force the first base in each line to always be
   annotated regardless of whether it occurs at the
-  `index_annotation_interval`. Defaults to `FALSE`.
+  `index_annotation_interval`. Defaults to `TRUE`.
+
+- index_annotation_always_last_base:
+
+  `logical`. Whether to force the last base in each line to always be
+  annotated regardless of whether it occurs at the
+  `index_annotation_interval`. Defaults to `TRUE`.
 
 - outline_colour:
 
