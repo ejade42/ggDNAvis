@@ -298,13 +298,23 @@ NULL
 #' (not needed for main package, but needed for the shinyapp)
 #' and then runs the shinyapp in the `inst/shinyapp` directory.
 #'
+#' @param themer `logical`. Whether the theme picker should be shown. Makes the app harder to use, not recommended except for dev purposes.
 #' @return Nothing.
 #' @export
 #' @examples
 #' \dontrun{
+#' ## Run normally
 #' ggDNAvis_shinyapp()
+#' ggDNAvis_shinyapp(themer = FALSE)
+#'
+#' ## Run with theme picker (dev)
+#' ggDNAvis_shinyapp(themer = TRUE)
 #' }
-ggDNAvis_shinyapp <- function() {
+ggDNAvis_shinyapp <- function(themer = FALSE) {
+    if (length(themer) != 1 || is.na(themer) || !is.logical(themer)) {
+        bad_arg("themer", list(themer = themer), "must be a single logical/boolean value")
+    }
+
     ## Check additional packages required for shinyapp but not main package are installed
     rlang::check_installed(c("bslib","colourpicker", "jsonlite", "markdown", "shiny"), reason = "for ggDNAvis interactive shinyapp.")
 
@@ -314,8 +324,12 @@ ggDNAvis_shinyapp <- function() {
         abort(paste("ggDNAvis shinyapp installation not found. Please file a bug report at", packageDescription("ggDNAvis")$BugReports), class = "shinyapp_dir_missing")
     }
 
-    ##
-    shiny::runApp(app_dir)
+    ## Run with themer if specified
+    if (themer) {
+        bslib::run_with_themer(app_dir)
+    } else {
+        shiny::runApp(app_dir)
+    }
 }
 
 #' @rdname ggDNAvis_shinyapp

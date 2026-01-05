@@ -7,6 +7,12 @@ reference:
   contents:
   - ggDNAvis_aliases
 
+- subtitle: Shiny app launcher
+  desc: >
+    Function for launching interactive Shiny app
+  contents:
+  - ggDNAvis_shinyapp
+
 - subtitle: Main visualisation functions
   desc: >
     Main functions for visualising DNA/RNA/methylation information
@@ -15,7 +21,6 @@ reference:
   - visualise_many_sequences
   - visualise_methylation
   - visualise_methylation_colour_scale
-  - ggDNAvis_shinyapp
 
 - subtitle: Key data processing functions
   desc: >

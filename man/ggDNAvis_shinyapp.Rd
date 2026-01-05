@@ -5,7 +5,10 @@
 \alias{ggDNAvis_shiny}
 \title{Run the interactive \code{ggDNAvis} shinyapp}
 \usage{
-ggDNAvis_shinyapp()
+ggDNAvis_shinyapp(themer = FALSE)
+}
+\arguments{
+\item{themer}{\code{logical}. Whether the theme picker should be shown. Makes the app harder to use, not recommended except for dev purposes.}
 }
 \value{
 Nothing.
@@ -24,6 +27,11 @@ and then runs the shinyapp in the \code{inst/shinyapp} directory.
 }
 \examples{
 \dontrun{
+## Run normally
 ggDNAvis_shinyapp()
+ggDNAvis_shinyapp(themer = FALSE)
+
+## Run with theme picker (dev)
+ggDNAvis_shinyapp(themer = TRUE)
 }
 }
