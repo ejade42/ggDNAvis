@@ -288,6 +288,8 @@ visualise_many_sequences(
     index_annotation_interval = 3,
     index_annotation_lines = 1:51,
     index_annotation_full_line = FALSE,
+    index_annotation_always_first_base = FALSE,
+    index_annotation_always_last_base = FALSE,
     background_colour = "lightgrey",
     outline_linewidth = 0,
     margin = 0
