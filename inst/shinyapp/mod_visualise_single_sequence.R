@@ -201,23 +201,6 @@ single_sequence_server <- function(id) {
 
 
         ## Helper popup
-        observeEvent(input$fasta_upload_details, {
-            showModal(modalDialog(
-                title = "Single sequence file upload requirements",
-                h5("Supported formats:"),
-                tags$ul(
-                    tags$li(strong("FASTA:"), "Standard format starting with a '>' header line, followed by the sequence. The sequence is allowed to be on one or multiple lines after the header line. If multiple sequences are present they will be concatenated."),
-                    tags$li(strong("Plain Text:"), "A simple text file containing only the DNA sequence on one or multiple lines. Lines will be concatenated.")
-                ),
-                h5("Allowed characters:"),
-                tags$ul(
-                    tags$li("A, C, G, T, and U (uppercase or lowercase)"),
-                    tags$li("Whitespace will be removed (spaces, tabs, and linebreaks)")
-                ),
-
-                easyClose = TRUE,
-                footer = modalButton("Close")
-            ))
-        })
+        popup_markdown(input, "fasta_upload_details", "Single sequence file upload requirements", "popup_single_upload_details.md")
     })
 }

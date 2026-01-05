@@ -4,8 +4,10 @@ are either scaling to 0-1 probabilities or leaving as 0-255 integers.
 
 Scaling is implemented as $\frac{p-min}{max}$, where $p$ is the underlying probability score and 
 $min$ and $max$ are values specifying the probability range. 
-* To write probabilities as unmodified 0-255
+
+ * To write probabilities as unmodified 0-255
 integers, $\frac{p-0}{1}$ is used ($min = 0$ and $max = 1$). 
+
  * To write probabilities as standard 0-1 probabilities,
 $\frac{p+0.5}{256}$ is used ($min = -0.5$ and $max = 256$). 
 This is because each integer $p$ represents the probability space from

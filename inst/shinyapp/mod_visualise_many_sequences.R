@@ -264,46 +264,9 @@ many_sequences_server <- function(id) {
 
 
 
-
-
         ## Helper popups
-        observeEvent(input$sequence_input_details, {
-            showModal(modalDialog(
-                title = "Multiple sequence text input requirements",
-                tags$p("Multiple sequence visualisation operates on a character vector of sequences, where each element of the vector is drawn on a new line."),
-                tags$p("For interactive text input, the entered text is split into a vector via", code('strsplit(input_text, split = " ")[[1]]'), "i.e. every space delineates a new line, and multiple spaces in a row allow insertion of blank lines for spacing."),
-                tags$p("Valid characters in the input text are A/C/G/T/U (uppercase or lowercase) and spaces for separation. Any other characters will trigger an error."),
-
-                easyClose = TRUE,
-                footer = modalButton("Close")
-            ))
-        })
-
-        observeEvent(input$fastq_upload_details, {
-            showModal(modalDialog(
-                title = "Multiple sequence file upload requirements",
-                tags$p("For multiple sequence visualisation, a FASTQ file containing the sequences to visualise and a metadata CSV file containing extra information about each read must be uploaded."),
-                h5("Required formats:"),
-                tags$ul(
-                    tags$li(strong("FASTQ:"), "A FASTQ file with 4-line entries consisting of: header line, sequence line, spacer line, quality line. If the FASTQ contains modification information in the header lines, it will make the read IDs not match, so special modified FASTQ parsing must be enabled by checking the checkbox."),
-                    tags$li(strong("CSV:"), "A CSV spreadsheet containing additional information about each row.", strong("Must"), "have a", code("'read'"), "column that exactly matches the read IDs in the FASTQ to allow merging, and a", code("'direction'"), "column indicating whether each read is 'forward' or 'reverse'. Can contain any other columns e.g. which participant from which family each read came from - any such columns can then be used to sort and group the sequences, which can greatly enhance visualisation effectiveness. See 'Loading from FASTQ and metadata file' section of", HTML("<a href='https://ejade42.github.io/ggDNAvis/'>documentation</a>"), "for instructions on how to generate a starter metadata file.")
-                ),
-
-                easyClose = TRUE,
-                footer = modalButton("Close")
-            ))
-        })
-
-        observeEvent(input$fastq_header_details, {
-            showModal(modalDialog(
-                title = "FASTQ header information",
-                tags$p("For methylation visualisation", code("ggDNAvis"), "is able to read modified FASTQ files that have modification information from the MM and ML SAMtools tags stored in each header row. These modified FASTQs can be created from SAM/BAM via", code('samtools fastq -T MM,ML ${input_bam_file} > "modified_fastq_file.fastq"')),
-                tags$p("If these tags are in each header row, they need special parsing to be interpreted correctly, otherwise they will be interpreted as one giant read ID that will not match the metadata read IDs. Therefore, if a modified FASTQ is uploaded, modification-capable parsing must be enabled via this checkbox."),
-                tags$p("See", HTML("<a href='https://ejade42.github.io/ggDNAvis/'>documentation</a>"), "for more information on modified FASTQ format and parsing."),
-
-                easyClose = TRUE,
-                footer = modalButton("Close")
-            ))
-        })
+        popup_markdown(input, "sequence_input_details", "Multiple sequence text input requirements", "popup_multiple_input_details.md")
+        popup_markdown(input, "fastq_upload_details", "Multiple sequence file upload requirements", "popup_multiple_upload_details.md")
+        popup_markdown(input, "fastq_header_details", "FASTQ header information", "popup_multiple_header_details.md")
     })
 }
