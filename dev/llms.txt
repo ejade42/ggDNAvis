@@ -195,6 +195,7 @@ visualise_single_sequence(
     index_annotations_above = TRUE,
     index_annotation_vertical_position = 1/3,
     index_annotation_always_first_base = TRUE,
+    index_annotation_always_last_base = TRUE,
     outline_colour = "black",
     outline_linewidth = 3,
     outline_join = "mitre",
@@ -246,7 +247,8 @@ visualise_many_sequences(
     index_annotations_above = TRUE,
     index_annotation_vertical_position = 1/3,
     index_annotation_full_line = FALSE,
-    index_annotation_always_first_base = FALSE,
+    index_annotation_always_first_base = TRUE,
+    index_annotation_always_last_base = TRUE,
     outline_colour = "black",
     outline_linewidth = 3,
     outline_join = "mitre",
@@ -304,11 +306,12 @@ visualise_methylation(
     index_annotation_lines = 1:51,
     index_annotation_colour = "darkred",
     index_annotation_size = 12.5,
-    index_annotation_interval = 3,
+    index_annotation_interval = 9,
     index_annotations_above = TRUE,
     index_annotation_vertical_position = 1/3,
     index_annotation_full_line = FALSE,
-    index_annotation_always_first_base = FALSE,
+    index_annotation_always_first_base = TRUE,
+    index_annotation_always_last_base = TRUE,
     outline_colour = "black",
     outline_linewidth = 3,
     outline_join = "mitre",
@@ -352,6 +355,7 @@ visualise_methylation(
     index_annotation_vertical_position = 1/3,
     index_annotation_full_line = TRUE,
     index_annotation_always_first_base = TRUE,
+    index_annotation_always_last_base = FALSE,
     outline_colour = "black",
     outline_join = "mitre",
     modified_bases_outline_linewidth = 3,
@@ -396,6 +400,7 @@ visualise_methylation(
     index_annotation_vertical_position = 1/3,
     index_annotation_full_line = TRUE,
     index_annotation_always_first_base = TRUE,
+    index_annotation_always_last_base = FALSE,
     outline_colour = "black",
     outline_join = "mitre",
     modified_bases_outline_linewidth = 3,
@@ -440,6 +445,7 @@ visualise_methylation(
     index_annotation_vertical_position = 1/3,
     index_annotation_full_line = TRUE,
     index_annotation_always_first_base = TRUE,
+    index_annotation_always_last_base = TRUE,
     outline_colour = "black",
     outline_join = "mitre",
     modified_bases_outline_linewidth = 3,
@@ -1516,9 +1522,13 @@ Many aspects of the sequence layout are also customisable via arguments:
   `1/3`, not recommended to change generally. If spacing is much larger
   than `1`, setting this to a slightly higher value might be
   appropriate.
-- - `index_annotation_always_first_base`: Boolean specifying whether the
-    first base should always be annotated even if it would not usually
-    be (i.e. `index_annotation_interval > 1`).
+- `index_annotation_always_first_base`: Boolean specifying whether the
+  first base should always be annotated even if it would not usually be
+  (i.e. `index_annotation_interval > 1`). Defaults to `TRUE`.
+- `index_annotation_always_last_base`: Boolean specifying whether the
+  last base should always be annotated even if it would not usually be
+  (i.e. `line_length %% index_annotation_interval != 0`). Defaults to
+  `TRUE`.
 - `outline_linewidth`: The thickness of the box outlines. Can be set to
   `0` to disable box outlines. Defaults to `3`.
 - `outline_join`: Changes how the corners of the box outlines are
@@ -1540,7 +1550,8 @@ visualise_single_sequence(
     index_annotation_interval = 20,
     index_annotations_above = FALSE,
     index_annotation_vertical_position = 1/2,
-    index_annotation_always_first_base = TRUE,
+    index_annotation_always_first_base = FALSE,
+    index_annotation_always_last_base = FALSE,
     outline_linewidth = 0
 )
 
@@ -1573,6 +1584,12 @@ visualise_single_sequence(
 ```
 
 ``` R
+## Warning: Disabling index annotations via index_annotation_interval = 0 or index_annotation_size = 0 overrides the index_annotation_always_first_base setting.
+## If you want the first base in each line to be annotated but no other bases, set index_annotation_interval greater than line_wrapping.
+
+## Warning: Disabling index annotations via index_annotation_interval = 0 or index_annotation_size = 0 overrides the index_annotation_always_last_base setting.
+## If you want the last base in each line to be annotated but no other bases, set index_annotation_interval greater than line_wrapping.
+
 ## Warning: If margin is small and outlines are on (outline_linewidth > 0), outlines may be cut off at the edges of the plot. Check if this is happening and consider using a bigger margin.
 ## Current margin: 0
 ```
@@ -1602,7 +1619,17 @@ visualise_single_sequence(
     pixels_per_base = 20,
     outline_linewidth = 3
 )
+```
 
+``` R
+## Warning: Disabling index annotations via index_annotation_interval = 0 or index_annotation_size = 0 overrides the index_annotation_always_first_base setting.
+## If you want the first base in each line to be annotated but no other bases, set index_annotation_interval greater than line_wrapping.
+
+## Warning: Disabling index annotations via index_annotation_interval = 0 or index_annotation_size = 0 overrides the index_annotation_always_last_base setting.
+## If you want the last base in each line to be annotated but no other bases, set index_annotation_interval greater than line_wrapping.
+```
+
+``` r
 ## View image
 knitr::include_graphics(paste0(github_location, "single_sequence_11.png"))
 ```
@@ -1629,6 +1656,12 @@ visualise_single_sequence(
 ```
 
 ``` R
+## Warning: Disabling index annotations via index_annotation_interval = 0 or index_annotation_size = 0 overrides the index_annotation_always_first_base setting.
+## If you want the first base in each line to be annotated but no other bases, set index_annotation_interval greater than line_wrapping.
+
+## Warning: Disabling index annotations via index_annotation_interval = 0 or index_annotation_size = 0 overrides the index_annotation_always_last_base setting.
+## If you want the last base in each line to be annotated but no other bases, set index_annotation_interval greater than line_wrapping.
+
 ## ℹ Automatically using geom_raster (much faster than geom_tile) as no sequence text, index annotations, or outlines are present.
 ```
 
@@ -1659,8 +1692,7 @@ visualise_single_sequence(
     sequence_colours = sequence_colour_palettes$bright_deep,
     sequence_text_colour = "white",
     line_wrapping = 65,
-    index_annotation_interval = 15,
-    index_annotation_always_first_base = TRUE,
+    index_annotation_interval = 15
 )
 
 ## View image
@@ -1728,7 +1760,7 @@ visualise_single_sequence(
 ``` R
 ## ℹ Verbose monitoring enabled
 
-## ℹ (2025-12-17 13:16:10) visualise_single_sequence start
+## ℹ (2026-01-05 17:52:29) visualise_single_sequence start
 
 ## ℹ (0.006 secs elapsed; 0.006 secs total) resolving aliases
 
@@ -1744,21 +1776,21 @@ visualise_single_sequence(
 
 ## ℹ (0.001 secs elapsed; 0.014 secs total) creating basic plot via geom_tile
 
-## ℹ (0.006 secs elapsed; 0.020 secs total) generating sequence text
+## ℹ (0.006 secs elapsed; 0.019 secs total) generating sequence text
 
 ## ℹ (0.001 secs elapsed; 0.021 secs total) adding sequence text
 
 ## ℹ (0.002 secs elapsed; 0.023 secs total) generating index annotations
 
-## ℹ (0.001 secs elapsed; 0.025 secs total) adding index annotations
+## ℹ (0.002 secs elapsed; 0.025 secs total) adding index annotations
 
 ## ℹ (0.003 secs elapsed; 0.028 secs total) adding general plot themes
 
-## ℹ (0.008 secs elapsed; 0.036 secs total) calculating margin
+## ℹ (0.009 secs elapsed; 0.036 secs total) calculating margin
 
 ## ℹ (0.002 secs elapsed; 0.038 secs total) exporting image file
 
-## ℹ (0.721 secs elapsed; 0.759 secs total) done
+## ℹ (0.588 secs elapsed; 0.626 secs total) done
 ```
 
 ``` r
@@ -1817,7 +1849,7 @@ visualise_single_sequence(
 ``` R
 ## ℹ Verbose monitoring enabled
 
-## ℹ (2025-12-17 13:16:11) visualise_single_sequence start
+## ℹ (2026-01-05 17:52:30) visualise_single_sequence start
 
 ## ℹ (0.002 secs elapsed; 0.002 secs total) resolving aliases
 
@@ -1825,9 +1857,15 @@ visualise_single_sequence(
 
 ## ℹ Automatically setting index_annotation_interval to 0 as index_annotation_size is 0
 
-## ℹ (0.002 secs elapsed; 0.005 secs total) splitting input seq to sequence vector
+## Warning: Disabling index annotations via index_annotation_interval = 0 or index_annotation_size = 0 overrides the index_annotation_always_first_base setting.
+## If you want the first base in each line to be annotated but no other bases, set index_annotation_interval greater than line_wrapping.
 
-## ℹ (0.001 secs elapsed; 0.006 secs total) rasterising image data
+## Warning: Disabling index annotations via index_annotation_interval = 0 or index_annotation_size = 0 overrides the index_annotation_always_last_base setting.
+## If you want the last base in each line to be annotated but no other bases, set index_annotation_interval greater than line_wrapping.
+
+## ℹ (0.003 secs elapsed; 0.006 secs total) splitting input seq to sequence vector
+
+## ℹ (0.001 secs elapsed; 0.007 secs total) rasterising image data
 
 ## ℹ (0.002 secs elapsed; 0.009 secs total) choosing rendering method
 
@@ -1838,13 +1876,13 @@ visualise_single_sequence(
 
 ## ℹ (0.002 secs elapsed; 0.011 secs total) creating basic plot via geom_raster
 
-## ℹ (0.004 secs elapsed; 0.015 secs total) adding general plot themes
+## ℹ (0.006 secs elapsed; 0.018 secs total) adding general plot themes
 
-## ℹ (0.012 secs elapsed; 0.027 secs total) calculating margin
+## ℹ (0.010 secs elapsed; 0.028 secs total) calculating margin
 
-## ℹ (0.002 secs elapsed; 0.029 secs total) exporting image file
+## ℹ (0.002 secs elapsed; 0.030 secs total) exporting image file
 
-## ℹ (0.406 secs elapsed; 0.435 secs total) done
+## ℹ (0.661 secs elapsed; 0.691 secs total) done
 ```
 
 ``` r
@@ -1881,31 +1919,31 @@ visualise_single_sequence(
 ``` R
 ## ℹ Verbose monitoring enabled
 
-## ℹ (2025-12-17 13:16:11) visualise_single_sequence start
+## ℹ (2026-01-05 17:52:31) visualise_single_sequence start
 
-## ℹ (0.002 secs elapsed; 0.002 secs total) resolving aliases
+## ℹ (0.005 secs elapsed; 0.005 secs total) resolving aliases
 
-## ℹ (0.001 secs elapsed; 0.003 secs total) validating arguments
+## ℹ (0.002 secs elapsed; 0.007 secs total) validating arguments
 
-## ℹ (0.001 secs elapsed; 0.004 secs total) splitting input seq to sequence vector
+## ℹ (0.002 secs elapsed; 0.009 secs total) splitting input seq to sequence vector
 
-## ℹ (0.001 secs elapsed; 0.005 secs total) rasterising image data
+## ℹ (0.002 secs elapsed; 0.012 secs total) rasterising image data
 
-## ℹ (0.002 secs elapsed; 0.008 secs total) choosing rendering method
+## ℹ (0.005 secs elapsed; 0.016 secs total) choosing rendering method
 
 ## Warning: Forcing geom_raster via force_raster = TRUE will remove all sequence
 ## text, index annotations (though any inserted blank lines/spacers will remain),
 ## and box outlines.
 
-## ℹ (0.001 secs elapsed; 0.009 secs total) creating basic plot via geom_raster
+## ℹ (0.002 secs elapsed; 0.019 secs total) creating basic plot via geom_raster
 
-## ℹ (0.003 secs elapsed; 0.013 secs total) adding general plot themes
+## ℹ (0.006 secs elapsed; 0.025 secs total) adding general plot themes
 
-## ℹ (0.012 secs elapsed; 0.024 secs total) calculating margin
+## ℹ (0.021 secs elapsed; 0.045 secs total) calculating margin
 
-## ℹ (0.003 secs elapsed; 0.027 secs total) exporting image file
+## ℹ (0.003 secs elapsed; 0.048 secs total) exporting image file
 
-## ℹ (0.108 secs elapsed; 0.135 secs total) done
+## ℹ (0.351 secs elapsed; 0.399 secs total) done
 ```
 
 ``` r
@@ -1940,29 +1978,35 @@ visualise_single_sequence(
 ``` R
 ## ℹ Verbose monitoring enabled
 
-## ℹ (2025-12-17 13:16:11) visualise_single_sequence start
+## ℹ (2026-01-05 17:52:31) visualise_single_sequence start
 
-## ℹ (0.002 secs elapsed; 0.002 secs total) resolving aliases
+## ℹ (0.004 secs elapsed; 0.004 secs total) resolving aliases
 
-## ℹ (0.001 secs elapsed; 0.003 secs total) validating arguments
+## ℹ (0.002 secs elapsed; 0.007 secs total) validating arguments
 
-## ℹ (0.001 secs elapsed; 0.004 secs total) splitting input seq to sequence vector
+## Warning: Disabling index annotations via index_annotation_interval = 0 or index_annotation_size = 0 overrides the index_annotation_always_first_base setting.
+## If you want the first base in each line to be annotated but no other bases, set index_annotation_interval greater than line_wrapping.
 
-## ℹ (0.001 secs elapsed; 0.005 secs total) rasterising image data
+## Warning: Disabling index annotations via index_annotation_interval = 0 or index_annotation_size = 0 overrides the index_annotation_always_last_base setting.
+## If you want the last base in each line to be annotated but no other bases, set index_annotation_interval greater than line_wrapping.
 
-## ℹ (0.002 secs elapsed; 0.007 secs total) choosing rendering method
+## ℹ (0.003 secs elapsed; 0.010 secs total) splitting input seq to sequence vector
+
+## ℹ (0.002 secs elapsed; 0.012 secs total) rasterising image data
+
+## ℹ (0.004 secs elapsed; 0.016 secs total) choosing rendering method
 
 ## ℹ Automatically using geom_raster (much faster than geom_tile) as no sequence text, index annotations, or outlines are present.
 
-## ℹ (0.002 secs elapsed; 0.009 secs total) creating basic plot via geom_raster
+## ℹ (0.003 secs elapsed; 0.019 secs total) creating basic plot via geom_raster
 
-## ℹ (0.003 secs elapsed; 0.013 secs total) adding general plot themes
+## ℹ (0.006 secs elapsed; 0.025 secs total) adding general plot themes
 
-## ℹ (0.009 secs elapsed; 0.021 secs total) calculating margin
+## ℹ (0.014 secs elapsed; 0.038 secs total) calculating margin
 
-## ℹ (0.002 secs elapsed; 0.023 secs total) exporting image file
+## ℹ (0.003 secs elapsed; 0.041 secs total) exporting image file
 
-## ℹ (0.217 secs elapsed; 0.240 secs total) done
+## ℹ (0.279 secs elapsed; 0.321 secs total) done
 ```
 
 ``` r
@@ -2424,13 +2468,17 @@ The full set of arguments controlling index annotations are:
   Defaults to `TRUE` (above).
 - `index_annotation_always_first_base`: Boolean specifying whether the
   first base should always be annotated even if it would not usually be
-  (i.e. `index_annotation_interval > 1`). Note that this only applies to
-  lines where annotations would be drawn, so not if they are excluded by
-  `index_annotation_lines` or disabled via
+  (i.e. `index_annotation_interval > 1`). Defaults to `TRUE`. Note that
+  this only applies to lines where annotations would be drawn, so not if
+  they are excluded by `index_annotation_lines` or disabled via
   `index_annotation_interval = 0` or `index_annotation_size = 0`. If the
   goal is to annotate the first base and no others in each line, turn
   this on but set `index_annotation_interval` to a value greater than
   the maximum sequence length.
+- `index_annotation_always_last_base`: Boolean specifying whether the
+  last base should always be annotated even if it would not usually be
+  (i.e. `line_length %% index_annotation_interval != 0`). Defaults to
+  `TRUE`.
 - `index_annotation_vertical_position`: How far annotation numbers
   should be rendered above (if `index_annotations_above = TRUE`) or
   below (if `index_annotations_above = FALSE`) each base. Defaults to
@@ -2898,29 +2946,29 @@ visualise_many_sequences(
 ``` R
 ## ℹ Verbose monitoring enabled
 
-## ℹ (2025-12-17 13:16:40) visualise_many_sequences start
+## ℹ (2026-01-05 17:53:00) visualise_many_sequences start
 
-## ℹ (0.002 secs elapsed; 0.002 secs total) resolving aliases
+## ℹ (0.003 secs elapsed; 0.003 secs total) resolving aliases
 
-## ℹ (0.001 secs elapsed; 0.003 secs total) validating arguments
+## ℹ (0.001 secs elapsed; 0.004 secs total) validating arguments
 
-## ℹ (0.001 secs elapsed; 0.004 secs total) inserting blank sequences at specified indices
+## ℹ (0.001 secs elapsed; 0.005 secs total) inserting blank sequences at specified indices
 
-## ℹ (0.001 secs elapsed; 0.005 secs total) rasterising image data
+## ℹ (0.001 secs elapsed; 0.006 secs total) rasterising image data
 
-## ℹ (0.005 secs elapsed; 0.010 secs total) choosing rendering method
+## ℹ (0.006 secs elapsed; 0.013 secs total) choosing rendering method
 
 ## ℹ Automatically using geom_raster (much faster than geom_tile) as no sequence text, index annotations, or outlines are present.
 
-## ℹ (0.002 secs elapsed; 0.012 secs total) creating basic plot via geom_raster
+## ℹ (0.002 secs elapsed; 0.015 secs total) creating basic plot via geom_raster
 
-## ℹ (0.003 secs elapsed; 0.016 secs total) adding general plot themes
+## ℹ (0.004 secs elapsed; 0.019 secs total) adding general plot themes
 
-## ℹ (0.009 secs elapsed; 0.024 secs total) calculating margin
+## ℹ (0.010 secs elapsed; 0.028 secs total) calculating margin
 
-## ℹ (0.002 secs elapsed; 0.026 secs total) exporting image file
+## ℹ (0.002 secs elapsed; 0.030 secs total) exporting image file
 
-## ℹ (0.288 secs elapsed; 0.314 secs total) done
+## ℹ (0.256 secs elapsed; 0.286 secs total) done
 ```
 
 ``` r
@@ -2957,31 +3005,31 @@ visualise_many_sequences(
 ``` R
 ## ℹ Verbose monitoring enabled
 
-## ℹ (2025-12-17 13:16:40) visualise_many_sequences start
+## ℹ (2026-01-05 17:53:01) visualise_many_sequences start
 
-## ℹ (0.002 secs elapsed; 0.002 secs total) resolving aliases
+## ℹ (0.006 secs elapsed; 0.006 secs total) resolving aliases
 
-## ℹ (0.001 secs elapsed; 0.004 secs total) validating arguments
+## ℹ (0.002 secs elapsed; 0.009 secs total) validating arguments
 
-## ℹ (0.001 secs elapsed; 0.005 secs total) inserting blank sequences at specified indices
+## ℹ (0.003 secs elapsed; 0.011 secs total) inserting blank sequences at specified indices
 
-## ℹ (0.001 secs elapsed; 0.006 secs total) rasterising image data
+## ℹ (0.002 secs elapsed; 0.014 secs total) rasterising image data
 
-## ℹ (0.006 secs elapsed; 0.011 secs total) choosing rendering method
+## ℹ (0.013 secs elapsed; 0.027 secs total) choosing rendering method
 
 ## Warning: Forcing geom_raster via force_raster = TRUE will remove all sequence
 ## text, index annotations (though any inserted blank lines/spacers will remain),
 ## and box outlines.
 
-## ℹ (0.002 secs elapsed; 0.013 secs total) creating basic plot via geom_raster
+## ℹ (0.003 secs elapsed; 0.029 secs total) creating basic plot via geom_raster
 
-## ℹ (0.004 secs elapsed; 0.017 secs total) adding general plot themes
+## ℹ (0.006 secs elapsed; 0.036 secs total) adding general plot themes
 
-## ℹ (0.009 secs elapsed; 0.026 secs total) calculating margin
+## ℹ (0.015 secs elapsed; 0.050 secs total) calculating margin
 
-## ℹ (0.002 secs elapsed; 0.028 secs total) exporting image file
+## ℹ (0.003 secs elapsed; 0.053 secs total) exporting image file
 
-## ℹ (0.347 secs elapsed; 0.375 secs total) done
+## ℹ (0.443 secs elapsed; 0.496 secs total) done
 ```
 
 ``` r
@@ -3591,6 +3639,10 @@ Briefly:
   annotated line numbers are drawn
 - `index_annotation_colour` controls the colour of the numbers
 - `index_annotation_size` controls the size of the numbers
+- `index_annotation_always_first_base` and
+  `index_annotation_always_last_base` control whether the first and last
+  bases are always annotated even if they fall outside the annotation
+  interval.
 
 For example:
 
@@ -3610,6 +3662,7 @@ visualise_methylation(
     index_annotation_interval = 3,
     index_annotation_full_line = FALSE,
     index_annotation_always_first_base = TRUE,
+    index_annotation_always_last_base = TRUE,
     index_annotation_colour = "purple",
     index_annotation_size = 16,
     index_annotation_vertical_position = 0.45
@@ -4542,6 +4595,8 @@ output <- visualise_methylation(
     other_bases_outline_linewidth = 1,
     other_bases_outline_colour = "darkgrey",
     sequence_text_type = "sequence",
+    index_annotation_always_first_base = FALSE,
+    index_annotation_always_last_base = FALSE,
     low_clamp = 255*0.4,
     high_clamp = 255*0.6,
     margin = margin
