@@ -128,6 +128,8 @@ visualise_single_sequence(
     spacing = 2,
     outline_linewidth = 0,
     index_annotations_above = FALSE,
+    index_annotation_always_first_base = FALSE,
+    index_annotation_always_last_base = FALSE,
     margin = 0
 )
 ## View exported image

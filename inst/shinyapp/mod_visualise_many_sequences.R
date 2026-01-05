@@ -61,7 +61,8 @@ many_sequences_ui <- function(id) {
                             numericInput(ns("num_index_annotation_vertical_position"), "Index annotation height:", value = 1/3, step = 1/6),
                             checkboxInput(ns("chk_index_annotations_above"), "Index annotations above boxes", value = TRUE),
                             checkboxInput(ns("chk_index_annotation_full_line"), "Index annotations always go to the end of the line", value = TRUE),
-                            checkboxInput(ns("chk_index_annotation_always_first_base"), "Always annotate first base", value = TRUE)
+                            checkboxInput(ns("chk_index_annotation_always_first_base"), "Always annotate first base", value = TRUE),
+                            checkboxInput(ns("chk_index_annotation_always_last_base"), "Always annotate last base", value = TRUE)
                         ),
                         accordion_panel(
                             title = "Outlines",
@@ -183,6 +184,7 @@ many_sequences_server <- function(id) {
                 index_annotation_vertical_position = input$num_index_annotation_vertical_position,
                 index_annotation_full_line = input$chk_index_annotation_full_line,
                 index_annotation_always_first_base = input$chk_index_annotation_always_first_base,
+                index_annotation_always_last_base = input$chk_index_annotation_always_last_base,
                 outline_colour = input$col_outline_colour,
                 outline_linewidth = input$num_outline_linewidth,
                 outline_join = input$sel_outline_join,
@@ -230,6 +232,7 @@ many_sequences_server <- function(id) {
                 chk_index_annotations_above = input$chk_index_annotations_above,
                 chk_index_annotation_full_line = input$chk_index_annotation_full_line,
                 chk_index_annotation_always_first_base = input$chk_index_annotation_always_first_base,
+                chk_index_annotation_always_last_base = input$chk_index_annotation_always_last_base,
                 num_outline_linewidth = input$num_outline_linewidth,
                 sel_outline_join = input$sel_outline_join,
 
