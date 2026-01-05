@@ -62,11 +62,22 @@ ui <- page_navbar(
                     div(
                         style = "position: absolute; top: 20; right: 0",
                         tags$a(
-                            href = "https://ejade42.github.io/ggDNAvis/",
+                            href = documentation_link,
                             target = "_blank",
                             tags$img(src = ggDNAvis_icon_full_res, style = "width: 100%; max-width: 200px;")
                         )
                     )
+                )
+            )
+        ),
+        card(
+            fill = FALSE,
+            max_height = "30%",
+            card_body(
+                layout_columns(
+                    col_widths = c(9, 1),
+                    HTML(create_html_content("instructions_bottom.md", "links.md", "help/")),
+                    div()
                 )
             )
         )

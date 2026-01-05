@@ -15,13 +15,10 @@ Parameters can then be adjusted as desired from the list on the left-hand side.
 Note that menus and sub-menus can be opened by clicking the arrows to access the
 full array of settings.
 
-Please report any bugs, difficulties, or feature requests to the [issues page][link_bugs].
+Parameters can be exported to and restored from a JSON file from the 
+"Restore settings" tab at the bottom of the sidebar. 
+Note that this does *not* store uploaded file information,
+and will only store text input information if the checkbox to do so is selected.
 
-*These interactive tools provide most of the functionality of the full R package,
-and enable a level of reproducibility via the settings import/export options.
-However, using the full R package via re-runable scripts improves reproducibility,
-as well as enabling advanced usage such as annotating returned ggplot2 objects
-(see [example of adding ggplot2 elements to visualisation][link_methylation_offset]).*
-
-This software is freely available under the open MIT licence, but please make sure
-to cite the [ggDNAvis paper][link_citation] when using in publications or presentations.
+Final images can be downloaded at full resolution from the "Download image" button
+at the bottom of the sidebar.

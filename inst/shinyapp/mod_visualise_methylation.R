@@ -167,7 +167,7 @@ methylation_ui <- function(id) {
                     textInput(ns("txt_scalebar_x_axis_title"), "x-axis title:", value = "Modification probability", placeholder = "Title (optional)"),
                     checkboxInput(ns("chk_scalebar_do_x_ticks"), "Display ticks on x axis", value = TRUE),
                     numericInput(ns("num_scalebar_width"), "Scalebar width:", value = 6, step = 0.5),
-                    numericInput(ns("num_scalebar_height"), "Scalebar height:", value = 1.5, step = 0.25),
+                    numericInput(ns("num_scalebar_height"), "Scalebar height:", value = 1.5, step = 0.25, min = 0.5),
                     numericInput(ns("num_scalebar_dpi"), "Scalebar dpi:", value = 300, step = 100)
                 ),
 
@@ -184,6 +184,7 @@ methylation_ui <- function(id) {
         ),
         card(
             fill = FALSE,
+            max_height = "40%",
             card_body(
                 div(
                     style = "display: block; margin: 0 auto; width: 50%",
