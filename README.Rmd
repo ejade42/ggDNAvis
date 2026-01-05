@@ -120,6 +120,7 @@ visualise_single_sequence(
     index_annotations_above = TRUE,
     index_annotation_vertical_position = 1/3,
     index_annotation_always_first_base = TRUE,
+    index_annotation_always_last_base = TRUE,
     outline_colour = "black",
     outline_linewidth = 3,
     outline_join = "mitre",
@@ -168,7 +169,8 @@ visualise_many_sequences(
     index_annotations_above = TRUE,
     index_annotation_vertical_position = 1/3,
     index_annotation_full_line = FALSE,
-    index_annotation_always_first_base = FALSE,
+    index_annotation_always_first_base = TRUE,
+    index_annotation_always_last_base = TRUE,
     outline_colour = "black",
     outline_linewidth = 3,
     outline_join = "mitre",
@@ -223,11 +225,12 @@ visualise_methylation(
     index_annotation_lines = 1:51,
     index_annotation_colour = "darkred",
     index_annotation_size = 12.5,
-    index_annotation_interval = 3,
+    index_annotation_interval = 9,
     index_annotations_above = TRUE,
     index_annotation_vertical_position = 1/3,
     index_annotation_full_line = FALSE,
-    index_annotation_always_first_base = FALSE,
+    index_annotation_always_first_base = TRUE,
+    index_annotation_always_last_base = TRUE,
     outline_colour = "black",
     outline_linewidth = 3,
     outline_join = "mitre",
@@ -268,6 +271,7 @@ visualise_methylation(
     index_annotation_vertical_position = 1/3,
     index_annotation_full_line = TRUE,
     index_annotation_always_first_base = TRUE,
+    index_annotation_always_last_base = FALSE,
     outline_colour = "black",
     outline_join = "mitre",
     modified_bases_outline_linewidth = 3,
@@ -310,6 +314,7 @@ visualise_methylation(
     index_annotation_vertical_position = 1/3,
     index_annotation_full_line = TRUE,
     index_annotation_always_first_base = TRUE,
+    index_annotation_always_last_base = FALSE,
     outline_colour = "black",
     outline_join = "mitre",
     modified_bases_outline_linewidth = 3,
@@ -351,6 +356,7 @@ visualise_methylation(
     index_annotation_vertical_position = 1/3,
     index_annotation_full_line = TRUE,
     index_annotation_always_first_base = TRUE,
+    index_annotation_always_last_base = TRUE,
     outline_colour = "black",
     outline_join = "mitre",
     modified_bases_outline_linewidth = 3,
@@ -928,7 +934,8 @@ Many aspects of the sequence layout are also customisable via arguments:
 - `index_annotation_interval`: The frequency at which index numbers should be listed. Can be set to `0` to disable index annotations. Defaults to `15`.
 - `index_annotations_above`: Boolean specifying whether index annotations should be drawn above or below each line of sequence. Defaults to `TRUE` (above).
 - `index_annotation_vertical_position`: How far annotation numbers should be rendered above (if `index_annotations_above = TRUE`) or below (if `index_annotations_above = FALSE`) each base. Defaults to `1/3`, not recommended to change generally. If spacing is much larger than `1`, setting this to a slightly higher value might be appropriate.
-- - `index_annotation_always_first_base`: Boolean specifying whether the first base should always be annotated even if it would not usually be (i.e. `index_annotation_interval > 1`).
+- `index_annotation_always_first_base`: Boolean specifying whether the first base should always be annotated even if it would not usually be (i.e. `index_annotation_interval > 1`). Defaults to `TRUE`.
+- `index_annotation_always_last_base`: Boolean specifying whether the last base should always be annotated even if it would not usually be (i.e. `line_length %% index_annotation_interval != 0`). Defaults to `TRUE`.
 - `outline_linewidth`: The thickness of the box outlines. Can be set to `0` to disable box outlines. Defaults to `3`.
 - `outline_join`: Changes how the corners of the box outlines are handled. Must be one of `"mitre"`, `"bevel"`, or `"round"`. Defaults to `"mitre"`. It is unlikely that you would ever need to change this.
 
@@ -946,7 +953,8 @@ visualise_single_sequence(
     index_annotation_interval = 20,
     index_annotations_above = FALSE,
     index_annotation_vertical_position = 1/2,
-    index_annotation_always_first_base = TRUE,
+    index_annotation_always_first_base = FALSE,
+    index_annotation_always_last_base = FALSE,
     outline_linewidth = 0
 )
 
@@ -1031,8 +1039,7 @@ visualise_single_sequence(
     sequence_colours = sequence_colour_palettes$bright_deep,
     sequence_text_colour = "white",
     line_wrapping = 65,
-    index_annotation_interval = 15,
-    index_annotation_always_first_base = TRUE,
+    index_annotation_interval = 15
 )
 
 ## View image
@@ -1392,7 +1399,8 @@ The full set of arguments controlling index annotations are:
 - `index_annotation_size`: The size of the index numbers above/below the boxes. Can be set to `0` to disable index annotations. Defaults to `12.5`.
 - `index_annotation_interval`: The frequency at which index numbers should be listed. Defaults to `15`. Note that unlike `visualise_single_sequence()`, the count resets each line in `visualise_many_sequences()` and `visualise_methylation()` because each line is assumed to be a different sequence.
 - `index_annotations_above`: Boolean specifying whether index annotations should be drawn above or below each line of sequence. Defaults to `TRUE` (above).
-- `index_annotation_always_first_base`: Boolean specifying whether the first base should always be annotated even if it would not usually be (i.e. `index_annotation_interval > 1`). Note that this only applies to lines where annotations would be drawn, so not if they are excluded by `index_annotation_lines` or disabled via `index_annotation_interval = 0` or `index_annotation_size = 0`. If the goal is to annotate the first base and no others in each line, turn this on but set `index_annotation_interval` to a value greater than the maximum sequence length.
+- `index_annotation_always_first_base`: Boolean specifying whether the first base should always be annotated even if it would not usually be (i.e. `index_annotation_interval > 1`). Defaults to `TRUE`. Note that this only applies to lines where annotations would be drawn, so not if they are excluded by `index_annotation_lines` or disabled via `index_annotation_interval = 0` or `index_annotation_size = 0`. If the goal is to annotate the first base and no others in each line, turn this on but set `index_annotation_interval` to a value greater than the maximum sequence length.
+- `index_annotation_always_last_base`: Boolean specifying whether the last base should always be annotated even if it would not usually be (i.e. `line_length %% index_annotation_interval != 0`). Defaults to `TRUE`.
 - `index_annotation_vertical_position`: How far annotation numbers should be rendered above (if `index_annotations_above = TRUE`) or below (if `index_annotations_above = FALSE`) each base. Defaults to `1/3`, not recommended to change generally.
 
 We will work through these arguments step by step to fully explain how they work.
@@ -1851,6 +1859,7 @@ Briefly:
 - `index_annotation_vertical_position` controls how far above each annotated line numbers are drawn
 - `index_annotation_colour` controls the colour of the numbers
 - `index_annotation_size` controls the size of the numbers
+- `index_annotation_always_first_base` and `index_annotation_always_last_base` control whether the first and last bases are always annotated even if they fall outside the annotation interval.
 
 For example:
 ```{r}
@@ -1869,6 +1878,7 @@ visualise_methylation(
     index_annotation_interval = 3,
     index_annotation_full_line = FALSE,
     index_annotation_always_first_base = TRUE,
+    index_annotation_always_last_base = TRUE,
     index_annotation_colour = "purple",
     index_annotation_size = 16,
     index_annotation_vertical_position = 0.45
@@ -2554,6 +2564,8 @@ output <- visualise_methylation(
     other_bases_outline_linewidth = 1,
     other_bases_outline_colour = "darkgrey",
     sequence_text_type = "sequence",
+    index_annotation_always_first_base = FALSE,
+    index_annotation_always_last_base = FALSE,
     low_clamp = 255*0.4,
     high_clamp = 255*0.6,
     margin = margin
