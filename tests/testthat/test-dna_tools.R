@@ -381,6 +381,53 @@ test_that("rasterising index annotations works, below", {
     ))
 })
 
+test_that("rasterising index annotations works, forcing first and last", {
+    ## Set up arguments (e.g. from visualise_many_sequences() call)
+    sequences_data <- example_many_sequences
+    index_annotation_lines <- c(1, 23, 37)
+    index_annotation_interval <- 10
+    index_annotations_above <- FALSE
+    index_annotation_full_line <- FALSE
+    index_annotation_always_first_base <- TRUE
+    index_annotation_always_last_base <- TRUE
+    index_index_annotation_vertical_position <- 1/3
+
+    ## Create sequences vector
+    sequences <- extract_and_sort_sequences(
+        example_many_sequences,
+        grouping_levels = c("family" = 8, "individual" = 2)
+    )
+
+    ## Insert blank rows as needed
+    new_sequences <- insert_at_indices(
+        sequences,
+        insertion_indices = index_annotation_lines,
+        insert_before = index_annotations_above,
+        insert = "",
+        vert = index_index_annotation_vertical_position
+    )
+
+    ## Create annnotation dataframe
+    d <- rasterise_index_annotations(
+        new_sequences_vector = new_sequences,
+        original_sequences_vector = sequences,
+        index_annotation_lines = index_annotation_lines,
+        index_annotation_interval = 10,
+        index_annotation_full_line = index_annotation_full_line,
+        index_annotations_above = index_annotations_above,
+        index_annotation_vertical_position = index_index_annotation_vertical_position,
+        index_annotation_always_first_base = index_annotation_always_first_base,
+        index_annotation_always_last_base = index_annotation_always_last_base
+    )
+
+    ## Test
+    expect_equal(d, data.frame(
+        x = c(0.00490196078431373, 0.0931372549019608, 0.191176470588235, 0.28921568627451, 0.387254901960784, 0.485294117647059, 0.583333333333333, 0.681372549019608, 0.779411764705882, 0.877450980392157, 0.975490196078431, 0.995098039215686, 0.00490196078431373, 0.0931372549019608, 0.191176470588235, 0.28921568627451, 0.387254901960784, 0.485294117647059, 0.583333333333333, 0.681372549019608, 0.779411764705882, 0.877450980392157, 0.906862745098039, 0.00490196078431373, 0.0931372549019608, 0.191176470588235, 0.28921568627451, 0.387254901960784, 0.485294117647059, 0.583333333333333, 0.681372549019608, 0.779411764705882, 0.877450980392157, 0.936274509803922),
+        y = c(0.975308641975309, 0.975308641975309, 0.975308641975309, 0.975308641975309, 0.975308641975309, 0.975308641975309, 0.975308641975309, 0.975308641975309, 0.975308641975309, 0.975308641975309, 0.975308641975309, 0.975308641975309, 0.549382716049383, 0.549382716049383, 0.549382716049383, 0.549382716049383, 0.549382716049383, 0.549382716049383, 0.549382716049383, 0.549382716049383, 0.549382716049383, 0.549382716049383, 0.549382716049383, 0.271604938271605, 0.271604938271605, 0.271604938271605, 0.271604938271605, 0.271604938271605, 0.271604938271605, 0.271604938271605, 0.271604938271605, 0.271604938271605, 0.271604938271605, 0.271604938271605),
+        value = c("1", "10", "20", "30", "40", "50", "60", "70", "80", "90", "100", "102", "1", "10", "20", "30", "40", "50", "60", "70", "80", "90", "93", "1", "10", "20", "30", "40", "50", "60", "70", "80", "90", "96")
+    ))
+})
+
 
 test_that("rasterising index annotations fails when needed", {
     ## Create sequences vector
@@ -406,6 +453,7 @@ test_that("rasterising index annotations fails when needed", {
         expect_error(rasterise_index_annotations(sequences, new_sequences, index_annotation_full_line = param, index_annotation_lines = 1, index_annotation_interval = 1), class = "argument_value_or_type")
         expect_error(rasterise_index_annotations(sequences, new_sequences, index_annotations_above = param, index_annotation_lines = 1, index_annotation_interval = 1), class = "argument_value_or_type")
         expect_error(rasterise_index_annotations(sequences, new_sequences, index_annotation_always_first_base = param, index_annotation_lines= 1, index_annotation_interval = 1), class = "argument_value_or_type")
+        expect_error(rasterise_index_annotations(sequences, new_sequences, index_annotation_always_last_base = param, index_annotation_lines= 1, index_annotation_interval = 1), class = "argument_value_or_type")
         expect_error(rasterise_index_annotations(sequences, new_sequences, sum_indices = param, index_annotation_lines= 1, index_annotation_interval = 1), class = "argument_value_or_type")
     }
 

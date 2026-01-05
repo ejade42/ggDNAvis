@@ -768,19 +768,20 @@ rasterise_index_annotations <- function(
     index_annotations_above = TRUE,
     index_annotation_vertical_position = 1/3,
     index_annotation_always_first_base = FALSE,
+    index_annotation_always_last_base = FALSE,
     sum_indices = FALSE,
     spacing = NA,
     offset_start = 0
 ) {
     ## Validate arguments
     ## ---------------------------------------------------------------------
-    not_na <- list(new_sequences_vector = new_sequences_vector, original_sequences_vector = original_sequences_vector, index_annotation_lines = index_annotation_lines, index_annotation_interval = index_annotation_interval, index_annotation_full_line = index_annotation_full_line, index_annotation_always_first_base = index_annotation_always_first_base, index_annotations_above = index_annotations_above, index_annotation_vertical_position = index_annotation_vertical_position, sum_indices = sum_indices, offset_start = offset_start)
+    not_na <- list(new_sequences_vector = new_sequences_vector, original_sequences_vector = original_sequences_vector, index_annotation_lines = index_annotation_lines, index_annotation_interval = index_annotation_interval, index_annotation_full_line = index_annotation_full_line, index_annotation_always_first_base = index_annotation_always_first_base, index_annotation_always_last_base = index_annotation_always_last_base, index_annotations_above = index_annotations_above, index_annotation_vertical_position = index_annotation_vertical_position, sum_indices = sum_indices, offset_start = offset_start)
     for (argument in names(not_na)) {
         if (any(is.na(not_na[[argument]]))) {bad_arg(argument, not_na, "must not be NA.")}
     }
     not_na <- NULL
 
-    not_null <- list(new_sequences_vector = new_sequences_vector, original_sequences_vector = original_sequences_vector, index_annotation_lines = index_annotation_lines, index_annotation_interval = index_annotation_interval, index_annotation_always_first_base = index_annotation_always_first_base, index_annotation_full_line = index_annotation_full_line, index_annotations_above = index_annotations_above, index_annotation_vertical_position = index_annotation_vertical_position, spacing = spacing, sum_indices = sum_indices, offset_start = offset_start)
+    not_null <- list(new_sequences_vector = new_sequences_vector, original_sequences_vector = original_sequences_vector, index_annotation_lines = index_annotation_lines, index_annotation_interval = index_annotation_interval, index_annotation_always_first_base = index_annotation_always_first_base, index_annotation_always_last_base = index_annotation_always_last_base, index_annotation_full_line = index_annotation_full_line, index_annotations_above = index_annotations_above, index_annotation_vertical_position = index_annotation_vertical_position, spacing = spacing, sum_indices = sum_indices, offset_start = offset_start)
     for (argument in names(not_null)) {
         if (any(is.null(not_null[[argument]]))) {bad_arg(argument, not_null, "must not be NULL.")}
     }
@@ -792,7 +793,7 @@ rasterise_index_annotations <- function(
     }
     vectors <- NULL
 
-    length_1 <- list(index_annotation_interval = index_annotation_interval, index_annotation_full_line = index_annotation_full_line, index_annotations_above = index_annotations_above, index_annotation_always_first_base = index_annotation_always_first_base, index_annotation_vertical_position = index_annotation_vertical_position, spacing = spacing, sum_indices = sum_indices, offset_start = offset_start)
+    length_1 <- list(index_annotation_interval = index_annotation_interval, index_annotation_full_line = index_annotation_full_line, index_annotations_above = index_annotations_above, index_annotation_always_first_base = index_annotation_always_first_base, index_annotation_always_last_base = index_annotation_always_last_base, index_annotation_vertical_position = index_annotation_vertical_position, spacing = spacing, sum_indices = sum_indices, offset_start = offset_start)
     for (argument in names(length_1)) {
         if (length(length_1[[argument]]) != 1) {bad_arg(argument, length_1, "must have length 1.")}
     }
@@ -827,7 +828,7 @@ rasterise_index_annotations <- function(
     }
     positive <- NULL
 
-    bools <- list(index_annotation_full_line = index_annotation_full_line, index_annotations_above = index_annotations_above, index_annotation_always_first_base = index_annotation_always_first_base, sum_indices = sum_indices)
+    bools <- list(index_annotation_full_line = index_annotation_full_line, index_annotations_above = index_annotations_above, index_annotation_always_first_base = index_annotation_always_first_base, index_annotation_always_last_base = index_annotation_always_last_base, sum_indices = sum_indices)
     for (argument in names(bools)) {
         if (is.logical(bools[[argument]]) == FALSE) {bad_arg(argument, bools, "must be logical/boolean.")}
     }
@@ -885,8 +886,12 @@ rasterise_index_annotations <- function(
         }
 
         ## If we are overriding to always annotate the first base, add 1 to the start of the selected lines
+        ## If we are overriding to always annotate the last, add k (the line length) to the end of the selected lines
         if (index_annotation_always_first_base) {
             j_vals_each_line <- c(1, j_vals_each_line)
+        }
+        if (index_annotation_always_last_base) {
+            j_vals_each_line <- c(j_vals_each_line, k)
         }
 
         annotations_per_line <- length(j_vals_each_line)
@@ -896,6 +901,9 @@ rasterise_index_annotations <- function(
     } else {
         annotations_per_line <- length_per_line %/% index_annotation_interval
         if (index_annotation_always_first_base) {
+            annotations_per_line[length_per_line > 0] <- annotations_per_line[length_per_line > 0] + 1
+        }
+        if (index_annotation_always_last_base) {
             annotations_per_line[length_per_line > 0] <- annotations_per_line[length_per_line > 0] + 1
         }
 
@@ -912,11 +920,15 @@ rasterise_index_annotations <- function(
                     j_vals_this_line <- seq(index_annotation_interval, l, index_annotation_interval)
                 }
 
+                ## Add the extra j values if needed
                 if (index_annotation_always_first_base) {
-                    return(c(1, j_vals_this_line))
-                } else {
-                    return(j_vals_this_line)
+                    j_vals_this_line <- c(1, j_vals_this_line)
                 }
+                if (index_annotation_always_last_base) {
+                    j_vals_this_line <- c(j_vals_this_line, l)
+                }
+
+                return(j_vals_this_line)
             }
         }))
         i_vals <- rep(annotated_sequence_indices, times = annotations_per_line)
@@ -946,6 +958,7 @@ rasterise_index_annotations <- function(
     }
 
     ## Create and return dataframe
+    ## Has to be unique otherwise there could be duplicates from adding first/last bases if they would be annotated anyway
     annotation_data <- data.frame("x" = x_vec, "y" = y_vec, "value" = as.character(annotations))
     return(unique(annotation_data))
 }
