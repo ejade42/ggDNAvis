@@ -16,8 +16,15 @@ the `inst/shinyapp` directory.
 ## Usage
 
 ``` r
-ggDNAvis_shinyapp()
+ggDNAvis_shinyapp(themer = FALSE)
 ```
+
+## Arguments
+
+- themer:
+
+  `logical`. Whether the theme picker should be shown. Makes the app
+  harder to use, not recommended except for dev purposes.
 
 ## Value
 
@@ -27,6 +34,11 @@ Nothing.
 
 ``` r
 if (FALSE) { # \dontrun{
+## Run normally
 ggDNAvis_shinyapp()
+ggDNAvis_shinyapp(themer = FALSE)
+
+## Run with theme picker (dev)
+ggDNAvis_shinyapp(themer = TRUE)
 } # }
 ```

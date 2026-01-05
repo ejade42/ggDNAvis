@@ -69,9 +69,17 @@ and then runs the shinyapp in the <code>inst/shinyapp</code> directory.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ggDNAvis_shinyapp</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ggDNAvis_shinyapp</span><span class="op">(</span>themer <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
+    <div class="section level2">
+    <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
+
+
+<dl><dt id="arg-themer">themer<a class="anchor" aria-label="anchor" href="#arg-themer"></a></dt>
+<dd><p><code>logical</code>. Whether the theme picker should be shown. Makes the app harder to use, not recommended except for dev purposes.</p></dd>
+
+</dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>Nothing.</p>
@@ -80,7 +88,12 @@ and then runs the shinyapp in the <code>inst/shinyapp</code> directory.</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
+<span class="r-in"><span><span class="co">## Run normally</span></span></span>
 <span class="r-in"><span><span class="fu">ggDNAvis_shinyapp</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">ggDNAvis_shinyapp</span><span class="op">(</span>themer <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## Run with theme picker (dev)</span></span></span>
+<span class="r-in"><span><span class="fu">ggDNAvis_shinyapp</span><span class="op">(</span>themer <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
