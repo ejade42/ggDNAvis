@@ -1,3 +1,4 @@
+library(dplyr)
 library(shiny)
 library(rlang)
 library(bslib)
@@ -13,9 +14,14 @@ source("mod_visualise_single_sequence.R")
 source("mod_visualise_many_sequences.R")
 source("mod_visualise_methylation.R")
 
-
-
+## Define links for reuse
 ggDNAvis_icon <- "https://raw.githubusercontent.com/ejade42/ggDNAvis/main/pkgdown/favicon/favicon-96x96.png"
+ggDNAvis_icon_full_res <- "https://raw.githubusercontent.com/ejade42/ggDNAvis/main/pkgdown/favicon/web-app-manifest-512x512.png"
+bugs_link <- extract_link("[link_bugs]: ")
+citation_link <- extract_link("[link_citation]: ")
+documentation_link <- extract_link("[link_documentation]: ")
+source_link <- extract_link("[link_source]: ")
+
 
 ui <- page_navbar(
 
@@ -44,7 +50,26 @@ ui <- page_navbar(
     ## Main tool tabs
     nav_panel(
         title = "Instructions",
-        h4("Instructions placeholder")
+        card(
+            card_body(
+                layout_columns(
+                    col_widths = c(9, 1),
+
+                    ## Column 1
+                    HTML(create_html_content("instructions.md", "links.md", "help/")),
+
+                    ## Column 2
+                    div(
+                        style = "position: absolute; top: 20; right: 0",
+                        tags$a(
+                            href = "https://ejade42.github.io/ggDNAvis/",
+                            target = "_blank",
+                            tags$img(src = ggDNAvis_icon_full_res, style = "width: 100%; max-width: 200px;")
+                        )
+                    )
+                )
+            )
+        )
     ),
 
     nav_panel(
@@ -64,19 +89,19 @@ ui <- page_navbar(
     ## Right-hand links
     nav_spacer(), # Pushes next items to the right
     nav_item(
-        tags$a(href = "https://github.com/ejade42/ggDNAvis", target = "_blank", icon("google-scholar"), "Citation")
+        tags$a(href = citation_link, target = "_blank", icon("google-scholar"), "Citation")
     ),
     nav_item(
-        tags$a(href = "https://github.com/ejade42/ggDNAvis", target = "_blank", icon("github"), "Source")
+        tags$a(href = source_link, target = "_blank", icon("github"), "Source")
     ),
     nav_item(
-        tags$a(href = "https://ejade42.github.io/ggDNAvis/", target = "_blank", icon("book"), "Documentation")
+        tags$a(href = documentation_link, target = "_blank", icon("book"), "Documentation")
     ),
     nav_item(
-        tags$a(href = "https://github.com/ejade42/ggDNAvis/issues", target = "_blank", icon("bacterium"), "Bugs")
+        tags$a(href = bugs_link, target = "_blank", icon("bacterium"), "Bugs")
     ),
     nav_item(
-        input_dark_mode(id = "theme_mode", mode = "light") # Default to light
+        input_dark_mode(id = "theme_mode", mode = "light") ## Default to light
     )
 )
 

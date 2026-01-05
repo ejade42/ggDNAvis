@@ -430,20 +430,35 @@ panel_update_sorting_grouping_from_colnames <- function(input, session, data_to_
 
 ## Show helper popup from markdown
 popup_markdown <- function(input, button_name, title, filename, links_file = "links.md") {
-    content <- readLines(paste0("help/", filename), warn = FALSE)
-    links   <- readLines(paste0("help/", links_file), warn = FALSE)
+    html_content <- create_html_content(filename, links_file, "help/")
+
+    observeEvent(input[[button_name]], {
+        showModal(modalDialog(
+            title = title,
+            withMathJax(HTML(html_content)),
+            easyClose = TRUE,
+            footer = modalButton("Close")
+        ))
+    })
+}
+
+## Create HTML from content + links markdowns
+create_html_content <- function(content_file, links_file, directory = "help/") {
+    content <- readLines(paste0(directory, content_file), warn = FALSE)
+    links   <- readLines(paste0(directory, links_file), warn = FALSE)
 
     combined_text <- paste(c(content, "\n", links), collapse = "\n")
     combined_html <- markdown::markdownToHTML(text = combined_text, fragment.only = TRUE)
     combined_html <- gsub("<a ", "<a target='_blank' rel='noopener noreferrer' ", combined_html)
 
-    observeEvent(input[[button_name]], {
-        showModal(modalDialog(
-            title = title,
-            withMathJax(HTML(combined_html)),
-            easyClose = TRUE,
-            footer = modalButton("Close")
-        ))
-    })
+    return(combined_html)
+}
+
+## Extract link from links md
+extract_link <- function(link_id, links_file = "help/links.md") {
+    readLines(links_file) %>%
+        str_subset(fixed(link_id)) %>%
+        strsplit(., split = "]: ") %>%
+        .[[1]] %>% .[2]
 }
 ## ------------------------------------------------------------------------------
