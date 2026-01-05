@@ -12,7 +12,7 @@ sequence_vector_1 <- c("GGCGGCGGCGGCGGAGGAGGCGGCGGAGGAGGCGGC",
 
 test_that("main plotting function works in basic case", {
     filename <- "visualise_many_sequences_test_01"
-    expect_message(visualize_many_sequences(sequence_vector_1, outline_linewidth = 0, index_annotation_lines = NA, margin = 0, sequence_text_size = 0, pixels_per_base = 10, filename = paste0(root, filename, ".png")))
+    expect_message(visualize_many_sequences(sequence_vector_1, outline_linewidth = 0, index_annotation_lines = NA, margin = 0, sequence_text_size = 0, pixels_per_base = 10, index_annotation_always_first_base = FALSE, index_annotation_always_last_base = FALSE, filename = paste0(root, filename, ".png")))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -20,7 +20,7 @@ test_that("main plotting function works in basic case", {
 
 test_that("main plotting function works with margin", {
     filename <- "visualise_many_sequences_test_02"
-    expect_message(visualise_many_sequences(sequence_vector_1, sequence_cols = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), outline_linewidth = 0, index_annotation_lines = NULL, sequence_text_size = 0, pixels_per_base = 10, filename = paste0(root, filename, ".png")))
+    expect_message(visualise_many_sequences(sequence_vector_1, sequence_cols = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), outline_linewidth = 0, index_annotation_lines = NULL, sequence_text_size = 0, pixels_per_base = 10, index_annotation_always_first_base = FALSE, index_annotation_always_last_base = FALSE, filename = paste0(root, filename, ".png")))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -28,7 +28,7 @@ test_that("main plotting function works with margin", {
 
 test_that("main plotting function works with double margin", {
     filename <- "visualise_many_sequences_test_03"
-    expect_message(visualise_many_sequences(sequence_vector_1, sequence_colors = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), outline_linewidth = 0, index_annotation_lines = numeric(), margin = 2, sequence_text_size = 0, pixels_per_base = 10, filename = paste0(root, filename, ".png")))
+    expect_message(visualise_many_sequences(sequence_vector_1, sequence_colors = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), outline_linewidth = 0, index_annotation_lines = numeric(), margin = 2, sequence_text_size = 0, pixels_per_base = 10, index_annotation_always_first_base = FALSE, index_annotation_always_last_base = FALSE, filename = paste0(root, filename, ".png")))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -36,7 +36,7 @@ test_that("main plotting function works with double margin", {
 
 test_that("main plotting function works with text turned on", {
     filename <- "visualise_many_sequences_test_04"
-    visualise_many_sequences(sequence_vector_1, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), outline_linewidth = 0, index_annotation_lines = NA, pixels_per_base = 30, filename = paste0(root, filename, ".png"))
+    visualise_many_sequences(sequence_vector_1, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), outline_linewidth = 0, index_annotation_lines = NA, pixels_per_base = 30, index_annotation_always_first_base = FALSE, index_annotation_always_last_base = FALSE, filename = paste0(root, filename, ".png"))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -44,7 +44,7 @@ test_that("main plotting function works with text turned on", {
 
 test_that("main plotting function works with family data, unsorted/unseparated, no margin + text off", {
     filename <- "visualise_many_sequences_test_05"
-    expect_message(visualise_many_sequences(example_many_sequences$sequence, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), outline_linewidth = 0, index_annotation_lines = NA, pixels_per_base = 10, margin = 0, sequence_text_size = 0, filename = paste0(root, filename, ".png")))
+    expect_message(visualise_many_sequences(example_many_sequences$sequence, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), outline_linewidth = 0, index_annotation_lines = NA, pixels_per_base = 10, margin = 0, sequence_text_size = 0, index_annotation_always_first_base = FALSE, index_annotation_always_last_base = FALSE, filename = paste0(root, filename, ".png")))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -52,7 +52,7 @@ test_that("main plotting function works with family data, unsorted/unseparated, 
 
 test_that("main plotting function works with family data, unsorted/unseparated, 0.5 margin + text on", {
     filename <- "visualise_many_sequences_test_06"
-    visualise_many_sequences(example_many_sequences$sequence, sequence_colours = sequence_colour_palettes$bright_pale, pixels_per_base = 30, outline_linewidth = 0, index_annotation_lines = NA, filename = paste0(root, filename, ".png"))
+    visualise_many_sequences(example_many_sequences$sequence, sequence_colours = sequence_colour_palettes$bright_pale, pixels_per_base = 30, outline_linewidth = 0, index_annotation_lines = NA, index_annotation_always_first_base = FALSE, index_annotation_always_last_base = FALSE, filename = paste0(root, filename, ".png"))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -61,7 +61,7 @@ test_that("main plotting function works with family data, unsorted/unseparated, 
 test_that("main plotting function works with grouped family data, boxes only", {
     filename <- "visualise_many_sequences_test_07"
     sequences <- extract_and_sort_sequences(example_many_sequences)
-    expect_message(visualise_many_sequences(sequences, sequence_colours = c("#FFAA00", "#00BC00", "#0000DC", "#FF1E1E"), outline_linewidth = 0, index_annotation_lines = NA, sequence_text_size = 0, margin = 0, pixels_per_base = 10, filename = paste0(root, filename, ".png")))
+    expect_message(visualise_many_sequences(sequences, sequence_colours = c("#FFAA00", "#00BC00", "#0000DC", "#FF1E1E"), outline_linewidth = 0, index_annotation_lines = NA, sequence_text_size = 0, margin = 0, pixels_per_base = 10, index_annotation_always_first_base = FALSE, index_annotation_always_last_base = FALSE, filename = paste0(root, filename, ".png")))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -70,7 +70,7 @@ test_that("main plotting function works with grouped family data, boxes only", {
 test_that("main plotting function works with grouped family data, boxes only, ascending", {
     filename <- "visualise_many_sequences_test_08"
     sequences <- extract_and_sort_sequences(example_many_sequences, grouping_levels = c("family" = 7, "individual" = 2), desc_sort = FALSE)
-    expect_message(visualise_many_sequences(sequences, sequence_colours = c("#FFAA00", "#00BC00", "#0000DC", "#FF1E1E"), outline_linewidth = 0, index_annotation_lines = NA, sequence_text_size = 0, margin = 0, pixels_per_base = 10, filename = paste0(root, filename, ".png")))
+    expect_message(visualise_many_sequences(sequences, sequence_colours = c("#FFAA00", "#00BC00", "#0000DC", "#FF1E1E"), outline_linewidth = 0, index_annotation_lines = NA, sequence_text_size = 0, margin = 0, pixels_per_base = 10, index_annotation_always_first_base = FALSE, index_annotation_always_last_base = FALSE, filename = paste0(root, filename, ".png")))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -79,7 +79,7 @@ test_that("main plotting function works with grouped family data, boxes only, as
 test_that("main plotting function works with grouped family data, boxes & text", {
     filename <- "visualise_many_sequences_test_09"
     sequences <- extract_and_sort_sequences(example_many_sequences, grouping_levels = c("family" = 1, "individual" = 0))
-    visualise_many_sequences(sequences, sequence_colours = c("#FFAA00", "#00BC00", "#0000DC", "#FF1E1E"), outline_linewidth = 0, index_annotation_lines = NA, margin = 0.5, pixels_per_base = 30, sequence_text_colour = "pink", background_colour = "black", filename = paste0(root, filename, ".png"))
+    visualise_many_sequences(sequences, sequence_colours = c("#FFAA00", "#00BC00", "#0000DC", "#FF1E1E"), outline_linewidth = 0, index_annotation_lines = NA, margin = 0.5, pixels_per_base = 30, sequence_text_colour = "pink", background_colour = "black", index_annotation_always_first_base = FALSE, index_annotation_always_last_base = FALSE, filename = paste0(root, filename, ".png"))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -88,7 +88,7 @@ test_that("main plotting function works with grouped family data, boxes & text",
 test_that("main plotting function works with grouped family data, boxes only, no grouping", {
     filename <- "visualise_many_sequences_test_10"
     sequences <- extract_and_sort_sequences(example_many_sequences, grouping_levels = NA)
-    expect_message(visualise_many_sequences(sequences, sequence_colours = c("#FFAA00", "#00BC00", "#0000DC", "#FF1E1E"), outline_linewidth = 0, index_annotation_lines = NA, sequence_text_size = 0, margin = 0, pixels_per_base = 10, filename = paste0(root, filename, ".png")))
+    expect_message(visualise_many_sequences(sequences, sequence_colours = c("#FFAA00", "#00BC00", "#0000DC", "#FF1E1E"), outline_linewidth = 0, index_annotation_lines = NA, sequence_text_size = 0, margin = 0, pixels_per_base = 10, index_annotation_always_first_base = FALSE, index_annotation_always_last_base = FALSE, filename = paste0(root, filename, ".png")))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -97,7 +97,7 @@ test_that("main plotting function works with grouped family data, boxes only, no
 test_that("main plotting function works with grouped family data, boxes only, no sorting", {
     filename <- "visualise_many_sequences_test_11"
     sequences <- extract_sequences_from_dataframe(example_many_sequences, sort_by = NA)
-    expect_message(visualise_many_sequences(sequences, sequence_colours = c("#FFAA00", "#00BC00", "#0000DC", "#FF1E1E"), outline_linewidth = 0, index_annotation_lines = NA, sequence_text_size = 0, margin = 0, pixels_per_base = 10, filename = paste0(root, filename, ".png")))
+    expect_message(visualise_many_sequences(sequences, sequence_colours = c("#FFAA00", "#00BC00", "#0000DC", "#FF1E1E"), outline_linewidth = 0, index_annotation_lines = NA, sequence_text_size = 0, margin = 0, pixels_per_base = 10, index_annotation_always_first_base = FALSE, index_annotation_always_last_base = FALSE, filename = paste0(root, filename, ".png")))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -106,7 +106,7 @@ test_that("main plotting function works with grouped family data, boxes only, no
 test_that("main plotting function works with grouped family data, boxes only, no sorting or grouping", {
     filename <- "visualise_many_sequences_test_12"
     sequences <- extract_and_sort_sequences(example_many_sequences, grouping_levels = NA, sort_by = NA)
-    expect_message(visualise_many_sequences(sequences, sequence_colours = c("#FFAA00", "#00BC00", "#0000DC", "#FF1E1E"), outline_linewidth = 0, index_annotation_lines = NA, sequence_text_size = 0, margin = 0, pixels_per_base = 10, filename = paste0(root, filename, ".png")))
+    expect_message(visualise_many_sequences(sequences, sequence_colours = c("#FFAA00", "#00BC00", "#0000DC", "#FF1E1E"), outline_linewidth = 0, index_annotation_lines = NA, sequence_text_size = 0, margin = 0, pixels_per_base = 10, index_annotation_always_first_base = FALSE, index_annotation_always_last_base = FALSE, filename = paste0(root, filename, ".png")))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -115,7 +115,7 @@ test_that("main plotting function works with grouped family data, boxes only, no
 test_that("main plotting function works with grouped family data, boxes & text", {
     filename <- "visualise_many_sequences_test_13"
     sequences <- extract_and_sort_sequences(example_many_sequences, grouping_levels = c("family" = 4))
-    visualise_many_sequences(sequences, sequence_colours = sequence_colour_palettes$bright_deep, margin = 0.5, outline_linewidth = 0, index_annotation_lines = NA, pixels_per_base = 30, sequence_text_colour = "brown", filename = paste0(root, filename, ".png"))
+    visualise_many_sequences(sequences, sequence_colours = sequence_colour_palettes$bright_deep, margin = 0.5, outline_linewidth = 0, index_annotation_lines = NA, pixels_per_base = 30, sequence_text_colour = "brown", index_annotation_always_first_base = FALSE, index_annotation_always_last_base = FALSE, filename = paste0(root, filename, ".png"))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -124,7 +124,7 @@ test_that("main plotting function works with grouped family data, boxes & text",
 test_that("main plotting function works with outlines", {
     filename <- "visualise_many_sequences_test_14"
     sequences <- extract_and_sort_sequences(example_many_sequences)
-    expect_message(visualise_many_sequences(sequences, sequence_colours = sequence_colour_palettes$bright_pale, margin = 0.5, outline_join = "RoUnD", index_annotation_size = 0, index_annotation_lines = 1, pixels_per_base = 30, sequence_text_colour = "black", filename = paste0(root, filename, ".png")))
+    expect_message(visualise_many_sequences(sequences, sequence_colours = sequence_colour_palettes$bright_pale, margin = 0.5, outline_join = "RoUnD", index_annotation_size = 0, index_annotation_lines = 1, pixels_per_base = 30, sequence_text_colour = "black", index_annotation_always_first_base = FALSE, index_annotation_always_last_base = FALSE, filename = paste0(root, filename, ".png")))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -133,7 +133,7 @@ test_that("main plotting function works with outlines", {
 test_that("main plotting function works with outlines", {
     filename <- "visualise_many_sequences_test_15"
     sequences <- extract_and_sort_sequences(example_many_sequences, grouping_levels = NA)
-    expect_message(expect_warning(visualise_many_sequences(sequences, sequence_colours = sequence_colour_palettes$sanger, margin = 0, outline_linewidth = 5, index_annotation_interval = 0, index_annotation_lines = 1,outline_colour = "magenta", pixels_per_base = 30, sequence_text_colour = "white", filename = paste0(root, filename, ".png")),
+    expect_message(expect_warning(visualise_many_sequences(sequences, sequence_colours = sequence_colour_palettes$sanger, margin = 0, outline_linewidth = 5, index_annotation_interval = 0, index_annotation_lines = 1,outline_colour = "magenta", pixels_per_base = 30, sequence_text_colour = "white", index_annotation_always_first_base = FALSE, index_annotation_always_last_base = FALSE, filename = paste0(root, filename, ".png")),
                    class = "parameter_recommendation"))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
@@ -143,7 +143,7 @@ test_that("main plotting function works with outlines", {
 test_that("main plotting function works with outlines and annnotations, ungrouped", {
     filename <- "visualise_many_sequences_test_16"
     sequences <- extract_and_sort_sequences(example_many_sequences, grouping_levels = NA)
-    visualise_many_sequences(sequences, sequence_colours = sequence_colour_palettes$bright_pale2, pixels_per_base = 30, index_annotation_lines = c(1, 15, 20), index_annotation_full_lines = FALSE, filename = paste0(root, filename, ".png"))
+    visualise_many_sequences(sequences, sequence_colours = sequence_colour_palettes$bright_pale2, pixels_per_base = 30, index_annotation_lines = c(1, 15, 20), index_annotations_full_lines = FALSE, index_annotation_always_first_base = FALSE, index_annotation_always_last_base = FALSE, filename = paste0(root, filename, ".png"))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -152,7 +152,7 @@ test_that("main plotting function works with outlines and annnotations, ungroupe
 test_that("main plotting function works with outlines and annnotations, ungrouped, not first row", {
     filename <- "visualise_many_sequences_test_17"
     sequences <- extract_and_sort_sequences(example_many_sequences, grouping_levels = NA)
-    visualise_many_sequences(sequences, sequence_colours = sequence_colour_palettes$bright_pale2, pixels_per_base = 30, index_annotation_lines = c(2, 15, 20), index_annotations_full_line = FALSE, filename = paste0(root, filename, ".png"))
+    visualise_many_sequences(sequences, sequence_colours = sequence_colour_palettes$bright_pale2, pixels_per_base = 30, index_annotation_lines = c(2, 15, 20), index_annotations_full_line = FALSE, index_annotations_always_first_base = FALSE, index_annotation_always_last_base = FALSE, filename = paste0(root, filename, ".png"))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -161,7 +161,7 @@ test_that("main plotting function works with outlines and annnotations, ungroupe
 test_that("main plotting function works with outlines and annnotations, ungrouped, below", {
     filename <- "visualise_many_sequences_test_18"
     sequences <- extract_and_sort_sequences(example_many_sequences, grouping_levels = NA)
-    visualise_many_sequences(sequences, sequence_colours = sequence_colour_palettes$bright_pale2, pixels_per_base = 30, index_annotation_lines = c(1, 15, 20), index_annotations_full_lines = FALSE, index_annotation_above = FALSE, filename = paste0(root, filename, ".png"))
+    visualise_many_sequences(sequences, sequence_colours = sequence_colour_palettes$bright_pale2, pixels_per_base = 30, index_annotation_lines = c(1, 15, 20), index_annotations_full_lines = FALSE, index_annotation_above = FALSE, index_annotation_always_first_base = FALSE, index_annotation_always_last_base = FALSE, filename = paste0(root, filename, ".png"))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -170,7 +170,7 @@ test_that("main plotting function works with outlines and annnotations, ungroupe
 test_that("main plotting function works with outlines and annnotations, ungrouped, below, last line", {
     filename <- "visualise_many_sequences_test_19"
     sequences <- extract_and_sort_sequences(example_many_sequences, grouping_levels = NA)
-    visualise_many_sequences(sequences, sequence_colours = sequence_colour_palettes$bright_pale2, pixels_per_base = 30, index_annotation_lines = c(1, 9, 15, 23), index_annotation_full_line = FALSE, index_annotations_above = FALSE, filename = paste0(root, filename, ".png"))
+    visualise_many_sequences(sequences, sequence_colours = sequence_colour_palettes$bright_pale2, pixels_per_base = 30, index_annotation_lines = c(1, 9, 15, 23), index_annotation_full_line = FALSE, index_annotations_above = FALSE, index_annotation_always_first_base = FALSE, index_annotation_always_last_base = FALSE, filename = paste0(root, filename, ".png"))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -179,7 +179,7 @@ test_that("main plotting function works with outlines and annnotations, ungroupe
 test_that("main plotting function works with outlines and annnotations, grouped", {
     filename <- "visualise_many_sequences_test_20"
     sequences <- extract_and_sort_sequences(example_many_sequences)
-    visualise_many_sequences(sequences, sequence_colours = sequence_colour_palettes$ggplot_style, pixels_per_base = 30, index_annotation_lines = c(1, 23, 37), index_annotation_interval = 20, index_annotation_size = 20, index_annotation_colour = "purple", index_annotation_vertical_position = 1/2, index_annotation_full_line = FALSE, filename = paste0(root, filename, ".png"))
+    visualise_many_sequences(sequences, sequence_colours = sequence_colour_palettes$ggplot_style, pixels_per_base = 30, index_annotation_lines = c(1, 23, 37), index_annotation_interval = 20, index_annotation_size = 20, index_annotation_colour = "purple", index_annotation_vertical_position = 1/2, index_annotation_full_line = FALSE, index_annotation_always_first_base = FALSE, index_annotation_always_last_base = FALSE, filename = paste0(root, filename, ".png"))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -190,7 +190,7 @@ test_that("main plotting function works with outlines and annnotations, grouped,
     sequences <- extract_and_sort_sequences(example_many_sequences)
     ## Also check that the messages for sanitising the lines vector are working
     ## Doesn't seem like expect_message class matches with cli_alert_info class so I removed class here.
-    expect_message(expect_message(visualise_many_sequences(sequences, sequence_colours = sequence_colour_palettes$ggplot_style, pixels_per_base = 30, index_annotation_lines = c(1, 37, 23, 23), index_annotation_interval = 20, index_annotation_size = 20, index_annotation_colour = "purple", index_annotation_vertical_position = 1/2, index_annotation_full_line = FALSE, index_annotations_above = FALSE, filename = paste0(root, filename, ".png"))))
+    expect_message(expect_message(visualise_many_sequences(sequences, sequence_colours = sequence_colour_palettes$ggplot_style, pixels_per_base = 30, index_annotation_lines = c(1, 37, 23, 23), index_annotation_interval = 20, index_annotation_size = 20, index_annotation_colour = "purple", index_annotation_vertical_position = 1/2, index_annotation_full_line = FALSE, index_annotations_above = FALSE, index_annotation_always_first_base = FALSE, index_annotation_always_last_base = FALSE, filename = paste0(root, filename, ".png"))))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -199,7 +199,7 @@ test_that("main plotting function works with outlines and annnotations, grouped,
 test_that("main plotting function works with outlines and annnotations, all", {
     filename <- "visualise_many_sequences_test_22"
     sequences <- extract_and_sort_sequences(example_many_sequences, grouping_levels = NA, sort_by = NA)
-    visualize_many_sequences(sequences, sequence_cols = sequence_colour_palettes$bright_deep, pixels_per_base = 15, index_annotation_lines = c(1:23), index_annotation_interval = 1, index_annotation_size = 20, index_annotation_colour = "purple", sequence_text_colour = "cyan", background_colour = "orange", outline_colour = "red", index_annotation_vertical_position = 5/4, index_annotation_full_line = FALSE, filename = paste0(root, filename, ".png"))
+    visualize_many_sequences(sequences, sequence_cols = sequence_colour_palettes$bright_deep, pixels_per_base = 15, index_annotation_lines = c(1:23), index_annotation_interval = 1, index_annotation_size = 20, index_annotation_colour = "purple", sequence_text_colour = "cyan", background_colour = "orange", outline_colour = "red", index_annotation_vertical_position = 5/4, index_annotation_full_line = FALSE, index_annotation_always_first_base = FALSE, index_annotation_always_last_base = FALSE, filename = paste0(root, filename, ".png"))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -208,7 +208,7 @@ test_that("main plotting function works with outlines and annnotations, all", {
 test_that("main plotting function works with outlines and annnotations, all, below", {
     filename <- "visualise_many_sequences_test_23"
     sequences <- extract_and_sort_sequences(example_many_sequences, grouping_levels = NA, sort_by = NA)
-    visualise_many_sequences(sequences, sequence_colours = sequence_colour_palettes$bright_deep, pixels_per_base = 15, index_annotation_lines = c(1:23), index_annotation_interval = 1, index_annotation_size = 20, index_annotation_colour = "purple", sequence_text_colour = "cyan", background_colour = "orange", outline_colour = "red", index_annotation_vertical_position = 5/4, index_annotation_full_line = FALSE, index_annotations_above = FALSE, filename = paste0(root, filename, ".png"))
+    visualise_many_sequences(sequences, sequence_colours = sequence_colour_palettes$bright_deep, pixels_per_base = 15, index_annotation_lines = c(1:23), index_annotation_interval = 1, index_annotation_size = 20, index_annotation_colour = "purple", sequence_text_colour = "cyan", background_colour = "orange", outline_colour = "red", index_annotation_vertical_position = 5/4, index_annotation_full_line = FALSE, index_annotations_above = FALSE, index_annotation_always_first_base = FALSE, index_annotation_always_last_base = FALSE, filename = paste0(root, filename, ".png"))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -217,7 +217,7 @@ test_that("main plotting function works with outlines and annnotations, all, bel
 test_that("forcing raster works", {
     filename <- "visualise_many_sequences_test_24"
     sequences <- extract_and_sort_sequences(example_many_sequences)
-    expect_warning(visualise_many_sequences(sequences, sequence_colours = sequence_colour_palettes$bright_deep, pixels_per_base = 10, background_col = "red", margin = 1.6, force_raster = TRUE, filename = paste0(root, filename, ".png")),
+    expect_warning(visualise_many_sequences(sequences, sequence_colours = sequence_colour_palettes$bright_deep, pixels_per_base = 10, background_col = "red", margin = 1.6, force_raster = TRUE, index_annotation_always_first_base = FALSE, index_annotation_always_last_base = FALSE, filename = paste0(root, filename, ".png")),
                    class = "raster_is_forced")
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
@@ -226,7 +226,7 @@ test_that("forcing raster works", {
 
 test_that("single sequence works with space but no annotation text", {
     filename <- "visualise_many_sequences_test_25"
-    visualise_many_sequences("ACGT", sequence_colours = sequence_colour_palettes$bright_deep, pixels_per_base = 25, filename = paste0(root, filename, ".png"))
+    visualise_many_sequences("ACGT", sequence_colours = sequence_colour_palettes$bright_deep, pixels_per_base = 25, index_annotation_always_first_base = FALSE, index_annotation_always_last_base = FALSE, filename = paste0(root, filename, ".png"))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -234,25 +234,25 @@ test_that("single sequence works with space but no annotation text", {
 
 test_that("single sequence works with no space but no annotation text", {
     filename <- "visualise_many_sequences_test_26"
-    visualise_many_sequences("ACGT", sequence_colours = sequence_colour_palettes$bright_deep, index_annotation_lines = NA, pixels_per_base = 25, filename = paste0(root, filename, ".png"))
+    visualise_many_sequences("ACGT", sequence_colours = sequence_colour_palettes$bright_deep, index_annotation_lines = NA, pixels_per_base = 25, index_annotation_always_first_base = FALSE, index_annotation_always_last_base = FALSE, filename = paste0(root, filename, ".png"))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
 })
 
-test_that("forcing first line annotation works", {
+test_that("forcing first & last base annotation works", {
     filename <- "visualise_many_sequences_test_27"
     sequences <- extract_and_sort_sequences(example_many_sequences)
-    visualise_many_sequences(sequences, sequence_colours = sequence_colour_palettes$bright_deep, index_annotation_always_first_base = TRUE, index_annotation_lines = seq_along(sequences), pixels_per_base = 25, filename = paste0(root, filename, ".png"))
+    visualise_many_sequences(sequences, sequence_colours = sequence_colour_palettes$bright_deep, index_annotation_always_first_base = TRUE, index_annotation_always_last_base = TRUE, index_annotation_lines = seq_along(sequences), pixels_per_base = 25, filename = paste0(root, filename, ".png"))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
 })
 
-test_that("forcing first line annotation works, not full lines", {
+test_that("forcing first & last base annotation works, not full lines", {
     filename <- "visualise_many_sequences_test_28"
     sequences <- extract_and_sort_sequences(example_many_sequences)
-    visualise_many_sequences(sequences, sequence_colours = sequence_colour_palettes$bright_deep, index_annotation_always_first_base = TRUE, index_annotation_lines = seq_along(sequences), index_annotation_full_line = FALSE, pixels_per_base = 25, filename = paste0(root, filename, ".png"))
+    visualise_many_sequences(sequences, sequence_colours = sequence_colour_palettes$bright_deep, index_annotation_always_first_base = TRUE, index_annotation_always_last_base = TRUE, index_annotation_lines = seq_along(sequences), index_annotation_full_line = FALSE, pixels_per_base = 25, filename = paste0(root, filename, ".png"))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -294,6 +294,7 @@ test_that("single sequence visualisation fails when arguments are invalid", {
         expect_error(visualise_many_sequences(sequence_vector_1, index_annotations_above = param), class = "argument_value_or_type")
         expect_error(visualise_many_sequences(sequence_vector_1, index_annotation_full_line = param), class = "argument_value_or_type")
         expect_error(visualise_many_sequences(sequence_vector_1, index_annotation_always_first_base = param), class = "argument_value_or_type")
+        expect_error(visualise_many_sequences(sequence_vector_1, index_annotation_always_last_base = param), class = "argument_value_or_type")
         expect_error(visualise_many_sequences(sequence_vector_1, force_raster = param), class = "argument_value_or_type")
     }
 

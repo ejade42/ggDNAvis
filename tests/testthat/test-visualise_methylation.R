@@ -8,7 +8,7 @@ test_that("methylation visualisation works as expected, all defaults", {
     locations     <- extract_and_sort_sequences(example_many_sequences, sequence_variable = "methylation_locations")
     probabilities <- extract_and_sort_sequences(example_many_sequences, sequence_variable = "methylation_probabilities")
     sequences <- extract_and_sort_sequences(example_many_sequences, sequence_variable = "sequence")
-    expect_message(visualize_methylation(locations, probabilities, sequences, filename = paste0(root, filename, ".png"), index_annotation_lines = NA, outline_linewidth = 0, pixels_per_base = 10))
+    expect_message(visualize_methylation(locations, probabilities, sequences, filename = paste0(root, filename, ".png"), index_annotation_lines = NA, outline_linewidth = 0, pixels_per_base = 10, index_annotation_always_first_base = FALSE, index_annotation_always_last_base = FALSE))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -17,7 +17,7 @@ test_that("methylation visualisation works as expected, all defaults", {
 test_that("methylation visualisation works as expected, ascending sort, via extract_methylation_from_dataframe", {
     filename <- "visualise_methylation_test_02"
     d <- extract_methylation_from_dataframe(example_many_sequences, desc_sort = FALSE)
-    expect_message(visualise_methylation(d$locations, d$probabilities, d$sequences, filename = paste0(root, filename, ".png"), index_annotation_lines = NULL, outline_linewidth = 0, pixels_per_base = 10))
+    expect_message(visualise_methylation(d$locations, d$probabilities, d$sequences, filename = paste0(root, filename, ".png"), index_annotation_lines = NULL, outline_linewidth = 0, pixels_per_base = 10, index_annotation_always_first_base = FALSE, index_annotation_always_last_base = FALSE))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -26,7 +26,7 @@ test_that("methylation visualisation works as expected, ascending sort, via extr
 test_that("methylation visualisation works as expected, wacky colours", {
     filename <- "visualise_methylation_test_03"
     d <- extract_methylation_from_dataframe(example_many_sequences, grouping_levels = c("individual" = 2), sort_by = NA)
-    expect_message(visualise_methylation(d$locations, d$probabilities, d$sequences, filename = paste0(root, filename, ".png"), background_colour = "pink", index_annotation_lines = numeric(), other_bases_colour = "lightblue", low_colour = "white", high_colour = "black", margin = 1, outline_linewidth = 0, pixels_per_base = 10))
+    expect_message(visualise_methylation(d$locations, d$probabilities, d$sequences, filename = paste0(root, filename, ".png"), background_colour = "pink", index_annotation_lines = numeric(), other_bases_colour = "lightblue", low_colour = "white", high_colour = "black", margin = 1, outline_linewidth = 0, pixels_per_base = 10, index_annotation_always_first_base = FALSE, index_annotation_always_last_base = FALSE))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -42,7 +42,7 @@ test_that("methylation visualisation works as expected, wacky colours", {
 test_that("methylation visualisation works as expected, hard clamping", {
     filename <- "visualise_methylation_test_04"
     d <- extract_methylation_from_dataframe(example_many_sequences, grouping_levels = NA, sort_by = NA)
-    expect_message(visualise_methylation(d$locations, d$probabilities, d$sequences, filename = paste0(root, filename, ".png"), low_clamp = 108, high_clamp = 148, index_annotation_lines = numeric(), margin = 0, outline_linewidth = 0, pixels_per_base = 10))
+    expect_message(visualise_methylation(d$locations, d$probabilities, d$sequences, filename = paste0(root, filename, ".png"), low_clamp = 108, high_clamp = 148, index_annotation_lines = numeric(), margin = 0, outline_linewidth = 0, pixels_per_base = 10, index_annotation_always_first_base = FALSE, index_annotation_always_last_base = FALSE))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -58,7 +58,7 @@ test_that("methylation visualisation works as expected, hard clamping", {
 test_that("methylation visualisation works with all individuals merged, mild clamping", {
     filename <- "visualise_methylation_test_05"
     d <- extract_methylation_from_dataframe(example_many_sequences, grouping_levels = NA)
-    expect_message(visualise_methylation(d$locations, d$probabilities, d$sequences, filename = paste0(root, filename, ".png"), low_clamp = 50, high_clamp = 200, index_annotation_lines = numeric(), margin = 1.5, outline_linewidth = 0, pixels_per_base = 10))
+    expect_message(visualise_methylation(d$locations, d$probabilities, d$sequences, filename = paste0(root, filename, ".png"), low_clamp = 50, high_clamp = 200, index_annotation_lines = numeric(), margin = 1.5, outline_linewidth = 0, pixels_per_base = 10, index_annotation_always_first_base = FALSE, index_annotation_always_last_base = FALSE))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -74,7 +74,7 @@ test_that("methylation visualisation works with all individuals merged, mild cla
 test_that("methylation visualisation works with unified outlines", {
     filename <- "visualise_methylation_test_06"
     d <- extract_methylation_from_dataframe(example_many_sequences)
-    visualise_methylation(d$locations, d$probabilities, d$sequences, filename = paste0(root, filename, ".png"), pixels_per_base = 10, index_annotation_lines = NA)
+    visualise_methylation(d$locations, d$probabilities, d$sequences, filename = paste0(root, filename, ".png"), pixels_per_base = 10, index_annotation_lines = NA, index_annotation_always_first_base = FALSE, index_annotation_always_last_base = FALSE)
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -83,7 +83,7 @@ test_that("methylation visualisation works with unified outlines", {
 test_that("methylation visualisation works with differing outlines", {
     filename <- "visualise_methylation_test_07"
     d <- extract_methylation_from_dataframe(example_many_sequences)
-    expect_message(visualise_methylation(d$locations, d$probabilities, d$sequences, filename = paste0(root, filename, ".png"), other_bases_outline_color = "green", index_annotation_interval = 0, modified_bases_outline_col = "orange", pixels_per_base = 10))
+    expect_message(visualise_methylation(d$locations, d$probabilities, d$sequences, filename = paste0(root, filename, ".png"), other_bases_outline_color = "green", index_annotation_interval = 0, modified_bases_outline_col = "orange", pixels_per_base = 10, index_annotation_always_first_base = FALSE, index_annotation_always_last_base = FALSE))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -92,7 +92,7 @@ test_that("methylation visualisation works with differing outlines", {
 test_that("methylation visualisation works with differing outlines", {
     filename <- "visualise_methylation_test_08"
     d <- extract_methylation_from_dataframe(example_many_sequences)
-    expect_message(visualise_methylation(d$locations, d$probabilities, d$sequences, filename = paste0(root, filename, ".png"), other_bases_outline_linewidth = 0, index_annotation_size = 0, pixels_per_base = 10))
+    expect_message(visualise_methylation(d$locations, d$probabilities, d$sequences, filename = paste0(root, filename, ".png"), other_bases_outline_linewidth = 0, index_annotation_size = 0, pixels_per_base = 10, index_annotation_always_first_base = FALSE, index_annotation_always_last_base = FALSE))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -101,7 +101,7 @@ test_that("methylation visualisation works with differing outlines", {
 test_that("methylation visualisation works with index annotations", {
     filename <- "visualise_methylation_test_09"
     d <- extract_methylation_from_dataframe(example_many_sequences)
-    expect_message(visualise_methylation(d$locations, d$probabilities, d$sequences, filename = paste0(root, filename, ".png"), index_annotation_lines = c(1, 10, 37, 51, 51), other_bases_outline_linewidth = 0, pixels_per_base = 30))
+    expect_message(visualise_methylation(d$locations, d$probabilities, d$sequences, filename = paste0(root, filename, ".png"), index_annotation_lines = c(1, 10, 37, 51, 51), other_bases_outline_linewidth = 0, pixels_per_base = 30, index_annotation_always_first_base = FALSE, index_annotation_always_last_base = FALSE))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -110,7 +110,7 @@ test_that("methylation visualisation works with index annotations", {
 test_that("methylation visualisation works with index annotations below", {
     filename <- "visualise_methylation_test_10"
     d <- extract_methylation_from_dataframe(example_many_sequences)
-    expect_message(expect_message(visualise_methylation(d$locations, d$probabilities, d$sequences, filename = paste0(root, filename, ".png"), index_annotation_lines = c(1, 10, 51, 37, 37), index_annotations_above = FALSE, other_bases_outline_linewidth = 0, pixels_per_base = 30)))
+    expect_message(expect_message(visualise_methylation(d$locations, d$probabilities, d$sequences, filename = paste0(root, filename, ".png"), index_annotation_lines = c(1, 10, 51, 37, 37), index_annotations_above = FALSE, other_bases_outline_linewidth = 0, pixels_per_base = 30, index_annotation_always_first_base = FALSE, index_annotation_always_last_base = FALSE)))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -119,7 +119,7 @@ test_that("methylation visualisation works with index annotations below", {
 test_that("methylation visualisation works with index annotations, big", {
     filename <- "visualise_methylation_test_11"
     d <- extract_methylation_from_dataframe(example_many_sequences)
-    expect_message(visualise_methylation(d$locations, d$probabilities, d$sequences, filename = paste0(root, filename, ".png"), index_annotation_lines = c(1, 37, 10, 51), index_annotation_vertical_position = 4/3, index_annotation_size = 20, index_annotation_colour = "magenta", index_annotation_interval = 7, index_annotations_full_line = FALSE, background_colour = "orange", margin = 1.5, other_bases_outline_linewidth = 0, pixels_per_base = 30))
+    expect_message(visualise_methylation(d$locations, d$probabilities, d$sequences, filename = paste0(root, filename, ".png"), index_annotation_lines = c(1, 37, 10, 51), index_annotation_vertical_position = 4/3, index_annotation_size = 20, index_annotation_colour = "magenta", index_annotation_interval = 7, index_annotations_full_line = FALSE, background_colour = "orange", margin = 1.5, other_bases_outline_linewidth = 0, pixels_per_base = 30, index_annotation_always_first_base = FALSE, index_annotation_always_last_base = FALSE))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -128,7 +128,7 @@ test_that("methylation visualisation works with index annotations, big", {
 test_that("methylation visualisation works with index annotations, big, below", {
     filename <- "visualise_methylation_test_12"
     d <- extract_methylation_from_dataframe(example_many_sequences)
-    visualise_methylation(d$locations, d$probabilities, d$sequences, filename = paste0(root, filename, ".png"), index_annotation_lines = c(1, 10, 37, 51), index_annotation_vertical_position = 4/3, index_annotation_size = 20, index_annotations_above = FALSE, index_annotation_colour = "magenta", index_annotation_interval = 7, index_annotation_full_lines = FALSE, background_colour = "orange", margin = 1.5, other_bases_outline_linewidth = 0, pixels_per_base = 30)
+    visualise_methylation(d$locations, d$probabilities, d$sequences, filename = paste0(root, filename, ".png"), index_annotation_lines = c(1, 10, 37, 51), index_annotation_vertical_position = 4/3, index_annotation_size = 20, index_annotations_above = FALSE, index_annotation_colour = "magenta", index_annotation_interval = 7, index_annotation_full_lines = FALSE, background_colour = "orange", margin = 1.5, other_bases_outline_linewidth = 0, pixels_per_base = 30, index_annotation_always_first_base = FALSE, index_annotation_always_last_base = FALSE)
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -137,7 +137,7 @@ test_that("methylation visualisation works with index annotations, big, below", 
 test_that("methylation visualisation works with index annotations, default", {
     filename <- "visualise_methylation_test_13"
     d <- extract_methylation_from_dataframe(example_many_sequences)
-    expect_message(visualise_methylation(d$locations, d$probabilities, d$sequences, filename = paste0(root, filename, ".png"), high_colour = "magenta", low_colour = "cyan", sequence_text_type = "sequence", sequence_text_size = 0, other_bases_color = "orange", other_bases_outline_linewidth = 0, pixels_per_base = 30))
+    expect_message(visualise_methylation(d$locations, d$probabilities, d$sequences, filename = paste0(root, filename, ".png"), high_colour = "magenta", low_colour = "cyan", sequence_text_type = "sequence", sequence_text_size = 0, other_bases_color = "orange", other_bases_outline_linewidth = 0, pixels_per_base = 30, index_annotation_always_first_base = FALSE, index_annotation_always_last_base = FALSE))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -146,7 +146,7 @@ test_that("methylation visualisation works with index annotations, default", {
 test_that("methylation visualisation works with sequence, default", {
     filename <- "visualise_methylation_test_14"
     d <- extract_methylation_from_dataframe(example_many_sequences)
-    visualise_methylation(d$locations, d$probabilities, d$sequences, filename = paste0(root, filename, ".png"), sequence_text_type = "sequence", pixels_per_base = 15)
+    visualise_methylation(d$locations, d$probabilities, d$sequences, filename = paste0(root, filename, ".png"), sequence_text_type = "sequence", pixels_per_base = 15, index_annotation_always_first_base = FALSE, index_annotation_always_last_base = FALSE)
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -155,7 +155,7 @@ test_that("methylation visualisation works with sequence, default", {
 test_that("methylation visualisation works with sequence, fancy", {
     filename <- "visualise_methylation_test_15"
     d <- extract_methylation_from_dataframe(example_many_sequences)
-    visualise_methylation(d$locations, d$probabilities, d$sequences, filename = paste0(root, filename, ".png"), sequence_text_type = "sequence", sequence_text_color = "magenta", sequence_text_size = 20, index_annotation_interval = 5, index_annotation_full_line = TRUE, index_annotation_lines = c(1, 23, 37), pixels_per_base = 15)
+    visualise_methylation(d$locations, d$probabilities, d$sequences, filename = paste0(root, filename, ".png"), sequence_text_type = "sequence", sequence_text_color = "magenta", sequence_text_size = 20, index_annotation_interval = 5, index_annotation_full_line = TRUE, index_annotation_lines = c(1, 23, 37), pixels_per_base = 15, index_annotation_always_first_base = FALSE, index_annotation_always_last_base = FALSE)
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -164,7 +164,7 @@ test_that("methylation visualisation works with sequence, fancy", {
 test_that("methylation visualisation works with scaled probabilities, default", {
     filename <- "visualise_methylation_test_16"
     d <- extract_and_sort_methylation(example_many_sequences)
-    visualise_methylation(d$locations, d$probabilities, d$sequences, filename = paste0(root, filename, ".png"), sequence_text_type = "probability", sequence_text_size = 10, sequence_text_col = "white", other_bases_outline_linewidth = 0, index_annotation_lines = c(1, 23, 37), pixels_per_base = 15)
+    visualise_methylation(d$locations, d$probabilities, d$sequences, filename = paste0(root, filename, ".png"), sequence_text_type = "probability", sequence_text_size = 10, sequence_text_col = "white", other_bases_outline_linewidth = 0, index_annotation_lines = c(1, 23, 37), pixels_per_base = 15, index_annotation_always_first_base = FALSE, index_annotation_always_last_base = FALSE)
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -173,7 +173,7 @@ test_that("methylation visualisation works with scaled probabilities, default", 
 test_that("methylation visualisation works with scaled probabilities, integer", {
     filename <- "visualise_methylation_test_17"
     d <- extract_methylation_from_dataframe(example_many_sequences)
-    visualise_methylation(d$locations, d$probabilities, d$sequences, filename = paste0(root, filename, ".png"), sequence_text_type = "probability", sequence_text_scaling = c(0, 1), sequence_text_rounding = 0, sequence_text_size = 10, sequence_text_colour = "white", other_bases_outline_linewidth = 0, index_annotation_lines = c(1, 23, 37), pixels_per_base = 15)
+    visualise_methylation(d$locations, d$probabilities, d$sequences, filename = paste0(root, filename, ".png"), sequence_text_type = "probability", sequence_text_scaling = c(0, 1), sequence_text_rounding = 0, sequence_text_size = 10, sequence_text_colour = "white", other_bases_outline_linewidth = 0, index_annotation_lines = c(1, 23, 37), pixels_per_base = 15, index_annotation_always_first_base = FALSE, index_annotation_always_last_base = FALSE)
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -182,7 +182,7 @@ test_that("methylation visualisation works with scaled probabilities, integer", 
 test_that("methylation visualisation works with scaled probabilities, warning", {
     filename <- "visualise_methylation_test_18"
     d <- extract_methylation_from_dataframe(example_many_sequences)
-    expect_warning(visualise_methylation(d$locations, d$probabilities, d$sequences, filename = paste0(root, filename, ".png"), sequence_text_type = "probability", sequence_text_scaling = c(0, 255), sequence_text_rounding = 1, sequence_text_size = 10, sequence_text_colour = "white", other_bases_outline_linewidth = 0, index_annotation_lines = c(1, 23, 37), pixels_per_base = 15),
+    expect_warning(visualise_methylation(d$locations, d$probabilities, d$sequences, filename = paste0(root, filename, ".png"), sequence_text_type = "probability", sequence_text_scaling = c(0, 255), sequence_text_rounding = 1, sequence_text_size = 10, sequence_text_colour = "white", other_bases_outline_linewidth = 0, index_annotation_lines = c(1, 23, 37), pixels_per_base = 15, index_annotation_always_first_base = FALSE, index_annotation_always_last_base = FALSE),
                    class = "unrecommended_argument")
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
@@ -192,7 +192,7 @@ test_that("methylation visualisation works with scaled probabilities, warning", 
 test_that("methylation visualisation works with scaled probabilities, default size warning", {
     filename <- "visualise_methylation_test_19"
     d <- extract_methylation_from_dataframe(example_many_sequences)
-    expect_warning(visualise_methylation(d$locations, d$probabilities, d$sequences, filename = paste0(root, filename, ".png"), sequence_text_type = "probability", sequence_text_colour = "white", other_bases_outline_linewidth = 0, index_annotation_lines = c(1, 23, 37), pixels_per_base = 15),
+    expect_warning(visualise_methylation(d$locations, d$probabilities, d$sequences, filename = paste0(root, filename, ".png"), sequence_text_type = "probability", sequence_text_colour = "white", other_bases_outline_linewidth = 0, index_annotation_lines = c(1, 23, 37), pixels_per_base = 15, index_annotation_always_first_base = FALSE, index_annotation_always_last_base = FALSE),
                    class = "default_text_too_large_for_prob")
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
@@ -202,7 +202,7 @@ test_that("methylation visualisation works with scaled probabilities, default si
 test_that("forcing rasterisation works and produces a warning", {
     filename <- "visualise_methylation_test_20"
     d <- extract_methylation_from_dataframe(example_many_sequences)
-    expect_warning(visualise_methylation(d$locations, d$probabilities, d$sequences, filename = paste0(root, filename, ".png"), sequence_text_type = "sequence", force_raster = TRUE, low_colour = "white", high_colour = "black", other_bases_colour = "lightblue1", background_colour = "orange", margin = 2, pixels_per_base = 10),
+    expect_warning(visualise_methylation(d$locations, d$probabilities, d$sequences, filename = paste0(root, filename, ".png"), sequence_text_type = "sequence", force_raster = TRUE, low_colour = "white", high_colour = "black", other_bases_colour = "lightblue1", background_colour = "orange", margin = 2, pixels_per_base = 10, index_annotation_always_first_base = FALSE, index_annotation_always_last_base = FALSE),
                    class = "raster_is_forced")
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
@@ -211,7 +211,7 @@ test_that("forcing rasterisation works and produces a warning", {
 
 test_that("one sequence methylation works, spacing", {
     filename <- "visualise_methylation_test_21"
-    visualise_methylation("2", "255", "ACGT", filename = paste0(root, filename, ".png"), sequence_text_type = "sequence", pixels_per_base = 30)
+    visualise_methylation("2", "255", "ACGT", filename = paste0(root, filename, ".png"), sequence_text_type = "sequence", pixels_per_base = 30, index_annotation_always_first_base = FALSE, index_annotation_always_last_base = FALSE)
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -219,25 +219,25 @@ test_that("one sequence methylation works, spacing", {
 
 test_that("one sequence methylation works, no spacing", {
     filename <- "visualise_methylation_test_22"
-    expect_message(visualise_methylation("2", "255", "ACGT", filename = paste0(root, filename, ".png"), sequence_text_type = "sequence", index_annotation_size = 0, pixels_per_base = 30))
+    expect_message(visualise_methylation("2", "255", "ACGT", filename = paste0(root, filename, ".png"), sequence_text_type = "sequence", index_annotation_size = 0, pixels_per_base = 30, index_annotation_always_first_base = FALSE, index_annotation_always_last_base = FALSE))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
 })
 
-test_that("forcing first base annotation works", {
+test_that("forcing first & last base annotation works", {
     filename <- "visualise_methylation_test_23"
     d <- extract_and_sort_methylation(example_many_sequences)
-    expect_message(visualise_methylation(d$locations, d$probabilities, d$sequences, filename = paste0(root, filename, ".png"), sequence_text_type = "probability", sequence_text_size = 0, index_annotation_lines = seq_along(d$sequences), index_annotation_always_first_base = TRUE, pixels_per_base = 10))
+    expect_message(visualise_methylation(d$locations, d$probabilities, d$sequences, filename = paste0(root, filename, ".png"), sequence_text_type = "probability", sequence_text_size = 0, index_annotation_lines = seq_along(d$sequences), index_annotations_always_first_base = TRUE, index_annotation_always_last_base = TRUE, pixels_per_base = 10))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
 })
 
-test_that("forcing first base annotation works, not full lines", {
+test_that("forcing first & last base annotation works, not full lines", {
     filename <- "visualise_methylation_test_24"
     d <- extract_and_sort_methylation(example_many_sequences)
-    visualise_methylation(d$locations, d$probabilities, d$sequences, filename = paste0(root, filename, ".png"), index_annotation_lines = seq_along(d$sequences), index_annotation_always_first_base = TRUE, index_annotation_full_lines = F, pixels_per_base = 10)
+    visualise_methylation(d$locations, d$probabilities, d$sequences, filename = paste0(root, filename, ".png"), index_annotation_lines = seq_along(d$sequences), index_annotation_always_first_base = TRUE, index_annotations_always_last_base = TRUE, index_annotation_full_lines = F, pixels_per_base = 10)
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -308,6 +308,7 @@ test_that("argument validation rejects bad arguments for methylation visualisati
         expect_error(visualise_methylation(d$locations, d$probabilities, d$sequences, index_annotations_above = param), class = "argument_value_or_type")
         expect_error(visualise_methylation(d$locations, d$probabilities, d$sequences, index_annotation_full_line = param), class = "argument_value_or_type")
         expect_error(visualise_methylation(d$locations, d$probabilities, d$sequences, index_annotation_always_first_base = param), class = "argument_value_or_type")
+        expect_error(visualise_methylation(d$locations, d$probabilities, d$sequences, index_annotation_always_last_base = param), class = "argument_value_or_type")
         expect_error(visualise_methylation(d$locations, d$probabilities, d$sequences, force_raster = param), class = "argument_value_or_type")
     }
 

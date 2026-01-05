@@ -244,6 +244,8 @@ test_that("rasterising index annotations, full example", {
     index_annotation_interval <- 10
     index_annotations_above <- TRUE
     index_annotation_full_line <- FALSE
+    index_annotation_always_first_base <- FALSE
+    index_annotation_always_last_base <- FALSE
     index_index_annotation_vertical_position <- 1/3
 
     ## Create sequences vector
@@ -269,7 +271,9 @@ test_that("rasterising index annotations, full example", {
         index_annotation_interval = 10,
         index_annotation_full_line = index_annotation_full_line,
         index_annotations_above = index_annotations_above,
-        index_annotation_vertical_position = index_index_annotation_vertical_position
+        index_annotation_vertical_position = index_index_annotation_vertical_position,
+        index_annotation_always_first_base = index_annotation_always_first_base,
+        index_annotation_always_last_base = index_annotation_always_last_base
     )
 
     ## Test
@@ -295,6 +299,8 @@ test_that("rasterising index annotations works, offset and spacing", {
     index_annotation_interval <- 10
     index_annotations_above <- TRUE
     index_annotation_full_line <- FALSE
+    index_annotation_always_first_base <- FALSE
+    index_annotation_always_last_base <- FALSE
     index_index_annotation_vertical_position <- 1/3
     offset <- 1
     spacing <- 2
@@ -328,7 +334,9 @@ test_that("rasterising index annotations works, offset and spacing", {
         index_annotation_vertical_position = index_index_annotation_vertical_position,
         sum_indices = TRUE,
         spacing = 2,
-        offset_start = 1
+        offset_start = 1,
+        index_annotation_always_first_base = index_annotation_always_first_base,
+        index_annotation_always_last_base = index_annotation_always_last_base
     )
 
     expect_equal(d, data.frame(
@@ -345,6 +353,8 @@ test_that("rasterising index annotations works, below", {
     index_annotation_interval <- 10
     index_annotations_above <- FALSE
     index_annotation_full_line <- TRUE
+    index_annotation_always_first_base <- FALSE
+    index_annotation_always_last_base <- FALSE
     index_index_annotation_vertical_position <- 1/3
 
     ## Create sequences vector
@@ -370,7 +380,9 @@ test_that("rasterising index annotations works, below", {
         index_annotation_interval = 10,
         index_annotation_full_line = index_annotation_full_line,
         index_annotations_above = index_annotations_above,
-        index_annotation_vertical_position = index_index_annotation_vertical_position
+        index_annotation_vertical_position = index_index_annotation_vertical_position,
+        index_annotation_always_first_base = index_annotation_always_first_base,
+        index_annotation_always_last_base = index_annotation_always_last_base
     )
 
     ## Test

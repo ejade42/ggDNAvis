@@ -76,7 +76,8 @@ visualise_many_sequences <- function(
     index_annotations_above = TRUE,
     index_annotation_vertical_position = 1/3,
     index_annotation_full_line = TRUE,
-    index_annotation_always_first_base = FALSE,
+    index_annotation_always_first_base = TRUE,
+    index_annotation_always_last_base = TRUE,
     outline_colour = "black",
     outline_linewidth = 3,
     outline_join = "mitre",
@@ -109,6 +110,8 @@ visualise_many_sequences <- function(
     index_annotation_full_line <- resolve_alias("index_annotation_full_line", index_annotation_full_line, "index_annotations_full_line", dots[["index_annotations_full_line"]], TRUE)
     index_annotation_full_line <- resolve_alias("index_annotation_full_line", index_annotation_full_line, "index_annotations_full_lines", dots[["index_annotations_full_lines"]], TRUE)
     index_annotation_full_line <- resolve_alias("index_annotation_full_line", index_annotation_full_line, "index_annotation_full_lines", dots[["index_annotation_full_lines"]], TRUE)
+    index_annotation_always_first_base <- resolve_alias("index_annotation_always_first_base", index_annotation_always_first_base, "index_annotations_always_first_base", dots[["index_annotations_always_first_base"]], TRUE)
+    index_annotation_always_last_base <- resolve_alias("index_annotation_always_last_base", index_annotation_always_last_base, "index_annotations_always_last_base", dots[["index_annotations_always_last_base"]], TRUE)
     ## ---------------------------------------------------------------------
 
 
@@ -116,19 +119,19 @@ visualise_many_sequences <- function(
     ## Validate arguments
     ## ---------------------------------------------------------------------
     monitor_time <- monitor(monitor_performance, start_time, monitor_time, "validating arguments")
-    not_null <- list(sequences_vector = sequences_vector, sequence_colours = sequence_colours, background_colour = background_colour, margin = margin, sequence_text_colour = sequence_text_colour, sequence_text_size = sequence_text_size, index_annotation_colour = index_annotation_colour, index_annotation_size = index_annotation_size, index_annotation_interval = index_annotation_interval, index_annotations_above = index_annotations_above, index_annotation_vertical_position = index_annotation_vertical_position, index_annotation_full_line = index_annotation_full_line, index_annotation_always_first_base = index_annotation_always_first_base, outline_colour = outline_colour, outline_linewidth = outline_linewidth, outline_join = outline_join, return = return, force_raster = force_raster, filename = filename, pixels_per_base = pixels_per_base)
+    not_null <- list(sequences_vector = sequences_vector, sequence_colours = sequence_colours, background_colour = background_colour, margin = margin, sequence_text_colour = sequence_text_colour, sequence_text_size = sequence_text_size, index_annotation_colour = index_annotation_colour, index_annotation_size = index_annotation_size, index_annotation_interval = index_annotation_interval, index_annotations_above = index_annotations_above, index_annotation_vertical_position = index_annotation_vertical_position, index_annotation_full_line = index_annotation_full_line, index_annotation_always_first_base = index_annotation_always_first_base, index_annotation_always_last_base = index_annotation_always_last_base, outline_colour = outline_colour, outline_linewidth = outline_linewidth, outline_join = outline_join, return = return, force_raster = force_raster, filename = filename, pixels_per_base = pixels_per_base)
     for (argument in names(not_null)) {
         if (any(is.null(not_null[[argument]]))) {bad_arg(argument, not_null, "must not be NULL.")}
     }
     not_null <- NULL
 
-    length_1 <- list(background_colour = background_colour, margin = margin, sequence_text_colour = sequence_text_colour, sequence_text_size = sequence_text_size, index_annotation_colour = index_annotation_colour, index_annotation_size = index_annotation_size, index_annotation_interval = index_annotation_interval, index_annotations_above = index_annotations_above, index_annotation_vertical_position = index_annotation_vertical_position, index_annotation_full_line = index_annotation_full_line, index_annotation_always_first_base = index_annotation_always_first_base, outline_colour = outline_colour, outline_linewidth = outline_linewidth, outline_join = outline_join, return = return, filename = filename, force_raster = force_raster, pixels_per_base = pixels_per_base)
+    length_1 <- list(background_colour = background_colour, margin = margin, sequence_text_colour = sequence_text_colour, sequence_text_size = sequence_text_size, index_annotation_colour = index_annotation_colour, index_annotation_size = index_annotation_size, index_annotation_interval = index_annotation_interval, index_annotations_above = index_annotations_above, index_annotation_vertical_position = index_annotation_vertical_position, index_annotation_full_line = index_annotation_full_line, index_annotation_always_first_base = index_annotation_always_first_base, index_annotation_always_last_base = index_annotation_always_last_base, outline_colour = outline_colour, outline_linewidth = outline_linewidth, outline_join = outline_join, return = return, filename = filename, force_raster = force_raster, pixels_per_base = pixels_per_base)
     for (argument in names(length_1)) {
         if (length(length_1[[argument]]) != 1) {bad_arg(argument, length_1, "must have length 1.")}
     }
     length_1 <- NULL
 
-    not_na <- list(sequences_vector = sequences_vector, sequence_colours = sequence_colours, background_colour = background_colour, margin = margin, sequence_text_colour = sequence_text_colour, sequence_text_size = sequence_text_size, index_annotation_colour = index_annotation_colour, index_annotation_size = index_annotation_size, index_annotation_interval = index_annotation_interval, index_annotations_above = index_annotations_above, index_annotation_vertical_position = index_annotation_vertical_position, index_annotation_full_line = index_annotation_full_line, index_annotation_always_first_base = index_annotation_always_first_base, outline_colour = outline_colour, outline_linewidth = outline_linewidth, outline_join = outline_join, return = return, force_raster = force_raster, pixels_per_base = pixels_per_base)
+    not_na <- list(sequences_vector = sequences_vector, sequence_colours = sequence_colours, background_colour = background_colour, margin = margin, sequence_text_colour = sequence_text_colour, sequence_text_size = sequence_text_size, index_annotation_colour = index_annotation_colour, index_annotation_size = index_annotation_size, index_annotation_interval = index_annotation_interval, index_annotations_above = index_annotations_above, index_annotation_vertical_position = index_annotation_vertical_position, index_annotation_full_line = index_annotation_full_line, index_annotation_always_first_base = index_annotation_always_first_base, index_annotation_always_last_base = index_annotation_always_last_base, outline_colour = outline_colour, outline_linewidth = outline_linewidth, outline_join = outline_join, return = return, force_raster = force_raster, pixels_per_base = pixels_per_base)
     for (argument in names(not_na)) {
         if (any(is.na(not_na[[argument]]))) {bad_arg(argument, not_na, "must not be NA.")}
     }
@@ -167,7 +170,7 @@ visualise_many_sequences <- function(
     }
     pos <- NULL
 
-    bools <- list(return = return, index_annotations_above = index_annotations_above, index_annotation_full_line = index_annotation_full_line, index_annotation_always_first_base = index_annotation_always_first_base, force_raster = force_raster)
+    bools <- list(return = return, index_annotations_above = index_annotations_above, index_annotation_full_line = index_annotation_full_line, index_annotation_always_first_base = index_annotation_always_first_base, index_annotation_always_last_base = index_annotation_always_last_base, force_raster = force_raster)
     for (argument in names(bools)) {
         if (!is.logical(bools[[argument]])) {bad_arg(argument, bools, "must be logical/boolean.")}
     }
@@ -288,7 +291,7 @@ visualise_many_sequences <- function(
         ## Add index annotations if desired
         if (length(index_annotation_lines) > 0) {
             monitor_time <- monitor(monitor_performance, start_time, monitor_time, "generating index annotations")
-            index_annotation_data <- rasterise_index_annotations(new_sequences_vector = new_sequences_vector, original_sequences_vector = sequences_vector, index_annotation_lines = index_annotation_lines, index_annotation_interval = index_annotation_interval, index_annotation_full_line = index_annotation_full_line, index_annotations_above = index_annotations_above, index_annotation_vertical_position = index_annotation_vertical_position, index_annotation_always_first_base = index_annotation_always_first_base)
+            index_annotation_data <- rasterise_index_annotations(new_sequences_vector = new_sequences_vector, original_sequences_vector = sequences_vector, index_annotation_lines = index_annotation_lines, index_annotation_interval = index_annotation_interval, index_annotation_full_line = index_annotation_full_line, index_annotations_above = index_annotations_above, index_annotation_vertical_position = index_annotation_vertical_position, index_annotation_always_first_base = index_annotation_always_first_base, index_annotation_always_last_base = index_annotation_always_last_base)
 
             monitor_time <- monitor(monitor_performance, start_time, monitor_time, "adding index annotations")
             result <- result +

@@ -27,7 +27,8 @@ visualise_methylation(
   index_annotations_above = TRUE,
   index_annotation_vertical_position = 1/3,
   index_annotation_full_line = TRUE,
-  index_annotation_always_first_base = FALSE,
+  index_annotation_always_first_base = TRUE,
+  index_annotation_always_last_base = TRUE,
   outline_colour = "black",
   outline_linewidth = 3,
   outline_join = "mitre",
@@ -90,7 +91,9 @@ visualise_methylation(
 
 \item{index_annotation_full_line}{\code{logical}. Whether index annotations should continue to the end of the longest sequence (\code{TRUE}, default) or should only continue as far as each selected line does (\code{FALSE}).}
 
-\item{index_annotation_always_first_base}{\code{logical}. Whether to force the first base in each line to always be annotated regardless of whether it occurs at the \code{index_annotation_interval}. Defaults to \code{FALSE}.}
+\item{index_annotation_always_first_base}{\code{logical}. Whether to force the first base in each line to always be annotated regardless of whether it occurs at the \code{index_annotation_interval}. Defaults to \code{TRUE}.}
+
+\item{index_annotation_always_last_base}{\code{logical}. Whether to force the last base in each line to always be annotated regardless of whether it occurs at the \code{index_annotation_interval}. Defaults to \code{TRUE}.}
 
 \item{outline_colour}{\code{character}. The colour of the box outlines. Defaults to black.}
 

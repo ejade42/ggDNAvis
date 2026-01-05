@@ -76,8 +76,8 @@ visualise_single_sequence <- function(
     index_annotation_interval = 15,
     index_annotations_above = TRUE,
     index_annotation_vertical_position = 1/3,
-    index_annotation_always_first_base = FALSE,
-    index_annotation_always_last_base = FALSE,
+    index_annotation_always_first_base = TRUE,
+    index_annotation_always_last_base = TRUE,
     outline_colour = "black",
     outline_linewidth = 3,
     outline_join = "mitre",
@@ -107,6 +107,8 @@ visualise_single_sequence <- function(
     outline_colour <- resolve_alias("outline_colour", outline_colour, "outline_color", dots[["outline_color"]], "black")
     outline_colour <- resolve_alias("outline_colour", outline_colour, "outline_col", dots[["outline_col"]], "black")
     index_annotations_above <- resolve_alias("index_annotations_above", index_annotations_above, "index_annotation_above", dots[["index_annotation_above"]], TRUE)
+    index_annotation_always_first_base <- resolve_alias("index_annotation_always_first_base", index_annotation_always_first_base, "index_annotations_always_first_base", dots[["index_annotations_always_first_base"]], TRUE)
+    index_annotation_always_last_base <- resolve_alias("index_annotation_always_last_base", index_annotation_always_last_base, "index_annotations_always_last_base", dots[["index_annotations_always_last_base"]], TRUE)
     ## ---------------------------------------------------------------------
 
 

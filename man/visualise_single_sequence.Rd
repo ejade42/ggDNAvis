@@ -19,7 +19,8 @@ visualise_single_sequence(
   index_annotation_interval = 15,
   index_annotations_above = TRUE,
   index_annotation_vertical_position = 1/3,
-  index_annotation_always_first_base = FALSE,
+  index_annotation_always_first_base = TRUE,
+  index_annotation_always_last_base = TRUE,
   outline_colour = "black",
   outline_linewidth = 3,
   outline_join = "mitre",
@@ -59,7 +60,9 @@ visualise_single_sequence(
 
 \item{index_annotation_vertical_position}{\code{numeric}. How far annotation numbers should be rendered above (if \code{index_annotations_above = TRUE}) or below (if \code{index_annotations_above = FALSE}) each base. Defaults to \code{1/3}.\cr\cr Not recommended to change at all. Strongly discouraged to set below 0 or above 1.}
 
-\item{index_annotation_always_first_base}{\code{logical}. Whether to force the first base in each line to always be annotated regardless of whether it occurs at the \code{index_annotation_interval}. Defaults to \code{FALSE}.}
+\item{index_annotation_always_first_base}{\code{logical}. Whether to force the first base in each line to always be annotated regardless of whether it occurs at the \code{index_annotation_interval}. Defaults to \code{TRUE}.}
+
+\item{index_annotation_always_last_base}{\code{logical}. Whether to force the last base in each line to always be annotated regardless of whether it occurs at the \code{index_annotation_interval}. Defaults to \code{TRUE}.}
 
 \item{outline_colour}{\code{character}. The colour of the box outlines. Defaults to black.}
 

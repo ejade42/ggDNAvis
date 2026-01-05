@@ -767,8 +767,8 @@ rasterise_index_annotations <- function(
     index_annotation_full_line = TRUE,
     index_annotations_above = TRUE,
     index_annotation_vertical_position = 1/3,
-    index_annotation_always_first_base = FALSE,
-    index_annotation_always_last_base = FALSE,
+    index_annotation_always_first_base = TRUE,
+    index_annotation_always_last_base = TRUE,
     sum_indices = FALSE,
     spacing = NA,
     offset_start = 0
