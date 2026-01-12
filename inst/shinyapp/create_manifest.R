@@ -6,7 +6,7 @@ if (file.exists("app.R")) {
     
     rsconnect::writeManifest(
         appDir = "../..",
-        appFiles = ,
+        appFiles = app_files,
         appPrimaryDoc = "inst/shinyapp/app.R",
         verbose = TRUE
     )
