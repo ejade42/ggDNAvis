@@ -3776,7 +3776,7 @@
       "checksum": "8c770edb59aac2ba563d3f5955d82602"
     },
     ".Rbuildignore": {
-      "checksum": "5653f9a3043201f98baae4c355752992"
+      "checksum": "b8a57368a89763ff37b8cfdf4ae33a89"
     },
     "app.R": {
       "checksum": "57583555fdab96765fdd60c7d5aea526"
@@ -3827,7 +3827,7 @@
       "checksum": "de725dda3c65f606277129d4771d8048"
     },
     "inst/shinyapp/create_manifest.R": {
-      "checksum": "8801a9b0df978d3a86b89bd54f2cfc2c"
+      "checksum": "d549bf2d87222632126de61869b7c8d2"
     },
     "inst/shinyapp/help/instructions_bottom.md": {
       "checksum": "043bf47c23e78e541693961e5e67d749"
@@ -4014,6 +4014,9 @@
     },
     "man/write_modified_fastq.Rd": {
       "checksum": "dc2c59e0366453923c95e3e166a7331a"
+    },
+    "manifest.json": {
+      "checksum": "0f47f02feda50e10b71af8a0b96a69a8"
     },
     "NAMESPACE": {
       "checksum": "47a0181fb235e8c6e5b825b9bdfaf384"
