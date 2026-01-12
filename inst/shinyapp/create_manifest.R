@@ -1,9 +1,10 @@
-## Must be run in top-level ggDNAvis directory
-if (file.exists("R/visualise_single_sequence.R")) {
+## Must be run in shinyapp directory
+if (file.exists("app.R")) {
     rsconnect::writeManifest(
-        appDir = getwd(),
-        appFiles = system("git ls-files", intern = TRUE),
+        appDir = "../..",
+        appFiles = system("cd ../..; git ls-files", intern = TRUE),
         appPrimaryDoc = "inst/shinyapp/app.R",
+        verbose = TRUE
     )
 } else {
     abort("Not in correct directory")
