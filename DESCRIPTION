@@ -33,6 +33,7 @@ Suggests:
     jsonlite,
     markdown,
     shiny,
+    shinyjs,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 Depends: 

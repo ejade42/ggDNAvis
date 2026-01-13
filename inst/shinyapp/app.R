@@ -26,7 +26,7 @@ ga_id <- "G-QB7HSZ4PJK"
 
 ui <- page_navbar(
 
-    header = tags$head(
+    header = list(shinyjs::useShinyjs(), tags$head(
         ## Icon in browser tab
         tags$link(rel = "icon", type = "image/png", href = ggDNAvis_icon),
 
@@ -47,13 +47,23 @@ ui <- page_navbar(
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){dataLayer.push(arguments);}
                 gtag('js', new Date());
-                gtag('config', '", ga_id, "');
+
+                // Detect if locally launched vs Posit cloud
+                var env_mode = 'cloud'
+                if (window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost') {
+                    env_mode = 'local';
+                }
+
+                gtag('config', '", ga_id, "', {
+                    'access_mode': env_mode
+                });
             </script>
             "))
-    ),
+    )),
 
-    ## Title
+    ## Title & ID
     title = tagList(img(src = ggDNAvis_icon, height = "30px"), "ggDNAvis interactive suite"),
+    id = "ggDNAvis_interactive_nav",
 
     ## Theme
     theme = bs_theme(version = 5, bootswatch = "minty"),
@@ -135,6 +145,16 @@ server <- function(input, output, session) {
     single_sequence_server("visualise-single-sequence")
     many_sequences_server("visualise-many-sequences")
     methylation_server("visualise-methylation")
+
+    ## Check what tabs are most used
+    observeEvent(input$ggDNAvis_interactive_nav, {
+        current_tab <- input$ggDNAvis_interactive_nav
+        js_command <- sprintf(
+            "gtag('event', 'switch_tab', {'event_category': 'Navigation', 'tab_name': '%s'});",
+            current_tab
+        )
+        shinyjs::runjs(js_command)
+    }, ignoreInit = TRUE)
 }
 
 
