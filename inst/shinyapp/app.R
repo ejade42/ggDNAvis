@@ -22,6 +22,7 @@ citation_link <- extract_link("[link_citation]: ")
 documentation_link <- extract_link("[link_documentation]: ")
 source_link <- extract_link("[link_source]: ")
 
+ga_id <- "G-QB7HSZ4PJK"
 
 ui <- page_navbar(
 
@@ -37,7 +38,18 @@ ui <- page_navbar(
                 font-weight: bold; /* Optional: makes DNA easier to read */
                 letter-spacing: 1px; /* Optional: adds breathing room */
             }
-        "))
+        ")),
+
+        ## Page view counter
+        HTML(paste0("
+            <script async src='https://www.googletagmanager.com/gtag/js?id=", ga_id, "'></script>
+            <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '", ga_id, "');
+            </script>
+            "))
     ),
 
     ## Title
