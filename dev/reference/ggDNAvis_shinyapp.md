@@ -16,7 +16,7 @@ the `inst/shinyapp` directory.
 ## Usage
 
 ``` r
-ggDNAvis_shinyapp(themer = FALSE)
+ggDNAvis_shinyapp(themer = FALSE, return = FALSE)
 ```
 
 ## Arguments
@@ -26,9 +26,14 @@ ggDNAvis_shinyapp(themer = FALSE)
   `logical`. Whether the theme picker should be shown. Makes the app
   harder to use, not recommended except for dev purposes.
 
+- return:
+
+  `logical`. Whether to return the shiny app object instead of running
+  it. Intended for hosting the shinyapp.
+
 ## Value
 
-Nothing.
+Nothing, or the shiny app object
 
 ## Examples
 
@@ -36,9 +41,12 @@ Nothing.
 if (FALSE) { # \dontrun{
 ## Run normally
 ggDNAvis_shinyapp()
-ggDNAvis_shinyapp(themer = FALSE)
+ggDNAvis_shinyapp(themer = FALSE, return = FALSE)
 
 ## Run with theme picker (dev)
 ggDNAvis_shinyapp(themer = TRUE)
+
+## Run, returning object (dev)
+ggDNAvis_shinyapp(return = TRUE)
 } # }
 ```
