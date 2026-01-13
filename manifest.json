@@ -3779,7 +3779,7 @@
       "checksum": "bebbfa32e5909c280f4297ac8468b6ae"
     },
     "app.R": {
-      "checksum": "5c32e8b52cd5eedbd223ec19805d8d3f"
+      "checksum": "b7bbb1ad5ee91780bf41e819e4e34588"
     },
     "cran-comments.md": {
       "checksum": "37497f21f3011dbabefd9659eeb087c0"
@@ -3833,7 +3833,7 @@
       "checksum": "3c1fc0d685038f94fa23391bc0c29f5b"
     },
     "inst/shinyapp/help/instructions_bottom.md": {
-      "checksum": "043bf47c23e78e541693961e5e67d749"
+      "checksum": "b8ab7da445b15d1be65e2d106c43cee2"
     },
     "inst/shinyapp/help/instructions.md": {
       "checksum": "d9b75f4d5f26b906696bba913b23090f"
