@@ -25,3 +25,4 @@
 ^pkgdown$
 ^CRAN-SUBMISSION$
 ^manifest\.json$
+^app\.R$

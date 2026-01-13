@@ -299,21 +299,29 @@ NULL
 #' and then runs the shinyapp in the `inst/shinyapp` directory.
 #'
 #' @param themer `logical`. Whether the theme picker should be shown. Makes the app harder to use, not recommended except for dev purposes.
-#' @return Nothing.
+#' @param return `logical`. Whether to return the shiny app object instead of running it. Intended for hosting the shinyapp.
+#' @return Nothing, or the shiny app object
 #' @export
 #' @examples
 #' \dontrun{
 #' ## Run normally
 #' ggDNAvis_shinyapp()
-#' ggDNAvis_shinyapp(themer = FALSE)
+#' ggDNAvis_shinyapp(themer = FALSE, return = FALSE)
 #'
 #' ## Run with theme picker (dev)
 #' ggDNAvis_shinyapp(themer = TRUE)
+#'
+#' ## Run, returning object (dev)
+#' ggDNAvis_shinyapp(return = TRUE)
 #' }
-ggDNAvis_shinyapp <- function(themer = FALSE) {
-    if (length(themer) != 1 || is.na(themer) || !is.logical(themer)) {
-        bad_arg("themer", list(themer = themer), "must be a single logical/boolean value")
+ggDNAvis_shinyapp <- function(themer = FALSE, return = FALSE) {
+    bools <- list(themer = themer, return = return)
+    for (arg in names(bools)) {
+        if (length(bools[[arg]]) != 1 || is.na(bools[[arg]]) || !is.logical(bools[[arg]])) {
+            bad_arg(arg, bools, "must be a single logical/boolean value")
+        }
     }
+
 
     ## Check additional packages required for shinyapp but not main package are installed
     rlang::check_installed(c("bslib","colourpicker", "jsonlite", "markdown", "shiny"), reason = "for ggDNAvis interactive shinyapp.")
@@ -325,6 +333,10 @@ ggDNAvis_shinyapp <- function(themer = FALSE) {
     }
 
     ## Run with themer if specified
+    if (return) {
+        return(shiny::shinyAppDir(app_dir))
+    }
+
     if (themer) {
         bslib::run_with_themer(app_dir)
     } else {

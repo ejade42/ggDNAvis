@@ -5,13 +5,15 @@
 \alias{ggDNAvis_shiny}
 \title{Run the interactive \code{ggDNAvis} shinyapp}
 \usage{
-ggDNAvis_shinyapp(themer = FALSE)
+ggDNAvis_shinyapp(themer = FALSE, return = FALSE)
 }
 \arguments{
 \item{themer}{\code{logical}. Whether the theme picker should be shown. Makes the app harder to use, not recommended except for dev purposes.}
+
+\item{return}{\code{logical}. Whether to return the shiny app object instead of running it. Intended for hosting the shinyapp.}
 }
 \value{
-Nothing.
+Nothing, or the shiny app object
 }
 \description{
 \code{ggDNAvis_shiny()} is an alias for \code{ggDNAvis_shinyapp()} - see \link{aliases}.
@@ -29,9 +31,12 @@ and then runs the shinyapp in the \code{inst/shinyapp} directory.
 \dontrun{
 ## Run normally
 ggDNAvis_shinyapp()
-ggDNAvis_shinyapp(themer = FALSE)
+ggDNAvis_shinyapp(themer = FALSE, return = FALSE)
 
 ## Run with theme picker (dev)
 ggDNAvis_shinyapp(themer = TRUE)
+
+## Run, returning object (dev)
+ggDNAvis_shinyapp(return = TRUE)
 }
 }
