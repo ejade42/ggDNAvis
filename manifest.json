@@ -3,8 +3,8 @@
   "locale": "en_US",
   "platform": "4.5.2",
   "metadata": {
-    "appmode": "rmd-static",
-    "primary_rmd": "README.Rmd",
+    "appmode": "shiny",
+    "primary_rmd": null,
     "primary_html": null,
     "content_category": null,
     "has_parameters": false
@@ -3776,7 +3776,10 @@
       "checksum": "8c770edb59aac2ba563d3f5955d82602"
     },
     ".Rbuildignore": {
-      "checksum": "b8a57368a89763ff37b8cfdf4ae33a89"
+      "checksum": "bebbfa32e5909c280f4297ac8468b6ae"
+    },
+    "app.R": {
+      "checksum": "cd1eadce892bc20e37a222816c274cd8"
     },
     "cran-comments.md": {
       "checksum": "37497f21f3011dbabefd9659eeb087c0"
@@ -3827,7 +3830,7 @@
       "checksum": "57583555fdab96765fdd60c7d5aea526"
     },
     "inst/shinyapp/create_manifest.R": {
-      "checksum": "e602c962d0561edf75629f6f3eed436f"
+      "checksum": "3c1fc0d685038f94fa23391bc0c29f5b"
     },
     "inst/shinyapp/help/instructions_bottom.md": {
       "checksum": "043bf47c23e78e541693961e5e67d749"
@@ -3941,7 +3944,7 @@
       "checksum": "418512294b6a741e2fab2ce95091c3bf"
     },
     "man/ggDNAvis_shinyapp.Rd": {
-      "checksum": "c28cec3942978fda7cdde23b6c42c351"
+      "checksum": "1d023ec97e63fd410f4e5d01d38999c1"
     },
     "man/ggDNAvis-package.Rd": {
       "checksum": "855eeec77c9f9651344996235f38a87c"
@@ -4052,7 +4055,7 @@
       "checksum": "80a1f6407e0c67212c4087e7435ced13"
     },
     "R/ggDNAvis-package.R": {
-      "checksum": "0c65d7c5f4832f7923470fd1d22228bf"
+      "checksum": "22b316b309c1db12f9b30b9906165bcc"
     },
     "R/merge_with_metadata.R": {
       "checksum": "3fa230d46186aaaef4dd0c00a1d15a63"
