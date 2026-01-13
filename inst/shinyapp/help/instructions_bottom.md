@@ -1,3 +1,6 @@
+This software is freely available under the open MIT licence, but please make sure
+to cite the [ggDNAvis paper][link_citation] when using in publications or presentations.
+
 Please report any bugs, difficulties, or feature requests to the [issues page][link_bugs].
 
 These interactive tools provide most of the functionality of the [full R package][link_CRAN],
@@ -9,6 +12,3 @@ To get started with the code-based R package, read the [documentation][link_docu
 
 From an R session with ggDNAvis installed, a local version of this Shiny application can
 be launched via `ggDNAvis_shinyapp()`.
-
-This software is freely available under the open MIT licence, but please make sure
-to cite the [ggDNAvis paper][link_citation] when using in publications or presentations.
