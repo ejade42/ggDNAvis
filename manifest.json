@@ -3,8 +3,8 @@
   "locale": "en_US",
   "platform": "4.5.2",
   "metadata": {
-    "appmode": "shiny",
-    "primary_rmd": null,
+    "appmode": "rmd-static",
+    "primary_rmd": "README.Rmd",
     "primary_html": null,
     "content_category": null,
     "has_parameters": false
@@ -3778,9 +3778,6 @@
     ".Rbuildignore": {
       "checksum": "b8a57368a89763ff37b8cfdf4ae33a89"
     },
-    "app.R": {
-      "checksum": "57583555fdab96765fdd60c7d5aea526"
-    },
     "cran-comments.md": {
       "checksum": "37497f21f3011dbabefd9659eeb087c0"
     },
@@ -3826,8 +3823,11 @@
     "inst/extdata/example_many_sequences_raw.fastq": {
       "checksum": "de725dda3c65f606277129d4771d8048"
     },
+    "inst/shinyapp/app.R": {
+      "checksum": "57583555fdab96765fdd60c7d5aea526"
+    },
     "inst/shinyapp/create_manifest.R": {
-      "checksum": "3f4cb66aede078319975d18e6bfa2b58"
+      "checksum": "e602c962d0561edf75629f6f3eed436f"
     },
     "inst/shinyapp/help/instructions_bottom.md": {
       "checksum": "043bf47c23e78e541693961e5e67d749"
