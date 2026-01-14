@@ -6,7 +6,7 @@ template:
   math-rendering: katex
 
 site:
-  build_all_versions: false
+  build_all_versions: true
   
 toc:
   depth: 3
@@ -29,8 +29,8 @@ navbar:
     app:
       text: "Interactive App"
       menu:
-        - text: "Integrated"
-          href: https://ejade42.github.io/ggDNAvis/dev/articles/interactive_app.html #temp - change back to articles/interactive_app.html once the new version releases
+        - text: "Embedded"
+          href: articles/interactive_app.html
         - text: "Fullscreen"
           href: https://ejade42-ggdnavis.share.connect.posit.cloud/
       

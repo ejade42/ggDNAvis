@@ -15,16 +15,18 @@ knitr::opts_chunk$set(
 ```
 
 <style>
-    .container, .container-fluid {
+    body > .container-template-article, 
+    body > .container-fluid, 
+    body > .container {
         max-width: 100% !important;
         width: 100% !important;
         padding-left: 0 !important;
         padding-right: 0 !important;
     }
-    .page-header {
+    .page-header, .pkgdown-toc, .col-md-3 {
         display: none;
     }
-    .col-md-9, main {
+    .row > main, .col-md-9 {
         width: 100% !important;
         max-width: 100% !important;
         flex: 0 0 100% !important;
