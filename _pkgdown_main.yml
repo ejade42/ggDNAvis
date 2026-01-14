@@ -28,7 +28,7 @@ navbar:
   components:
     tutorials:
       text: "Interactive App"
-      href: articles/ggDNAvis_app.html
+      href: articles/interactive_app.html
       
     
     version:
