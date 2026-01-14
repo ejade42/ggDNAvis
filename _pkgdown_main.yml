@@ -33,6 +33,7 @@ navbar:
           href: articles/interactive_app.html
         - text: "Fullscreen"
           href: https://ejade42-ggdnavis.share.connect.posit.cloud/
+          target: _blank
       
       
     
