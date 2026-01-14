@@ -19,6 +19,7 @@ knitr::opts_chunk$set(
         overflow: hidden !important;
         height: 100%;
         width: 100%;
+        padding-bottom: 0 !important;
     }
     
     body > .container-template-article, 
@@ -28,19 +29,24 @@ knitr::opts_chunk$set(
         width: 100% !important;
         padding: 0 !important;
         margin: 0 !important;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
     }
     .row {
         margin-left: 0 !important;
         margin-right: 0 !important;
     }
-    .page-header, .pkgdown-toc, .col-md-3, footer {
-        display: none;
-    }
     .row > main, .col-md-9 {
+        padding: 0 !important;
+        margin: 0 !important;
         width: 100% !important;
         max-width: 100% !important;
-        flex: 0 0 100% !important;
-        padding: 0 !important;
+        flex: 1 0 auto;
+        
+    }
+    .page-header, .pkgdown-toc, .col-md-3, footer {
+        display: none;
     }
 </style>
 
@@ -48,5 +54,5 @@ knitr::opts_chunk$set(
     src="https://ejade42-ggdnavis.share.connect.posit.cloud/" 
     width="100%" 
     data-external="1" 
-    style="height: calc(100vh - 150px); border: none; display: block;">
+    style="height: calc(100vh - 56px); border: none; display: block;">
 </iframe>
