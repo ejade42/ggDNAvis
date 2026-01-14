@@ -152,6 +152,9 @@ jobs:
                 git checkout origin/main -- vignettes/interactive_app.Rmd || echo "Warning: Could not copy app from main"
               fi
               
+              ## Inject news.md from latest release
+              git checkout origin/release/${LATEST} -- NEWS.md || echo "Warning: could not copy news.md from latest release"
+              
               ## Build site in docs/vX.X.X
               Rscript -e "pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE, dest_dir = 'docs/${release}')"
               
