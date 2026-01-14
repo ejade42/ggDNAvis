@@ -15,19 +15,22 @@ knitr::opts_chunk$set(
 ```
 
 <style>
+    .container, .container-fluid {
+        max-width: 100% !important;
+        width: 100% !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
     .page-header {
         display: none;
     }
-    .col-md-9 { 
-        width: 100%; max-width: 100%; flex: 0 0 100%; 
+    .col-md-9, main {
+        width: 100% !important;
+        max-width: 100% !important;
+        flex: 0 0 100% !important;
+        padding: 0 !important;
     }
 </style>
-
-<div style="margin-bottom: 15px;"> 
-<a href="https://ejade42-ggdnavis.share.connect.posit.cloud/" target="_blank" class="btn btn-primary btn-lg" role="button"> 
-    Open Full Screen / Pop-out 
-</a> <span style="margin-left: 10px; color: #666;"> <em>(Recommended for smaller screens)</em> </span> 
-</div>
 
 <iframe 
     src="https://ejade42-ggdnavis.share.connect.posit.cloud/" 

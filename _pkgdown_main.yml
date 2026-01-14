@@ -28,7 +28,12 @@ navbar:
   components:
     app:
       text: "Interactive App"
-      href: articles/interactive_app.html
+      menu:
+        - text: "Integrated"
+          href: https://ejade42.github.io/ggDNAvis/dev/articles/interactive_app.html #temp - change back to articles/interactive_app.html once the new version releases
+        - text: "Fullscreen"
+          href: https://ejade42-ggdnavis.share.connect.posit.cloud/
+      
       
     
     version:
