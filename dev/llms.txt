@@ -4878,3 +4878,9 @@ they are available if needed)
   ([`merge_methylation_with_metadata()`](https://ejade42.github.io/ggDNAvis/reference/merge_methylation_with_metadata.md)
   helper)
 
+# Articles
+
+### All vignettes
+
+- [Interactive
+  App](https://ejade42.github.io/ggDNAvis/articles/interactive_app.md):
