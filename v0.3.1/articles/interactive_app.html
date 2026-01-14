@@ -42,7 +42,7 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-interactive-app" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Interactive App</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-interactive-app">
 <li><a class="dropdown-item" href="../articles/interactive_app.html">Embedded</a></li>
-    <li><a class="external-link dropdown-item" href="https://ejade42-ggdnavis.share.connect.posit.cloud/">Fullscreen</a></li>
+    <li><a class="external-link dropdown-item" href="https://ejade42-ggdnavis.share.connect.posit.cloud/" target="_blank">Fullscreen</a></li>
   </ul>
 </li>
 <li class="nav-item dropdown">
@@ -85,15 +85,25 @@
     
     
 <style>
+    html, body {
+        overflow: hidden !important;
+        height: 100%;
+        width: 100%;
+    }
+    
     body > .container-template-article, 
     body > .container-fluid, 
     body > .container {
         max-width: 100% !important;
         width: 100% !important;
-        padding-left: 0 !important;
-        padding-right: 0 !important;
+        padding: 0 !important;
+        margin: 0 !important;
     }
-    .page-header, .pkgdown-toc, .col-md-3 {
+    .row {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+    .page-header, .pkgdown-toc, .col-md-3, footer {
         display: none;
     }
     .row > main, .col-md-9 {
@@ -103,7 +113,7 @@
         padding: 0 !important;
     }
 </style>
-<iframe src="https://ejade42-ggdnavis.share.connect.posit.cloud/" width="100%" data-external="1" style="height: calc(100vh - 150px); border: 1px solid #eee; border-radius: 4px;">
+<iframe src="https://ejade42-ggdnavis.share.connect.posit.cloud/" width="100%" data-external="1" style="height: calc(100vh - 150px); border: none; display: block;">
 </iframe>
   </main>
 </div>
