@@ -11,7 +11,8 @@
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link rel="icon" sizes="any" href="favicon.ico">
 <link rel="manifest" href="site.webmanifest">
-<script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- katex math --><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" integrity="sha384-7zkQWkzuo3B5mTepMUcHkMB5jZaolc2xDwL6VFqjFALcbeS9Ggm/Yr2r3Dy4lfFg" crossorigin="anonymous"></script><script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" integrity="sha384-43gviWU0YVjaDtb/GhzOouOXtZMP/7XUzwPTstBeZFe/+rCMvRwr4yROQP43s0Xk" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script><script src="katex-auto.js"></script><script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
@@ -22,21 +23,6 @@
 <meta property="og:image" content="https://ejade42.github.io/ggDNAvis/logo.png">
 </head>
 <body>
-<p>
-
-
-
-
-
-
-
-
-
-  pkgdown/google0acd00d8574ec2df.html
-
-  
-
-  </p>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -55,6 +41,13 @@
       <ul class="navbar-nav me-auto">
 <li class="nav-item"><a class="nav-link" href="reference/index.html">Reference</a></li>
 <li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-interactive-app" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Interactive App</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-interactive-app">
+<li><a class="dropdown-item" href="articles/interactive_app.html">Embedded</a></li>
+    <li><a class="external-link dropdown-item" href="https://ejade42-ggdnavis.share.connect.posit.cloud/">Fullscreen</a></li>
+  </ul>
+</li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-version" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Version</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-version">
@@ -439,7 +432,7 @@
 </table>
 <p>The DNA sequence in column <code>sequence</code> is the information used for visualising single/multiple sequences. For visualising DNA modification, this data contains information on both 5-cytosine-methylation and 5-cytosine-hydroxymethylation. For a given modification type (e.g. methylation), visualisation requires a column of locations and a column of probabilities. In this dataset, the relevant columns are <code>methylation_locations</code> and <code>methylation_probabilities</code> for methylation and <code>hydroxymethylation_locations</code> and <code>hydroxymethylation_probabilities</code> for hydroxymethylation.</p>
 <p>Locations are stored as a comma-condensed string of integers for each read, produced via <code><a href="reference/vector_to_string.html">vector_to_string()</a></code>, and indicate the indices along the read at which the probability of modification was assessed. For example, methylation might be assessed at each CpG site, which in the read <code>"GGCGGCGGAGGCGGCGGA"</code> would be the third, sixth, twelfth, and fifteenth bases, thus the location string would be <code>"3,6,12,15"</code> for that read.</p>
-<p>Probabilities are also a comma-condensed string of integers produced via <code><a href="reference/vector_to_string.html">vector_to_string()</a></code>, but here each integer represents the probability that the corresponding base is modified. Probabilities are stored as 8-bit integers (0-255) where a score of <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>N</mi><annotation encoding="application/x-tex">N</annotation></semantics></math> represents the probability space from <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mfrac><mi>N</mi><mn>256</mn></mfrac><annotation encoding="application/x-tex">\frac{N}{256}</annotation></semantics></math> to <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mfrac><mrow><mi>N</mi><mo>+</mo><mn>1</mn></mrow><mn>256</mn></mfrac><annotation encoding="application/x-tex">\frac{N+1}{256}</annotation></semantics></math>. For the read above, a probability string of <code>"250,3,50,127"</code> would indicate that the third base is almost certainly methylated (97.66%-98.05%), the sixth base is almost certainly not methylated (1.17%-1.56%), the twelfth base is most likely not methylated (19.53%-19.92%), and the fifteenth base may or may not be methylated (49.61%-50.00%)</p>
+<p>Probabilities are also a comma-condensed string of integers produced via <code><a href="reference/vector_to_string.html">vector_to_string()</a></code>, but here each integer represents the probability that the corresponding base is modified. Probabilities are stored as 8-bit integers (0-255) where a score of <span class="math inline">N</span> represents the probability space from <span class="math inline">\frac{N}{256}</span> to <span class="math inline">\frac{N+1}{256}</span>. For the read above, a probability string of <code>"250,3,50,127"</code> would indicate that the third base is almost certainly methylated (97.66%-98.05%), the sixth base is almost certainly not methylated (1.17%-1.56%), the twelfth base is most likely not methylated (19.53%-19.92%), and the fifteenth base may or may not be methylated (49.61%-50.00%)</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Function to convert integer scores to corresponding percentages</span></span>
 <span><span class="va">convert_8bit_to_decimal_prob</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
@@ -3163,7 +3156,6 @@ Sone, J., Mitsuhashi, S., Fujita, A., Mizuguchi, T., Hamanaka, K., Mori, K., Koi
 </ul>
 </div>
 
-
 <div class="citation">
 <h2 data-toc-skip>Citation</h2>
 <ul class="list-unstyled">
@@ -3197,7 +3189,7 @@ Sone, J., Mitsuhashi, S., Fujita, A., Mizuguchi, T., Hamanaka, K., Mori, K., Koi
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>
@@ -3207,6 +3199,5 @@ Sone, J., Mitsuhashi, S., Fujita, A., Mizuguchi, T., Hamanaka, K., Mori, K., Koi
 
 
 
-  
-</body>
+  </body>
 </html>

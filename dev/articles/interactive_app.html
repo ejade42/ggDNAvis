@@ -38,10 +38,10 @@
       <ul class="navbar-nav me-auto">
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
-<li class="nav-item dropdown">
+<li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-interactive-app" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Interactive App</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-interactive-app">
-<li><a class="dropdown-item" href="https://ejade42.github.io/ggDNAvis/dev/articles/interactive_app.html">Integrated</a></li>
+<li><a class="dropdown-item" href="../articles/interactive_app.html">Embedded</a></li>
     <li><a class="external-link dropdown-item" href="https://ejade42-ggdnavis.share.connect.posit.cloud/">Fullscreen</a></li>
   </ul>
 </li>
@@ -85,16 +85,18 @@
     
     
 <style>
-    .container, .container-fluid {
+    body > .container-template-article, 
+    body > .container-fluid, 
+    body > .container {
         max-width: 100% !important;
         width: 100% !important;
         padding-left: 0 !important;
         padding-right: 0 !important;
     }
-    .page-header {
+    .page-header, .pkgdown-toc, .col-md-3 {
         display: none;
     }
-    .col-md-9, main {
+    .row > main, .col-md-9 {
         width: 100% !important;
         max-width: 100% !important;
         flex: 0 0 100% !important;

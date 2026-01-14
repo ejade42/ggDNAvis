@@ -1,0 +1,72 @@
+# Split a single input sequence into a vector of "lines" for visualisation ([`visualise_single_sequence()`](https://ejade42.github.io/ggDNAvis/reference/visualise_single_sequence.md) helper)
+
+Takes a single input sequence and an integer line length, and splits the
+input sequence into lines of that length (with the last line potentially
+being shorter).  
+  
+Optionally inserts empty strings `""` after each line to space them out.
+
+## Usage
+
+``` r
+convert_input_seq_to_sequence_list(
+  input_seq,
+  line_length,
+  spacing = 1,
+  spaces_first = TRUE
+)
+```
+
+## Arguments
+
+- input_seq:
+
+  `character`. A DNA/RNA sequence (or for the purposes of this function,
+  any string, though only DNA/RNA will work with later functions) to be
+  split up.
+
+- line_length:
+
+  `integer`. How long each line (split-up section) should be.
+
+- spacing:
+
+  `integer`. How many blank lines to leave before/after each line of
+  sequence. Defaults to `0`.
+
+- spaces_first:
+
+  `logical`. Whether blank lines should come before (`TRUE`, default) or
+  after (`FALSE`) each line of sequence.
+
+## Value
+
+`character vector`. The input sequence split into multiple lines, with
+specified spacing in between.
+
+## Examples
+
+``` r
+convert_input_seq_to_sequence_list(
+    "GGCGGCGGC",
+    line_length = 6,
+    spacing = 1,
+    spaces_first = TRUE
+)
+#> Error in convert_input_seq_to_sequence_list("GGCGGCGGC", line_length = 6,     spacing = 1, spaces_first = TRUE): could not find function "convert_input_seq_to_sequence_list"
+
+convert_input_seq_to_sequence_list(
+    "GGCGGCGGC",
+    line_length = 3,
+    spacing = 2,
+    spaces_first = FALSE
+)
+#> Error in convert_input_seq_to_sequence_list("GGCGGCGGC", line_length = 3,     spacing = 2, spaces_first = FALSE): could not find function "convert_input_seq_to_sequence_list"
+
+convert_input_seq_to_sequence_list(
+    "GGCGGCGGC",
+    line_length = 6,
+    spacing = 0
+)
+#> Error in convert_input_seq_to_sequence_list("GGCGGCGGC", line_length = 6,     spacing = 0): could not find function "convert_input_seq_to_sequence_list"
+```
