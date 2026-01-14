@@ -142,7 +142,7 @@ jobs:
               echo "Build step 3-${i}: Building for ${release}"
               
               ## Checkout prior release branch but overwrite _pkgdown.yml
-              git checkout -B "release-${release}" "origin/release/${release}"
+              git checkout -f -B "release-${release}" "origin/release/${release}"
               cat _pkgdown_layout.yml _pkgdown_reference.yml > _pkgdown.yml
               
               ## Inject interactive_app Rmd from main if missing
