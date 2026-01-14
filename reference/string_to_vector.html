@@ -25,7 +25,11 @@ lapply(c("1,2,3", "9,8,7"), string_to_vector) returns list(c(1, 2, 3), c(9, 8, 7
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
-<li class="nav-item"><a class="nav-link" href="../articles/interactive_app.html">Interactive App</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-interactive-app" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Interactive App</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-interactive-app"><li><a class="dropdown-item" href="https://ejade42.github.io/ggDNAvis/dev/articles/interactive_app.html">Integrated</a></li>
+    <li><a class="external-link dropdown-item" href="https://ejade42-ggdnavis.share.connect.posit.cloud/">Fullscreen</a></li>
+  </ul></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-version" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Version</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-version"><li><a class="dropdown-item" href="https://ejade42.github.io/ggDNAvis/">Latest release</a></li>
