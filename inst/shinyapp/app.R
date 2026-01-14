@@ -82,11 +82,15 @@ ui <- page_navbar(
 
                     ## Column 2
                     div(
-                        style = "position: absolute; top: 20; right: 0",
+                        style = "position: absolute; top: 20; right: 0; text-align: center;",
                         tags$a(
                             href = documentation_link,
                             target = "_blank",
                             tags$img(src = ggDNAvis_icon_full_res, style = "width: 100%; max-width: 200px;")
+                        ),
+                        div(
+                            style = "font-size: 0.85rem; color: #999; margin-top: 5px;",
+                            paste0("v", packageVersion("ggDNAvis"))
                         )
                     )
                 )
@@ -140,13 +144,12 @@ ui <- page_navbar(
 
 
 server <- function(input, output, session) {
-    #bs_themer()  ## Uncomment to check out different themes
-
     single_sequence_server("visualise-single-sequence")
     many_sequences_server("visualise-many-sequences")
     methylation_server("visualise-methylation")
 
     ## Check what tabs are most used
+    ## TODO: add checking for how it's used (e.g. embedded vs native)
     observeEvent(input$ggDNAvis_interactive_nav, {
         current_tab <- input$ggDNAvis_interactive_nav
         js_command <- sprintf(
