@@ -14,10 +14,24 @@ knitr::opts_chunk$set(
 )
 ```
 
+<style>
+    .page-header {
+        display: none;
+    }
+    .col-md-9 { 
+        width: 100%; max-width: 100%; flex: 0 0 100%; 
+    }
+</style>
+
 <div style="margin-bottom: 15px;"> 
 <a href="https://ejade42-ggdnavis.share.connect.posit.cloud/" target="_blank" class="btn btn-primary btn-lg" role="button"> 
     Open Full Screen / Pop-out 
 </a> <span style="margin-left: 10px; color: #666;"> <em>(Recommended for smaller screens)</em> </span> 
 </div>
 
-<iframe src="https://ejade42-ggdnavis.share.connect.posit.cloud/" width="100%" height="850px" data-external="1" style="border: 1px solid #eee; box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); border-radius: 4px;" ></iframe>
+<iframe 
+    src="https://ejade42-ggdnavis.share.connect.posit.cloud/" 
+    width="100%" 
+    data-external="1" 
+    style="height: calc(100vh - 150px); border: 1px solid #eee; border-radius: 4px;">
+</iframe>

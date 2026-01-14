@@ -22,11 +22,11 @@ home:
 
 navbar:
   structure:
-    left:  [intro, reference, articles, news, tutorials, version]
+    left:  [intro, reference, news, app, version]
     right: [search, github, lightswitch]
 
   components:
-    tutorials:
+    app:
       text: "Interactive App"
       href: articles/interactive_app.html
       
