@@ -22,10 +22,15 @@ home:
 
 navbar:
   structure:
-    left:  [intro, reference, articles, tutorials, news, version]
+    left:  [intro, reference, articles, news, tutorials, version]
     right: [search, github, lightswitch]
 
   components:
+    tutorials:
+      text: "Interactive App"
+      href: articles/ggDNAvis_app.html
+      
+    
     version:
       text: "Version"
       menu:

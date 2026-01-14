@@ -1,0 +1,21 @@
+---
+title: "Interactive App"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Interactive App}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+app_url <- "[https://ejade42-ggdnavis.share.connect.posit.cloud/](https://ejade42-ggdnavis.share.connect.posit.cloud/)"
+```
+
+<div style="margin-bottom: 15px;"> <a href="r app_url" target="_blank" class="btn btn-primary btn-lg" role="button"> Open Full Screen / Pop-out </a> <span style="margin-left: 10px; color: #666;"> <em>(Recommended for smaller screens)</em> </span> </div>
+
+<iframe src="r app_url" width="100%" height="850px" data-external="1" style="border: 1px solid #eee; box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); border-radius: 4px;" ></iframe>

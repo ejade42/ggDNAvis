@@ -31,7 +31,9 @@ Suggests:
     bslib,
     colourpicker,
     jsonlite,
+    knitr,
     markdown,
+    rmarkdown,
     shiny,
     shinyjs,
     testthat (>= 3.0.0)
@@ -42,3 +44,4 @@ LazyData: true
 Language: en-GB
 URL: https://ejade42.github.io/ggDNAvis/, https://github.com/ejade42/ggDNAvis 
 BugReports: https://github.com/ejade42/ggDNAvis/issues
+VignetteBuilder: knitr
