@@ -34,7 +34,7 @@ knitr::opts_chunk$set(
         flex-direction: column;
     }
     .navbar {
-        position: relative !important; /* Sit naturally in the layout (don't float) */
+        position: relative !important;
         top: auto !important;
         margin-bottom: 0 !important;
         width: 100% !important;
