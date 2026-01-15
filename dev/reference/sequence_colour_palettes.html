@@ -84,7 +84,7 @@ corresponding to A, C, G, and T/U in that order.</p>
 <h3 id="sequence-colour-palettes"><code>sequence_colour_palettes</code><a class="anchor" aria-label="anchor" href="#sequence-colour-palettes"></a></h3>
 
 
-<p>A list of 5 length-4 character vectors</p><dl><dt>ggplot_style</dt>
+<p>A list of 6 length-4 character vectors</p><dl><dt>ggplot_style</dt>
 <dd><p>The shades of red, green, blue, and purple that <code><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot2::ggplot()</a></code> uses by default for a 4-way discrete colour scheme.<br><br> Values: <code>c("#F8766D", "#7CAE00", "#00BFC4", "#C77CFF")</code></p></dd>
 
 <dt>bright_pale</dt>
@@ -98,6 +98,9 @@ corresponding to A, C, G, and T/U in that order.</p>
 
 <dt>sanger</dt>
 <dd><p>Green, blue, black, and red similar to a traditional Sanger sequencing readout.<br><br> Values: <code>c("#00B200", "#0000FF", "#000000", "#FF0000")</code></p></dd>
+
+<dt>accessible</dt>
+<dd><p>Light green, dark green, dark blue, and light blue as suggested by https://colorbrewer2.org/ for a 4-qualitative-category colourblind-safe palette.<br><br> Values: <code>c("#B2DF8A", "#33A02C", "#1F78B4", "#A6CEE3")</code></p></dd>
 
 
 </dl></div>
@@ -167,6 +170,20 @@ corresponding to A, C, G, and T/U in that order.</p>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Disabling index annotations via index_annotation_interval = 0 or index_annotation_size = 0 overrides the index_annotation_always_last_base setting.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> If you want the last base in each line to be annotated but no other bases, set index_annotation_interval greater than line_wrapping.</span>
 <span class="r-plt img"><img src="sequence_colour_palettes-5.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## accessible:</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="visualise_single_sequence.html">visualise_single_sequence</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="st">"ACGT"</span>,</span></span>
+<span class="r-in"><span>    sequence_colours <span class="op">=</span> <span class="va">sequence_colour_palettes</span><span class="op">$</span><span class="va">accessible</span>,</span></span>
+<span class="r-in"><span>    sequence_text_colour <span class="op">=</span> <span class="st">"black"</span>,</span></span>
+<span class="r-in"><span>    index_annotation_interval <span class="op">=</span> <span class="fl">0</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Disabling index annotations via index_annotation_interval = 0 or index_annotation_size = 0 overrides the index_annotation_always_first_base setting.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> If you want the first base in each line to be annotated but no other bases, set index_annotation_interval greater than line_wrapping.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Disabling index annotations via index_annotation_interval = 0 or index_annotation_size = 0 overrides the index_annotation_always_last_base setting.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> If you want the last base in each line to be annotated but no other bases, set index_annotation_interval greater than line_wrapping.</span>
+<span class="r-plt img"><img src="sequence_colour_palettes-6.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

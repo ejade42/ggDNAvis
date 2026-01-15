@@ -26,7 +26,7 @@ sequence_colour_palettes
 
 ### `sequence_colour_palettes`
 
-A list of 5 length-4 character vectors
+A list of 6 length-4 character vectors
 
 - ggplot_style:
 
@@ -61,6 +61,14 @@ A list of 5 length-4 character vectors
   readout.  
     
   Values: `c("#00B200", "#0000FF", "#000000", "#FF0000")`
+
+- accessible:
+
+  Light green, dark green, dark blue, and light blue as suggested by
+  https://colorbrewer2.org/ for a 4-qualitative-category
+  colourblind-safe palette.  
+    
+  Values: `c("#B2DF8A", "#33A02C", "#1F78B4", "#A6CEE3")`
 
 ## Examples
 
@@ -125,5 +133,19 @@ visualise_single_sequence(
 #> If you want the first base in each line to be annotated but no other bases, set index_annotation_interval greater than line_wrapping.
 #> Warning: Disabling index annotations via index_annotation_interval = 0 or index_annotation_size = 0 overrides the index_annotation_always_last_base setting.
 #> If you want the last base in each line to be annotated but no other bases, set index_annotation_interval greater than line_wrapping.
+
+
+## accessible:
+visualise_single_sequence(
+    "ACGT",
+    sequence_colours = sequence_colour_palettes$accessible,
+    sequence_text_colour = "black",
+    index_annotation_interval = 0
+)
+#> Warning: Disabling index annotations via index_annotation_interval = 0 or index_annotation_size = 0 overrides the index_annotation_always_first_base setting.
+#> If you want the first base in each line to be annotated but no other bases, set index_annotation_interval greater than line_wrapping.
+#> Warning: Disabling index annotations via index_annotation_interval = 0 or index_annotation_size = 0 overrides the index_annotation_always_last_base setting.
+#> If you want the last base in each line to be annotated but no other bases, set index_annotation_interval greater than line_wrapping.
+
 
 ```
