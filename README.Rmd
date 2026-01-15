@@ -845,7 +845,7 @@ visualise_single_sequence(
 knitr::include_graphics(paste0(github_location, "single_sequence_03.png"))
 ```
 
-Included in `ggDNAvis` are a set of colour palettes for sequence colours that can often be helpful. The default is `sequence_colour_palettes$ggplot_style`, as seen in the first example above. The other palettes are `$bright_pale`, `$bright_pale2`, `$bright_deep`, and `$sanger`:
+Included in `ggDNAvis` are a set of colour palettes for sequence colours that can often be helpful. The default is `sequence_colour_palettes$ggplot_style`, as seen in the first example above. The other palettes are `$bright_pale`, `$bright_pale2`, `$bright_deep`, `$sanger`, and `$accessible`:
 
 The `bright_pale` palette works well with either white or black text, depending on how much the text is desired to "pop":
 ```{r}
@@ -923,6 +923,21 @@ visualise_single_sequence(
 knitr::include_graphics(paste0(github_location, "single_sequence_08.png"))
 ```
 
+The `accessible` palette is light and dark each of blue and green, which is the only 4-category qualitative colourblind-safe palette recommended by [colourbrewer2.org](https::/colourbrewer2.org) [@harrowerColorBrewerorgOnlineTool2003]:
+```{r}
+## Create image
+visualise_single_sequence(
+    sone_2019_f1_1_expanded_ggt_added,
+    filename = paste0(output_location, "single_sequence_09.png"), 
+    return = FALSE,
+    sequence_colours = sequence_colour_palettes$accessible,
+    sequence_text_colour = "black"
+)
+
+## View image
+knitr::include_graphics(paste0(github_location, "single_sequence_09.png"))
+```
+
 ## Layout customisation
 Many aspects of the sequence layout are also customisable via arguments:
 
@@ -944,7 +959,7 @@ A sensible example of how these might be changed is as follows:
 ## Create image
 visualise_single_sequence(
     sone_2019_f1_1_expanded_ggt_added,
-    filename = paste0(output_location, "single_sequence_09.png"), 
+    filename = paste0(output_location, "single_sequence_10.png"), 
     return = FALSE,
     sequence_colours = sequence_colour_palettes$ggplot_style,
     margin = 2,
@@ -959,7 +974,7 @@ visualise_single_sequence(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_09.png"))
+knitr::include_graphics(paste0(github_location, "single_sequence_10.png"))
 ```
 
 Setting spacing, margin, sequence text size, and index annotation interval all to 0 produces a no-frills visualisation of the sequence only. If doing so, `pixels_per_base` can be set low as there is no text that would be rendered poorly at low resolutions:
@@ -967,7 +982,7 @@ Setting spacing, margin, sequence text size, and index annotation interval all t
 ## Create image
 visualise_single_sequence(
     sone_2019_f1_1_expanded_ggt_added,
-    filename = paste0(output_location, "single_sequence_10.png"), 
+    filename = paste0(output_location, "single_sequence_11.png"), 
     return = FALSE,
     sequence_colours = sequence_colour_palettes$bright_pale,
     margin = 0,
@@ -980,7 +995,7 @@ visualise_single_sequence(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_10.png"))
+knitr::include_graphics(paste0(github_location, "single_sequence_11.png"))
 ```
 This produced a warning message as setting the margin to 0 clipped off the outlines of the outermost boxes. Either a slightly larger margin can be used:
 
@@ -988,7 +1003,7 @@ This produced a warning message as setting the margin to 0 clipped off the outli
 ## Create image
 visualise_single_sequence(
     sone_2019_f1_1_expanded_ggt_added,
-    filename = paste0(output_location, "single_sequence_11.png"), 
+    filename = paste0(output_location, "single_sequence_12.png"), 
     return = FALSE,
     sequence_colours = sequence_colour_palettes$bright_pale,
     margin = 0.3,
@@ -1001,7 +1016,7 @@ visualise_single_sequence(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_11.png"))
+knitr::include_graphics(paste0(github_location, "single_sequence_12.png"))
 ```
 
 Or the outlines can be turned off:
@@ -1010,7 +1025,7 @@ Or the outlines can be turned off:
 ## Create image
 visualise_single_sequence(
     sone_2019_f1_1_expanded_ggt_added,
-    filename = paste0(output_location, "single_sequence_12.png"), 
+    filename = paste0(output_location, "single_sequence_13.png"), 
     return = FALSE,
     sequence_colours = sequence_colour_palettes$bright_pale,
     margin = 0,
@@ -1023,7 +1038,7 @@ visualise_single_sequence(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_12.png"))
+knitr::include_graphics(paste0(github_location, "single_sequence_13.png"))
 ```
 
 
@@ -1034,7 +1049,7 @@ Here is an example where these guidelines are not followed:
 ## Create image
 visualise_single_sequence(
     sone_2019_f1_1_expanded_ggt_added,
-    filename = paste0(output_location, "single_sequence_13.png"), 
+    filename = paste0(output_location, "single_sequence_14.png"), 
     return = FALSE,
     sequence_colours = sequence_colour_palettes$bright_deep,
     sequence_text_colour = "white",
@@ -1043,7 +1058,7 @@ visualise_single_sequence(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_13.png"))
+knitr::include_graphics(paste0(github_location, "single_sequence_14.png"))
 ```
 
 When setting spacing to 0, it is highly recommended to disable index annotations via `index_annotation_interval = 0`, otherwise there is nowhere for them to render:
@@ -1051,7 +1066,7 @@ When setting spacing to 0, it is highly recommended to disable index annotations
 ## Create image
 visualise_single_sequence(
     sone_2019_f1_1_expanded_ggt_added,
-    filename = paste0(output_location, "single_sequence_14.png"), 
+    filename = paste0(output_location, "single_sequence_15.png"), 
     return = FALSE,
     sequence_colours = sequence_colour_palettes$sanger,
     sequence_text_colour = "white",
@@ -1061,7 +1076,7 @@ visualise_single_sequence(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_14.png"))
+knitr::include_graphics(paste0(github_location, "single_sequence_15.png"))
 ```
 
 ## Performance
@@ -1073,13 +1088,13 @@ For example:
 ## Create image
 visualise_single_sequence(
     sone_2019_f1_1_expanded_ggt_added,
-    filename = paste0(output_location, "single_sequence_15.png"),
+    filename = paste0(output_location, "single_sequence_16.png"),
     return = FALSE,
     monitor_performance = TRUE
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_15.png"))
+knitr::include_graphics(paste0(github_location, "single_sequence_16.png"))
 ```
 
 ### Raster versus tile rendering
@@ -1094,7 +1109,7 @@ An example where `visualise_single_sequence()` automatically switches to `geom_r
 ## Create image
 visualise_single_sequence(
     sone_2019_f1_1_expanded_ggt_added,
-    filename = paste0(output_location, "single_sequence_16.png"),
+    filename = paste0(output_location, "single_sequence_17.png"),
     return = FALSE,
     sequence_colours = sequence_colour_palettes$bright_deep,
     outline_linewidth = 0,
@@ -1104,7 +1119,7 @@ visualise_single_sequence(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_16.png"))
+knitr::include_graphics(paste0(github_location, "single_sequence_17.png"))
 ```
 
 An example of forcing rasterisation when there would otherwise be sequence text, index annotations, and outlines (thus producing a warning) is as follows:
@@ -1113,7 +1128,7 @@ An example of forcing rasterisation when there would otherwise be sequence text,
 ## Create image
 visualise_single_sequence(
     sone_2019_f1_1_expanded_ggt_added,
-    filename = paste0(output_location, "single_sequence_17.png"),
+    filename = paste0(output_location, "single_sequence_18.png"),
     return = FALSE,
     sequence_colours = sequence_colour_palettes$bright_deep,
     outline_linewidth = 5,
@@ -1129,7 +1144,7 @@ visualise_single_sequence(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_17.png"))
+knitr::include_graphics(paste0(github_location, "single_sequence_18.png"))
 ```
 
 If sequence text, annotations, and outlines are all already off (i.e. `sequence_text_size = 0`, either `index_annotation_size = 0` or `index_annotation_interval = 0`, and `outline_linewidth = 0`), then no warning is produced from `force_raster` (but it is redundant and doesn't do anything):
@@ -1138,7 +1153,7 @@ If sequence text, annotations, and outlines are all already off (i.e. `sequence_
 ## Create image
 visualise_single_sequence(
     sone_2019_f1_1_expanded_ggt_added,
-    filename = paste0(output_location, "single_sequence_18.png"),
+    filename = paste0(output_location, "single_sequence_19.png"),
     return = FALSE,
     sequence_colours = sequence_colour_palettes$bright_deep,
     outline_linewidth = 0,
@@ -1150,7 +1165,7 @@ visualise_single_sequence(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_18.png"))
+knitr::include_graphics(paste0(github_location, "single_sequence_19.png"))
 ```
 
 

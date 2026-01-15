@@ -496,7 +496,7 @@ ggsave(paste0(output_location, "summary_methylation_scalebar.png"), scalebar, dp
 knitr::include_graphics(paste0(github_location, "summary_methylation_scalebar.png"))
 ```
 
-<img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/summary_methylation_scalebar.png" width="60%" style="display: block; margin: auto;" />
+<img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/summary_methylation_scalebar.png" alt="" width="60%" style="display: block; margin: auto;" />
 
 # 3 Loading data
 
@@ -1333,7 +1333,7 @@ Included in `ggDNAvis` are a set of colour palettes for sequence colours
 that can often be helpful. The default is
 `sequence_colour_palettes$ggplot_style`, as seen in the first example
 above. The other palettes are `$bright_pale`, `$bright_pale2`,
-`$bright_deep`, and `$sanger`:
+`$bright_deep`, `$sanger`, and `$accessible`:
 
 The `bright_pale` palette works well with either white or black text,
 depending on how much the text is desired to “pop”:
@@ -1426,6 +1426,27 @@ knitr::include_graphics(paste0(github_location, "single_sequence_08.png"))
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_08.png)<!-- -->
 
+The `accessible` palette is light and dark each of blue and green, which
+is the only 4-category qualitative colourblind-safe palette recommended
+by [colourbrewer2.org](https::/colourbrewer2.org) (Harrower & Brewer,
+2003):
+
+``` r
+## Create image
+visualise_single_sequence(
+    sone_2019_f1_1_expanded_ggt_added,
+    filename = paste0(output_location, "single_sequence_09.png"), 
+    return = FALSE,
+    sequence_colours = sequence_colour_palettes$accessible,
+    sequence_text_colour = "black"
+)
+
+## View image
+knitr::include_graphics(paste0(github_location, "single_sequence_09.png"))
+```
+
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_09.png)<!-- -->
+
 ## 4.3 Layout customisation
 
 Many aspects of the sequence layout are also customisable via arguments:
@@ -1483,7 +1504,7 @@ A sensible example of how these might be changed is as follows:
 ## Create image
 visualise_single_sequence(
     sone_2019_f1_1_expanded_ggt_added,
-    filename = paste0(output_location, "single_sequence_09.png"), 
+    filename = paste0(output_location, "single_sequence_10.png"), 
     return = FALSE,
     sequence_colours = sequence_colour_palettes$ggplot_style,
     margin = 2,
@@ -1498,10 +1519,10 @@ visualise_single_sequence(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_09.png"))
+knitr::include_graphics(paste0(github_location, "single_sequence_10.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_09.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_10.png)<!-- -->
 
 Setting spacing, margin, sequence text size, and index annotation
 interval all to 0 produces a no-frills visualisation of the sequence
@@ -1512,7 +1533,7 @@ that would be rendered poorly at low resolutions:
 ## Create image
 visualise_single_sequence(
     sone_2019_f1_1_expanded_ggt_added,
-    filename = paste0(output_location, "single_sequence_10.png"), 
+    filename = paste0(output_location, "single_sequence_11.png"), 
     return = FALSE,
     sequence_colours = sequence_colour_palettes$bright_pale,
     margin = 0,
@@ -1536,10 +1557,10 @@ visualise_single_sequence(
 
 ``` r
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_10.png"))
+knitr::include_graphics(paste0(github_location, "single_sequence_11.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_10.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_11.png)<!-- -->
 This produced a warning message as setting the margin to 0 clipped off
 the outlines of the outermost boxes. Either a slightly larger margin can
 be used:
@@ -1548,7 +1569,7 @@ be used:
 ## Create image
 visualise_single_sequence(
     sone_2019_f1_1_expanded_ggt_added,
-    filename = paste0(output_location, "single_sequence_11.png"), 
+    filename = paste0(output_location, "single_sequence_12.png"), 
     return = FALSE,
     sequence_colours = sequence_colour_palettes$bright_pale,
     margin = 0.3,
@@ -1569,10 +1590,10 @@ visualise_single_sequence(
 
 ``` r
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_11.png"))
+knitr::include_graphics(paste0(github_location, "single_sequence_12.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_11.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_12.png)<!-- -->
 
 Or the outlines can be turned off:
 
@@ -1580,7 +1601,7 @@ Or the outlines can be turned off:
 ## Create image
 visualise_single_sequence(
     sone_2019_f1_1_expanded_ggt_added,
-    filename = paste0(output_location, "single_sequence_12.png"), 
+    filename = paste0(output_location, "single_sequence_13.png"), 
     return = FALSE,
     sequence_colours = sequence_colour_palettes$bright_pale,
     margin = 0,
@@ -1603,10 +1624,10 @@ visualise_single_sequence(
 
 ``` r
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_12.png"))
+knitr::include_graphics(paste0(github_location, "single_sequence_13.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_12.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_13.png)<!-- -->
 
 When changing line wrapping and annotation interval, divisibility is
 important. It is generally recommended to make the line wrapping length
@@ -1623,7 +1644,7 @@ Here is an example where these guidelines are not followed:
 ## Create image
 visualise_single_sequence(
     sone_2019_f1_1_expanded_ggt_added,
-    filename = paste0(output_location, "single_sequence_13.png"), 
+    filename = paste0(output_location, "single_sequence_14.png"), 
     return = FALSE,
     sequence_colours = sequence_colour_palettes$bright_deep,
     sequence_text_colour = "white",
@@ -1632,10 +1653,10 @@ visualise_single_sequence(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_13.png"))
+knitr::include_graphics(paste0(github_location, "single_sequence_14.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_13.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_14.png)<!-- -->
 
 When setting spacing to 0, it is highly recommended to disable index
 annotations via `index_annotation_interval = 0`, otherwise there is
@@ -1645,7 +1666,7 @@ nowhere for them to render:
 ## Create image
 visualise_single_sequence(
     sone_2019_f1_1_expanded_ggt_added,
-    filename = paste0(output_location, "single_sequence_14.png"), 
+    filename = paste0(output_location, "single_sequence_15.png"), 
     return = FALSE,
     sequence_colours = sequence_colour_palettes$sanger,
     sequence_text_colour = "white",
@@ -1661,10 +1682,10 @@ visualise_single_sequence(
 
 ``` r
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_14.png"))
+knitr::include_graphics(paste0(github_location, "single_sequence_15.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_14.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_15.png)<!-- -->
 
 ## 4.4 Performance
 
@@ -1685,7 +1706,7 @@ For example:
 ## Create image
 visualise_single_sequence(
     sone_2019_f1_1_expanded_ggt_added,
-    filename = paste0(output_location, "single_sequence_15.png"),
+    filename = paste0(output_location, "single_sequence_16.png"),
     return = FALSE,
     monitor_performance = TRUE
 )
@@ -1693,44 +1714,44 @@ visualise_single_sequence(
 
     ## ℹ Verbose monitoring enabled
 
-    ## ℹ (2026-01-05 18:04:27) visualise_single_sequence start
+    ## ℹ (2026-01-15 16:07:51) visualise_single_sequence start
 
     ## ℹ (0.006 secs elapsed; 0.006 secs total) resolving aliases
 
-    ## ℹ (0.001 secs elapsed; 0.007 secs total) validating arguments
+    ## ℹ (0.002 secs elapsed; 0.008 secs total) validating arguments
 
-    ## ℹ (0.001 secs elapsed; 0.008 secs total) splitting input seq to sequence vector
+    ## ℹ (0.001 secs elapsed; 0.009 secs total) splitting input seq to sequence vector
 
-    ## ℹ (0.001 secs elapsed; 0.009 secs total) rasterising image data
+    ## ℹ (0.001 secs elapsed; 0.010 secs total) rasterising image data
 
-    ## ℹ (0.002 secs elapsed; 0.011 secs total) choosing rendering method
+    ## ℹ (0.002 secs elapsed; 0.013 secs total) choosing rendering method
 
-    ## ℹ (0.001 secs elapsed; 0.012 secs total) calculating tile sizes
+    ## ℹ (0.001 secs elapsed; 0.014 secs total) calculating tile sizes
 
-    ## ℹ (0.001 secs elapsed; 0.013 secs total) creating basic plot via geom_tile
+    ## ℹ (0.004 secs elapsed; 0.017 secs total) creating basic plot via geom_tile
 
-    ## ℹ (0.006 secs elapsed; 0.019 secs total) generating sequence text
+    ## ℹ (0.008 secs elapsed; 0.026 secs total) generating sequence text
 
-    ## ℹ (0.001 secs elapsed; 0.020 secs total) adding sequence text
+    ## ℹ (0.002 secs elapsed; 0.027 secs total) adding sequence text
 
-    ## ℹ (0.002 secs elapsed; 0.023 secs total) generating index annotations
+    ## ℹ (0.003 secs elapsed; 0.030 secs total) generating index annotations
 
-    ## ℹ (0.001 secs elapsed; 0.024 secs total) adding index annotations
+    ## ℹ (0.002 secs elapsed; 0.032 secs total) adding index annotations
 
-    ## ℹ (0.002 secs elapsed; 0.026 secs total) adding general plot themes
+    ## ℹ (0.003 secs elapsed; 0.035 secs total) adding general plot themes
 
-    ## ℹ (0.009 secs elapsed; 0.035 secs total) calculating margin
+    ## ℹ (0.009 secs elapsed; 0.044 secs total) calculating margin
 
-    ## ℹ (0.002 secs elapsed; 0.038 secs total) exporting image file
+    ## ℹ (0.002 secs elapsed; 0.047 secs total) exporting image file
 
-    ## ℹ (0.413 secs elapsed; 0.451 secs total) done
+    ## ℹ (0.483 secs elapsed; 0.530 secs total) done
 
 ``` r
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_15.png"))
+knitr::include_graphics(paste0(github_location, "single_sequence_16.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_15.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_16.png)<!-- -->
 
 ### 4.4.2 Raster versus tile rendering
 
@@ -1760,7 +1781,7 @@ follows:
 ## Create image
 visualise_single_sequence(
     sone_2019_f1_1_expanded_ggt_added,
-    filename = paste0(output_location, "single_sequence_16.png"),
+    filename = paste0(output_location, "single_sequence_17.png"),
     return = FALSE,
     sequence_colours = sequence_colour_palettes$bright_deep,
     outline_linewidth = 0,
@@ -1772,7 +1793,7 @@ visualise_single_sequence(
 
     ## ℹ Verbose monitoring enabled
 
-    ## ℹ (2026-01-05 18:04:27) visualise_single_sequence start
+    ## ℹ (2026-01-15 16:07:51) visualise_single_sequence start
 
     ## ℹ (0.002 secs elapsed; 0.002 secs total) resolving aliases
 
@@ -1788,31 +1809,31 @@ visualise_single_sequence(
 
     ## ℹ (0.003 secs elapsed; 0.006 secs total) splitting input seq to sequence vector
 
-    ## ℹ (0.001 secs elapsed; 0.007 secs total) rasterising image data
+    ## ℹ (0.001 secs elapsed; 0.008 secs total) rasterising image data
 
-    ## ℹ (0.002 secs elapsed; 0.009 secs total) choosing rendering method
+    ## ℹ (0.002 secs elapsed; 0.010 secs total) choosing rendering method
 
     ## ℹ Automatically using geom_raster (much faster than geom_tile) as no sequence text, index annotations, or outlines are present.
 
     ## Warning: When using geom_raster, it is recommended to use a smaller pixels_per_base e.g. 10, as there is no text/outlines that would benefit from higher resolution.
     ## Current value: 100
 
-    ## ℹ (0.002 secs elapsed; 0.011 secs total) creating basic plot via geom_raster
+    ## ℹ (0.002 secs elapsed; 0.012 secs total) creating basic plot via geom_raster
 
-    ## ℹ (0.006 secs elapsed; 0.018 secs total) adding general plot themes
+    ## ℹ (0.003 secs elapsed; 0.016 secs total) adding general plot themes
 
-    ## ℹ (0.010 secs elapsed; 0.028 secs total) calculating margin
+    ## ℹ (0.009 secs elapsed; 0.025 secs total) calculating margin
 
-    ## ℹ (0.002 secs elapsed; 0.030 secs total) exporting image file
+    ## ℹ (0.002 secs elapsed; 0.027 secs total) exporting image file
 
-    ## ℹ (0.392 secs elapsed; 0.422 secs total) done
+    ## ℹ (0.950 secs elapsed; 0.977 secs total) done
 
 ``` r
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_16.png"))
+knitr::include_graphics(paste0(github_location, "single_sequence_17.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_16.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_17.png)<!-- -->
 
 An example of forcing rasterisation when there would otherwise be
 sequence text, index annotations, and outlines (thus producing a
@@ -1822,7 +1843,7 @@ warning) is as follows:
 ## Create image
 visualise_single_sequence(
     sone_2019_f1_1_expanded_ggt_added,
-    filename = paste0(output_location, "single_sequence_17.png"),
+    filename = paste0(output_location, "single_sequence_18.png"),
     return = FALSE,
     sequence_colours = sequence_colour_palettes$bright_deep,
     outline_linewidth = 5,
@@ -1840,38 +1861,38 @@ visualise_single_sequence(
 
     ## ℹ Verbose monitoring enabled
 
-    ## ℹ (2026-01-05 18:04:27) visualise_single_sequence start
+    ## ℹ (2026-01-15 16:07:52) visualise_single_sequence start
 
-    ## ℹ (0.002 secs elapsed; 0.002 secs total) resolving aliases
+    ## ℹ (0.003 secs elapsed; 0.003 secs total) resolving aliases
 
-    ## ℹ (0.001 secs elapsed; 0.003 secs total) validating arguments
+    ## ℹ (0.002 secs elapsed; 0.005 secs total) validating arguments
 
-    ## ℹ (0.001 secs elapsed; 0.004 secs total) splitting input seq to sequence vector
+    ## ℹ (0.002 secs elapsed; 0.007 secs total) splitting input seq to sequence vector
 
-    ## ℹ (0.001 secs elapsed; 0.005 secs total) rasterising image data
+    ## ℹ (0.002 secs elapsed; 0.008 secs total) rasterising image data
 
-    ## ℹ (0.002 secs elapsed; 0.008 secs total) choosing rendering method
+    ## ℹ (0.003 secs elapsed; 0.011 secs total) choosing rendering method
 
     ## Warning: Forcing geom_raster via force_raster = TRUE will remove all sequence
     ## text, index annotations (though any inserted blank lines/spacers will remain),
     ## and box outlines.
 
-    ## ℹ (0.001 secs elapsed; 0.009 secs total) creating basic plot via geom_raster
+    ## ℹ (0.002 secs elapsed; 0.013 secs total) creating basic plot via geom_raster
 
-    ## ℹ (0.004 secs elapsed; 0.013 secs total) adding general plot themes
+    ## ℹ (0.005 secs elapsed; 0.018 secs total) adding general plot themes
 
-    ## ℹ (0.013 secs elapsed; 0.026 secs total) calculating margin
+    ## ℹ (0.011 secs elapsed; 0.029 secs total) calculating margin
 
-    ## ℹ (0.002 secs elapsed; 0.028 secs total) exporting image file
+    ## ℹ (0.002 secs elapsed; 0.032 secs total) exporting image file
 
-    ## ℹ (0.127 secs elapsed; 0.155 secs total) done
+    ## ℹ (0.715 secs elapsed; 0.747 secs total) done
 
 ``` r
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_17.png"))
+knitr::include_graphics(paste0(github_location, "single_sequence_18.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_17.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_18.png)<!-- -->
 
 If sequence text, annotations, and outlines are all already off
 (i.e. `sequence_text_size = 0`, either `index_annotation_size = 0` or
@@ -1883,7 +1904,7 @@ do anything):
 ## Create image
 visualise_single_sequence(
     sone_2019_f1_1_expanded_ggt_added,
-    filename = paste0(output_location, "single_sequence_18.png"),
+    filename = paste0(output_location, "single_sequence_19.png"),
     return = FALSE,
     sequence_colours = sequence_colour_palettes$bright_deep,
     outline_linewidth = 0,
@@ -1897,11 +1918,11 @@ visualise_single_sequence(
 
     ## ℹ Verbose monitoring enabled
 
-    ## ℹ (2026-01-05 18:04:28) visualise_single_sequence start
+    ## ℹ (2026-01-15 16:07:53) visualise_single_sequence start
 
-    ## ℹ (0.003 secs elapsed; 0.003 secs total) resolving aliases
+    ## ℹ (0.004 secs elapsed; 0.004 secs total) resolving aliases
 
-    ## ℹ (0.001 secs elapsed; 0.004 secs total) validating arguments
+    ## ℹ (0.002 secs elapsed; 0.006 secs total) validating arguments
 
     ## Warning: Disabling index annotations via index_annotation_interval = 0 or index_annotation_size = 0 overrides the index_annotation_always_first_base setting.
     ## If you want the first base in each line to be annotated but no other bases, set index_annotation_interval greater than line_wrapping.
@@ -1909,30 +1930,30 @@ visualise_single_sequence(
     ## Warning: Disabling index annotations via index_annotation_interval = 0 or index_annotation_size = 0 overrides the index_annotation_always_last_base setting.
     ## If you want the last base in each line to be annotated but no other bases, set index_annotation_interval greater than line_wrapping.
 
-    ## ℹ (0.002 secs elapsed; 0.006 secs total) splitting input seq to sequence vector
+    ## ℹ (0.003 secs elapsed; 0.009 secs total) splitting input seq to sequence vector
 
-    ## ℹ (0.001 secs elapsed; 0.008 secs total) rasterising image data
+    ## ℹ (0.002 secs elapsed; 0.011 secs total) rasterising image data
 
-    ## ℹ (0.003 secs elapsed; 0.010 secs total) choosing rendering method
+    ## ℹ (0.004 secs elapsed; 0.015 secs total) choosing rendering method
 
     ## ℹ Automatically using geom_raster (much faster than geom_tile) as no sequence text, index annotations, or outlines are present.
 
-    ## ℹ (0.002 secs elapsed; 0.013 secs total) creating basic plot via geom_raster
+    ## ℹ (0.004 secs elapsed; 0.019 secs total) creating basic plot via geom_raster
 
-    ## ℹ (0.004 secs elapsed; 0.017 secs total) adding general plot themes
+    ## ℹ (0.006 secs elapsed; 0.025 secs total) adding general plot themes
 
-    ## ℹ (0.010 secs elapsed; 0.027 secs total) calculating margin
+    ## ℹ (0.013 secs elapsed; 0.037 secs total) calculating margin
 
-    ## ℹ (0.002 secs elapsed; 0.029 secs total) exporting image file
+    ## ℹ (0.003 secs elapsed; 0.041 secs total) exporting image file
 
-    ## ℹ (0.394 secs elapsed; 0.424 secs total) done
+    ## ℹ (0.390 secs elapsed; 0.431 secs total) done
 
 ``` r
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_18.png"))
+knitr::include_graphics(paste0(github_location, "single_sequence_19.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_18.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_19.png)<!-- -->
 
 # 5 Visualising many DNA/RNA sequences
 
@@ -2820,29 +2841,29 @@ visualise_many_sequences(
 
     ## ℹ Verbose monitoring enabled
 
-    ## ℹ (2026-01-05 18:04:58) visualise_many_sequences start
+    ## ℹ (2026-01-15 16:08:26) visualise_many_sequences start
 
-    ## ℹ (0.002 secs elapsed; 0.002 secs total) resolving aliases
+    ## ℹ (0.004 secs elapsed; 0.004 secs total) resolving aliases
 
-    ## ℹ (0.001 secs elapsed; 0.003 secs total) validating arguments
+    ## ℹ (0.002 secs elapsed; 0.006 secs total) validating arguments
 
-    ## ℹ (0.001 secs elapsed; 0.004 secs total) inserting blank sequences at specified indices
+    ## ℹ (0.002 secs elapsed; 0.007 secs total) inserting blank sequences at specified indices
 
-    ## ℹ (0.001 secs elapsed; 0.005 secs total) rasterising image data
+    ## ℹ (0.002 secs elapsed; 0.009 secs total) rasterising image data
 
-    ## ℹ (0.005 secs elapsed; 0.011 secs total) choosing rendering method
+    ## ℹ (0.008 secs elapsed; 0.017 secs total) choosing rendering method
 
     ## ℹ Automatically using geom_raster (much faster than geom_tile) as no sequence text, index annotations, or outlines are present.
 
-    ## ℹ (0.002 secs elapsed; 0.013 secs total) creating basic plot via geom_raster
+    ## ℹ (0.003 secs elapsed; 0.020 secs total) creating basic plot via geom_raster
 
-    ## ℹ (0.004 secs elapsed; 0.016 secs total) adding general plot themes
+    ## ℹ (0.005 secs elapsed; 0.025 secs total) adding general plot themes
 
-    ## ℹ (0.009 secs elapsed; 0.025 secs total) calculating margin
+    ## ℹ (0.011 secs elapsed; 0.036 secs total) calculating margin
 
-    ## ℹ (0.002 secs elapsed; 0.027 secs total) exporting image file
+    ## ℹ (0.002 secs elapsed; 0.038 secs total) exporting image file
 
-    ## ℹ (0.299 secs elapsed; 0.327 secs total) done
+    ## ℹ (0.366 secs elapsed; 0.405 secs total) done
 
 ``` r
 ## View image
@@ -2875,31 +2896,31 @@ visualise_many_sequences(
 
     ## ℹ Verbose monitoring enabled
 
-    ## ℹ (2026-01-05 18:04:58) visualise_many_sequences start
+    ## ℹ (2026-01-15 16:08:26) visualise_many_sequences start
 
     ## ℹ (0.002 secs elapsed; 0.002 secs total) resolving aliases
 
-    ## ℹ (0.001 secs elapsed; 0.003 secs total) validating arguments
+    ## ℹ (0.001 secs elapsed; 0.004 secs total) validating arguments
 
-    ## ℹ (0.001 secs elapsed; 0.004 secs total) inserting blank sequences at specified indices
+    ## ℹ (0.001 secs elapsed; 0.005 secs total) inserting blank sequences at specified indices
 
-    ## ℹ (0.001 secs elapsed; 0.005 secs total) rasterising image data
+    ## ℹ (0.001 secs elapsed; 0.006 secs total) rasterising image data
 
-    ## ℹ (0.006 secs elapsed; 0.010 secs total) choosing rendering method
+    ## ℹ (0.007 secs elapsed; 0.013 secs total) choosing rendering method
 
     ## Warning: Forcing geom_raster via force_raster = TRUE will remove all sequence
     ## text, index annotations (though any inserted blank lines/spacers will remain),
     ## and box outlines.
 
-    ## ℹ (0.002 secs elapsed; 0.012 secs total) creating basic plot via geom_raster
+    ## ℹ (0.002 secs elapsed; 0.014 secs total) creating basic plot via geom_raster
 
-    ## ℹ (0.003 secs elapsed; 0.016 secs total) adding general plot themes
+    ## ℹ (0.003 secs elapsed; 0.018 secs total) adding general plot themes
 
-    ## ℹ (0.009 secs elapsed; 0.025 secs total) calculating margin
+    ## ℹ (0.009 secs elapsed; 0.027 secs total) calculating margin
 
-    ## ℹ (0.003 secs elapsed; 0.028 secs total) exporting image file
+    ## ℹ (0.002 secs elapsed; 0.029 secs total) exporting image file
 
-    ## ℹ (0.342 secs elapsed; 0.370 secs total) done
+    ## ℹ (0.270 secs elapsed; 0.299 secs total) done
 
 ``` r
 ## View image
@@ -3396,7 +3417,7 @@ ggsave(paste0(output_location, "modification_01_scalebar.png"), scalebar, dpi = 
 knitr::include_graphics(paste0(github_location, "modification_01_scalebar.png"))
 ```
 
-<img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_01_scalebar.png" width="60%" style="display: block; margin: auto;" />
+<img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_01_scalebar.png" alt="" width="60%" style="display: block; margin: auto;" />
 
 ## 6.2 Sequence arrangement customisation
 
@@ -3828,7 +3849,7 @@ ggsave(paste0(output_location, "modification_08_scalebar.png"), scalebar, dpi = 
 knitr::include_graphics(paste0(github_location, "modification_08_scalebar.png"))
 ```
 
-<img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_08_scalebar.png" width="60%" style="display: block; margin: auto;" />
+<img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_08_scalebar.png" alt="" width="60%" style="display: block; margin: auto;" />
 
 One way this might be used in practice is for making a graphic in the
 “lollipop” style where methylated/modified CGs are black and unmodified
@@ -3892,7 +3913,7 @@ ggsave(paste0(output_location, "modification_09_scalebar.png"), scalebar, dpi = 
 knitr::include_graphics(paste0(github_location, "modification_09_scalebar.png"))
 ```
 
-<img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_09_scalebar.png" width="60%" style="display: block; margin: auto;" />
+<img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_09_scalebar.png" alt="" width="60%" style="display: block; margin: auto;" />
 
 ## 6.6 Colour mapping customisation
 
@@ -3982,7 +4003,7 @@ ggsave(paste0(output_location, "modification_10_scalebar.png"), scalebar, dpi = 
 knitr::include_graphics(paste0(github_location, "modification_10_scalebar.png"))
 ```
 
-<img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_10_scalebar.png" width="60%" style="display: block; margin: auto;" />
+<img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_10_scalebar.png" alt="" width="60%" style="display: block; margin: auto;" />
 
 The clamping arguments do not have to be integers. Clamping is
 implemented with `pmin()` and `pmax()` and relies on their default
@@ -4048,7 +4069,7 @@ ggsave(paste0(output_location, "modification_11_scalebar.png"), scalebar, dpi = 
 knitr::include_graphics(paste0(github_location, "modification_11_scalebar.png"))
 ```
 
-<img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_11_scalebar.png" width="60%" style="display: block; margin: auto;" />
+<img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_11_scalebar.png" alt="" width="60%" style="display: block; margin: auto;" />
 
 The clamping does not need to be symmetrical. One use for this is if the
 data is skewed. For example, the methylation scores were randomly
@@ -4104,7 +4125,7 @@ ggsave(paste0(output_location, "modification_12_scalebar.png"), scalebar, dpi = 
 knitr::include_graphics(paste0(github_location, "modification_12_scalebar.png"))
 ```
 
-<img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_12_scalebar.png" width="60%" style="display: block; margin: auto;" />
+<img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_12_scalebar.png" alt="" width="60%" style="display: block; margin: auto;" />
 
 ***IMPORTANT:** make sure that you provide the scalebar when presenting
 data, especially if clamping is used, otherwise the colours could be
@@ -4170,7 +4191,7 @@ ggsave(paste0(output_location, "modification_scalebar_alone_01.png"), scalebar, 
 knitr::include_graphics(paste0(github_location, "modification_scalebar_alone_01.png"))
 ```
 
-<img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_scalebar_alone_01.png" width="60%" style="display: block; margin: auto;" />
+<img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_scalebar_alone_01.png" alt="" width="60%" style="display: block; margin: auto;" />
 
 Disabling x axis ticks with intermediate precision gives the following:
 
@@ -4188,7 +4209,7 @@ ggsave(paste0(output_location, "modification_scalebar_alone_02.png"), scalebar, 
 knitr::include_graphics(paste0(github_location, "modification_scalebar_alone_02.png"))
 ```
 
-<img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_scalebar_alone_02.png" width="60%" style="display: block; margin: auto;" />
+<img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_scalebar_alone_02.png" alt="" width="60%" style="display: block; margin: auto;" />
 
 If ticks are left on, they can be customised with `scale_x_continuous()`
 as per usual for a ggplot. Here is an example with the side scalebar
@@ -4219,7 +4240,7 @@ ggsave(paste0(output_location, "modification_scalebar_alone_03.png"), scalebar, 
 knitr::include_graphics(paste0(github_location, "modification_scalebar_alone_03.png"))
 ```
 
-<img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_scalebar_alone_03.png" width="60%" style="display: block; margin: auto;" />
+<img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_scalebar_alone_03.png" alt="" width="60%" style="display: block; margin: auto;" />
 
 And here is an example of a more sensible scalebar but with the side
 scale turned on:
@@ -4242,7 +4263,7 @@ ggsave(paste0(output_location, "modification_scalebar_alone_04.png"), scalebar, 
 knitr::include_graphics(paste0(github_location, "modification_scalebar_alone_04.png"))
 ```
 
-<img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_scalebar_alone_04.png" width="60%" style="display: block; margin: auto;" />
+<img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_scalebar_alone_04.png" alt="" width="60%" style="display: block; margin: auto;" />
 
 ## 6.8 Think about the offset!
 
@@ -4478,6 +4499,14 @@ For `visualise_methylation()`, `geom_raster()` is automatically used if:
 
 <div id="refs" class="references csl-bib-body hanging-indent"
 entry-spacing="0" line-spacing="2">
+
+<div id="ref-harrowerColorBrewerorgOnlineTool2003" class="csl-entry">
+
+Harrower, M., & Brewer, C. A. (2003). ColorBrewer.org: An Online Tool
+for Selecting Colour Schemes for Maps. *The Cartographic Journal*,
+*40*(1), 27–37. <https://doi.org/10.1179/000870403235002042>
+
+</div>
 
 <div id="ref-sone_long-read_2019" class="csl-entry">
 
