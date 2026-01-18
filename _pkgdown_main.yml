@@ -6,7 +6,7 @@ template:
   math-rendering: katex
 
 site:
-  build_all_versions: true
+  build_all_versions: false
   
 toc:
   depth: 3

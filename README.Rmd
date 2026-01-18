@@ -65,6 +65,7 @@ library(dplyr)
 library(ggplot2)
 
 ## Function for viewing tables throughout this document
+## This is not a package data-processing function, it just helps make this document
 github_table <- function(data) {
     quoted <- as.data.frame(
         lapply(data, function(x) {paste0("`", x, "`")}),
@@ -92,7 +93,7 @@ This is implemented via a Shiny app, which can also be launched from R on any lo
 ggDNAvis_shiny()
 ```
 
-The files for the app are stored in `inst/shinyapp`.
+The files for the app are stored in the `inst/shinyapp/` directory, accessible via `system.file("shinyapp/", package = "ggDNAvis")`.
 
 # Summary/quickstart
 This section contains one example for each type of visualisation. See the relevant full sections for more details and customisation options.
@@ -139,8 +140,8 @@ knitr::include_graphics(paste0(github_location, "summary_single_sequence.png"))
 ## Many sequences
 ```{r}
 ## Read and merge data
-fastq_data <- read_fastq("inst/extdata/example_many_sequences_raw.fastq", calculate_length = TRUE)
-metadata   <- read.csv("inst/extdata/example_many_sequences_metadata.csv")
+fastq_data <- read_fastq(system.file("extdata/example_many_sequences_raw.fastq", package = "ggDNAvis"), calculate_length = TRUE)
+metadata   <- read.csv(system.file("extdata/example_many_sequences_metadata.csv", package = "ggDNAvis"))
 merged_fastq_data <- merge_fastq_with_metadata(fastq_data, metadata)
 
 ## Extract character vector
@@ -189,8 +190,8 @@ knitr::include_graphics(paste0(github_location, "summary_many_sequences.png"))
 ## Methylation/modification
 ```{r}
 ## Read and merge data
-modification_data <- read_modified_fastq("inst/extdata/example_many_sequences_raw_modified.fastq")
-metadata          <- read.csv("inst/extdata/example_many_sequences_metadata.csv")
+modification_data <- read_modified_fastq(system.file("extdata/example_many_sequences_raw_modified.fastq", package = "ggDNAvis"))
+metadata          <- read.csv(system.file("extdata/example_many_sequences_metadata.csv", package = "ggDNAvis"))
 merged_modification_data <- merge_methylation_with_metadata(
     modification_data, 
     metadata,
@@ -471,17 +472,20 @@ lapply(c("1,2,3", "4,5,6"), string_to_vector)
 
 ### Standard FASTQ
 
-To read in a normal FASTQ file (containing a read ID/header, sequence, and quality scores for each read), the function `read_fastq()` can be used. The example data file for this is `inst/extdata/example_many_sequences_raw.fastq`
+To read in a normal FASTQ file (containing a read ID/header, sequence, and quality scores for each read), the function `read_fastq()` can be used. The example data file for this is `inst/extdata/example_many_sequences_raw.fastq`, accessible via `system.file("extdata/example_many_sequences_raw.fastq", package = "ggDNAvis")`:
 
 ```{r}
 ## Look at first 16 lines of FASTQ
-fastq_raw <- readLines("inst/extdata/example_many_sequences_raw.fastq")
+fastq_raw <- readLines(system.file("extdata/example_many_sequences_raw.fastq", package = "ggDNAvis"))
 for (i in 1:16) {
     cat(fastq_raw[i], "\n")
 }
 
 ## Load data from FASTQ
-fastq_data <- read_fastq("inst/extdata/example_many_sequences_raw.fastq", calculate_length = TRUE)
+fastq_data <- read_fastq(
+    system.file("extdata/example_many_sequences_raw.fastq", package = "ggDNAvis"), 
+    calculate_length = TRUE
+)
 
 ## View first 4 rows
 github_table(head(fastq_data, 4))
@@ -492,7 +496,7 @@ To convert reverse reads to their forward equivalents, and incorporate additiona
 
 ```{r}
 ## Load metadata from CSV
-metadata <- read.csv("inst/extdata/example_many_sequences_metadata.csv")
+metadata <- read.csv(system.file("extdata/example_many_sequences_metadata.csv", package = "ggDNAvis"))
 
 ## View first 4 rows
 github_table(head(metadata, 4))
@@ -593,17 +597,21 @@ Do be careful that either both sequence and quality are the forward versions or 
 
 ### Modified FASTQ (eg methylation)
 
-FASTQ files can be extended to include DNA modification (most often 5-cytosine-methylation) information within the header rows. Most often, this information comes from Nanopore long-read sequencing being basecalled with a modification-capable model in Guppy or Dorado, resulting in SAM or BAM files. In SAM/BAM files, modification information is stored in the MM and ML tags. These can be copied to the header rows of a FASTQ file via:
+FASTQ files can be modified to include DNA modification (most often 5-cytosine-methylation) information within the header lines. This is a very specific file format that is generally produced under the following conditions:
+
+- Oxford Nanopore sequencing is used
+- Raw FAST5/POD5/BLOW5 signal files are basecalled to SAM/BAM using a modification-capable model in Guppy or Dorado (see [modified basecalling documentation](https://software-docs.nanoporetech.com/dorado/latest/basecaller/mods/){target="_blank"})
+- SAM/BAM, which stores modification information in the MM and ML tags, is converted to FASTQ with MM/ML information copied to header rows via:
 
 ```{bash, eval = FALSE}
 samtools fastq -T MM,ML ${input_bam_file} > "modified_fastq_file.fastq"
 ```
 
-ggDNAvis then contains tools for reading from, processing, and writing to these modified FASTQ files. The example data file for this is `inst/extdata/example_many_sequences_raw_modified.fastq`
+ggDNAvis then contains tools for reading from, processing, and writing to these modified FASTQ files. The example data file for this is `inst/extdata/example_many_sequences_raw_modified.fastq`, accessible via `system.file("extdata/example_many_sequences_raw_modified.fastq", package = "ggDNAvis")`:
 
 ```{r}
 ## Look at first 16 lines of FASTQ
-modified_fastq_raw <- readLines("inst/extdata/example_many_sequences_raw_modified.fastq")
+modified_fastq_raw <- readLines(system.file("extdata/example_many_sequences_raw_modified.fastq", package = "ggDNAvis"))
 for (i in 1:16) {
     cat(modified_fastq_raw[i], "\n")
 }
@@ -615,7 +623,7 @@ The modification information stored in these FASTQ header lines can be parsed wi
 
 ```{r}
 ## Load data from FASTQ
-methylation_data <- read_modified_fastq("inst/extdata/example_many_sequences_raw_modified.fastq")
+methylation_data <- read_modified_fastq(system.file("extdata/example_many_sequences_raw_modified.fastq", package = "ggDNAvis"))
 
 ## View first 4 rows
 github_table(head(methylation_data, 4))
@@ -629,7 +637,7 @@ As with the standard FASTQ, some of the reads in the modified FASTQ are reverse.
 
 ```{r}
 ## Load metadata from CSV
-metadata <- read.csv("inst/extdata/example_many_sequences_metadata.csv")
+metadata <- read.csv(system.file("extdata/example_many_sequences_metadata.csv", package = "ggDNAvis"))
 
 ## View first 4 rows
 github_table(head(metadata, 4))
@@ -923,7 +931,7 @@ visualise_single_sequence(
 knitr::include_graphics(paste0(github_location, "single_sequence_08.png"))
 ```
 
-The `accessible` palette is light and dark each of blue and green, which is the only 4-category qualitative colourblind-safe palette recommended by [colourbrewer2.org](https::/colourbrewer2.org) [@harrowerColorBrewerorgOnlineTool2003]:
+The `accessible` palette is light and dark each of blue and green, which is the only 4-category qualitative colourblind-safe palette recommended by [colorbrewer2.org](https://colorbrewer2.org) [@harrowerColorBrewerorgOnlineTool2003]:
 ```{r}
 ## Create image
 visualise_single_sequence(
@@ -1180,8 +1188,11 @@ Here is an example of how that could be accomplished with the `example_many_sequ
 
 ```{r}
 ## Reminder of how to load data from file
-fastq_data <- read_fastq("inst/extdata/example_many_sequences_raw.fastq", calculate_length = TRUE)
-metadata   <- read.csv("inst/extdata/example_many_sequences_metadata.csv")
+fastq_data <- read_fastq(
+    system.file("extdata/example_many_sequences_raw.fastq", package = "ggDNAvis"), 
+    calculate_length = TRUE
+)
+metadata   <- read.csv(system.file("extdata/example_many_sequences_metadata.csv", package = "ggDNAvis"))
 merged_fastq_data <- merge_fastq_with_metadata(fastq_data, metadata)
 
 ## Subset and change colnames to make it match example_many_sequences
@@ -1725,8 +1736,8 @@ This is all discussed in more detail in the [reading from modified FASTQ](#332-m
 As a reminder, methylation information can be read from FASTQ as follows:
 
 ```{r}
-modified_fastq_data <- read_modified_fastq("inst/extdata/example_many_sequences_raw_modified.fastq")
-metadata            <- read.csv("inst/extdata/example_many_sequences_metadata.csv")
+modified_fastq_data <- read_modified_fastq(system.file("extdata/example_many_sequences_raw_modified.fastq", package = "ggDNAvis"))
+metadata            <- read.csv(system.file("extdata/example_many_sequences_metadata.csv", package = "ggDNAvis"))
 
 ## Merge with offset = 1 (map C to C of palindromic CG sites when reversing)
 ## See the reading from modified FASTQ section for a full discussion
