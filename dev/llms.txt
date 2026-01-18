@@ -128,6 +128,7 @@ library(dplyr)
 library(ggplot2)
 
 ## Function for viewing tables throughout this document
+## This is not a package data-processing function, it just helps make this document
 github_table <- function(data) {
     quoted <- as.data.frame(
         lapply(data, function(x) {paste0("`", x, "`")}),
@@ -164,7 +165,8 @@ function:
 ggDNAvis_shiny()
 ```
 
-The files for the app are stored in `inst/shinyapp`.
+The files for the app are stored in the `inst/shinyapp/` directory,
+accessible via `system.file("shinyapp/", package = "ggDNAvis")`.
 
 # 2 Summary/quickstart
 
@@ -217,8 +219,8 @@ knitr::include_graphics(paste0(github_location, "summary_single_sequence.png"))
 
 ``` r
 ## Read and merge data
-fastq_data <- read_fastq("inst/extdata/example_many_sequences_raw.fastq", calculate_length = TRUE)
-metadata   <- read.csv("inst/extdata/example_many_sequences_metadata.csv")
+fastq_data <- read_fastq(system.file("extdata/example_many_sequences_raw.fastq", package = "ggDNAvis"), calculate_length = TRUE)
+metadata   <- read.csv(system.file("extdata/example_many_sequences_metadata.csv", package = "ggDNAvis"))
 merged_fastq_data <- merge_fastq_with_metadata(fastq_data, metadata)
 
 ## Extract character vector
@@ -270,8 +272,8 @@ knitr::include_graphics(paste0(github_location, "summary_many_sequences.png"))
 
 ``` r
 ## Read and merge data
-modification_data <- read_modified_fastq("inst/extdata/example_many_sequences_raw_modified.fastq")
-metadata          <- read.csv("inst/extdata/example_many_sequences_metadata.csv")
+modification_data <- read_modified_fastq(system.file("extdata/example_many_sequences_raw_modified.fastq", package = "ggDNAvis"))
+metadata          <- read.csv(system.file("extdata/example_many_sequences_metadata.csv", package = "ggDNAvis"))
 merged_modification_data <- merge_methylation_with_metadata(
     modification_data, 
     metadata,
@@ -677,11 +679,12 @@ To read in a normal FASTQ file (containing a read ID/header, sequence,
 and quality scores for each read), the function
 [`read_fastq()`](https://ejade42.github.io/ggDNAvis/reference/read_fastq.md)
 can be used. The example data file for this is
-`inst/extdata/example_many_sequences_raw.fastq`
+`inst/extdata/example_many_sequences_raw.fastq`, accessible via
+`system.file("extdata/example_many_sequences_raw.fastq", package = "ggDNAvis")`:
 
 ``` r
 ## Look at first 16 lines of FASTQ
-fastq_raw <- readLines("inst/extdata/example_many_sequences_raw.fastq")
+fastq_raw <- readLines(system.file("extdata/example_many_sequences_raw.fastq", package = "ggDNAvis"))
 for (i in 1:16) {
     cat(fastq_raw[i], "\n")
 }
@@ -708,7 +711,10 @@ for (i in 1:16) {
 
 ``` r
 ## Load data from FASTQ
-fastq_data <- read_fastq("inst/extdata/example_many_sequences_raw.fastq", calculate_length = TRUE)
+fastq_data <- read_fastq(
+    system.file("extdata/example_many_sequences_raw.fastq", package = "ggDNAvis"), 
+    calculate_length = TRUE
+)
 
 ## View first 4 rows
 github_table(head(fastq_data, 4))
@@ -736,7 +742,7 @@ belongs, we will make use of a metadata file located at
 
 ``` r
 ## Load metadata from CSV
-metadata <- read.csv("inst/extdata/example_many_sequences_metadata.csv")
+metadata <- read.csv(system.file("extdata/example_many_sequences_metadata.csv", package = "ggDNAvis"))
 
 ## View first 4 rows
 github_table(head(metadata, 4))
@@ -928,13 +934,19 @@ be wrong.
 
 ### 3.3.2 Modified FASTQ (eg methylation)
 
-FASTQ files can be extended to include DNA modification (most often
-5-cytosine-methylation) information within the header rows. Most often,
-this information comes from Nanopore long-read sequencing being
-basecalled with a modification-capable model in Guppy or Dorado,
-resulting in SAM or BAM files. In SAM/BAM files, modification
-information is stored in the MM and ML tags. These can be copied to the
-header rows of a FASTQ file via:
+FASTQ files can be modified to include DNA modification (most often
+5-cytosine-methylation) information within the header lines. This is a
+very specific file format that is generally produced under the following
+conditions:
+
+- Oxford Nanopore sequencing is used
+- Raw FAST5/POD5/BLOW5 signal files are basecalled to SAM/BAM using a
+  modification-capable model in Guppy or Dorado (see [modified
+  basecalling
+  documentation](https://software-docs.nanoporetech.com/dorado/latest/basecaller/mods/))
+- SAM/BAM, which stores modification information in the MM and ML tags,
+  is converted to FASTQ with MM/ML information copied to header rows
+  via:
 
 ``` bash
 samtools fastq -T MM,ML ${input_bam_file} > "modified_fastq_file.fastq"
@@ -942,11 +954,12 @@ samtools fastq -T MM,ML ${input_bam_file} > "modified_fastq_file.fastq"
 
 ggDNAvis then contains tools for reading from, processing, and writing
 to these modified FASTQ files. The example data file for this is
-`inst/extdata/example_many_sequences_raw_modified.fastq`
+`inst/extdata/example_many_sequences_raw_modified.fastq`, accessible via
+`system.file("extdata/example_many_sequences_raw_modified.fastq", package = "ggDNAvis")`:
 
 ``` r
 ## Look at first 16 lines of FASTQ
-modified_fastq_raw <- readLines("inst/extdata/example_many_sequences_raw_modified.fastq")
+modified_fastq_raw <- readLines(system.file("extdata/example_many_sequences_raw_modified.fastq", package = "ggDNAvis"))
 for (i in 1:16) {
     cat(modified_fastq_raw[i], "\n")
 }
@@ -1002,7 +1015,7 @@ fully explained in [introduction to
 
 ``` r
 ## Load data from FASTQ
-methylation_data <- read_modified_fastq("inst/extdata/example_many_sequences_raw_modified.fastq")
+methylation_data <- read_modified_fastq(system.file("extdata/example_many_sequences_raw_modified.fastq", package = "ggDNAvis"))
 
 ## View first 4 rows
 github_table(head(methylation_data, 4))
@@ -1045,7 +1058,7 @@ function.
 
 ``` r
 ## Load metadata from CSV
-metadata <- read.csv("inst/extdata/example_many_sequences_metadata.csv")
+metadata <- read.csv(system.file("extdata/example_many_sequences_metadata.csv", package = "ggDNAvis"))
 
 ## View first 4 rows
 github_table(head(metadata, 4))
@@ -1486,7 +1499,7 @@ knitr::include_graphics(paste0(github_location, "single_sequence_08.png"))
 
 The `accessible` palette is light and dark each of blue and green, which
 is the only 4-category qualitative colourblind-safe palette recommended
-by [colourbrewer2.org](https::/colourbrewer2.org) (Harrower & Brewer,
+by [colorbrewer2.org](https://colorbrewer2.org) (Harrower & Brewer,
 2003):
 
 ``` r
@@ -1781,37 +1794,37 @@ visualise_single_sequence(
 ``` R
 ## ℹ Verbose monitoring enabled
 
-## ℹ (2026-01-15 16:07:51) visualise_single_sequence start
+## ℹ (2026-01-19 12:10:02) visualise_single_sequence start
 
-## ℹ (0.006 secs elapsed; 0.006 secs total) resolving aliases
+## ℹ (0.008 secs elapsed; 0.008 secs total) resolving aliases
 
-## ℹ (0.002 secs elapsed; 0.008 secs total) validating arguments
+## ℹ (0.002 secs elapsed; 0.010 secs total) validating arguments
 
-## ℹ (0.001 secs elapsed; 0.009 secs total) splitting input seq to sequence vector
+## ℹ (0.002 secs elapsed; 0.011 secs total) splitting input seq to sequence vector
 
-## ℹ (0.001 secs elapsed; 0.010 secs total) rasterising image data
+## ℹ (0.002 secs elapsed; 0.013 secs total) rasterising image data
 
-## ℹ (0.002 secs elapsed; 0.013 secs total) choosing rendering method
+## ℹ (0.003 secs elapsed; 0.016 secs total) choosing rendering method
 
-## ℹ (0.001 secs elapsed; 0.014 secs total) calculating tile sizes
+## ℹ (0.001 secs elapsed; 0.018 secs total) calculating tile sizes
 
-## ℹ (0.004 secs elapsed; 0.017 secs total) creating basic plot via geom_tile
+## ℹ (0.006 secs elapsed; 0.024 secs total) creating basic plot via geom_tile
 
-## ℹ (0.008 secs elapsed; 0.026 secs total) generating sequence text
+## ℹ (0.008 secs elapsed; 0.032 secs total) generating sequence text
 
-## ℹ (0.002 secs elapsed; 0.027 secs total) adding sequence text
+## ℹ (0.002 secs elapsed; 0.034 secs total) adding sequence text
 
-## ℹ (0.003 secs elapsed; 0.030 secs total) generating index annotations
+## ℹ (0.003 secs elapsed; 0.037 secs total) generating index annotations
 
-## ℹ (0.002 secs elapsed; 0.032 secs total) adding index annotations
+## ℹ (0.002 secs elapsed; 0.039 secs total) adding index annotations
 
-## ℹ (0.003 secs elapsed; 0.035 secs total) adding general plot themes
+## ℹ (0.003 secs elapsed; 0.041 secs total) adding general plot themes
 
-## ℹ (0.009 secs elapsed; 0.044 secs total) calculating margin
+## ℹ (0.010 secs elapsed; 0.052 secs total) calculating margin
 
-## ℹ (0.002 secs elapsed; 0.047 secs total) exporting image file
+## ℹ (0.002 secs elapsed; 0.054 secs total) exporting image file
 
-## ℹ (0.483 secs elapsed; 0.530 secs total) done
+## ℹ (0.940 secs elapsed; 0.994 secs total) done
 ```
 
 ``` r
@@ -1870,11 +1883,11 @@ visualise_single_sequence(
 ``` R
 ## ℹ Verbose monitoring enabled
 
-## ℹ (2026-01-15 16:07:51) visualise_single_sequence start
+## ℹ (2026-01-19 12:10:03) visualise_single_sequence start
 
-## ℹ (0.002 secs elapsed; 0.002 secs total) resolving aliases
+## ℹ (0.003 secs elapsed; 0.003 secs total) resolving aliases
 
-## ℹ (0.001 secs elapsed; 0.003 secs total) validating arguments
+## ℹ (0.001 secs elapsed; 0.004 secs total) validating arguments
 
 ## ℹ Automatically setting index_annotation_interval to 0 as index_annotation_size is 0
 
@@ -1884,26 +1897,26 @@ visualise_single_sequence(
 ## Warning: Disabling index annotations via index_annotation_interval = 0 or index_annotation_size = 0 overrides the index_annotation_always_last_base setting.
 ## If you want the last base in each line to be annotated but no other bases, set index_annotation_interval greater than line_wrapping.
 
-## ℹ (0.003 secs elapsed; 0.006 secs total) splitting input seq to sequence vector
+## ℹ (0.003 secs elapsed; 0.008 secs total) splitting input seq to sequence vector
 
-## ℹ (0.001 secs elapsed; 0.008 secs total) rasterising image data
+## ℹ (0.001 secs elapsed; 0.009 secs total) rasterising image data
 
-## ℹ (0.002 secs elapsed; 0.010 secs total) choosing rendering method
+## ℹ (0.003 secs elapsed; 0.012 secs total) choosing rendering method
 
 ## ℹ Automatically using geom_raster (much faster than geom_tile) as no sequence text, index annotations, or outlines are present.
 
 ## Warning: When using geom_raster, it is recommended to use a smaller pixels_per_base e.g. 10, as there is no text/outlines that would benefit from higher resolution.
 ## Current value: 100
 
-## ℹ (0.002 secs elapsed; 0.012 secs total) creating basic plot via geom_raster
+## ℹ (0.003 secs elapsed; 0.014 secs total) creating basic plot via geom_raster
 
-## ℹ (0.003 secs elapsed; 0.016 secs total) adding general plot themes
+## ℹ (0.004 secs elapsed; 0.018 secs total) adding general plot themes
 
-## ℹ (0.009 secs elapsed; 0.025 secs total) calculating margin
+## ℹ (0.011 secs elapsed; 0.029 secs total) calculating margin
 
-## ℹ (0.002 secs elapsed; 0.027 secs total) exporting image file
+## ℹ (0.002 secs elapsed; 0.031 secs total) exporting image file
 
-## ℹ (0.950 secs elapsed; 0.977 secs total) done
+## ℹ (0.949 secs elapsed; 0.980 secs total) done
 ```
 
 ``` r
@@ -1940,7 +1953,7 @@ visualise_single_sequence(
 ``` R
 ## ℹ Verbose monitoring enabled
 
-## ℹ (2026-01-15 16:07:52) visualise_single_sequence start
+## ℹ (2026-01-19 12:10:04) visualise_single_sequence start
 
 ## ℹ (0.003 secs elapsed; 0.003 secs total) resolving aliases
 
@@ -1950,7 +1963,7 @@ visualise_single_sequence(
 
 ## ℹ (0.002 secs elapsed; 0.008 secs total) rasterising image data
 
-## ℹ (0.003 secs elapsed; 0.011 secs total) choosing rendering method
+## ℹ (0.003 secs elapsed; 0.012 secs total) choosing rendering method
 
 ## Warning: Forcing geom_raster via force_raster = TRUE will remove all sequence
 ## text, index annotations (though any inserted blank lines/spacers will remain),
@@ -1960,11 +1973,11 @@ visualise_single_sequence(
 
 ## ℹ (0.005 secs elapsed; 0.018 secs total) adding general plot themes
 
-## ℹ (0.011 secs elapsed; 0.029 secs total) calculating margin
+## ℹ (0.011 secs elapsed; 0.030 secs total) calculating margin
 
 ## ℹ (0.002 secs elapsed; 0.032 secs total) exporting image file
 
-## ℹ (0.715 secs elapsed; 0.747 secs total) done
+## ℹ (0.289 secs elapsed; 0.321 secs total) done
 ```
 
 ``` r
@@ -1999,7 +2012,7 @@ visualise_single_sequence(
 ``` R
 ## ℹ Verbose monitoring enabled
 
-## ℹ (2026-01-15 16:07:53) visualise_single_sequence start
+## ℹ (2026-01-19 12:10:04) visualise_single_sequence start
 
 ## ℹ (0.004 secs elapsed; 0.004 secs total) resolving aliases
 
@@ -2019,15 +2032,15 @@ visualise_single_sequence(
 
 ## ℹ Automatically using geom_raster (much faster than geom_tile) as no sequence text, index annotations, or outlines are present.
 
-## ℹ (0.004 secs elapsed; 0.019 secs total) creating basic plot via geom_raster
+## ℹ (0.003 secs elapsed; 0.018 secs total) creating basic plot via geom_raster
 
-## ℹ (0.006 secs elapsed; 0.025 secs total) adding general plot themes
+## ℹ (0.005 secs elapsed; 0.023 secs total) adding general plot themes
 
-## ℹ (0.013 secs elapsed; 0.037 secs total) calculating margin
+## ℹ (0.013 secs elapsed; 0.036 secs total) calculating margin
 
-## ℹ (0.003 secs elapsed; 0.041 secs total) exporting image file
+## ℹ (0.003 secs elapsed; 0.039 secs total) exporting image file
 
-## ℹ (0.390 secs elapsed; 0.431 secs total) done
+## ℹ (0.231 secs elapsed; 0.270 secs total) done
 ```
 
 ``` r
@@ -2057,8 +2070,11 @@ section):
 
 ``` r
 ## Reminder of how to load data from file
-fastq_data <- read_fastq("inst/extdata/example_many_sequences_raw.fastq", calculate_length = TRUE)
-metadata   <- read.csv("inst/extdata/example_many_sequences_metadata.csv")
+fastq_data <- read_fastq(
+    system.file("extdata/example_many_sequences_raw.fastq", package = "ggDNAvis"), 
+    calculate_length = TRUE
+)
+metadata   <- read.csv(system.file("extdata/example_many_sequences_metadata.csv", package = "ggDNAvis"))
 merged_fastq_data <- merge_fastq_with_metadata(fastq_data, metadata)
 
 ## Subset and change colnames to make it match example_many_sequences
@@ -2967,29 +2983,29 @@ visualise_many_sequences(
 ``` R
 ## ℹ Verbose monitoring enabled
 
-## ℹ (2026-01-15 16:08:26) visualise_many_sequences start
+## ℹ (2026-01-19 12:10:42) visualise_many_sequences start
 
-## ℹ (0.004 secs elapsed; 0.004 secs total) resolving aliases
+## ℹ (0.003 secs elapsed; 0.003 secs total) resolving aliases
 
-## ℹ (0.002 secs elapsed; 0.006 secs total) validating arguments
+## ℹ (0.001 secs elapsed; 0.004 secs total) validating arguments
 
-## ℹ (0.002 secs elapsed; 0.007 secs total) inserting blank sequences at specified indices
+## ℹ (0.001 secs elapsed; 0.006 secs total) inserting blank sequences at specified indices
 
-## ℹ (0.002 secs elapsed; 0.009 secs total) rasterising image data
+## ℹ (0.001 secs elapsed; 0.007 secs total) rasterising image data
 
-## ℹ (0.008 secs elapsed; 0.017 secs total) choosing rendering method
+## ℹ (0.007 secs elapsed; 0.014 secs total) choosing rendering method
 
 ## ℹ Automatically using geom_raster (much faster than geom_tile) as no sequence text, index annotations, or outlines are present.
 
-## ℹ (0.003 secs elapsed; 0.020 secs total) creating basic plot via geom_raster
+## ℹ (0.002 secs elapsed; 0.017 secs total) creating basic plot via geom_raster
 
-## ℹ (0.005 secs elapsed; 0.025 secs total) adding general plot themes
+## ℹ (0.004 secs elapsed; 0.021 secs total) adding general plot themes
 
-## ℹ (0.011 secs elapsed; 0.036 secs total) calculating margin
+## ℹ (0.011 secs elapsed; 0.032 secs total) calculating margin
 
-## ℹ (0.002 secs elapsed; 0.038 secs total) exporting image file
+## ℹ (0.002 secs elapsed; 0.034 secs total) exporting image file
 
-## ℹ (0.366 secs elapsed; 0.405 secs total) done
+## ℹ (0.401 secs elapsed; 0.435 secs total) done
 ```
 
 ``` r
@@ -3026,31 +3042,31 @@ visualise_many_sequences(
 ``` R
 ## ℹ Verbose monitoring enabled
 
-## ℹ (2026-01-15 16:08:26) visualise_many_sequences start
+## ℹ (2026-01-19 12:10:43) visualise_many_sequences start
 
-## ℹ (0.002 secs elapsed; 0.002 secs total) resolving aliases
+## ℹ (0.003 secs elapsed; 0.003 secs total) resolving aliases
 
-## ℹ (0.001 secs elapsed; 0.004 secs total) validating arguments
+## ℹ (0.001 secs elapsed; 0.005 secs total) validating arguments
 
-## ℹ (0.001 secs elapsed; 0.005 secs total) inserting blank sequences at specified indices
+## ℹ (0.001 secs elapsed; 0.006 secs total) inserting blank sequences at specified indices
 
-## ℹ (0.001 secs elapsed; 0.006 secs total) rasterising image data
+## ℹ (0.001 secs elapsed; 0.008 secs total) rasterising image data
 
-## ℹ (0.007 secs elapsed; 0.013 secs total) choosing rendering method
+## ℹ (0.008 secs elapsed; 0.015 secs total) choosing rendering method
 
 ## Warning: Forcing geom_raster via force_raster = TRUE will remove all sequence
 ## text, index annotations (though any inserted blank lines/spacers will remain),
 ## and box outlines.
 
-## ℹ (0.002 secs elapsed; 0.014 secs total) creating basic plot via geom_raster
+## ℹ (0.002 secs elapsed; 0.017 secs total) creating basic plot via geom_raster
 
-## ℹ (0.003 secs elapsed; 0.018 secs total) adding general plot themes
+## ℹ (0.004 secs elapsed; 0.021 secs total) adding general plot themes
 
-## ℹ (0.009 secs elapsed; 0.027 secs total) calculating margin
+## ℹ (0.010 secs elapsed; 0.031 secs total) calculating margin
 
-## ℹ (0.002 secs elapsed; 0.029 secs total) exporting image file
+## ℹ (0.002 secs elapsed; 0.033 secs total) exporting image file
 
-## ℹ (0.270 secs elapsed; 0.299 secs total) done
+## ℹ (0.629 secs elapsed; 0.662 secs total) done
 ```
 
 ``` r
@@ -3084,8 +3100,8 @@ As a reminder, methylation information can be read from FASTQ as
 follows:
 
 ``` r
-modified_fastq_data <- read_modified_fastq("inst/extdata/example_many_sequences_raw_modified.fastq")
-metadata            <- read.csv("inst/extdata/example_many_sequences_metadata.csv")
+modified_fastq_data <- read_modified_fastq(system.file("extdata/example_many_sequences_raw_modified.fastq", package = "ggDNAvis"))
+metadata            <- read.csv(system.file("extdata/example_many_sequences_metadata.csv", package = "ggDNAvis"))
 
 ## Merge with offset = 1 (map C to C of palindromic CG sites when reversing)
 ## See the reading from modified FASTQ section for a full discussion
