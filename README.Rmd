@@ -85,12 +85,12 @@ cat("Loaded ggDNAvis version is:", as.character(packageVersion("ggDNAvis")))
 ```
 
 ## Interactive suite
-An interactive GUI-based version of ggDNAvis that runs in a browser is under development. Hosting details are still being established.
+An interactive GUI-based version of ggDNAvis that runs in a browser is available from the "interactive app" tab of the top navbar of this website, or directly from https://ejade42-ggdnavis.share.connect.posit.cloud/.
 
 This is implemented via a Shiny app, which can also be launched from R on any local computer that has `ggDNAvis` installed, via the `ggDNAvis_shinyapp()` function:
 
 ```{r, eval = FALSE}
-ggDNAvis_shiny()
+ggDNAvis_shinyapp()
 ```
 
 The files for the app are stored in the `inst/shinyapp/` directory, accessible via `system.file("shinyapp/", package = "ggDNAvis")`.
