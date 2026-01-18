@@ -219,10 +219,10 @@
 <div class="section level2">
 <h2 id="id_13-interactive-suite">1.3 Interactive suite<a class="anchor" aria-label="anchor" href="#id_13-interactive-suite"></a>
 </h2>
-<p>An interactive GUI-based version of ggDNAvis that runs in a browser is under development. Hosting details are still being established.</p>
+<p>An interactive GUI-based version of ggDNAvis that runs in a browser is available from the “interactive app” tab of the top navbar of this website, or directly from <a href="https://ejade42-ggdnavis.share.connect.posit.cloud/" class="external-link uri">https://ejade42-ggdnavis.share.connect.posit.cloud/</a>.</p>
 <p>This is implemented via a Shiny app, which can also be launched from R on any local computer that has <code>ggDNAvis</code> installed, via the <code><a href="reference/ggDNAvis_shinyapp.html">ggDNAvis_shinyapp()</a></code> function:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/ggDNAvis_shinyapp.html">ggDNAvis_shiny</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/ggDNAvis_shinyapp.html">ggDNAvis_shinyapp</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>The files for the app are stored in the <code>inst/shinyapp/</code> directory, accessible via <code>system.file("shinyapp/", package = "ggDNAvis")</code>.</p>
 </div>
 </div>
@@ -2102,7 +2102,7 @@
 <span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb83"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" tabindex="-1"></a><span class="do">## ℹ Verbose monitoring enabled</span></span>
 <span id="cb83-2"><a href="#cb83-2" tabindex="-1"></a></span>
-<span id="cb83-3"><a href="#cb83-3" tabindex="-1"></a><span class="do">## ℹ (2026-01-19 12:10:02) visualise_single_sequence start</span></span>
+<span id="cb83-3"><a href="#cb83-3" tabindex="-1"></a><span class="do">## ℹ (2026-01-19 12:23:58) visualise_single_sequence start</span></span>
 <span id="cb83-4"><a href="#cb83-4" tabindex="-1"></a></span>
 <span id="cb83-5"><a href="#cb83-5" tabindex="-1"></a><span class="do">## ℹ (0.008 secs elapsed; 0.008 secs total) resolving aliases</span></span>
 <span id="cb83-6"><a href="#cb83-6" tabindex="-1"></a></span>
@@ -2116,23 +2116,23 @@
 <span id="cb83-14"><a href="#cb83-14" tabindex="-1"></a></span>
 <span id="cb83-15"><a href="#cb83-15" tabindex="-1"></a><span class="do">## ℹ (0.001 secs elapsed; 0.018 secs total) calculating tile sizes</span></span>
 <span id="cb83-16"><a href="#cb83-16" tabindex="-1"></a></span>
-<span id="cb83-17"><a href="#cb83-17" tabindex="-1"></a><span class="do">## ℹ (0.006 secs elapsed; 0.024 secs total) creating basic plot via geom_tile</span></span>
+<span id="cb83-17"><a href="#cb83-17" tabindex="-1"></a><span class="do">## ℹ (0.005 secs elapsed; 0.023 secs total) creating basic plot via geom_tile</span></span>
 <span id="cb83-18"><a href="#cb83-18" tabindex="-1"></a></span>
-<span id="cb83-19"><a href="#cb83-19" tabindex="-1"></a><span class="do">## ℹ (0.008 secs elapsed; 0.032 secs total) generating sequence text</span></span>
+<span id="cb83-19"><a href="#cb83-19" tabindex="-1"></a><span class="do">## ℹ (0.008 secs elapsed; 0.031 secs total) generating sequence text</span></span>
 <span id="cb83-20"><a href="#cb83-20" tabindex="-1"></a></span>
-<span id="cb83-21"><a href="#cb83-21" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.034 secs total) adding sequence text</span></span>
+<span id="cb83-21"><a href="#cb83-21" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.033 secs total) adding sequence text</span></span>
 <span id="cb83-22"><a href="#cb83-22" tabindex="-1"></a></span>
-<span id="cb83-23"><a href="#cb83-23" tabindex="-1"></a><span class="do">## ℹ (0.003 secs elapsed; 0.037 secs total) generating index annotations</span></span>
+<span id="cb83-23"><a href="#cb83-23" tabindex="-1"></a><span class="do">## ℹ (0.003 secs elapsed; 0.036 secs total) generating index annotations</span></span>
 <span id="cb83-24"><a href="#cb83-24" tabindex="-1"></a></span>
-<span id="cb83-25"><a href="#cb83-25" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.039 secs total) adding index annotations</span></span>
+<span id="cb83-25"><a href="#cb83-25" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.038 secs total) adding index annotations</span></span>
 <span id="cb83-26"><a href="#cb83-26" tabindex="-1"></a></span>
 <span id="cb83-27"><a href="#cb83-27" tabindex="-1"></a><span class="do">## ℹ (0.003 secs elapsed; 0.041 secs total) adding general plot themes</span></span>
 <span id="cb83-28"><a href="#cb83-28" tabindex="-1"></a></span>
-<span id="cb83-29"><a href="#cb83-29" tabindex="-1"></a><span class="do">## ℹ (0.010 secs elapsed; 0.052 secs total) calculating margin</span></span>
+<span id="cb83-29"><a href="#cb83-29" tabindex="-1"></a><span class="do">## ℹ (0.010 secs elapsed; 0.051 secs total) calculating margin</span></span>
 <span id="cb83-30"><a href="#cb83-30" tabindex="-1"></a></span>
-<span id="cb83-31"><a href="#cb83-31" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.054 secs total) exporting image file</span></span>
+<span id="cb83-31"><a href="#cb83-31" tabindex="-1"></a><span class="do">## ℹ (0.003 secs elapsed; 0.054 secs total) exporting image file</span></span>
 <span id="cb83-32"><a href="#cb83-32" tabindex="-1"></a></span>
-<span id="cb83-33"><a href="#cb83-33" tabindex="-1"></a><span class="do">## ℹ (0.940 secs elapsed; 0.994 secs total) done</span></span></code></pre></div>
+<span id="cb83-33"><a href="#cb83-33" tabindex="-1"></a><span class="do">## ℹ (0.606 secs elapsed; 0.660 secs total) done</span></span></code></pre></div>
 <div class="sourceCode" id="cb84"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## View image</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"single_sequence_16.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -2159,11 +2159,11 @@
 <span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb86"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1" tabindex="-1"></a><span class="do">## ℹ Verbose monitoring enabled</span></span>
 <span id="cb86-2"><a href="#cb86-2" tabindex="-1"></a></span>
-<span id="cb86-3"><a href="#cb86-3" tabindex="-1"></a><span class="do">## ℹ (2026-01-19 12:10:03) visualise_single_sequence start</span></span>
+<span id="cb86-3"><a href="#cb86-3" tabindex="-1"></a><span class="do">## ℹ (2026-01-19 12:23:59) visualise_single_sequence start</span></span>
 <span id="cb86-4"><a href="#cb86-4" tabindex="-1"></a></span>
-<span id="cb86-5"><a href="#cb86-5" tabindex="-1"></a><span class="do">## ℹ (0.003 secs elapsed; 0.003 secs total) resolving aliases</span></span>
+<span id="cb86-5"><a href="#cb86-5" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.002 secs total) resolving aliases</span></span>
 <span id="cb86-6"><a href="#cb86-6" tabindex="-1"></a></span>
-<span id="cb86-7"><a href="#cb86-7" tabindex="-1"></a><span class="do">## ℹ (0.001 secs elapsed; 0.004 secs total) validating arguments</span></span>
+<span id="cb86-7"><a href="#cb86-7" tabindex="-1"></a><span class="do">## ℹ (0.001 secs elapsed; 0.003 secs total) validating arguments</span></span>
 <span id="cb86-8"><a href="#cb86-8" tabindex="-1"></a></span>
 <span id="cb86-9"><a href="#cb86-9" tabindex="-1"></a><span class="do">## ℹ Automatically setting index_annotation_interval to 0 as index_annotation_size is 0</span></span>
 <span id="cb86-10"><a href="#cb86-10" tabindex="-1"></a></span>
@@ -2173,26 +2173,26 @@
 <span id="cb86-14"><a href="#cb86-14" tabindex="-1"></a><span class="do">## Warning: Disabling index annotations via index_annotation_interval = 0 or index_annotation_size = 0 overrides the index_annotation_always_last_base setting.</span></span>
 <span id="cb86-15"><a href="#cb86-15" tabindex="-1"></a><span class="do">## If you want the last base in each line to be annotated but no other bases, set index_annotation_interval greater than line_wrapping.</span></span>
 <span id="cb86-16"><a href="#cb86-16" tabindex="-1"></a></span>
-<span id="cb86-17"><a href="#cb86-17" tabindex="-1"></a><span class="do">## ℹ (0.003 secs elapsed; 0.008 secs total) splitting input seq to sequence vector</span></span>
+<span id="cb86-17"><a href="#cb86-17" tabindex="-1"></a><span class="do">## ℹ (0.003 secs elapsed; 0.006 secs total) splitting input seq to sequence vector</span></span>
 <span id="cb86-18"><a href="#cb86-18" tabindex="-1"></a></span>
-<span id="cb86-19"><a href="#cb86-19" tabindex="-1"></a><span class="do">## ℹ (0.001 secs elapsed; 0.009 secs total) rasterising image data</span></span>
+<span id="cb86-19"><a href="#cb86-19" tabindex="-1"></a><span class="do">## ℹ (0.001 secs elapsed; 0.007 secs total) rasterising image data</span></span>
 <span id="cb86-20"><a href="#cb86-20" tabindex="-1"></a></span>
-<span id="cb86-21"><a href="#cb86-21" tabindex="-1"></a><span class="do">## ℹ (0.003 secs elapsed; 0.012 secs total) choosing rendering method</span></span>
+<span id="cb86-21"><a href="#cb86-21" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.009 secs total) choosing rendering method</span></span>
 <span id="cb86-22"><a href="#cb86-22" tabindex="-1"></a></span>
 <span id="cb86-23"><a href="#cb86-23" tabindex="-1"></a><span class="do">## ℹ Automatically using geom_raster (much faster than geom_tile) as no sequence text, index annotations, or outlines are present.</span></span>
 <span id="cb86-24"><a href="#cb86-24" tabindex="-1"></a></span>
 <span id="cb86-25"><a href="#cb86-25" tabindex="-1"></a><span class="do">## Warning: When using geom_raster, it is recommended to use a smaller pixels_per_base e.g. 10, as there is no text/outlines that would benefit from higher resolution.</span></span>
 <span id="cb86-26"><a href="#cb86-26" tabindex="-1"></a><span class="do">## Current value: 100</span></span>
 <span id="cb86-27"><a href="#cb86-27" tabindex="-1"></a></span>
-<span id="cb86-28"><a href="#cb86-28" tabindex="-1"></a><span class="do">## ℹ (0.003 secs elapsed; 0.014 secs total) creating basic plot via geom_raster</span></span>
+<span id="cb86-28"><a href="#cb86-28" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.012 secs total) creating basic plot via geom_raster</span></span>
 <span id="cb86-29"><a href="#cb86-29" tabindex="-1"></a></span>
-<span id="cb86-30"><a href="#cb86-30" tabindex="-1"></a><span class="do">## ℹ (0.004 secs elapsed; 0.018 secs total) adding general plot themes</span></span>
+<span id="cb86-30"><a href="#cb86-30" tabindex="-1"></a><span class="do">## ℹ (0.004 secs elapsed; 0.015 secs total) adding general plot themes</span></span>
 <span id="cb86-31"><a href="#cb86-31" tabindex="-1"></a></span>
-<span id="cb86-32"><a href="#cb86-32" tabindex="-1"></a><span class="do">## ℹ (0.011 secs elapsed; 0.029 secs total) calculating margin</span></span>
+<span id="cb86-32"><a href="#cb86-32" tabindex="-1"></a><span class="do">## ℹ (0.009 secs elapsed; 0.024 secs total) calculating margin</span></span>
 <span id="cb86-33"><a href="#cb86-33" tabindex="-1"></a></span>
-<span id="cb86-34"><a href="#cb86-34" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.031 secs total) exporting image file</span></span>
+<span id="cb86-34"><a href="#cb86-34" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.026 secs total) exporting image file</span></span>
 <span id="cb86-35"><a href="#cb86-35" tabindex="-1"></a></span>
-<span id="cb86-36"><a href="#cb86-36" tabindex="-1"></a><span class="do">## ℹ (0.949 secs elapsed; 0.980 secs total) done</span></span></code></pre></div>
+<span id="cb86-36"><a href="#cb86-36" tabindex="-1"></a><span class="do">## ℹ (0.738 secs elapsed; 0.764 secs total) done</span></span></code></pre></div>
 <div class="sourceCode" id="cb87"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## View image</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"single_sequence_17.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -2218,31 +2218,31 @@
 <span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb89"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1" tabindex="-1"></a><span class="do">## ℹ Verbose monitoring enabled</span></span>
 <span id="cb89-2"><a href="#cb89-2" tabindex="-1"></a></span>
-<span id="cb89-3"><a href="#cb89-3" tabindex="-1"></a><span class="do">## ℹ (2026-01-19 12:10:04) visualise_single_sequence start</span></span>
+<span id="cb89-3"><a href="#cb89-3" tabindex="-1"></a><span class="do">## ℹ (2026-01-19 12:23:59) visualise_single_sequence start</span></span>
 <span id="cb89-4"><a href="#cb89-4" tabindex="-1"></a></span>
 <span id="cb89-5"><a href="#cb89-5" tabindex="-1"></a><span class="do">## ℹ (0.003 secs elapsed; 0.003 secs total) resolving aliases</span></span>
 <span id="cb89-6"><a href="#cb89-6" tabindex="-1"></a></span>
-<span id="cb89-7"><a href="#cb89-7" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.005 secs total) validating arguments</span></span>
+<span id="cb89-7"><a href="#cb89-7" tabindex="-1"></a><span class="do">## ℹ (0.001 secs elapsed; 0.004 secs total) validating arguments</span></span>
 <span id="cb89-8"><a href="#cb89-8" tabindex="-1"></a></span>
-<span id="cb89-9"><a href="#cb89-9" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.007 secs total) splitting input seq to sequence vector</span></span>
+<span id="cb89-9"><a href="#cb89-9" tabindex="-1"></a><span class="do">## ℹ (0.001 secs elapsed; 0.005 secs total) splitting input seq to sequence vector</span></span>
 <span id="cb89-10"><a href="#cb89-10" tabindex="-1"></a></span>
-<span id="cb89-11"><a href="#cb89-11" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.008 secs total) rasterising image data</span></span>
+<span id="cb89-11"><a href="#cb89-11" tabindex="-1"></a><span class="do">## ℹ (0.001 secs elapsed; 0.007 secs total) rasterising image data</span></span>
 <span id="cb89-12"><a href="#cb89-12" tabindex="-1"></a></span>
-<span id="cb89-13"><a href="#cb89-13" tabindex="-1"></a><span class="do">## ℹ (0.003 secs elapsed; 0.012 secs total) choosing rendering method</span></span>
+<span id="cb89-13"><a href="#cb89-13" tabindex="-1"></a><span class="do">## ℹ (0.003 secs elapsed; 0.009 secs total) choosing rendering method</span></span>
 <span id="cb89-14"><a href="#cb89-14" tabindex="-1"></a></span>
 <span id="cb89-15"><a href="#cb89-15" tabindex="-1"></a><span class="do">## Warning: Forcing geom_raster via force_raster = TRUE will remove all sequence</span></span>
 <span id="cb89-16"><a href="#cb89-16" tabindex="-1"></a><span class="do">## text, index annotations (though any inserted blank lines/spacers will remain),</span></span>
 <span id="cb89-17"><a href="#cb89-17" tabindex="-1"></a><span class="do">## and box outlines.</span></span>
 <span id="cb89-18"><a href="#cb89-18" tabindex="-1"></a></span>
-<span id="cb89-19"><a href="#cb89-19" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.013 secs total) creating basic plot via geom_raster</span></span>
+<span id="cb89-19"><a href="#cb89-19" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.011 secs total) creating basic plot via geom_raster</span></span>
 <span id="cb89-20"><a href="#cb89-20" tabindex="-1"></a></span>
-<span id="cb89-21"><a href="#cb89-21" tabindex="-1"></a><span class="do">## ℹ (0.005 secs elapsed; 0.018 secs total) adding general plot themes</span></span>
+<span id="cb89-21"><a href="#cb89-21" tabindex="-1"></a><span class="do">## ℹ (0.004 secs elapsed; 0.015 secs total) adding general plot themes</span></span>
 <span id="cb89-22"><a href="#cb89-22" tabindex="-1"></a></span>
-<span id="cb89-23"><a href="#cb89-23" tabindex="-1"></a><span class="do">## ℹ (0.011 secs elapsed; 0.030 secs total) calculating margin</span></span>
+<span id="cb89-23"><a href="#cb89-23" tabindex="-1"></a><span class="do">## ℹ (0.011 secs elapsed; 0.025 secs total) calculating margin</span></span>
 <span id="cb89-24"><a href="#cb89-24" tabindex="-1"></a></span>
-<span id="cb89-25"><a href="#cb89-25" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.032 secs total) exporting image file</span></span>
+<span id="cb89-25"><a href="#cb89-25" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.028 secs total) exporting image file</span></span>
 <span id="cb89-26"><a href="#cb89-26" tabindex="-1"></a></span>
-<span id="cb89-27"><a href="#cb89-27" tabindex="-1"></a><span class="do">## ℹ (0.289 secs elapsed; 0.321 secs total) done</span></span></code></pre></div>
+<span id="cb89-27"><a href="#cb89-27" tabindex="-1"></a><span class="do">## ℹ (0.553 secs elapsed; 0.581 secs total) done</span></span></code></pre></div>
 <div class="sourceCode" id="cb90"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## View image</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"single_sequence_18.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -2264,11 +2264,11 @@
 <span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb92"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb92-1"><a href="#cb92-1" tabindex="-1"></a><span class="do">## ℹ Verbose monitoring enabled</span></span>
 <span id="cb92-2"><a href="#cb92-2" tabindex="-1"></a></span>
-<span id="cb92-3"><a href="#cb92-3" tabindex="-1"></a><span class="do">## ℹ (2026-01-19 12:10:04) visualise_single_sequence start</span></span>
+<span id="cb92-3"><a href="#cb92-3" tabindex="-1"></a><span class="do">## ℹ (2026-01-19 12:24:00) visualise_single_sequence start</span></span>
 <span id="cb92-4"><a href="#cb92-4" tabindex="-1"></a></span>
-<span id="cb92-5"><a href="#cb92-5" tabindex="-1"></a><span class="do">## ℹ (0.004 secs elapsed; 0.004 secs total) resolving aliases</span></span>
+<span id="cb92-5"><a href="#cb92-5" tabindex="-1"></a><span class="do">## ℹ (0.005 secs elapsed; 0.005 secs total) resolving aliases</span></span>
 <span id="cb92-6"><a href="#cb92-6" tabindex="-1"></a></span>
-<span id="cb92-7"><a href="#cb92-7" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.006 secs total) validating arguments</span></span>
+<span id="cb92-7"><a href="#cb92-7" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.007 secs total) validating arguments</span></span>
 <span id="cb92-8"><a href="#cb92-8" tabindex="-1"></a></span>
 <span id="cb92-9"><a href="#cb92-9" tabindex="-1"></a><span class="do">## Warning: Disabling index annotations via index_annotation_interval = 0 or index_annotation_size = 0 overrides the index_annotation_always_first_base setting.</span></span>
 <span id="cb92-10"><a href="#cb92-10" tabindex="-1"></a><span class="do">## If you want the first base in each line to be annotated but no other bases, set index_annotation_interval greater than line_wrapping.</span></span>
@@ -2288,11 +2288,11 @@
 <span id="cb92-24"><a href="#cb92-24" tabindex="-1"></a></span>
 <span id="cb92-25"><a href="#cb92-25" tabindex="-1"></a><span class="do">## ℹ (0.005 secs elapsed; 0.023 secs total) adding general plot themes</span></span>
 <span id="cb92-26"><a href="#cb92-26" tabindex="-1"></a></span>
-<span id="cb92-27"><a href="#cb92-27" tabindex="-1"></a><span class="do">## ℹ (0.013 secs elapsed; 0.036 secs total) calculating margin</span></span>
+<span id="cb92-27"><a href="#cb92-27" tabindex="-1"></a><span class="do">## ℹ (0.012 secs elapsed; 0.035 secs total) calculating margin</span></span>
 <span id="cb92-28"><a href="#cb92-28" tabindex="-1"></a></span>
-<span id="cb92-29"><a href="#cb92-29" tabindex="-1"></a><span class="do">## ℹ (0.003 secs elapsed; 0.039 secs total) exporting image file</span></span>
+<span id="cb92-29"><a href="#cb92-29" tabindex="-1"></a><span class="do">## ℹ (0.003 secs elapsed; 0.038 secs total) exporting image file</span></span>
 <span id="cb92-30"><a href="#cb92-30" tabindex="-1"></a></span>
-<span id="cb92-31"><a href="#cb92-31" tabindex="-1"></a><span class="do">## ℹ (0.231 secs elapsed; 0.270 secs total) done</span></span></code></pre></div>
+<span id="cb92-31"><a href="#cb92-31" tabindex="-1"></a><span class="do">## ℹ (0.218 secs elapsed; 0.256 secs total) done</span></span></code></pre></div>
 <div class="sourceCode" id="cb93"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## View image</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"single_sequence_19.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -2998,29 +2998,29 @@
 <span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb128"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb128-1"><a href="#cb128-1" tabindex="-1"></a><span class="do">## ℹ Verbose monitoring enabled</span></span>
 <span id="cb128-2"><a href="#cb128-2" tabindex="-1"></a></span>
-<span id="cb128-3"><a href="#cb128-3" tabindex="-1"></a><span class="do">## ℹ (2026-01-19 12:10:42) visualise_many_sequences start</span></span>
+<span id="cb128-3"><a href="#cb128-3" tabindex="-1"></a><span class="do">## ℹ (2026-01-19 12:24:30) visualise_many_sequences start</span></span>
 <span id="cb128-4"><a href="#cb128-4" tabindex="-1"></a></span>
-<span id="cb128-5"><a href="#cb128-5" tabindex="-1"></a><span class="do">## ℹ (0.003 secs elapsed; 0.003 secs total) resolving aliases</span></span>
+<span id="cb128-5"><a href="#cb128-5" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.002 secs total) resolving aliases</span></span>
 <span id="cb128-6"><a href="#cb128-6" tabindex="-1"></a></span>
 <span id="cb128-7"><a href="#cb128-7" tabindex="-1"></a><span class="do">## ℹ (0.001 secs elapsed; 0.004 secs total) validating arguments</span></span>
 <span id="cb128-8"><a href="#cb128-8" tabindex="-1"></a></span>
-<span id="cb128-9"><a href="#cb128-9" tabindex="-1"></a><span class="do">## ℹ (0.001 secs elapsed; 0.006 secs total) inserting blank sequences at specified indices</span></span>
+<span id="cb128-9"><a href="#cb128-9" tabindex="-1"></a><span class="do">## ℹ (0.001 secs elapsed; 0.005 secs total) inserting blank sequences at specified indices</span></span>
 <span id="cb128-10"><a href="#cb128-10" tabindex="-1"></a></span>
-<span id="cb128-11"><a href="#cb128-11" tabindex="-1"></a><span class="do">## ℹ (0.001 secs elapsed; 0.007 secs total) rasterising image data</span></span>
+<span id="cb128-11"><a href="#cb128-11" tabindex="-1"></a><span class="do">## ℹ (0.001 secs elapsed; 0.006 secs total) rasterising image data</span></span>
 <span id="cb128-12"><a href="#cb128-12" tabindex="-1"></a></span>
-<span id="cb128-13"><a href="#cb128-13" tabindex="-1"></a><span class="do">## ℹ (0.007 secs elapsed; 0.014 secs total) choosing rendering method</span></span>
+<span id="cb128-13"><a href="#cb128-13" tabindex="-1"></a><span class="do">## ℹ (0.006 secs elapsed; 0.012 secs total) choosing rendering method</span></span>
 <span id="cb128-14"><a href="#cb128-14" tabindex="-1"></a></span>
 <span id="cb128-15"><a href="#cb128-15" tabindex="-1"></a><span class="do">## ℹ Automatically using geom_raster (much faster than geom_tile) as no sequence text, index annotations, or outlines are present.</span></span>
 <span id="cb128-16"><a href="#cb128-16" tabindex="-1"></a></span>
-<span id="cb128-17"><a href="#cb128-17" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.017 secs total) creating basic plot via geom_raster</span></span>
+<span id="cb128-17"><a href="#cb128-17" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.014 secs total) creating basic plot via geom_raster</span></span>
 <span id="cb128-18"><a href="#cb128-18" tabindex="-1"></a></span>
-<span id="cb128-19"><a href="#cb128-19" tabindex="-1"></a><span class="do">## ℹ (0.004 secs elapsed; 0.021 secs total) adding general plot themes</span></span>
+<span id="cb128-19"><a href="#cb128-19" tabindex="-1"></a><span class="do">## ℹ (0.004 secs elapsed; 0.018 secs total) adding general plot themes</span></span>
 <span id="cb128-20"><a href="#cb128-20" tabindex="-1"></a></span>
-<span id="cb128-21"><a href="#cb128-21" tabindex="-1"></a><span class="do">## ℹ (0.011 secs elapsed; 0.032 secs total) calculating margin</span></span>
+<span id="cb128-21"><a href="#cb128-21" tabindex="-1"></a><span class="do">## ℹ (0.009 secs elapsed; 0.027 secs total) calculating margin</span></span>
 <span id="cb128-22"><a href="#cb128-22" tabindex="-1"></a></span>
-<span id="cb128-23"><a href="#cb128-23" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.034 secs total) exporting image file</span></span>
+<span id="cb128-23"><a href="#cb128-23" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.029 secs total) exporting image file</span></span>
 <span id="cb128-24"><a href="#cb128-24" tabindex="-1"></a></span>
-<span id="cb128-25"><a href="#cb128-25" tabindex="-1"></a><span class="do">## ℹ (0.401 secs elapsed; 0.435 secs total) done</span></span></code></pre></div>
+<span id="cb128-25"><a href="#cb128-25" tabindex="-1"></a><span class="do">## ℹ (0.442 secs elapsed; 0.472 secs total) done</span></span></code></pre></div>
 <div class="sourceCode" id="cb129"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## View image</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"many_sequences_19.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -3039,31 +3039,31 @@
 <span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb131"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb131-1"><a href="#cb131-1" tabindex="-1"></a><span class="do">## ℹ Verbose monitoring enabled</span></span>
 <span id="cb131-2"><a href="#cb131-2" tabindex="-1"></a></span>
-<span id="cb131-3"><a href="#cb131-3" tabindex="-1"></a><span class="do">## ℹ (2026-01-19 12:10:43) visualise_many_sequences start</span></span>
+<span id="cb131-3"><a href="#cb131-3" tabindex="-1"></a><span class="do">## ℹ (2026-01-19 12:24:31) visualise_many_sequences start</span></span>
 <span id="cb131-4"><a href="#cb131-4" tabindex="-1"></a></span>
-<span id="cb131-5"><a href="#cb131-5" tabindex="-1"></a><span class="do">## ℹ (0.003 secs elapsed; 0.003 secs total) resolving aliases</span></span>
+<span id="cb131-5"><a href="#cb131-5" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.002 secs total) resolving aliases</span></span>
 <span id="cb131-6"><a href="#cb131-6" tabindex="-1"></a></span>
-<span id="cb131-7"><a href="#cb131-7" tabindex="-1"></a><span class="do">## ℹ (0.001 secs elapsed; 0.005 secs total) validating arguments</span></span>
+<span id="cb131-7"><a href="#cb131-7" tabindex="-1"></a><span class="do">## ℹ (0.001 secs elapsed; 0.003 secs total) validating arguments</span></span>
 <span id="cb131-8"><a href="#cb131-8" tabindex="-1"></a></span>
-<span id="cb131-9"><a href="#cb131-9" tabindex="-1"></a><span class="do">## ℹ (0.001 secs elapsed; 0.006 secs total) inserting blank sequences at specified indices</span></span>
+<span id="cb131-9"><a href="#cb131-9" tabindex="-1"></a><span class="do">## ℹ (0.001 secs elapsed; 0.004 secs total) inserting blank sequences at specified indices</span></span>
 <span id="cb131-10"><a href="#cb131-10" tabindex="-1"></a></span>
-<span id="cb131-11"><a href="#cb131-11" tabindex="-1"></a><span class="do">## ℹ (0.001 secs elapsed; 0.008 secs total) rasterising image data</span></span>
+<span id="cb131-11"><a href="#cb131-11" tabindex="-1"></a><span class="do">## ℹ (0.001 secs elapsed; 0.005 secs total) rasterising image data</span></span>
 <span id="cb131-12"><a href="#cb131-12" tabindex="-1"></a></span>
-<span id="cb131-13"><a href="#cb131-13" tabindex="-1"></a><span class="do">## ℹ (0.008 secs elapsed; 0.015 secs total) choosing rendering method</span></span>
+<span id="cb131-13"><a href="#cb131-13" tabindex="-1"></a><span class="do">## ℹ (0.006 secs elapsed; 0.011 secs total) choosing rendering method</span></span>
 <span id="cb131-14"><a href="#cb131-14" tabindex="-1"></a></span>
 <span id="cb131-15"><a href="#cb131-15" tabindex="-1"></a><span class="do">## Warning: Forcing geom_raster via force_raster = TRUE will remove all sequence</span></span>
 <span id="cb131-16"><a href="#cb131-16" tabindex="-1"></a><span class="do">## text, index annotations (though any inserted blank lines/spacers will remain),</span></span>
 <span id="cb131-17"><a href="#cb131-17" tabindex="-1"></a><span class="do">## and box outlines.</span></span>
 <span id="cb131-18"><a href="#cb131-18" tabindex="-1"></a></span>
-<span id="cb131-19"><a href="#cb131-19" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.017 secs total) creating basic plot via geom_raster</span></span>
+<span id="cb131-19"><a href="#cb131-19" tabindex="-1"></a><span class="do">## ℹ (0.001 secs elapsed; 0.013 secs total) creating basic plot via geom_raster</span></span>
 <span id="cb131-20"><a href="#cb131-20" tabindex="-1"></a></span>
-<span id="cb131-21"><a href="#cb131-21" tabindex="-1"></a><span class="do">## ℹ (0.004 secs elapsed; 0.021 secs total) adding general plot themes</span></span>
+<span id="cb131-21"><a href="#cb131-21" tabindex="-1"></a><span class="do">## ℹ (0.004 secs elapsed; 0.016 secs total) adding general plot themes</span></span>
 <span id="cb131-22"><a href="#cb131-22" tabindex="-1"></a></span>
-<span id="cb131-23"><a href="#cb131-23" tabindex="-1"></a><span class="do">## ℹ (0.010 secs elapsed; 0.031 secs total) calculating margin</span></span>
+<span id="cb131-23"><a href="#cb131-23" tabindex="-1"></a><span class="do">## ℹ (0.009 secs elapsed; 0.026 secs total) calculating margin</span></span>
 <span id="cb131-24"><a href="#cb131-24" tabindex="-1"></a></span>
-<span id="cb131-25"><a href="#cb131-25" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.033 secs total) exporting image file</span></span>
+<span id="cb131-25"><a href="#cb131-25" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.028 secs total) exporting image file</span></span>
 <span id="cb131-26"><a href="#cb131-26" tabindex="-1"></a></span>
-<span id="cb131-27"><a href="#cb131-27" tabindex="-1"></a><span class="do">## ℹ (0.629 secs elapsed; 0.662 secs total) done</span></span></code></pre></div>
+<span id="cb131-27"><a href="#cb131-27" tabindex="-1"></a><span class="do">## ℹ (0.409 secs elapsed; 0.437 secs total) done</span></span></code></pre></div>
 <div class="sourceCode" id="cb132"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## View image</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">github_location</span>, <span class="st">"many_sequences_20.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
