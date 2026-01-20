@@ -36,42 +36,73 @@ test_that("error reporting recursively rejects bad arguments", {
 ## Test alias management
 test_that("alias management works", {
     low_colour <- "blue"
-    dots <- list(low_color = "orange")
-    low_colour <- resolve_alias("low_colour", low_colour, "low_color", dots$low_color, "blue")
+    dots_env <- list2env(list(low_color = "orange"))
+    low_colour <- resolve_alias("low_colour", low_colour, "blue", "low_color", dots_env)
     expect_equal(low_colour, "orange")
 })
 
 test_that("alias management works, canonical changed", {
     low_colour <- "red"
-    dots <- list(low_color = "orange")
-    expect_warning(low_colour <- resolve_alias("low_colour", low_colour, "low_color", dots$low_color, "blue"), class = "alias_conflict")
+    dots_env <- list2env(list(low_color = "orange"))
+    expect_warning(low_colour <- resolve_alias("low_colour", low_colour, "blue", "low_color", dots_env), class = "alias_conflict")
     expect_equal(low_colour, "red")
 })
 
 test_that("alias management works, canonical always wins", {
     low_colour <- "green"
-    dots <- list(low_color = "orange", low_col = "purple")
-    expect_warning(low_colour <- resolve_alias("low_colour", low_colour, "low_color", dots$low_color, "blue"), class = "alias_conflict")
-    expect_warning(low_colour <- resolve_alias("low_colour", low_colour, "low_col", dots$low_col, "blue"), class = "alias_conflict")
+    dots_env <- list2env(list(low_color = "orange", low_col = "purple"))
+    expect_warning(low_colour <- resolve_alias("low_colour", low_colour, "blue", "low_color", dots_env), class = "alias_conflict")
+    expect_warning(low_colour <- resolve_alias("low_colour", low_colour, "blue", "low_col", dots_env), class = "alias_conflict")
     expect_equal(low_colour, "green")
 })
 
 test_that("alias management works, cascading", {
     low_colour <- "blue"
-    dots <- list(low_color = "orange", low_col = "purple")
-    low_colour <- resolve_alias("low_colour", low_colour, "low_color", dots$low_color, "blue")
-    expect_warning(low_colour <- resolve_alias("low_colour", low_colour, "low_col", dots$low_col, "blue"), class = "alias_conflict")
+    dots_env <- list2env(list(low_color = "orange", low_col = "purple"))
+    low_colour <- resolve_alias("low_colour", low_colour, "blue", "low_color", dots_env)
+    expect_warning(low_colour <- resolve_alias("low_colour", low_colour, "blue", "low_col", dots_env), class = "alias_conflict")
     expect_equal(low_colour, "orange")
 })
 
 test_that("alias management works, cascading", {
     low_colour <- "blue"
-    dots <- list(low_col = "purple")
-    low_colour <- resolve_alias("low_colour", low_colour, "low_color", dots$low_color, "blue")
-    low_colour <- resolve_alias("low_colour", low_colour, "low_col", dots$low_col, "blue")
+    dots_env <- list2env(list(low_col = "purple"))
+    low_colour <- resolve_alias("low_colour", low_colour, "blue", "low_color", dots_env)
+    low_colour <- resolve_alias("low_colour", low_colour, "blue", "low_col", dots_env)
     expect_equal(low_colour, "purple")
 })
 
+test_that("alias management works, documentation example", {
+    low_colour <- "blue" ## e.g. default value from function call
+    dots_env <- list2env(list(low_color = "pink")) ## presumes low_color = "pink" was set in function call
+    low_colour <- resolve_alias("low_colour", low_colour, "blue", "low_color", dots_env)
+    expect_equal(low_colour, "pink")
+})
+
+test_that("alias management works, alias map documentation example", {
+    ## Alias map (from within function code)
+    alias_map <- list(
+        low_colour = list(default = "blue", aliases = c("low_color", "low_col")),
+        high_colour = list(default = "red", aliases = c("high_color", "high_col"))
+    )
+
+    ## Default values (would come from formal arguments)
+    low_colour = "blue" ## default
+    high_colour = "green" ## changed from default
+
+    ## Extra arguments provided by name
+    dots_env <- list2env(list("low_col" = "black", "low_color" = "white", "high_color" = "orange"))
+
+    ## Process
+    expect_warning(expect_warning(
+        resolve_alias_map(alias_map, dots_env),
+        class = "alias_conflict"), class = "alias_conflict"
+    )
+
+    ## See values
+    expect_equal(low_colour, "white")
+    expect_equal(high_colour, "green")
+})
 
 ## Test converting base to number
 test_that("converting base to number works when expected to", {

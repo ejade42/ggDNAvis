@@ -28,16 +28,16 @@ If any arguments were given that aren't in the alias map an error is raised.
 \examples{
 ## Alias map (from within function code)
 alias_map <- list(
-    low_colour = list(default = "blue", aliases = c("low_color", "low_col")),
-    high_colour = list(default = "red", aliases = c("high_color", "high_col"))
+   low_colour = list(default = "blue", aliases = c("low_color", "low_col")),
+   high_colour = list(default = "red", aliases = c("high_color", "high_col"))
 )
 
 ## Default values (would come from formal arguments)
-low_colour = "blue"
-high_colour = "red"
+low_colour = "blue" ## default
+high_colour = "green" ## changed from default
 
 ## Extra arguments provided by name
-dots_env <- list2env(list("low_col" = "black", "low_color" = "white"))
+dots_env <- list2env(list("low_col" = "black", "low_color" = "white", "high_color" = "orange"))
 
 ## Process
 resolve_alias_map(alias_map, dots_env)
