@@ -10,6 +10,7 @@ visualise_methylation_colour_scale(
   high_colour = "red",
   low_clamp = 0,
   high_clamp = 255,
+  ...,
   full_range = c(0, 255),
   precision = 10^3,
   background_colour = "white",
@@ -19,8 +20,7 @@ visualise_methylation_colour_scale(
   side_scale_title = NULL,
   outline_colour = "black",
   outline_linewidth = 1,
-  monitor_performance = FALSE,
-  ...
+  monitor_performance = FALSE
 )
 }
 \arguments{
@@ -31,6 +31,8 @@ visualise_methylation_colour_scale(
 \item{low_clamp}{\code{numeric}. The minimum probability below which all values are coloured \code{low_colour}. Defaults to \code{0} (i.e. no clamping). To specify a proportion probability in 8-bit form, multiply by 255 e.g. to low-clamp at 30\% probability, set this to \code{0.3*255}.}
 
 \item{high_clamp}{\code{numeric}. The maximum probability above which all values are coloured \code{high_colour}. Defaults to \code{255} (i.e. no clamping, assuming Nanopore > SAM style modification calling where probabilities are 8-bit integers from 0 to 255).}
+
+\item{...}{Used to recognise aliases e.g. American spellings or common misspellings - see \link{aliases}. If any American spellings do not work, please make a bug report at \url{https://github.com/ejade42/ggDNAvis/issues}.}
 
 \item{full_range}{\verb{numeric vector}, length 2. The total range of possible probabilities. Defaults to \code{c(0, 255)}, which is appropriate for Nanopore > SAM style modification calling where probabilities are 8-bit integers from 0 to 255.\cr\cr May need to be set to \code{c(0, 1)} if probabilites are instead stored as decimals. Setting any other value is advanced use and should be done for a good reason.}
 
@@ -51,8 +53,6 @@ visualise_methylation_colour_scale(
 \item{outline_linewidth}{\code{numeric}. The linewidth of the scalebar outline. Defaults to \code{1}. Set to \code{0} to disable scalebar outline.}
 
 \item{monitor_performance}{\code{logical}. Boolean specifying whether verbose performance monitoring should be messaged to console. Defaults to \code{FALSE}.}
-
-\item{...}{Used to recognise aliases e.g. American spellings or common misspellings - see \link{aliases}. If any American spellings do not work, please make a bug report at \url{https://github.com/ejade42/ggDNAvis/issues}.}
 }
 \value{
 ggplot of the scalebar.\cr\cr Unlike the other \verb{visualise_<>} functions in this package, does not directly export a png. This is because there are no squares that need to be rendered at a precise aspect ratio in this function. It can just be saved normally with \code{\link[ggplot2:ggsave]{ggplot2::ggsave()}} with any sensible combination of height and width.

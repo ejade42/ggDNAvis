@@ -4,35 +4,44 @@
 #' See the [aliases] page for a general explanation of how aliases are used in `ggDNAvis`.
 #'
 #' This function takes the name and value for the 'primary' form of an argument
-#' (generally British spellings in `ggDNAvis`), the name and value of an alternative
-#' 'alias' form, and the default value of the 'primary' argument.
+#' (generally British spellings in `ggDNAvis`), the name of an alternative
+#' 'alias' form, the dots (unrecognised argument) environment, and the default value of the 'primary' argument.
 #'
-#' If the alias has not been used (i.e. the 'alias' value is `NULL`) or if the 'primary'
+#' If the alias has not been used (i.e. the alias is not present in the dots env) or if the 'primary'
 #' value has been changed from the default, then the 'primary' value will be returned.
-#' (Note that if the 'alias' value is not `NULL` and the 'primary' value has been changed
+#' (Note that if the alias is present in the dots env and the 'primary' value has been changed
 #' from the default, then the updated 'primary' value 'wins' and is returned, but with a
 #' warning that explains that both values were set and the 'alias' has been discarded).
 #'
-#' If the alias has been used (i.e. the 'alias' value is not `NULL`) and the 'primary'
+#' If the alias has been used (i.e. the alias is present in the dots env) and the 'primary'
 #' value is the default, then the 'alias' value will be returned.
+#'
+#' This function is most often used when called by [resolve_alias_map()].
 #'
 #' @param primary_name `character`. The usual name of the argument.
 #' @param primary_val `value`. The value of the argument under its usual name.
-#' @param alias_name `character`. An alternative alias name for the argument.
-#' @param alias_val `value`. The value of the argument under its alias. Expected to be `NULL` if the alias argument is not being used.
 #' @param primary_default `value`. The default value of the argument under its usual name, used to determine if the primary argument has been explicitly set.
+#' @param alias_name `character`. An alternative alias name for the argument.
+#' @param dots_env `environment`. The environment created from the dots list. *WILL BE MODIFIED* by this function - alias is removed if it exists, to allow searching this environment for any unused arguments.
 #'
 #' @return `value`. Either `primary_val` or `alias_val`, depending on the logic above.
 #' @export
+#'
+#' @examples
+#' low_colour <- "blue" ## e.g. default value from function call
+#' dots_env <- list2env(list(low_color = "pink")) ## presumes low_color = "pink" was set in function call
+#' resolve_alias("low_colour", low_colour, "blue", "low_color", dots_env)
+#'
 resolve_alias <- function(
     primary_name,
     primary_val,
+    primary_default,
     alias_name,
-    alias_val,
-    primary_default
+    dots_env
 ) {
-    ## This function doesn't cope is a mandatory argument is missing but its alias is provided.
-    ## I don't think that shows up in the package, at least in user-facing functions.
+    ## This function doesn't cope if a mandatory argument is missing but its alias is provided.
+    ## I don't think that shows up in the package, at least in user-facing functions, because
+    ## mandatory arguments don't get aliases.
 
     ## Validate arguments
     ## ---------------------------------------------------------------------
@@ -45,8 +54,14 @@ resolve_alias <- function(
 
 
     ## If alias has been provided:
-    if (!is.null(alias_val)) {
+    if (exists(alias_name, envir = dots_env)) {
+        ## Get alias value from dots environment
+        ## Remove alias from dots environment
+        alias_val <- get(alias_name, envir = dots_env)
+        rm(list = alias_name, envir = dots_env)
+
         not_default <- !identical(primary_val, primary_default)
+
 
         ## If both are set, warn and return primary value
         if (not_default) {
@@ -63,6 +78,74 @@ resolve_alias <- function(
     ## If alias was not provided, return primary:
     } else {
         return(primary_val)
+    }
+}
+
+#' Process an alias map list (generic `ggDNAvis` helper)
+#'
+#' @description
+#' See the [aliases] page for a general explanation of how aliases are used in `ggDNAvis`.
+#'
+#' This function takes an alias map and the environment constructed from non-formal
+#' arguments (...) to the calling function, and optionally an environment to function inside,
+#' and works through the aliases provided in the map via [resolve_alias()].
+#'
+#' If any arguments were given that aren't in the alias map an error is raised.
+#'
+#' @param alias_map `list`. A list where each entry takes the name of a formal argument in the calling function, and each value is a list containing `"default"` (the default value of the formal argument) and `"aliases"` (a character vector of all allowed aliases for the formal argument). Aliases are processed in the order given in the character vector, with earlier aliases taking precedence.
+#' @param target_env `environment`. The environment in which variables should be modified. Generally [parent.frame()] i.e. the calling function.
+#' @inheritParams resolve_alias
+#'
+#' @return Nothing (variables are modified within the `target_env`).
+#' @export
+#'
+#' @examples
+#' ## Alias map (from within function code)
+#' alias_map <- list(
+#'     low_colour = list(default = "blue", aliases = c("low_color", "low_col")),
+#'     high_colour = list(default = "red", aliases = c("high_color", "high_col"))
+#' )
+#'
+#' ## Default values (would come from formal arguments)
+#' low_colour = "blue"
+#' high_colour = "red"
+#'
+#' ## Extra arguments provided by name
+#' dots_env <- list2env(list("low_col" = "black", "low_color" = "white"))
+#'
+#' ## Process
+#' resolve_alias_map(alias_map, dots_env)
+#'
+#' ## See values
+#' print(low_colour)
+#' print(high_colour)
+#'
+resolve_alias_map <- function(alias_map, dots_env, target_env = parent.frame()) {
+    ## Process aliases
+    for (argument in names(alias_map)) {
+        argument_map <- alias_map[[argument]]
+        current_val  <- get(argument, envir = target_env)
+
+        ## Loop through aliases - precedence depends on order in alias map vector
+        for (alias in argument_map[[aliases]]) {
+            current_value <- resolve_alias(
+                primary_name = argument,
+                primary_val = current_val,
+                primary_default = argument_map[[default]],
+                alias_name = alias,
+                dots_env = dots_env
+            )
+        }
+
+        ## Assign argument in parent environment
+        assign(argument, current_val, envir = target_env)
+    }
+
+    ## Give error if any arguments are unrecognised
+    unused_args <- ls(envir = dots_env)
+    error_message <- paste("Unrecognised arguments:", paste(unused_args, collapse = ", "))
+    if (length(unused_args) > 0) {
+        abort(error_message, class = "unrecognised_argument", call = rlang::caller_env())
     }
 }
 

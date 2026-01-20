@@ -9,6 +9,7 @@ visualise_methylation(
   modification_locations,
   modification_probabilities,
   sequences,
+  ...,
   low_colour = "blue",
   high_colour = "red",
   low_clamp = 0,
@@ -44,8 +45,7 @@ visualise_methylation(
   force_raster = FALSE,
   render_device = ragg::agg_png,
   pixels_per_base = 100,
-  monitor_performance = FALSE,
-  ...
+  monitor_performance = FALSE
 )
 }
 \arguments{
@@ -54,6 +54,8 @@ visualise_methylation(
 \item{modification_probabilities}{\verb{character vector}. One character value for each sequence, storing a condensed string (e.g. \code{"0,128,255,15"}, produced via \code{\link[=vector_to_string]{vector_to_string()}}) of the probability of methylation/modification at each assessed base.\cr\cr Assumed to be Nanopore > SAM style modification stored as an 8-bit integer from 0 to 255, but changing other arguments could make this work on other scales.}
 
 \item{sequences}{\verb{character vector}. One character value for each sequence, storing the actual DNA sequence.}
+
+\item{...}{Used to recognise aliases e.g. American spellings or common misspellings - see \link{aliases}. If any American spellings do not work, please make a bug report at \url{https://github.com/ejade42/ggDNAvis/issues}.}
 
 \item{low_colour}{\code{character}. The colour that should be used to represent minimum probability of methylation/modification (defaults to blue).}
 
@@ -126,8 +128,6 @@ visualise_methylation(
 \item{pixels_per_base}{\code{integer}. How large each box should be in pixels, if file output is turned on via setting \code{filename}. Corresponds to dpi of the exported image. Defaults to \code{100}.\cr\cr Large values (e.g. 100) are required to render small text properly. Small values (e.g. 20) will work when sequence/annotation text is off, and very small values (e.g. 10) will work when sequence/annotation text and outlines are all off.}
 
 \item{monitor_performance}{\code{logical}. Boolean specifying whether verbose performance monitoring should be messaged to console. Defaults to \code{FALSE}.}
-
-\item{...}{Used to recognise aliases e.g. American spellings or common misspellings - see \link{aliases}. If any American spellings do not work, please make a bug report at \url{https://github.com/ejade42/ggDNAvis/issues}.}
 }
 \value{
 A ggplot object containing the full visualisation, or \code{invisible(NULL)} if \code{return = FALSE}. It is often more useful to use \code{filename = "myfilename.png"}, because then the visualisation is exported at the correct aspect ratio.

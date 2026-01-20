@@ -231,6 +231,7 @@ visualise_methylation <- function(
     modification_locations,
     modification_probabilities,
     sequences,
+    ...,
     low_colour = "blue",
     high_colour = "red",
     low_clamp = 0,
@@ -266,8 +267,7 @@ visualise_methylation <- function(
     force_raster = FALSE,
     render_device = ragg::agg_png,
     pixels_per_base = 100,
-    monitor_performance = FALSE,
-    ...
+    monitor_performance = FALSE
 ) {
     ## Validate monitor_performance then store start time
     start_time <- monitor_start(monitor_performance, "visualise_methylation")
@@ -275,31 +275,25 @@ visualise_methylation <- function(
     ## Process aliases
     ## ---------------------------------------------------------------------
     monitor_time <- monitor(monitor_performance, start_time, start_time, "resolving aliases")
-    dots <- list(...)
-    low_colour <- resolve_alias("low_colour", low_colour, "low_color", dots[["low_color"]], "blue")
-    low_colour <- resolve_alias("low_colour", low_colour, "low_col", dots[["low_col"]], "blue")
-    high_colour <- resolve_alias("high_colour", high_colour, "high_color", dots[["high_color"]], "red")
-    high_colour <- resolve_alias("high_colour", high_colour, "high_col", dots[["high_col"]], "red")
-    background_colour <- resolve_alias("background_colour", background_colour, "background_color", dots[["background_color"]], "white")
-    background_colour <- resolve_alias("background_colour", background_colour, "background_col", dots[["background_col"]], "white")
-    other_bases_colour <- resolve_alias("other_bases_colour", other_bases_colour, "other_bases_color", dots[["other_bases_color"]], "grey")
-    other_bases_colour <- resolve_alias("other_bases_colour", other_bases_colour, "other_bases_col", dots[["other_bases_col"]], "grey")
-    sequence_text_colour <- resolve_alias("sequence_text_colour", sequence_text_colour, "sequence_text_color", dots[["sequence_text_color"]], "black")
-    sequence_text_colour <- resolve_alias("sequence_text_colour", sequence_text_colour, "sequence_text_col", dots[["sequence_text_col"]], "black")
-    index_annotation_colour <- resolve_alias("index_annotation_colour", index_annotation_colour, "index_annotation_color", dots[["index_annotation_color"]], "darkred")
-    index_annotation_colour <- resolve_alias("index_annotation_colour", index_annotation_colour, "index_annotation_col", dots[["index_annotation_col"]], "darkred")
-    outline_colour <- resolve_alias("outline_colour", outline_colour, "outline_color", dots[["outline_color"]], "black")
-    outline_colour <- resolve_alias("outline_colour", outline_colour, "outline_col", dots[["outline_col"]], "black")
-    modified_bases_outline_colour <- resolve_alias("modified_bases_outline_colour", modified_bases_outline_colour, "modified_bases_outline_color", dots[["modified_bases_outline_color"]], NA)
-    modified_bases_outline_colour <- resolve_alias("modified_bases_outline_colour", modified_bases_outline_colour, "modified_bases_outline_col", dots[["modified_bases_outline_col"]], NA)
-    other_bases_outline_colour <- resolve_alias("other_bases_outline_colour", other_bases_outline_colour, "other_bases_outline_color", dots[["other_bases_outline_color"]], NA)
-    other_bases_outline_colour <- resolve_alias("other_bases_outline_colour", other_bases_outline_colour, "other_bases_outline_col", dots[["other_bases_outline_col"]], NA)
-    index_annotations_above <- resolve_alias("index_annotations_above", index_annotations_above, "index_annotation_above", dots[["index_annotation_above"]], TRUE)
-    index_annotation_full_line <- resolve_alias("index_annotation_full_line", index_annotation_full_line, "index_annotations_full_line", dots[["index_annotations_full_line"]], TRUE)
-    index_annotation_full_line <- resolve_alias("index_annotation_full_line", index_annotation_full_line, "index_annotations_full_lines", dots[["index_annotations_full_lines"]], TRUE)
-    index_annotation_full_line <- resolve_alias("index_annotation_full_line", index_annotation_full_line, "index_annotation_full_lines", dots[["index_annotation_full_lines"]], TRUE)
-    index_annotation_always_first_base <- resolve_alias("index_annotation_always_first_base", index_annotation_always_first_base, "index_annotations_always_first_base", dots[["index_annotations_always_first_base"]], TRUE)
-    index_annotation_always_last_base <- resolve_alias("index_annotation_always_last_base", index_annotation_always_last_base, "index_annotations_always_last_base", dots[["index_annotations_always_last_base"]], TRUE)
+    dots_env <- list2env(list(...))
+
+    alias_map <- list(
+        low_colour = list(default = "blue", aliases = c("low_color", "low_col")),
+        high_colour = list(default = "red", aliases = c("high_color", "high_col")),
+        background_colour = list(default = "white", aliases = c("background_color", "background_col")),
+        other_bases_colour = list(default = "grey", aliases = c("other_bases_color", "other_bases_col")),
+        sequence_text_colour = list(default = "black", aliases = c("sequence_text_color", "sequence_text_col")),
+        index_annotation_colour = list(default = "darkred", aliases = c("index_annotation_color", "index_annotation_col")),
+        outline_colour = list(default = "black", aliases = c("outline_color", "outline_col")),
+        modified_bases_outline_colour = list(default = NA, aliases = c("modified_bases_outline_color", "modified_bases_outline_col")),
+        other_bases_outline_colour = list(default = NA, aliases = c("other_bases_outline_color", "other_bases_outline_col")),
+        index_annotations_above = list(default = TRUE, aliases = c("index_annotation_above")),
+        index_annotation_full_line = list(default = TRUE, aliases = c("index_annotations_full_line", "index_annotations_full_lines", "index_annotation_full_lines")),
+        index_annotation_always_first_base = list(default = TRUE, aliases = c("index_annotations_always_first_base")),
+        index_annotation_always_last_base = list(default = TRUE, aliases = c("index_annotations_always_last_base"))
+    )
+
+    process_alias_map(alias_map, dots_env)
     ## ---------------------------------------------------------------------
 
 
@@ -697,6 +691,7 @@ visualise_methylation_colour_scale <- function(
     high_colour = "red",
     low_clamp = 0,
     high_clamp = 255,
+    ...,
     full_range = c(0, 255),
     precision = 10^3,
     background_colour = "white",
@@ -706,8 +701,7 @@ visualise_methylation_colour_scale <- function(
     side_scale_title = NULL,
     outline_colour = "black",
     outline_linewidth = 1,
-    monitor_performance = FALSE,
-    ...
+    monitor_performance = FALSE
 ) {
     ## Validate monitor_performance then store start time
     start_time <- monitor_start(monitor_performance, "visualise_methylation_colour_scale")
@@ -887,14 +881,14 @@ visualise_methylation_colour_scale <- function(
 #' @export
 extract_and_sort_methylation <- function(
     modification_data,
+    ...,
     locations_colname = "methylation_locations",
     probabilities_colname = "methylation_probabilities",
     sequences_colname = "sequence",
     lengths_colname = "sequence_length",
     grouping_levels = c("family" = 8, "individual" = 2),
     sort_by = "sequence_length",
-    desc_sort = TRUE,
-    ...
+    desc_sort = TRUE
 ) {
     ## Process aliases
     ## ---------------------------------------------------------------------

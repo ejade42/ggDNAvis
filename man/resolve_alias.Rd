@@ -4,24 +4,18 @@
 \alias{resolve_alias}
 \title{Resolve argument value when aliases are used (generic \code{ggDNAvis} helper)}
 \usage{
-resolve_alias(
-  primary_name,
-  primary_val,
-  alias_name,
-  alias_val,
-  primary_default
-)
+resolve_alias(primary_name, primary_val, primary_default, alias_name, dots_env)
 }
 \arguments{
 \item{primary_name}{\code{character}. The usual name of the argument.}
 
 \item{primary_val}{\code{value}. The value of the argument under its usual name.}
 
+\item{primary_default}{\code{value}. The default value of the argument under its usual name, used to determine if the primary argument has been explicitly set.}
+
 \item{alias_name}{\code{character}. An alternative alias name for the argument.}
 
-\item{alias_val}{\code{value}. The value of the argument under its alias. Expected to be \code{NULL} if the alias argument is not being used.}
-
-\item{primary_default}{\code{value}. The default value of the argument under its usual name, used to determine if the primary argument has been explicitly set.}
+\item{dots_env}{\code{environment}. The environment created from the dots list. \emph{WILL BE MODIFIED} by this function - alias is removed if it exists, to allow searching this environment for any unused arguments.}
 }
 \value{
 \code{value}. Either \code{primary_val} or \code{alias_val}, depending on the logic above.
@@ -30,15 +24,23 @@ resolve_alias(
 See the \link{aliases} page for a general explanation of how aliases are used in \code{ggDNAvis}.
 
 This function takes the name and value for the 'primary' form of an argument
-(generally British spellings in \code{ggDNAvis}), the name and value of an alternative
-'alias' form, and the default value of the 'primary' argument.
+(generally British spellings in \code{ggDNAvis}), the name of an alternative
+'alias' form, the dots (unrecognised argument) environment, and the default value of the 'primary' argument.
 
-If the alias has not been used (i.e. the 'alias' value is \code{NULL}) or if the 'primary'
+If the alias has not been used (i.e. the alias is not present in the dots env) or if the 'primary'
 value has been changed from the default, then the 'primary' value will be returned.
-(Note that if the 'alias' value is not \code{NULL} and the 'primary' value has been changed
+(Note that if the alias is present in the dots env and the 'primary' value has been changed
 from the default, then the updated 'primary' value 'wins' and is returned, but with a
 warning that explains that both values were set and the 'alias' has been discarded).
 
-If the alias has been used (i.e. the 'alias' value is not \code{NULL}) and the 'primary'
+If the alias has been used (i.e. the alias is present in the dots env) and the 'primary'
 value is the default, then the 'alias' value will be returned.
+
+This function is most often used when called by \code{\link[=resolve_alias_map]{resolve_alias_map()}}.
+}
+\examples{
+low_colour <- "blue" ## e.g. default value from function call
+dots_env <- list2env(list(low_color = "pink")) ## presumes low_color = "pink" was set in function call
+resolve_alias("low_colour", low_colour, "blue", "low_color", dots_env)
+
 }

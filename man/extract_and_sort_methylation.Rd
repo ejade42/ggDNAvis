@@ -7,18 +7,20 @@
 \usage{
 extract_and_sort_methylation(
   modification_data,
+  ...,
   locations_colname = "methylation_locations",
   probabilities_colname = "methylation_probabilities",
   sequences_colname = "sequence",
   lengths_colname = "sequence_length",
   grouping_levels = c(family = 8, individual = 2),
   sort_by = "sequence_length",
-  desc_sort = TRUE,
-  ...
+  desc_sort = TRUE
 )
 }
 \arguments{
 \item{modification_data}{\code{dataframe}. A dataframe that must contain columns for methylation locations, methylation probabilities, sequence, and sequence length for each read. The former two should be condensed strings as produced by \code{\link[=vector_to_string]{vector_to_string()}} e.g. \code{"1,2,3,4"}.\cr\cr See \code{\link{example_many_sequences}} for an example of a compatible dataframe.}
+
+\item{...}{Used to recognise aliases e.g. American spellings or common misspellings - see \link{aliases}. If any American spellings do not work, please make a bug report at \url{https://github.com/ejade42/ggDNAvis/issues}.}
 
 \item{locations_colname}{\code{character}. The name of the column within the input dataframe that contains methylation/modification location information. Defaults to \code{"methylation_locations"}.\cr\cr Values within this column must be a comma-separated string representing a condensed numerical vector (e.g. \code{"3,6,9,12"}, produced via \code{\link[=vector_to_string]{vector_to_string()}}) of the indices along the read at which modification was assessed. Indexing starts at 1.}
 
@@ -33,8 +35,6 @@ extract_and_sort_methylation(
 \item{sort_by}{\code{character}. The name of the column within the dataframe that should be used to sort/order the rows within each lowest-level group. Set to \code{NA} to turn off sorting within groups.\cr\cr Recommended to be the length of the sequence information, as is the case for the default \code{"sequence_length"} which was generated via \code{example_many_sequences$sequence_length <- nchar(example_many_sequences$sequence)}.}
 
 \item{desc_sort}{\code{logical}. Boolean specifying whether rows within groups should be sorted by the \code{sort_by} variable descending (\code{TRUE}, default) or ascending (\code{FALSE}).}
-
-\item{...}{Used to recognise aliases e.g. American spellings or common misspellings - see \link{aliases}. If any American spellings do not work, please make a bug report at \url{https://github.com/ejade42/ggDNAvis/issues}.}
 }
 \value{
 \code{list}, containing \verb{$locations} (\verb{character vector}), \verb{$probabilities} (\verb{character vector}), \verb{$sequences} (\verb{character vector}), and \verb{$lengths} (\verb{integer vector}).
