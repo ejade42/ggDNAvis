@@ -276,24 +276,7 @@ visualise_methylation <- function(
     ## ---------------------------------------------------------------------
     monitor_time <- monitor(monitor_performance, start_time, start_time, "resolving aliases")
     dots_env <- list2env(list(...))
-
-    alias_map <- list(
-        low_colour = list(default = "blue", aliases = c("low_color", "low_col")),
-        high_colour = list(default = "red", aliases = c("high_color", "high_col")),
-        background_colour = list(default = "white", aliases = c("background_color", "background_col")),
-        other_bases_colour = list(default = "grey", aliases = c("other_bases_color", "other_bases_col")),
-        sequence_text_colour = list(default = "black", aliases = c("sequence_text_color", "sequence_text_col")),
-        index_annotation_colour = list(default = "darkred", aliases = c("index_annotation_color", "index_annotation_col")),
-        outline_colour = list(default = "black", aliases = c("outline_color", "outline_col")),
-        modified_bases_outline_colour = list(default = NA, aliases = c("modified_bases_outline_color", "modified_bases_outline_col")),
-        other_bases_outline_colour = list(default = NA, aliases = c("other_bases_outline_color", "other_bases_outline_col")),
-        index_annotations_above = list(default = TRUE, aliases = c("index_annotation_above")),
-        index_annotation_full_line = list(default = TRUE, aliases = c("index_annotations_full_line", "index_annotations_full_lines", "index_annotation_full_lines")),
-        index_annotation_always_first_base = list(default = TRUE, aliases = c("index_annotations_always_first_base")),
-        index_annotation_always_last_base = list(default = TRUE, aliases = c("index_annotations_always_last_base"))
-    )
-
-    resolve_alias_map(alias_map, dots_env)
+    resolve_alias_map(.alias_maps$visualise_methylation, dots_env)
     ## ---------------------------------------------------------------------
 
 
@@ -709,15 +692,8 @@ visualise_methylation_colour_scale <- function(
     ## Process aliases
     ## ---------------------------------------------------------------------
     monitor_time <- monitor(monitor_performance, start_time, start_time, "resolving aliases")
-    dots <- list(...)
-    low_colour <- resolve_alias("low_colour", low_colour, "low_color", dots[["low_color"]], "blue")
-    low_colour <- resolve_alias("low_colour", low_colour, "low_col", dots[["low_col"]], "blue")
-    high_colour <- resolve_alias("high_colour", high_colour, "high_color", dots[["high_color"]], "red")
-    high_colour <- resolve_alias("high_colour", high_colour, "high_col", dots[["high_col"]], "red")
-    background_colour <- resolve_alias("background_colour", background_colour, "background_color", dots[["background_color"]], "white")
-    background_colour <- resolve_alias("background_colour", background_colour, "background_col", dots[["background_col"]], "white")
-    outline_colour <- resolve_alias("outline_colour", outline_colour, "outline_color", dots[["outline_color"]], "black")
-    outline_colour <- resolve_alias("outline_colour", outline_colour, "outline_col", dots[["outline_col"]], "black")
+    dots_env <- list2env(list(...))
+    resolve_alias_map(.alias_maps$visualise_methylation_colour_scale, dots_env)
     ## ---------------------------------------------------------------------
 
 
@@ -892,11 +868,8 @@ extract_and_sort_methylation <- function(
 ) {
     ## Process aliases
     ## ---------------------------------------------------------------------
-    dots <- list(...)
-    sequences_colname <- resolve_alias("sequences_colname", sequences_colname, "sequence_colname", dots[["sequence_colname"]], "sequence")
-    locations_colname <- resolve_alias("locations_colname", locations_colname, "location_colname", dots[["location_colname"]], "methylation_locations")
-    probabilities_colname <- resolve_alias("probabilities_colname", probabilities_colname, "probability_colname", dots[["probability_colname"]], "methylation_probabilities")
-    lengths_colname <- resolve_alias("lengths_colname", lengths_colname, "length_colname", dots[["length_colname"]], "sequence_length")
+    dots_env <- list2env(list(...))
+    resolve_alias_map(.alias_maps$extract_and_sort_methylation, dots_env)
     ## ---------------------------------------------------------------------
 
 
