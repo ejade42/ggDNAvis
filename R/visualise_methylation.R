@@ -293,7 +293,7 @@ visualise_methylation <- function(
         index_annotation_always_last_base = list(default = TRUE, aliases = c("index_annotations_always_last_base"))
     )
 
-    process_alias_map(alias_map, dots_env)
+    resolve_alias_map(alias_map, dots_env)
     ## ---------------------------------------------------------------------
 
 

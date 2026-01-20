@@ -127,11 +127,11 @@ resolve_alias_map <- function(alias_map, dots_env, target_env = parent.frame()) 
         current_val  <- get(argument, envir = target_env)
 
         ## Loop through aliases - precedence depends on order in alias map vector
-        for (alias in argument_map[[aliases]]) {
-            current_value <- resolve_alias(
+        for (alias in argument_map[["aliases"]]) {
+            current_val <- resolve_alias(
                 primary_name = argument,
                 primary_val = current_val,
-                primary_default = argument_map[[default]],
+                primary_default = argument_map[["default"]],
                 alias_name = alias,
                 dots_env = dots_env
             )
