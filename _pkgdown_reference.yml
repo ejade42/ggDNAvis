@@ -54,6 +54,7 @@ reference:
   - debug_join_vector_str
   - bad_arg
   - resolve_alias
+  - resolve_alias_map
 
 - subtitle: Advanced helpers
   desc: >
