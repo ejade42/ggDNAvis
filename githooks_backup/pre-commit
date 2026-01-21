@@ -17,7 +17,7 @@ Rscript -e "
                 version_parts[length(version_parts)] <- as.integer(version_parts[length(version_parts)]) + 1
                 
                 # Reassemble
-                new_version <- paste(parts, collapse = '.')
+                new_version <- paste(version_parts, collapse = '.')
                 
                 # Write back to file
                 description_lines[version_row] <- paste('Version:', new_version)
