@@ -9,10 +9,14 @@ and (b) since the last step was recorded via this function.
 ## Usage
 
 ``` r
-monitor(monitor_performace, start_time, previous_time, message)
+monitor(monitor_performance, start_time, previous_time, message)
 ```
 
 ## Arguments
+
+- monitor_performance:
+
+  `logical`. Whether verbose performance monitoring should be enabled.
 
 - start_time:
 
@@ -41,7 +45,7 @@ monitor(monitor_performace, start_time, previous_time, message)
 ## Initialise monitoring
 start_time <- monitor_start(TRUE, "my_cool_function")
 #> ℹ Verbose monitoring enabled
-#> ℹ (2026-01-21 01:29:15) my_cool_function start
+#> ℹ (2026-01-21 01:42:13) my_cool_function start
 
 ## Step 1
 monitor_time <- monitor(TRUE, start_time, start_time, "performing step 1")
@@ -50,15 +54,15 @@ x <- 2 + 2
 
 ## Step 2
 monitor_time <- monitor(TRUE, start_time, monitor_time, "performing step 2")
-#> ℹ (0.003 secs elapsed; 0.007 secs total) performing step 2
+#> ℹ (0.002 secs elapsed; 0.007 secs total) performing step 2
 y <- 10.5^6 %% 345789
 
 ## Step 3
 monitor_time <- monitor(TRUE, start_time, monitor_time, "performing step 3")
-#> ℹ (0.003 secs elapsed; 0.009 secs total) performing step 3
+#> ℹ (0.002 secs elapsed; 0.009 secs total) performing step 3
 z <- y / x^2
 
 ## Conclude monitoring
 monitor_time <- monitor(TRUE, start_time, monitor_time, "done")
-#> ℹ (0.003 secs elapsed; 0.012 secs total) done
+#> ℹ (0.002 secs elapsed; 0.011 secs total) done
 ```

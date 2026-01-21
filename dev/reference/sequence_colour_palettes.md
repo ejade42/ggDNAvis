@@ -65,8 +65,8 @@ A list of 6 length-4 character vectors
 - accessible:
 
   Light green, dark green, dark blue, and light blue as suggested by
-  https://colorbrewer2.org/ for a 4-qualitative-category
-  colourblind-safe palette.  
+  [colorbrewer2.org](https://colorbrewer2.org/) for a
+  4-qualitative-category colourblind-safe palette.  
     
   Values: `c("#B2DF8A", "#33A02C", "#1F78B4", "#A6CEE3")`
 

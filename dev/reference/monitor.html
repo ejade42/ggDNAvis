@@ -65,14 +65,18 @@ this function.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">monitor</span><span class="op">(</span><span class="va">monitor_performace</span>, <span class="va">start_time</span>, <span class="va">previous_time</span>, <span class="va">message</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">monitor</span><span class="op">(</span><span class="va">monitor_performance</span>, <span class="va">start_time</span>, <span class="va">previous_time</span>, <span class="va">message</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
 
 
-<dl><dt id="arg-start-time">start_time<a class="anchor" aria-label="anchor" href="#arg-start-time"></a></dt>
+<dl><dt id="arg-monitor-performance">monitor_performance<a class="anchor" aria-label="anchor" href="#arg-monitor-performance"></a></dt>
+<dd><p><code>logical</code>. Whether verbose performance monitoring should be enabled.</p></dd>
+
+
+<dt id="arg-start-time">start_time<a class="anchor" aria-label="anchor" href="#arg-start-time"></a></dt>
 <dd><p><code>POSIXct</code>. The time at which the overarching function was initialised (generally via <code><a href="monitor_start.html">monitor_start()</a></code>).</p></dd>
 
 
@@ -94,7 +98,7 @@ this function.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">## Initialise monitoring</span></span></span>
 <span class="r-in"><span><span class="va">start_time</span> <span class="op">&lt;-</span> <span class="fu"><a href="monitor_start.html">monitor_start</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="st">"my_cool_function"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Verbose monitoring enabled</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> (2026-01-21 01:29:15) my_cool_function start</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> (2026-01-21 01:42:13) my_cool_function start</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Step 1</span></span></span>
 <span class="r-in"><span><span class="va">monitor_time</span> <span class="op">&lt;-</span> <span class="fu">monitor</span><span class="op">(</span><span class="cn">TRUE</span>, <span class="va">start_time</span>, <span class="va">start_time</span>, <span class="st">"performing step 1"</span><span class="op">)</span></span></span>
@@ -103,17 +107,17 @@ this function.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Step 2</span></span></span>
 <span class="r-in"><span><span class="va">monitor_time</span> <span class="op">&lt;-</span> <span class="fu">monitor</span><span class="op">(</span><span class="cn">TRUE</span>, <span class="va">start_time</span>, <span class="va">monitor_time</span>, <span class="st">"performing step 2"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> (0.003 secs elapsed; 0.007 secs total) performing step 2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> (0.002 secs elapsed; 0.007 secs total) performing step 2</span>
 <span class="r-in"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fl">10.5</span><span class="op">^</span><span class="fl">6</span> <span class="op"><a href="https://rdrr.io/r/base/Arithmetic.html" class="external-link">%%</a></span> <span class="fl">345789</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Step 3</span></span></span>
 <span class="r-in"><span><span class="va">monitor_time</span> <span class="op">&lt;-</span> <span class="fu">monitor</span><span class="op">(</span><span class="cn">TRUE</span>, <span class="va">start_time</span>, <span class="va">monitor_time</span>, <span class="st">"performing step 3"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> (0.003 secs elapsed; 0.009 secs total) performing step 3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> (0.002 secs elapsed; 0.009 secs total) performing step 3</span>
 <span class="r-in"><span><span class="va">z</span> <span class="op">&lt;-</span> <span class="va">y</span> <span class="op">/</span> <span class="va">x</span><span class="op">^</span><span class="fl">2</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Conclude monitoring</span></span></span>
 <span class="r-in"><span><span class="va">monitor_time</span> <span class="op">&lt;-</span> <span class="fu">monitor</span><span class="op">(</span><span class="cn">TRUE</span>, <span class="va">start_time</span>, <span class="va">monitor_time</span>, <span class="st">"done"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> (0.003 secs elapsed; 0.012 secs total) done</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> (0.002 secs elapsed; 0.011 secs total) done</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
