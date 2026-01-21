@@ -1,0 +1,31 @@
+#!/bin/sh
+
+Rscript -e "
+    description <- 'DESCRIPTION'
+    if (file.exists(description)) {
+        description_lines <- readLines(description)
+        version_row <- grep('^Version:', description_lines)
+        
+        if (length(version_row) > 0) {
+            current_version <- trimws(sub('^Version:', '', description_lines[version_row]))
+            version_parts <- unlist(strsplit(current_version, '[.-]'))
+            
+            ## >=4 parts i.e. dev version, iterate the last part by 1 upon commit
+            if (length(version_parts) >= 4) {
+                
+                # Increment the last part
+                version_parts[length(version_parts)] <- as.integer(version_parts[length(version_parts)]) + 1
+                
+                # Reassemble
+                new_version <- paste(parts, collapse = '.')
+                
+                # Write back to file
+                description_lines[version_row] <- paste('Version:', new_version)
+                writeLines(x, f)
+                
+                cat(sprintf('Auto-incremented dev version to %s\n', new_version))
+            }
+        }
+    }
+"
+git add DESCRIPTION

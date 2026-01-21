@@ -26,3 +26,4 @@
 ^CRAN-SUBMISSION$
 ^manifest\.json$
 ^app\.R$
+^githooks_backup$
