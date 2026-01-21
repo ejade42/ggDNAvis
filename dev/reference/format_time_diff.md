@@ -55,7 +55,7 @@ format_time_diff(newer, older, 4)
 format_time_diff(newer, older, 3)
 #> [1] "456"
 format_time_diff(newer, older, 2)
-#> [1] "%.0-1f"
+#> [1] "456"
 
 newer <- 1000000000.011
 older <- 1000000000
