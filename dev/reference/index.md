@@ -116,6 +116,21 @@ Small, widely used helper functions
 
   Process an alias map list (generic `ggDNAvis` helper)
 
+- [`monitor_start()`](https://ejade42.github.io/ggDNAvis/reference/monitor_start.md)
+  :
+
+  Start performance monitoring (generic `ggDNAvis` helper)
+
+- [`monitor()`](https://ejade42.github.io/ggDNAvis/reference/monitor.md)
+  :
+
+  Continue performance monitoring (generic `ggDNAvis` helper)
+
+- [`format_time_diff()`](https://ejade42.github.io/ggDNAvis/reference/format_time_diff.md)
+  :
+
+  Format a difference between times (generic `ggDNAvis` helper)
+
 ### Advanced helpers
 
 Helper functions that are mostly called by other functions; users

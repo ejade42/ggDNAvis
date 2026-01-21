@@ -21,6 +21,7 @@
 <url><loc>https://ejade42.github.io/ggDNAvis/reference/extract_and_sort_methylation.html</loc></url>
 <url><loc>https://ejade42.github.io/ggDNAvis/reference/extract_and_sort_sequences.html</loc></url>
 <url><loc>https://ejade42.github.io/ggDNAvis/reference/fastq_quality_scores.html</loc></url>
+<url><loc>https://ejade42.github.io/ggDNAvis/reference/format_time_diff.html</loc></url>
 <url><loc>https://ejade42.github.io/ggDNAvis/reference/ggDNAvis-package.html</loc></url>
 <url><loc>https://ejade42.github.io/ggDNAvis/reference/ggDNAvis_aliases.html</loc></url>
 <url><loc>https://ejade42.github.io/ggDNAvis/reference/ggDNAvis_shinyapp.html</loc></url>
@@ -28,6 +29,8 @@
 <url><loc>https://ejade42.github.io/ggDNAvis/reference/insert_at_indices.html</loc></url>
 <url><loc>https://ejade42.github.io/ggDNAvis/reference/merge_fastq_with_metadata.html</loc></url>
 <url><loc>https://ejade42.github.io/ggDNAvis/reference/merge_methylation_with_metadata.html</loc></url>
+<url><loc>https://ejade42.github.io/ggDNAvis/reference/monitor.html</loc></url>
+<url><loc>https://ejade42.github.io/ggDNAvis/reference/monitor_start.html</loc></url>
 <url><loc>https://ejade42.github.io/ggDNAvis/reference/rasterise_index_annotations.html</loc></url>
 <url><loc>https://ejade42.github.io/ggDNAvis/reference/rasterise_matrix.html</loc></url>
 <url><loc>https://ejade42.github.io/ggDNAvis/reference/rasterise_probabilities.html</loc></url>
