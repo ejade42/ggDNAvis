@@ -4,9 +4,11 @@
 \alias{monitor}
 \title{Continue performance monitoring (generic \code{ggDNAvis} helper)}
 \usage{
-monitor(monitor_performace, start_time, previous_time, message)
+monitor(monitor_performance, start_time, previous_time, message)
 }
 \arguments{
+\item{monitor_performance}{\code{logical}. Whether verbose performance monitoring should be enabled.}
+
 \item{start_time}{\code{POSIXct}. The time at which the overarching function was initialised (generally via \code{\link[=monitor_start]{monitor_start()}}).}
 
 \item{previous_time}{\code{POSIXct}. The time at which the previous step was recorded (via a prior call to \code{\link[=monitor]{monitor()}}).}

@@ -29,7 +29,7 @@
 #'
 #' @examples
 #' low_colour <- "blue" ## e.g. default value from function call
-#' dots_env <- list2env(list(low_color = "pink")) ## presumes low_color = "pink" was set in function call
+#' dots_env <- list2env(list(low_color = "pink")) ## e.g. low_color = "pink" set in function call
 #' low_colour <- resolve_alias("low_colour", low_colour, "blue", "low_color", dots_env)
 #' low_colour ## check to see what value was stored
 #'
@@ -239,8 +239,8 @@ monitor_start <- function(monitor_performance, function_name) {
 #' ## Conclude monitoring
 #' monitor_time <- monitor(TRUE, start_time, monitor_time, "done")
 #'
-monitor <- function(monitor_performace, start_time, previous_time, message) {
-    if (!monitor_performace) {return(invisible(NULL))}
+monitor <- function(monitor_performance, start_time, previous_time, message) {
+    if (!monitor_performance) {return(invisible(NULL))}
 
     current_time <- Sys.time()
     time_since_start <- format_time_diff(current_time, start_time, 4)
@@ -953,6 +953,8 @@ rasterise_matrix <- function(image_matrix, drop_na = TRUE) {
 #'     index_annotation_full_line = index_annotation_full_line,
 #'     index_annotations_above = index_annotations_above,
 #'     index_annotation_vertical_position = index_annotation_vertical_position,
+#'     index_annotation_always_first_base = TRUE,
+#'     index_annotation_always_last_base = TRUE,
 #'     sum_indices = FALSE,
 #'     spacing = NA, ## infer from vertical position
 #'     offset_start = 0

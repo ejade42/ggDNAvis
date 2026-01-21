@@ -206,7 +206,7 @@ NULL
 #'  \item{bright_pale2}{Bright yellow, green, blue, and red in lighter pastel-like tones. The green (for C) is slightly lighter than bright_pale.\cr\cr Values: `c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E")`}
 #'  \item{bright_deep}{Bright orange, green, blue, and red in darker, richer tones.\cr\cr Values: `c("#FFAA00", "#00BC00", "#0000DC", "#FF1E1E")`}
 #'  \item{sanger}{Green, blue, black, and red similar to a traditional Sanger sequencing readout.\cr\cr Values: `c("#00B200", "#0000FF", "#000000", "#FF0000")`}
-#'  \item{accessible}{Light green, dark green, dark blue, and light blue as suggested by https://colorbrewer2.org/ for a 4-qualitative-category colourblind-safe palette.\cr\cr Values: `c("#B2DF8A", "#33A02C", "#1F78B4", "#A6CEE3")`}
+#'  \item{accessible}{Light green, dark green, dark blue, and light blue as suggested by [colorbrewer2.org](https://colorbrewer2.org/) for a 4-qualitative-category colourblind-safe palette.\cr\cr Values: `c("#B2DF8A", "#33A02C", "#1F78B4", "#A6CEE3")`}
 #' }
 #'
 #' @examples

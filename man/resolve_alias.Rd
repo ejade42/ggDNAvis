@@ -40,7 +40,7 @@ This function is most often used when called by \code{\link[=resolve_alias_map]{
 }
 \examples{
 low_colour <- "blue" ## e.g. default value from function call
-dots_env <- list2env(list(low_color = "pink")) ## presumes low_color = "pink" was set in function call
+dots_env <- list2env(list(low_color = "pink")) ## e.g. low_color = "pink" set in function call
 low_colour <- resolve_alias("low_colour", low_colour, "blue", "low_color", dots_env)
 low_colour ## check to see what value was stored
 

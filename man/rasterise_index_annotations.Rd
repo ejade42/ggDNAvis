@@ -96,6 +96,8 @@ rasterise_index_annotations(
     index_annotation_full_line = index_annotation_full_line,
     index_annotations_above = index_annotations_above,
     index_annotation_vertical_position = index_annotation_vertical_position,
+    index_annotation_always_first_base = TRUE,
+    index_annotation_always_last_base = TRUE,
     sum_indices = FALSE,
     spacing = NA, ## infer from vertical position
     offset_start = 0
