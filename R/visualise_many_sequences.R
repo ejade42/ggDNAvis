@@ -66,6 +66,7 @@
 #' @export
 visualise_many_sequences <- function(
     sequences_vector,
+    ...,
     sequence_colours = sequence_colour_palettes$ggplot_style,
     background_colour = "white",
     margin = 0.5,
@@ -88,8 +89,7 @@ visualise_many_sequences <- function(
     force_raster = FALSE,
     render_device = ragg::agg_png,
     pixels_per_base = 100,
-    monitor_performance = FALSE,
-    ...
+    monitor_performance = FALSE
 ) {
     ## Validate monitor_performance then store start time
     start_time <- monitor_start(monitor_performance, "visualise_many_sequences")
@@ -97,23 +97,8 @@ visualise_many_sequences <- function(
     ## Process aliases
     ## ---------------------------------------------------------------------
     monitor_time <- monitor(monitor_performance, start_time, start_time, "resolving aliases")
-    dots <- list(...)
-    sequence_colours <- resolve_alias("sequence_colours", sequence_colours, "sequence_colors", dots[["sequence_colors"]], sequence_colour_palettes$ggplot_style)
-    sequence_colours <- resolve_alias("sequence_colours", sequence_colours, "sequence_cols", dots[["sequence_cols"]], sequence_colour_palettes$ggplot_style)
-    background_colour <- resolve_alias("background_colour", background_colour, "background_color", dots[["background_color"]], "white")
-    background_colour <- resolve_alias("background_colour", background_colour, "background_col", dots[["background_col"]], "white")
-    sequence_text_colour <- resolve_alias("sequence_text_colour", sequence_text_colour, "sequence_text_color", dots[["sequence_text_color"]], "black")
-    sequence_text_colour <- resolve_alias("sequence_text_colour", sequence_text_colour, "sequence_text_col", dots[["sequence_text_col"]], "black")
-    index_annotation_colour <- resolve_alias("index_annotation_colour", index_annotation_colour, "index_annotation_color", dots[["index_annotation_color"]], "darkred")
-    index_annotation_colour <- resolve_alias("index_annotation_colour", index_annotation_colour, "index_annotation_col", dots[["index_annotation_col"]], "darkred")
-    outline_colour <- resolve_alias("outline_colour", outline_colour, "outline_color", dots[["outline_color"]], "black")
-    outline_colour <- resolve_alias("outline_colour", outline_colour, "outline_col", dots[["outline_col"]], "black")
-    index_annotations_above <- resolve_alias("index_annotations_above", index_annotations_above, "index_annotation_above", dots[["index_annotation_above"]], TRUE)
-    index_annotation_full_line <- resolve_alias("index_annotation_full_line", index_annotation_full_line, "index_annotations_full_line", dots[["index_annotations_full_line"]], TRUE)
-    index_annotation_full_line <- resolve_alias("index_annotation_full_line", index_annotation_full_line, "index_annotations_full_lines", dots[["index_annotations_full_lines"]], TRUE)
-    index_annotation_full_line <- resolve_alias("index_annotation_full_line", index_annotation_full_line, "index_annotation_full_lines", dots[["index_annotation_full_lines"]], TRUE)
-    index_annotation_always_first_base <- resolve_alias("index_annotation_always_first_base", index_annotation_always_first_base, "index_annotations_always_first_base", dots[["index_annotations_always_first_base"]], TRUE)
-    index_annotation_always_last_base <- resolve_alias("index_annotation_always_last_base", index_annotation_always_last_base, "index_annotations_always_last_base", dots[["index_annotations_always_last_base"]], TRUE)
+    dots_env <- list2env(list(...))
+    resolve_alias_map(.alias_maps()$visualise_many_sequences, dots_env)
     ## ---------------------------------------------------------------------
 
 

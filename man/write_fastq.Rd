@@ -7,17 +7,19 @@
 write_fastq(
   dataframe,
   filename = NA,
+  ...,
   read_id_colname = "read",
   sequence_colname = "sequence",
   quality_colname = "quality",
-  return = FALSE,
-  ...
+  return = FALSE
 )
 }
 \arguments{
 \item{dataframe}{Dataframe containing sequence information to write back to FASTQ. Must have columns for unique read ID and DNA sequence. Should also have a column for quality, unless wanting to fill in qualities with \code{"B"}.}
 
 \item{filename}{\code{character}. File to write the FASTQ to. Recommended to end with \code{.fastq} (warns but works if not). If set to \code{NA} (default), no file will be output, which may be useful for testing/debugging.}
+
+\item{...}{Used to recognise aliases e.g. American spellings or common misspellings - see \link{aliases}. If any American spellings do not work, please make a bug report at \url{https://github.com/ejade42/ggDNAvis/issues}.}
 
 \item{read_id_colname}{\code{character}. The name of the column within the dataframe that contains the unique ID for each read. Defaults to \code{"read"}.}
 
@@ -26,8 +28,6 @@ write_fastq(
 \item{quality_colname}{\code{character}. The name of the column within the dataframe that contains the FASTQ quality scores for each read. Defaults to \code{"quality"}. If scores are not known, can be set to \code{NA} to fill in quality with \code{"B"}.\cr\cr If not \code{NA}, must correspond to a column where the values are the FASTQ quality scores e.g. \verb{"$12\\">/2C;4:9F8:816E,6C3*,"} - see \code{\link{fastq_quality_scores}}.}
 
 \item{return}{\code{logical}. Boolean specifying whether this function should return the FASTQ (as a character vector of each line in the FASTQ), otherwise it will return \code{invisible(NULL)}. Defaults to \code{FALSE}.}
-
-\item{...}{Used to recognise aliases e.g. American spellings or common misspellings - see \link{aliases}. If any American spellings do not work, please make a bug report at \url{https://github.com/ejade42/ggDNAvis/issues}.}
 }
 \value{
 \verb{character vector}. The resulting FASTQ file as a character vector of its constituent lines (or \code{invisible(NULL)} if \code{return} is \code{FALSE}). This is probably mostly useful for debugging, as setting \code{filename} within this function directly writes to FASTQ via \code{\link[=writeLines]{writeLines()}}. Therefore, defaults to returning \code{invisible(NULL)}.

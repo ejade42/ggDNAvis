@@ -7,6 +7,7 @@
 write_modified_fastq(
   dataframe,
   filename = NA,
+  ...,
   read_id_colname = "read",
   sequence_colname = "sequence",
   quality_colname = "quality",
@@ -15,14 +16,15 @@ write_modified_fastq(
     "methylation_probabilities"),
   modification_prefixes = c("C+h?", "C+m?"),
   include_blank_tags = TRUE,
-  return = FALSE,
-  ...
+  return = FALSE
 )
 }
 \arguments{
 \item{dataframe}{\code{dataframe}. Dataframe containing modification information to write back to modified FASTQ. Must have columns for unique read ID, DNA sequence, and at least one set of locations and probabilities for a particular modification type (e.g. 5C methylation).}
 
 \item{filename}{\code{character}. File to write the FASTQ to. Recommended to end with \code{.fastq} (warns but works if not). If set to \code{NA} (default), no file will be output, which may be useful for testing/debugging.}
+
+\item{...}{Used to recognise aliases e.g. American spellings or common misspellings - see \link{aliases}. If any American spellings do not work, please make a bug report at \url{https://github.com/ejade42/ggDNAvis/issues}.}
 
 \item{read_id_colname}{\code{character}. The name of the column within the dataframe that contains the unique ID for each read. Defaults to \code{"read"}.}
 
@@ -39,8 +41,6 @@ write_modified_fastq(
 \item{include_blank_tags}{\code{logical}. Boolean specifying what to do if a particular read has no assessed locations for a given modification type from \code{modification_prefixes}.\cr\cr If \code{TRUE} (default), blank tags will be written e.g. \code{"C+h?;"} (whereas a normal, non-blank tag looks like \code{"C+h?,0,0,0,0;"}). If \code{FALSE}, tags with no assessed locations in that read will not be written at all.}
 
 \item{return}{\code{logical}. Boolean specifying whether this function should return the FASTQ (as a character vector of each line in the FASTQ), otherwise it will return \code{invisible(NULL)}. Defaults to \code{FALSE}.}
-
-\item{...}{Used to recognise aliases e.g. American spellings or common misspellings - see \link{aliases}. If any American spellings do not work, please make a bug report at \url{https://github.com/ejade42/ggDNAvis/issues}.}
 }
 \value{
 \verb{character vector}. The resulting modified FASTQ file as a character vector of its constituent lines (or \code{invisible(NULL)} if \code{return} is \code{FALSE}). This is probably mostly useful for debugging, as setting \code{filename} within this function directly writes to FASTQ via \code{\link[=writeLines]{writeLines()}}. Therefore, defaults to returning \code{invisible(NULL)}.

@@ -314,7 +314,7 @@ test_that("single sequence visualisation fails when arguments are invalid", {
 
     bad_param_value_for_sequences_vector <- list(1, NA, -1, 0, TRUE, FALSE, c(1.5, 3))
     for (param in bad_param_value_for_sequences_vector) {
-        expect_error(visualise_many_sequences(sequence_vector_1, sequences_vector = param), class = "argument_value_or_type")
+        expect_error(visualise_many_sequences(sequences_vector = param), class = "argument_value_or_type")
     }
 
     bad_param_value_for_filename <- list(c("hi", "bye"), 1, TRUE, -1, 0, 1.5, -1.5, c("A", "B", "C", "D"), c(NA, NA))

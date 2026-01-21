@@ -276,7 +276,7 @@ visualise_methylation <- function(
     ## ---------------------------------------------------------------------
     monitor_time <- monitor(monitor_performance, start_time, start_time, "resolving aliases")
     dots_env <- list2env(list(...))
-    resolve_alias_map(.alias_maps$visualise_methylation, dots_env)
+    resolve_alias_map(.alias_maps()$visualise_methylation, dots_env)
     ## ---------------------------------------------------------------------
 
 
@@ -693,7 +693,7 @@ visualise_methylation_colour_scale <- function(
     ## ---------------------------------------------------------------------
     monitor_time <- monitor(monitor_performance, start_time, start_time, "resolving aliases")
     dots_env <- list2env(list(...))
-    resolve_alias_map(.alias_maps$visualise_methylation_colour_scale, dots_env)
+    resolve_alias_map(.alias_maps()$visualise_methylation_colour_scale, dots_env)
     ## ---------------------------------------------------------------------
 
 
@@ -869,7 +869,7 @@ extract_and_sort_methylation <- function(
     ## Process aliases
     ## ---------------------------------------------------------------------
     dots_env <- list2env(list(...))
-    resolve_alias_map(.alias_maps$extract_and_sort_methylation, dots_env)
+    resolve_alias_map(.alias_maps()$extract_and_sort_methylation, dots_env)
     ## ---------------------------------------------------------------------
 
 

@@ -388,7 +388,7 @@ test_that("single sequence visualisation fails when arguments are invalid", {
 
     bad_param_value_for_single_character <- list(c("hi", "bye"), 1, TRUE, -1, 0, 1.5, -1.5, c("A", "B", "C", "D"), NA, c(NA, NA), NULL)
     for (param in bad_param_value_for_single_character) {
-        expect_error(visualise_single_sequence(sone_2019_f1_1_expanded, sequence = param), class = "argument_value_or_type")
+        expect_error(visualise_single_sequence(sequence = param), class = "argument_value_or_type")
         expect_error(visualise_single_sequence(sone_2019_f1_1_expanded, background_colour = param), class = "argument_value_or_type")
         expect_error(visualise_single_sequence(sone_2019_f1_1_expanded, sequence_text_colour = param), class = "argument_value_or_type")
         expect_error(visualise_single_sequence(sone_2019_f1_1_expanded, index_annotation_colour = param), class = "argument_value_or_type")

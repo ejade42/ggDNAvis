@@ -439,17 +439,16 @@ convert_MM_vector_to_locations <- function(sequence, skips, target_base = "C") {
 write_fastq <- function(
     dataframe,
     filename = NA,
+    ...,
     read_id_colname = "read",
     sequence_colname = "sequence",
     quality_colname = "quality",
-    return = FALSE,
-    ...
+    return = FALSE
 ) {
     ## Process aliases
     ## ---------------------------------------------------------------------
-    dots <- list(...)
-    sequence_colname <- resolve_alias("sequence_colname", sequence_colname, "sequences_colname", dots[["sequences_colname"]], "sequence")
-    quality_colname <- resolve_alias("quality_colname", quality_colname, "qualities_colname", dots[["qualities_colname"]], "quality")
+    dots_env <- list2env(list(...))
+    resolve_alias_map(.alias_maps()$write_fastq, dots_env)
     ## ---------------------------------------------------------------------
 
 
@@ -599,6 +598,7 @@ write_fastq <- function(
 write_modified_fastq <- function(
     dataframe,
     filename = NA,
+    ...,
     read_id_colname = "read",
     sequence_colname = "sequence",
     quality_colname = "quality",
@@ -606,16 +606,12 @@ write_modified_fastq <- function(
     probabilities_colnames = c("hydroxymethylation_probabilities", "methylation_probabilities"),
     modification_prefixes = c("C+h?", "C+m?"),
     include_blank_tags = TRUE,
-    return = FALSE,
-    ...
+    return = FALSE
 ) {
     ## Process aliases
     ## ---------------------------------------------------------------------
-    dots <- list(...)
-    sequence_colname <- resolve_alias("sequence_colname", sequence_colname, "sequences_colname", dots[["sequences_colname"]], "sequence")
-    quality_colname <- resolve_alias("quality_colname", quality_colname, "qualities_colname", dots[["qualities_colname"]], "quality")
-    locations_colnames <- resolve_alias("locations_colnames", locations_colnames, "location_colnames", dots[["location_colnames"]], c("hydroxymethylation_locations", "methylation_locations"))
-    probabilities_colnames <- resolve_alias("probabilities_colnames", probabilities_colnames, "probability_colnames", dots[["probability_colnames"]], c("hydroxymethylation_probabilities", "methylation_probabilities"))
+    dots_env <- list2env(list(...))
+    resolve_alias_map(.alias_maps()$write_modified_fastq, dots_env)
     ## ---------------------------------------------------------------------
 
 

@@ -7,6 +7,7 @@
 \usage{
 visualise_many_sequences(
   sequences_vector,
+  ...,
   sequence_colours = sequence_colour_palettes$ggplot_style,
   background_colour = "white",
   margin = 0.5,
@@ -29,12 +30,13 @@ visualise_many_sequences(
   force_raster = FALSE,
   render_device = ragg::agg_png,
   pixels_per_base = 100,
-  monitor_performance = FALSE,
-  ...
+  monitor_performance = FALSE
 )
 }
 \arguments{
 \item{sequences_vector}{\verb{character vector}. The sequences to visualise, often created from a dataframe via \code{\link[=extract_and_sort_sequences]{extract_and_sort_sequences()}}. E.g. \code{c("GGCGGC", "", "AGCTAGCTA")}.}
+
+\item{...}{Used to recognise aliases e.g. American spellings or common misspellings - see \link{aliases}. If any American spellings do not work, please make a bug report at \url{https://github.com/ejade42/ggDNAvis/issues}.}
 
 \item{sequence_colours}{\verb{character vector}, length 4. A vector indicating which colours should be used for each base. In order: \code{c(A_colour, C_colour, G_colour, T/U_colour)}.\cr\cr Defaults to red, green, blue, purple in the default shades produced by ggplot with 4 colours, i.e. \code{c("#F8766D", "#7CAE00", "#00BFC4", "#C77CFF")}, accessed via \code{\link{sequence_colour_palettes}}\verb{$ggplot_style}.}
 
@@ -81,8 +83,6 @@ visualise_many_sequences(
 \item{pixels_per_base}{\code{integer}. How large each box should be in pixels, if file output is turned on via setting \code{filename}. Corresponds to dpi of the exported image. Defaults to \code{100}.\cr\cr Large values (e.g. 100) are required to render small text properly. Small values (e.g. 20) will work when sequence/annotation text is off, and very small values (e.g. 10) will work when sequence/annotation text and outlines are all off.}
 
 \item{monitor_performance}{\code{logical}. Boolean specifying whether verbose performance monitoring should be messaged to console. Defaults to \code{FALSE}.}
-
-\item{...}{Used to recognise aliases e.g. American spellings or common misspellings - see \link{aliases}. If any American spellings do not work, please make a bug report at \url{https://github.com/ejade42/ggDNAvis/issues}.}
 }
 \value{
 A ggplot object containing the full visualisation, or \code{invisible(NULL)} if \code{return = FALSE}. It is often more useful to use \code{filename = "myfilename.png"}, because then the visualisation is exported at the correct aspect ratio.
