@@ -121,11 +121,11 @@ visualise_methylation(
     low_color = "orange",
     low_col = "purple"
 )
-#> Warning: Both 'low_colour' and alias 'low_color' were provided.
-#> 'low_color' will be discarded.
-#>     Value: orange
-#> 'low_colour' will be used.
+#> Warning: Both 'low_colour' and alias 'low_col' were provided.
+#> 'low_col' will be discarded.
 #>     Value: purple
+#> 'low_colour' will be used.
+#>     Value: orange
 #> ℹ Automatically using geom_raster (much faster than geom_tile) as no sequence text, index annotations, or outlines are present.
 #> Warning: When using geom_raster, it is recommended to use a smaller pixels_per_base e.g. 10, as there is no text/outlines that would benefit from higher resolution.
 #> Current value: 100

@@ -24,6 +24,7 @@ visualise_methylation_colour_scale(
   high_colour = "red",
   low_clamp = 0,
   high_clamp = 255,
+  ...,
   full_range = c(0, 255),
   precision = 10^3,
   background_colour = "white",
@@ -33,8 +34,7 @@ visualise_methylation_colour_scale(
   side_scale_title = NULL,
   outline_colour = "black",
   outline_linewidth = 1,
-  monitor_performance = FALSE,
-  ...
+  monitor_performance = FALSE
 )
 ```
 
@@ -63,6 +63,14 @@ visualise_methylation_colour_scale(
   `high_colour`. Defaults to `255` (i.e. no clamping, assuming Nanopore
   \> SAM style modification calling where probabilities are 8-bit
   integers from 0 to 255).
+
+- ...:
+
+  Used to recognise aliases e.g. American spellings or common
+  misspellings - see
+  [aliases](https://ejade42.github.io/ggDNAvis/reference/ggDNAvis_aliases.md).
+  If any American spellings do not work, please make a bug report at
+  <https://github.com/ejade42/ggDNAvis/issues>.
 
 - full_range:
 
@@ -123,14 +131,6 @@ visualise_methylation_colour_scale(
 
   `logical`. Boolean specifying whether verbose performance monitoring
   should be messaged to console. Defaults to `FALSE`.
-
-- ...:
-
-  Used to recognise aliases e.g. American spellings or common
-  misspellings - see
-  [aliases](https://ejade42.github.io/ggDNAvis/reference/ggDNAvis_aliases.md).
-  If any American spellings do not work, please make a bug report at
-  <https://github.com/ejade42/ggDNAvis/issues>.
 
 ## Value
 

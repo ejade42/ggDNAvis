@@ -111,6 +111,11 @@ Small, widely used helper functions
   Resolve argument value when aliases are used (generic `ggDNAvis`
   helper)
 
+- [`resolve_alias_map()`](https://ejade42.github.io/ggDNAvis/reference/resolve_alias_map.md)
+  :
+
+  Process an alias map list (generic `ggDNAvis` helper)
+
 ### Advanced helpers
 
 Helper functions that are mostly called by other functions; users

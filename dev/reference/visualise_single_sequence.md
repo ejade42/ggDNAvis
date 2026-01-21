@@ -14,6 +14,7 @@ pixels per square when exported are configurable.
 ``` r
 visualise_single_sequence(
   sequence,
+  ...,
   sequence_colours = sequence_colour_palettes$ggplot_style,
   background_colour = "white",
   line_wrapping = 75,
@@ -36,8 +37,7 @@ visualise_single_sequence(
   force_raster = FALSE,
   render_device = ragg::agg_png,
   pixels_per_base = 100,
-  monitor_performance = FALSE,
-  ...
+  monitor_performance = FALSE
 )
 ```
 
@@ -46,6 +46,14 @@ visualise_single_sequence(
 - sequence:
 
   `character`. A DNA or RNA sequence to visualise e.g. `"AAATGCTGC"`.
+
+- ...:
+
+  Used to recognise aliases e.g. American spellings or common
+  misspellings - see
+  [aliases](https://ejade42.github.io/ggDNAvis/reference/ggDNAvis_aliases.md).
+  If any American spellings do not work, please make a bug report at
+  <https://github.com/ejade42/ggDNAvis/issues>.
 
 - sequence_colours:
 
@@ -232,14 +240,6 @@ visualise_single_sequence(
 
   `logical`. Boolean specifying whether verbose performance monitoring
   should be messaged to console. Defaults to `FALSE`.
-
-- ...:
-
-  Used to recognise aliases e.g. American spellings or common
-  misspellings - see
-  [aliases](https://ejade42.github.io/ggDNAvis/reference/ggDNAvis_aliases.md).
-  If any American spellings do not work, please make a bug report at
-  <https://github.com/ejade42/ggDNAvis/issues>.
 
 ## Value
 

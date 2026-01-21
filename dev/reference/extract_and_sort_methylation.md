@@ -32,14 +32,14 @@ data.
 ``` r
 extract_and_sort_methylation(
   modification_data,
+  ...,
   locations_colname = "methylation_locations",
   probabilities_colname = "methylation_probabilities",
   sequences_colname = "sequence",
   lengths_colname = "sequence_length",
   grouping_levels = c(family = 8, individual = 2),
   sort_by = "sequence_length",
-  desc_sort = TRUE,
-  ...
+  desc_sort = TRUE
 )
 ```
 
@@ -57,6 +57,14 @@ extract_and_sort_methylation(
   See
   [`example_many_sequences`](https://ejade42.github.io/ggDNAvis/reference/example_many_sequences.md)
   for an example of a compatible dataframe.
+
+- ...:
+
+  Used to recognise aliases e.g. American spellings or common
+  misspellings - see
+  [aliases](https://ejade42.github.io/ggDNAvis/reference/ggDNAvis_aliases.md).
+  If any American spellings do not work, please make a bug report at
+  <https://github.com/ejade42/ggDNAvis/issues>.
 
 - locations_colname:
 
@@ -138,14 +146,6 @@ extract_and_sort_methylation(
   `logical`. Boolean specifying whether rows within groups should be
   sorted by the `sort_by` variable descending (`TRUE`, default) or
   ascending (`FALSE`).
-
-- ...:
-
-  Used to recognise aliases e.g. American spellings or common
-  misspellings - see
-  [aliases](https://ejade42.github.io/ggDNAvis/reference/ggDNAvis_aliases.md).
-  If any American spellings do not work, please make a bug report at
-  <https://github.com/ejade42/ggDNAvis/issues>.
 
 ## Value
 

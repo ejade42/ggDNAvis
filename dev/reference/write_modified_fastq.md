@@ -34,6 +34,7 @@ data.
 write_modified_fastq(
   dataframe,
   filename = NA,
+  ...,
   read_id_colname = "read",
   sequence_colname = "sequence",
   quality_colname = "quality",
@@ -42,8 +43,7 @@ write_modified_fastq(
     "methylation_probabilities"),
   modification_prefixes = c("C+h?", "C+m?"),
   include_blank_tags = TRUE,
-  return = FALSE,
-  ...
+  return = FALSE
 )
 ```
 
@@ -61,6 +61,14 @@ write_modified_fastq(
   `character`. File to write the FASTQ to. Recommended to end with
   `.fastq` (warns but works if not). If set to `NA` (default), no file
   will be output, which may be useful for testing/debugging.
+
+- ...:
+
+  Used to recognise aliases e.g. American spellings or common
+  misspellings - see
+  [aliases](https://ejade42.github.io/ggDNAvis/reference/ggDNAvis_aliases.md).
+  If any American spellings do not work, please make a bug report at
+  <https://github.com/ejade42/ggDNAvis/issues>.
 
 - read_id_colname:
 
@@ -145,14 +153,6 @@ write_modified_fastq(
   `logical`. Boolean specifying whether this function should return the
   FASTQ (as a character vector of each line in the FASTQ), otherwise it
   will return `invisible(NULL)`. Defaults to `FALSE`.
-
-- ...:
-
-  Used to recognise aliases e.g. American spellings or common
-  misspellings - see
-  [aliases](https://ejade42.github.io/ggDNAvis/reference/ggDNAvis_aliases.md).
-  If any American spellings do not work, please make a bug report at
-  <https://github.com/ejade42/ggDNAvis/issues>.
 
 ## Value
 

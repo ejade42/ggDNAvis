@@ -17,6 +17,7 @@ exported are configurable.
 ``` r
 visualise_many_sequences(
   sequences_vector,
+  ...,
   sequence_colours = sequence_colour_palettes$ggplot_style,
   background_colour = "white",
   margin = 0.5,
@@ -39,8 +40,7 @@ visualise_many_sequences(
   force_raster = FALSE,
   render_device = ragg::agg_png,
   pixels_per_base = 100,
-  monitor_performance = FALSE,
-  ...
+  monitor_performance = FALSE
 )
 ```
 
@@ -52,6 +52,14 @@ visualise_many_sequences(
   dataframe via
   [`extract_and_sort_sequences()`](https://ejade42.github.io/ggDNAvis/reference/extract_and_sort_sequences.md).
   E.g. `c("GGCGGC", "", "AGCTAGCTA")`.
+
+- ...:
+
+  Used to recognise aliases e.g. American spellings or common
+  misspellings - see
+  [aliases](https://ejade42.github.io/ggDNAvis/reference/ggDNAvis_aliases.md).
+  If any American spellings do not work, please make a bug report at
+  <https://github.com/ejade42/ggDNAvis/issues>.
 
 - sequence_colours:
 
@@ -237,14 +245,6 @@ visualise_many_sequences(
 
   `logical`. Boolean specifying whether verbose performance monitoring
   should be messaged to console. Defaults to `FALSE`.
-
-- ...:
-
-  Used to recognise aliases e.g. American spellings or common
-  misspellings - see
-  [aliases](https://ejade42.github.io/ggDNAvis/reference/ggDNAvis_aliases.md).
-  If any American spellings do not work, please make a bug report at
-  <https://github.com/ejade42/ggDNAvis/issues>.
 
 ## Value
 

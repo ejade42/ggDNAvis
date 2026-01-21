@@ -74,11 +74,11 @@ To read/write a modified FASTQ containing modification information
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">write_fastq</span><span class="op">(</span></span>
 <span>  <span class="va">dataframe</span>,</span>
 <span>  filename <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>  <span class="va">...</span>,</span>
 <span>  read_id_colname <span class="op">=</span> <span class="st">"read"</span>,</span>
 <span>  sequence_colname <span class="op">=</span> <span class="st">"sequence"</span>,</span>
 <span>  quality_colname <span class="op">=</span> <span class="st">"quality"</span>,</span>
-<span>  return <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  <span class="va">...</span></span>
+<span>  return <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -92,6 +92,10 @@ To read/write a modified FASTQ containing modification information
 
 <dt id="arg-filename">filename<a class="anchor" aria-label="anchor" href="#arg-filename"></a></dt>
 <dd><p><code>character</code>. File to write the FASTQ to. Recommended to end with <code>.fastq</code> (warns but works if not). If set to <code>NA</code> (default), no file will be output, which may be useful for testing/debugging.</p></dd>
+
+
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
+<dd><p>Used to recognise aliases e.g. American spellings or common misspellings - see <a href="ggDNAvis_aliases.html">aliases</a>. If any American spellings do not work, please make a bug report at <a href="https://github.com/ejade42/ggDNAvis/issues" class="external-link">https://github.com/ejade42/ggDNAvis/issues</a>.</p></dd>
 
 
 <dt id="arg-read-id-colname">read_id_colname<a class="anchor" aria-label="anchor" href="#arg-read-id-colname"></a></dt>
@@ -108,10 +112,6 @@ To read/write a modified FASTQ containing modification information
 
 <dt id="arg-return">return<a class="anchor" aria-label="anchor" href="#arg-return"></a></dt>
 <dd><p><code>logical</code>. Boolean specifying whether this function should return the FASTQ (as a character vector of each line in the FASTQ), otherwise it will return <code>invisible(NULL)</code>. Defaults to <code>FALSE</code>.</p></dd>
-
-
-<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>Used to recognise aliases e.g. American spellings or common misspellings - see <a href="ggDNAvis_aliases.html">aliases</a>. If any American spellings do not work, please make a bug report at <a href="https://github.com/ejade42/ggDNAvis/issues" class="external-link">https://github.com/ejade42/ggDNAvis/issues</a>.</p></dd>
 
 </dl></div>
     <div class="section level2">

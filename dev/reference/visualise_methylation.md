@@ -41,6 +41,7 @@ visualise_methylation(
   modification_locations,
   modification_probabilities,
   sequences,
+  ...,
   low_colour = "blue",
   high_colour = "red",
   low_clamp = 0,
@@ -76,8 +77,7 @@ visualise_methylation(
   force_raster = FALSE,
   render_device = ragg::agg_png,
   pixels_per_base = 100,
-  monitor_performance = FALSE,
-  ...
+  monitor_performance = FALSE
 )
 ```
 
@@ -107,6 +107,14 @@ visualise_methylation(
 
   `character vector`. One character value for each sequence, storing the
   actual DNA sequence.
+
+- ...:
+
+  Used to recognise aliases e.g. American spellings or common
+  misspellings - see
+  [aliases](https://ejade42.github.io/ggDNAvis/reference/ggDNAvis_aliases.md).
+  If any American spellings do not work, please make a bug report at
+  <https://github.com/ejade42/ggDNAvis/issues>.
 
 - low_colour:
 
@@ -384,14 +392,6 @@ visualise_methylation(
 
   `logical`. Boolean specifying whether verbose performance monitoring
   should be messaged to console. Defaults to `FALSE`.
-
-- ...:
-
-  Used to recognise aliases e.g. American spellings or common
-  misspellings - see
-  [aliases](https://ejade42.github.io/ggDNAvis/reference/ggDNAvis_aliases.md).
-  If any American spellings do not work, please make a bug report at
-  <https://github.com/ejade42/ggDNAvis/issues>.
 
 ## Value
 
