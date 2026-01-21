@@ -21,7 +21,7 @@ Rscript -e "
                 
                 # Write back to file
                 description_lines[version_row] <- paste('Version:', new_version)
-                writeLines(x, f)
+                writeLines(description_lines, description)
                 
                 cat(sprintf('Auto-incremented dev version to %s\n', new_version))
             }
