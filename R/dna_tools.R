@@ -299,7 +299,7 @@ format_time_diff <- function(new_time, old_time, characters_to_print = 4) {
     diff <- as.numeric(difftime(new_time, old_time, units = "secs"))
     digits_before_decimal <- max(floor(log10(diff)) + 1, 1)
     digits_after_decimal <- characters_to_print - digits_before_decimal
-    formatted_diff <- sprintf("%.*f", digits_after_decimal, diff)
+    formatted_diff <- sprintf("%.*f", max(digits_after_decimal, 0), diff)
     return(formatted_diff)
 }
 
