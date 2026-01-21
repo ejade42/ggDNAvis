@@ -55,6 +55,9 @@ reference:
   - bad_arg
   - resolve_alias
   - resolve_alias_map
+  - monitor_start
+  - monitor
+  - format_time_diff
 
 - subtitle: Advanced helpers
   desc: >

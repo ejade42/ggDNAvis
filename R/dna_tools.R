@@ -150,6 +150,42 @@ resolve_alias_map <- function(alias_map, dots_env, target_env = parent.frame()) 
     }
 }
 
+
+#' Start performance monitoring (generic `ggDNAvis` helper)
+#'
+#' @description
+#' This function takes a bool of whether verbose performance
+#' monitoring is on, as well as the name of the calling function,
+#' prints a monitoring initialisation message (if desired),
+#' and returns the start time.
+#'
+#' Later monitoring steps are performed by [monitor()]
+#'
+#' @param monitor_performance `logical`. Whether verbose performance monitoring should be enabled.
+#' @param function_name `character`. The name of the calling function, printed as part of the monitoring initialisation message.
+#'
+#' @return `POSIXct` the time at which the function was initialised, via [Sys.time()].
+#' @export
+#'
+#' @examples
+#' ## Initialise monitoring
+#' start_time <- monitor_start(TRUE, "my_cool_function")
+#'
+#' ## Step 1
+#' monitor_time <- monitor(TRUE, start_time, start_time, "performing step 1")
+#' x <- 2 + 2
+#'
+#' ## Step 2
+#' monitor_time <- monitor(TRUE, start_time, monitor_time, "performing step 2")
+#' y <- 10.5^6 %% 345789
+#'
+#' ## Step 3
+#' monitor_time <- monitor(TRUE, start_time, monitor_time, "performing step 3")
+#' z <- y / x^2
+#'
+#' ## Conclude monitoring
+#' monitor_time <- monitor(TRUE, start_time, monitor_time, "done")
+#'
 monitor_start <- function(monitor_performance, function_name) {
     start_time <- Sys.time()
 
@@ -167,6 +203,42 @@ monitor_start <- function(monitor_performance, function_name) {
     return(start_time)
 }
 
+#' Continue performance monitoring (generic `ggDNAvis` helper)
+#'
+#' @description
+#' This function is meant to be called frequently throughout
+#' a main function, and if verbose performance monitoring is enabled
+#' then it will print the elapsed time since (a) initialisation via
+#' [monitor_start()] and (b) since the last step was recorded via
+#' this function.
+#'
+#' @inheritParams monitor_start
+#' @param start_time `POSIXct`. The time at which the overarching function was initialised (generally via [monitor_start()]).
+#' @param previous_time `POSIXct`. The time at which the previous step was recorded (via a prior call to [monitor()]).
+#' @param message `character`. The message to be printed, generally indicating what this step is doing
+#'
+#' @return `POSIXct` the time at which the function was called, via [Sys.time()].
+#' @export
+#'
+#' @examples
+#' ## Initialise monitoring
+#' start_time <- monitor_start(TRUE, "my_cool_function")
+#'
+#' ## Step 1
+#' monitor_time <- monitor(TRUE, start_time, start_time, "performing step 1")
+#' x <- 2 + 2
+#'
+#' ## Step 2
+#' monitor_time <- monitor(TRUE, start_time, monitor_time, "performing step 2")
+#' y <- 10.5^6 %% 345789
+#'
+#' ## Step 3
+#' monitor_time <- monitor(TRUE, start_time, monitor_time, "performing step 3")
+#' z <- y / x^2
+#'
+#' ## Conclude monitoring
+#' monitor_time <- monitor(TRUE, start_time, monitor_time, "done")
+#'
 monitor <- function(monitor_performace, start_time, previous_time, message) {
     if (!monitor_performace) {return(invisible(NULL))}
 
@@ -180,6 +252,49 @@ monitor <- function(monitor_performace, start_time, previous_time, message) {
     return(current_time)
 }
 
+
+#' Format a difference between times (generic `ggDNAvis` helper)
+#'
+#' @description
+#' This function takes two times (class `"POSIXct"`) and formats
+#' the difference between them nicely, with a certain number
+#' of numerical characters printed.
+#'
+#' Note that the if the time difference rounded to the integer
+#' number of seconds (e.g. 1234 seconds) requires more space than
+#' the number of characters allocated (e.g. 3 characters) then
+#' it will go beyond the specified characters.
+#' However, this would be an exceptionally slow-running function.
+#' In normal monitoring use for [monitor()],
+#' <1 second steps should be nearly universal, and <0.01 second
+#' steps are very common.
+#'
+#'
+#' @param new_time `POSIXct`. The more recent (newer) of the two times to calculate a difference between.
+#' @param old_time `POSIXct`. The less recent (older) of the two times to calculate a difference between.
+#' @param characters_to_print `integer`. How many numeric digits should be printed.
+#'
+#' @return `character`. The formatted time difference in seconds.
+#' @export
+#'
+#' @examples
+#' ## POSIXct time is a very large number of seconds
+#' newer <- 1000000001
+#' older <- 1000000000
+#' format_time_diff(newer, older, 4)
+#'
+#' newer <- 1000000456.45645
+#' older <- 1000000000
+#' format_time_diff(newer, older, 4)
+#' format_time_diff(newer, older, 3)
+#' format_time_diff(newer, older, 2)
+#'
+#' newer <- 1000000000.011
+#' older <- 1000000000
+#' format_time_diff(newer, older, 4)
+#' format_time_diff(newer, older, 3)
+#' format_time_diff(newer, older, 2)
+#'
 format_time_diff <- function(new_time, old_time, characters_to_print = 4) {
     diff <- as.numeric(difftime(new_time, old_time, units = "secs"))
     digits_before_decimal <- max(floor(log10(diff)) + 1, 1)
@@ -187,6 +302,8 @@ format_time_diff <- function(new_time, old_time, characters_to_print = 4) {
     formatted_diff <- sprintf("%.*f", digits_after_decimal, diff)
     return(formatted_diff)
 }
+
+
 
 #' Emit an error message for an invalid function argument (generic `ggDNAvis` helper)
 #'

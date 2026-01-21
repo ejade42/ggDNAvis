@@ -104,6 +104,62 @@ test_that("alias management works, alias map documentation example", {
     expect_equal(high_colour, "green")
 })
 
+
+## Test monitoring
+test_that("monitoring initialisation works", {
+    expect_message(expect_message(
+        start_time <- monitor_start(TRUE, "lol")
+    ))
+    expect_equal(class(start_time), c("POSIXct", "POSIXt"))
+})
+
+test_that("monitoring initialisation rejects bad arg", {
+    bad_param_value_for_bool <- list(NA, NULL, c(TRUE, FALSE), 1, "X", -1, 0.5)
+    for (param in bad_param_value_for_bool) {
+        expect_error(monitor_start(param, "hi"), class = "argument_value_or_type")
+    }
+})
+
+test_that("monitoring continuation works", {
+    expect_message(expect_message(
+        start_time <- monitor_start(TRUE, "my_cool_function")
+    ))
+    expect_message(
+        monitor_time <- monitor(TRUE, start_time, start_time, "performing step 1")
+    )
+
+    ## Calculations to spend a bit of time, results not important
+    x <- 2 + 2
+    y <- 10.5^6 %% 345789
+    z <- y / x^2
+
+    expect_message(
+        monitor_time <- monitor(TRUE, start_time, monitor_time, "done")
+    )
+
+    expect_equal(class(start_time), c("POSIXct", "POSIXt"))
+    expect_equal(class(monitor_time), c("POSIXct", "POSIXt"))
+})
+
+test_that("time difference calculation works", {
+    newer <- 1000000001
+    older <- 1000000000
+    expect_equal(format_time_diff(newer, older, 4), "1.000")
+
+    newer <- 1000000456.45645
+    older <- 1000000000
+    expect_equal(format_time_diff(newer, older, 4), "456.5")
+    expect_equal(format_time_diff(newer, older, 3), "456")
+    expect_equal(format_time_diff(newer, older, 2), "456")
+
+    newer <- 1000000000.011
+    older <- 1000000000
+    expect_equal(format_time_diff(newer, older, 4), "0.011")
+    expect_equal(format_time_diff(newer, older, 3), "0.01")
+    expect_equal(format_time_diff(newer, older, 2), "0.0")
+})
+
+
 ## Test converting base to number
 test_that("converting base to number works when expected to", {
     expect_equal(convert_base_to_number("A"), 1)
