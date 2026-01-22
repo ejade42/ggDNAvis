@@ -12,6 +12,7 @@ format_metric <- function(x) {
 }
 
 ## Setup
+dir.create("badges", showWarnings = FALSE)
 ga_auth(json_file = "ga_auth.json")
 property_id <- "519812281" 
 start_date  <- "2026-01-01"
