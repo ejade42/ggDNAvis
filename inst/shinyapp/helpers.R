@@ -16,17 +16,32 @@ enable_settings_import <- function(input, session, id, import_name = "import_set
     observeEvent(input[[import_name]], {
         tryCatch({
             settings <- read_json(input[[import_name]]$datapath)
-            lapply(names(settings), function(id) {
-                val <- settings[[id]]
+            lapply(names(settings), function(setting) {
+                val <- settings[[setting]]
 
-                if (startsWith(id, "num_")) {updateNumericInput(session, id, value = val)}
-                if (startsWith(id, "col_")) {updateColourInput(session, id, value = val)}
-                if (startsWith(id, "sel_")) {updateSelectInput(session, id, selected = val)}
-                if (startsWith(id, "chk_")) {updateCheckboxInput(session, id, value = val)}
-                if (startsWith(id, "txt_")) {updateTextInput(session, id, value = val)}
-                if (startsWith(id, "tab_")) {updateTabsetPanel(session, id, selected = val)}
+                freezeReactiveValue(input, setting)
+                if (startsWith(setting, "num_")) {updateNumericInput(session, setting, value = val)}
+                if (startsWith(setting, "col_")) {updateColourInput(session, setting, value = val)}
+                if (startsWith(setting, "sel_")) {updateSelectInput(session, setting, selected = val)}
+                if (startsWith(setting, "chk_")) {updateCheckboxInput(session, setting, value = val)}
+                if (startsWith(setting, "txt_")) {updateTextInput(session, setting, value = val)}
+                if (startsWith(setting, "tab_")) {updateTabsetPanel(session, setting, selected = val)}
             })
+
+            ## Register successful settings import
+            shinyjs::runjs(sprintf(
+                "gtag('event', 'settings_import', {'event_category': 'Restore', 'event_label': '%s'});",
+                id
+            ))
+
+            showNotification("Settings imported successfully!", type = "message")
         }, error = function(e) {
+            ## Register unsuccessful settings import
+            shinyjs::runjs(sprintf(
+                "gtag('event', 'settings_import_error', {'event_category': 'Restore', 'event_label': '%s'});",
+                id
+            ))
+
             showNotification(paste("Settings file invalid. Error when parsing:\n", e), type = "error")
         })
     })
@@ -41,6 +56,12 @@ enable_settings_export <- function(settings, id, reactive_tz) {
         ## Can access the list from the wider function environment
         content = function(file) {
             write_json(settings(), file, pretty = TRUE, auto_unbox = TRUE)
+
+            ## Register settings export
+            shinyjs::runjs(sprintf(
+                "gtag('event', 'settings_export', {'event_category': 'Restore', 'event_label': '%s'});",
+                id
+            ))
         }
     )
 }
@@ -53,6 +74,12 @@ enable_image_download <- function(id, image_path, reactive_tz) {
         },
         content = function(file) {
             file.copy(image_path(), file)
+
+            ## Register image download
+            shinyjs::runjs(sprintf(
+                "gtag('event', 'image_download', {'event_category': 'Download', 'event_label': '%s'});",
+                id
+            ))
         }
     )
 }
