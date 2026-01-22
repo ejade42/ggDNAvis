@@ -62,8 +62,22 @@ ui <- page_navbar(
                     env_mode = 'local';
                 }
 
+                // Detect iframe vs direct
+                var is_iframe = (window.self !== window.top);
+                var nav_mode = is_iframe ? 'embedded' : 'direct';
+
+                // Detect who is embedding if iframe
+                var host_source = '(self)';
+                if (is_iframe) {
+                     // Use referrer, or fallback if policy blocks it
+                    host_source = document.referrer || '(unknown_embedder)';
+                }
+
                 gtag('config', '", ga_id, "', {
-                    'access_mode': env_mode
+                    'access_mode': env_mode,
+                    'navigation_mode': nav_mode,
+                    'parent_host': host_source,
+                    'send_page_view': false
                 });
             </script>
             "))
@@ -157,15 +171,31 @@ server <- function(input, output, session) {
     methylation_server("visualise-methylation")
 
     ## Check what tabs are most used
-    ## TODO: add checking for how it's used (e.g. embedded vs native)
     observeEvent(input$ggDNAvis_interactive_nav, {
         current_tab <- input$ggDNAvis_interactive_nav
+        clean_path <- paste0("/", gsub(" ", "_", tolower(current_tab)))
+
         js_command <- sprintf(
-            "gtag('event', 'switch_tab', {'event_category': 'Navigation', 'tab_name': '%s'});",
+            "
+            // Virtual Pageview (for Time metrics)
+            gtag('event', 'page_view', {
+                'page_title': '%s',
+                'page_location': window.location.origin + '%s',
+                'tab_name': '%s'
+            });
+
+            // Custom Event (for historical continuity)
+            gtag('event', 'switch_tab', {
+                'event_category': 'Navigation',
+                'tab_name': '%s'
+            });
+            ",
+            current_tab, clean_path, current_tab,
             current_tab
         )
+
         shinyjs::runjs(js_command)
-    }, ignoreInit = TRUE)
+    }, ignoreInit = FALSE)
 }
 
 
