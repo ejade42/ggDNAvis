@@ -201,7 +201,7 @@ many_sequences_server <- function(id) {
         })
 
         output$visualisation <- enable_live_visualisation(current_image_path)
-        output$download_image <- enable_image_download(id, current_image_path)
+        output$download_image <- enable_image_download(id, current_image_path, input$client_time_zone)
 
 
 
@@ -260,7 +260,7 @@ many_sequences_server <- function(id) {
 
             return(settings)
         })
-        output$export_settings <- enable_settings_export(settings, id)
+        output$export_settings <- enable_settings_export(settings, id, input$client_time_zone)
 
         ## Import settings
         enable_settings_import(input, session, id, "import_settings")

@@ -1,7 +1,10 @@
 ## READ/WRITE/DISPLAY
 ## ------------------------------------------------------------------------------
 ## Standardised timestamp formatting
-get_current_time <- function() {format(Sys.time(), "%y%m%d-%H.%M.%S")}
+get_current_time <- function(tz = NULL) {
+    if (is.null(tz)) {tz <- ""}
+    format(Sys.time(), "%y.%m.%d-%H.%M.%S", tz = tz)
+}
 
 ## Import settings from JSON
 enable_settings_import <- function(input, session, id, import_name = "import_settings") {
@@ -25,10 +28,10 @@ enable_settings_import <- function(input, session, id, import_name = "import_set
 }
 
 ## Export settings to JSON
-enable_settings_export <- function(settings, id) {
+enable_settings_export <- function(settings, id, user_tz) {
     downloadHandler(
         filename = function() {
-            paste0("ggDNAvis-settings_", id, "_", get_current_time(), ".json")
+            paste0("ggDNAvis-settings_", id, "_", get_current_time(user_tz), ".json")
         },
         ## Can access the list from the wider function environment
         content = function(file) {
@@ -38,10 +41,10 @@ enable_settings_export <- function(settings, id) {
 }
 
 ## Export file to image
-enable_image_download <- function(id, image_path) {
+enable_image_download <- function(id, image_path, user_tz) {
     downloadHandler(
         filename = function() {
-            paste0("ggDNAvis_", id, "_", get_current_time(), ".png")
+            paste0("ggDNAvis_", id, "_", get_current_time(user_tz), ".png")
         },
         content = function(file) {
             file.copy(image_path(), file)

@@ -40,6 +40,14 @@ ui <- page_navbar(
             }
         ")),
 
+        ## Timezone detector
+        tags$script(HTML("
+            $(document).on('shiny:connected', function(event) {
+              var timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+              Shiny.setInputValue('client_time_zone', timeZone);
+            });
+        ")),
+
         ## Page view counter
         HTML(paste0("
             <script async src='https://www.googletagmanager.com/gtag/js?id=", ga_id, "'></script>
