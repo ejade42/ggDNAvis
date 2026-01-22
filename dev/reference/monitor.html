@@ -15,7 +15,7 @@ this function."><meta property="og:image" content="https://ejade42.github.io/ggD
 
     <a class="navbar-brand me-2" href="../index.html">ggDNAvis</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.2.9007</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.2.9008</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -98,7 +98,7 @@ this function.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">## Initialise monitoring</span></span></span>
 <span class="r-in"><span><span class="va">start_time</span> <span class="op">&lt;-</span> <span class="fu"><a href="monitor_start.html">monitor_start</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="st">"my_cool_function"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Verbose monitoring enabled</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> (2026-01-22 02:37:28) my_cool_function start</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> (2026-01-22 03:15:32) my_cool_function start</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Step 1</span></span></span>
 <span class="r-in"><span><span class="va">monitor_time</span> <span class="op">&lt;-</span> <span class="fu">monitor</span><span class="op">(</span><span class="cn">TRUE</span>, <span class="va">start_time</span>, <span class="va">start_time</span>, <span class="st">"performing step 1"</span><span class="op">)</span></span></span>
@@ -107,7 +107,7 @@ this function.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Step 2</span></span></span>
 <span class="r-in"><span><span class="va">monitor_time</span> <span class="op">&lt;-</span> <span class="fu">monitor</span><span class="op">(</span><span class="cn">TRUE</span>, <span class="va">start_time</span>, <span class="va">monitor_time</span>, <span class="st">"performing step 2"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> (0.003 secs elapsed; 0.006 secs total) performing step 2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> (0.003 secs elapsed; 0.007 secs total) performing step 2</span>
 <span class="r-in"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fl">10.5</span><span class="op">^</span><span class="fl">6</span> <span class="op"><a href="https://rdrr.io/r/base/Arithmetic.html" class="external-link">%%</a></span> <span class="fl">345789</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Step 3</span></span></span>
@@ -117,7 +117,7 @@ this function.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Conclude monitoring</span></span></span>
 <span class="r-in"><span><span class="va">monitor_time</span> <span class="op">&lt;-</span> <span class="fu">monitor</span><span class="op">(</span><span class="cn">TRUE</span>, <span class="va">start_time</span>, <span class="va">monitor_time</span>, <span class="st">"done"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> (0.003 secs elapsed; 0.011 secs total) done</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> (0.002 secs elapsed; 0.012 secs total) done</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
