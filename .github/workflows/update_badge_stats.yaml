@@ -1,0 +1,41 @@
+name: Update Analytics Badges
+
+on:
+  schedule:
+    - cron: '0 0 * * *' ## Runs at midnight UTC
+  workflow_dispatch:
+
+jobs:
+  update-badges:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: 'release'
+
+      - name: Install Packages
+        run: Rscript -e 'install.packages(c("googleAnalyticsR", "jsonlite", "dplyr"))'
+
+      - name: Create Auth File
+        run: echo '${{ secrets.GA_AUTH_JSON }}' > ga_auth.json
+
+      - name: Run Stats Script
+        run: Rscript .github/scripts/update_badges.R
+
+      - name: Deploy badges to orphan branch
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./badges
+          publish_branch: badges
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
