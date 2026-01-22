@@ -86,7 +86,7 @@ single_sequence_ui <- function(id) {
     )
 }
 
-single_sequence_server <- function(id) {
+single_sequence_server <- function(id, user_tz) {
     moduleServer(id, function(input, output, session) {
 
         ## Process sequence input
@@ -152,7 +152,7 @@ single_sequence_server <- function(id) {
 
         ## Outputs
         output$visualisation <- enable_live_visualisation(current_image_path)
-        output$download_image <- enable_image_download(id, current_image_path, input$client_time_zone)
+        output$download_image <- enable_image_download(id, current_image_path, user_tz)
 
 
         ## Export settings
@@ -197,7 +197,7 @@ single_sequence_server <- function(id) {
 
             return(settings)
         })
-        output$export_settings <- enable_settings_export(settings, id, input$client_time_zone)
+        output$export_settings <- enable_settings_export(settings, id, user_tz)
 
         ## Import settings
         enable_settings_import(input, session, id, "import_settings")

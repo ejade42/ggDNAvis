@@ -2,8 +2,13 @@
 ## ------------------------------------------------------------------------------
 ## Standardised timestamp formatting
 get_current_time <- function(tz = NULL) {
-    if (is.null(tz)) {tz <- ""}
-    format(Sys.time(), "%y.%m.%d-%H.%M.%S", tz = tz)
+    if (is.null(tz) || tz == "") {tz <- Sys.timezone()} ## Fallback
+    timezone_format <- "%y.%m.%d-%H.%M.%S"
+    tryCatch({
+        format(Sys.time(), timezone_format, tz = tz)
+    }, error = function(e) {
+        format(Sys.time(), timezone_format)
+    })
 }
 
 ## Import settings from JSON
@@ -28,10 +33,10 @@ enable_settings_import <- function(input, session, id, import_name = "import_set
 }
 
 ## Export settings to JSON
-enable_settings_export <- function(settings, id, user_tz) {
+enable_settings_export <- function(settings, id, reactive_tz) {
     downloadHandler(
         filename = function() {
-            paste0("ggDNAvis-settings_", id, "_", get_current_time(user_tz), ".json")
+            paste0("ggDNAvis-settings_", id, "_", get_current_time(reactive_tz()), ".json")
         },
         ## Can access the list from the wider function environment
         content = function(file) {
@@ -41,10 +46,10 @@ enable_settings_export <- function(settings, id, user_tz) {
 }
 
 ## Export file to image
-enable_image_download <- function(id, image_path, user_tz) {
+enable_image_download <- function(id, image_path, reactive_tz) {
     downloadHandler(
         filename = function() {
-            paste0("ggDNAvis_", id, "_", get_current_time(user_tz), ".png")
+            paste0("ggDNAvis_", id, "_", get_current_time(reactive_tz()), ".png")
         },
         content = function(file) {
             file.copy(image_path(), file)

@@ -198,7 +198,7 @@ methylation_ui <- function(id) {
 
 
 
-methylation_server <- function(id) {
+methylation_server <- function(id, user_tz) {
     moduleServer(id, function(input, output, session) {
         max_grouping_depth <- 10
         termination_value <- "END GROUPING"
@@ -395,8 +395,8 @@ methylation_server <- function(id) {
         ## Enable visualisation and downloads
         output$main_visualisation <- enable_live_visualisation(main_image_path)
         output$scalebar_visualisation <- enable_live_visualisation(scalebar_image_path)
-        output$download_main_image <- enable_image_download(id, main_image_path, input$client_time_zone)
-        output$download_scalebar <- enable_image_download(paste0(id, "-scalebar"), scalebar_image_path, input$client_time_zone)
+        output$download_main_image <- enable_image_download(id, main_image_path, user_tz)
+        output$download_scalebar <- enable_image_download(paste0(id, "-scalebar"), scalebar_image_path, user_tz)
 
 
 
@@ -489,7 +489,7 @@ methylation_server <- function(id) {
 
             return(settings)
         })
-        output$export_settings <- enable_settings_export(settings, id, input$client_time_zone)
+        output$export_settings <- enable_settings_export(settings, id, user_tz)
 
         ## Import settings
         enable_settings_import(input, session, id, "import_settings")

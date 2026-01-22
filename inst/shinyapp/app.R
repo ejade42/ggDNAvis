@@ -166,9 +166,11 @@ ui <- page_navbar(
 
 
 server <- function(input, output, session) {
-    single_sequence_server("visualise-single-sequence")
-    many_sequences_server("visualise-many-sequences")
-    methylation_server("visualise-methylation")
+    user_tz <- reactive(input$client_time_zone)
+
+    single_sequence_server("visualise-single-sequence", user_tz)
+    many_sequences_server("visualise-many-sequences", user_tz)
+    methylation_server("visualise-methylation", user_tz)
 
     ## Check what tabs are most used
     observeEvent(input$ggDNAvis_interactive_nav, {

@@ -88,7 +88,7 @@ many_sequences_ui <- function(id) {
 
 
 
-many_sequences_server <- function(id) {
+many_sequences_server <- function(id, user_tz) {
     moduleServer(id, function(input, output, session) {
         max_grouping_depth <- 10
         termination_value <- "END GROUPING"
@@ -201,7 +201,7 @@ many_sequences_server <- function(id) {
         })
 
         output$visualisation <- enable_live_visualisation(current_image_path)
-        output$download_image <- enable_image_download(id, current_image_path, input$client_time_zone)
+        output$download_image <- enable_image_download(id, current_image_path, user_tz)
 
 
 
@@ -260,7 +260,7 @@ many_sequences_server <- function(id) {
 
             return(settings)
         })
-        output$export_settings <- enable_settings_export(settings, id, input$client_time_zone)
+        output$export_settings <- enable_settings_export(settings, id, user_tz)
 
         ## Import settings
         enable_settings_import(input, session, id, "import_settings")
