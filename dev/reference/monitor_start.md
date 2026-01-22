@@ -35,7 +35,7 @@ monitor_start(monitor_performance, function_name)
 ## Initialise monitoring
 start_time <- monitor_start(TRUE, "my_cool_function")
 #> ℹ Verbose monitoring enabled
-#> ℹ (2026-01-22 04:38:33) my_cool_function start
+#> ℹ (2026-01-22 05:01:16) my_cool_function start
 
 ## Step 1
 monitor_time <- monitor(TRUE, start_time, start_time, "performing step 1")
