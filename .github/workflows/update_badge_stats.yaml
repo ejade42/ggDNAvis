@@ -22,8 +22,13 @@ jobs:
         with:
           r-version: 'release'
 
-      - name: Install Packages
-        run: Rscript -e 'install.packages(c("googleAnalyticsR", "jsonlite", "dplyr"))'
+      - name: Install Dependencies
+        uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          packages: |
+            any::googleAnalyticsR
+            any::jsonlite
+            any::dplyr
 
       - name: Create Auth File
         run: echo '${{ secrets.GA_AUTH_JSON }}' > ga_auth.json
