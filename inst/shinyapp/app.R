@@ -21,6 +21,7 @@ bugs_link <- extract_link("[link_bugs]: ")
 citation_link <- extract_link("[link_citation]: ")
 documentation_link <- extract_link("[link_documentation]: ")
 source_link <- extract_link("[link_source]: ")
+shinyapp_link <- extract_link("[link_shinyapp]: ")
 
 ga_id <- "G-QB7HSZ4PJK"
 
@@ -113,6 +114,29 @@ ui <- page_navbar(
                         div(
                             style = "font-size: 0.85rem; color: #999; margin-top: 5px;",
                             paste0("v", packageVersion("ggDNAvis"))
+                        ),
+                        div(
+                            style = "display: inline-flex; flex-direction: column; align-items: flex-start; gap: 5px; margin-top: 20px;",
+                            ## Monthly views
+                            tags$a(
+                                href = documentation_link, target = "_blank",
+                                tags$img(src = "https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/ejade42/ggDNAvis/badges/views_monthly.json")
+                            ),
+                            ## Total views
+                            tags$a(
+                                href = documentation_link, target = "_blank",
+                                tags$img(src = "https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/ejade42/ggDNAvis/badges/views_total.json")
+                            ),
+                            ## Monthly users
+                            tags$a(
+                                href = documentation_link, target = "_blank",
+                                tags$img(src = "https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/ejade42/ggDNAvis/badges/users_monthly.json")
+                            ),
+                            ## Total users
+                            tags$a(
+                                href = documentation_link, target = "_blank",
+                                tags$img(src = "https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/ejade42/ggDNAvis/badges/users_total.json")
+                            )
                         )
                     )
                 )

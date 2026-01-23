@@ -3,6 +3,7 @@
 [link_documentation]: https://ejade42.github.io/ggDNAvis/
 [link_source]: https://github.com/ejade42/ggDNAvis
 [link_CRAN]: https://CRAN.R-project.org/package=ggDNAvis
+[link_shinyapp]: https://ejade42-ggdnavis.share.connect.posit.cloud/
 
 [link_fastq_reading]: https://ejade42.github.io/ggDNAvis/dev/#id_33-loading-from-fastq-and-metadata-file
 [link_methylation_offset]: https://ejade42.github.io/ggDNAvis/dev/#id_68-think-about-the-offset
