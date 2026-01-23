@@ -2,7 +2,7 @@ name: Update Analytics Badges
 
 on:
   schedule:
-    - cron: '0 0 * * *' ## Runs at midnight UTC
+    - cron: '0 12 * * *' ## Runs at noon UTC
   workflow_dispatch:
 
 jobs:
