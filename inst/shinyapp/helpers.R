@@ -300,7 +300,7 @@ panel_sequence_vis_colours <- function(ns) {
     accordion_panel(
         title = "Colours",
 
-        selectInput(ns("sel_sequence_colour_palette"), "Sequence colour palette:", choices = c("bright_pale", "bright_pale2", "bright_deep", "ggplot_style", "sanger", "custom")),
+        selectInput(ns("sel_sequence_colour_palette"), "Sequence colour palette:", choices = c("bright_pale", "bright_pale2", "bright_deep", "ggplot_style", "sanger", "accessible", "custom")),
         conditionalPanel(
             ns = ns,
             condition = "input.sel_sequence_colour_palette == 'custom'",
