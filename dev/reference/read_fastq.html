@@ -21,7 +21,7 @@ read_modified_fastq() and write_modified_fastq()."><meta property="og:image" con
 
     <a class="navbar-brand me-2" href="../index.html">ggDNAvis</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.2.9015</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.2.9016</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -74,7 +74,7 @@ To read/write a modified FASTQ containing modification information
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">read_fastq</span><span class="op">(</span>filename <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.choose.html" class="external-link">file.choose</a></span><span class="op">(</span><span class="op">)</span>, calculate_length <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">read_fastq</span><span class="op">(</span>filename <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.choose.html" class="external-link">file.choose</a></span><span class="op">(</span><span class="op">)</span>, calculate_length <span class="op">=</span> <span class="cn">TRUE</span>, strip_at <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -87,6 +87,10 @@ To read/write a modified FASTQ containing modification information
 
 <dt id="arg-calculate-length">calculate_length<a class="anchor" aria-label="anchor" href="#arg-calculate-length"></a></dt>
 <dd><p><code>logical</code>. Whether or not <code>sequence_length</code> column should be calculated and included.</p></dd>
+
+
+<dt id="arg-strip-at">strip_at<a class="anchor" aria-label="anchor" href="#arg-strip-at"></a></dt>
+<dd><p><code>logical</code>. Boolean value for whether "<code>@</code>" characters at the start of read IDs should automatically be stripped if they are present.<br><br> These "<code>@</code>"s tend to be introduced by writing BAM to FASTQ via <code>samtools fastq</code> and can cause read IDs to not match between FASTQ data and metadata, causing metadata merging to fail.</p></dd>
 
 </dl></div>
     <div class="section level2">

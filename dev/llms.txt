@@ -4813,6 +4813,11 @@ Small, widely used helper functions
   Emit an error message for an invalid function argument (generic
   `ggDNAvis` helper)
 
+- [`strip_leading_at()`](https://ejade42.github.io/ggDNAvis/reference/strip_leading_at.md)
+  :
+
+  Strip leading `@` from character vector
+
 - [`resolve_alias()`](https://ejade42.github.io/ggDNAvis/reference/resolve_alias.md)
   :
 

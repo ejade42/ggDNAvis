@@ -19,7 +19,7 @@ and
 ## Usage
 
 ``` r
-read_fastq(filename = file.choose(), calculate_length = TRUE)
+read_fastq(filename = file.choose(), calculate_length = TRUE, strip_at = TRUE)
 ```
 
 ## Arguments
@@ -34,6 +34,15 @@ read_fastq(filename = file.choose(), calculate_length = TRUE)
 
   `logical`. Whether or not `sequence_length` column should be
   calculated and included.
+
+- strip_at:
+
+  `logical`. Boolean value for whether "`@`" characters at the start of
+  read IDs should automatically be stripped if they are present.  
+    
+  These "`@`"s tend to be introduced by writing BAM to FASTQ via
+  `samtools fastq` and can cause read IDs to not match between FASTQ
+  data and metadata, causing metadata merging to fail.
 
 ## Value
 

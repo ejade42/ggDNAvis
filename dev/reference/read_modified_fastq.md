@@ -49,7 +49,7 @@ FASTQ via
 ## Usage
 
 ``` r
-read_modified_fastq(filename = file.choose(), debug = FALSE)
+read_modified_fastq(filename = file.choose(), strip_at = TRUE, debug = FALSE)
 ```
 
 ## Arguments
@@ -59,6 +59,15 @@ read_modified_fastq(filename = file.choose(), debug = FALSE)
   `character`. The file to be read. Defaults to
   [`file.choose()`](https://rdrr.io/r/base/file.choose.html) to select a
   file interactively.
+
+- strip_at:
+
+  `logical`. Boolean value for whether "`@`" characters at the start of
+  read IDs should automatically be stripped if they are present.  
+    
+  These "`@`"s tend to be introduced by writing BAM to FASTQ via
+  `samtools fastq` and can cause read IDs to not match between FASTQ
+  data and metadata, causing metadata merging to fail.
 
 - debug:
 
