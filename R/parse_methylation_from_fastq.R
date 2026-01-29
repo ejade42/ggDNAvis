@@ -33,10 +33,10 @@
 #' read_fastq(fastq_file, calculate_length = TRUE)
 #'
 #' @export
-read_fastq <- function(filename = file.choose(), calculate_length = TRUE) {
+read_fastq <- function(filename = file.choose(), calculate_length = TRUE, strip_at = TRUE) {
     ## Validate arguments
     ## ---------------------------------------------------------------------
-    not_na_or_null <- list(filename = filename, calculate_length = calculate_length)
+    not_na_or_null <- list(filename = filename, calculate_length = calculate_length, strip_at = strip_at)
     for (argument in names(not_na_or_null)) {
         if (length(not_na_or_null[[argument]]) != 1 || any(is.na(not_na_or_null[[argument]])) || any(is.null(not_na_or_null[[argument]]))) {bad_arg(argument, not_na_or_null, "must be a single value and not NA or NULL.")}
     }
@@ -45,9 +45,14 @@ read_fastq <- function(filename = file.choose(), calculate_length = TRUE) {
     if (!is.character(filename)) {
         bad_arg("filename", list(filename = filename), "must be a character/string value.")
     }
-    if (!is.logical(calculate_length)) {
-        bad_arg("calculate_length", list(calculate_length = calculate_length), "must be a logical/boolean value.")
+
+    bool <- list(calculate_length = calculate_length, strip_at = strip_at)
+    for (argument in names(bool)) {
+        if (!is.logical(bool[[argument]])) {
+            bad_arg(argument, bool, "must be a logical/boolean value.")
+        }
     }
+    bool <- NULL
     ## ---------------------------------------------------------------------
 
 
@@ -64,8 +69,45 @@ read_fastq <- function(filename = file.choose(), calculate_length = TRUE) {
     if (calculate_length) {
         output_data$sequence_length <- nchar(output_data$sequence)
     }
+    if (strip_at) {
+        output_data$read <- strip_leading_at(output_data$read)
+    }
 
     return(output_data)
+}
+
+
+#' Strip leading `@` from character vector
+#'
+#' @description
+#' This function removes a single leading `@` character
+#' from each element of a character vector when present.
+#' This is intended to deal with SAMtools > FASTQ translation
+#' often prefixing read IDs with an "`@`", which can result
+#' in read ID mismatches and metadata merging fails.
+#'
+#' @param string `character vector`. A vector (e.g. read IDs) to strip of a single leading "`@`" each wherever one is present.
+#' @return `character vector`. The same string but with one "`@`" removed from each element that started with one.
+#' @export
+#' @examples
+#' strip_leading_at(c("read_1", "@read_2", "@@@read_3", "", NA, NULL))
+strip_leading_at <- function(string) {
+    ## Validate
+    if (!is.character(string)) {
+        bad_arg("string", list(string = string), "must be a character/string.")
+    }
+
+
+    ## Check
+    unname(sapply(string, function(string) {
+        if (is.na(string)) {
+            return(NA)
+        } else if (substr(string, 1, 1) == "@") {
+            return(substr(string, 2, nchar(string)))
+        } else {
+            return(string)
+        }
+    }))
 }
 
 
@@ -97,6 +139,7 @@ read_fastq <- function(filename = file.choose(), calculate_length = TRUE) {
 #' Dataframes produced by this function can be written back to modified FASTQ via [write_modified_fastq()].
 #'
 #' @param filename `character`. The file to be read. Defaults to [file.choose()] to select a file interactively.
+#' @param strip_at `logical`. Boolean value for whether "`@`" characters at the start of read IDs should automatically be stripped if they are present, via [strip_leading_at()].\cr\cr These "`@`"s tend to be introduced by writing BAM to FASTQ via `samtools fastq` and can cause read IDs to not match between FASTQ data and metadata, causing metadata merging to fail.
 #' @param debug `logical`. Boolean value for whether the extra `<MM/ML>_tags` and `<MM/ML>_raw` columns should be added to the dataframe. Defaults to `FALSE` as I can't imagine this is often helpful, but the option is provided to assist with debugging.
 #'
 #' @return `dataframe`. Dataframe of modification information, as described above.\cr\cr Sequences can be visualised with [visualise_many_sequences()] and modification information can be visualised with [visualise_methylation()] (despite the name, any type of information can be visualised as long as it has locations and probabilities columns).\cr\cr Can be written back to FASTQ via [write_modified_fastq()].
@@ -117,10 +160,10 @@ read_fastq <- function(filename = file.choose(), calculate_length = TRUE) {
 #' read_modified_fastq(modified_fastq_file, debug = TRUE)
 #'
 #' @export
-read_modified_fastq <- function(filename = file.choose(), debug = FALSE) {
+read_modified_fastq <- function(filename = file.choose(), strip_at = TRUE, debug = FALSE) {
     ## Validate arguments
     ## ---------------------------------------------------------------------
-    not_na_or_null <- list(filename = filename, debug = debug)
+    not_na_or_null <- list(filename = filename, debug = debug, strip_at = strip_at)
     for (argument in names(not_na_or_null)) {
         if (length(not_na_or_null[[argument]]) != 1 || any(is.na(not_na_or_null[[argument]])) || any(is.null(not_na_or_null[[argument]]))) {bad_arg(argument, not_na_or_null, "must be a single value and not NA or NULL.")}
     }
@@ -129,9 +172,14 @@ read_modified_fastq <- function(filename = file.choose(), debug = FALSE) {
     if (!is.character(filename)) {
         bad_arg("filename", list(filename = filename), "must be a character/string value.")
     }
-    if (!is.logical(debug)) {
-        bad_arg("debug", list(debug = debug), "must be a logical/boolean value.")
+
+    bool <- list(debug = debug, strip_at = strip_at)
+    for (argument in names(bool)) {
+        if (!is.logical(bool[[argument]])) {
+            bad_arg(argument, bool, "must be a logical/boolean value.")
+        }
     }
+    bool <- NULL
     ## ---------------------------------------------------------------------
 
 
@@ -268,6 +316,12 @@ read_modified_fastq <- function(filename = file.choose(), debug = FALSE) {
                 modification_data[i, paste0(modification_type, "_probabilities")] <- header_info$modification_probabilities[[i]][index]
             }
         }
+    }
+
+
+    ## Strip @s if needed
+    if (strip_at) {
+        modification_data$read <- strip_leading_at(modification_data$read)
     }
 
     ## Return result

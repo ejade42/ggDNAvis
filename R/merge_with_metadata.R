@@ -65,9 +65,7 @@ merge_fastq_with_metadata <- function(fastq_data, metadata, reverse_complement_m
     if (length(reverse_complement_mode) != 1 || is.na(reverse_complement_mode) || !is.character(reverse_complement_mode) || !(tolower(reverse_complement_mode) %in% c("dna", "rna", "reverse_only"))) {
         bad_arg("reverse_complement_mode", list(reverse_complement_mode = reverse_complement_mode), "must be a single character value, either 'DNA', 'RNA', or 'reverse_only'.")
     }
-    if (nrow(metadata) != nrow(fastq_data)) {
-        abort(paste("FASTQ and metadata dataframes must have the same number of rows, one row per read.\n'fastq_data' rows:", nrow(fastq_data), "\n'metadata' rows:", nrow(metadata)), class = "argument_value_or_type")
-    }
+
     for (column in c("read", "sequence", "quality")) {
         if (!(column %in% colnames(fastq_data))) {
             abort(paste0("FASTQ dataframe must contain a '", column, "' column. This error should not occur if data was read via read_modified_fastq(), please create a bug report at ", packageDescription("ggDNAvis")$BugReports, "\nCurrent columns: ", paste(colnames(fastq_data), collapse = ", ")), class = "argument_value_or_type")
@@ -78,6 +76,17 @@ merge_fastq_with_metadata <- function(fastq_data, metadata, reverse_complement_m
     }
     if (!("direction" %in% colnames(metadata))) {
         abort(paste0("Metadata must contain a 'direction' column. Please make sure there is a column of forward/reverse read directions in the metadata and that it is called 'direction'.\nCurrent columns: ", paste(colnames(metadata), collapse = ", ")), class = "argument_value_or_type")
+    }
+
+    ## Overlap checking
+    id_overlap <- sum(fastq_data$read %in% metadata$read)
+    total_reads <- nrow(fastq_data)
+    if (id_overlap == 0) {
+        abort(paste("Zero overlap detected between read ID column in metadata and fastq_data. Check strip_at setting in read_fastq.\nFirst fastq_data read ID:", fastq_data$read[1], "\nFirst metadata read ID:", metadata$read[1]), class = "overlap_zero")
+    }
+    if (id_overlap < total_reads) {
+        reads_missing_from_metadata <- fastq_data$read[!(fastq_data$read %in% metadata$read)]
+        abort(paste("Not all reads in FASTQ have associated metadata.\nRead IDs with missing metadata:", paste(reads_missing_from_metadata, collapse = ", ")), class = "overlap_incomplete")
     }
     ## ---------------------------------------------------------------------
 
@@ -193,9 +202,7 @@ merge_methylation_with_metadata <- function(methylation_data, metadata, reversed
     if (tolower(reverse_complement_mode) == "reverse_only" && reversed_location_offset != 0) {
         warn(paste("It is not recommended to use reverse_complement_mode = reverse_only with an offset value other than 0, as this will make the locations not match the sequence.\nCurrent reversed_location_offset value:", reversed_location_offset), class = "parameter_recommendation")
     }
-    if (nrow(metadata) != nrow(methylation_data)) {
-        abort(paste("Methylation and metadata dataframes must have the same number of rows, one row per read.\n'methylation_data' rows:", nrow(methylation_data), "\n'metadata' rows:", nrow(metadata)), class = "argument_value_or_type")
-    }
+
     for (column in c("read", "sequence", "quality", "sequence_length", "modification_types")) {
         if (!(column %in% colnames(methylation_data))) {
             abort(paste0("Methylation dataframe must contain a '", column, "' column. This error should not occur if data was read via read_modified_fastq(), please create a bug report at ", packageDescription("ggDNAvis")$BugReports, "\nCurrent columns: ", paste(colnames(methylation_data), collapse = ", ")), class = "argument_value_or_type")
@@ -206,6 +213,17 @@ merge_methylation_with_metadata <- function(methylation_data, metadata, reversed
     }
     if (!("direction" %in% colnames(metadata))) {
         abort(paste0("Metadata must contain a 'direction' column. Please make sure there is a column of forward/reverse read directions in the metadata and that it is called 'direction'.\nCurrent columns: ", paste(colnames(metadata), collapse = ", ")), class = "argument_value_or_type")
+    }
+
+    ## Overlap checking
+    id_overlap <- sum(methylation_data$read %in% metadata$read)
+    total_reads <- nrow(methylation_data)
+    if (id_overlap == 0) {
+        abort(paste("Zero overlap detected between read ID column in metadata and methylation_data. Check strip_at setting in read_modified_fastq.\nFirst methylation_data read ID:", methylation_data$read[1], "\nFirst metadata read ID:", metadata$read[1]), class = "overlap_zero")
+    }
+    if (id_overlap < total_reads) {
+        reads_missing_from_metadata <- methylation_data$read[!(methylation_data$read %in% metadata$read)]
+        abort(paste("Not all reads in FASTQ have associated metadata.\nRead IDs with missing metadata:", paste(reads_missing_from_metadata, collapse = ", ")), class = "overlap_incomplete")
     }
     ## ---------------------------------------------------------------------
 

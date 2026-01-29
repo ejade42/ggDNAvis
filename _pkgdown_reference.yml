@@ -53,6 +53,7 @@ reference:
   - debug_join_vector_num
   - debug_join_vector_str
   - bad_arg
+  - strip_leading_at
   - resolve_alias
   - resolve_alias_map
   - monitor_start

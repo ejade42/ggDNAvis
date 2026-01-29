@@ -163,6 +163,16 @@ test_that("helper function for interpreting MM vector fails", {
 })
 
 
+
+test_that("stripping at helper works", {
+    expect_equal(strip_leading_at(c("read_1", "@read_2", "@@read_3", "", NA, NULL)),
+                 c("read_1", "read_2", "@read_3", "", NA))
+
+    bad_param_value_for_string <- list(TRUE, FALSE, -1, 1.5, 0.5, 3)
+    for (param in bad_param_value_for_string) {
+        expect_error(strip_leading_at(param), class = "argument_value_or_type")
+    }
+})
 ## -------------------------------------------------------------------------------------
 
 

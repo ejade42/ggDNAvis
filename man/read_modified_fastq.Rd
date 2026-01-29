@@ -4,10 +4,12 @@
 \alias{read_modified_fastq}
 \title{Read modification information from modified FASTQ}
 \usage{
-read_modified_fastq(filename = file.choose(), debug = FALSE)
+read_modified_fastq(filename = file.choose(), strip_at = TRUE, debug = FALSE)
 }
 \arguments{
 \item{filename}{\code{character}. The file to be read. Defaults to \code{\link[=file.choose]{file.choose()}} to select a file interactively.}
+
+\item{strip_at}{\code{logical}. Boolean value for whether "\code{@}" characters at the start of read IDs should automatically be stripped if they are present.\cr\cr These "\code{@}"s tend to be introduced by writing BAM to FASTQ via \verb{samtools fastq} and can cause read IDs to not match between FASTQ data and metadata, causing metadata merging to fail.}
 
 \item{debug}{\code{logical}. Boolean value for whether the extra \verb{<MM/ML>_tags} and \verb{<MM/ML>_raw} columns should be added to the dataframe. Defaults to \code{FALSE} as I can't imagine this is often helpful, but the option is provided to assist with debugging.}
 }
