@@ -1,0 +1,50 @@
+name: Sync Assets to Manuscript
+
+on:
+  push:
+    paths:
+      - 'man/figures/**'
+  workflow_dispatch: # Allows you to trigger the sync manually from the Actions tab
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  sync-assets:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Package Repo (Source)
+        uses: actions/checkout@v4
+
+      - name: Checkout Manuscript Repo (Destination)
+        uses: actions/checkout@v4
+        with:
+          repository: ejade42/ggDNAvis-manuscript
+          path: manuscript-dest
+          token: ${{ secrets.SYNC_LOGO_PAT }}
+
+      - name: Sync Files
+        run: |
+          # Ensure the specific target directory exists in the manuscript repo
+          mkdir -p manuscript-dest/figures/ggDNAvis_sticker/
+          
+          # Copy everything from package figures to manuscript sticker folder
+          # -a preserves attributes, -v shows what is happening in the logs
+          cp -rv man/figures/* manuscript-dest/figures/ggDNAvis_sticker/
+
+      - name: Commit and Push to Manuscript
+        working-directory: manuscript-dest
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          git add .
+          
+          # Check if there are changes before committing to avoid workflow errors
+          if git diff --staged --quiet; then
+            echo "No changes to sync."
+          else
+            git commit -m "Update figures from R package (automated)"
+            git push
+          fi
