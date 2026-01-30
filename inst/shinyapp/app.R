@@ -16,7 +16,7 @@ source("mod_visualise_methylation.R")
 
 ## Define links for reuse
 ggDNAvis_icon <- "https://raw.githubusercontent.com/ejade42/ggDNAvis/main/pkgdown/favicon/favicon-96x96.png"
-ggDNAvis_icon_full_res <- "https://raw.githubusercontent.com/ejade42/ggDNAvis/main/pkgdown/favicon/web-app-manifest-512x512.png"
+ggDNAvis_icon_full_res <- "https://raw.githubusercontent.com/ejade42/ggDNAvis/main/man/figures/logo.png"
 bugs_link <- extract_link("[link_bugs]: ")
 citation_link <- extract_link("[link_citation]: ")
 documentation_link <- extract_link("[link_documentation]: ")
