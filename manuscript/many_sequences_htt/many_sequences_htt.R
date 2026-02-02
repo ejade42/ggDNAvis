@@ -29,7 +29,7 @@ merged_data <- merged_data[merged_data$sequence_length > 0,]
 
 ## Histogram to justify allele separation threshold
 ## Exported to the github folder but not included in paper
-threshold <- 125
+threshold <- 138
 ggplot(merged_data, aes(x = sequence_length)) +
     geom_histogram(binwidth = 1, center = 0) +
     geom_vline(xintercept = threshold, col = "red", linetype = "dashed") +
@@ -38,6 +38,20 @@ ggplot(merged_data, aes(x = sequence_length)) +
     labs(x = "Trimmed HTT read length", y = "Read count")
 ggsave("supplementary_htt_allele_separation_histogram.png", dpi = 300, width = 7, height = 5)
 
+## Calculate how many are near threshold
+flanking  <- 24
+equivalent_repeats <- (threshold - flanking) / 3
+
+low <- 132
+low_mid <- 133
+high_mid <- 143
+high <- 147
+from_36_41 <- sum(merged_data$sequence_length >= low & merged_data$sequence_length <= high)
+within_5_bp <- sum(merged_data$sequence_length >= low_mid & merged_data$sequence_length <= high_mid)
+window_repeats <- (c(low, low_mid, high_mid, high) - flanking) / 3
+
+cat("36-41 repeats: ", from_36_41, " reads (", from_36_41 / nrow(merged_data) * 100, "%)", sep = "")
+cat("133-143 bp: ", within_5_bp, " reads (", within_5_bp / nrow(merged_data) * 100, "%)", sep = "")
 
 ## Separate alleles by length
 merged_data$allele <- ifelse(merged_data$sequence_length > threshold, "expanded", "wildtype")
