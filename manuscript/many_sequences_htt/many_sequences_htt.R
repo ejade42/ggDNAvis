@@ -45,21 +45,22 @@ ggsave("supplementary_htt_allele_separation_histogram.png", dpi = 300, width = 7
 
 ## Calculate how many are near threshold
 flanking  <- 24
-equivalent_repeats <- (threshold - flanking) / 3
+find_codons <- function(x, flanking = 24) {(x - flanking) / 3}
 low <- 132
 low_mid <- 133
 high_mid <- 143
 high <- 147
 from_36_41 <- sum(merged_data$sequence_length >= low & merged_data$sequence_length <= high)
 within_5_bp <- sum(merged_data$sequence_length >= low_mid & merged_data$sequence_length <= high_mid)
-window_repeats <- (c(low, low_mid, high_mid, high) - flanking) / 3
+window <- find_codons(c(low, low_mid, high_mid, high))
 
 ## Summarise threshold information
 cat(
     "Allele separation threshold: ", threshold, " bp (> expanded, <= wildtype)\n",
+    "Equivalent to ", find_codons(threshold), " repeats with ", flanking, " bp flanking sequence\n",
     "Total reads after filtering: ", nrow(merged_data), "\n",
-    "Reads from 36-41 repeats: ", from_36_41, " reads (", round(from_36_41 / nrow(merged_data), 4) * 100, "%)\n",
-    "Reads from 133-143 bases: ", within_5_bp, " reads (", round(within_5_bp / nrow(merged_data), 4) * 100, "%)", 
+    "Reads from ", find_codons(low), "-", find_codons(high), " repeats: ", from_36_41, " reads (", round(from_36_41 / nrow(merged_data), 4) * 100, "%)\n",
+    "Reads from ", low_mid, "-", high_mid, " bases: ", within_5_bp, " reads (", round(within_5_bp / nrow(merged_data), 4) * 100, "%)", 
     sep = ""
 )
 
@@ -147,8 +148,8 @@ visualise_single_sequence(
 
 
 ## Merge images via magick
-main <- image_read("many_sequences_htt_main.png")
-key  <- image_read("many_sequences_htt_key.png")
+main <- image_read("many_sequences_htt_main.png", strip = TRUE)
+key  <- image_read("many_sequences_htt_key.png", strip = TRUE)
 
 combined <- image_composite(main, key, operator = "over", gravity = "southeast", offset = "+0+0")
 image_write(combined, "many_sequences_htt.png", format = "png")
