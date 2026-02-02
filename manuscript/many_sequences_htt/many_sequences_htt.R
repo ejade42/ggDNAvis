@@ -27,6 +27,11 @@ merged_data <- merged_data[!duplicated(merged_data$read),]
 ## Exclude reads with length 0
 merged_data <- merged_data[merged_data$sequence_length > 0,]
 
+
+
+
+## ALLELE DETERMINATION
+## ---------------------------------------------------------------------------------------------
 ## Histogram to justify allele separation threshold
 ## Exported to the github folder but not included in paper
 threshold <- 138
@@ -41,7 +46,6 @@ ggsave("supplementary_htt_allele_separation_histogram.png", dpi = 300, width = 7
 ## Calculate how many are near threshold
 flanking  <- 24
 equivalent_repeats <- (threshold - flanking) / 3
-
 low <- 132
 low_mid <- 133
 high_mid <- 143
@@ -50,17 +54,26 @@ from_36_41 <- sum(merged_data$sequence_length >= low & merged_data$sequence_leng
 within_5_bp <- sum(merged_data$sequence_length >= low_mid & merged_data$sequence_length <= high_mid)
 window_repeats <- (c(low, low_mid, high_mid, high) - flanking) / 3
 
-cat("36-41 repeats: ", from_36_41, " reads (", from_36_41 / nrow(merged_data) * 100, "%)", sep = "")
-cat("133-143 bp: ", within_5_bp, " reads (", within_5_bp / nrow(merged_data) * 100, "%)", sep = "")
+## Summarise threshold information
+cat(
+    "Allele separation threshold: ", threshold, " bp (> expanded, <= wildtype)\n",
+    "Total reads after filtering: ", nrow(merged_data), "\n",
+    "Reads from 36-41 repeats: ", from_36_41, " reads (", round(from_36_41 / nrow(merged_data), 4) * 100, "%)\n",
+    "Reads from 133-143 bases: ", within_5_bp, " reads (", round(within_5_bp / nrow(merged_data), 4) * 100, "%)", 
+    sep = ""
+)
 
 ## Separate alleles by length
 merged_data$allele <- ifelse(merged_data$sequence_length > threshold, "expanded", "wildtype")
+## ---------------------------------------------------------------------------------------------
+
+
+
 
 
 ## Randomly subsample to make visualisation size manageable
 set.seed(123)
 subsampled_data <- merged_data[sample(1:nrow(merged_data), 250, replace = FALSE),]
-
 
 
 ## Extract, grouping by allele and sorting by length and direction
@@ -118,7 +131,6 @@ visualise_many_sequences(
 
 ggsave(filename = "many_sequences_htt_main.png", dpi = 10, width = width + 2*margin, height = height + 2*margin, device = ragg::agg_png, limitsize = FALSE)
     
-
 
 ## Create key
 visualise_single_sequence(
