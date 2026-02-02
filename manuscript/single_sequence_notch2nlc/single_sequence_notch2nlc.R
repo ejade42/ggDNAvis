@@ -1,7 +1,7 @@
 library(ggDNAvis)
-library(patchwork)
-library(ggplot2)
-library(cowplot)
+library(patchwork) ## v1.3.2
+library(ggplot2)   ## v4.0.1
+library(cowplot)   ## v1.2.0
 
 
 ## Create sequence list

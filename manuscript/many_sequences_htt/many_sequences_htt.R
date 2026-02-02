@@ -1,6 +1,6 @@
 library(ggDNAvis)
-library(ggplot2)
-library(magick)
+library(ggplot2)   ## v4.0.1
+library(magick)    ## v2.9.0
 
 ## Create metadata dataframe
 forward_reads <- readLines("output/05_forward_reads.txt")

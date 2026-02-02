@@ -1,6 +1,6 @@
 library(ggDNAvis)
-library(dplyr)
-library(ggplot2)
+library(dplyr)     ## v1.1.4
+library(ggplot2)   ## v4.0.1
 
 ## Create random methylation probabilities
 set.seed(1234)
@@ -113,6 +113,8 @@ visualise_methylation(
     input[[3]],
     index_annotation_lines = lines_to_annotate,
     index_annotation_interval = 6,
+    index_annotation_always_first_base = FALSE,
+    index_annotation_always_last_base = FALSE,
     other_bases_outline_linewidth = 1,
     other_bases_outline_colour = "darkgrey",
     sequence_text_type = "sequence",
