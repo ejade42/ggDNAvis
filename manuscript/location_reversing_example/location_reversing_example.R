@@ -6,7 +6,7 @@ library(ggplot2)   ## v4.0.1
 set.seed(1234)
 random_probabilities <- sample(0:255, size = 12, replace = TRUE)
 
-## Set up original dataframe with reads always 5'-3'
+## Set up original dataframe with reads always 5’-3’
 location_reversing_example <- data.frame(
     read = c("example_f", "example_r"),
     sequence = c("GGCGGCGGCGGCGGAGGAGGCGGCGGAGGAA", "TTCCTCCGCCGCCTCCTCCGCCGCCGCCGCC"),
@@ -81,17 +81,17 @@ n <- length(input[[3]]) + length(lines_to_annotate)
 
 ## Create dataframe for titles
 titles <- data.frame(
-    text = c("(a) Original sequences, both 5'-3' (e.g. original reads):",
-             "(b) Reversed to be 3'-5', offset 0:",
-             "(c) Reverse-complemented to 5'-3' of other strand, offset 0:",
-             "(d) Reverse-complemented to 5'-3' of other strand, offset 1:"),
+    text = c("(a) Original sequences, both 5’–3’ (e.g. original reads):",
+             "(b) Reversed to be 3’–5’, offset 0:",
+             "(c) Reverse-complemented to 5’–3’ of other strand, offset 0:",
+             "(d) Reverse-complemented to 5’–3’ of other strand, offset 1:"),
     lines = lines_to_annotate - 1,
     x = 0
 )
 titles$y = 1 - (titles$lines - 0.66) / length(input[[1]])
 
 ## Create dataframe for 1 extra tile on each edge
-## and for 5' and 3' direction indicators
+## and for 5’ and 3’ direction indicators
 lines_for_tiles <- sort(
     rep(seq_along(lines_to_annotate) + lines_to_annotate - 2, times = 2) +
     rep(0:1, each = length(lines_to_annotate)),
@@ -102,8 +102,8 @@ directions <- data.frame(
     y = rep((lines_for_tiles - 0.5 ) / n, times = 2),
     width = 1 / k,
     height = 1 / n,
-    text = c(rep("5'", 2), "5'", "3'", rep("5'", 4),
-             rep("3'", 2), "3'", "5'", rep("3'", 4))
+    text = c(rep("5’", 2), "5’", "3’", rep("5’", 4),
+             rep("3’", 2), "3’", "5’", rep("3’", 4))
 )
 
 ## Create visualisation
@@ -122,7 +122,7 @@ visualise_methylation(
     high_clamp = 255*0.6,
     margin = margin
 ) +
-    ## Add titles and 5'/3' directions
+    ## Add titles and 5’/3’ directions
     geom_tile(data = directions, aes(x = x, y = y, width = width, height = height), fill = alpha("white", 0), linewidth = 0) +
     geom_text(data = directions, aes(x = x, y = y, label = text), size = 15, col = "darkred", fontface = "bold") +
     geom_text(data = titles, aes(x = x, y = y, label = text), hjust = 0, size = 16, family = "Helvetica Light")
