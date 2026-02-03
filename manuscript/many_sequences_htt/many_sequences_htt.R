@@ -40,7 +40,7 @@ ggplot(merged_data, aes(x = sequence_length)) +
     geom_vline(xintercept = threshold, col = "red", linetype = "dashed") +
     theme_classic() +
     coord_cartesian(expand = FALSE) +
-    labs(x = "Trimmed HTT read length", y = "Read count")
+    labs(x = "Clipped HTT read length", y = "Read count")
 ggsave("supplementary_htt_allele_separation_histogram.png", dpi = 300, width = 7, height = 5)
 
 ## Calculate how many are near threshold
