@@ -31,4 +31,4 @@ dorado download --model "${modified_model}" --models-directory "models"
 
 ## Step 3: Basecall
 echo; echo "$(date +"(%Y-%m-%d %T)") Step 3: basecalling"
-dorado basecaller "models/${base_model}" --modified-bases-models "models/${modified_model}" "output/01_initial.pod5" -o "output/02_basecalled.bam"
+dorado basecaller "models/${base_model}" --modified-bases-models "models/${modified_model}" "output/01_initial.pod5" > "output/02_basecalled.bam"
