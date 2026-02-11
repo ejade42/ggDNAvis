@@ -25,7 +25,9 @@ participant_ids=(NA04026 NA12878)
 input_files=(input/GBXM123343/NA04026_FMR1_readfish/20210527_0307_X3_FAQ22858_a248fea1/slow5/FAQ22858_9e0f66cb.blow5
              input/placeholder.blow5)
 reference_fasta="input/Homo_sapiens.GRCh38.dna.primary_assembly_250707.fa.gz"
-
+target_start="input/FMR1_repeat_start.bed"
+target_end="input/FMR1_repeat_end.bed"
+target_clip="input/FMR1_repeat_clip.bed"
 
 ## Step 1 - index reference (only needs to be done once)
 if ${do_reference_indexing}; then
@@ -54,7 +56,7 @@ for i in "${!participant_ids[@]}"; do
             --cpus-per-task "6" \
             --time "1:00:00" \
             --mem "16G" \
-            --output "${subjob_dir}/slurm-%j-InputConversion.out" \
+            --output "${subjob_dir}/slurm-%j-${participant_id}-InputConversion.out" \
             "02_input_conversion.sh" \
             "${participant_id}" "${input_file}")
         echo "Step 2 (input conversion) for participant ${participant_id} submitted with ID: ${conversion_id}"
@@ -74,7 +76,7 @@ for i in "${!participant_ids[@]}"; do
             --gpus-per-node "A100:1" \
             --time "6:00:00" \
             --mem "32G" \
-            --output "${subjob_dir}/slurm-%j-Basecalling.out" \
+            --output "${subjob_dir}/slurm-%j-${participant_id}-Basecalling.out" \
             "03_basecalling.sh" \
             "${participant_id}")
         echo "Step 3 (basecalling) for participant ${participant_id} submitted with ID: ${basecalling_id}"
@@ -95,9 +97,9 @@ for i in "${!participant_ids[@]}"; do
             --cpus-per-task "4" \
             --time "1:00:00" \
             --mem "16G" \
-            --output "${subjob_dir}/slurm-%j-Filtering.out" \
+            --output "${subjob_dir}/slurm-%j-${participant_id}-Filtering.out" \
             "04_filtering.sh" \
-            "${participant_id}")
+            "${participant_id}" "${target_start}" "${target_end}" "${target_clip}")
         echo "Step 4 (filtering) for participant ${participant_id} submitted with ID: ${filtering_id}"
     fi
 done
