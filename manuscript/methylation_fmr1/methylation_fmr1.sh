@@ -22,8 +22,10 @@ do_filtering=false
 ## Set up inputs 
 ## Input files assumed to have been downloaded and extracted to input/ directory by input/download_fmr1.sh
 ## Be warned that the sequencing data is hundreds of GB
-participant_ids=("NA04026" "NA12878")
+participant_ids=("NA04026" "NA05131" "NA06905" "NA12878")
 input_files=("input/GBXM123343/NA04026_FMR1_readfish/*/slow5/*.blow5"
+             "input/MBXM107326/NA05131/*/slow5/*.blow5"
+             "input/MBXM032249/NA06905/*/slow5/*.blow5"
              "input/MBXM044264/NA12878/*/slow5/*.blow5")
 reference_fasta="input/Homo_sapiens.GRCh38.dna.primary_assembly_250707.fa.gz"
 target_start="input/fmr1_repeat_start.bed"
@@ -58,7 +60,7 @@ for i in "${!participant_ids[@]}"; do
             --mem "16G" \
             --output "${subjob_dir}/slurm-%j-${participant_id}-InputConversion.out" \
             "02_input_conversion.sh" \
-            "${participant_id}" "${input_files}")
+            "${participant_id}" "${input_file}")
         echo "Step 2 (input conversion) for participant ${participant_id} submitted with ID: ${conversion_id}"
     fi
 
