@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 ## Assumes minimap2 is installed (I had version 2.30-r1287)
 ## Assumes Homo_sapiens.GRCh38.dna.primary_assembly_240815.fa is in input/

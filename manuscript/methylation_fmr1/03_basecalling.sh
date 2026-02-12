@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 ## Assumes dorado is installed (I had version 0.9.6+0949eb8)
 
