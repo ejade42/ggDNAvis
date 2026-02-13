@@ -1,5 +1,5 @@
 library(ggDNAvis)
-library(ggplot2)   ## v4.0.1
+library(ggplot2)   ## v4.0.2
 library(magick)    ## v2.9.0
 
 ## Create metadata dataframe
