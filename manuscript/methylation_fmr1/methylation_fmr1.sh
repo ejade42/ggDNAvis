@@ -16,7 +16,7 @@ subjob_dir="logs/subjobs"
 do_reference_indexing=false
 do_input_conversion=false
 do_basecalling=false
-do_mapping=true
+do_mapping=false
 do_filtering=true
 
 ## Set up inputs 
@@ -121,7 +121,7 @@ for i in "${!participant_ids[@]}"; do
         filtering_id=$(sbatch \
             ${active_args} \
             --cpus-per-task "4" \
-            --time "2:30:00" \
+            --time "0:30:00" \
             --mem "16G" \
             --output "${subjob_dir}/slurm-%j-${participant_id}-Filtering.out" \
             "05_filtering.sh" \
