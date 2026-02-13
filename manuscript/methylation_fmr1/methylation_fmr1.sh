@@ -14,18 +14,18 @@ subjob_dir="logs/subjobs"
 
 ## Control which steps run
 do_reference_indexing=false
-do_input_conversion=true
+do_input_conversion=false
 do_basecalling=false
-do_mapping=false
-do_filtering=false
+do_mapping=true
+do_filtering=true
 
 ## Set up inputs 
 ## Input files assumed to have been downloaded and extracted to input/ directory by input/download_fmr1.sh
 ## Be warned that the sequencing data is hundreds of GB
 participant_ids=("NA04026" "NA05131" "NA06905" "NA12878")
 input_files=("input/GBXM123343/NA04026_FMR1_readfish/*/slow5/*.blow5"
-             "input/MBXM107326/NA05131/*/slow5/*.blow5"
-             "input/MBXM032249/NA06905/*/slow5/*.blow5"
+             "input/MBXM107326/NA05131_FMR1_readfish/*/slow5/*.blow5"
+             "input/MBXM032249/fmr1_readfish_lsk110/*/slow5/*.blow5"
              "input/MBXM044264/NA12878/*/slow5/*.blow5")
 reference_fasta="input/Homo_sapiens.GRCh38.dna.primary_assembly_250707.fa.gz"
 target_start="input/fmr1_repeat_start.bed"
@@ -56,7 +56,7 @@ for i in "${!participant_ids[@]}"; do
         conversion_id=$(sbatch \
             ${args} \
             --cpus-per-task "6" \
-            --time "1:00:00" \
+            --time "6:00:00" \
             --mem "16G" \
             --output "${subjob_dir}/slurm-%j-${participant_id}-InputConversion.out" \
             "02_input_conversion.sh" \
@@ -76,7 +76,7 @@ for i in "${!participant_ids[@]}"; do
             ${active_args} \
             --cpus-per-task "6" \
             --gpus-per-node "A100:1" \
-            --time "4:00:00" \
+            --time "12:00:00" \
             --mem "32G" \
             --output "${subjob_dir}/slurm-%j-${participant_id}-Basecalling.out" \
             "03_basecalling.sh" \
@@ -98,7 +98,7 @@ for i in "${!participant_ids[@]}"; do
             ${active_args} \
             --cpus-per-task "16" \
             --time "12:00:00" \
-            --mem "16G" \
+            --mem "32G" \
             --output "${subjob_dir}/slurm-%j-${participant_id}-Mapping.out" \
             "04_mapping.sh" \
             "${participant_id}")
@@ -121,7 +121,7 @@ for i in "${!participant_ids[@]}"; do
         filtering_id=$(sbatch \
             ${active_args} \
             --cpus-per-task "4" \
-            --time "0:30:00" \
+            --time "2:30:00" \
             --mem "16G" \
             --output "${subjob_dir}/slurm-%j-${participant_id}-Filtering.out" \
             "05_filtering.sh" \
