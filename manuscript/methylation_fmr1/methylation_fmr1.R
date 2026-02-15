@@ -210,7 +210,9 @@ composite <- image_composite(composite, binary_scalebar, operator = "over", grav
 
 ## Write final figure
 image_write(composite, "methylation_fmr1_alleles.png", format = "png")
+rm(list = c("canvas", "smooth", "binary", "smooth_scalebar", "binary_scalebar", "composite"))
 ## -------------------------------------------------------------------------------------------
+
 
 
 
@@ -218,5 +220,176 @@ image_write(composite, "methylation_fmr1_alleles.png", format = "png")
 
 ## TEXT FIGURE
 ## -------------------------------------------------------------------------------------------
-## todo - wildtype alleles only, show seq/int/prob text types
+## Extract modification info, using wildtype alleles only
+title_spacing <- 3
+participant_spacing <- 2
+vis_input <- extract_and_sort_methylation(
+    filter(merged_data, participant_id == "NA12878"),
+    locations_colname = "C+m?_locations",
+    probabilities_colname = "total_modification_prob",
+    sequences_colname = "sequence",
+    lengths_colname = "sequence_length",
+    grouping_levels = c("participant_id" = participant_spacing)
+)
+vis_input <- lapply(vis_input, function(vec) {c(rep("", participant_spacing+title_spacing), vec)})
+
+## Calculate which lines need to have titles added
+blank_lines <- which(vis_input$sequences == "")
+blank_lines_gap <- c(blank_lines[2:length(blank_lines)], 1000) - blank_lines
+names(blank_lines_gap) <- blank_lines
+
+last_blanks_before_sequences <- which(blank_lines_gap > 1)
+participant_lines <- blank_lines[last_blanks_before_sequences]
+title_line <- participant_lines[1] - participant_spacing
+
+
+## Visualisation parameters
+margin <- 0.5
+width <- max(nchar(vis_input$sequences)) 
+height <- length(vis_input$sequences)
+pixels_per_base <- 75
+#low_colour <- "#4d9221"
+#high_colour <- "#c51b7d"
+low_colour <- "darkblue"
+high_colour <- "#FF5C00"
+low_clamp <- 0.25*255
+high_clamp <- 0.75*255
+
+## Create annotation dataframes
+text_data_seq <- data.frame(
+    x = margin / width,
+    y = 1 - ((c(title_line - 1, participant_lines - 0.75)) / height),
+    label = c("(a) Sequence text",
+              c("NA12878")),
+    size = c(50, rep(35, times = 1))
+)
+text_data_prob <- text_data_seq
+text_data_int  <- text_data_seq
+text_data_prob[1, "label"] <- "(b) Probability text" 
+text_data_int[1, "label"]  <- "(c) Probability integer text" 
+
+
+
+## Create sequence text visualisation
+visualise_methylation(
+    vis_input$locations,
+    vis_input$probabilities,
+    vis_input$sequences,
+    sequence_text_type = "sequence",
+    sequence_text_size = 16,
+    sequence_text_colour = "white",
+    low_colour = low_colour,
+    high_colour = high_colour,
+    low_clamp = low_clamp,
+    high_clamp = high_clamp,
+    other_bases_colour = "grey",
+    other_bases_outline_colour = "lightgrey",
+    other_bases_outline_linewidth = 1,
+    index_annotation_lines = NA,
+    margin = margin
+) +
+    geom_text(data = text_data_seq, aes(x = x, y = y, label = label, size = size), col = "black", family = "Helvetica Light", hjust = 0, vjust = 0) +
+    scale_size_identity()
+ggsave(filename = "methylation_fmr1_text_sequence.png", dpi = pixels_per_base, width = width + 2*margin, height = height + 2*margin, device = ragg::agg_png, limitsize = FALSE)
+
+## Create probability text visualisation
+visualise_methylation(
+    vis_input$locations,
+    vis_input$probabilities,
+    vis_input$sequences,
+    sequence_text_type = "probability",
+    sequence_text_scaling = c(-0.5, 256),
+    sequence_text_rounding = 2,
+    sequence_text_size = 10,
+    sequence_text_colour = "white",
+    low_colour = low_colour,
+    high_colour = high_colour,
+    low_clamp = low_clamp,
+    high_clamp = high_clamp,
+    other_bases_colour = "grey",
+    other_bases_outline_colour = "lightgrey",
+    other_bases_outline_linewidth = 1,
+    index_annotation_lines = NA,
+    margin = margin
+) +
+    geom_text(data = text_data_prob, aes(x = x, y = y, label = label, size = size), col = "black", family = "Helvetica Light", hjust = 0, vjust = 0) +
+    scale_size_identity()
+ggsave(filename = "methylation_fmr1_text_probability.png", dpi = pixels_per_base, width = width + 2*margin, height = height + 2*margin, device = ragg::agg_png, limitsize = FALSE)
+
+## Create probability integer text visualisation
+visualise_methylation(
+    vis_input$locations,
+    vis_input$probabilities,
+    vis_input$sequences,
+    sequence_text_type = "probability",
+    sequence_text_scaling = c(0, 1),
+    sequence_text_rounding = 0,
+    sequence_text_size = 11,
+    sequence_text_colour = "white",
+    low_colour = low_colour,
+    high_colour = high_colour,
+    low_clamp = low_clamp,
+    high_clamp = high_clamp,
+    other_bases_colour = "grey",
+    other_bases_outline_colour = "lightgrey",
+    other_bases_outline_linewidth = 1,
+    index_annotation_lines = NA,
+    margin = margin
+) +
+    geom_text(data = text_data_int, aes(x = x, y = y, label = label, size = size), col = "black", family = "Helvetica Light", hjust = 0, vjust = 0) +
+    scale_size_identity()
+ggsave(filename = "methylation_fmr1_text_integer.png", dpi = pixels_per_base, width = width + 2*margin, height = height + 2*margin, device = ragg::agg_png, limitsize = FALSE)
+
+
+
+## Create scalebar
+x_axis_title = "Combined methylation + hydroxymethylation probability"
+dpi <- pixels_per_base * 10
+scalebar_width <- 1.5
+scalebar_height <- 5.01
+visualise_methylation_colour_scale(
+    low_colour = low_colour,
+    high_colour = high_colour,
+    low_clamp = low_clamp,
+    high_clamp = high_clamp,
+    precision = 10^3,
+    x_axis_title = x_axis_title
+) +
+    coord_flip(expand = FALSE) +
+    theme(axis.title = element_text(family = "Helvetica Light"),
+          axis.text.x = element_blank(),
+          axis.ticks.x = element_blank(),
+          axis.text.y = element_text())
+    
+ggsave(filename = "methylation_fmr1_text_scalebar.png", dpi = dpi, width = scalebar_width, height = scalebar_height, device = ragg::agg_png)
+
+
+
+## Composite images using magick
+## Create pure white image to layer onto
+v_separation <- 2 ## in bases
+truncation_width <- 50 ## in bases
+scalebar_px_width <- scalebar_width * dpi
+scalebar_px_height <- scalebar_height * dpi
+composite_px_width <- scalebar_px_width + pixels_per_base * (truncation_width + 2*margin)
+composite_px_height <- pixels_per_base * (3 * (height + 2*margin) + 2*v_separation)
+ggplot() + theme_classic()
+ggsave("methylation_fmr1_text_canvas.png", dpi = 1, width = composite_px_width, height = composite_px_height, limitsize = FALSE)
+
+
+canvas <- image_read("methylation_fmr1_text_canvas.png", strip = TRUE)
+scalebar <- image_read("methylation_fmr1_text_scalebar.png", strip = TRUE)
+sequence <- image_read("methylation_fmr1_text_sequence.png", strip = TRUE)
+probability <- image_read("methylation_fmr1_text_probability.png", strip = TRUE)
+integer <- image_read("methylation_fmr1_text_integer.png", strip = TRUE)
+
+## Merge in main visualisations
+composite <- image_composite(canvas, scalebar, operator = "over", gravity = "west", offset = "+0+0")
+composite <- image_composite(composite, sequence, operator = "over", gravity = "northwest", offset = paste0("+", scalebar_px_width, "+0"))
+composite <- image_composite(composite, probability, operator = "over", gravity = "northwest", offset = paste0("+", scalebar_px_width, "+", pixels_per_base*(height + 2*margin + v_separation)))
+composite <- image_composite(composite, integer, operator = "over", gravity = "southwest", offset = paste0("+", scalebar_px_width, "+0"))
+
+## Write final figure
+image_write(composite, "methylation_fmr1_text.png", format = "png")
+rm(list = c("canvas", "sequence", "probability", "integer", "composite"))
 ## -------------------------------------------------------------------------------------------
