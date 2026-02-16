@@ -23,9 +23,13 @@ metadata <- map_df(participant_ids, function(id) {
 })
 
 ## Read modified FASTQs
+## Exclude dodgy read (insertion didn't map properly, got clipped, so incorrectly looked wildtype)
 methylation_data <- map_df(participant_ids, function(id) {
     read_modified_fastq(paste0("output/", id, "/", id, "_09_final.fastq"))
-})
+}) %>% 
+    filter(read != "9fd72b80-b4ca-4070-8058-5de62cbb2b64")
+
+
 
 ## Merge
 merged_data <- merge_methylation_with_metadata(methylation_data, metadata, reversed_location_offset = 1)
@@ -105,8 +109,8 @@ text_data <- data.frame(
     y = 1 - ((c(10, allele_lines - 0.75, participant_lines - 1.5)) / height),
     label = c("(a) Blue/red gradient",
               c("Full mutation (truncated)", "Premutation", "Wildtype"),
-              c("NA04026", "NA05131", "NA06905", "NA05131", "NA06905", "NA12878")),
-    size = c(225, rep(c(175, 125), times = c(3, 6)))
+              c("NA04026", "NA05131", "NA06905", "NA06905", "NA12878")),
+    size = c(225, rep(c(175, 125), times = c(3, 5)))
 )
 text_data_binary <- text_data
 text_data_binary[1, "label"] <- "(b) White/black binary"
@@ -368,7 +372,7 @@ ggsave(filename = "methylation_fmr1_text_scalebar.png", dpi = dpi, width = scale
 ## Composite images using magick
 ## Create pure white image to layer onto
 v_separation <- 2 ## in bases
-truncation_width <- 50 ## in bases
+truncation_width <- 51 ## in bases
 scalebar_px_width <- scalebar_width * dpi
 scalebar_px_height <- scalebar_height * dpi
 composite_px_width <- scalebar_px_width + pixels_per_base * (truncation_width + 2*margin)
