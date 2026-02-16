@@ -63,6 +63,22 @@ ggplot(data = merged_data, aes(x = sequence_length)) +
     scale_x_continuous(breaks = seq(0, 2500, 200)) +
     labs(x = "Clipped FMR1 read length", y = "Number of reads") +
     coord_cartesian(expand = FALSE)
+
+flanking_bp <- 43
+find_codons <- function(x, flanking = 43) {(x - flanking) / 3}
+merged_data$trinucleotide_length <- find_codons(merged_data$sequence_length)
+
+## Print allele lengths corresponding to thresholds
+find_codons(pre_threshold)
+find_codons(full_threshold)
+
+## Print summary lengths of each allele
+merged_data %>% 
+    group_by(allele) %>%
+    summarise(min = min(trinucleotide_length), 
+              mean = mean(trinucleotide_length), 
+              max = max(trinucleotide_length), 
+              n = n())
 ## -------------------------------------------------------------------------------------------
 
 
