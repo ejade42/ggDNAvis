@@ -241,7 +241,7 @@ rm(list = c("canvas", "smooth", "binary", "smooth_scalebar", "binary_scalebar", 
 ## TEXT FIGURE
 ## -------------------------------------------------------------------------------------------
 ## Extract modification info, using wildtype alleles only
-title_spacing <- 3
+title_spacing <- 2
 participant_spacing <- 2
 vis_input <- extract_and_sort_methylation(
     filter(merged_data, participant_id == "NA12878"),
@@ -278,7 +278,7 @@ high_clamp <- 0.75*255
 ## Create annotation dataframes
 text_data_seq <- data.frame(
     x = margin / width,
-    y = 1 - ((c(title_line - 1, participant_lines - 0.75)) / height),
+    y = 1 - ((c(title_line - 0.35, participant_lines - 0.1)) / height),
     label = c("(a) Sequence text",
               c("NA12878")),
     size = c(50, rep(35, times = 1))
@@ -305,7 +305,7 @@ visualise_methylation(
     other_bases_colour = "grey",
     other_bases_outline_colour = "lightgrey",
     other_bases_outline_linewidth = 1,
-    index_annotation_lines = NA,
+    index_annotation_lines = 1+participant_spacing+title_spacing,
     margin = margin
 ) +
     geom_text(data = text_data_seq, aes(x = x, y = y, label = label, size = size), col = "black", family = "Helvetica Light", hjust = 0, vjust = 0) +
@@ -329,7 +329,7 @@ visualise_methylation(
     other_bases_colour = "grey",
     other_bases_outline_colour = "lightgrey",
     other_bases_outline_linewidth = 1,
-    index_annotation_lines = NA,
+    index_annotation_lines = 1+participant_spacing+title_spacing,
     margin = margin
 ) +
     geom_text(data = text_data_prob, aes(x = x, y = y, label = label, size = size), col = "black", family = "Helvetica Light", hjust = 0, vjust = 0) +
@@ -353,7 +353,7 @@ visualise_methylation(
     other_bases_colour = "grey",
     other_bases_outline_colour = "lightgrey",
     other_bases_outline_linewidth = 1,
-    index_annotation_lines = NA,
+    index_annotation_lines = 1+participant_spacing+title_spacing,
     margin = margin
 ) +
     geom_text(data = text_data_int, aes(x = x, y = y, label = label, size = size), col = "black", family = "Helvetica Light", hjust = 0, vjust = 0) +
@@ -379,7 +379,8 @@ visualise_methylation_colour_scale(
     theme(axis.title = element_text(family = "Helvetica Light"),
           axis.text.x = element_blank(),
           axis.ticks.x = element_blank(),
-          axis.text.y = element_text())
+          axis.text.y = element_text(),
+          axis.ticks.y = element_line())
     
 ggsave(filename = "methylation_fmr1_text_scalebar.png", dpi = dpi, width = scalebar_width, height = scalebar_height, device = ragg::agg_png)
 
