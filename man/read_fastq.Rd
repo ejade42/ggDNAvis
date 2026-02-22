@@ -11,7 +11,7 @@ read_fastq(filename = file.choose(), calculate_length = TRUE, strip_at = TRUE)
 
 \item{calculate_length}{\code{logical}. Whether or not \code{sequence_length} column should be calculated and included.}
 
-\item{strip_at}{\code{logical}. Boolean value for whether "\code{@}" characters at the start of read IDs should automatically be stripped if they are present.\cr\cr These "\code{@}"s tend to be introduced by writing BAM to FASTQ via \verb{samtools fastq} and can cause read IDs to not match between FASTQ data and metadata, causing metadata merging to fail.}
+\item{strip_at}{\code{logical}. Boolean value for whether "\code{@}" characters at the start of read IDs should automatically be stripped if they are present, via \code{\link[=strip_leading_at]{strip_leading_at()}}.\cr\cr These "\code{@}"s tend to be introduced by writing BAM to FASTQ via \verb{samtools fastq} and can cause read IDs to not match between FASTQ data and metadata, causing metadata merging to fail.}
 }
 \value{
 \code{dataframe}. A dataframe with \code{read}, \code{sequence}, \code{quality}, and optionally \code{sequence_length} columns.
