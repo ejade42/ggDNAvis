@@ -7,21 +7,29 @@ New features:
 * Interactive web-app now available
     
     * Can be found on ['Interactive App' tab of documentation website](https://ejade42.github.io/ggDNAvis/articles/interactive_app.html)
+    
     * Can be launched locally via `ggDNAvis_shinyapp()`.
 
 * Aliases: American spellings should now be available for all major function and argument names.
 
     * Every instance of `visualise` should now also work with `visualize` e.g. `visualize_single_sequence()`.
+    
     * Every instance of `colour` should now also work with `color` and `col` e.g. `sequence_text_color` or `background_col`. 
+    
     * There is a minor exception in that `visualise_methylation_colour_scale()` accepts `visualize_methylation_color_scale()` but does not accept `col` in the function name (and does not accept mixing `visualise` with `color` or `visualize` with `colour`).
+    
     * Some aliases are set up for common typos, especially regarding pluralisation. In particular, `index_annotations_above` also accepts `index_annotation_above`, and `index_annotation_full_line` accepts any combination of `annotation` and `line` being plural or single.
+    
     * If any aliases which ought to work don't, please raise an issue at https://github.com/ejade42/ggDNAvis/issues and they can be easily added.
 
 * `visualise_many_sequences()` and `visualise_methylation()` now have index annotations! 
 
     * Arguments controlling size, colour, position, and frequency are the same as for `visualise_single_sequence()`.
+    
     * `index_annotation_lines` controls which lines (counting down from the top) have annotations.
+    
     * `index_annotation_full_line` controls whether annotations go to the end of each annotated sequence, or all the way to the end of the image.
+    
     * Unlike `visualise_single_sequence()`, index annotations in `visualise_many_sequences()` and `visualise_methylation()` reset each line as each line is a different sequence.
 
 * Index annotations can now be forced to always occur at the start and end of each line

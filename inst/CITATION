@@ -1,0 +1,15 @@
+bibentry(
+  bibtype = "Article",
+  title = "ggDNAvis: a ggplot2-based R package for creating high-quality DNA sequence and modification visualisations",
+  author = c(
+    person(given = "Evelyn", family = "Jade",
+           email = "evelynjade42@gmail.com",
+           comment = c(ORCID = "0009-0003-7761-5425")),
+    person(given = "Emma L.", family = "Scotter",
+           comment = c(ORCID = "0000-0003-4064-3599"))
+  ),
+  journal = "bioRxiv",
+  year = "2026",
+  doi = "10.1101/XXXXXX",
+  url = "https://doi.org/10.1101/XXXXXX"
+)
