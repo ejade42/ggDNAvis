@@ -96,6 +96,7 @@ many_sequences_server <- function(id, user_tz) {
 
         ## Logic for adding FASTQ parsing settings panel
         fastq_parsing_panel <- tagList(
+            checkboxInput(session$ns("chk_strip_at"), "Strip '@'s from read IDs (try this if merging fails)", value = TRUE),
             checkboxInput(session$ns("chk_fastq_is_modified"), "FASTQ header contains modification information", value = FALSE),
             actionLink(session$ns("fastq_header_details"), "View FASTQ header explanation", icon = icon("info-circle"), class = "mt-0 mb-3"),
             selectInput(session$ns("sel_reverse_mode"), "Reverse sequence processing:", choices = c("Reverse-complement to DNA", "Reverse-complement to RNA", "Reverse without complementing", "Don't reverse")),
@@ -242,6 +243,7 @@ many_sequences_server <- function(id, user_tz) {
 
             if (input$tab_input_mode == "Upload") {
                 ## FASTQ parsing
+                settings[["chk_strip_at"]] = input$chk_strip_at
                 settings[["chk_fastq_is_modified"]] = input$chk_fastq_is_modified
                 settings[["sel_reverse_mode"]] = input$sel_reverse_mode
                 settings[["sel_sort_by"]] = input$sel_sort_by

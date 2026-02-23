@@ -162,14 +162,14 @@ process_merge_input_files <- function(input, fastq_modified_control = FALSE, mer
         ## Read FASTQ
         fastq_data <- if (do_modified) {
             tryCatch({
-                read_modified_fastq(input$fil_fastq_file$datapath)
+                read_modified_fastq(input$fil_fastq_file$datapath, strip_at = input$chk_strip_at)
             }, error = function(e) {
                 showNotification(paste("Modified FASTQ invalid. Error when parsing:\n", e), type = "error")
                 NULL
             })
         } else {
             tryCatch({
-                read_fastq(input$fil_fastq_file$datapath)
+                read_fastq(input$fil_fastq_file$datapath, strip_at = input$chk_strip_at)
             }, error = function(e) {
                 showNotification(paste("FASTQ invalid. Error when parsing:\n", e), type = "error")
                 NULL
@@ -199,19 +199,26 @@ process_merge_input_files <- function(input, fastq_modified_control = FALSE, mer
         )
 
         ## Merge dataframe
-        if (merge_methylation) {
-            ## Determine which offset to use
-            if (input$num_reverse_offset == 0 || reverse_complement_mode == "reverse_only") {
-                reversed_location_offset <- 0
+        merged_data <- tryCatch({
+            if (merge_methylation) {
+                ## Determine which offset to use
+                if (input$num_reverse_offset == 0 || reverse_complement_mode == "reverse_only") {
+                    reversed_location_offset <- 0
+                } else {
+                    reversed_location_offset <- input$num_reverse_offset
+                }
+                merge_methylation_with_metadata(fastq_data, metadata, reversed_location_offset = reversed_location_offset, reverse_complement_mode = reverse_complement_mode)
             } else {
-                reversed_location_offset <- input$num_reverse_offset
+                merge_fastq_with_metadata(fastq_data, metadata, reverse_complement_mode = reverse_complement_mode)
             }
-            merged_data <- merge_methylation_with_metadata(fastq_data, metadata, reversed_location_offset = reversed_location_offset, reverse_complement_mode = reverse_complement_mode)
-        } else {
-            merged_data <- merge_fastq_with_metadata(fastq_data, metadata, reverse_complement_mode = reverse_complement_mode)
-        }
+        }, error = function(e) {
+            showNotification(paste("Error when merging:\n", e), type = "error")
+            NULL
+        })
 
         ## Validate and return dataframe
+        req(merged_data)
+
         if (nrow(merged_data) == 0) {
             showNotification(paste0("0 read IDs present in both input FASTQ and metadata CSV.\nFirst 3 input FASTQ read IDs: ", paste(head(fastq_data$read, 3), collapse = " "),
                                     "\nFirst 3 metadata read IDs: ", paste(head(metadata$read, 3), collapse = " ")),

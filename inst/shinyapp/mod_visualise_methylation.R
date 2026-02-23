@@ -207,6 +207,7 @@ methylation_server <- function(id, user_tz) {
 
         ## Logic for adding FASTQ parsing settings panel
         fastq_parsing_panel <- tagList(
+            checkboxInput(session$ns("chk_strip_at"), "Strip '@'s from read IDs (try this if merging fails)", value = TRUE),
             selectInput(session$ns("sel_modification_type"), "Modification type to visualise", choices = NULL),
             selectInput(session$ns("sel_reverse_mode"), "Reverse sequence processing:", choices = c("Reverse-complement to DNA", "Reverse-complement to RNA", "Reverse without complementing", "Don't reverse")),
             conditionalPanel(
@@ -469,6 +470,7 @@ methylation_server <- function(id, user_tz) {
 
             if (input$tab_input_mode == "Upload") {
                 ## FASTQ parsing
+                settings[["chk_strip_at"]] = input$chk_strip_at
                 settings[["sel_modification_type"]] = input$sel_modification_type
                 settings[["sel_reverse_mode"]] = input$sel_reverse_mode
                 settings[["num_reverse_offset"]] = input$num_reverse_offset
