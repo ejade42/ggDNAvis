@@ -155,7 +155,7 @@ knitr::opts_chunk$set(fig.path = output_location)
 cat("Loaded ggDNAvis version is:", as.character(packageVersion("ggDNAvis")))
 ```
 
-    ## Loaded ggDNAvis version is: 0.3.2.9017
+    ## Loaded ggDNAvis version is: 0.3.2.9023
 
 ## 1.3 Interactive suite
 
@@ -485,10 +485,9 @@ scalebar <- visualise_methylation_colour_scale(
     full_range = c(0, 255),
     precision = 10^3,
     background_colour = "white",
-    x_axis_title = "Methylation probability",
-    do_x_ticks = TRUE,
-    do_side_scale = FALSE,
-    side_scale_title = NULL,
+    axis_location = "bottom",
+    axis_title = "Methylation probability",
+    do_axis_ticks = TRUE,
     outline_colour = "black",
     outline_linewidth = 1
 )
@@ -695,7 +694,8 @@ for (i in 1:16) {
 ## Load data from FASTQ
 fastq_data <- read_fastq(
     system.file("extdata/example_many_sequences_raw.fastq", package = "ggDNAvis"), 
-    calculate_length = TRUE
+    calculate_length = TRUE,
+    strip_at = TRUE
 )
 
 ## View first 4 rows
@@ -718,7 +718,18 @@ occurs when the read is of the - strand at the biochemical level.
 To convert reverse reads to their forward equivalents, and incorporate
 additional data such as the participant and family to which each read
 belongs, we will make use of a metadata file located at
-`inst/extdata/example_many_sequences_metadata.csv`
+`inst/extdata/example_many_sequences_metadata.csv`.
+
+Depending on how the FASTQ was created, the read IDs may be prefixed
+with `@` (e.g. `samtools fastq` generally leaves these `@`s). This can
+cause issues with metadata merging if the FASTQ has `@` at the start of
+each read ID but the metadata doesn’t, as then the reads can’t be
+matched up. The `strip_at` argument in `read_fastq()` and
+`read_modified_fastq()` (on by default), removes a single leading `@`
+from each read ID that starts with `@`, and does nothing to read IDs
+that don’t start with `@`. If the metadata *does* have IDs beginning
+with `@`, then they can be kept in the FASTQ data by setting
+`strip_at = FALSE`.
 
 ``` r
 ## Load metadata from CSV
@@ -743,7 +754,8 @@ additional information on each read.
 
 Note: the `direction` column can be produced manually. However, for
 large data volumes it may be more effective to use SAMtools to write TXT
-files of all forward and reverse read IDs via the -F/-f 16 flags, e.g.:
+files of all forward and reverse read IDs via the `-F`/`-f 16` flags,
+e.g.:
 
 ``` bash
 ## bash/shell code for using SAMtools on the command line:
@@ -979,7 +991,10 @@ modification probability (this is fully explained in [introduction to
 
 ``` r
 ## Load data from FASTQ
-methylation_data <- read_modified_fastq(system.file("extdata/example_many_sequences_raw_modified.fastq", package = "ggDNAvis"))
+methylation_data <- read_modified_fastq(
+    system.file("extdata/example_many_sequences_raw_modified.fastq", package = "ggDNAvis"),
+    strip_at = TRUE
+)
 
 ## View first 4 rows
 github_table(head(methylation_data, 4))
@@ -1729,37 +1744,37 @@ visualise_single_sequence(
 
     ## ℹ Verbose monitoring enabled
 
-    ## ℹ (2026-01-30 16:37:58) visualise_single_sequence start
+    ## ℹ (2026-02-23 16:01:44) visualise_single_sequence start
 
-    ## ℹ (0.005 secs elapsed; 0.005 secs total) resolving aliases
+    ## ℹ (0.009 secs elapsed; 0.009 secs total) resolving aliases
 
-    ## ℹ (0.001 secs elapsed; 0.006 secs total) validating arguments
+    ## ℹ (0.001 secs elapsed; 0.010 secs total) validating arguments
 
-    ## ℹ (0.001 secs elapsed; 0.008 secs total) splitting input seq to sequence vector
+    ## ℹ (0.001 secs elapsed; 0.011 secs total) splitting input seq to sequence vector
 
-    ## ℹ (0.001 secs elapsed; 0.009 secs total) rasterising image data
+    ## ℹ (0.001 secs elapsed; 0.013 secs total) rasterising image data
 
-    ## ℹ (0.002 secs elapsed; 0.011 secs total) choosing rendering method
+    ## ℹ (0.003 secs elapsed; 0.016 secs total) choosing rendering method
 
-    ## ℹ (0.001 secs elapsed; 0.012 secs total) calculating tile sizes
+    ## ℹ (0.002 secs elapsed; 0.018 secs total) calculating tile sizes
 
-    ## ℹ (0.001 secs elapsed; 0.013 secs total) creating basic plot via geom_tile
+    ## ℹ (0.001 secs elapsed; 0.019 secs total) creating basic plot via geom_tile
 
-    ## ℹ (0.006 secs elapsed; 0.019 secs total) generating sequence text
+    ## ℹ (0.008 secs elapsed; 0.027 secs total) generating sequence text
 
-    ## ℹ (0.001 secs elapsed; 0.021 secs total) adding sequence text
+    ## ℹ (0.002 secs elapsed; 0.029 secs total) adding sequence text
 
-    ## ℹ (0.003 secs elapsed; 0.023 secs total) generating index annotations
+    ## ℹ (0.006 secs elapsed; 0.035 secs total) generating index annotations
 
-    ## ℹ (0.001 secs elapsed; 0.025 secs total) adding index annotations
+    ## ℹ (0.002 secs elapsed; 0.037 secs total) adding index annotations
 
-    ## ℹ (0.002 secs elapsed; 0.027 secs total) adding general plot themes
+    ## ℹ (0.003 secs elapsed; 0.041 secs total) adding general plot themes
 
-    ## ℹ (0.008 secs elapsed; 0.035 secs total) calculating margin
+    ## ℹ (0.011 secs elapsed; 0.052 secs total) calculating margin
 
-    ## ℹ (0.002 secs elapsed; 0.037 secs total) exporting image file
+    ## ℹ (0.003 secs elapsed; 0.055 secs total) exporting image file
 
-    ## ℹ (0.548 secs elapsed; 0.586 secs total) done
+    ## ℹ (0.510 secs elapsed; 0.565 secs total) done
 
 ``` r
 ## View image
@@ -1808,11 +1823,11 @@ visualise_single_sequence(
 
     ## ℹ Verbose monitoring enabled
 
-    ## ℹ (2026-01-30 16:37:58) visualise_single_sequence start
+    ## ℹ (2026-02-23 16:01:45) visualise_single_sequence start
 
     ## ℹ (0.002 secs elapsed; 0.002 secs total) resolving aliases
 
-    ## ℹ (0.001 secs elapsed; 0.003 secs total) validating arguments
+    ## ℹ (0.001 secs elapsed; 0.004 secs total) validating arguments
 
     ## ℹ Automatically setting index_annotation_interval to 0 as index_annotation_size is 0
 
@@ -1822,26 +1837,26 @@ visualise_single_sequence(
     ## Warning: Disabling index annotations via index_annotation_interval = 0 or index_annotation_size = 0 overrides the index_annotation_always_last_base setting.
     ## If you want the last base in each line to be annotated but no other bases, set index_annotation_interval greater than line_wrapping.
 
-    ## ℹ (0.003 secs elapsed; 0.006 secs total) splitting input seq to sequence vector
+    ## ℹ (0.003 secs elapsed; 0.007 secs total) splitting input seq to sequence vector
 
-    ## ℹ (0.001 secs elapsed; 0.007 secs total) rasterising image data
+    ## ℹ (0.001 secs elapsed; 0.008 secs total) rasterising image data
 
-    ## ℹ (0.002 secs elapsed; 0.009 secs total) choosing rendering method
+    ## ℹ (0.002 secs elapsed; 0.010 secs total) choosing rendering method
 
     ## ℹ Automatically using geom_raster (much faster than geom_tile) as no sequence text, index annotations, or outlines are present.
 
     ## Warning: When using geom_raster, it is recommended to use a smaller pixels_per_base e.g. 10, as there is no text/outlines that would benefit from higher resolution.
     ## Current value: 100
 
-    ## ℹ (0.002 secs elapsed; 0.012 secs total) creating basic plot via geom_raster
+    ## ℹ (0.003 secs elapsed; 0.013 secs total) creating basic plot via geom_raster
 
-    ## ℹ (0.003 secs elapsed; 0.015 secs total) adding general plot themes
+    ## ℹ (0.004 secs elapsed; 0.017 secs total) adding general plot themes
 
-    ## ℹ (0.013 secs elapsed; 0.028 secs total) calculating margin
+    ## ℹ (0.017 secs elapsed; 0.034 secs total) calculating margin
 
-    ## ℹ (0.002 secs elapsed; 0.030 secs total) exporting image file
+    ## ℹ (0.004 secs elapsed; 0.037 secs total) exporting image file
 
-    ## ℹ (0.552 secs elapsed; 0.583 secs total) done
+    ## ℹ (0.427 secs elapsed; 0.465 secs total) done
 
 ``` r
 ## View image
@@ -1876,31 +1891,31 @@ visualise_single_sequence(
 
     ## ℹ Verbose monitoring enabled
 
-    ## ℹ (2026-01-30 16:37:59) visualise_single_sequence start
+    ## ℹ (2026-02-23 16:01:45) visualise_single_sequence start
 
-    ## ℹ (0.003 secs elapsed; 0.003 secs total) resolving aliases
+    ## ℹ (0.002 secs elapsed; 0.002 secs total) resolving aliases
 
     ## ℹ (0.001 secs elapsed; 0.004 secs total) validating arguments
 
-    ## ℹ (0.001 secs elapsed; 0.006 secs total) splitting input seq to sequence vector
+    ## ℹ (0.001 secs elapsed; 0.005 secs total) splitting input seq to sequence vector
 
-    ## ℹ (0.001 secs elapsed; 0.007 secs total) rasterising image data
+    ## ℹ (0.001 secs elapsed; 0.006 secs total) rasterising image data
 
-    ## ℹ (0.003 secs elapsed; 0.010 secs total) choosing rendering method
+    ## ℹ (0.003 secs elapsed; 0.008 secs total) choosing rendering method
 
     ## Warning: Forcing geom_raster via force_raster = TRUE will remove all sequence
     ## text, index annotations (though any inserted blank lines/spacers will remain),
     ## and box outlines.
 
-    ## ℹ (0.002 secs elapsed; 0.012 secs total) creating basic plot via geom_raster
+    ## ℹ (0.002 secs elapsed; 0.010 secs total) creating basic plot via geom_raster
 
-    ## ℹ (0.005 secs elapsed; 0.017 secs total) adding general plot themes
+    ## ℹ (0.004 secs elapsed; 0.014 secs total) adding general plot themes
 
-    ## ℹ (0.011 secs elapsed; 0.028 secs total) calculating margin
+    ## ℹ (0.009 secs elapsed; 0.023 secs total) calculating margin
 
-    ## ℹ (0.002 secs elapsed; 0.030 secs total) exporting image file
+    ## ℹ (0.002 secs elapsed; 0.025 secs total) exporting image file
 
-    ## ℹ (0.827 secs elapsed; 0.857 secs total) done
+    ## ℹ (0.420 secs elapsed; 0.446 secs total) done
 
 ``` r
 ## View image
@@ -1933,7 +1948,7 @@ visualise_single_sequence(
 
     ## ℹ Verbose monitoring enabled
 
-    ## ℹ (2026-01-30 16:38:00) visualise_single_sequence start
+    ## ℹ (2026-02-23 16:01:46) visualise_single_sequence start
 
     ## ℹ (0.003 secs elapsed; 0.003 secs total) resolving aliases
 
@@ -1945,23 +1960,23 @@ visualise_single_sequence(
     ## Warning: Disabling index annotations via index_annotation_interval = 0 or index_annotation_size = 0 overrides the index_annotation_always_last_base setting.
     ## If you want the last base in each line to be annotated but no other bases, set index_annotation_interval greater than line_wrapping.
 
-    ## ℹ (0.002 secs elapsed; 0.007 secs total) splitting input seq to sequence vector
+    ## ℹ (0.007 secs elapsed; 0.012 secs total) splitting input seq to sequence vector
 
-    ## ℹ (0.001 secs elapsed; 0.008 secs total) rasterising image data
+    ## ℹ (0.002 secs elapsed; 0.013 secs total) rasterising image data
 
-    ## ℹ (0.003 secs elapsed; 0.011 secs total) choosing rendering method
+    ## ℹ (0.003 secs elapsed; 0.016 secs total) choosing rendering method
 
     ## ℹ Automatically using geom_raster (much faster than geom_tile) as no sequence text, index annotations, or outlines are present.
 
-    ## ℹ (0.002 secs elapsed; 0.014 secs total) creating basic plot via geom_raster
+    ## ℹ (0.002 secs elapsed; 0.018 secs total) creating basic plot via geom_raster
 
-    ## ℹ (0.004 secs elapsed; 0.018 secs total) adding general plot themes
+    ## ℹ (0.004 secs elapsed; 0.022 secs total) adding general plot themes
 
-    ## ℹ (0.011 secs elapsed; 0.029 secs total) calculating margin
+    ## ℹ (0.017 secs elapsed; 0.040 secs total) calculating margin
 
-    ## ℹ (0.002 secs elapsed; 0.031 secs total) exporting image file
+    ## ℹ (0.006 secs elapsed; 0.045 secs total) exporting image file
 
-    ## ℹ (0.189 secs elapsed; 0.220 secs total) done
+    ## ℹ (0.635 secs elapsed; 0.680 secs total) done
 
 ``` r
 ## View image
@@ -2386,8 +2401,8 @@ The full set of arguments controlling index annotations are:
   values of `extract_and_sort_sequences()`, `c(1, 23, 37)` annotates the
   first sequence from each family, which I personally find a useful
   setting. It may take some trial and error to find the ideal setting of
-  this for each ordering/dataset. Can be set to `NA` or `numeric(0)` to
-  disable index annotations.
+  this for each ordering/dataset. Can be set to `0`, `FALSE`, `NA`,
+  `NULL`, or `numeric(0)` to disable index annotations.
 - `index_annotation_full_line`: Whether the annotations should always
   continue to the end of the longest sequence (`TRUE`, default) or
   whether they should end once the sequence along each annotated line
@@ -2859,29 +2874,29 @@ visualise_many_sequences(
 
     ## ℹ Verbose monitoring enabled
 
-    ## ℹ (2026-01-30 16:38:37) visualise_many_sequences start
+    ## ℹ (2026-02-23 16:02:18) visualise_many_sequences start
 
-    ## ℹ (0.004 secs elapsed; 0.004 secs total) resolving aliases
+    ## ℹ (0.003 secs elapsed; 0.003 secs total) resolving aliases
 
-    ## ℹ (0.002 secs elapsed; 0.005 secs total) validating arguments
+    ## ℹ (0.001 secs elapsed; 0.004 secs total) validating arguments
 
-    ## ℹ (0.001 secs elapsed; 0.007 secs total) inserting blank sequences at specified indices
+    ## ℹ (0.001 secs elapsed; 0.005 secs total) inserting blank sequences at specified indices
 
-    ## ℹ (0.001 secs elapsed; 0.008 secs total) rasterising image data
+    ## ℹ (0.002 secs elapsed; 0.007 secs total) rasterising image data
 
-    ## ℹ (0.007 secs elapsed; 0.015 secs total) choosing rendering method
+    ## ℹ (0.007 secs elapsed; 0.014 secs total) choosing rendering method
 
     ## ℹ Automatically using geom_raster (much faster than geom_tile) as no sequence text, index annotations, or outlines are present.
 
-    ## ℹ (0.003 secs elapsed; 0.018 secs total) creating basic plot via geom_raster
+    ## ℹ (0.003 secs elapsed; 0.016 secs total) creating basic plot via geom_raster
 
-    ## ℹ (0.005 secs elapsed; 0.022 secs total) adding general plot themes
+    ## ℹ (0.004 secs elapsed; 0.020 secs total) adding general plot themes
 
-    ## ℹ (0.011 secs elapsed; 0.033 secs total) calculating margin
+    ## ℹ (0.010 secs elapsed; 0.030 secs total) calculating margin
 
-    ## ℹ (0.003 secs elapsed; 0.036 secs total) exporting image file
+    ## ℹ (0.002 secs elapsed; 0.032 secs total) exporting image file
 
-    ## ℹ (0.438 secs elapsed; 0.474 secs total) done
+    ## ℹ (0.371 secs elapsed; 0.403 secs total) done
 
 ``` r
 ## View image
@@ -2914,17 +2929,17 @@ visualise_many_sequences(
 
     ## ℹ Verbose monitoring enabled
 
-    ## ℹ (2026-01-30 16:38:38) visualise_many_sequences start
+    ## ℹ (2026-02-23 16:02:18) visualise_many_sequences start
 
     ## ℹ (0.002 secs elapsed; 0.002 secs total) resolving aliases
 
-    ## ℹ (0.002 secs elapsed; 0.004 secs total) validating arguments
+    ## ℹ (0.001 secs elapsed; 0.004 secs total) validating arguments
 
     ## ℹ (0.001 secs elapsed; 0.005 secs total) inserting blank sequences at specified indices
 
     ## ℹ (0.001 secs elapsed; 0.006 secs total) rasterising image data
 
-    ## ℹ (0.006 secs elapsed; 0.013 secs total) choosing rendering method
+    ## ℹ (0.007 secs elapsed; 0.013 secs total) choosing rendering method
 
     ## Warning: Forcing geom_raster via force_raster = TRUE will remove all sequence
     ## text, index annotations (though any inserted blank lines/spacers will remain),
@@ -2932,13 +2947,13 @@ visualise_many_sequences(
 
     ## ℹ (0.002 secs elapsed; 0.015 secs total) creating basic plot via geom_raster
 
-    ## ℹ (0.003 secs elapsed; 0.018 secs total) adding general plot themes
+    ## ℹ (0.004 secs elapsed; 0.018 secs total) adding general plot themes
 
-    ## ℹ (0.009 secs elapsed; 0.027 secs total) calculating margin
+    ## ℹ (0.010 secs elapsed; 0.028 secs total) calculating margin
 
-    ## ℹ (0.002 secs elapsed; 0.029 secs total) exporting image file
+    ## ℹ (0.002 secs elapsed; 0.030 secs total) exporting image file
 
-    ## ℹ (0.687 secs elapsed; 0.716 secs total) done
+    ## ℹ (0.667 secs elapsed; 0.697 secs total) done
 
 ``` r
 ## View image
@@ -3426,7 +3441,10 @@ exported manually via `ggsave()`.
 
 ``` r
 ## Create scalebar and save to object
-scalebar <- visualise_methylation_colour_scale(x_axis_title = "Methylation probability")
+scalebar <- visualise_methylation_colour_scale(
+    axis_location = "bottom", 
+    axis_title = "Methylation probability"
+)
 
 ## Write png from object
 ggsave(paste0(output_location, "modification_01_scalebar.png"), scalebar, dpi = 300, width = 5.25, height = 1.25, device = ragg::agg_png)
@@ -3436,6 +3454,11 @@ knitr::include_graphics(paste0(github_location, "modification_01_scalebar.png"))
 ```
 
 <img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_01_scalebar.png" alt="" width="60%" style="display: block; margin: auto;" />
+
+(Note that sometimes vertical white lines can appear in the scalebar,
+depending on the exact gradient precision, export dimensions, and dpi.
+If this happens, changing the `precision` argument very slightly usually
+fixes it.)
 
 ## 6.2 Sequence arrangement customisation
 
@@ -3850,7 +3873,7 @@ knitr::include_graphics(paste0(github_location, "modification_08.png"))
 ## Text colour doesn't have an argument within the function
 ## but can be modified by adding to the ggplot object like normal
 scalebar <- visualise_methylation_colour_scale(
-    x_axis_title = "Methylation probability",
+    axis_title = "Methylation probability",
     low_colour = "green",
     high_colour = "#0000FF",
     background_colour = "#FF0000",
@@ -3918,7 +3941,7 @@ knitr::include_graphics(paste0(github_location, "modification_09.png"))
 ``` r
 ## Create scalebar and save to object
 scalebar <- visualise_methylation_colour_scale(
-    x_axis_title = "Methylation probability",
+    axis_title = "Methylation probability",
     low_colour = "white",
     high_colour = "black",
     background_colour = "lightblue1"
@@ -4006,7 +4029,7 @@ knitr::include_graphics(paste0(github_location, "modification_10.png"))
 ``` r
 ## Create scalebar and save to object
 scalebar <- visualise_methylation_colour_scale(
-    x_axis_title = "Methylation probability",
+    axis_title = "Methylation probability",
     low_colour = "white",
     low_clamp = 127,
     high_colour = "black",
@@ -4075,7 +4098,7 @@ knitr::include_graphics(paste0(github_location, "modification_11.png"))
 ``` r
 ## Create scalebar and save to object
 scalebar <- visualise_methylation_colour_scale(
-    x_axis_title = "Methylation probability",
+    axis_title = "Methylation probability",
     low_clamp = 0.3*255,
     high_clamp = 0.7*255
 )
@@ -4132,9 +4155,11 @@ knitr::include_graphics(paste0(github_location, "modification_12.png"))
 
 ``` r
 ## Create scalebar and save to object
-scalebar <- visualise_methylation_colour_scale(x_axis_title = "Hydroxymethylation probability",
-                                               low_clamp = 0.1*255,
-                                               high_clamp = 0.5*255)
+scalebar <- visualise_methylation_colour_scale(
+    axis_title = "Hydroxymethylation probability",
+    low_clamp = 0.1*255,
+    high_clamp = 0.5*255
+)
 
 ## Write png from object
 ggsave(paste0(output_location, "modification_12_scalebar.png"), scalebar, dpi = 300, width = 5.25, height = 1.25, device = ragg::agg_png)
@@ -4178,21 +4203,21 @@ Clamping arguments:
   be sensible depending on the data.
 - `precision`: How many different shades should be rendered. Larger
   values give a smoother gradient. Defaults to `10^3` i.e. `1000`, which
-  looks smooth to my eyes and isn’t too intensive to calculate.
+  looks smooth to my eyes and isn’t too intensive to calculate. Note
+  that if white lines appear in the output image, this is because of
+  issues aligning the very thin rectangles with the pixel grid and can
+  generally be fixed by very slightly changing `precision`.
 
 Layout arguments:
 
-- `x_axis_title`: The desired x-axis title. Defaults to `NULL` (no
-  title).
-- `do_x_ticks`: Boolean specifying whether ticks on the x axis should be
-  enabled. Defaults to `TRUE`.
-- `do_side_scale`: Boolean specifying whether a smaller scalebar should
-  be rendered on the right. Defaults to FALSE. I think it is unlikely
-  anyone would want to use this, but the option is here. One potential
-  usecase is that this side scalebar shows the raw probability values
-  (e.g. 0 to 255), whereas the x-axis is normalised to 0-1.
-- `side_scale_title`: The desired title for the right-hand scalebar, if
-  turned on. Defaults to `NULL`.
+- `axis_location`: Which edge should be labelled. The gradient will
+  always be along this axis (i.e. horizontal gradient for `"top"` or
+  `"bottom"`, vertical gradient for `"left"` or `"right"`). Accepts
+  `"top"` / `"north"`, `"bottom"` / `"south"`, `"left"` / `"west"`, and
+  `"right"` / `"east"` (not case sensitive).
+- `axis_title`: The desired axis title. Defaults to `NULL` (no title).
+- `do_axis_ticks`: Boolean specifying whether ticks and number labels on
+  the gradient axis should be enabled. Defaults to `TRUE`.
 - `outline_linewidth`: The width of the outline around the whole
   scalebar. Can be set to 0 to remove outline. Defaults to 1.
 
@@ -4211,13 +4236,13 @@ knitr::include_graphics(paste0(github_location, "modification_scalebar_alone_01.
 
 <img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_scalebar_alone_01.png" alt="" width="60%" style="display: block; margin: auto;" />
 
-Disabling x axis ticks with intermediate precision gives the following:
+Disabling axis ticks with intermediate precision gives the following:
 
 ``` r
 ## Create scalebar and save to object
 scalebar <- visualise_methylation_colour_scale(
     precision = 50,
-    do_x_ticks = FALSE
+    do_axis_ticks = FALSE
 )
 
 ## Write png from object
@@ -4230,8 +4255,9 @@ knitr::include_graphics(paste0(github_location, "modification_scalebar_alone_02.
 <img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_scalebar_alone_02.png" alt="" width="60%" style="display: block; margin: auto;" />
 
 If ticks are left on, they can be customised with `scale_x_continuous()`
-as per usual for a ggplot. Here is an example with the side scalebar
-turned on and ticks customised:
+as per usual for a ggplot. Here is an example of the left side being the
+gradient axis i.e. a vertical plot, with ticks every 0.1 instead of
+every 0.25.
 
 ``` r
 ## Create scalebar and save to object
@@ -4241,36 +4267,33 @@ scalebar <- visualise_methylation_colour_scale(
     high_clamp = 0.8,
     low_clamp = 0.5, 
     full_range = c(0,1),
-    precision = 100,
-    do_x_ticks = TRUE,
-    x_axis_title = "some kind of title",
-    do_side_scale = TRUE,
-    side_scale_title = "some other title",
+    precision = 101,
+    axis_location = "left",
+    do_axis_ticks = TRUE,
+    axis_title = "some kind of title",
     outline_colour = "red",
     outline_linewidth = 3
 ) +
     scale_x_continuous(breaks = seq(0, 1, 0.1))
 
 ## Write png from object
-ggsave(paste0(output_location, "modification_scalebar_alone_03.png"), scalebar, dpi = 300, width = 5.25, height = 2, device = ragg::agg_png)
+ggsave(paste0(output_location, "modification_scalebar_alone_03.png"), scalebar, dpi = 300, width = 2, height = 5.25, device = ragg::agg_png)
 
 ## View image
 knitr::include_graphics(paste0(github_location, "modification_scalebar_alone_03.png"))
 ```
 
-<img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_scalebar_alone_03.png" alt="" width="60%" style="display: block; margin: auto;" />
+<img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_scalebar_alone_03.png" alt="" width="20%" style="display: block; margin: auto;" />
 
-And here is an example of a more sensible scalebar but with the side
-scale turned on:
+And here is an example of a more sensible scalebar with top text:
 
 ``` r
 ## Create scalebar and save to object
 scalebar <- visualise_methylation_colour_scale(
     low_clamp = 0.1*255,
     high_clamp  = 0.9*255,
-    x_axis_title = "Methylation probability",
-    do_side_scale = TRUE,
-    side_scale_title = "Raw\nprobability\nscore",
+    axis_location = "north",
+    axis_title = "Methylation probability",
     outline_linewidth = 0
 )
 
