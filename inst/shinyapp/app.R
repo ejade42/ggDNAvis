@@ -8,6 +8,7 @@ library(colourpicker)
 library(stringr)
 library(ggplot2)
 library(ggDNAvis)
+options(shiny.sanitize.errors = FALSE)
 
 source("helpers.R")
 source("mod_visualise_single_sequence.R")
