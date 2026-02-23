@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ggDNAvis</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.2.9024</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.2.9025</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,8 +48,23 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="ggdnavis-development-version">ggDNAvis (development version)<a class="anchor" aria-label="anchor" href="#ggdnavis-development-version"></a></h2>
+<p>This <strong><em>major</em></strong> release has enormous changes to pretty much every aspect of <code>ggDNAvis</code>. Expect code to break, but also for performance and features to be enhanced across the board.</p>
 <p>New features:</p>
 <ul><li>
+<p>Interactive web-app now available</p>
+<ul><li>Can be found on <a href="https://ejade42.github.io/ggDNAvis/articles/interactive_app.html">‘Interactive App’ tab of documentation website</a>
+</li>
+<li>Can be launched locally via <code><a href="../reference/ggDNAvis_shinyapp.html">ggDNAvis_shinyapp()</a></code>.</li>
+</ul></li>
+<li>
+<p>Aliases: American spellings should now be available for all major function and argument names.</p>
+<ul><li>Every instance of <code>visualise</code> should now also work with <code>visualize</code> e.g. <code><a href="../reference/visualise_single_sequence.html">visualize_single_sequence()</a></code>.</li>
+<li>Every instance of <code>colour</code> should now also work with <code>color</code> and <code>col</code> e.g. <code>sequence_text_color</code> or <code>background_col</code>.</li>
+<li>There is a minor exception in that <code><a href="../reference/visualise_methylation_colour_scale.html">visualise_methylation_colour_scale()</a></code> accepts <code><a href="../reference/visualise_methylation_colour_scale.html">visualize_methylation_color_scale()</a></code> but does not accept <code>col</code> in the function name (and does not accept mixing <code>visualise</code> with <code>color</code> or <code>visualize</code> with <code>colour</code>).</li>
+<li>Some aliases are set up for common typos, especially regarding pluralisation. In particular, <code>index_annotations_above</code> also accepts <code>index_annotation_above</code>, and <code>index_annotation_full_line</code> accepts any combination of <code>annotation</code> and <code>line</code> being plural or single.</li>
+<li>If any aliases which ought to work don’t, please raise an issue at <a href="https://github.com/ejade42/ggDNAvis/issues" class="external-link uri">https://github.com/ejade42/ggDNAvis/issues</a> and they can be easily added.</li>
+</ul></li>
+<li>
 <p><code><a href="../reference/visualise_many_sequences.html">visualise_many_sequences()</a></code> and <code><a href="../reference/visualise_methylation.html">visualise_methylation()</a></code> now have index annotations!</p>
 <ul><li>Arguments controlling size, colour, position, and frequency are the same as for <code><a href="../reference/visualise_single_sequence.html">visualise_single_sequence()</a></code>.</li>
 <li>
@@ -58,29 +73,47 @@
 <code>index_annotation_full_line</code> controls whether annotations go to the end of each annotated sequence, or all the way to the end of the image.</li>
 <li>Unlike <code><a href="../reference/visualise_single_sequence.html">visualise_single_sequence()</a></code>, index annotations in <code><a href="../reference/visualise_many_sequences.html">visualise_many_sequences()</a></code> and <code><a href="../reference/visualise_methylation.html">visualise_methylation()</a></code> reset each line as each line is a different sequence.</li>
 </ul></li>
-<li><p><code><a href="../reference/visualise_methylation.html">visualise_methylation()</a></code> now has the ability to draw sequence and probability text!</p></li>
 <li>
-<p>All function, argument, and data names now have aliases i.e. accept American spellings</p>
-<ul><li>Every instance of <code>visualise</code> should now also work with <code>visualize</code> e.g. <code><a href="../reference/visualise_single_sequence.html">visualize_single_sequence()</a></code>.</li>
-<li>Every instance of <code>colour</code> should now also work with <code>color</code> and <code>col</code> e.g. <code>sequence_text_color</code> or <code>background_col</code>.</li>
-<li>There is a minor exception in that <code><a href="../reference/visualise_methylation_colour_scale.html">visualise_methylation_colour_scale()</a></code> accepts <code><a href="../reference/visualise_methylation_colour_scale.html">visualize_methylation_color_scale()</a></code> but does not accept <code>col</code> in the function name (and does not accept mixing <code>visualise</code> with <code>color</code> or <code>visualize</code> with <code>colour</code>).</li>
-<li>Some aliases are set up for common typos, especially regarding pluralisation. In particular, <code>index_annotations_above</code> also accepts <code>index_annotation_above</code>, and <code>index_annotation_full_line</code> accepts any combination of <code>annotation</code> and <code>line</code> being plural or single.</li>
-<li>If any aliases which ought to work don’t, please raise an issue at <a href="https://github.com/ejade42/ggDNAvis/issues" class="external-link uri">https://github.com/ejade42/ggDNAvis/issues</a> and they can be easily added.</li>
+<p>Index annotations can now be forced to always occur at the start and end of each line</p>
+<ul><li><p>Applies to <code><a href="../reference/visualise_single_sequence.html">visualise_single_sequence()</a></code>, <code><a href="../reference/visualise_many_sequences.html">visualise_many_sequences()</a></code>, and <code><a href="../reference/visualise_methylation.html">visualise_methylation()</a></code></p></li>
+<li><p>Controlled via <code>index_annotation_always_first_base</code> and <code>index_annotation_always_last_base</code> logical arguments.</p></li>
+<li><p>On by default</p></li>
 </ul></li>
-<li><p><code><a href="../reference/visualise_single_sequence.html">visualise_single_sequence()</a></code>, <code><a href="../reference/visualise_many_sequences.html">visualise_many_sequences()</a></code>, and <code><a href="../reference/visualise_methylation.html">visualise_methylation()</a></code> can now use <code><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_raster()</a></code> instead of <code><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_tile()</a></code> when sequence text, index annotations, and box outlines are off. This provides a moderate performance improvement and can be forced via <code>force_raster = TRUE</code>.</p></li>
+<li>
+<p><code><a href="../reference/visualise_methylation.html">visualise_methylation()</a></code> can now draw text inside the boxes</p>
+<ul><li><p>Can draw sequence text like <code><a href="../reference/visualise_many_sequences.html">visualise_many_sequences()</a></code>, via <code>sequence_text_type = "sequence"</code>.</p></li>
+<li><p>Can draw sequence probabilities, via <code>sequence_text_type = "probability"</code>. <code>sequence_text_rounding</code> and <code>sequence_text_scaling</code> then determine how the probability score integers from 0-255 are scaled (e.g. <code>c(-0.5, 256)</code> takes (probability + 0.5) / 256 to convert to 0-1 probability) and rounded for display.</p></li>
+<li><p>As a consequence, <code><a href="../reference/visualise_methylation.html">visualise_methylation()</a></code> now takes sequences rather than sequence lengths as its third input, and <code><a href="../reference/extract_and_sort_methylation.html">extract_and_sort_methylation()</a></code> therefore returns sequences as well as sequence lengths.</p></li>
+</ul></li>
+<li><p><code>visualise_methylation_colour_scale</code> can now have the text assigned to any of the four cardinal directions rather than always below. If set to <code>"left"</code> / <code>"west"</code> or <code>"right"</code> / <code>"east"</code>, gradient direction will be vertical instead of horizontal.</p></li>
+</ul><p>Minor changes:</p>
+<ul><li><p><code><a href="../reference/visualise_single_sequence.html">visualise_single_sequence()</a></code>, <code><a href="../reference/visualise_many_sequences.html">visualise_many_sequences()</a></code>, and <code><a href="../reference/visualise_methylation.html">visualise_methylation()</a></code> can now use <code><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_raster()</a></code> instead of <code><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_tile()</a></code> when sequence text, index annotations, and box outlines are off. This provides a moderate performance improvement and can be forced via <code>force_raster = TRUE</code>.</p></li>
 <li><p><code><a href="../reference/visualise_single_sequence.html">visualise_single_sequence()</a></code>, <code><a href="../reference/visualise_many_sequences.html">visualise_many_sequences()</a></code>, <code><a href="../reference/visualise_methylation.html">visualise_methylation()</a></code>, and <code><a href="../reference/visualise_methylation_colour_scale.html">visualise_methylation_colour_scale()</a></code> all now have a <code>monitor_performance</code> argument which prints the time taken for each step. This is mostly for internal debugging purposes.</p></li>
-</ul><p>User-facing changes:</p>
-<ul><li><p>Changed <code><a href="../reference/extract_and_sort_methylation.html">extract_methylation_from_dataframe()</a></code> to now return a list of 4 vectors instead of 3, with <code>sequences</code> added. <code>sequence_lengths</code> is still returned just in case it’s useful for anything, but it is no longer used in <code><a href="../reference/visualise_methylation.html">visualise_methylation()</a></code>, which now takes the sequences directly rather than their lengths.</p></li>
+<li><p>Changed <code><a href="../reference/extract_and_sort_methylation.html">extract_methylation_from_dataframe()</a></code> to now return a list of 4 vectors instead of 3, with <code>sequences</code> added. <code>sequence_lengths</code> is still returned just in case it’s useful for anything, but it is no longer used in <code><a href="../reference/visualise_methylation.html">visualise_methylation()</a></code>, which now takes the sequences directly rather than their lengths.</p></li>
 <li><p>Removed warning for “incorrectly” removing index annotations. Now setting any relevant argument to 0/empty (e.g. <code>index_annotation_size = 0</code>, <code>index_annotation_interval = 0</code>, <code>index_annotation_lines = numeric(0)</code>) will automatically change the “main” one to remove annotations.</p></li>
+<li><p><code><a href="../reference/read_fastq.html">read_fastq()</a></code> and <code><a href="../reference/read_modified_fastq.html">read_modified_fastq()</a></code> have a <code>strip_at</code> argument to remove leading ’@’s from read IDs via new helper <code><a href="../reference/strip_leading_at.html">strip_leading_at()</a></code>. This prevents issues when FASTQ read IDs start with @ but metadata read IDs do not, and IDs therefore cannot be merged.</p></li>
 <li><p>Massively improved <code><a href="../reference/rasterise_matrix.html">rasterise_matrix()</a></code> performance by vectorising calculations.</p></li>
 <li><p>Changed default <code>pixels_per_base</code> from <code>20</code> to <code>100</code> for <code><a href="../reference/visualise_methylation.html">visualise_methylation()</a></code> because there is now the option for index and sequence text, which requires a higher resolution to be legible.</p></li>
-</ul><p>New helper functions:</p>
-<ul><li><p><code><a href="../reference/bad_arg.html">bad_arg()</a></code> - throws an error with information (e.g. name, class, value) about a problematic argument.</p></li>
-<li><p><code><a href="../reference/insert_at_indices.html">insert_at_indices()</a></code> - inserts blank lines for index annotations in <code><a href="../reference/visualise_many_sequences.html">visualise_many_sequences()</a></code> and <code><a href="../reference/visualise_methylation.html">visualise_methylation()</a></code>.</p></li>
-<li><p><code>create_many_sequence_index_annotations()</code> - calculates coordinates and labels for index annotations in <code><a href="../reference/visualise_many_sequences.html">visualise_many_sequences()</a></code> and <code><a href="../reference/visualise_methylation.html">visualise_methylation()</a></code>.</p></li>
-</ul><p>Background changes:</p>
-<ul><li><p>Starting changing all argument validation to use <code><a href="../reference/bad_arg.html">bad_arg()</a></code>.</p></li>
+<li><p>Added <code>accessible</code> palette to <code>sequence_colour_palettes</code>.</p></li>
+<li><p>Starting changing all argument validation to use <code><a href="../reference/bad_arg.html">bad_arg()</a></code>.</p></li>
 <li><p>Enforced version requirement for ggplot2 (&gt;= 4.0.0).</p></li>
+</ul><p>Full list of new functions, including exported helpers:</p>
+<ul><li><p><code>ggDNAvis_shinyapp</code></p></li>
+<li><p><code><a href="../reference/extract_and_sort_methylation.html">extract_and_sort_methylation()</a></code> - renamed from <code><a href="../reference/extract_and_sort_methylation.html">extract_methylation_from_dataframe()</a></code> for consistency with <code><a href="../reference/extract_and_sort_sequences.html">extract_and_sort_sequences()</a></code>, though the old name still works as an alias.</p></li>
+<li><p><code><a href="../reference/bad_arg.html">bad_arg()</a></code> - throws an error with information (e.g. name, class, value) about a problematic argument.</p></li>
+<li><p><code><a href="../reference/strip_leading_at.html">strip_leading_at()</a></code> - strips leading @ from elements of character vector (e.g. read IDs)</p></li>
+<li><p><code><a href="../reference/resolve_alias.html">resolve_alias()</a></code> - resolves value of an argument where aliases are used.</p></li>
+<li><p><code><a href="../reference/resolve_alias_map.html">resolve_alias_map()</a></code> - processes a list of many potential aliases for various arguments of a function, using <code><a href="../reference/resolve_alias.html">resolve_alias()</a></code> for each individually.</p></li>
+<li><p><code><a href="../reference/monitor_start.html">monitor_start()</a></code> - initiate performance monitoring.</p></li>
+<li><p><code><a href="../reference/monitor.html">monitor()</a></code> - continue performance monitoring.</p></li>
+<li><p><code><a href="../reference/format_time_diff.html">format_time_diff()</a></code> - format a difference between times.</p></li>
+<li><p><code><a href="../reference/convert_sequences_to_matrix.html">convert_sequences_to_matrix()</a></code> - convert vector of sequences to character matrix.</p></li>
+<li><p><code><a href="../reference/insert_at_indices.html">insert_at_indices()</a></code> - inserts blank lines for index annotations.</p></li>
+<li><p><code><a href="../reference/rasterise_index_annotations.html">rasterise_index_annotations()</a></code> - calculates coordinates and labels for index annotations.</p></li>
+<li><p><code><a href="../reference/rasterise_probabilities.html">rasterise_probabilities()</a></code> - calculates coordinates and labels for methylation probabilities.</p></li>
+</ul><p>Deleted functions:</p>
+<ul><li><p><code>convert_input_seq_to_sequence_list()</code></p></li>
+<li><p><code>convert_sequences_to_annotations()</code></p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.2" id="ggdnavis-032">ggDNAvis 0.3.2<a class="anchor" aria-label="anchor" href="#ggdnavis-032"></a></h2><p class="text-muted">CRAN release: 2025-10-31</p>
