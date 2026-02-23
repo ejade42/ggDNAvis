@@ -636,10 +636,9 @@ visualise_methylation <- function(
 #'
 #' @param full_range `numeric vector`, length 2. The total range of possible probabilities. Defaults to `c(0, 255)`, which is appropriate for Nanopore > SAM style modification calling where probabilities are 8-bit integers from 0 to 255.\cr\cr May need to be set to `c(0, 1)` if probabilites are instead stored as decimals. Setting any other value is advanced use and should be done for a good reason.
 #' @param precision `integer`. How many different shades should be rendered. Larger values give a smoother gradient. Defaults to `10^3` i.e. `1000`, which looks smooth to my eyes and isn't too intensive to calculate.
-#' @param x_axis_title `character`. The desired x-axis title. Defaults to `NULL`.
-#' @param do_x_ticks `logical`. Boolean specifying whether x axis ticks should be enabled (`TRUE`, default) or disabled (`FALSE`).
-#' @param do_side_scale `logical`. Boolean specifying whether a smaller scalebar should be rendered on the right. Defaults to `FALSE`.\cr\cr I think it is unlikely anyone would want to use this, but the option is here. One potential usecase is that this scalebar shows the raw probability values (e.g. 0 to 255), whereas the x-axis is normalised to 0-1.
-#' @param side_scale_title `character`. The desired title for the right-hand scalebar, if turned on. Defaults to `NULL`.
+#' @param axis_location `character`. Which edge should be labelled. The gradient will always be along this axis (i.e. horizontal gradient for `"top"` or `"bottom"`, vertical gradient for `"left"` or `"right"`). Accepts `"top"` / `"north"`, `"bottom"` / `"south"`, `"left"` / `"west"`, and `"right"` / `"east"` (not case sensitive).
+#' @param axis_title `character`. The desired axis title for the edge selected by `axis_location`. Defaults to `NULL`.
+#' @param do_axis_ticks `logical`. Boolean specifying whether gradient axis ticks should be enabled (`TRUE`, default) or disabled (`FALSE`).
 #' @param outline_colour `character`. The colour of the scalebar outline. Defaults to black.
 #' @param outline_linewidth `numeric`. The linewidth of the scalebar outline. Defaults to `1`. Set to `0` to disable scalebar outline.
 #'
@@ -659,13 +658,21 @@ visualise_methylation <- function(
 #'     high_clamp = 0.7*255,
 #'     full_range = c(0, 255),
 #'     background_colour = "lightblue1",
-#'     x_axis_title = "Methylation probability"
+#'     axis_location = "bottom",
+#'     axis_title = "Methylation probability"
 #' )
 #'
 #' ## Lower precision = colour banding
 #' visualise_methylation_colour_scale(
 #'     precision = 10,
 #'     do_x_ticks = FALSE
+#' )
+#'
+#' ## Left axis
+#' visualise_methylation_colour_scale(
+#'     precision = 100,
+#'     axis_location = "WEST",
+#'     axis_title = "vertical probability"
 #' )
 #'
 #' @export
@@ -678,10 +685,9 @@ visualise_methylation_colour_scale <- function(
     full_range = c(0, 255),
     precision = 10^3,
     background_colour = "white",
-    x_axis_title = NULL,
-    do_x_ticks = TRUE,
-    do_side_scale = FALSE,
-    side_scale_title = NULL,
+    axis_location = "bottom",
+    axis_title = NULL,
+    do_axis_ticks = TRUE,
     outline_colour = "black",
     outline_linewidth = 1,
     monitor_performance = FALSE
@@ -701,22 +707,26 @@ visualise_methylation_colour_scale <- function(
     ## Validate arguments
     ## ---------------------------------------------------------------------
     monitor_time <- monitor(monitor_performance, start_time, monitor_time, "validating arguments")
-    not_null_or_na <- list(low_colour = low_colour, high_colour = high_colour, low_clamp = low_clamp, high_clamp = high_clamp, full_range = full_range, precision = precision, background_colour = background_colour, do_x_ticks = do_x_ticks, do_side_scale = do_side_scale, outline_colour = outline_colour, outline_linewidth = outline_linewidth)
+    not_null_or_na <- list(low_colour = low_colour, high_colour = high_colour, low_clamp = low_clamp, high_clamp = high_clamp, full_range = full_range, precision = precision, background_colour = background_colour, do_axis_ticks = do_axis_ticks, axis_location = axis_location, outline_colour = outline_colour, outline_linewidth = outline_linewidth)
     for (argument in names(not_null_or_na)) {
         if (any(is.null(not_null_or_na[[argument]])) || any(is.na(not_null_or_na[[argument]]))) {bad_arg(argument, not_null_or_na, "must not be NULL or NA.")}
     }
     not_null_or_na <- NULL
 
-    length_1 <- list(low_colour = low_colour, high_colour = high_colour, low_clamp = low_clamp, high_clamp = high_clamp, precision = precision, background_colour = background_colour, x_axis_title = x_axis_title, do_x_ticks = do_x_ticks, do_side_scale = do_side_scale, side_scale_title = side_scale_title, outline_colour = outline_colour, outline_linewidth = outline_linewidth)
+    length_1 <- list(low_colour = low_colour, high_colour = high_colour, low_clamp = low_clamp, high_clamp = high_clamp, precision = precision, background_colour = background_colour, axis_title = axis_title, do_axis_ticks = do_axis_ticks, axis_location = axis_location, outline_colour = outline_colour, outline_linewidth = outline_linewidth)
     for (argument in names(length_1)) {
         if (!any(is.null(length_1[[argument]])) && length(length_1[[argument]]) != 1) {bad_arg(argument, length_1, "must have length 1.")}
     }
 
-    single_char <- list(background_colour = background_colour, low_colour = low_colour, high_colour = high_colour, outline_colour = outline_colour)
+    single_char <- list(background_colour = background_colour, low_colour = low_colour, high_colour = high_colour, outline_colour = outline_colour, axis_location = axis_location)
     for (argument in names(single_char)) {
         if (!is.na(single_char[[argument]]) && (!is.character(single_char[[argument]]) || length(single_char[[argument]]) != 1)) {bad_arg(argument, single_char, "must be a single character value, and a valid colour name or hexcode.")}
     }
     single_char <- NULL
+
+    if (!(tolower(axis_location) %in% c("top", "bottom", "left", "right", "north", "south", "west", "east"))) {
+        bad_arg("axis_location", list(axis_location = axis_location), "must be one of 'top', 'bottom', 'left', 'right', 'north', 'south', 'east', or 'west'.")
+    }
 
     numerical <- list(low_clamp = low_clamp, high_clamp = high_clamp, full_range = full_range, precision = precision, outline_linewidth = outline_linewidth)
     for (argument in names(numerical)) {
@@ -724,13 +734,13 @@ visualise_methylation_colour_scale <- function(
     }
     numerical <- NULL
 
-    bool <- list(do_x_ticks = do_x_ticks, do_side_scale = do_side_scale)
+    bool <- list(do_axis_ticks = do_axis_ticks)
     for (argument in names(bool)) {
         if (!is.logical(bool[[argument]])) {bad_arg(argument, bool, "must be logical/boolean.")}
     }
     bool <- NULL
 
-    char_or_na_null <- list(x_axis_title = x_axis_title, side_scale_title = side_scale_title)
+    char_or_na_null <- list(axis_title = axis_title)
     for (argument in names(char_or_na_null)) {
         if (!any(is.null(char_or_na_null[[argument]])) && !any(is.na(char_or_na_null[[argument]]))) {
             if (!is.character(char_or_na_null[[argument]]) || length(char_or_na_null[[argument]]) != 1) {bad_arg(argument, char_or_na_null, "must be a single character value, or NA/NULL.")}
@@ -739,8 +749,7 @@ visualise_methylation_colour_scale <- function(
     char_or_na_null <- NULL
 
     ## Accept NA as meaning NULL for titles
-    if (any(is.null(x_axis_title)) || any(is.na(x_axis_title))) {x_axis_title <- NULL}
-    if (any(is.null(side_scale_title)) || any(is.na(side_scale_title))) {side_scale_title <- NULL}
+    if (any(is.null(axis_title)) || any(is.na(axis_title))) {axis_title <- NULL}
 
 
     if (length(full_range) != 2) {bad_arg("full_range", list(full_range = full_range), "must provide two numeric values e.g. c(0, 255) as the full probability range.")}
@@ -771,19 +780,31 @@ visualise_methylation_colour_scale <- function(
     result <- ggplot(scale_data) +
         geom_rect(aes(xmin = .data$xmin, xmax = .data$xmax, ymin = 0, ymax = 1, fill = .data$col_scale_clamped)) +
         scale_fill_gradient(low = low_colour, high = high_colour, limits = c(low_clamp, high_clamp)) +
-        coord_cartesian(expand = F) +
-        theme(axis.ticks.y = element_blank(), axis.text.y = element_blank()) +
-        labs(x = x_axis_title, fill = side_scale_title) + guides(fill = "none") +
+        labs(x = axis_title) + guides(fill = "none") +
         theme(plot.background = element_rect(fill = background_colour, colour = NA),
               panel.border = element_rect(fill = NA, colour = outline_colour, linewidth = outline_linewidth),
               plot.margin = grid::unit(c(0.05, 0.16, 0.05, 0.16), "inches"))
 
-    ## Alter plot according to arguments
-    if (do_x_ticks == FALSE) {
-        result <- result + theme(axis.ticks.x = element_blank(), axis.text.x = element_blank())
+    ## Move labelled axis if needed
+    monitor_time <- monitor(monitor_performance, start_time, monitor_time, "modifying plot per arguments")
+    if (tolower(axis_location) %in% c("top", "right", "north", "east")) {
+        result <- result + scale_x_continuous(position = "top")
     }
-    if (do_side_scale == TRUE) {
-        result <- result + guides(fill = guide_legend())
+
+    ## Rotate axes if needed
+    if (tolower(axis_location) %in% c("top", "bottom", "north", "south")) {
+        result <- result +
+            coord_cartesian(expand = FALSE) +
+            theme(axis.ticks.y = element_blank(), axis.text.y = element_blank())
+    } else {
+        result <- result +
+            coord_flip(expand = FALSE) +
+            theme(axis.ticks.x = element_blank(), axis.text.x = element_blank())
+    }
+
+    ## Alter plot according to arguments
+    if (do_axis_ticks == FALSE) {
+        result <- result + theme(axis.ticks = element_blank(), axis.text = element_blank())
     }
 
     ## Return plot

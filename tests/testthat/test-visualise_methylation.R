@@ -32,8 +32,8 @@ test_that("methylation visualisation works as expected, wacky colours", {
                                        metric = "MAE"))$distortion, acceptable_distortion)
 
     filename <- "visualise_methylation_scalebar_test_03"
-    visualize_methylation_color_scale(background_col = "pink", low_color = "white", high_colour = "black")
-    ggsave(paste0(root, filename, ".png"), dpi = 200, device = ragg::agg_png, width = 6, height = 1.5)
+    visualize_methylation_color_scale(background_col = "pink", low_color = "white", high_colour = "black", axis_location = "wEsT")
+    ggsave(paste0(root, filename, ".png"), dpi = 200, device = ragg::agg_png, width = 2, height = 6.1)
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -48,7 +48,7 @@ test_that("methylation visualisation works as expected, hard clamping", {
                                        metric = "MAE"))$distortion, acceptable_distortion)
 
     filename <- "visualise_methylation_scalebar_test_04"
-    visualise_methylation_colour_scale(low_clamp = 108, high_clamp = 148, x_axis_title = NA, side_scale_title = NA)
+    visualise_methylation_colour_scale(low_clamp = 108, high_clamp = 148, axis_title = NA, do_axis_ticks = FALSE)
     ggsave(paste0(root, filename, ".png"), dpi = 200, device = ragg::agg_png, width = 6, height = 1.5)
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
@@ -64,7 +64,7 @@ test_that("methylation visualisation works with all individuals merged, mild cla
                                        metric = "MAE"))$distortion, acceptable_distortion)
 
     filename <- "visualise_methylation_scalebar_test_05"
-    visualise_methylation_colour_scale(low_clamp = 50, high_clamp = 200, precision = 20, x_axis_title = "probability", do_x_ticks = FALSE, do_side_scale = TRUE, side_scale_title = "raw probability")
+    visualise_methylation_colour_scale(low_clamp = 50, high_clamp = 200, precision = 20, axis_title = "probability", do_axis_ticks = FALSE, axis_location = "top")
     ggsave(paste0(root, filename, ".png"), dpi = 200, device = ragg::agg_png, width = 6, height = 1.5)
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
@@ -334,6 +334,7 @@ test_that("argument validation rejects bad arguments for methylation scalebar", 
         expect_error(visualise_methylation_colour_scale(low_colour = param), class = "argument_value_or_type")
         expect_error(visualise_methylation_colour_scale(high_colour = param), class = "argument_value_or_type")
         expect_error(visualise_methylation_colour_scale(background_colour = param), class = "argument_value_or_type")
+        expect_error(visualise_methylation_colour_scale(axis_location = param), class = "argument_value_or_type")
     }
 
     bad_param_value_for_single_numeric <- list("x", TRUE, FALSE, NA, NULL, c(1, 2))
@@ -345,8 +346,7 @@ test_that("argument validation rejects bad arguments for methylation scalebar", 
 
     bad_param_value_for_optional_axis_title <- list(c("hi", "bye"), 1, TRUE, -1, 0, 1.5, -1.5, c("A", "B", "C", "D"), c(NA, NA))
     for (param in bad_param_value_for_optional_axis_title) {
-        expect_error(visualise_methylation_colour_scale(x_axis_title = param), class = "argument_value_or_type")
-        expect_error(visualise_methylation_colour_scale(side_scale_title = param), class = "argument_value_or_type")
+        expect_error(visualise_methylation_colour_scale(axis_title = param), class = "argument_value_or_type")
     }
 })
 

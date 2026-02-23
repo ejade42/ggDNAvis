@@ -14,10 +14,9 @@ visualise_methylation_colour_scale(
   full_range = c(0, 255),
   precision = 10^3,
   background_colour = "white",
-  x_axis_title = NULL,
-  do_x_ticks = TRUE,
-  do_side_scale = FALSE,
-  side_scale_title = NULL,
+  axis_location = "bottom",
+  axis_title = NULL,
+  do_axis_ticks = TRUE,
   outline_colour = "black",
   outline_linewidth = 1,
   monitor_performance = FALSE
@@ -40,13 +39,11 @@ visualise_methylation_colour_scale(
 
 \item{background_colour}{\code{character}. The colour the background should be drawn (defaults to white).}
 
-\item{x_axis_title}{\code{character}. The desired x-axis title. Defaults to \code{NULL}.}
+\item{axis_location}{\code{character}. Which edge should be labelled. The gradient will always be along this axis (i.e. horizontal gradient for \code{"top"} or \code{"bottom"}, vertical gradient for \code{"left"} or \code{"right"}). Accepts \code{"top"} / \code{"north"}, \code{"bottom"} / \code{"south"}, \code{"left"} / \code{"west"}, and \code{"right"} / \code{"east"} (not case sensitive).}
 
-\item{do_x_ticks}{\code{logical}. Boolean specifying whether x axis ticks should be enabled (\code{TRUE}, default) or disabled (\code{FALSE}).}
+\item{axis_title}{\code{character}. The desired axis title for the edge selected by \code{axis_location}. Defaults to \code{NULL}.}
 
-\item{do_side_scale}{\code{logical}. Boolean specifying whether a smaller scalebar should be rendered on the right. Defaults to \code{FALSE}.\cr\cr I think it is unlikely anyone would want to use this, but the option is here. One potential usecase is that this scalebar shows the raw probability values (e.g. 0 to 255), whereas the x-axis is normalised to 0-1.}
-
-\item{side_scale_title}{\code{character}. The desired title for the right-hand scalebar, if turned on. Defaults to \code{NULL}.}
+\item{do_axis_ticks}{\code{logical}. Boolean specifying whether gradient axis ticks should be enabled (\code{TRUE}, default) or disabled (\code{FALSE}).}
 
 \item{outline_colour}{\code{character}. The colour of the scalebar outline. Defaults to black.}
 
@@ -81,13 +78,21 @@ visualise_methylation_colour_scale(
     high_clamp = 0.7*255,
     full_range = c(0, 255),
     background_colour = "lightblue1",
-    x_axis_title = "Methylation probability"
+    axis_location = "bottom",
+    axis_title = "Methylation probability"
 )
 
 ## Lower precision = colour banding
 visualise_methylation_colour_scale(
     precision = 10,
     do_x_ticks = FALSE
+)
+
+## Left axis
+visualise_methylation_colour_scale(
+    precision = 100,
+    axis_location = "WEST",
+    axis_title = "vertical probability"
 )
 
 }
