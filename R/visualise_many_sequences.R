@@ -125,7 +125,7 @@ visualise_many_sequences <- function(
     not_na <- NULL
 
     ## Interpret NA/NULL/empty argument as not wanting any annotations
-    if (any(is.na(index_annotation_lines)) || any(is.null(index_annotation_lines)) || length(index_annotation_lines) == 0) {
+    if (any(is.na(index_annotation_lines)) || any(is.null(index_annotation_lines)) || length(index_annotation_lines) == 0 || (length(index_annotation_lines) == 1 && index_annotation_lines == 0)) {
         index_annotation_lines <- integer(0)
     }
 

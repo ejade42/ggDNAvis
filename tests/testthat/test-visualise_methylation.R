@@ -42,7 +42,7 @@ test_that("methylation visualisation works as expected, wacky colours", {
 test_that("methylation visualisation works as expected, hard clamping", {
     filename <- "visualise_methylation_test_04"
     d <- extract_methylation_from_dataframe(example_many_sequences, grouping_levels = NA, sort_by = NA)
-    expect_message(visualise_methylation(d$locations, d$probabilities, d$sequences, filename = paste0(root, filename, ".png"), low_clamp = 108, high_clamp = 148, index_annotation_lines = numeric(), margin = 0, outline_linewidth = 0, pixels_per_base = 10, index_annotation_always_first_base = FALSE, index_annotation_always_last_base = FALSE))
+    expect_message(visualise_methylation(d$locations, d$probabilities, d$sequences, filename = paste0(root, filename, ".png"), low_clamp = 108, high_clamp = 148, index_annotation_lines = 0, margin = 0, outline_linewidth = 0, pixels_per_base = 10, index_annotation_always_first_base = FALSE, index_annotation_always_last_base = FALSE))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -58,7 +58,7 @@ test_that("methylation visualisation works as expected, hard clamping", {
 test_that("methylation visualisation works with all individuals merged, mild clamping", {
     filename <- "visualise_methylation_test_05"
     d <- extract_methylation_from_dataframe(example_many_sequences, grouping_levels = NA)
-    expect_message(visualise_methylation(d$locations, d$probabilities, d$sequences, filename = paste0(root, filename, ".png"), low_clamp = 50, high_clamp = 200, index_annotation_lines = numeric(), margin = 1.5, outline_linewidth = 0, pixels_per_base = 10, index_annotation_always_first_base = FALSE, index_annotation_always_last_base = FALSE))
+    expect_message(visualise_methylation(d$locations, d$probabilities, d$sequences, filename = paste0(root, filename, ".png"), low_clamp = 50, high_clamp = 200, index_annotation_lines = FALSE, margin = 1.5, outline_linewidth = 0, pixels_per_base = 10, index_annotation_always_first_base = FALSE, index_annotation_always_last_base = FALSE))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -297,7 +297,7 @@ test_that("argument validation rejects bad arguments for methylation visualisati
         expect_error(visualise_methylation(d$locations, d$probabilities, d$sequences, other_bases_outline_linewidth = param), class = "argument_value_or_type")
     }
 
-    bad_param_value_for_index_annotation_lines <- list("x", TRUE, FALSE, c(1, -1), c(1, 0), c(1, 1.5))
+    bad_param_value_for_index_annotation_lines <- list("x", TRUE, c(1, -1), c(1, 0), c(1, 1.5))
     for (param in bad_param_value_for_index_annotation_lines) {
         expect_error(visualise_methylation(d$locations, d$probabilities, d$sequences, index_annotation_lines = param), class = "argument_value_or_type")
     }

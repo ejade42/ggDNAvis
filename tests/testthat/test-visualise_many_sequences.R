@@ -36,7 +36,7 @@ test_that("main plotting function works with double margin", {
 
 test_that("main plotting function works with text turned on", {
     filename <- "visualise_many_sequences_test_04"
-    visualise_many_sequences(sequence_vector_1, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), outline_linewidth = 0, index_annotation_lines = NA, pixels_per_base = 30, index_annotation_always_first_base = FALSE, index_annotation_always_last_base = FALSE, filename = paste0(root, filename, ".png"))
+    visualise_many_sequences(sequence_vector_1, sequence_colours = c("#FFDD00", "#30EC00", "#00A0FF", "#FF4E4E"), outline_linewidth = 0, index_annotation_lines = 0, pixels_per_base = 30, index_annotation_always_first_base = FALSE, index_annotation_always_last_base = FALSE, filename = paste0(root, filename, ".png"))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -70,7 +70,7 @@ test_that("main plotting function works with grouped family data, boxes only", {
 test_that("main plotting function works with grouped family data, boxes only, ascending", {
     filename <- "visualise_many_sequences_test_08"
     sequences <- extract_and_sort_sequences(example_many_sequences, grouping_levels = c("family" = 7, "individual" = 2), desc_sort = FALSE)
-    expect_message(visualise_many_sequences(sequences, sequence_colours = c("#FFAA00", "#00BC00", "#0000DC", "#FF1E1E"), outline_linewidth = 0, index_annotation_lines = NA, sequence_text_size = 0, margin = 0, pixels_per_base = 10, index_annotation_always_first_base = FALSE, index_annotation_always_last_base = FALSE, filename = paste0(root, filename, ".png")))
+    expect_message(visualise_many_sequences(sequences, sequence_colours = c("#FFAA00", "#00BC00", "#0000DC", "#FF1E1E"), outline_linewidth = 0, index_annotation_lines = FALSE, sequence_text_size = 0, margin = 0, pixels_per_base = 10, index_annotation_always_first_base = FALSE, index_annotation_always_last_base = FALSE, filename = paste0(root, filename, ".png")))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -79,7 +79,7 @@ test_that("main plotting function works with grouped family data, boxes only, as
 test_that("main plotting function works with grouped family data, boxes & text", {
     filename <- "visualise_many_sequences_test_09"
     sequences <- extract_and_sort_sequences(example_many_sequences, grouping_levels = c("family" = 1, "individual" = 0))
-    visualise_many_sequences(sequences, sequence_colours = c("#FFAA00", "#00BC00", "#0000DC", "#FF1E1E"), outline_linewidth = 0, index_annotation_lines = NA, margin = 0.5, pixels_per_base = 30, sequence_text_colour = "pink", background_colour = "black", index_annotation_always_first_base = FALSE, index_annotation_always_last_base = FALSE, filename = paste0(root, filename, ".png"))
+    visualise_many_sequences(sequences, sequence_colours = c("#FFAA00", "#00BC00", "#0000DC", "#FF1E1E"), outline_linewidth = 0, index_annotation_lines = NULL, margin = 0.5, pixels_per_base = 30, sequence_text_colour = "pink", background_colour = "black", index_annotation_always_first_base = FALSE, index_annotation_always_last_base = FALSE, filename = paste0(root, filename, ".png"))
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)
@@ -278,7 +278,7 @@ test_that("single sequence visualisation fails when arguments are invalid", {
         expect_error(visualise_many_sequences(sequence_vector_1, pixels_per_base = param), class = "argument_value_or_type")
     }
 
-    bad_param_value_for_positive_int_vector <- list("hi", -1, TRUE, 1.5, sqrt(5), 0, c(1, 0), c(1, 2, 3, -5), c(1, 1.1))
+    bad_param_value_for_positive_int_vector <- list("hi", -1, TRUE, 1.5, sqrt(5), c(1, 0), c(1, 2, 3, -5), c(1, 1.1))
     for (param in bad_param_value_for_positive_int_vector) {
         expect_error(visualise_many_sequences(sequence_vector_1, index_annotation_lines = param), class = "argument_value_or_type")
     }
