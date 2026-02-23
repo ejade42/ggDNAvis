@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ggDNAvis</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.2.9025</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.2.9026</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,26 +52,23 @@
 <p>New features:</p>
 <ul><li>
 <p>Interactive web-app now available</p>
-<ul><li>Can be found on <a href="https://ejade42.github.io/ggDNAvis/articles/interactive_app.html">‘Interactive App’ tab of documentation website</a>
-</li>
-<li>Can be launched locally via <code><a href="../reference/ggDNAvis_shinyapp.html">ggDNAvis_shinyapp()</a></code>.</li>
+<ul><li><p>Can be found on <a href="https://ejade42.github.io/ggDNAvis/articles/interactive_app.html">‘Interactive App’ tab of documentation website</a></p></li>
+<li><p>Can be launched locally via <code><a href="../reference/ggDNAvis_shinyapp.html">ggDNAvis_shinyapp()</a></code>.</p></li>
 </ul></li>
 <li>
 <p>Aliases: American spellings should now be available for all major function and argument names.</p>
-<ul><li>Every instance of <code>visualise</code> should now also work with <code>visualize</code> e.g. <code><a href="../reference/visualise_single_sequence.html">visualize_single_sequence()</a></code>.</li>
-<li>Every instance of <code>colour</code> should now also work with <code>color</code> and <code>col</code> e.g. <code>sequence_text_color</code> or <code>background_col</code>.</li>
-<li>There is a minor exception in that <code><a href="../reference/visualise_methylation_colour_scale.html">visualise_methylation_colour_scale()</a></code> accepts <code><a href="../reference/visualise_methylation_colour_scale.html">visualize_methylation_color_scale()</a></code> but does not accept <code>col</code> in the function name (and does not accept mixing <code>visualise</code> with <code>color</code> or <code>visualize</code> with <code>colour</code>).</li>
-<li>Some aliases are set up for common typos, especially regarding pluralisation. In particular, <code>index_annotations_above</code> also accepts <code>index_annotation_above</code>, and <code>index_annotation_full_line</code> accepts any combination of <code>annotation</code> and <code>line</code> being plural or single.</li>
-<li>If any aliases which ought to work don’t, please raise an issue at <a href="https://github.com/ejade42/ggDNAvis/issues" class="external-link uri">https://github.com/ejade42/ggDNAvis/issues</a> and they can be easily added.</li>
+<ul><li><p>Every instance of <code>visualise</code> should now also work with <code>visualize</code> e.g. <code><a href="../reference/visualise_single_sequence.html">visualize_single_sequence()</a></code>.</p></li>
+<li><p>Every instance of <code>colour</code> should now also work with <code>color</code> and <code>col</code> e.g. <code>sequence_text_color</code> or <code>background_col</code>.</p></li>
+<li><p>There is a minor exception in that <code><a href="../reference/visualise_methylation_colour_scale.html">visualise_methylation_colour_scale()</a></code> accepts <code><a href="../reference/visualise_methylation_colour_scale.html">visualize_methylation_color_scale()</a></code> but does not accept <code>col</code> in the function name (and does not accept mixing <code>visualise</code> with <code>color</code> or <code>visualize</code> with <code>colour</code>).</p></li>
+<li><p>Some aliases are set up for common typos, especially regarding pluralisation. In particular, <code>index_annotations_above</code> also accepts <code>index_annotation_above</code>, and <code>index_annotation_full_line</code> accepts any combination of <code>annotation</code> and <code>line</code> being plural or single.</p></li>
+<li><p>If any aliases which ought to work don’t, please raise an issue at <a href="https://github.com/ejade42/ggDNAvis/issues" class="external-link uri">https://github.com/ejade42/ggDNAvis/issues</a> and they can be easily added.</p></li>
 </ul></li>
 <li>
 <p><code><a href="../reference/visualise_many_sequences.html">visualise_many_sequences()</a></code> and <code><a href="../reference/visualise_methylation.html">visualise_methylation()</a></code> now have index annotations!</p>
-<ul><li>Arguments controlling size, colour, position, and frequency are the same as for <code><a href="../reference/visualise_single_sequence.html">visualise_single_sequence()</a></code>.</li>
-<li>
-<code>index_annotation_lines</code> controls which lines (counting down from the top) have annotations.</li>
-<li>
-<code>index_annotation_full_line</code> controls whether annotations go to the end of each annotated sequence, or all the way to the end of the image.</li>
-<li>Unlike <code><a href="../reference/visualise_single_sequence.html">visualise_single_sequence()</a></code>, index annotations in <code><a href="../reference/visualise_many_sequences.html">visualise_many_sequences()</a></code> and <code><a href="../reference/visualise_methylation.html">visualise_methylation()</a></code> reset each line as each line is a different sequence.</li>
+<ul><li><p>Arguments controlling size, colour, position, and frequency are the same as for <code><a href="../reference/visualise_single_sequence.html">visualise_single_sequence()</a></code>.</p></li>
+<li><p><code>index_annotation_lines</code> controls which lines (counting down from the top) have annotations.</p></li>
+<li><p><code>index_annotation_full_line</code> controls whether annotations go to the end of each annotated sequence, or all the way to the end of the image.</p></li>
+<li><p>Unlike <code><a href="../reference/visualise_single_sequence.html">visualise_single_sequence()</a></code>, index annotations in <code><a href="../reference/visualise_many_sequences.html">visualise_many_sequences()</a></code> and <code><a href="../reference/visualise_methylation.html">visualise_methylation()</a></code> reset each line as each line is a different sequence.</p></li>
 </ul></li>
 <li>
 <p>Index annotations can now be forced to always occur at the start and end of each line</p>

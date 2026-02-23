@@ -8,16 +8,18 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/ejade42/ggDNAvis/blob/main/DESCRIPTION)
+[`inst/CITATION`](https://github.com/ejade42/ggDNAvis/blob/main/inst/CITATION)
 
-Jade E (2026). *ggDNAvis: 'ggplot2'-Based Tools for Visualising DNA
-Sequences and Modifications*. R package version 0.3.2.9025,
-<https://ejade42.github.io/ggDNAvis/>.
+Jade E, Scotter E (2026). “ggDNAvis: a ggplot2-based R package for
+creating high-quality DNA sequence and modification visualisations.”
+*bioRxiv*. [doi:10.1101/XXXXXX](https://doi.org/10.1101/XXXXXX),
+<https://doi.org/10.1101/XXXXXX>.
 
-    @Manual{,
-      title = {ggDNAvis: 'ggplot2'-Based Tools for Visualising DNA Sequences and Modifications},
-      author = {Evelyn Jade},
+    @Article{,
+      title = {ggDNAvis: a ggplot2-based R package for creating high-quality DNA sequence and modification visualisations},
+      author = {Evelyn Jade and Emma L. Scotter},
+      journal = {bioRxiv},
       year = {2026},
-      note = {R package version 0.3.2.9025},
-      url = {https://ejade42.github.io/ggDNAvis/},
+      doi = {10.1101/XXXXXX},
+      url = {https://doi.org/10.1101/XXXXXX},
     }

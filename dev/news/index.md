@@ -12,6 +12,7 @@ New features:
 
   - Can be found on [‘Interactive App’ tab of documentation
     website](https://ejade42.github.io/ggDNAvis/articles/interactive_app.html)
+
   - Can be launched locally via
     [`ggDNAvis_shinyapp()`](https://ejade42.github.io/ggDNAvis/reference/ggDNAvis_shinyapp.md).
 
@@ -20,18 +21,22 @@ New features:
 
   - Every instance of `visualise` should now also work with `visualize`
     e.g. [`visualize_single_sequence()`](https://ejade42.github.io/ggDNAvis/reference/visualise_single_sequence.md).
+
   - Every instance of `colour` should now also work with `color` and
     `col` e.g. `sequence_text_color` or `background_col`.
+
   - There is a minor exception in that
     [`visualise_methylation_colour_scale()`](https://ejade42.github.io/ggDNAvis/reference/visualise_methylation_colour_scale.md)
     accepts
     [`visualize_methylation_color_scale()`](https://ejade42.github.io/ggDNAvis/reference/visualise_methylation_colour_scale.md)
     but does not accept `col` in the function name (and does not accept
     mixing `visualise` with `color` or `visualize` with `colour`).
+
   - Some aliases are set up for common typos, especially regarding
     pluralisation. In particular, `index_annotations_above` also accepts
     `index_annotation_above`, and `index_annotation_full_line` accepts
     any combination of `annotation` and `line` being plural or single.
+
   - If any aliases which ought to work don’t, please raise an issue at
     <https://github.com/ejade42/ggDNAvis/issues> and they can be easily
     added.
@@ -44,11 +49,14 @@ New features:
   - Arguments controlling size, colour, position, and frequency are the
     same as for
     [`visualise_single_sequence()`](https://ejade42.github.io/ggDNAvis/reference/visualise_single_sequence.md).
+
   - `index_annotation_lines` controls which lines (counting down from
     the top) have annotations.
+
   - `index_annotation_full_line` controls whether annotations go to the
     end of each annotated sequence, or all the way to the end of the
     image.
+
   - Unlike
     [`visualise_single_sequence()`](https://ejade42.github.io/ggDNAvis/reference/visualise_single_sequence.md),
     index annotations in
