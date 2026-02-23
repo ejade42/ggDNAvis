@@ -165,8 +165,9 @@ methylation_ui <- function(id) {
                     colourInput(ns("col_scalebar_background"), "Background colour:", value = "white"),
                     colourInput(ns("col_scalebar_outline_colour"), "Outline colour:", value = "black"),
                     numericInput(ns("num_scalebar_outline_linewidth"), "Outline thickness", value = 1, min = 0, step = 0.25),
-                    textInput(ns("txt_scalebar_x_axis_title"), "x-axis title:", value = "Modification probability", placeholder = "Title (optional)"),
-                    checkboxInput(ns("chk_scalebar_do_x_ticks"), "Display ticks on x axis", value = TRUE),
+                    selectInput(ns("sel_scalebar_axis_location"), "Axis location:", choices = c("top", "bottom", "left", "right")),
+                    textInput(ns("txt_scalebar_axis_title"), "Axis title:", value = "Modification probability", placeholder = "Title (optional)"),
+                    checkboxInput(ns("chk_scalebar_do_axis_ticks"), "Display ticks on axis", value = TRUE),
                     numericInput(ns("num_scalebar_width"), "Scalebar width:", value = 6, step = 0.5),
                     numericInput(ns("num_scalebar_height"), "Scalebar height:", value = 1.5, step = 0.25, min = 0.5),
                     numericInput(ns("num_scalebar_dpi"), "Scalebar dpi:", value = 300, step = 100)
@@ -373,9 +374,9 @@ methylation_server <- function(id, user_tz) {
                 full_range = c(0, 255), ## Currently hard-coded
                 precision = input$num_scalebar_precision,
                 background_colour = input$col_scalebar_background,
-                x_axis_title = input$txt_scalebar_x_axis_title,
-                do_x_ticks = input$chk_scalebar_do_x_ticks,
-                do_side_scale = FALSE,  ## this looks dumb so not exposing it as an option
+                axis_location = input$sel_scalebar_axis_location,
+                axis_title = input$txt_scalebar_axis_title,
+                do_axis_ticks = input$chk_scalebar_do_axis_ticks,
                 outline_colour = input$col_scalebar_outline_colour,
                 outline_linewidth = input$num_scalebar_outline_linewidth
             )
@@ -455,8 +456,9 @@ methylation_server <- function(id, user_tz) {
                 col_scalebar_background = input$col_scalebar_background,
                 col_scalebar_outline_colour = input$col_scalebar_outline_colour,
                 num_scalebar_outline_linewidth = input$num_scalebar_outline_linewidth,
-                txt_scalebar_x_axis_title = input$txt_scalebar_x_axis_title,
-                chk_scalebar_do_x_ticks = input$chk_scalebar_do_x_ticks,
+                sel_scalebar_axis_location = input$sel_scalebar_axis_location,
+                txt_scalebar_axis_title = input$txt_scalebar_axis_title,
+                chk_scalebar_do_axis_ticks = input$chk_scalebar_do_axis_ticks,
                 num_scalebar_width = input$num_scalebar_width,
                 num_scalebar_height = input$num_scalebar_height,
                 num_scalebar_dpi = input$num_scalebar_dpi,

@@ -665,7 +665,7 @@ visualise_methylation <- function(
 #' ## Lower precision = colour banding
 #' visualise_methylation_colour_scale(
 #'     precision = 10,
-#'     do_x_ticks = FALSE
+#'     do_axis_ticks = FALSE
 #' )
 #'
 #' ## Left axis
