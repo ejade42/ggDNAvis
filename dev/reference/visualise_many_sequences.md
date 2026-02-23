@@ -117,7 +117,12 @@ visualise_many_sequences(
     
   Setting to `NA` disables index annotations (and prevents adding
   additional blank lines). Defaults to `c(1)` i.e. first sequence is
-  annotated.
+  annotated.  
+    
+  Note:
+  [`visualise_methylation()`](https://ejade42.github.io/ggDNAvis/reference/visualise_methylation.md)
+  and `visualise_many_sequences()` accept `NA`, `NULL`, `numeric(0)`,
+  `0`, and `FALSE` as meaning "annotations off".
 
 - index_annotation_colour:
 

@@ -68,7 +68,14 @@ rasterise_index_annotations(
     
   Setting to `NA` disables index annotations (and prevents adding
   additional blank lines). Defaults to `c(1)` i.e. first sequence is
-  annotated.
+  annotated.  
+    
+  Note:
+  [`visualise_methylation()`](https://ejade42.github.io/ggDNAvis/reference/visualise_methylation.md)
+  and
+  [`visualise_many_sequences()`](https://ejade42.github.io/ggDNAvis/reference/visualise_many_sequences.md)
+  accept `NA`, `NULL`, `numeric(0)`, `0`, and `FALSE` as meaning
+  "annotations off".
 
 - index_annotation_interval:
 
