@@ -28,10 +28,9 @@ visualise_methylation_colour_scale(
   full_range = c(0, 255),
   precision = 10^3,
   background_colour = "white",
-  x_axis_title = NULL,
-  do_x_ticks = TRUE,
-  do_side_scale = FALSE,
-  side_scale_title = NULL,
+  axis_location = "bottom",
+  axis_title = NULL,
+  do_axis_ticks = TRUE,
   outline_colour = "black",
   outline_linewidth = 1,
   monitor_performance = FALSE
@@ -94,29 +93,23 @@ visualise_methylation_colour_scale(
   `character`. The colour the background should be drawn (defaults to
   white).
 
-- x_axis_title:
+- axis_location:
 
-  `character`. The desired x-axis title. Defaults to `NULL`.
+  `character`. Which edge should be labelled. The gradient will always
+  be along this axis (i.e. horizontal gradient for `"top"` or
+  `"bottom"`, vertical gradient for `"left"` or `"right"`). Accepts
+  `"top"` / `"north"`, `"bottom"` / `"south"`, `"left"` / `"west"`, and
+  `"right"` / `"east"` (not case sensitive).
 
-- do_x_ticks:
+- axis_title:
 
-  `logical`. Boolean specifying whether x axis ticks should be enabled
-  (`TRUE`, default) or disabled (`FALSE`).
+  `character`. The desired axis title for the edge selected by
+  `axis_location`. Defaults to `NULL`.
 
-- do_side_scale:
+- do_axis_ticks:
 
-  `logical`. Boolean specifying whether a smaller scalebar should be
-  rendered on the right. Defaults to `FALSE`.  
-    
-  I think it is unlikely anyone would want to use this, but the option
-  is here. One potential usecase is that this scalebar shows the raw
-  probability values (e.g. 0 to 255), whereas the x-axis is normalised
-  to 0-1.
-
-- side_scale_title:
-
-  `character`. The desired title for the right-hand scalebar, if turned
-  on. Defaults to `NULL`.
+  `logical`. Boolean specifying whether gradient axis ticks should be
+  enabled (`TRUE`, default) or disabled (`FALSE`).
 
 - outline_colour:
 
@@ -158,7 +151,8 @@ visualise_methylation_colour_scale(
     high_clamp = 0.7*255,
     full_range = c(0, 255),
     background_colour = "lightblue1",
-    x_axis_title = "Methylation probability"
+    axis_location = "bottom",
+    axis_title = "Methylation probability"
 )
 
 
@@ -166,6 +160,14 @@ visualise_methylation_colour_scale(
 visualise_methylation_colour_scale(
     precision = 10,
     do_x_ticks = FALSE
+)
+#> Error in visualise_methylation_colour_scale(precision = 10, do_x_ticks = FALSE): Unrecognised arguments: do_x_ticks
+
+## Left axis
+visualise_methylation_colour_scale(
+    precision = 100,
+    axis_location = "WEST",
+    axis_title = "vertical probability"
 )
 
 ```

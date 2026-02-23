@@ -38,7 +38,8 @@ read_fastq(filename = file.choose(), calculate_length = TRUE, strip_at = TRUE)
 - strip_at:
 
   `logical`. Boolean value for whether "`@`" characters at the start of
-  read IDs should automatically be stripped if they are present.  
+  read IDs should automatically be stripped if they are present, via
+  [`strip_leading_at()`](https://ejade42.github.io/ggDNAvis/reference/strip_leading_at.md).  
     
   These "`@`"s tend to be introduced by writing BAM to FASTQ via
   `samtools fastq` and can cause read IDs to not match between FASTQ
