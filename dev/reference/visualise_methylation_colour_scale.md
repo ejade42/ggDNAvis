@@ -159,9 +159,9 @@ visualise_methylation_colour_scale(
 ## Lower precision = colour banding
 visualise_methylation_colour_scale(
     precision = 10,
-    do_x_ticks = FALSE
+    do_axis_ticks = FALSE
 )
-#> Error in visualise_methylation_colour_scale(precision = 10, do_x_ticks = FALSE): Unrecognised arguments: do_x_ticks
+
 
 ## Left axis
 visualise_methylation_colour_scale(
