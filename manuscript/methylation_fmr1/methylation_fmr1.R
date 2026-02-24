@@ -259,7 +259,9 @@ vis_input <- extract_and_sort_methylation(
     probabilities_colname = "total_modification_prob",
     sequences_colname = "sequence",
     lengths_colname = "sequence_length",
-    grouping_levels = c("participant_id" = participant_spacing)
+    grouping_levels = c("participant_id" = participant_spacing),
+    sort_by = "sequence_length",
+    desc_sort = TRUE
 )
 set.seed(123)
 subsample <- sort(sample(1:length(vis_input$sequences), 10, replace = FALSE))
