@@ -1,4 +1,4 @@
-library(ggDNAvis)
+library(ggDNAvis)  ## v1.0.0
 library(dplyr)     ## v1.1.4
 library(ggplot2)   ## v4.0.1
 

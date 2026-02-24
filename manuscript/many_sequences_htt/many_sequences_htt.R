@@ -1,6 +1,7 @@
-library(ggDNAvis)
+library(ggDNAvis)  ## v1.0.0
 library(ggplot2)   ## v4.0.2
 library(magick)    ## v2.9.0
+library(ggtext)    ## v0.1.2
 
 ## Create metadata dataframe
 forward_reads <- readLines("output/05_forward_reads.txt")
@@ -40,7 +41,8 @@ ggplot(merged_data, aes(x = sequence_length)) +
     geom_vline(xintercept = threshold, col = "red", linetype = "dashed") +
     theme_classic() +
     coord_cartesian(expand = FALSE) +
-    labs(x = "Clipped HTT read length", y = "Read count")
+    labs(x = "Clipped *HTT* read length", y = "Read count") +
+    theme(axis.title.x = element_markdown())
 ggsave("supplementary_htt_allele_separation_histogram.png", dpi = 300, width = 7, height = 5)
 
 ## Calculate how many are near threshold
@@ -111,7 +113,7 @@ height <- length(sequences)
 
 ## Create annotation dataframe
 text_data <- data.frame(
-    x = margin / width,
+    x = 0,
     y = 1 - ((c(allele_lines - 0.75, direction_lines - 1.5)) / height),
     label = c("Expanded", "Wildtype", rep(c("Forward (5’–3’)", "Reverse (3’–5’)"), times = 2)),
     size = rep(c(175, 125), times = c(2, 4))

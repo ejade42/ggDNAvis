@@ -1,4 +1,4 @@
-library(ggDNAvis)
+library(ggDNAvis)  ## v1.0.0
 library(patchwork) ## v1.3.2
 library(ggplot2)   ## v4.0.2
 library(cowplot)   ## v1.2.0

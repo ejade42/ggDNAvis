@@ -1,8 +1,9 @@
-library(ggDNAvis)
+library(ggDNAvis)  ## v1.0.0
 library(ggplot2)   ## v4.0.1
 library(dplyr)     ## v1.2.0
 library(purrr)     ## v1.2.1
 library(magick)    ## v2.9.0
+library(ggtext)    ## v0.1.2
 
 participant_ids <- c("NA04026", "NA05131", "NA06905", "NA12878")
 
@@ -61,8 +62,10 @@ ggplot(data = merged_data, aes(x = sequence_length)) +
     theme_classic() +
     geom_vline(xintercept = c(full_threshold, pre_threshold), col = "red", linetype = "dashed", linewidth = 1) +
     scale_x_continuous(breaks = seq(0, 2500, 200)) +
-    labs(x = "Clipped FMR1 read length", y = "Number of reads") +
-    coord_cartesian(expand = FALSE)
+    labs(x = "Clipped *FMR1* read length", y = "Number of reads") +
+    coord_cartesian(expand = FALSE) +
+    theme(axis.title.x = element_markdown())
+ggsave("supplementary_fmr1_allele_separation_histogram.png", dpi = 300, width = 7, height = 5)
 
 flanking_bp <- 43
 find_codons <- function(x, flanking = 43) {(x - flanking) / 3}
@@ -73,12 +76,13 @@ find_codons(pre_threshold)
 find_codons(full_threshold)
 
 ## Print summary lengths of each allele
-merged_data %>% 
+summ <- merged_data %>% 
     group_by(allele) %>%
     summarise(min = min(trinucleotide_length), 
               mean = mean(trinucleotide_length), 
               max = max(trinucleotide_length), 
               n = n())
+summ
 ## -------------------------------------------------------------------------------------------
 
 
@@ -88,7 +92,7 @@ merged_data %>%
 ## ALLELE FIGURE
 ## -------------------------------------------------------------------------------------------
 ## Extract modification info from dataframe, using combined probability column
-allele_spacing <- 30
+allele_spacing <- 27
 participant_spacing <- 8
 
 vis_input <- extract_and_sort_methylation(
@@ -121,12 +125,12 @@ pixels_per_base <- 20
 
 ## Create annotation dataframe
 text_data <- data.frame(
-    x = margin / width,
-    y = 1 - ((c(10, allele_lines - 0.75, participant_lines - 1.5)) / height),
+    x = 0,
+    y = 1 - ((c(8, allele_lines - 0.75, participant_lines - 1.5)) / height),
     label = c("(a) Blue/red gradient",
               c("Full mutation (truncated)", "Premutation", "Wildtype"),
               c("NA04026", "NA05131", "NA06905", "NA06905", "NA12878")),
-    size = c(225, rep(c(175, 125), times = c(3, 5)))
+    size = c(195, rep(c(165, 125), times = c(3, 5)))
 )
 text_data_binary <- text_data
 text_data_binary[1, "label"] <- "(b) White/black binary"
@@ -166,7 +170,7 @@ ggsave(filename = "methylation_fmr1_alleles_binary.png", dpi = pixels_per_base, 
 
 
 ## Create scalebars
-x_axis_title = "Combined methylation + hydroxymethylation probability"
+axis_title = "Combined methylation + hydroxymethylation probability"
 dpi <- pixels_per_base * 20
 scalebar_width <- 4.7
 scalebar_height <- 1.25
@@ -176,9 +180,11 @@ visualise_methylation_colour_scale(
     low_clamp = 0,
     high_clamp = 255,
     precision = 10^3,
-    x_axis_title = x_axis_title
+    axis_location = "top",
+    axis_title = axis_title
 ) +
-    theme(axis.title = element_text(family = "Helvetica Light"))
+    theme(axis.title = element_text(family = "Helvetica Light"),
+          plot.margin = unit(c(0.05, 0.15, 0.025, 0.15), "inch"))
 ggsave(filename = "methylation_fmr1_alleles_smooth_scalebar.png", dpi = dpi, width = scalebar_width, height = scalebar_height, device = ragg::agg_png)
 
 visualise_methylation_colour_scale(
@@ -187,9 +193,11 @@ visualise_methylation_colour_scale(
     low_clamp = 127,
     high_clamp = 128,
     precision = 256,
-    x_axis_title = x_axis_title
+    axis_location = "top",
+    axis_title = axis_title
 ) +
-    theme(axis.title = element_text(family = "Helvetica Light"))
+    theme(axis.title = element_text(family = "Helvetica Light"),
+          plot.margin = unit(c(0.05, 0.15, 0.025, 0.15), "inch"))
 ggsave(filename = "methylation_fmr1_alleles_binary_scalebar.png", dpi = dpi, width = scalebar_width, height = scalebar_height, device = ragg::agg_png)
 
 
@@ -201,7 +209,7 @@ max_premutation_width <- merged_data %>%
     pull(sequence_length) %>%
     max()
 right_padding <- 20  ## in bases
-v_separation <- 20 ## in bases
+v_separation <- 17.5 ## in bases
 composite_px_width <- pixels_per_base * (max_premutation_width + 2*margin + right_padding)
 composite_px_height <- pixels_per_base * (2 * (height + 2*margin) + v_separation)
 ggplot() + theme_classic()
@@ -209,8 +217,8 @@ ggsave("methylation_fmr1_alleles_canvas.png", dpi = 1, width = composite_px_widt
 
 ## Calculations for scalebar placements
 single_part_height <- pixels_per_base * (height + 2*margin + v_separation)
-scalebar_from_bottom <- pixels_per_base * 5
-scalebar_from_right <- pixels_per_base * 5
+scalebar_from_bottom <- pixels_per_base * 0
+scalebar_from_right <- pixels_per_base * 0
 
 canvas <- image_read("methylation_fmr1_alleles_canvas.png", strip = TRUE)
 smooth <- image_read("methylation_fmr1_alleles_smooth.png", strip = TRUE)
@@ -242,7 +250,7 @@ rm(list = c("canvas", "smooth", "binary", "smooth_scalebar", "binary_scalebar", 
 ## -------------------------------------------------------------------------------------------
 ## Extract modification info, using wildtype alleles only
 title_spacing <- 2
-participant_spacing <- 2
+participant_spacing <- 1
 vis_input <- extract_and_sort_methylation(
     filter(merged_data, participant_id == "NA12878"),
     locations_colname = "C+m?_locations",
@@ -251,7 +259,9 @@ vis_input <- extract_and_sort_methylation(
     lengths_colname = "sequence_length",
     grouping_levels = c("participant_id" = participant_spacing)
 )
-vis_input <- lapply(vis_input, function(vec) {c(rep("", participant_spacing+title_spacing), vec)})
+set.seed(123)
+subsample <- sort(sample(1:length(vis_input$sequences), 10, replace = FALSE))
+vis_input <- lapply(vis_input, function(vec) {c(rep("", participant_spacing+title_spacing), vec[subsample])})
 
 ## Calculate which lines need to have titles added
 blank_lines <- which(vis_input$sequences == "")
@@ -266,8 +276,9 @@ title_line <- participant_lines[1] - participant_spacing
 ## Visualisation parameters
 margin <- 0.5
 width <- max(nchar(vis_input$sequences)) 
-height <- length(vis_input$sequences)
-pixels_per_base <- 75
+index_annotation_lines <- 1+participant_spacing+title_spacing
+height <- length(vis_input$sequences) + length(index_annotation_lines)
+pixels_per_base <- 100
 #low_colour <- "#4d9221"
 #high_colour <- "#c51b7d"
 low_colour <- "darkblue"
@@ -277,11 +288,11 @@ high_clamp <- 0.75*255
 
 ## Create annotation dataframes
 text_data_seq <- data.frame(
-    x = margin / width,
-    y = 1 - ((c(title_line - 0.35, participant_lines - 0.1)) / height),
+    x = 0,
+    y = 1 - ((c(title_line - 0.5, participant_lines)) / height),
     label = c("(a) Sequence text",
               c("NA12878")),
-    size = c(50, rep(35, times = 1))
+    size = c(32.5, rep(27.5, times = 1))
 )
 text_data_prob <- text_data_seq
 text_data_int  <- text_data_seq
@@ -305,7 +316,7 @@ visualise_methylation(
     other_bases_colour = "grey",
     other_bases_outline_colour = "lightgrey",
     other_bases_outline_linewidth = 1,
-    index_annotation_lines = 1+participant_spacing+title_spacing,
+    index_annotation_lines = index_annotation_lines,
     margin = margin
 ) +
     geom_text(data = text_data_seq, aes(x = x, y = y, label = label, size = size), col = "black", family = "Helvetica Light", hjust = 0, vjust = 0) +
@@ -329,7 +340,7 @@ visualise_methylation(
     other_bases_colour = "grey",
     other_bases_outline_colour = "lightgrey",
     other_bases_outline_linewidth = 1,
-    index_annotation_lines = 1+participant_spacing+title_spacing,
+    index_annotation_lines = index_annotation_lines,
     margin = margin
 ) +
     geom_text(data = text_data_prob, aes(x = x, y = y, label = label, size = size), col = "black", family = "Helvetica Light", hjust = 0, vjust = 0) +
@@ -353,7 +364,7 @@ visualise_methylation(
     other_bases_colour = "grey",
     other_bases_outline_colour = "lightgrey",
     other_bases_outline_linewidth = 1,
-    index_annotation_lines = 1+participant_spacing+title_spacing,
+    index_annotation_lines = index_annotation_lines,
     margin = margin
 ) +
     geom_text(data = text_data_int, aes(x = x, y = y, label = label, size = size), col = "black", family = "Helvetica Light", hjust = 0, vjust = 0) +
@@ -363,24 +374,20 @@ ggsave(filename = "methylation_fmr1_text_integer.png", dpi = pixels_per_base, wi
 
 
 ## Create scalebar
-x_axis_title = "Combined methylation + hydroxymethylation probability"
-dpi <- pixels_per_base * 10
+axis_title = "Combined methylation + hydroxymethylation probability"
+dpi <- pixels_per_base * 5
 scalebar_width <- 1.5
-scalebar_height <- 5.01
+scalebar_height <- 4.5
 visualise_methylation_colour_scale(
     low_colour = low_colour,
     high_colour = high_colour,
     low_clamp = low_clamp,
     high_clamp = high_clamp,
     precision = 10^3,
-    x_axis_title = x_axis_title
+    axis_location = "left",
+    axis_title = axis_title
 ) +
-    coord_flip(expand = FALSE) +
-    theme(axis.title = element_text(family = "Helvetica Light"),
-          axis.text.x = element_blank(),
-          axis.ticks.x = element_blank(),
-          axis.text.y = element_text(),
-          axis.ticks.y = element_line())
+    theme(axis.title = element_text(family = "Helvetica Light"))
     
 ggsave(filename = "methylation_fmr1_text_scalebar.png", dpi = dpi, width = scalebar_width, height = scalebar_height, device = ragg::agg_png)
 
@@ -388,8 +395,8 @@ ggsave(filename = "methylation_fmr1_text_scalebar.png", dpi = dpi, width = scale
 
 ## Composite images using magick
 ## Create pure white image to layer onto
-v_separation <- 2 ## in bases
-truncation_width <- 51 ## in bases
+v_separation <- 1 ## in bases
+truncation_width <- 30 ## in bases
 scalebar_px_width <- scalebar_width * dpi
 scalebar_px_height <- scalebar_height * dpi
 composite_px_width <- scalebar_px_width + pixels_per_base * (truncation_width + 2*margin)
@@ -414,3 +421,4 @@ composite <- image_composite(composite, integer, operator = "over", gravity = "s
 image_write(composite, "methylation_fmr1_text.png", format = "png")
 rm(list = c("canvas", "sequence", "probability", "integer", "composite"))
 ## -------------------------------------------------------------------------------------------
+
