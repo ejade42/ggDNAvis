@@ -53,9 +53,11 @@ devtools::install_github("ejade42/ggDNAvis")
 devtools::install_github("ejade42/ggDNAvis", ref = "v1.0.0")
 ```
 
-Throughout this manual, only `ggDNAvis`, `dplyr`, and `ggplot2` are loaded.
+Throughout this manual, only `ggDNAvis`, `dplyr`, and `ggplot2` are loaded. The following chunk provides setup for rendering this README page and should NOT be copied verbatim. If you are trying to work through the examples, use the alternative setup chunk below.
 
 ```{r opts, message = FALSE}
+## THIS SETUP CHUNK IS FOR THE WEBPAGE AND WILL NOT WORK FOR COPYING THE EXAMPLES
+
 ## Load this package
 library(ggDNAvis)
 
@@ -66,7 +68,7 @@ library(ggplot2)
 
 ## Function for viewing tables throughout this document
 ## This is not a package data-processing function, it just helps make this document
-github_table <- function(data) {
+print_table <- function(data) {
     quoted <- as.data.frame(
         lapply(data, function(x) {paste0("`", x, "`")}),
         check.names = FALSE
@@ -75,14 +77,56 @@ github_table <- function(data) {
     return(kable_output)
 }
 
+## Function for viewing figures throughout this document
+view_figure <- function(filename) {
+    knitr::include_graphics(filename)
+}
+
 ## Set up file locations
 output_location <- "README_files/output/"
-github_location <- "https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/"
+display_location <- "https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/"
 knitr::opts_chunk$set(fig.path = output_location)
 
 ## Print current ggDNAvis version
 cat("Loaded ggDNAvis version is:", as.character(packageVersion("ggDNAvis")))
 ```
+
+If you are working through the examples, use this setup chunk instead
+
+```{r, eval = FALSE}
+## THIS SETUP CHUNK WILL ALLOW YOU TO RUN THE EXAMPLES YOURSELF
+
+## Load pacakges
+library(ggDNAvis)
+library(dplyr)
+library(ggplot2)
+library(magick) ## additional - needed for viewing images
+
+## Function for printing tables to console
+print_table <- function(data) {
+    quoted <- as.data.frame(
+        lapply(data, function(x) {paste0("`", x, "`")}),
+        check.names = FALSE
+    )
+    table_output <- tibble(quoted)
+    return(table_output)
+}
+
+## Function for viewing figures in plot window
+view_figure <- function(filename) {
+    plot(image_read(filename))
+}
+
+## File location to output to
+output_location <- "PUT YOUR FOLDER NAME HERE"
+display_location <- output_location # you probably want these to be the same
+
+## Print current ggDNAvis version
+cat("Loaded ggDNAvis version is:", as.character(packageVersion("ggDNAvis")))
+```
+
+
+
 
 ## Interactive suite
 An interactive GUI-based version of ggDNAvis that runs in a browser is available from the "interactive app" tab of the top navbar of this website, or directly from https://ejade42-ggdnavis.share.connect.posit.cloud/.
@@ -134,7 +178,7 @@ visualise_single_sequence(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "summary_single_sequence.png"))
+view_figure(paste0(display_location, "summary_single_sequence.png"))
 ```
 
 ## Many sequences
@@ -184,7 +228,7 @@ visualise_many_sequences(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "summary_many_sequences.png"))
+view_figure(paste0(display_location, "summary_many_sequences.png"))
 ```
 
 ## Methylation/modification
@@ -245,7 +289,7 @@ visualise_methylation(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "summary_methylation_none.png"))
+view_figure(paste0(display_location, "summary_methylation_none.png"))
 ```
 
 ### Methylation showing sequence
@@ -285,7 +329,7 @@ visualise_methylation(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "summary_methylation_sequence.png"))
+view_figure(paste0(display_location, "summary_methylation_sequence.png"))
 ```
 
 
@@ -328,7 +372,7 @@ visualise_methylation(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "summary_methylation_probabilities.png"))
+view_figure(paste0(display_location, "summary_methylation_probabilities.png"))
 ```
 
 ### Methylation showing probability integers
@@ -370,7 +414,7 @@ visualise_methylation(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "summary_methylation_probability_integers.png"))
+view_figure(paste0(display_location, "summary_methylation_probability_integers.png"))
 ```
 
 ### Methylation scalebar
@@ -396,7 +440,7 @@ scalebar <- visualise_methylation_colour_scale(
 ggsave(paste0(output_location, "summary_methylation_scalebar.png"), scalebar, dpi = 300, width = 5.25, height = 1.25, device = ragg::agg_png)
 
 ## View image
-knitr::include_graphics(paste0(github_location, "summary_methylation_scalebar.png"))
+view_figure(paste0(display_location, "summary_methylation_scalebar.png"))
 ```
 
 
@@ -409,7 +453,7 @@ ggDNAvis comes with example dataset `example_many_sequences`. In this data, each
 
 ```{r}
 ## View the first 4 rows of example_many_sequences data
-github_table(head(example_many_sequences, 4))
+print_table(head(example_many_sequences, 4))
 ```
 
 The DNA sequence in column `sequence` is the information used for visualising single/multiple sequences. For visualising DNA modification, this data contains information on both 5-cytosine-methylation and 5-cytosine-hydroxymethylation. For a given modification type (e.g. methylation), visualisation requires a column of locations and a column of probabilities. In this dataset, the relevant columns are `methylation_locations` and `methylation_probabilities` for methylation and `hydroxymethylation_locations` and `hydroxymethylation_probabilities` for hydroxymethylation.
@@ -488,7 +532,7 @@ fastq_data <- read_fastq(
 )
 
 ## View first 4 rows
-github_table(head(fastq_data, 4))
+print_table(head(fastq_data, 4))
 ```
 Using the basic `read_fastq()` function returns a dataframe with read ID, sequence, and quality columns. Optionally, a `sequence_length` column can be generated by setting `calculate_length = TRUE`. However, we can see that some of the sequences (e.g. F1-1c) are reversed. This occurs when the read is of the - strand at the biochemical level. 
 
@@ -501,7 +545,7 @@ Depending on how the FASTQ was created, the read IDs may be prefixed with `@` (e
 metadata <- read.csv(system.file("extdata/example_many_sequences_metadata.csv", package = "ggDNAvis"))
 
 ## View first 4 rows
-github_table(head(metadata, 4))
+print_table(head(metadata, 4))
 ```
 
 We see that this metadata file contains the same `read` column with the same unique read IDs and a `direction` column specifying whether each read is `"forward"` or `"reverse"`. These two columns are mandatory. Additionally, we have family and participant ID columns providing additional information on each read.
@@ -551,7 +595,7 @@ This example with proceed with the default `reverse_complement_mode = "DNA"`, bu
 merged_fastq_data <- merge_fastq_with_metadata(fastq_data, metadata)
 
 ## View first 4 rows
-github_table(head(merged_fastq_data, 4))
+print_table(head(merged_fastq_data, 4))
 ```
 
 Now we have a `forward_sequence` column (scroll to the right if you can't see it!). We can now reformat this data to be exactly the same as the included `example_many_sequences` data:
@@ -564,10 +608,10 @@ merged_fastq_data <- merged_fastq_data[, c("family", "individual", "read", "forw
 colnames(merged_fastq_data)[c(4,6)] <- c("sequence", "quality")
 
 ## View first 4 rows of data produced from files
-github_table(head(merged_fastq_data, 4))
+print_table(head(merged_fastq_data, 4))
 
 ## View first 4 rows of example_many_sequences (with modification columns excluded)
-github_table(head(example_many_sequences[, 1:6], 4))
+print_table(head(example_many_sequences[, 1:6], 4))
 
 ## Check if equal
 identical(merged_fastq_data, example_many_sequences[, 1:6])
@@ -631,7 +675,7 @@ methylation_data <- read_modified_fastq(
 )
 
 ## View first 4 rows
-github_table(head(methylation_data, 4))
+print_table(head(methylation_data, 4))
 ```
 
 Ultimately, `read_modified_fastq()` outputs a dataframe with the standard read information (ID, sequence, length, quality), a column stating which modification types were assessed for each read (e.g. `"C+h?"` for hydroxymethylation or `"C+m?"` for methylation - refer to the [SAM tags specification](https://samtools.github.io/hts-specs/SAMtags.pdf)), and for each modification type, a column of assessed locations (indices along the read) and a column of modification probabilities (as 8-bit integers).
@@ -645,7 +689,7 @@ As with the standard FASTQ, some of the reads in the modified FASTQ are reverse.
 metadata <- read.csv(system.file("extdata/example_many_sequences_metadata.csv", package = "ggDNAvis"))
 
 ## View first 4 rows
-github_table(head(metadata, 4))
+print_table(head(metadata, 4))
 ```
 
 The metadata is identical to its previous use in the [reading from standard FASTQ](#331-standard-fastq) section.
@@ -658,7 +702,7 @@ The metadata is identical to its previous use in the [reading from standard FAST
 merged_methylation_data <- merge_methylation_with_metadata(methylation_data, metadata)
 
 ## View first 4 rows
-github_table(head(merged_methylation_data, 4))
+print_table(head(merged_methylation_data, 4))
 ```
 
 The merged methylation data contains `forward_` rows for sequence and quality, as before, but also for hydroxymethylation and methylation locations and probabilities. However, looking at the modification locations columns (scroll right on the table), we can see that the indices assessed for modification are 4, 7, 10 etc for sequence `"GGCGGCGGCGGC..."`. This is because the actual biochemical modification was on the Cs on the reverse strand, corresponding to Gs on the forward strand according to Watson-Crick base pairing. For many purposes, it may be desirable to keep these positions to indicate that in reality, the modification occurred at exactly that location on the other strand. This is accomplished by setting `offset = 0` (the default) inside `merge_methylation_with_metadata()`.
@@ -712,7 +756,7 @@ merged_methylation_data <- merge_methylation_with_metadata(
 )
 
 ## View first 4 rows
-github_table(head(merged_methylation_data, 4))
+print_table(head(merged_methylation_data, 4))
 ```
 
 Now, looking at the methylation and hydroxymethylation locations we see that the forward-version locations are 3, 6, 9, 12..., corresponding to the Cs of CGs. This makes the reversed reverse read consistent with the forward reads. 
@@ -727,10 +771,10 @@ merged_methylation_data <- merged_methylation_data[, c("family", "individual", "
 colnames(merged_methylation_data)[c(4,6:10)] <- c("sequence", "quality", "methylation_locations", "methylation_probabilities", "hydroxymethylation_locations", "hydroxymethylation_probabilities")
 
 ## View first 4 rows of data produced from files
-github_table(head(merged_methylation_data, 4))
+print_table(head(merged_methylation_data, 4))
 
 ## View first 4 rows of example_many_sequences
-github_table(head(example_many_sequences, 4))
+print_table(head(example_many_sequences, 4))
 
 ## Check if equal
 identical(merged_methylation_data, example_many_sequences)
@@ -789,7 +833,7 @@ visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added)
 ggsave(paste0(output_location, "single_sequence_default-1.png"))
 ```
 ```{r, echo = FALSE}
-knitr::include_graphics(paste0(github_location, "single_sequence_default-1.png"))
+view_figure(paste0(display_location, "single_sequence_default-1.png"))
 ```
 
 By default, `visualise_single_sequence()` will return a ggplot object. It can be useful to view this for instant debugging. However, it is not usually rendered at a sensible scale or aspect ratio. Therefore, it is preferable to set a `filename = <file_to_write_to.png>` for export, as the function has built-in logic for scaling correctly (with resolution configurable via the `pixels_per_base` argument). We don't have a use for interactive debugging, so we will also set `return = FALSE`.
@@ -803,7 +847,7 @@ visualise_single_sequence(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_01.png"))
+view_figure(paste0(display_location, "single_sequence_01.png"))
 ```
 
 This is the typical single sequence visualisation produced by this package. However, almost every aspect of the visualisation is configurable via arguments to `visualise_single_sequence()` (and the resulting `ggplot` object can be further modified in standard `ggplot` manner if required).
@@ -820,7 +864,7 @@ visualise_single_sequence(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_02.png"))
+view_figure(paste0(display_location, "single_sequence_02.png"))
 ```
 
 For all `visualise_` functions, the `render_device` argument can be used to control the rendering method. It is fed directly to `ggsave(device = )`, so the `ggsave` documentation fully explains its use. The default `ragg::agg_png` works well and ensures consistent graphics (though not font) rendering across platforms/operating systems, so you should not need to change it.
@@ -855,7 +899,7 @@ visualise_single_sequence(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_03.png"))
+view_figure(paste0(display_location, "single_sequence_03.png"))
 ```
 
 Included in `ggDNAvis` are a set of colour palettes for sequence colours that can often be helpful. The default is `sequence_colour_palettes$ggplot_style`, as seen in the first example above. The other palettes are `$bright_pale`, `$bright_pale2`, `$bright_deep`, `$sanger`, and `$accessible`:
@@ -872,7 +916,7 @@ visualise_single_sequence(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_04.png"))
+view_figure(paste0(display_location, "single_sequence_04.png"))
 ```
 
 ```{r}
@@ -886,7 +930,7 @@ visualise_single_sequence(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_05.png"))
+view_figure(paste0(display_location, "single_sequence_05.png"))
 ```
 
 `bright_pale2` is the same but with a slightly lighter shade of green:
@@ -902,7 +946,7 @@ visualise_single_sequence(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_06.png"))
+view_figure(paste0(display_location, "single_sequence_06.png"))
 ```
 
 The `bright_deep` palette works best with white text:
@@ -917,7 +961,7 @@ visualise_single_sequence(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_07.png"))
+view_figure(paste0(display_location, "single_sequence_07.png"))
 ```
 
 The `sanger` palette is inspired by old-school Sanger sequencing readouts and works best with white text:
@@ -933,7 +977,7 @@ visualise_single_sequence(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_08.png"))
+view_figure(paste0(display_location, "single_sequence_08.png"))
 ```
 
 The `accessible` palette is light and dark each of blue and green, which is the only 4-category qualitative colourblind-safe palette recommended by [colorbrewer2.org](https://colorbrewer2.org) [@harrowerColorBrewerorgOnlineTool2003]:
@@ -948,7 +992,7 @@ visualise_single_sequence(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_09.png"))
+view_figure(paste0(display_location, "single_sequence_09.png"))
 ```
 
 ## Layout customisation
@@ -987,7 +1031,7 @@ visualise_single_sequence(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_10.png"))
+view_figure(paste0(display_location, "single_sequence_10.png"))
 ```
 
 Setting spacing, margin, sequence text size, and index annotation interval all to 0 produces a no-frills visualisation of the sequence only. If doing so, `pixels_per_base` can be set low as there is no text that would be rendered poorly at low resolutions:
@@ -1008,7 +1052,7 @@ visualise_single_sequence(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_11.png"))
+view_figure(paste0(display_location, "single_sequence_11.png"))
 ```
 This produced a warning message as setting the margin to 0 clipped off the outlines of the outermost boxes. Either a slightly larger margin can be used:
 
@@ -1029,7 +1073,7 @@ visualise_single_sequence(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_12.png"))
+view_figure(paste0(display_location, "single_sequence_12.png"))
 ```
 
 Or the outlines can be turned off:
@@ -1051,7 +1095,7 @@ visualise_single_sequence(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_13.png"))
+view_figure(paste0(display_location, "single_sequence_13.png"))
 ```
 
 
@@ -1071,7 +1115,7 @@ visualise_single_sequence(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_14.png"))
+view_figure(paste0(display_location, "single_sequence_14.png"))
 ```
 
 When setting spacing to 0, it is highly recommended to disable index annotations via `index_annotation_interval = 0`, otherwise there is nowhere for them to render:
@@ -1089,7 +1133,7 @@ visualise_single_sequence(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_15.png"))
+view_figure(paste0(display_location, "single_sequence_15.png"))
 ```
 
 ## Performance
@@ -1107,7 +1151,7 @@ visualise_single_sequence(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_16.png"))
+view_figure(paste0(display_location, "single_sequence_16.png"))
 ```
 
 ### Raster versus tile rendering
@@ -1132,7 +1176,7 @@ visualise_single_sequence(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_17.png"))
+view_figure(paste0(display_location, "single_sequence_17.png"))
 ```
 
 An example of forcing rasterisation when there would otherwise be sequence text, index annotations, and outlines (thus producing a warning) is as follows:
@@ -1157,7 +1201,7 @@ visualise_single_sequence(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_18.png"))
+view_figure(paste0(display_location, "single_sequence_18.png"))
 ```
 
 If sequence text, annotations, and outlines are all already off (i.e. `sequence_text_size = 0`, either `index_annotation_size = 0` or `index_annotation_interval = 0`, and `outline_linewidth = 0`), then no warning is produced from `force_raster` (but it is redundant and doesn't do anything):
@@ -1178,7 +1222,7 @@ visualise_single_sequence(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_19.png"))
+view_figure(paste0(display_location, "single_sequence_19.png"))
 ```
 
 
@@ -1210,7 +1254,7 @@ identical(merged_fastq_data, example_many_sequences[, 1:6])
 
 
 ## Look at first 4 rows of the data as a reminder
-github_table(head(merged_fastq_data, 4))
+print_table(head(merged_fastq_data, 4))
 
 ## Extract sequences to a character vector
 sequences_for_visualisation <- extract_and_sort_sequences(merged_fastq_data)
@@ -1226,7 +1270,7 @@ visualise_many_sequences(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "many_sequences_01.png"))
+view_figure(paste0(display_location, "many_sequences_01.png"))
 ```
 
 ## Sequence arrangement customisation
@@ -1267,7 +1311,7 @@ visualise_many_sequences(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "many_sequences_02.png"))
+view_figure(paste0(display_location, "many_sequences_02.png"))
 ```
 
 Here the top large cluster is Family 1, containing individuals F1-1, F1-2, and F-3. These individuals contain 5, 2, and 3 reads respectively, and are separated from each other by 2 blank lines. After Family 1, there is there 8 blank lines before Family 2. Family 2 contains F2-1 and F2-2 with 1 and 3 reads (individuals separated by 2 blank lines), then there are 8 blank lines before Family 3. Family 3 contains F3-1, F3-2, F3-3, and F3-4 with 2, 3, 1, and 3 reads.
@@ -1292,7 +1336,7 @@ visualise_many_sequences(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "many_sequences_03.png"))
+view_figure(paste0(display_location, "many_sequences_03.png"))
 ```
 
 Now we have a group for each individual, with sequences in ascending length order per individual, and one blank line between individuals.
@@ -1317,7 +1361,7 @@ visualise_many_sequences(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "many_sequences_04.png"))
+view_figure(paste0(display_location, "many_sequences_04.png"))
 ```
 
 We can also turn off sorting entirely (keeping grouping off) with `sort_by = NA` to simply show all the reads in the order in which they appear in the dataframe:
@@ -1341,7 +1385,7 @@ visualise_many_sequences(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "many_sequences_05.png"))
+view_figure(paste0(display_location, "many_sequences_05.png"))
 ```
 
 It is also possible to keep grouping on while turning sorting off if desired:
@@ -1364,7 +1408,7 @@ visualise_many_sequences(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "many_sequences_06.png"))
+view_figure(paste0(display_location, "many_sequences_06.png"))
 ```
 
 The grouping spacers can be set to 0 to sort within groups without visually separating them (but negative values don't work - they produce an error in `rep()` as the blank line can't be repeated a negative number of times). Additionally, the order of the groups/levels within a grouping variable can be changed in standard R fashion with `factor(x, levels = ...)`:
@@ -1395,7 +1439,7 @@ visualise_many_sequences(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "many_sequences_07.png"))
+view_figure(paste0(display_location, "many_sequences_07.png"))
 
 ```
 
@@ -1453,7 +1497,7 @@ visualise_many_sequences(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "many_sequences_08.png"))
+view_figure(paste0(display_location, "many_sequences_08.png"))
 ```
 
 However, any numerical vector can be used as `index_annotation_lines` to specify which lines should be annotated. For each selected line, an additional blank/spacer line will be inserted above (if `index_annotations_above = TRUE`) or below (if `index_annotations_below = FALSE`), and index annotations will be drawn in the new space. 
@@ -1471,7 +1515,7 @@ visualise_many_sequences(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "many_sequences_09.png"))
+view_figure(paste0(display_location, "many_sequences_09.png"))
 ```
 
 To annotate below the final line of each family, we can look at the sequences vector:
@@ -1492,7 +1536,7 @@ visualise_many_sequences(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "many_sequences_10.png"))
+view_figure(paste0(display_location, "many_sequences_10.png"))
 ```
 
 As with `visualise_single_sequence()`, the frequency of annotations along each line is controlled by `index_annotation_interval`. Additionally, it is configurable whether annotations continue to the end of the image (`index_annotation_full_line = TRUE`, default) or stop when each annotated sequence ends (`index_annotation_full_line = FALSE`).
@@ -1511,7 +1555,7 @@ visualise_many_sequences(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "many_sequences_11.png"))
+view_figure(paste0(display_location, "many_sequences_11.png"))
 ```
 
 And doing the same but annotating until the end of the image regardless of when each sequence ends would look as follows:
@@ -1531,7 +1575,7 @@ visualise_many_sequences(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "many_sequences_12.png"))
+view_figure(paste0(display_location, "many_sequences_12.png"))
 ```
 
 Customising the colour, size, and vertical position of annotations works exactly the same as `visualise_single_sequence()` via `index_annotation_colour`, `index_annotation_size`, and `index_annotation_vertical_position` respectively:
@@ -1555,7 +1599,7 @@ visualise_many_sequences(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "many_sequences_13.png"))
+view_figure(paste0(display_location, "many_sequences_13.png"))
 ```
 
 Finally, index annotations can of course also be turned completely off if desired. The 'canonical' way of doing this is by setting `index_annotation_lines = NA` or `index_annotation_lines = numeric(0)`, but `index_annotation_size = 0` and `index_annotation_interval = 0` also work perfectly well:
@@ -1570,7 +1614,7 @@ visualise_many_sequences(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "many_sequences_14.png"))
+view_figure(paste0(display_location, "many_sequences_14.png"))
 ```
 ```{r}
 visualise_many_sequences(
@@ -1582,7 +1626,7 @@ visualise_many_sequences(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "many_sequences_15.png"))
+view_figure(paste0(display_location, "many_sequences_15.png"))
 ```
 ```{r}
 visualise_many_sequences(
@@ -1594,7 +1638,7 @@ visualise_many_sequences(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "many_sequences_16.png"))
+view_figure(paste0(display_location, "many_sequences_16.png"))
 ```
 
 
@@ -1648,7 +1692,7 @@ visualize_many_sequences(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "many_sequences_17.png"))
+view_figure(paste0(display_location, "many_sequences_17.png"))
 ```
 
 As with `visualise_single_sequence()`, text can be turned off, in which case it is sensible to reduce the resolution:
@@ -1674,7 +1718,7 @@ visualise_many_sequences(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "many_sequences_18.png"))
+view_figure(paste0(display_location, "many_sequences_18.png"))
 ```
 Note that the margin/outline warning is produced whenever the margin is ≤0.25 and the outline linewidth is >0. Getting the warning does not necessarily mean that the outlines are getting cut off (as this only happens if the half of the outline that falls outside the boxes is thicker than the margin), but if you get the warning you should check. In this case it's fine and the outlines are not getting cut off with 0.1 margin.
 
@@ -1704,7 +1748,7 @@ visualise_many_sequences(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "many_sequences_19.png"))
+view_figure(paste0(display_location, "many_sequences_19.png"))
 ```
 
 One important thing to note (which also applies to `visualise_methylation()`) is that if `force_raster` is set to `TRUE`, the index annotation text will not be drawn, but the blank rows inserted to make room for it will still be inserted (see [index annotation customisation](#53-index-annotation-customisation) for how blank rows are inserted). This means the outcome is not identical between forcing `geom_raster()` and allowing it to be automatically applied by manually turning off text/annotations/outlines:
@@ -1722,7 +1766,7 @@ visualise_many_sequences(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "many_sequences_20.png"))
+view_figure(paste0(display_location, "many_sequences_20.png"))
 ```
 
 
@@ -1757,7 +1801,7 @@ colnames(merged_modification_data)[c(4,6:10)] <- c("sequence", "quality", "methy
 identical(merged_modification_data, example_many_sequences)
 
 ## Look at first 4 rows of the data as a reminder
-github_table(head(merged_modification_data, 4))
+print_table(head(merged_modification_data, 4))
 ```
 
 Once we have the dataframe with all forward modification columns, we can extract and sort them with `extract_and_sort_methylation()`. This function works extremely similarly to `extract_and_sort_sequences()` (as explained with examples previously in the [many sequences arrangement customisation](#52-sequence-arrangement-customisation) section), but instead of taking a single argument for the sequence column to extract, it takes four arguments for locations, probabilities, sequences, and sequence length colnames to extract:
@@ -1812,7 +1856,7 @@ visualise_methylation(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "modification_01.png"))
+view_figure(paste0(display_location, "modification_01.png"))
 ```
 
 Here all the modification-assessed bases (Cs of CG dinucleotides) are coloured blue for low methylation probability and red for high methylation probability and linearly interpolated for intermediate probabilities. Non-modification-assessed bases are coloured grey, and the background is white.
@@ -1830,7 +1874,7 @@ scalebar <- visualise_methylation_colour_scale(
 ggsave(paste0(output_location, "modification_01_scalebar.png"), scalebar, dpi = 300, width = 5.25, height = 1.25, device = ragg::agg_png)
 
 ## View image
-knitr::include_graphics(paste0(github_location, "modification_01_scalebar.png"))
+view_figure(paste0(display_location, "modification_01_scalebar.png"))
 ```
 
 (Note that sometimes vertical white lines can appear in the scalebar, depending on the exact gradient precision, export dimensions, and dpi. If this happens, changing the `precision` argument very slightly usually fixes it.)
@@ -1876,7 +1920,7 @@ visualise_methylation(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "modification_02.png"))
+view_figure(paste0(display_location, "modification_02.png"))
 ```
 
 Here there is no grouping by family, 3 blank lines between each participant, and sequences are sorted in ascending length order within each participant.
@@ -1920,7 +1964,7 @@ visualise_methylation(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "modification_03.png"))
+view_figure(paste0(display_location, "modification_03.png"))
 ```
 
 ## Sequence text customisation
@@ -1955,7 +1999,7 @@ visualise_methylation(
                       
 
 ## View image
-knitr::include_graphics(paste0(github_location, "modification_04.png"))
+view_figure(paste0(display_location, "modification_04.png"))
 ```
 
 The default text size is 16, which is appropriate for sequence (1 character per box) but is generally too large for probabilities (often 3-4 characters per box):
@@ -1974,7 +2018,7 @@ visualise_methylation(
                       
 
 ## View image
-knitr::include_graphics(paste0(github_location, "modification_05.png"))
+view_figure(paste0(display_location, "modification_05.png"))
 ```
 
 A more sensible version with integers scaled to 0-1 (which is the default, but we will write the arguments explicitly for clarity) would be:
@@ -1996,7 +2040,7 @@ visualise_methylation(
                       
 
 ## View image
-knitr::include_graphics(paste0(github_location, "modification_06.png"))
+view_figure(paste0(display_location, "modification_06.png"))
 ```
 
 If we instead wanted to see the integer scores from the original data we would turn off scaling and rounding:
@@ -2018,7 +2062,7 @@ visualise_methylation(
                       
 
 ## View image
-knitr::include_graphics(paste0(github_location, "modification_07.png"))
+view_figure(paste0(display_location, "modification_07.png"))
 ```
 
 
@@ -2094,7 +2138,7 @@ visualise_methylation(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "modification_08.png"))
+view_figure(paste0(display_location, "modification_08.png"))
 ```
 ```{r, out.width="60%", fig.align="center"}
 ## Create scalebar and save to object
@@ -2115,7 +2159,7 @@ scalebar <- visualise_methylation_colour_scale(
 ggsave(paste0(output_location, "modification_08_scalebar.png"), scalebar, dpi = 300, width = 5.25, height = 1.25, device = ragg::agg_png)
 
 ## View image
-knitr::include_graphics(paste0(github_location, "modification_08_scalebar.png"))
+view_figure(paste0(display_location, "modification_08_scalebar.png"))
 ```
 
 One way this might be used in practice is for making a graphic in the "lollipop" style where methylated/modified CGs are black and unmodified CGs are white:
@@ -2152,7 +2196,7 @@ visualise_methylation(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "modification_09.png"))
+view_figure(paste0(display_location, "modification_09.png"))
 ```
 ```{r, out.width="60%", fig.align="center"}
 ## Create scalebar and save to object
@@ -2167,7 +2211,7 @@ scalebar <- visualise_methylation_colour_scale(
 ggsave(paste0(output_location, "modification_09_scalebar.png"), scalebar, dpi = 300, width = 5.25, height = 1.25, device = ragg::agg_png)
 
 ## View image
-knitr::include_graphics(paste0(github_location, "modification_09_scalebar.png"))
+view_figure(paste0(display_location, "modification_09_scalebar.png"))
 ```
 
 ## Colour mapping customisation
@@ -2216,7 +2260,7 @@ visualise_methylation(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "modification_10.png"))
+view_figure(paste0(display_location, "modification_10.png"))
 ```
 ```{r, out.width="60%", fig.align="center"}
 ## Create scalebar and save to object
@@ -2233,7 +2277,7 @@ scalebar <- visualise_methylation_colour_scale(
 ggsave(paste0(output_location, "modification_10_scalebar.png"), scalebar, dpi = 300, width = 5.25, height = 1.25, device = ragg::agg_png)
 
 ## View image
-knitr::include_graphics(paste0(github_location, "modification_10_scalebar.png"))
+view_figure(paste0(display_location, "modification_10_scalebar.png"))
 ```
 
 The clamping arguments do not have to be integers. Clamping is implemented with `pmin()` and `pmax()` and relies on their default behaviour for `pm<in/ax>(vector, clamping_value)`, which is to clamp to a fraction when the clamping value is fractional. For example, `pmin(c(1,2,3,4,5), 3.5)` produces `c(1.0, 2.0, 3.0, 3.5, 3.5)` i.e. the values above `3.5` were clamped down to `3.5`. Therefore, clamping with fractional values will clamp extreme probabilities to said fractional value, but this is not visible and does not interfere with plotting logic.
@@ -2268,7 +2312,7 @@ visualise_methylation(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "modification_11.png"))
+view_figure(paste0(display_location, "modification_11.png"))
 ```
 ```{r, out.width="60%", fig.align="center"}
 ## Create scalebar and save to object
@@ -2282,7 +2326,7 @@ scalebar <- visualise_methylation_colour_scale(
 ggsave(paste0(output_location, "modification_11_scalebar.png"), scalebar, dpi = 300, width = 5.25, height = 1.25, device = ragg::agg_png)
 
 ## View image
-knitr::include_graphics(paste0(github_location, "modification_11_scalebar.png"))
+view_figure(paste0(display_location, "modification_11_scalebar.png"))
 ```
 
 The clamping does not need to be symmetrical. One use for this is if the data is skewed. For example, the methylation scores were randomly generated from `0` to `255` for each CpG in `example_many_sequences`, but the hydroxymethylation scores were generated from `0` to `(255 - methylation score)` for each CpG to avoid >100% total modification probability, so they tend to be lower. Here is the hydroxymethylation data visualised with clamping at 10% and 50%:
@@ -2315,7 +2359,7 @@ visualise_methylation(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "modification_12.png"))
+view_figure(paste0(display_location, "modification_12.png"))
 ```
 ```{r, out.width="60%", fig.align="center"}
 ## Create scalebar and save to object
@@ -2329,7 +2373,7 @@ scalebar <- visualise_methylation_colour_scale(
 ggsave(paste0(output_location, "modification_12_scalebar.png"), scalebar, dpi = 300, width = 5.25, height = 1.25, device = ragg::agg_png)
 
 ## View image
-knitr::include_graphics(paste0(github_location, "modification_12_scalebar.png"))
+view_figure(paste0(display_location, "modification_12_scalebar.png"))
 ```
 
 ***IMPORTANT:** make sure that you provide the scalebar when presenting data, especially if clamping is used, otherwise the colours could be misleading or academically dishonest.*
@@ -2370,7 +2414,7 @@ scalebar <- visualise_methylation_colour_scale(precision = 10)
 ggsave(paste0(output_location, "modification_scalebar_alone_01.png"), scalebar, dpi = 300, width = 5.25, height = 1.25, device = ragg::agg_png)
 
 ## View image
-knitr::include_graphics(paste0(github_location, "modification_scalebar_alone_01.png"))
+view_figure(paste0(display_location, "modification_scalebar_alone_01.png"))
 ```
 
 Disabling axis ticks with intermediate precision gives the following:
@@ -2386,7 +2430,7 @@ scalebar <- visualise_methylation_colour_scale(
 ggsave(paste0(output_location, "modification_scalebar_alone_02.png"), scalebar, dpi = 300, width = 5.25, height = 1.25, device = ragg::agg_png)
 
 ## View image
-knitr::include_graphics(paste0(github_location, "modification_scalebar_alone_02.png"))
+view_figure(paste0(display_location, "modification_scalebar_alone_02.png"))
 ```
 
 If ticks are left on, they can be customised with `scale_x_continuous()` as per usual for a ggplot. Here is an example of the left side being the gradient axis i.e. a vertical plot, with ticks every 0.1 instead of every 0.25.
@@ -2412,7 +2456,7 @@ scalebar <- visualise_methylation_colour_scale(
 ggsave(paste0(output_location, "modification_scalebar_alone_03.png"), scalebar, dpi = 300, width = 2, height = 5.25, device = ragg::agg_png)
 
 ## View image
-knitr::include_graphics(paste0(github_location, "modification_scalebar_alone_03.png"))
+view_figure(paste0(display_location, "modification_scalebar_alone_03.png"))
 ```
 
 And here is an example of a more sensible scalebar with top text:
@@ -2431,7 +2475,7 @@ scalebar <- visualise_methylation_colour_scale(
 ggsave(paste0(output_location, "modification_scalebar_alone_04.png"), scalebar, dpi = 300, width = 5.25, height = 2, device = ragg::agg_png)
 
 ## View image
-knitr::include_graphics(paste0(github_location, "modification_scalebar_alone_04.png"))
+view_figure(paste0(display_location, "modification_scalebar_alone_04.png"))
 ```
 
 ## Think about the offset!
@@ -2625,7 +2669,7 @@ ggsave(
 )
 
 ## View visualisation
-knitr::include_graphics(paste0(github_location, "modification_reversing_example.png"))
+view_figure(paste0(display_location, "modification_reversing_example.png"))
 ```
 
 ## Performance

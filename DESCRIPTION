@@ -1,6 +1,6 @@
 Package: ggDNAvis
 Title: 'ggplot2'-Based Tools for Visualising DNA Sequences and Modifications
-Version: 0.3.2.9026
+Version: 0.3.2.9027
 Authors@R: 
     person(
         "Evelyn", "Jade", 
@@ -8,7 +8,7 @@ Authors@R:
         role = c("aut", "cre", "cph"),
         comment = c(ORCID = "0009-0003-7761-5425")
     )
-Description: Uses 'ggplot2' to visualise either (a) a single DNA/RNA sequence split across multiple lines, (b) multiple DNA/RNA sequences, each occupying a whole line, or (c) base modifications such as DNA methylation called by modified bases models in Dorado or Guppy. Functions starting with visualise_<something>() are the main plotting functions, and functions starting with extract_<something>() are key helper functions for reading files and reformatting data. Source code is available at <https://github.com/ejade42/ggDNAvis> and a full non-expert user guide is available at <https://ejade42.github.io/ggDNAvis/>.
+Description: Uses 'ggplot2' to visualise either (a) a single DNA/RNA sequence split across multiple lines, (b) multiple DNA/RNA sequences, each occupying a whole line, or (c) base modifications such as DNA methylation called by modified bases models in Dorado or Guppy. Functions starting with visualise_<>() are the main plotting functions, and functions starting with extract_and_sort_<>() are key helper functions for reading files and reformatting data. Source code is available at <https://github.com/ejade42/ggDNAvis>, a full non-expert user guide is available at <https://ejade42.github.io/ggDNAvis/>, and an interactive web-app version of the software is available at <https://ejade42.github.io/ggDNAvis/articles/interactive_app.html>
 Imports:
     cli,
     dplyr,

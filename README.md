@@ -124,9 +124,13 @@ devtools::install_github("ejade42/ggDNAvis", ref = "v1.0.0")
 ```
 
 Throughout this manual, only `ggDNAvis`, `dplyr`, and `ggplot2` are
-loaded.
+loaded. The following chunk provides setup for rendering this README
+page and should NOT be copied verbatim. If you are trying to work
+through the examples, use the alternative setup chunk below.
 
 ``` r
+## THIS SETUP CHUNK IS FOR THE WEBPAGE AND WILL NOT WORK FOR COPYING THE EXAMPLES
+
 ## Load this package
 library(ggDNAvis)
 
@@ -137,7 +141,7 @@ library(ggplot2)
 
 ## Function for viewing tables throughout this document
 ## This is not a package data-processing function, it just helps make this document
-github_table <- function(data) {
+print_table <- function(data) {
     quoted <- as.data.frame(
         lapply(data, function(x) {paste0("`", x, "`")}),
         check.names = FALSE
@@ -146,16 +150,55 @@ github_table <- function(data) {
     return(kable_output)
 }
 
+## Function for viewing figures throughout this document
+view_figure <- function(filename) {
+    knitr::include_graphics(filename)
+}
+
 ## Set up file locations
 output_location <- "README_files/output/"
-github_location <- "https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/"
+display_location <- "https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/"
 knitr::opts_chunk$set(fig.path = output_location)
 
 ## Print current ggDNAvis version
 cat("Loaded ggDNAvis version is:", as.character(packageVersion("ggDNAvis")))
 ```
 
-    ## Loaded ggDNAvis version is: 0.3.2.9023
+    ## Loaded ggDNAvis version is: 0.3.2.9026
+
+If you are working through the examples, use this setup chunk instead
+
+``` r
+## THIS SETUP CHUNK WILL ALLOW YOU TO RUN THE EXAMPLES YOURSELF
+
+## Load pacakges
+library(ggDNAvis)
+library(dplyr)
+library(ggplot2)
+library(magick) ## additional - needed for viewing images
+
+## Function for printing tables to console
+print_table <- function(data) {
+    quoted <- as.data.frame(
+        lapply(data, function(x) {paste0("`", x, "`")}),
+        check.names = FALSE
+    )
+    table_output <- tibble(quoted)
+    return(table_output)
+}
+
+## Function for viewing figures in plot window
+view_figure <- function(filename) {
+    plot(image_read(filename))
+}
+
+## File location to output to
+output_location <- "PUT YOUR FOLDER NAME HERE"
+display_location <- output_location # you probably want these to be the same
+
+## Print current ggDNAvis version
+cat("Loaded ggDNAvis version is:", as.character(packageVersion("ggDNAvis")))
+```
 
 ## 1.3 Interactive suite
 
@@ -217,7 +260,7 @@ visualise_single_sequence(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "summary_single_sequence.png"))
+view_figure(paste0(display_location, "summary_single_sequence.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/summary_single_sequence.png)<!-- -->
@@ -270,7 +313,7 @@ visualise_many_sequences(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "summary_many_sequences.png"))
+view_figure(paste0(display_location, "summary_many_sequences.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/summary_many_sequences.png)<!-- -->
@@ -334,7 +377,7 @@ visualise_methylation(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "summary_methylation_none.png"))
+view_figure(paste0(display_location, "summary_methylation_none.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/summary_methylation_none.png)<!-- -->
@@ -377,7 +420,7 @@ visualise_methylation(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "summary_methylation_sequence.png"))
+view_figure(paste0(display_location, "summary_methylation_sequence.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/summary_methylation_sequence.png)<!-- -->
@@ -422,7 +465,7 @@ visualise_methylation(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "summary_methylation_probabilities.png"))
+view_figure(paste0(display_location, "summary_methylation_probabilities.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/summary_methylation_probabilities.png)<!-- -->
@@ -467,7 +510,7 @@ visualise_methylation(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "summary_methylation_probability_integers.png"))
+view_figure(paste0(display_location, "summary_methylation_probability_integers.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/summary_methylation_probability_integers.png)<!-- -->
@@ -496,7 +539,7 @@ scalebar <- visualise_methylation_colour_scale(
 ggsave(paste0(output_location, "summary_methylation_scalebar.png"), scalebar, dpi = 300, width = 5.25, height = 1.25, device = ragg::agg_png)
 
 ## View image
-knitr::include_graphics(paste0(github_location, "summary_methylation_scalebar.png"))
+view_figure(paste0(display_location, "summary_methylation_scalebar.png"))
 ```
 
 <img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/summary_methylation_scalebar.png" alt="" width="60%" style="display: block; margin: auto;" />
@@ -514,7 +557,7 @@ SAM/BAM file.
 
 ``` r
 ## View the first 4 rows of example_many_sequences data
-github_table(head(example_many_sequences, 4))
+print_table(head(example_many_sequences, 4))
 ```
 
 | family | individual | read | sequence | sequence_length | quality | methylation_locations | methylation_probabilities | hydroxymethylation_locations | hydroxymethylation_probabilities |
@@ -699,7 +742,7 @@ fastq_data <- read_fastq(
 )
 
 ## View first 4 rows
-github_table(head(fastq_data, 4))
+print_table(head(fastq_data, 4))
 ```
 
 | read | sequence | quality | sequence_length |
@@ -736,7 +779,7 @@ with `@`, then they can be kept in the FASTQ data by setting
 metadata <- read.csv(system.file("extdata/example_many_sequences_metadata.csv", package = "ggDNAvis"))
 
 ## View first 4 rows
-github_table(head(metadata, 4))
+print_table(head(metadata, 4))
 ```
 
 | family     | individual | read    | direction |
@@ -814,7 +857,7 @@ reads without complementing.
 merged_fastq_data <- merge_fastq_with_metadata(fastq_data, metadata)
 
 ## View first 4 rows
-github_table(head(merged_fastq_data, 4))
+print_table(head(merged_fastq_data, 4))
 ```
 
 | read | family | individual | direction | sequence | quality | sequence_length | forward_sequence | forward_quality |
@@ -836,7 +879,7 @@ merged_fastq_data <- merged_fastq_data[, c("family", "individual", "read", "forw
 colnames(merged_fastq_data)[c(4,6)] <- c("sequence", "quality")
 
 ## View first 4 rows of data produced from files
-github_table(head(merged_fastq_data, 4))
+print_table(head(merged_fastq_data, 4))
 ```
 
 | family | individual | read | sequence | sequence_length | quality |
@@ -848,7 +891,7 @@ github_table(head(merged_fastq_data, 4))
 
 ``` r
 ## View first 4 rows of example_many_sequences (with modification columns excluded)
-github_table(head(example_many_sequences[, 1:6], 4))
+print_table(head(example_many_sequences[, 1:6], 4))
 ```
 
 | family | individual | read | sequence | sequence_length | quality |
@@ -997,7 +1040,7 @@ methylation_data <- read_modified_fastq(
 )
 
 ## View first 4 rows
-github_table(head(methylation_data, 4))
+print_table(head(methylation_data, 4))
 ```
 
 | read | sequence | sequence_length | quality | modification_types | C+h?\_locations | C+h?\_probabilities | C+m?\_locations | C+m?\_probabilities |
@@ -1035,7 +1078,7 @@ achieved via the `merge_methylation_with_metadata()` function.
 metadata <- read.csv(system.file("extdata/example_many_sequences_metadata.csv", package = "ggDNAvis"))
 
 ## View first 4 rows
-github_table(head(metadata, 4))
+print_table(head(metadata, 4))
 ```
 
 | family     | individual | read    | direction |
@@ -1056,7 +1099,7 @@ standard FASTQ](#331-standard-fastq) section.
 merged_methylation_data <- merge_methylation_with_metadata(methylation_data, metadata)
 
 ## View first 4 rows
-github_table(head(merged_methylation_data, 4))
+print_table(head(merged_methylation_data, 4))
 ```
 
 | read | family | individual | direction | sequence | sequence_length | quality | modification_types | C+h?\_locations | C+h?\_probabilities | C+m?\_locations | C+m?\_probabilities | forward_sequence | forward_quality | forward_C+h?\_locations | forward_C+h?\_probabilities | forward_C+m?\_locations | forward_C+m?\_probabilities |
@@ -1133,7 +1176,7 @@ merged_methylation_data <- merge_methylation_with_metadata(
 )
 
 ## View first 4 rows
-github_table(head(merged_methylation_data, 4))
+print_table(head(merged_methylation_data, 4))
 ```
 
 | read | family | individual | direction | sequence | sequence_length | quality | modification_types | C+h?\_locations | C+h?\_probabilities | C+m?\_locations | C+m?\_probabilities | forward_sequence | forward_quality | forward_C+h?\_locations | forward_C+h?\_probabilities | forward_C+m?\_locations | forward_C+m?\_probabilities |
@@ -1160,7 +1203,7 @@ merged_methylation_data <- merged_methylation_data[, c("family", "individual", "
 colnames(merged_methylation_data)[c(4,6:10)] <- c("sequence", "quality", "methylation_locations", "methylation_probabilities", "hydroxymethylation_locations", "hydroxymethylation_probabilities")
 
 ## View first 4 rows of data produced from files
-github_table(head(merged_methylation_data, 4))
+print_table(head(merged_methylation_data, 4))
 ```
 
 | family | individual | read | sequence | sequence_length | quality | methylation_locations | methylation_probabilities | hydroxymethylation_locations | hydroxymethylation_probabilities |
@@ -1172,7 +1215,7 @@ github_table(head(merged_methylation_data, 4))
 
 ``` r
 ## View first 4 rows of example_many_sequences
-github_table(head(example_many_sequences, 4))
+print_table(head(example_many_sequences, 4))
 ```
 
 | family | individual | read | sequence | sequence_length | quality | methylation_locations | methylation_probabilities | hydroxymethylation_locations | hydroxymethylation_probabilities |
@@ -1283,7 +1326,7 @@ visualise_single_sequence(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_01.png"))
+view_figure(paste0(display_location, "single_sequence_01.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_01.png)<!-- -->
@@ -1309,7 +1352,7 @@ visualise_single_sequence(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_02.png"))
+view_figure(paste0(display_location, "single_sequence_02.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_02.png)<!-- -->
@@ -1354,7 +1397,7 @@ visualise_single_sequence(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_03.png"))
+view_figure(paste0(display_location, "single_sequence_03.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_03.png)<!-- -->
@@ -1379,7 +1422,7 @@ visualise_single_sequence(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_04.png"))
+view_figure(paste0(display_location, "single_sequence_04.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_04.png)<!-- -->
@@ -1395,7 +1438,7 @@ visualise_single_sequence(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_05.png"))
+view_figure(paste0(display_location, "single_sequence_05.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_05.png)<!-- -->
@@ -1413,7 +1456,7 @@ visualise_single_sequence(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_06.png"))
+view_figure(paste0(display_location, "single_sequence_06.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_06.png)<!-- -->
@@ -1431,7 +1474,7 @@ visualise_single_sequence(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_07.png"))
+view_figure(paste0(display_location, "single_sequence_07.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_07.png)<!-- -->
@@ -1451,7 +1494,7 @@ visualise_single_sequence(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_08.png"))
+view_figure(paste0(display_location, "single_sequence_08.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_08.png)<!-- -->
@@ -1472,7 +1515,7 @@ visualise_single_sequence(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_09.png"))
+view_figure(paste0(display_location, "single_sequence_09.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_09.png)<!-- -->
@@ -1549,7 +1592,7 @@ visualise_single_sequence(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_10.png"))
+view_figure(paste0(display_location, "single_sequence_10.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_10.png)<!-- -->
@@ -1587,7 +1630,7 @@ visualise_single_sequence(
 
 ``` r
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_11.png"))
+view_figure(paste0(display_location, "single_sequence_11.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_11.png)<!-- -->
@@ -1620,7 +1663,7 @@ visualise_single_sequence(
 
 ``` r
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_12.png"))
+view_figure(paste0(display_location, "single_sequence_12.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_12.png)<!-- -->
@@ -1654,7 +1697,7 @@ visualise_single_sequence(
 
 ``` r
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_13.png"))
+view_figure(paste0(display_location, "single_sequence_13.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_13.png)<!-- -->
@@ -1683,7 +1726,7 @@ visualise_single_sequence(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_14.png"))
+view_figure(paste0(display_location, "single_sequence_14.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_14.png)<!-- -->
@@ -1712,7 +1755,7 @@ visualise_single_sequence(
 
 ``` r
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_15.png"))
+view_figure(paste0(display_location, "single_sequence_15.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_15.png)<!-- -->
@@ -1744,41 +1787,41 @@ visualise_single_sequence(
 
     ## ℹ Verbose monitoring enabled
 
-    ## ℹ (2026-02-23 16:01:44) visualise_single_sequence start
+    ## ℹ (2026-02-25 12:36:43) visualise_single_sequence start
 
-    ## ℹ (0.009 secs elapsed; 0.009 secs total) resolving aliases
+    ## ℹ (0.006 secs elapsed; 0.006 secs total) resolving aliases
 
-    ## ℹ (0.001 secs elapsed; 0.010 secs total) validating arguments
+    ## ℹ (0.002 secs elapsed; 0.008 secs total) validating arguments
 
-    ## ℹ (0.001 secs elapsed; 0.011 secs total) splitting input seq to sequence vector
+    ## ℹ (0.002 secs elapsed; 0.010 secs total) splitting input seq to sequence vector
 
-    ## ℹ (0.001 secs elapsed; 0.013 secs total) rasterising image data
+    ## ℹ (0.002 secs elapsed; 0.012 secs total) rasterising image data
 
-    ## ℹ (0.003 secs elapsed; 0.016 secs total) choosing rendering method
+    ## ℹ (0.003 secs elapsed; 0.015 secs total) choosing rendering method
 
-    ## ℹ (0.002 secs elapsed; 0.018 secs total) calculating tile sizes
+    ## ℹ (0.001 secs elapsed; 0.016 secs total) calculating tile sizes
 
-    ## ℹ (0.001 secs elapsed; 0.019 secs total) creating basic plot via geom_tile
+    ## ℹ (0.001 secs elapsed; 0.018 secs total) creating basic plot via geom_tile
 
-    ## ℹ (0.008 secs elapsed; 0.027 secs total) generating sequence text
+    ## ℹ (0.011 secs elapsed; 0.028 secs total) generating sequence text
 
-    ## ℹ (0.002 secs elapsed; 0.029 secs total) adding sequence text
+    ## ℹ (0.002 secs elapsed; 0.030 secs total) adding sequence text
 
-    ## ℹ (0.006 secs elapsed; 0.035 secs total) generating index annotations
+    ## ℹ (0.004 secs elapsed; 0.034 secs total) generating index annotations
 
-    ## ℹ (0.002 secs elapsed; 0.037 secs total) adding index annotations
+    ## ℹ (0.002 secs elapsed; 0.036 secs total) adding index annotations
 
-    ## ℹ (0.003 secs elapsed; 0.041 secs total) adding general plot themes
+    ## ℹ (0.003 secs elapsed; 0.039 secs total) adding general plot themes
 
-    ## ℹ (0.011 secs elapsed; 0.052 secs total) calculating margin
+    ## ℹ (0.010 secs elapsed; 0.049 secs total) calculating margin
 
-    ## ℹ (0.003 secs elapsed; 0.055 secs total) exporting image file
+    ## ℹ (0.002 secs elapsed; 0.051 secs total) exporting image file
 
-    ## ℹ (0.510 secs elapsed; 0.565 secs total) done
+    ## ℹ (0.728 secs elapsed; 0.779 secs total) done
 
 ``` r
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_16.png"))
+view_figure(paste0(display_location, "single_sequence_16.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_16.png)<!-- -->
@@ -1823,9 +1866,9 @@ visualise_single_sequence(
 
     ## ℹ Verbose monitoring enabled
 
-    ## ℹ (2026-02-23 16:01:45) visualise_single_sequence start
+    ## ℹ (2026-02-25 12:36:44) visualise_single_sequence start
 
-    ## ℹ (0.002 secs elapsed; 0.002 secs total) resolving aliases
+    ## ℹ (0.003 secs elapsed; 0.003 secs total) resolving aliases
 
     ## ℹ (0.001 secs elapsed; 0.004 secs total) validating arguments
 
@@ -1837,30 +1880,30 @@ visualise_single_sequence(
     ## Warning: Disabling index annotations via index_annotation_interval = 0 or index_annotation_size = 0 overrides the index_annotation_always_last_base setting.
     ## If you want the last base in each line to be annotated but no other bases, set index_annotation_interval greater than line_wrapping.
 
-    ## ℹ (0.003 secs elapsed; 0.007 secs total) splitting input seq to sequence vector
+    ## ℹ (0.003 secs elapsed; 0.008 secs total) splitting input seq to sequence vector
 
-    ## ℹ (0.001 secs elapsed; 0.008 secs total) rasterising image data
+    ## ℹ (0.001 secs elapsed; 0.009 secs total) rasterising image data
 
-    ## ℹ (0.002 secs elapsed; 0.010 secs total) choosing rendering method
+    ## ℹ (0.003 secs elapsed; 0.012 secs total) choosing rendering method
 
     ## ℹ Automatically using geom_raster (much faster than geom_tile) as no sequence text, index annotations, or outlines are present.
 
     ## Warning: When using geom_raster, it is recommended to use a smaller pixels_per_base e.g. 10, as there is no text/outlines that would benefit from higher resolution.
     ## Current value: 100
 
-    ## ℹ (0.003 secs elapsed; 0.013 secs total) creating basic plot via geom_raster
+    ## ℹ (0.003 secs elapsed; 0.014 secs total) creating basic plot via geom_raster
 
-    ## ℹ (0.004 secs elapsed; 0.017 secs total) adding general plot themes
+    ## ℹ (0.004 secs elapsed; 0.018 secs total) adding general plot themes
 
-    ## ℹ (0.017 secs elapsed; 0.034 secs total) calculating margin
+    ## ℹ (0.010 secs elapsed; 0.028 secs total) calculating margin
 
-    ## ℹ (0.004 secs elapsed; 0.037 secs total) exporting image file
+    ## ℹ (0.002 secs elapsed; 0.030 secs total) exporting image file
 
-    ## ℹ (0.427 secs elapsed; 0.465 secs total) done
+    ## ℹ (1.140 secs elapsed; 1.170 secs total) done
 
 ``` r
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_17.png"))
+view_figure(paste0(display_location, "single_sequence_17.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_17.png)<!-- -->
@@ -1891,7 +1934,7 @@ visualise_single_sequence(
 
     ## ℹ Verbose monitoring enabled
 
-    ## ℹ (2026-02-23 16:01:45) visualise_single_sequence start
+    ## ℹ (2026-02-25 12:36:45) visualise_single_sequence start
 
     ## ℹ (0.002 secs elapsed; 0.002 secs total) resolving aliases
 
@@ -1901,25 +1944,25 @@ visualise_single_sequence(
 
     ## ℹ (0.001 secs elapsed; 0.006 secs total) rasterising image data
 
-    ## ℹ (0.003 secs elapsed; 0.008 secs total) choosing rendering method
+    ## ℹ (0.002 secs elapsed; 0.008 secs total) choosing rendering method
 
     ## Warning: Forcing geom_raster via force_raster = TRUE will remove all sequence
     ## text, index annotations (though any inserted blank lines/spacers will remain),
     ## and box outlines.
 
-    ## ℹ (0.002 secs elapsed; 0.010 secs total) creating basic plot via geom_raster
+    ## ℹ (0.001 secs elapsed; 0.009 secs total) creating basic plot via geom_raster
 
-    ## ℹ (0.004 secs elapsed; 0.014 secs total) adding general plot themes
+    ## ℹ (0.004 secs elapsed; 0.013 secs total) adding general plot themes
 
-    ## ℹ (0.009 secs elapsed; 0.023 secs total) calculating margin
+    ## ℹ (0.009 secs elapsed; 0.022 secs total) calculating margin
 
-    ## ℹ (0.002 secs elapsed; 0.025 secs total) exporting image file
+    ## ℹ (0.002 secs elapsed; 0.024 secs total) exporting image file
 
-    ## ℹ (0.420 secs elapsed; 0.446 secs total) done
+    ## ℹ (0.307 secs elapsed; 0.331 secs total) done
 
 ``` r
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_18.png"))
+view_figure(paste0(display_location, "single_sequence_18.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_18.png)<!-- -->
@@ -1948,11 +1991,11 @@ visualise_single_sequence(
 
     ## ℹ Verbose monitoring enabled
 
-    ## ℹ (2026-02-23 16:01:46) visualise_single_sequence start
+    ## ℹ (2026-02-25 12:36:46) visualise_single_sequence start
 
-    ## ℹ (0.003 secs elapsed; 0.003 secs total) resolving aliases
+    ## ℹ (0.004 secs elapsed; 0.004 secs total) resolving aliases
 
-    ## ℹ (0.002 secs elapsed; 0.004 secs total) validating arguments
+    ## ℹ (0.007 secs elapsed; 0.011 secs total) validating arguments
 
     ## Warning: Disabling index annotations via index_annotation_interval = 0 or index_annotation_size = 0 overrides the index_annotation_always_first_base setting.
     ## If you want the first base in each line to be annotated but no other bases, set index_annotation_interval greater than line_wrapping.
@@ -1960,27 +2003,27 @@ visualise_single_sequence(
     ## Warning: Disabling index annotations via index_annotation_interval = 0 or index_annotation_size = 0 overrides the index_annotation_always_last_base setting.
     ## If you want the last base in each line to be annotated but no other bases, set index_annotation_interval greater than line_wrapping.
 
-    ## ℹ (0.007 secs elapsed; 0.012 secs total) splitting input seq to sequence vector
+    ## ℹ (0.004 secs elapsed; 0.014 secs total) splitting input seq to sequence vector
 
-    ## ℹ (0.002 secs elapsed; 0.013 secs total) rasterising image data
+    ## ℹ (0.002 secs elapsed; 0.017 secs total) rasterising image data
 
-    ## ℹ (0.003 secs elapsed; 0.016 secs total) choosing rendering method
+    ## ℹ (0.005 secs elapsed; 0.021 secs total) choosing rendering method
 
     ## ℹ Automatically using geom_raster (much faster than geom_tile) as no sequence text, index annotations, or outlines are present.
 
-    ## ℹ (0.002 secs elapsed; 0.018 secs total) creating basic plot via geom_raster
+    ## ℹ (0.003 secs elapsed; 0.025 secs total) creating basic plot via geom_raster
 
-    ## ℹ (0.004 secs elapsed; 0.022 secs total) adding general plot themes
+    ## ℹ (0.006 secs elapsed; 0.030 secs total) adding general plot themes
 
-    ## ℹ (0.017 secs elapsed; 0.040 secs total) calculating margin
+    ## ℹ (0.013 secs elapsed; 0.043 secs total) calculating margin
 
-    ## ℹ (0.006 secs elapsed; 0.045 secs total) exporting image file
+    ## ℹ (0.003 secs elapsed; 0.046 secs total) exporting image file
 
-    ## ℹ (0.635 secs elapsed; 0.680 secs total) done
+    ## ℹ (0.525 secs elapsed; 0.571 secs total) done
 
 ``` r
 ## View image
-knitr::include_graphics(paste0(github_location, "single_sequence_19.png"))
+view_figure(paste0(display_location, "single_sequence_19.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_19.png)<!-- -->
@@ -2022,7 +2065,7 @@ identical(merged_fastq_data, example_many_sequences[, 1:6])
 
 ``` r
 ## Look at first 4 rows of the data as a reminder
-github_table(head(merged_fastq_data, 4))
+print_table(head(merged_fastq_data, 4))
 ```
 
 | family | individual | read | sequence | sequence_length | quality |
@@ -2101,7 +2144,7 @@ visualise_many_sequences(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "many_sequences_01.png"))
+view_figure(paste0(display_location, "many_sequences_01.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_01.png)<!-- -->
@@ -2165,7 +2208,7 @@ visualise_many_sequences(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "many_sequences_02.png"))
+view_figure(paste0(display_location, "many_sequences_02.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_02.png)<!-- -->
@@ -2200,7 +2243,7 @@ visualise_many_sequences(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "many_sequences_03.png"))
+view_figure(paste0(display_location, "many_sequences_03.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_03.png)<!-- -->
@@ -2229,7 +2272,7 @@ visualise_many_sequences(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "many_sequences_04.png"))
+view_figure(paste0(display_location, "many_sequences_04.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_04.png)<!-- -->
@@ -2258,7 +2301,7 @@ visualise_many_sequences(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "many_sequences_05.png"))
+view_figure(paste0(display_location, "many_sequences_05.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_05.png)<!-- -->
@@ -2284,7 +2327,7 @@ visualise_many_sequences(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "many_sequences_06.png"))
+view_figure(paste0(display_location, "many_sequences_06.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_06.png)<!-- -->
@@ -2322,7 +2365,7 @@ visualise_many_sequences(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "many_sequences_07.png"))
+view_figure(paste0(display_location, "many_sequences_07.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_07.png)<!-- -->
@@ -2458,7 +2501,7 @@ visualise_many_sequences(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "many_sequences_08.png"))
+view_figure(paste0(display_location, "many_sequences_08.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_08.png)<!-- -->
@@ -2486,7 +2529,7 @@ visualise_many_sequences(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "many_sequences_09.png"))
+view_figure(paste0(display_location, "many_sequences_09.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_09.png)<!-- -->
@@ -2566,7 +2609,7 @@ visualise_many_sequences(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "many_sequences_10.png"))
+view_figure(paste0(display_location, "many_sequences_10.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_10.png)<!-- -->
@@ -2593,7 +2636,7 @@ visualise_many_sequences(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "many_sequences_11.png"))
+view_figure(paste0(display_location, "many_sequences_11.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_11.png)<!-- -->
@@ -2619,7 +2662,7 @@ visualise_many_sequences(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "many_sequences_12.png"))
+view_figure(paste0(display_location, "many_sequences_12.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_12.png)<!-- -->
@@ -2649,7 +2692,7 @@ visualise_many_sequences(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "many_sequences_13.png"))
+view_figure(paste0(display_location, "many_sequences_13.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_13.png)<!-- -->
@@ -2670,7 +2713,7 @@ visualise_many_sequences(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "many_sequences_14.png"))
+view_figure(paste0(display_location, "many_sequences_14.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_14.png)<!-- -->
@@ -2689,7 +2732,7 @@ visualise_many_sequences(
 
 ``` r
 ## View image
-knitr::include_graphics(paste0(github_location, "many_sequences_15.png"))
+view_figure(paste0(display_location, "many_sequences_15.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_15.png)<!-- -->
@@ -2708,7 +2751,7 @@ visualise_many_sequences(
 
 ``` r
 ## View image
-knitr::include_graphics(paste0(github_location, "many_sequences_16.png"))
+view_figure(paste0(display_location, "many_sequences_16.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_16.png)<!-- -->
@@ -2788,7 +2831,7 @@ visualize_many_sequences(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "many_sequences_17.png"))
+view_figure(paste0(display_location, "many_sequences_17.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_17.png)<!-- -->
@@ -2825,7 +2868,7 @@ visualise_many_sequences(
 
 ``` r
 ## View image
-knitr::include_graphics(paste0(github_location, "many_sequences_18.png"))
+view_figure(paste0(display_location, "many_sequences_18.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_18.png)<!-- -->
@@ -2874,33 +2917,33 @@ visualise_many_sequences(
 
     ## ℹ Verbose monitoring enabled
 
-    ## ℹ (2026-02-23 16:02:18) visualise_many_sequences start
+    ## ℹ (2026-02-25 12:37:20) visualise_many_sequences start
 
-    ## ℹ (0.003 secs elapsed; 0.003 secs total) resolving aliases
+    ## ℹ (0.004 secs elapsed; 0.004 secs total) resolving aliases
 
-    ## ℹ (0.001 secs elapsed; 0.004 secs total) validating arguments
+    ## ℹ (0.006 secs elapsed; 0.009 secs total) validating arguments
 
-    ## ℹ (0.001 secs elapsed; 0.005 secs total) inserting blank sequences at specified indices
+    ## ℹ (0.002 secs elapsed; 0.011 secs total) inserting blank sequences at specified indices
 
-    ## ℹ (0.002 secs elapsed; 0.007 secs total) rasterising image data
+    ## ℹ (0.002 secs elapsed; 0.013 secs total) rasterising image data
 
-    ## ℹ (0.007 secs elapsed; 0.014 secs total) choosing rendering method
+    ## ℹ (0.009 secs elapsed; 0.023 secs total) choosing rendering method
 
     ## ℹ Automatically using geom_raster (much faster than geom_tile) as no sequence text, index annotations, or outlines are present.
 
-    ## ℹ (0.003 secs elapsed; 0.016 secs total) creating basic plot via geom_raster
+    ## ℹ (0.004 secs elapsed; 0.026 secs total) creating basic plot via geom_raster
 
-    ## ℹ (0.004 secs elapsed; 0.020 secs total) adding general plot themes
+    ## ℹ (0.005 secs elapsed; 0.031 secs total) adding general plot themes
 
-    ## ℹ (0.010 secs elapsed; 0.030 secs total) calculating margin
+    ## ℹ (0.011 secs elapsed; 0.042 secs total) calculating margin
 
-    ## ℹ (0.002 secs elapsed; 0.032 secs total) exporting image file
+    ## ℹ (0.002 secs elapsed; 0.044 secs total) exporting image file
 
-    ## ℹ (0.371 secs elapsed; 0.403 secs total) done
+    ## ℹ (0.477 secs elapsed; 0.521 secs total) done
 
 ``` r
 ## View image
-knitr::include_graphics(paste0(github_location, "many_sequences_19.png"))
+view_figure(paste0(display_location, "many_sequences_19.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_19.png)<!-- -->
@@ -2929,35 +2972,35 @@ visualise_many_sequences(
 
     ## ℹ Verbose monitoring enabled
 
-    ## ℹ (2026-02-23 16:02:18) visualise_many_sequences start
+    ## ℹ (2026-02-25 12:37:21) visualise_many_sequences start
 
-    ## ℹ (0.002 secs elapsed; 0.002 secs total) resolving aliases
+    ## ℹ (0.008 secs elapsed; 0.008 secs total) resolving aliases
 
-    ## ℹ (0.001 secs elapsed; 0.004 secs total) validating arguments
+    ## ℹ (0.002 secs elapsed; 0.010 secs total) validating arguments
 
-    ## ℹ (0.001 secs elapsed; 0.005 secs total) inserting blank sequences at specified indices
+    ## ℹ (0.002 secs elapsed; 0.012 secs total) inserting blank sequences at specified indices
 
-    ## ℹ (0.001 secs elapsed; 0.006 secs total) rasterising image data
+    ## ℹ (0.002 secs elapsed; 0.014 secs total) rasterising image data
 
-    ## ℹ (0.007 secs elapsed; 0.013 secs total) choosing rendering method
+    ## ℹ (0.010 secs elapsed; 0.024 secs total) choosing rendering method
 
     ## Warning: Forcing geom_raster via force_raster = TRUE will remove all sequence
     ## text, index annotations (though any inserted blank lines/spacers will remain),
     ## and box outlines.
 
-    ## ℹ (0.002 secs elapsed; 0.015 secs total) creating basic plot via geom_raster
+    ## ℹ (0.002 secs elapsed; 0.026 secs total) creating basic plot via geom_raster
 
-    ## ℹ (0.004 secs elapsed; 0.018 secs total) adding general plot themes
+    ## ℹ (0.005 secs elapsed; 0.030 secs total) adding general plot themes
 
-    ## ℹ (0.010 secs elapsed; 0.028 secs total) calculating margin
+    ## ℹ (0.012 secs elapsed; 0.042 secs total) calculating margin
 
-    ## ℹ (0.002 secs elapsed; 0.030 secs total) exporting image file
+    ## ℹ (0.002 secs elapsed; 0.045 secs total) exporting image file
 
-    ## ℹ (0.667 secs elapsed; 0.697 secs total) done
+    ## ℹ (1.070 secs elapsed; 1.114 secs total) done
 
 ``` r
 ## View image
-knitr::include_graphics(paste0(github_location, "many_sequences_20.png"))
+view_figure(paste0(display_location, "many_sequences_20.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_20.png)<!-- -->
@@ -3006,7 +3049,7 @@ identical(merged_modification_data, example_many_sequences)
 
 ``` r
 ## Look at first 4 rows of the data as a reminder
-github_table(head(merged_modification_data, 4))
+print_table(head(merged_modification_data, 4))
 ```
 
 | family | individual | read | sequence | sequence_length | quality | methylation_locations | methylation_probabilities | hydroxymethylation_locations | hydroxymethylation_probabilities |
@@ -3422,7 +3465,7 @@ visualise_methylation(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "modification_01.png"))
+view_figure(paste0(display_location, "modification_01.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_01.png)<!-- -->
@@ -3450,7 +3493,7 @@ scalebar <- visualise_methylation_colour_scale(
 ggsave(paste0(output_location, "modification_01_scalebar.png"), scalebar, dpi = 300, width = 5.25, height = 1.25, device = ragg::agg_png)
 
 ## View image
-knitr::include_graphics(paste0(github_location, "modification_01_scalebar.png"))
+view_figure(paste0(display_location, "modification_01_scalebar.png"))
 ```
 
 <img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_01_scalebar.png" alt="" width="60%" style="display: block; margin: auto;" />
@@ -3525,7 +3568,7 @@ visualise_methylation(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "modification_02.png"))
+view_figure(paste0(display_location, "modification_02.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_02.png)<!-- -->
@@ -3584,7 +3627,7 @@ visualise_methylation(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "modification_03.png"))
+view_figure(paste0(display_location, "modification_03.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_03.png)<!-- -->
@@ -3650,7 +3693,7 @@ visualise_methylation(
                       
 
 ## View image
-knitr::include_graphics(paste0(github_location, "modification_04.png"))
+view_figure(paste0(display_location, "modification_04.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_04.png)<!-- -->
@@ -3677,7 +3720,7 @@ visualise_methylation(
 
 ``` r
 ## View image
-knitr::include_graphics(paste0(github_location, "modification_05.png"))
+view_figure(paste0(display_location, "modification_05.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_05.png)<!-- -->
@@ -3703,7 +3746,7 @@ visualise_methylation(
                       
 
 ## View image
-knitr::include_graphics(paste0(github_location, "modification_06.png"))
+view_figure(paste0(display_location, "modification_06.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_06.png)<!-- -->
@@ -3728,7 +3771,7 @@ visualise_methylation(
                       
 
 ## View image
-knitr::include_graphics(paste0(github_location, "modification_07.png"))
+view_figure(paste0(display_location, "modification_07.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_07.png)<!-- -->
@@ -3863,7 +3906,7 @@ visualise_methylation(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "modification_08.png"))
+view_figure(paste0(display_location, "modification_08.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_08.png)<!-- -->
@@ -3887,7 +3930,7 @@ scalebar <- visualise_methylation_colour_scale(
 ggsave(paste0(output_location, "modification_08_scalebar.png"), scalebar, dpi = 300, width = 5.25, height = 1.25, device = ragg::agg_png)
 
 ## View image
-knitr::include_graphics(paste0(github_location, "modification_08_scalebar.png"))
+view_figure(paste0(display_location, "modification_08_scalebar.png"))
 ```
 
 <img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_08_scalebar.png" alt="" width="60%" style="display: block; margin: auto;" />
@@ -3933,7 +3976,7 @@ visualise_methylation(
 
 ``` r
 ## View image
-knitr::include_graphics(paste0(github_location, "modification_09.png"))
+view_figure(paste0(display_location, "modification_09.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_09.png)<!-- -->
@@ -3951,7 +3994,7 @@ scalebar <- visualise_methylation_colour_scale(
 ggsave(paste0(output_location, "modification_09_scalebar.png"), scalebar, dpi = 300, width = 5.25, height = 1.25, device = ragg::agg_png)
 
 ## View image
-knitr::include_graphics(paste0(github_location, "modification_09_scalebar.png"))
+view_figure(paste0(display_location, "modification_09_scalebar.png"))
 ```
 
 <img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_09_scalebar.png" alt="" width="60%" style="display: block; margin: auto;" />
@@ -4021,7 +4064,7 @@ visualise_methylation(
 
 ``` r
 ## View image
-knitr::include_graphics(paste0(github_location, "modification_10.png"))
+view_figure(paste0(display_location, "modification_10.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_10.png)<!-- -->
@@ -4041,7 +4084,7 @@ scalebar <- visualise_methylation_colour_scale(
 ggsave(paste0(output_location, "modification_10_scalebar.png"), scalebar, dpi = 300, width = 5.25, height = 1.25, device = ragg::agg_png)
 
 ## View image
-knitr::include_graphics(paste0(github_location, "modification_10_scalebar.png"))
+view_figure(paste0(display_location, "modification_10_scalebar.png"))
 ```
 
 <img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_10_scalebar.png" alt="" width="60%" style="display: block; margin: auto;" />
@@ -4090,7 +4133,7 @@ visualise_methylation(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "modification_11.png"))
+view_figure(paste0(display_location, "modification_11.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_11.png)<!-- -->
@@ -4107,7 +4150,7 @@ scalebar <- visualise_methylation_colour_scale(
 ggsave(paste0(output_location, "modification_11_scalebar.png"), scalebar, dpi = 300, width = 5.25, height = 1.25, device = ragg::agg_png)
 
 ## View image
-knitr::include_graphics(paste0(github_location, "modification_11_scalebar.png"))
+view_figure(paste0(display_location, "modification_11_scalebar.png"))
 ```
 
 <img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_11_scalebar.png" alt="" width="60%" style="display: block; margin: auto;" />
@@ -4148,7 +4191,7 @@ visualise_methylation(
 )
 
 ## View image
-knitr::include_graphics(paste0(github_location, "modification_12.png"))
+view_figure(paste0(display_location, "modification_12.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_12.png)<!-- -->
@@ -4165,7 +4208,7 @@ scalebar <- visualise_methylation_colour_scale(
 ggsave(paste0(output_location, "modification_12_scalebar.png"), scalebar, dpi = 300, width = 5.25, height = 1.25, device = ragg::agg_png)
 
 ## View image
-knitr::include_graphics(paste0(github_location, "modification_12_scalebar.png"))
+view_figure(paste0(display_location, "modification_12_scalebar.png"))
 ```
 
 <img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_12_scalebar.png" alt="" width="60%" style="display: block; margin: auto;" />
@@ -4231,7 +4274,7 @@ scalebar <- visualise_methylation_colour_scale(precision = 10)
 ggsave(paste0(output_location, "modification_scalebar_alone_01.png"), scalebar, dpi = 300, width = 5.25, height = 1.25, device = ragg::agg_png)
 
 ## View image
-knitr::include_graphics(paste0(github_location, "modification_scalebar_alone_01.png"))
+view_figure(paste0(display_location, "modification_scalebar_alone_01.png"))
 ```
 
 <img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_scalebar_alone_01.png" alt="" width="60%" style="display: block; margin: auto;" />
@@ -4249,7 +4292,7 @@ scalebar <- visualise_methylation_colour_scale(
 ggsave(paste0(output_location, "modification_scalebar_alone_02.png"), scalebar, dpi = 300, width = 5.25, height = 1.25, device = ragg::agg_png)
 
 ## View image
-knitr::include_graphics(paste0(github_location, "modification_scalebar_alone_02.png"))
+view_figure(paste0(display_location, "modification_scalebar_alone_02.png"))
 ```
 
 <img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_scalebar_alone_02.png" alt="" width="60%" style="display: block; margin: auto;" />
@@ -4280,7 +4323,7 @@ scalebar <- visualise_methylation_colour_scale(
 ggsave(paste0(output_location, "modification_scalebar_alone_03.png"), scalebar, dpi = 300, width = 2, height = 5.25, device = ragg::agg_png)
 
 ## View image
-knitr::include_graphics(paste0(github_location, "modification_scalebar_alone_03.png"))
+view_figure(paste0(display_location, "modification_scalebar_alone_03.png"))
 ```
 
 <img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_scalebar_alone_03.png" alt="" width="20%" style="display: block; margin: auto;" />
@@ -4301,7 +4344,7 @@ scalebar <- visualise_methylation_colour_scale(
 ggsave(paste0(output_location, "modification_scalebar_alone_04.png"), scalebar, dpi = 300, width = 5.25, height = 2, device = ragg::agg_png)
 
 ## View image
-knitr::include_graphics(paste0(github_location, "modification_scalebar_alone_04.png"))
+view_figure(paste0(display_location, "modification_scalebar_alone_04.png"))
 ```
 
 <img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_scalebar_alone_04.png" alt="" width="60%" style="display: block; margin: auto;" />
@@ -4513,7 +4556,7 @@ ggsave(
 )
 
 ## View visualisation
-knitr::include_graphics(paste0(github_location, "modification_reversing_example.png"))
+view_figure(paste0(display_location, "modification_reversing_example.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_reversing_example.png)<!-- -->
