@@ -102,7 +102,9 @@ vis_input <- extract_and_sort_methylation(
     sequences_colname = "sequence",
     lengths_colname = "sequence_length",
     grouping_levels = c("allele" = allele_spacing,
-                        "participant_id" = participant_spacing)
+                        "participant_id" = participant_spacing),
+    sort_by = "sequence_length",
+    desc_sort = TRUE
 )
 vis_input <- lapply(vis_input, function(vec) {c(rep("", allele_spacing), vec)})
 
