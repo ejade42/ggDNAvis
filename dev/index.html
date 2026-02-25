@@ -30,7 +30,7 @@
 
     <a class="navbar-brand me-2" href="index.html">ggDNAvis</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.2.9027</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.2.9028</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -151,7 +151,8 @@
 <li><a href="#id_69-performance">6.9 Performance</a></li>
 </ul>
 </li>
-<li><a href="#id_7-references">7 References</a></li>
+<li><a href="#id_7-advanced-usage">7 Advanced usage</a></li>
+<li><a href="#id_8-references">8 References</a></li>
 </ul>
 <!-- badges: start -->
 <div class="section level1">
@@ -188,7 +189,7 @@
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"ejade42/ggDNAvis"</span>, ref <span class="op">=</span> <span class="st">"v1.0.0"</span><span class="op">)</span></span></code></pre></div>
 <p>Throughout this manual, only <code>ggDNAvis</code>, <code>dplyr</code>, and <code>ggplot2</code> are loaded. The following chunk provides setup for rendering this README page and should NOT be copied verbatim. If you are trying to work through the examples, use the alternative setup chunk below.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">## THIS SETUP CHUNK IS FOR THE WEBPAGE AND WILL NOT WORK FOR COPYING THE EXAMPLES</span></span>
+<code class="sourceCode R"><span><span class="co">## THIS SETUP CHUNK IS FOR THE WEBPAGE AND WILL NOT WORK FOR RUNNING THE EXAMPLES LOCALLY</span></span>
 <span></span>
 <span><span class="co">## Load this package</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ejade42.github.io/ggDNAvis/">ggDNAvis</a></span><span class="op">)</span></span>
@@ -210,7 +211,7 @@
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="co">## Function for viewing figures throughout this document</span></span>
-<span><span class="va">view_figure</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">filename</span><span class="op">)</span> <span class="op">{</span></span>
+<span><span class="va">view_image</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">filename</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="va">filename</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
@@ -222,7 +223,7 @@
 <span><span class="co">## Print current ggDNAvis version</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Loaded ggDNAvis version is:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/packageDescription.html" class="external-link">packageVersion</a></span><span class="op">(</span><span class="st">"ggDNAvis"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="do">## Loaded ggDNAvis version is: 0.3.2.9026</span></span></code></pre></div>
-<p>If you are working through the examples, use this setup chunk instead</p>
+<p>If you are working through the examples, use this setup chunk instead:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## THIS SETUP CHUNK WILL ALLOW YOU TO RUN THE EXAMPLES YOURSELF</span></span>
 <span></span>
@@ -243,12 +244,12 @@
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="co">## Function for viewing figures in plot window</span></span>
-<span><span class="va">view_figure</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">filename</span><span class="op">)</span> <span class="op">{</span></span>
+<span><span class="va">view_image</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">filename</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://docs.ropensci.org/magick/reference/editing.html" class="external-link">image_read</a></span><span class="op">(</span><span class="va">filename</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="co">## File location to output to</span></span>
-<span><span class="va">output_location</span> <span class="op">&lt;-</span> <span class="st">"PUT YOUR FOLDER NAME HERE"</span></span>
+<span><span class="va">output_location</span> <span class="op">&lt;-</span> <span class="st">"PUT YOUR FOLDER NAME HERE ENDING IN A SLASH/"</span></span>
 <span><span class="va">display_location</span> <span class="op">&lt;-</span> <span class="va">output_location</span> <span class="co"># you probably want these to be the same</span></span>
 <span></span>
 <span><span class="co">## Print current ggDNAvis version</span></span>
@@ -273,7 +274,7 @@
 </h2>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Create input sequence. This can be any DNA/RNA string</span></span>
-<span><span class="va">sequence</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"GGC"</span>, <span class="fl">72</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"GGAGGAGGCGGC"</span>, <span class="fl">15</span><span class="op">)</span><span class="op">)</span>, collapse <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
+<span><span class="va">sequence</span> <span class="op">&lt;-</span> <span class="st">"GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGC"</span></span>
 <span></span>
 <span><span class="co">## Create visualisation</span></span>
 <span><span class="co">## This lists out all arguments</span></span>
@@ -306,7 +307,7 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"summary_single_sequence.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"summary_single_sequence.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/summary_single_sequence.png"><!-- --></p>
 </div>
 <div class="section level2">
@@ -358,7 +359,7 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"summary_many_sequences.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"summary_many_sequences.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/summary_many_sequences.png"><!-- --></p>
 </div>
 <div class="section level2">
@@ -421,7 +422,7 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"summary_methylation_none.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"summary_methylation_none.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/summary_methylation_none.png"><!-- --></p>
 <div class="section level3">
 <h3 id="id_231-methylation-showing-sequence">2.3.1 Methylation showing sequence<a class="anchor" aria-label="anchor" href="#id_231-methylation-showing-sequence"></a>
@@ -462,7 +463,7 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"summary_methylation_sequence.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"summary_methylation_sequence.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/summary_methylation_sequence.png"><!-- --></p>
 </div>
 <div class="section level3">
@@ -506,7 +507,7 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"summary_methylation_probabilities.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"summary_methylation_probabilities.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/summary_methylation_probabilities.png"><!-- --></p>
 </div>
 <div class="section level3">
@@ -550,7 +551,7 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"summary_methylation_probability_integers.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"summary_methylation_probability_integers.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/summary_methylation_probability_integers.png"><!-- --></p>
 </div>
 <div class="section level3">
@@ -578,7 +579,7 @@
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"summary_methylation_scalebar.png"</span><span class="op">)</span>, <span class="va">scalebar</span>, dpi <span class="op">=</span> <span class="fl">300</span>, width <span class="op">=</span> <span class="fl">5.25</span>, height <span class="op">=</span> <span class="fl">1.25</span>, device <span class="op">=</span> <span class="fu">ragg</span><span class="fu">::</span><span class="va"><a href="https://ragg.r-lib.org/reference/agg_png.html" class="external-link">agg_png</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"summary_methylation_scalebar.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"summary_methylation_scalebar.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/summary_methylation_scalebar.png" alt="" width="60%" style="display: block; margin: auto;"></p>
 </div>
 </div>
@@ -1819,7 +1820,7 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"single_sequence_01.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"single_sequence_01.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_01.png"><!-- --></p>
 <p>This is the typical single sequence visualisation produced by this package. However, almost every aspect of the visualisation is configurable via arguments to <code><a href="reference/visualise_single_sequence.html">visualise_single_sequence()</a></code> (and the resulting <code>ggplot</code> object can be further modified in standard <code>ggplot</code> manner if required).</p>
 <p>The resolution can be changed with <code>pixels_per_base</code>, but it is recommended to not go too low otherwise text can become illegible (and going too high obviously increases filesize). The default value of 100 is often a happy medium.</p>
@@ -1833,7 +1834,7 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"single_sequence_02.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"single_sequence_02.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_02.png"><!-- --></p>
 <p>For all <code>visualise_</code> functions, the <code>render_device</code> argument can be used to control the rendering method. It is fed directly to <code>ggsave(device = )</code>, so the <code>ggsave</code> documentation fully explains its use. The default <code><a href="https://ragg.r-lib.org/reference/agg_png.html" class="external-link">ragg::agg_png</a></code> works well and ensures consistent graphics (though not font) rendering across platforms/operating systems, so you should not need to change it.</p>
 </div>
@@ -1869,7 +1870,7 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"single_sequence_03.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"single_sequence_03.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_03.png"><!-- --></p>
 <p>Included in <code>ggDNAvis</code> are a set of colour palettes for sequence colours that can often be helpful. The default is <code>sequence_colour_palettes$ggplot_style</code>, as seen in the first example above. The other palettes are <code>$bright_pale</code>, <code>$bright_pale2</code>, <code>$bright_deep</code>, <code>$sanger</code>, and <code>$accessible</code>:</p>
 <p>The <code>bright_pale</code> palette works well with either white or black text, depending on how much the text is desired to “pop”:</p>
@@ -1884,7 +1885,7 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"single_sequence_04.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"single_sequence_04.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_04.png"><!-- --></p>
 <div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Create image</span></span>
@@ -1897,7 +1898,7 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"single_sequence_05.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"single_sequence_05.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_05.png"><!-- --></p>
 <p><code>bright_pale2</code> is the same but with a slightly lighter shade of green:</p>
 <div class="sourceCode" id="cb65"><pre class="downlit sourceCode r">
@@ -1911,7 +1912,7 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"single_sequence_06.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"single_sequence_06.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_06.png"><!-- --></p>
 <p>The <code>bright_deep</code> palette works best with white text:</p>
 <div class="sourceCode" id="cb66"><pre class="downlit sourceCode r">
@@ -1925,7 +1926,7 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"single_sequence_07.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"single_sequence_07.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_07.png"><!-- --></p>
 <p>The <code>sanger</code> palette is inspired by old-school Sanger sequencing readouts and works best with white text:</p>
 <div class="sourceCode" id="cb67"><pre class="downlit sourceCode r">
@@ -1940,7 +1941,7 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"single_sequence_08.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"single_sequence_08.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_08.png"><!-- --></p>
 <p>The <code>accessible</code> palette is light and dark each of blue and green, which is the only 4-category qualitative colourblind-safe palette recommended by <a href="https://colorbrewer2.org" class="external-link">colorbrewer2.org</a> (Harrower &amp; Brewer, 2003):</p>
 <div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
@@ -1954,7 +1955,7 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"single_sequence_09.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"single_sequence_09.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_09.png"><!-- --></p>
 </div>
 <div class="section level2">
@@ -2007,7 +2008,7 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"single_sequence_10.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"single_sequence_10.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_10.png"><!-- --></p>
 <p>Setting spacing, margin, sequence text size, and index annotation interval all to 0 produces a no-frills visualisation of the sequence only. If doing so, <code>pixels_per_base</code> can be set low as there is no text that would be rendered poorly at low resolutions:</p>
 <div class="sourceCode" id="cb70"><pre class="downlit sourceCode r">
@@ -2035,7 +2036,7 @@
 <span id="cb71-8"><a href="#cb71-8" tabindex="-1"></a><span class="do">## Current margin: 0</span></span></code></pre></div>
 <div class="sourceCode" id="cb72"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"single_sequence_11.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"single_sequence_11.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_11.png"><!-- --> This produced a warning message as setting the margin to 0 clipped off the outlines of the outermost boxes. Either a slightly larger margin can be used:</p>
 <div class="sourceCode" id="cb73"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Create image</span></span>
@@ -2059,7 +2060,7 @@
 <span id="cb74-5"><a href="#cb74-5" tabindex="-1"></a><span class="do">## If you want the last base in each line to be annotated but no other bases, set index_annotation_interval greater than line_wrapping.</span></span></code></pre></div>
 <div class="sourceCode" id="cb75"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"single_sequence_12.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"single_sequence_12.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_12.png"><!-- --></p>
 <p>Or the outlines can be turned off:</p>
 <div class="sourceCode" id="cb76"><pre class="downlit sourceCode r">
@@ -2086,7 +2087,7 @@
 <span id="cb77-7"><a href="#cb77-7" tabindex="-1"></a><span class="do">## ℹ Automatically using geom_raster (much faster than geom_tile) as no sequence text, index annotations, or outlines are present.</span></span></code></pre></div>
 <div class="sourceCode" id="cb78"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"single_sequence_13.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"single_sequence_13.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_13.png"><!-- --></p>
 <p>When changing line wrapping and annotation interval, divisibility is important. It is generally recommended to make the line wrapping length a multiple of the motif length when visualising repeats (e.g. a multiple of 3 for a trinucleotide repeat), and to make the index annotation interval a factor of the line wrapping length. If the annotation interval is not a factor of the line length, then there will be uneven gaps between annotations as the interval is counted <em>from the start of each line</em>.</p>
 <p>Here is an example where these guidelines are not followed:</p>
@@ -2103,7 +2104,7 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"single_sequence_14.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"single_sequence_14.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_14.png"><!-- --></p>
 <p>When setting spacing to 0, it is highly recommended to disable index annotations via <code>index_annotation_interval = 0</code>, otherwise there is nowhere for them to render:</p>
 <div class="sourceCode" id="cb80"><pre class="downlit sourceCode r">
@@ -2123,7 +2124,7 @@
 <span id="cb81-3"><a href="#cb81-3" tabindex="-1"></a><span class="do">## Recommended to set index_annotation_interval = 0 to disable index annotations.</span></span></code></pre></div>
 <div class="sourceCode" id="cb82"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"single_sequence_15.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"single_sequence_15.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_15.png"><!-- --></p>
 </div>
 <div class="section level2">
@@ -2144,40 +2145,40 @@
 <span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb84"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1" tabindex="-1"></a><span class="do">## ℹ Verbose monitoring enabled</span></span>
 <span id="cb84-2"><a href="#cb84-2" tabindex="-1"></a></span>
-<span id="cb84-3"><a href="#cb84-3" tabindex="-1"></a><span class="do">## ℹ (2026-02-25 12:36:43) visualise_single_sequence start</span></span>
+<span id="cb84-3"><a href="#cb84-3" tabindex="-1"></a><span class="do">## ℹ (2026-02-25 15:07:39) visualise_single_sequence start</span></span>
 <span id="cb84-4"><a href="#cb84-4" tabindex="-1"></a></span>
 <span id="cb84-5"><a href="#cb84-5" tabindex="-1"></a><span class="do">## ℹ (0.006 secs elapsed; 0.006 secs total) resolving aliases</span></span>
 <span id="cb84-6"><a href="#cb84-6" tabindex="-1"></a></span>
-<span id="cb84-7"><a href="#cb84-7" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.008 secs total) validating arguments</span></span>
+<span id="cb84-7"><a href="#cb84-7" tabindex="-1"></a><span class="do">## ℹ (0.001 secs elapsed; 0.007 secs total) validating arguments</span></span>
 <span id="cb84-8"><a href="#cb84-8" tabindex="-1"></a></span>
-<span id="cb84-9"><a href="#cb84-9" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.010 secs total) splitting input seq to sequence vector</span></span>
+<span id="cb84-9"><a href="#cb84-9" tabindex="-1"></a><span class="do">## ℹ (0.001 secs elapsed; 0.008 secs total) splitting input seq to sequence vector</span></span>
 <span id="cb84-10"><a href="#cb84-10" tabindex="-1"></a></span>
-<span id="cb84-11"><a href="#cb84-11" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.012 secs total) rasterising image data</span></span>
+<span id="cb84-11"><a href="#cb84-11" tabindex="-1"></a><span class="do">## ℹ (0.001 secs elapsed; 0.009 secs total) rasterising image data</span></span>
 <span id="cb84-12"><a href="#cb84-12" tabindex="-1"></a></span>
-<span id="cb84-13"><a href="#cb84-13" tabindex="-1"></a><span class="do">## ℹ (0.003 secs elapsed; 0.015 secs total) choosing rendering method</span></span>
+<span id="cb84-13"><a href="#cb84-13" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.011 secs total) choosing rendering method</span></span>
 <span id="cb84-14"><a href="#cb84-14" tabindex="-1"></a></span>
-<span id="cb84-15"><a href="#cb84-15" tabindex="-1"></a><span class="do">## ℹ (0.001 secs elapsed; 0.016 secs total) calculating tile sizes</span></span>
+<span id="cb84-15"><a href="#cb84-15" tabindex="-1"></a><span class="do">## ℹ (0.001 secs elapsed; 0.012 secs total) calculating tile sizes</span></span>
 <span id="cb84-16"><a href="#cb84-16" tabindex="-1"></a></span>
-<span id="cb84-17"><a href="#cb84-17" tabindex="-1"></a><span class="do">## ℹ (0.001 secs elapsed; 0.018 secs total) creating basic plot via geom_tile</span></span>
+<span id="cb84-17"><a href="#cb84-17" tabindex="-1"></a><span class="do">## ℹ (0.001 secs elapsed; 0.013 secs total) creating basic plot via geom_tile</span></span>
 <span id="cb84-18"><a href="#cb84-18" tabindex="-1"></a></span>
-<span id="cb84-19"><a href="#cb84-19" tabindex="-1"></a><span class="do">## ℹ (0.011 secs elapsed; 0.028 secs total) generating sequence text</span></span>
+<span id="cb84-19"><a href="#cb84-19" tabindex="-1"></a><span class="do">## ℹ (0.006 secs elapsed; 0.020 secs total) generating sequence text</span></span>
 <span id="cb84-20"><a href="#cb84-20" tabindex="-1"></a></span>
-<span id="cb84-21"><a href="#cb84-21" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.030 secs total) adding sequence text</span></span>
+<span id="cb84-21"><a href="#cb84-21" tabindex="-1"></a><span class="do">## ℹ (0.001 secs elapsed; 0.021 secs total) adding sequence text</span></span>
 <span id="cb84-22"><a href="#cb84-22" tabindex="-1"></a></span>
-<span id="cb84-23"><a href="#cb84-23" tabindex="-1"></a><span class="do">## ℹ (0.004 secs elapsed; 0.034 secs total) generating index annotations</span></span>
+<span id="cb84-23"><a href="#cb84-23" tabindex="-1"></a><span class="do">## ℹ (0.005 secs elapsed; 0.026 secs total) generating index annotations</span></span>
 <span id="cb84-24"><a href="#cb84-24" tabindex="-1"></a></span>
-<span id="cb84-25"><a href="#cb84-25" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.036 secs total) adding index annotations</span></span>
+<span id="cb84-25"><a href="#cb84-25" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.028 secs total) adding index annotations</span></span>
 <span id="cb84-26"><a href="#cb84-26" tabindex="-1"></a></span>
-<span id="cb84-27"><a href="#cb84-27" tabindex="-1"></a><span class="do">## ℹ (0.003 secs elapsed; 0.039 secs total) adding general plot themes</span></span>
+<span id="cb84-27"><a href="#cb84-27" tabindex="-1"></a><span class="do">## ℹ (0.003 secs elapsed; 0.031 secs total) adding general plot themes</span></span>
 <span id="cb84-28"><a href="#cb84-28" tabindex="-1"></a></span>
-<span id="cb84-29"><a href="#cb84-29" tabindex="-1"></a><span class="do">## ℹ (0.010 secs elapsed; 0.049 secs total) calculating margin</span></span>
+<span id="cb84-29"><a href="#cb84-29" tabindex="-1"></a><span class="do">## ℹ (0.009 secs elapsed; 0.040 secs total) calculating margin</span></span>
 <span id="cb84-30"><a href="#cb84-30" tabindex="-1"></a></span>
-<span id="cb84-31"><a href="#cb84-31" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.051 secs total) exporting image file</span></span>
+<span id="cb84-31"><a href="#cb84-31" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.042 secs total) exporting image file</span></span>
 <span id="cb84-32"><a href="#cb84-32" tabindex="-1"></a></span>
-<span id="cb84-33"><a href="#cb84-33" tabindex="-1"></a><span class="do">## ℹ (0.728 secs elapsed; 0.779 secs total) done</span></span></code></pre></div>
+<span id="cb84-33"><a href="#cb84-33" tabindex="-1"></a><span class="do">## ℹ (0.521 secs elapsed; 0.563 secs total) done</span></span></code></pre></div>
 <div class="sourceCode" id="cb85"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"single_sequence_16.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"single_sequence_16.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_16.png"><!-- --></p>
 </div>
 <div class="section level3">
@@ -2201,11 +2202,11 @@
 <span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb87"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1" tabindex="-1"></a><span class="do">## ℹ Verbose monitoring enabled</span></span>
 <span id="cb87-2"><a href="#cb87-2" tabindex="-1"></a></span>
-<span id="cb87-3"><a href="#cb87-3" tabindex="-1"></a><span class="do">## ℹ (2026-02-25 12:36:44) visualise_single_sequence start</span></span>
+<span id="cb87-3"><a href="#cb87-3" tabindex="-1"></a><span class="do">## ℹ (2026-02-25 15:07:39) visualise_single_sequence start</span></span>
 <span id="cb87-4"><a href="#cb87-4" tabindex="-1"></a></span>
-<span id="cb87-5"><a href="#cb87-5" tabindex="-1"></a><span class="do">## ℹ (0.003 secs elapsed; 0.003 secs total) resolving aliases</span></span>
+<span id="cb87-5"><a href="#cb87-5" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.002 secs total) resolving aliases</span></span>
 <span id="cb87-6"><a href="#cb87-6" tabindex="-1"></a></span>
-<span id="cb87-7"><a href="#cb87-7" tabindex="-1"></a><span class="do">## ℹ (0.001 secs elapsed; 0.004 secs total) validating arguments</span></span>
+<span id="cb87-7"><a href="#cb87-7" tabindex="-1"></a><span class="do">## ℹ (0.001 secs elapsed; 0.003 secs total) validating arguments</span></span>
 <span id="cb87-8"><a href="#cb87-8" tabindex="-1"></a></span>
 <span id="cb87-9"><a href="#cb87-9" tabindex="-1"></a><span class="do">## ℹ Automatically setting index_annotation_interval to 0 as index_annotation_size is 0</span></span>
 <span id="cb87-10"><a href="#cb87-10" tabindex="-1"></a></span>
@@ -2215,29 +2216,29 @@
 <span id="cb87-14"><a href="#cb87-14" tabindex="-1"></a><span class="do">## Warning: Disabling index annotations via index_annotation_interval = 0 or index_annotation_size = 0 overrides the index_annotation_always_last_base setting.</span></span>
 <span id="cb87-15"><a href="#cb87-15" tabindex="-1"></a><span class="do">## If you want the last base in each line to be annotated but no other bases, set index_annotation_interval greater than line_wrapping.</span></span>
 <span id="cb87-16"><a href="#cb87-16" tabindex="-1"></a></span>
-<span id="cb87-17"><a href="#cb87-17" tabindex="-1"></a><span class="do">## ℹ (0.003 secs elapsed; 0.008 secs total) splitting input seq to sequence vector</span></span>
+<span id="cb87-17"><a href="#cb87-17" tabindex="-1"></a><span class="do">## ℹ (0.003 secs elapsed; 0.006 secs total) splitting input seq to sequence vector</span></span>
 <span id="cb87-18"><a href="#cb87-18" tabindex="-1"></a></span>
-<span id="cb87-19"><a href="#cb87-19" tabindex="-1"></a><span class="do">## ℹ (0.001 secs elapsed; 0.009 secs total) rasterising image data</span></span>
+<span id="cb87-19"><a href="#cb87-19" tabindex="-1"></a><span class="do">## ℹ (0.001 secs elapsed; 0.007 secs total) rasterising image data</span></span>
 <span id="cb87-20"><a href="#cb87-20" tabindex="-1"></a></span>
-<span id="cb87-21"><a href="#cb87-21" tabindex="-1"></a><span class="do">## ℹ (0.003 secs elapsed; 0.012 secs total) choosing rendering method</span></span>
+<span id="cb87-21"><a href="#cb87-21" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.009 secs total) choosing rendering method</span></span>
 <span id="cb87-22"><a href="#cb87-22" tabindex="-1"></a></span>
 <span id="cb87-23"><a href="#cb87-23" tabindex="-1"></a><span class="do">## ℹ Automatically using geom_raster (much faster than geom_tile) as no sequence text, index annotations, or outlines are present.</span></span>
 <span id="cb87-24"><a href="#cb87-24" tabindex="-1"></a></span>
 <span id="cb87-25"><a href="#cb87-25" tabindex="-1"></a><span class="do">## Warning: When using geom_raster, it is recommended to use a smaller pixels_per_base e.g. 10, as there is no text/outlines that would benefit from higher resolution.</span></span>
 <span id="cb87-26"><a href="#cb87-26" tabindex="-1"></a><span class="do">## Current value: 100</span></span>
 <span id="cb87-27"><a href="#cb87-27" tabindex="-1"></a></span>
-<span id="cb87-28"><a href="#cb87-28" tabindex="-1"></a><span class="do">## ℹ (0.003 secs elapsed; 0.014 secs total) creating basic plot via geom_raster</span></span>
+<span id="cb87-28"><a href="#cb87-28" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.011 secs total) creating basic plot via geom_raster</span></span>
 <span id="cb87-29"><a href="#cb87-29" tabindex="-1"></a></span>
-<span id="cb87-30"><a href="#cb87-30" tabindex="-1"></a><span class="do">## ℹ (0.004 secs elapsed; 0.018 secs total) adding general plot themes</span></span>
+<span id="cb87-30"><a href="#cb87-30" tabindex="-1"></a><span class="do">## ℹ (0.003 secs elapsed; 0.015 secs total) adding general plot themes</span></span>
 <span id="cb87-31"><a href="#cb87-31" tabindex="-1"></a></span>
-<span id="cb87-32"><a href="#cb87-32" tabindex="-1"></a><span class="do">## ℹ (0.010 secs elapsed; 0.028 secs total) calculating margin</span></span>
+<span id="cb87-32"><a href="#cb87-32" tabindex="-1"></a><span class="do">## ℹ (0.009 secs elapsed; 0.024 secs total) calculating margin</span></span>
 <span id="cb87-33"><a href="#cb87-33" tabindex="-1"></a></span>
-<span id="cb87-34"><a href="#cb87-34" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.030 secs total) exporting image file</span></span>
+<span id="cb87-34"><a href="#cb87-34" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.026 secs total) exporting image file</span></span>
 <span id="cb87-35"><a href="#cb87-35" tabindex="-1"></a></span>
-<span id="cb87-36"><a href="#cb87-36" tabindex="-1"></a><span class="do">## ℹ (1.140 secs elapsed; 1.170 secs total) done</span></span></code></pre></div>
+<span id="cb87-36"><a href="#cb87-36" tabindex="-1"></a><span class="do">## ℹ (0.676 secs elapsed; 0.702 secs total) done</span></span></code></pre></div>
 <div class="sourceCode" id="cb88"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"single_sequence_17.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"single_sequence_17.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_17.png"><!-- --></p>
 <p>An example of forcing rasterisation when there would otherwise be sequence text, index annotations, and outlines (thus producing a warning) is as follows:</p>
 <div class="sourceCode" id="cb89"><pre class="downlit sourceCode r">
@@ -2260,34 +2261,34 @@
 <span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb90"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1" tabindex="-1"></a><span class="do">## ℹ Verbose monitoring enabled</span></span>
 <span id="cb90-2"><a href="#cb90-2" tabindex="-1"></a></span>
-<span id="cb90-3"><a href="#cb90-3" tabindex="-1"></a><span class="do">## ℹ (2026-02-25 12:36:45) visualise_single_sequence start</span></span>
+<span id="cb90-3"><a href="#cb90-3" tabindex="-1"></a><span class="do">## ℹ (2026-02-25 15:07:40) visualise_single_sequence start</span></span>
 <span id="cb90-4"><a href="#cb90-4" tabindex="-1"></a></span>
-<span id="cb90-5"><a href="#cb90-5" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.002 secs total) resolving aliases</span></span>
+<span id="cb90-5"><a href="#cb90-5" tabindex="-1"></a><span class="do">## ℹ (0.004 secs elapsed; 0.004 secs total) resolving aliases</span></span>
 <span id="cb90-6"><a href="#cb90-6" tabindex="-1"></a></span>
-<span id="cb90-7"><a href="#cb90-7" tabindex="-1"></a><span class="do">## ℹ (0.001 secs elapsed; 0.004 secs total) validating arguments</span></span>
+<span id="cb90-7"><a href="#cb90-7" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.005 secs total) validating arguments</span></span>
 <span id="cb90-8"><a href="#cb90-8" tabindex="-1"></a></span>
-<span id="cb90-9"><a href="#cb90-9" tabindex="-1"></a><span class="do">## ℹ (0.001 secs elapsed; 0.005 secs total) splitting input seq to sequence vector</span></span>
+<span id="cb90-9"><a href="#cb90-9" tabindex="-1"></a><span class="do">## ℹ (0.001 secs elapsed; 0.007 secs total) splitting input seq to sequence vector</span></span>
 <span id="cb90-10"><a href="#cb90-10" tabindex="-1"></a></span>
-<span id="cb90-11"><a href="#cb90-11" tabindex="-1"></a><span class="do">## ℹ (0.001 secs elapsed; 0.006 secs total) rasterising image data</span></span>
+<span id="cb90-11"><a href="#cb90-11" tabindex="-1"></a><span class="do">## ℹ (0.001 secs elapsed; 0.008 secs total) rasterising image data</span></span>
 <span id="cb90-12"><a href="#cb90-12" tabindex="-1"></a></span>
-<span id="cb90-13"><a href="#cb90-13" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.008 secs total) choosing rendering method</span></span>
+<span id="cb90-13"><a href="#cb90-13" tabindex="-1"></a><span class="do">## ℹ (0.003 secs elapsed; 0.011 secs total) choosing rendering method</span></span>
 <span id="cb90-14"><a href="#cb90-14" tabindex="-1"></a></span>
 <span id="cb90-15"><a href="#cb90-15" tabindex="-1"></a><span class="do">## Warning: Forcing geom_raster via force_raster = TRUE will remove all sequence</span></span>
 <span id="cb90-16"><a href="#cb90-16" tabindex="-1"></a><span class="do">## text, index annotations (though any inserted blank lines/spacers will remain),</span></span>
 <span id="cb90-17"><a href="#cb90-17" tabindex="-1"></a><span class="do">## and box outlines.</span></span>
 <span id="cb90-18"><a href="#cb90-18" tabindex="-1"></a></span>
-<span id="cb90-19"><a href="#cb90-19" tabindex="-1"></a><span class="do">## ℹ (0.001 secs elapsed; 0.009 secs total) creating basic plot via geom_raster</span></span>
+<span id="cb90-19"><a href="#cb90-19" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.012 secs total) creating basic plot via geom_raster</span></span>
 <span id="cb90-20"><a href="#cb90-20" tabindex="-1"></a></span>
-<span id="cb90-21"><a href="#cb90-21" tabindex="-1"></a><span class="do">## ℹ (0.004 secs elapsed; 0.013 secs total) adding general plot themes</span></span>
+<span id="cb90-21"><a href="#cb90-21" tabindex="-1"></a><span class="do">## ℹ (0.004 secs elapsed; 0.017 secs total) adding general plot themes</span></span>
 <span id="cb90-22"><a href="#cb90-22" tabindex="-1"></a></span>
-<span id="cb90-23"><a href="#cb90-23" tabindex="-1"></a><span class="do">## ℹ (0.009 secs elapsed; 0.022 secs total) calculating margin</span></span>
+<span id="cb90-23"><a href="#cb90-23" tabindex="-1"></a><span class="do">## ℹ (0.010 secs elapsed; 0.027 secs total) calculating margin</span></span>
 <span id="cb90-24"><a href="#cb90-24" tabindex="-1"></a></span>
-<span id="cb90-25"><a href="#cb90-25" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.024 secs total) exporting image file</span></span>
+<span id="cb90-25"><a href="#cb90-25" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.029 secs total) exporting image file</span></span>
 <span id="cb90-26"><a href="#cb90-26" tabindex="-1"></a></span>
-<span id="cb90-27"><a href="#cb90-27" tabindex="-1"></a><span class="do">## ℹ (0.307 secs elapsed; 0.331 secs total) done</span></span></code></pre></div>
+<span id="cb90-27"><a href="#cb90-27" tabindex="-1"></a><span class="do">## ℹ (0.268 secs elapsed; 0.297 secs total) done</span></span></code></pre></div>
 <div class="sourceCode" id="cb91"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"single_sequence_18.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"single_sequence_18.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_18.png"><!-- --></p>
 <p>If sequence text, annotations, and outlines are all already off (i.e. <code>sequence_text_size = 0</code>, either <code>index_annotation_size = 0</code> or <code>index_annotation_interval = 0</code>, and <code>outline_linewidth = 0</code>), then no warning is produced from <code>force_raster</code> (but it is redundant and doesn’t do anything):</p>
 <div class="sourceCode" id="cb92"><pre class="downlit sourceCode r">
@@ -2306,11 +2307,11 @@
 <span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb93"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb93-1"><a href="#cb93-1" tabindex="-1"></a><span class="do">## ℹ Verbose monitoring enabled</span></span>
 <span id="cb93-2"><a href="#cb93-2" tabindex="-1"></a></span>
-<span id="cb93-3"><a href="#cb93-3" tabindex="-1"></a><span class="do">## ℹ (2026-02-25 12:36:46) visualise_single_sequence start</span></span>
+<span id="cb93-3"><a href="#cb93-3" tabindex="-1"></a><span class="do">## ℹ (2026-02-25 15:07:41) visualise_single_sequence start</span></span>
 <span id="cb93-4"><a href="#cb93-4" tabindex="-1"></a></span>
 <span id="cb93-5"><a href="#cb93-5" tabindex="-1"></a><span class="do">## ℹ (0.004 secs elapsed; 0.004 secs total) resolving aliases</span></span>
 <span id="cb93-6"><a href="#cb93-6" tabindex="-1"></a></span>
-<span id="cb93-7"><a href="#cb93-7" tabindex="-1"></a><span class="do">## ℹ (0.007 secs elapsed; 0.011 secs total) validating arguments</span></span>
+<span id="cb93-7"><a href="#cb93-7" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.006 secs total) validating arguments</span></span>
 <span id="cb93-8"><a href="#cb93-8" tabindex="-1"></a></span>
 <span id="cb93-9"><a href="#cb93-9" tabindex="-1"></a><span class="do">## Warning: Disabling index annotations via index_annotation_interval = 0 or index_annotation_size = 0 overrides the index_annotation_always_first_base setting.</span></span>
 <span id="cb93-10"><a href="#cb93-10" tabindex="-1"></a><span class="do">## If you want the first base in each line to be annotated but no other bases, set index_annotation_interval greater than line_wrapping.</span></span>
@@ -2318,26 +2319,26 @@
 <span id="cb93-12"><a href="#cb93-12" tabindex="-1"></a><span class="do">## Warning: Disabling index annotations via index_annotation_interval = 0 or index_annotation_size = 0 overrides the index_annotation_always_last_base setting.</span></span>
 <span id="cb93-13"><a href="#cb93-13" tabindex="-1"></a><span class="do">## If you want the last base in each line to be annotated but no other bases, set index_annotation_interval greater than line_wrapping.</span></span>
 <span id="cb93-14"><a href="#cb93-14" tabindex="-1"></a></span>
-<span id="cb93-15"><a href="#cb93-15" tabindex="-1"></a><span class="do">## ℹ (0.004 secs elapsed; 0.014 secs total) splitting input seq to sequence vector</span></span>
+<span id="cb93-15"><a href="#cb93-15" tabindex="-1"></a><span class="do">## ℹ (0.003 secs elapsed; 0.010 secs total) splitting input seq to sequence vector</span></span>
 <span id="cb93-16"><a href="#cb93-16" tabindex="-1"></a></span>
-<span id="cb93-17"><a href="#cb93-17" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.017 secs total) rasterising image data</span></span>
+<span id="cb93-17"><a href="#cb93-17" tabindex="-1"></a><span class="do">## ℹ (0.006 secs elapsed; 0.016 secs total) rasterising image data</span></span>
 <span id="cb93-18"><a href="#cb93-18" tabindex="-1"></a></span>
-<span id="cb93-19"><a href="#cb93-19" tabindex="-1"></a><span class="do">## ℹ (0.005 secs elapsed; 0.021 secs total) choosing rendering method</span></span>
+<span id="cb93-19"><a href="#cb93-19" tabindex="-1"></a><span class="do">## ℹ (0.005 secs elapsed; 0.020 secs total) choosing rendering method</span></span>
 <span id="cb93-20"><a href="#cb93-20" tabindex="-1"></a></span>
 <span id="cb93-21"><a href="#cb93-21" tabindex="-1"></a><span class="do">## ℹ Automatically using geom_raster (much faster than geom_tile) as no sequence text, index annotations, or outlines are present.</span></span>
 <span id="cb93-22"><a href="#cb93-22" tabindex="-1"></a></span>
-<span id="cb93-23"><a href="#cb93-23" tabindex="-1"></a><span class="do">## ℹ (0.003 secs elapsed; 0.025 secs total) creating basic plot via geom_raster</span></span>
+<span id="cb93-23"><a href="#cb93-23" tabindex="-1"></a><span class="do">## ℹ (0.004 secs elapsed; 0.024 secs total) creating basic plot via geom_raster</span></span>
 <span id="cb93-24"><a href="#cb93-24" tabindex="-1"></a></span>
-<span id="cb93-25"><a href="#cb93-25" tabindex="-1"></a><span class="do">## ℹ (0.006 secs elapsed; 0.030 secs total) adding general plot themes</span></span>
+<span id="cb93-25"><a href="#cb93-25" tabindex="-1"></a><span class="do">## ℹ (0.006 secs elapsed; 0.029 secs total) adding general plot themes</span></span>
 <span id="cb93-26"><a href="#cb93-26" tabindex="-1"></a></span>
 <span id="cb93-27"><a href="#cb93-27" tabindex="-1"></a><span class="do">## ℹ (0.013 secs elapsed; 0.043 secs total) calculating margin</span></span>
 <span id="cb93-28"><a href="#cb93-28" tabindex="-1"></a></span>
-<span id="cb93-29"><a href="#cb93-29" tabindex="-1"></a><span class="do">## ℹ (0.003 secs elapsed; 0.046 secs total) exporting image file</span></span>
+<span id="cb93-29"><a href="#cb93-29" tabindex="-1"></a><span class="do">## ℹ (0.003 secs elapsed; 0.045 secs total) exporting image file</span></span>
 <span id="cb93-30"><a href="#cb93-30" tabindex="-1"></a></span>
-<span id="cb93-31"><a href="#cb93-31" tabindex="-1"></a><span class="do">## ℹ (0.525 secs elapsed; 0.571 secs total) done</span></span></code></pre></div>
+<span id="cb93-31"><a href="#cb93-31" tabindex="-1"></a><span class="do">## ℹ (0.178 secs elapsed; 0.224 secs total) done</span></span></code></pre></div>
 <div class="sourceCode" id="cb94"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"single_sequence_19.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"single_sequence_19.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_19.png"><!-- --></p>
 </div>
 </div>
@@ -2487,7 +2488,7 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"many_sequences_01.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"many_sequences_01.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_01.png"><!-- --></p>
 </div>
 <div class="section level2">
@@ -2532,7 +2533,7 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"many_sequences_02.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"many_sequences_02.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_02.png"><!-- --></p>
 <p>Here the top large cluster is Family 1, containing individuals F1-1, F1-2, and F-3. These individuals contain 5, 2, and 3 reads respectively, and are separated from each other by 2 blank lines. After Family 1, there is there 8 blank lines before Family 2. Family 2 contains F2-1 and F2-2 with 1 and 3 reads (individuals separated by 2 blank lines), then there are 8 blank lines before Family 3. Family 3 contains F3-1, F3-2, F3-3, and F3-4 with 2, 3, 1, and 3 reads.</p>
 <p>If we wanted to group only by individual without showing the family structure, and present reads in ascending length order for each individual, we could do the following:</p>
@@ -2554,7 +2555,7 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"many_sequences_03.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"many_sequences_03.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_03.png"><!-- --></p>
 <p>Now we have a group for each individual, with sequences in ascending length order per individual, and one blank line between individuals.</p>
 <p>We could also turn off grouping entirely to just visualise all of the reads in length order, via <code>grouping_levels = NA</code>:</p>
@@ -2576,7 +2577,7 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"many_sequences_04.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"many_sequences_04.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_04.png"><!-- --></p>
 <p>We can also turn off sorting entirely (keeping grouping off) with <code>sort_by = NA</code> to simply show all the reads in the order in which they appear in the dataframe:</p>
 <p>NB: if <code>sort_by = NA</code> is used, then <code>desc_sort</code> does nothing so it doesn’t matter what it is set to.</p>
@@ -2597,7 +2598,7 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"many_sequences_05.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"many_sequences_05.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_05.png"><!-- --></p>
 <p>It is also possible to keep grouping on while turning sorting off if desired:</p>
 <div class="sourceCode" id="cb105"><pre class="downlit sourceCode r">
@@ -2618,7 +2619,7 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"many_sequences_06.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"many_sequences_06.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_06.png"><!-- --></p>
 <p>The grouping spacers can be set to 0 to sort within groups without visually separating them (but negative values don’t work - they produce an error in <code><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep()</a></code> as the blank line can’t be repeated a negative number of times). Additionally, the order of the groups/levels within a grouping variable can be changed in standard R fashion with <code>factor(x, levels = ...)</code>:</p>
 <div class="sourceCode" id="cb106"><pre class="downlit sourceCode r">
@@ -2647,7 +2648,7 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"many_sequences_07.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"many_sequences_07.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_07.png"><!-- --></p>
 <p>Finally, all the same grouping and sorting logic can be used to extract any other column as a character vector, though of course if it isn’t DNA sequence then the resulting vector is not valid input to <code><a href="reference/visualise_many_sequences.html">visualise_many_sequences()</a></code>. The column for extraction is specified by <code>sequence_variable</code>, and the column for sorting is <code>sort_by</code>. If the <code>sort_by</code> column is non-numeric then it will be sorted alphabetically, just like using <code><a href="https://rdrr.io/r/base/sort.html" class="external-link">sort()</a></code> on a character vector.</p>
 <div class="sourceCode" id="cb107"><pre class="downlit sourceCode r">
@@ -2734,7 +2735,7 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"many_sequences_08.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"many_sequences_08.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_08.png"><!-- --></p>
 <p>However, any numerical vector can be used as <code>index_annotation_lines</code> to specify which lines should be annotated. For each selected line, an additional blank/spacer line will be inserted above (if <code>index_annotations_above = TRUE</code>) or below (if <code>index_annotations_below = FALSE</code>), and index annotations will be drawn in the new space.</p>
 <p><em>(Note: if <code>index_annotation_vertical_position</code> is more than 1, more than 1 additional blank line will be inserted, according to <code>ceiling(index_annotation_vertical_position)</code>).</em></p>
@@ -2749,7 +2750,7 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"many_sequences_09.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"many_sequences_09.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_09.png"><!-- --></p>
 <p>To annotate below the final line of each family, we can look at the sequences vector:</p>
 <div class="sourceCode" id="cb111"><pre class="downlit sourceCode r">
@@ -2818,7 +2819,7 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"many_sequences_10.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"many_sequences_10.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_10.png"><!-- --></p>
 <p>As with <code><a href="reference/visualise_single_sequence.html">visualise_single_sequence()</a></code>, the frequency of annotations along each line is controlled by <code>index_annotation_interval</code>. Additionally, it is configurable whether annotations continue to the end of the image (<code>index_annotation_full_line = TRUE</code>, default) or stop when each annotated sequence ends (<code>index_annotation_full_line = FALSE</code>).</p>
 <p>Annotating above every line every 3 bases until each sequence ends would look as follows:</p>
@@ -2835,7 +2836,7 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"many_sequences_11.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"many_sequences_11.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_11.png"><!-- --></p>
 <p>And doing the same but annotating until the end of the image regardless of when each sequence ends would look as follows:</p>
 <p>Note that the blank/spacing lines are also annotated, but with <code>index_annotation_full_line = FALSE</code> they don’t display anything as there is no sequence (however, the additional spacers are still inserted to make room for theoretical annotations).</p>
@@ -2852,7 +2853,7 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"many_sequences_12.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"many_sequences_12.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_12.png"><!-- --></p>
 <p>Customising the colour, size, and vertical position of annotations works exactly the same as <code><a href="reference/visualise_single_sequence.html">visualise_single_sequence()</a></code> via <code>index_annotation_colour</code>, <code>index_annotation_size</code>, and <code>index_annotation_vertical_position</code> respectively:</p>
 <p>(if you make the text much bigger than this then the <code>margin</code> will also need increasing to prevent the top of the text being cut off).</p>
@@ -2873,7 +2874,7 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"many_sequences_13.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"many_sequences_13.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_13.png"><!-- --></p>
 <p>Finally, index annotations can of course also be turned completely off if desired. The ‘canonical’ way of doing this is by setting <code>index_annotation_lines = NA</code> or <code>index_annotation_lines = numeric(0)</code>, but <code>index_annotation_size = 0</code> and <code>index_annotation_interval = 0</code> also work perfectly well:</p>
 <div class="sourceCode" id="cb117"><pre class="downlit sourceCode r">
@@ -2886,7 +2887,7 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"many_sequences_14.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"many_sequences_14.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_14.png"><!-- --></p>
 <div class="sourceCode" id="cb118"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/visualise_many_sequences.html">visualise_many_sequences</a></span><span class="op">(</span></span>
@@ -2899,7 +2900,7 @@
 <div class="sourceCode" id="cb119"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb119-1"><a href="#cb119-1" tabindex="-1"></a><span class="do">## ℹ Automatically emptying index_annotation_lines as index_annotation_interval is 0</span></span></code></pre></div>
 <div class="sourceCode" id="cb120"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"many_sequences_15.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"many_sequences_15.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_15.png"><!-- --></p>
 <div class="sourceCode" id="cb121"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/visualise_many_sequences.html">visualise_many_sequences</a></span><span class="op">(</span></span>
@@ -2912,7 +2913,7 @@
 <div class="sourceCode" id="cb122"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb122-1"><a href="#cb122-1" tabindex="-1"></a><span class="do">## ℹ Automatically emptying index_annotation_lines as index_annotation_size is 0</span></span></code></pre></div>
 <div class="sourceCode" id="cb123"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"many_sequences_16.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"many_sequences_16.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_16.png"><!-- --></p>
 </div>
 <div class="section level2">
@@ -2977,7 +2978,7 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"many_sequences_17.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"many_sequences_17.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_17.png"><!-- --></p>
 <p>As with <code><a href="reference/visualise_single_sequence.html">visualise_single_sequence()</a></code>, text can be turned off, in which case it is sensible to reduce the resolution:</p>
 <div class="sourceCode" id="cb125"><pre class="downlit sourceCode r">
@@ -3006,7 +3007,7 @@
 <span id="cb126-5"><a href="#cb126-5" tabindex="-1"></a><span class="do">## ℹ Automatically emptying index_annotation_lines as index_annotation_size is 0</span></span></code></pre></div>
 <div class="sourceCode" id="cb127"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"many_sequences_18.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"many_sequences_18.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_18.png"><!-- --> Note that the margin/outline warning is produced whenever the margin is ≤0.25 and the outline linewidth is &gt;0. Getting the warning does not necessarily mean that the outlines are getting cut off (as this only happens if the half of the outline that falls outside the boxes is thicker than the margin), but if you get the warning you should check. In this case it’s fine and the outlines are not getting cut off with 0.1 margin.</p>
 </div>
 <div class="section level2">
@@ -3040,9 +3041,9 @@
 <span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb129"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb129-1"><a href="#cb129-1" tabindex="-1"></a><span class="do">## ℹ Verbose monitoring enabled</span></span>
 <span id="cb129-2"><a href="#cb129-2" tabindex="-1"></a></span>
-<span id="cb129-3"><a href="#cb129-3" tabindex="-1"></a><span class="do">## ℹ (2026-02-25 12:37:20) visualise_many_sequences start</span></span>
+<span id="cb129-3"><a href="#cb129-3" tabindex="-1"></a><span class="do">## ℹ (2026-02-25 15:08:13) visualise_many_sequences start</span></span>
 <span id="cb129-4"><a href="#cb129-4" tabindex="-1"></a></span>
-<span id="cb129-5"><a href="#cb129-5" tabindex="-1"></a><span class="do">## ℹ (0.004 secs elapsed; 0.004 secs total) resolving aliases</span></span>
+<span id="cb129-5"><a href="#cb129-5" tabindex="-1"></a><span class="do">## ℹ (0.003 secs elapsed; 0.003 secs total) resolving aliases</span></span>
 <span id="cb129-6"><a href="#cb129-6" tabindex="-1"></a></span>
 <span id="cb129-7"><a href="#cb129-7" tabindex="-1"></a><span class="do">## ℹ (0.006 secs elapsed; 0.009 secs total) validating arguments</span></span>
 <span id="cb129-8"><a href="#cb129-8" tabindex="-1"></a></span>
@@ -3050,22 +3051,22 @@
 <span id="cb129-10"><a href="#cb129-10" tabindex="-1"></a></span>
 <span id="cb129-11"><a href="#cb129-11" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.013 secs total) rasterising image data</span></span>
 <span id="cb129-12"><a href="#cb129-12" tabindex="-1"></a></span>
-<span id="cb129-13"><a href="#cb129-13" tabindex="-1"></a><span class="do">## ℹ (0.009 secs elapsed; 0.023 secs total) choosing rendering method</span></span>
+<span id="cb129-13"><a href="#cb129-13" tabindex="-1"></a><span class="do">## ℹ (0.009 secs elapsed; 0.022 secs total) choosing rendering method</span></span>
 <span id="cb129-14"><a href="#cb129-14" tabindex="-1"></a></span>
 <span id="cb129-15"><a href="#cb129-15" tabindex="-1"></a><span class="do">## ℹ Automatically using geom_raster (much faster than geom_tile) as no sequence text, index annotations, or outlines are present.</span></span>
 <span id="cb129-16"><a href="#cb129-16" tabindex="-1"></a></span>
-<span id="cb129-17"><a href="#cb129-17" tabindex="-1"></a><span class="do">## ℹ (0.004 secs elapsed; 0.026 secs total) creating basic plot via geom_raster</span></span>
+<span id="cb129-17"><a href="#cb129-17" tabindex="-1"></a><span class="do">## ℹ (0.003 secs elapsed; 0.025 secs total) creating basic plot via geom_raster</span></span>
 <span id="cb129-18"><a href="#cb129-18" tabindex="-1"></a></span>
-<span id="cb129-19"><a href="#cb129-19" tabindex="-1"></a><span class="do">## ℹ (0.005 secs elapsed; 0.031 secs total) adding general plot themes</span></span>
+<span id="cb129-19"><a href="#cb129-19" tabindex="-1"></a><span class="do">## ℹ (0.005 secs elapsed; 0.029 secs total) adding general plot themes</span></span>
 <span id="cb129-20"><a href="#cb129-20" tabindex="-1"></a></span>
-<span id="cb129-21"><a href="#cb129-21" tabindex="-1"></a><span class="do">## ℹ (0.011 secs elapsed; 0.042 secs total) calculating margin</span></span>
+<span id="cb129-21"><a href="#cb129-21" tabindex="-1"></a><span class="do">## ℹ (0.011 secs elapsed; 0.040 secs total) calculating margin</span></span>
 <span id="cb129-22"><a href="#cb129-22" tabindex="-1"></a></span>
-<span id="cb129-23"><a href="#cb129-23" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.044 secs total) exporting image file</span></span>
+<span id="cb129-23"><a href="#cb129-23" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.042 secs total) exporting image file</span></span>
 <span id="cb129-24"><a href="#cb129-24" tabindex="-1"></a></span>
-<span id="cb129-25"><a href="#cb129-25" tabindex="-1"></a><span class="do">## ℹ (0.477 secs elapsed; 0.521 secs total) done</span></span></code></pre></div>
+<span id="cb129-25"><a href="#cb129-25" tabindex="-1"></a><span class="do">## ℹ (0.405 secs elapsed; 0.447 secs total) done</span></span></code></pre></div>
 <div class="sourceCode" id="cb130"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"many_sequences_19.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"many_sequences_19.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_19.png"><!-- --></p>
 <p>One important thing to note (which also applies to <code><a href="reference/visualise_methylation.html">visualise_methylation()</a></code>) is that if <code>force_raster</code> is set to <code>TRUE</code>, the index annotation text will not be drawn, but the blank rows inserted to make room for it will still be inserted (see <a href="#id_53-index-annotation-customisation">index annotation customisation</a> for how blank rows are inserted). This means the outcome is not identical between forcing <code><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_raster()</a></code> and allowing it to be automatically applied by manually turning off text/annotations/outlines:</p>
 <div class="sourceCode" id="cb131"><pre class="downlit sourceCode r">
@@ -3081,34 +3082,34 @@
 <span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb132"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb132-1"><a href="#cb132-1" tabindex="-1"></a><span class="do">## ℹ Verbose monitoring enabled</span></span>
 <span id="cb132-2"><a href="#cb132-2" tabindex="-1"></a></span>
-<span id="cb132-3"><a href="#cb132-3" tabindex="-1"></a><span class="do">## ℹ (2026-02-25 12:37:21) visualise_many_sequences start</span></span>
+<span id="cb132-3"><a href="#cb132-3" tabindex="-1"></a><span class="do">## ℹ (2026-02-25 15:08:13) visualise_many_sequences start</span></span>
 <span id="cb132-4"><a href="#cb132-4" tabindex="-1"></a></span>
-<span id="cb132-5"><a href="#cb132-5" tabindex="-1"></a><span class="do">## ℹ (0.008 secs elapsed; 0.008 secs total) resolving aliases</span></span>
+<span id="cb132-5"><a href="#cb132-5" tabindex="-1"></a><span class="do">## ℹ (0.007 secs elapsed; 0.007 secs total) resolving aliases</span></span>
 <span id="cb132-6"><a href="#cb132-6" tabindex="-1"></a></span>
-<span id="cb132-7"><a href="#cb132-7" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.010 secs total) validating arguments</span></span>
+<span id="cb132-7"><a href="#cb132-7" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.008 secs total) validating arguments</span></span>
 <span id="cb132-8"><a href="#cb132-8" tabindex="-1"></a></span>
-<span id="cb132-9"><a href="#cb132-9" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.012 secs total) inserting blank sequences at specified indices</span></span>
+<span id="cb132-9"><a href="#cb132-9" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.010 secs total) inserting blank sequences at specified indices</span></span>
 <span id="cb132-10"><a href="#cb132-10" tabindex="-1"></a></span>
-<span id="cb132-11"><a href="#cb132-11" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.014 secs total) rasterising image data</span></span>
+<span id="cb132-11"><a href="#cb132-11" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.011 secs total) rasterising image data</span></span>
 <span id="cb132-12"><a href="#cb132-12" tabindex="-1"></a></span>
-<span id="cb132-13"><a href="#cb132-13" tabindex="-1"></a><span class="do">## ℹ (0.010 secs elapsed; 0.024 secs total) choosing rendering method</span></span>
+<span id="cb132-13"><a href="#cb132-13" tabindex="-1"></a><span class="do">## ℹ (0.009 secs elapsed; 0.020 secs total) choosing rendering method</span></span>
 <span id="cb132-14"><a href="#cb132-14" tabindex="-1"></a></span>
 <span id="cb132-15"><a href="#cb132-15" tabindex="-1"></a><span class="do">## Warning: Forcing geom_raster via force_raster = TRUE will remove all sequence</span></span>
 <span id="cb132-16"><a href="#cb132-16" tabindex="-1"></a><span class="do">## text, index annotations (though any inserted blank lines/spacers will remain),</span></span>
 <span id="cb132-17"><a href="#cb132-17" tabindex="-1"></a><span class="do">## and box outlines.</span></span>
 <span id="cb132-18"><a href="#cb132-18" tabindex="-1"></a></span>
-<span id="cb132-19"><a href="#cb132-19" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.026 secs total) creating basic plot via geom_raster</span></span>
+<span id="cb132-19"><a href="#cb132-19" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.022 secs total) creating basic plot via geom_raster</span></span>
 <span id="cb132-20"><a href="#cb132-20" tabindex="-1"></a></span>
-<span id="cb132-21"><a href="#cb132-21" tabindex="-1"></a><span class="do">## ℹ (0.005 secs elapsed; 0.030 secs total) adding general plot themes</span></span>
+<span id="cb132-21"><a href="#cb132-21" tabindex="-1"></a><span class="do">## ℹ (0.004 secs elapsed; 0.026 secs total) adding general plot themes</span></span>
 <span id="cb132-22"><a href="#cb132-22" tabindex="-1"></a></span>
-<span id="cb132-23"><a href="#cb132-23" tabindex="-1"></a><span class="do">## ℹ (0.012 secs elapsed; 0.042 secs total) calculating margin</span></span>
+<span id="cb132-23"><a href="#cb132-23" tabindex="-1"></a><span class="do">## ℹ (0.010 secs elapsed; 0.036 secs total) calculating margin</span></span>
 <span id="cb132-24"><a href="#cb132-24" tabindex="-1"></a></span>
-<span id="cb132-25"><a href="#cb132-25" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.045 secs total) exporting image file</span></span>
+<span id="cb132-25"><a href="#cb132-25" tabindex="-1"></a><span class="do">## ℹ (0.002 secs elapsed; 0.038 secs total) exporting image file</span></span>
 <span id="cb132-26"><a href="#cb132-26" tabindex="-1"></a></span>
-<span id="cb132-27"><a href="#cb132-27" tabindex="-1"></a><span class="do">## ℹ (1.070 secs elapsed; 1.114 secs total) done</span></span></code></pre></div>
+<span id="cb132-27"><a href="#cb132-27" tabindex="-1"></a><span class="do">## ℹ (0.580 secs elapsed; 0.618 secs total) done</span></span></code></pre></div>
 <div class="sourceCode" id="cb133"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"many_sequences_20.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"many_sequences_20.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_20.png"><!-- --></p>
 </div>
 </div>
@@ -3589,7 +3590,7 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"modification_01.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"modification_01.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_01.png"><!-- --></p>
 <p>Here all the modification-assessed bases (Cs of CG dinucleotides) are coloured blue for low methylation probability and red for high methylation probability and linearly interpolated for intermediate probabilities. Non-modification-assessed bases are coloured grey, and the background is white.</p>
 <p><code>ggDNAvis</code> also contains a function for making a scalebar for the methylation probabilities: <code><a href="reference/visualise_methylation_colour_scale.html">visualise_methylation_colour_scale()</a></code>. Unlike the main <code>visualise_</code> functions, this one will work at any scale and aspect resolution, so it always returns a ggplot object that can be exported manually via <code><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave()</a></code>.</p>
@@ -3604,7 +3605,7 @@
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_01_scalebar.png"</span><span class="op">)</span>, <span class="va">scalebar</span>, dpi <span class="op">=</span> <span class="fl">300</span>, width <span class="op">=</span> <span class="fl">5.25</span>, height <span class="op">=</span> <span class="fl">1.25</span>, device <span class="op">=</span> <span class="fu">ragg</span><span class="fu">::</span><span class="va"><a href="https://ragg.r-lib.org/reference/agg_png.html" class="external-link">agg_png</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"modification_01_scalebar.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"modification_01_scalebar.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_01_scalebar.png" alt="" width="60%" style="display: block; margin: auto;"></p>
 <p>(Note that sometimes vertical white lines can appear in the scalebar, depending on the exact gradient precision, export dimensions, and dpi. If this happens, changing the <code>precision</code> argument very slightly usually fixes it.)</p>
 </div>
@@ -3655,7 +3656,7 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"modification_02.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"modification_02.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_02.png"><!-- --></p>
 <p>Here there is no grouping by family, 3 blank lines between each participant, and sequences are sorted in ascending length order within each participant.</p>
 </div>
@@ -3706,7 +3707,7 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"modification_03.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"modification_03.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_03.png"><!-- --></p>
 </div>
 <div class="section level2">
@@ -3745,7 +3746,7 @@
 <span>                      </span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"modification_04.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"modification_04.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_04.png"><!-- --></p>
 <p>The default text size is 16, which is appropriate for sequence (1 character per box) but is generally too large for probabilities (often 3-4 characters per box):</p>
 <div class="sourceCode" id="cb147"><pre class="downlit sourceCode r">
@@ -3763,7 +3764,7 @@
 <span id="cb148-2"><a href="#cb148-2" tabindex="-1"></a><span class="do">## Consider setting sequence_text_size to a smaller value e.g. 10.</span></span></code></pre></div>
 <div class="sourceCode" id="cb149"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"modification_05.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"modification_05.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_05.png"><!-- --></p>
 <p>A more sensible version with integers scaled to 0-1 (which is the default, but we will write the arguments explicitly for clarity) would be:</p>
 <div class="sourceCode" id="cb150"><pre class="downlit sourceCode r">
@@ -3783,7 +3784,7 @@
 <span>                      </span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"modification_06.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"modification_06.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_06.png"><!-- --></p>
 <p>If we instead wanted to see the integer scores from the original data we would turn off scaling and rounding:</p>
 <div class="sourceCode" id="cb151"><pre class="downlit sourceCode r">
@@ -3803,7 +3804,7 @@
 <span>                      </span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"modification_07.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"modification_07.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_07.png"><!-- --></p>
 </div>
 <div class="section level2">
@@ -3892,7 +3893,7 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"modification_08.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"modification_08.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_08.png"><!-- --></p>
 <div class="sourceCode" id="cb153"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Create scalebar and save to object</span></span>
@@ -3913,7 +3914,7 @@
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_08_scalebar.png"</span><span class="op">)</span>, <span class="va">scalebar</span>, dpi <span class="op">=</span> <span class="fl">300</span>, width <span class="op">=</span> <span class="fl">5.25</span>, height <span class="op">=</span> <span class="fl">1.25</span>, device <span class="op">=</span> <span class="fu">ragg</span><span class="fu">::</span><span class="va"><a href="https://ragg.r-lib.org/reference/agg_png.html" class="external-link">agg_png</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"modification_08_scalebar.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"modification_08_scalebar.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_08_scalebar.png" alt="" width="60%" style="display: block; margin: auto;"></p>
 <p>One way this might be used in practice is for making a graphic in the “lollipop” style where methylated/modified CGs are black and unmodified CGs are white:</p>
 <div class="sourceCode" id="cb154"><pre class="downlit sourceCode r">
@@ -3950,7 +3951,7 @@
 <span id="cb155-2"><a href="#cb155-2" tabindex="-1"></a><span class="do">## Current margin: 0.1</span></span></code></pre></div>
 <div class="sourceCode" id="cb156"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"modification_09.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"modification_09.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_09.png"><!-- --></p>
 <div class="sourceCode" id="cb157"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Create scalebar and save to object</span></span>
@@ -3965,7 +3966,7 @@
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_09_scalebar.png"</span><span class="op">)</span>, <span class="va">scalebar</span>, dpi <span class="op">=</span> <span class="fl">300</span>, width <span class="op">=</span> <span class="fl">5.25</span>, height <span class="op">=</span> <span class="fl">1.25</span>, device <span class="op">=</span> <span class="fu">ragg</span><span class="fu">::</span><span class="va"><a href="https://ragg.r-lib.org/reference/agg_png.html" class="external-link">agg_png</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"modification_09_scalebar.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"modification_09_scalebar.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_09_scalebar.png" alt="" width="60%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
@@ -4017,7 +4018,7 @@
 <span id="cb159-2"><a href="#cb159-2" tabindex="-1"></a><span class="do">## Current margin: 0.1</span></span></code></pre></div>
 <div class="sourceCode" id="cb160"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"modification_10.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"modification_10.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_10.png"><!-- --></p>
 <div class="sourceCode" id="cb161"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Create scalebar and save to object</span></span>
@@ -4034,7 +4035,7 @@
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_10_scalebar.png"</span><span class="op">)</span>, <span class="va">scalebar</span>, dpi <span class="op">=</span> <span class="fl">300</span>, width <span class="op">=</span> <span class="fl">5.25</span>, height <span class="op">=</span> <span class="fl">1.25</span>, device <span class="op">=</span> <span class="fu">ragg</span><span class="fu">::</span><span class="va"><a href="https://ragg.r-lib.org/reference/agg_png.html" class="external-link">agg_png</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"modification_10_scalebar.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"modification_10_scalebar.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_10_scalebar.png" alt="" width="60%" style="display: block; margin: auto;"></p>
 <p>The clamping arguments do not have to be integers. Clamping is implemented with <code><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">pmin()</a></code> and <code><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">pmax()</a></code> and relies on their default behaviour for <code>pm&lt;in/ax&gt;(vector, clamping_value)</code>, which is to clamp to a fraction when the clamping value is fractional. For example, <code>pmin(c(1,2,3,4,5), 3.5)</code> produces <code>c(1.0, 2.0, 3.0, 3.5, 3.5)</code> i.e. the values above <code>3.5</code> were clamped down to <code>3.5</code>. Therefore, clamping with fractional values will clamp extreme probabilities to said fractional value, but this is not visible and does not interfere with plotting logic.</p>
 <p>This means one approach is to define clamping values as <code>proportion*255</code>, as that can be easier than working out which integer to use. Using the standard blue/red colour scheme with the hydroxymethylation data but clamping at 30% and 70% probability gives the following:</p>
@@ -4066,7 +4067,7 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"modification_11.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"modification_11.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_11.png"><!-- --></p>
 <div class="sourceCode" id="cb163"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Create scalebar and save to object</span></span>
@@ -4080,7 +4081,7 @@
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_11_scalebar.png"</span><span class="op">)</span>, <span class="va">scalebar</span>, dpi <span class="op">=</span> <span class="fl">300</span>, width <span class="op">=</span> <span class="fl">5.25</span>, height <span class="op">=</span> <span class="fl">1.25</span>, device <span class="op">=</span> <span class="fu">ragg</span><span class="fu">::</span><span class="va"><a href="https://ragg.r-lib.org/reference/agg_png.html" class="external-link">agg_png</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"modification_11_scalebar.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"modification_11_scalebar.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_11_scalebar.png" alt="" width="60%" style="display: block; margin: auto;"></p>
 <p>The clamping does not need to be symmetrical. One use for this is if the data is skewed. For example, the methylation scores were randomly generated from <code>0</code> to <code>255</code> for each CpG in <code>example_many_sequences</code>, but the hydroxymethylation scores were generated from <code>0</code> to <code>(255 - methylation score)</code> for each CpG to avoid &gt;100% total modification probability, so they tend to be lower. Here is the hydroxymethylation data visualised with clamping at 10% and 50%:</p>
 <div class="sourceCode" id="cb164"><pre class="downlit sourceCode r">
@@ -4111,7 +4112,7 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"modification_12.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"modification_12.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_12.png"><!-- --></p>
 <div class="sourceCode" id="cb165"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Create scalebar and save to object</span></span>
@@ -4125,7 +4126,7 @@
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_12_scalebar.png"</span><span class="op">)</span>, <span class="va">scalebar</span>, dpi <span class="op">=</span> <span class="fl">300</span>, width <span class="op">=</span> <span class="fl">5.25</span>, height <span class="op">=</span> <span class="fl">1.25</span>, device <span class="op">=</span> <span class="fu">ragg</span><span class="fu">::</span><span class="va"><a href="https://ragg.r-lib.org/reference/agg_png.html" class="external-link">agg_png</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"modification_12_scalebar.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"modification_12_scalebar.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_12_scalebar.png" alt="" width="60%" style="display: block; margin: auto;"></p>
 <p><em><strong>IMPORTANT:</strong> make sure that you provide the scalebar when presenting data, especially if clamping is used, otherwise the colours could be misleading or academically dishonest.</em></p>
 </div>
@@ -4175,7 +4176,7 @@
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_scalebar_alone_01.png"</span><span class="op">)</span>, <span class="va">scalebar</span>, dpi <span class="op">=</span> <span class="fl">300</span>, width <span class="op">=</span> <span class="fl">5.25</span>, height <span class="op">=</span> <span class="fl">1.25</span>, device <span class="op">=</span> <span class="fu">ragg</span><span class="fu">::</span><span class="va"><a href="https://ragg.r-lib.org/reference/agg_png.html" class="external-link">agg_png</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"modification_scalebar_alone_01.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"modification_scalebar_alone_01.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_scalebar_alone_01.png" alt="" width="60%" style="display: block; margin: auto;"></p>
 <p>Disabling axis ticks with intermediate precision gives the following:</p>
 <div class="sourceCode" id="cb167"><pre class="downlit sourceCode r">
@@ -4189,7 +4190,7 @@
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_scalebar_alone_02.png"</span><span class="op">)</span>, <span class="va">scalebar</span>, dpi <span class="op">=</span> <span class="fl">300</span>, width <span class="op">=</span> <span class="fl">5.25</span>, height <span class="op">=</span> <span class="fl">1.25</span>, device <span class="op">=</span> <span class="fu">ragg</span><span class="fu">::</span><span class="va"><a href="https://ragg.r-lib.org/reference/agg_png.html" class="external-link">agg_png</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"modification_scalebar_alone_02.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"modification_scalebar_alone_02.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_scalebar_alone_02.png" alt="" width="60%" style="display: block; margin: auto;"></p>
 <p>If ticks are left on, they can be customised with <code><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_x_continuous()</a></code> as per usual for a ggplot. Here is an example of the left side being the gradient axis i.e. a vertical plot, with ticks every 0.1 instead of every 0.25.</p>
 <div class="sourceCode" id="cb168"><pre class="downlit sourceCode r">
@@ -4213,7 +4214,7 @@
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_scalebar_alone_03.png"</span><span class="op">)</span>, <span class="va">scalebar</span>, dpi <span class="op">=</span> <span class="fl">300</span>, width <span class="op">=</span> <span class="fl">2</span>, height <span class="op">=</span> <span class="fl">5.25</span>, device <span class="op">=</span> <span class="fu">ragg</span><span class="fu">::</span><span class="va"><a href="https://ragg.r-lib.org/reference/agg_png.html" class="external-link">agg_png</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"modification_scalebar_alone_03.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"modification_scalebar_alone_03.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_scalebar_alone_03.png" alt="" width="20%" style="display: block; margin: auto;"></p>
 <p>And here is an example of a more sensible scalebar with top text:</p>
 <div class="sourceCode" id="cb169"><pre class="downlit sourceCode r">
@@ -4230,7 +4231,7 @@
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output_location</span>, <span class="st">"modification_scalebar_alone_04.png"</span><span class="op">)</span>, <span class="va">scalebar</span>, dpi <span class="op">=</span> <span class="fl">300</span>, width <span class="op">=</span> <span class="fl">5.25</span>, height <span class="op">=</span> <span class="fl">2</span>, device <span class="op">=</span> <span class="fu">ragg</span><span class="fu">::</span><span class="va"><a href="https://ragg.r-lib.org/reference/agg_png.html" class="external-link">agg_png</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View image</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"modification_scalebar_alone_04.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"modification_scalebar_alone_04.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_scalebar_alone_04.png" alt="" width="60%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
@@ -4408,7 +4409,7 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## View visualisation</span></span>
-<span><span class="fu">view_figure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"modification_reversing_example.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">view_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">display_location</span>, <span class="st">"modification_reversing_example.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_reversing_example.png"><!-- --></p>
 </div>
 <div class="section level2">
@@ -4434,7 +4435,19 @@
 </div>
 </div>
 <div class="section level1">
-<h1 id="id_7-references">7 References<a class="anchor" aria-label="anchor" href="#id_7-references"></a>
+<h1 id="id_7-advanced-usage">7 Advanced usage<a class="anchor" aria-label="anchor" href="#id_7-advanced-usage"></a>
+</h1>
+<p>As ggDNAvis visualisations can be returned as ggplots by setting <code>return = TRUE</code>, they can be added to and further modified using standard ggplot processing (e.g. adding new geoms). The modification reversing example just above is one example of this, but more are shown in the <a href="https://doi.org/10.1101/XXXXXX" class="external-link">ggDNAvis manuscript</a> - not reproduced here for copyright safety. The code to generate all these advanced, composite visualisations is available in the <a href="https://github.com/ejade42/ggDNAvis/blob/main/manuscript" class="external-link">manuscript/ directory</a> of the source code repo.</p>
+<p>The general principles of advanced usage are:</p>
+<ul>
+<li><p>Visualisations can be returned using <code>return = TRUE</code> rather than being directly exported via <code>filename = "myfile.png"</code>.</p></li>
+<li><p>Additional layers such as text markup can be added in typical ggplot fashion, e.g. by making a new dataframe with text labels and locations (bearing in mind that ggDNAvis visualisations occupy a square from cartesian coordinates 0,0 to 1,1).</p></li>
+<li><p>To export the images with the correct aspect ratio, you will need to calculate the appropriate dimensions. My approach is generally to count the width and height in bases (e.g. <code>width = max(nchar(sequences))</code> and <code>height = length(sequences)</code>, though bear in mind that index annotations add additional lines e.g. might need <code>height = length(sequences) + length(index_annotation_lines)</code>), then set those as the width and height in inches in <code><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave()</a></code> while setting <code>dpi = pixels_per_base</code>.</p></li>
+<li><p>Composite/multi-panel visualisations can be made by merging ggplot objects using <code>patchwork</code> or <code>cowplot</code> packages, or by overlaying exported PNGs using the <code>magick</code> package.</p></li>
+</ul>
+</div>
+<div class="section level1">
+<h1 id="id_8-references">8 References<a class="anchor" aria-label="anchor" href="#id_8-references"></a>
 </h1>
 <div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0" line-spacing="2">
 <div id="ref-harrowerColorBrewerorgOnlineTool2003" class="csl-entry">
