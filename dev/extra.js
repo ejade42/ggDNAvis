@@ -1,12 +1,11 @@
 document.addEventListener("DOMContentLoaded", function() {
-  // 1. Safer check: pkgdown wraps homepage content in a div with the class 'home'
   const isHome = document.querySelector(".home") !== null;
   if (!isHome) return;
 
-  // 2. Inject HTML. Open by default
+  // Inject HTML - Notice the toggle is now a <button> instead of a <div>
   const tocHTML = `
     <div id="custom-toc-container">
-      <div id="custom-toc-toggle" title="Toggle Table of Contents">▶</div>
+      <button id="custom-toc-toggle" title="Toggle Table of Contents">▶</button>
       <div id="custom-toc-content">
         <h5 style="margin-top:0;">Contents</h5>
         <nav id="custom-toc-nav"></nav>
@@ -15,8 +14,8 @@ document.addEventListener("DOMContentLoaded", function() {
   `;
   document.body.insertAdjacentHTML('beforeend', tocHTML);
 
-  // 3. Find headings in the main content area
-  const headings = document.querySelectorAll("main h2, main h3");
+  // Find headings (broadened search just in case pkgdown layout varies)
+  const headings = document.querySelectorAll(".home h2, .home h3, main h2, main h3");
   const tocNav = document.getElementById("custom-toc-nav");
   
   if (headings.length === 0) {
@@ -24,14 +23,14 @@ document.addEventListener("DOMContentLoaded", function() {
     return;
   }
 
-  // 4. Build the hierarchical list
+  // Build the list
   let ulLevel1 = document.createElement("ul");
   ulLevel1.className = "toc-level-1";
   let currentH2Li = null;
   let currentH3Ul = null;
 
   headings.forEach(h => {
-    if (!h.id) return; // Skip if heading has no ID
+    if (!h.id) return; 
 
     let li = document.createElement("li");
     let a = document.createElement("a");
@@ -55,7 +54,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   tocNav.appendChild(ulLevel1);
 
-  // 5. Toggle Logic
+  // Toggle Logic - Should now work flawlessly
   const toggleBtn = document.getElementById("custom-toc-toggle");
   const container = document.getElementById("custom-toc-container");
   
@@ -64,22 +63,19 @@ document.addEventListener("DOMContentLoaded", function() {
     toggleBtn.textContent = container.classList.contains("collapsed") ? "◀" : "▶";
   });
 
-  // 6. Scrollspy Logic
+  // Scrollspy Logic
   const tocLinks = document.querySelectorAll('#custom-toc-nav a');
   
   const updateScrollSpy = () => {
     let currentId = "";
     
-    // Find the heading closest to the top of the viewport
     headings.forEach(h => {
       const rect = h.getBoundingClientRect();
-      // Adjust the offset (150px) based on your top navbar height
       if (rect.top <= 150) {
         currentId = h.id;
       }
     });
 
-    // Remove active class from all, add to the current one
     tocLinks.forEach(link => {
       link.classList.remove('active');
       if (currentId && link.getAttribute('href') === '#' + currentId) {
@@ -88,7 +84,6 @@ document.addEventListener("DOMContentLoaded", function() {
     });
   };
 
-  // Run on scroll and once on initial load
   window.addEventListener('scroll', updateScrollSpy);
   updateScrollSpy();
 });
