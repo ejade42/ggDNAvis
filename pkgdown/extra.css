@@ -1,7 +1,12 @@
-/* Custom Floating TOC Container */
+/* Prevent the extra scrollbar caused by off-screen elements */
+body {
+  overflow-x: hidden;
+}
+
+/* Custom Floating TOC Container - OPEN BY DEFAULT */
 #custom-toc-container {
   position: fixed;
-  right: 0;
+  right: 0; /* 0 means it sits flush against the right edge (Open) */
   top: 100px;
   width: 280px;
   background: #ffffff;
@@ -9,13 +14,13 @@
   border-right: none;
   border-radius: 8px 0 0 8px;
   box-shadow: -3px 3px 10px rgba(0, 0, 0, 0.05);
-  transition: transform 0.3s ease-in-out;
-  z-index: 1050;
+  transition: right 0.3s ease-in-out;
+  z-index: 9999; /* Extremely high z-index to stay above pkgdown elements */
 }
 
-/* The Collapsed State - Slides off screen to the right */
+/* The Collapsed State - Slides off screen using 'right' instead of 'transform' */
 #custom-toc-container.collapsed {
-  transform: translateX(100%);
+  right: -280px;
 }
 
 /* The Clickable Arrow Button */
@@ -36,7 +41,13 @@
   font-size: 14px;
   color: #555;
   box-shadow: -3px 0px 5px rgba(0, 0, 0, 0.05);
-  z-index: 1060; /* HIGHER z-index ensures it is always clickable */
+  z-index: 10000;
+  padding: 0;
+  user-select: none; /* Stops the arrow from being highlighted as text */
+}
+
+#custom-toc-toggle:hover {
+  background: #f8f9fa;
 }
 
 /* Inner content styling */
@@ -69,10 +80,10 @@
 
 /* Scrollspy Active State */
 #custom-toc-content a.active {
-  color: #212529; /* Darker text */
+  color: #212529;
   font-weight: 600;
-  border-left: 3px solid #0056b3; /* Blue highlight bar */
-  padding-left: 8px; /* Push text right to make room for border */
-  margin-left: -11px; /* Pull left to keep aligned with inactive links */
+  border-left: 3px solid #0056b3;
+  padding-left: 8px;
+  margin-left: -11px;
   transition: all 0.2s ease-in-out;
 }
