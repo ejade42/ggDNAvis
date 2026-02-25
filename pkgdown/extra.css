@@ -1,0 +1,67 @@
+/* Custom Floating TOC Container */
+#custom-toc-container {
+  position: fixed;
+  right: 0;
+  top: 100px; /* Distance from top of screen */
+  width: 280px;
+  background: #ffffff;
+  border: 1px solid #dee2e6;
+  border-right: none;
+  border-radius: 8px 0 0 8px;
+  box-shadow: -3px 3px 10px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease-in-out;
+  z-index: 1050; /* Keeps it above other content */
+}
+
+/* The Collapsed State */
+#custom-toc-container.collapsed {
+  transform: translateX(100%);
+}
+
+/* The Clickable Arrow Button */
+#custom-toc-toggle {
+  position: absolute;
+  left: -32px;
+  top: 20px;
+  width: 32px;
+  height: 40px;
+  background: #ffffff;
+  border: 1px solid #dee2e6;
+  border-right: none;
+  border-radius: 8px 0 0 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: #555;
+  box-shadow: -3px 0px 5px rgba(0, 0, 0, 0.05);
+}
+
+/* Inner content styling */
+#custom-toc-content {
+  padding: 15px;
+  max-height: 75vh;
+  overflow-y: auto;
+}
+
+#custom-toc-content ul {
+  list-style-type: none;
+  padding-left: 15px;
+  font-size: 0.9em;
+}
+
+#custom-toc-content .toc-level-1 {
+  padding-left: 0;
+}
+
+#custom-toc-content a {
+  text-decoration: none;
+  color: #0056b3;
+  display: block;
+  margin-bottom: 6px;
+}
+
+#custom-toc-content a:hover {
+  text-decoration: underline;
+}
