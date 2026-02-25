@@ -2,7 +2,7 @@
 #custom-toc-container {
   position: fixed;
   right: 0;
-  top: 100px; /* Distance from top of screen */
+  top: 100px;
   width: 280px;
   background: #ffffff;
   border: 1px solid #dee2e6;
@@ -10,10 +10,10 @@
   border-radius: 8px 0 0 8px;
   box-shadow: -3px 3px 10px rgba(0, 0, 0, 0.05);
   transition: transform 0.3s ease-in-out;
-  z-index: 1050; /* Keeps it above other content */
+  z-index: 1050;
 }
 
-/* The Collapsed State */
+/* The Collapsed State - Slides off screen to the right */
 #custom-toc-container.collapsed {
   transform: translateX(100%);
 }
@@ -36,6 +36,7 @@
   font-size: 14px;
   color: #555;
   box-shadow: -3px 0px 5px rgba(0, 0, 0, 0.05);
+  z-index: 1060; /* HIGHER z-index ensures it is always clickable */
 }
 
 /* Inner content styling */
@@ -64,4 +65,14 @@
 
 #custom-toc-content a:hover {
   text-decoration: underline;
+}
+
+/* Scrollspy Active State */
+#custom-toc-content a.active {
+  color: #212529; /* Darker text */
+  font-weight: 600;
+  border-left: 3px solid #0056b3; /* Blue highlight bar */
+  padding-left: 8px; /* Push text right to make room for border */
+  margin-left: -11px; /* Pull left to keep aligned with inactive links */
+  transition: all 0.2s ease-in-out;
 }

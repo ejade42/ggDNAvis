@@ -1,13 +1,12 @@
 document.addEventListener("DOMContentLoaded", function() {
-  // 1. Only run this on the homepage (index.html)
-  if (!window.location.pathname.endsWith('/') && !window.location.pathname.endsWith('index.html')) {
-    return;
-  }
+  // 1. Safer check: pkgdown wraps homepage content in a div with the class 'home'
+  const isHome = document.querySelector(".home") !== null;
+  if (!isHome) return;
 
-  // 2. Inject the HTML skeleton into the body
+  // 2. Inject HTML. Open by default
   const tocHTML = `
-    <div id="custom-toc-container" class="collapsed">
-      <div id="custom-toc-toggle" title="Toggle Table of Contents">◀</div>
+    <div id="custom-toc-container">
+      <div id="custom-toc-toggle" title="Toggle Table of Contents">▶</div>
       <div id="custom-toc-content">
         <h5 style="margin-top:0;">Contents</h5>
         <nav id="custom-toc-nav"></nav>
@@ -16,11 +15,14 @@ document.addEventListener("DOMContentLoaded", function() {
   `;
   document.body.insertAdjacentHTML('beforeend', tocHTML);
 
-  // 3. Find all H2 and H3 headings in the main content
+  // 3. Find headings in the main content area
   const headings = document.querySelectorAll("main h2, main h3");
   const tocNav = document.getElementById("custom-toc-nav");
   
-  if (headings.length === 0) return;
+  if (headings.length === 0) {
+    document.getElementById("custom-toc-container").style.display = 'none';
+    return;
+  }
 
   // 4. Build the hierarchical list
   let ulLevel1 = document.createElement("ul");
@@ -40,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function() {
     if (h.tagName === "H2") {
       ulLevel1.appendChild(li);
       currentH2Li = li;
-      currentH3Ul = null; // Reset sub-list
+      currentH3Ul = null;
     } else if (h.tagName === "H3" && currentH2Li) {
       if (!currentH3Ul) {
         currentH3Ul = document.createElement("ul");
@@ -53,13 +55,40 @@ document.addEventListener("DOMContentLoaded", function() {
 
   tocNav.appendChild(ulLevel1);
 
-  // 5. Add the click toggle logic
+  // 5. Toggle Logic
   const toggleBtn = document.getElementById("custom-toc-toggle");
   const container = document.getElementById("custom-toc-container");
   
-  toggleBtn.addEventListener("click", () => {
+  toggleBtn.addEventListener("click", function() {
     container.classList.toggle("collapsed");
-    // Swap arrow direction
     toggleBtn.textContent = container.classList.contains("collapsed") ? "◀" : "▶";
   });
+
+  // 6. Scrollspy Logic
+  const tocLinks = document.querySelectorAll('#custom-toc-nav a');
+  
+  const updateScrollSpy = () => {
+    let currentId = "";
+    
+    // Find the heading closest to the top of the viewport
+    headings.forEach(h => {
+      const rect = h.getBoundingClientRect();
+      // Adjust the offset (150px) based on your top navbar height
+      if (rect.top <= 150) {
+        currentId = h.id;
+      }
+    });
+
+    // Remove active class from all, add to the current one
+    tocLinks.forEach(link => {
+      link.classList.remove('active');
+      if (currentId && link.getAttribute('href') === '#' + currentId) {
+        link.classList.add('active');
+      }
+    });
+  };
+
+  // Run on scroll and once on initial load
+  window.addEventListener('scroll', updateScrollSpy);
+  updateScrollSpy();
 });
