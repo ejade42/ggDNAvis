@@ -12,6 +12,10 @@ document.addEventListener("DOMContentLoaded", function() {
     console.log("No headings found for TOC.");
     return;
   }
+  
+  // Delete existing containers
+  const existingTocs = document.querySelectorAll("#simple-toc");
+  existingTocs.forEach(toc => toc.remove());
 
   // Inject the simple HTML container
   const tocHTML = `
