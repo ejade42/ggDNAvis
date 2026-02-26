@@ -132,4 +132,14 @@ document.addEventListener("DOMContentLoaded", function() {
   // Listen for scrolling, and run it once on load to set the initial state
   window.addEventListener("scroll", onScroll);
   onScroll();
+  
+ 
+  // Hide basic TOC from md
+  const firstList = document.querySelector("main ul");
+  if (firstList) {
+    const firstLink = firstList.querySelector("a");
+    if (firstLink && firstLink.getAttribute("href").startsWith("#")) {
+      firstList.style.display = "none";
+    }
+  }
 });

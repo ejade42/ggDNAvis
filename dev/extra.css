@@ -18,7 +18,7 @@
 #simple-toc-nav {
   overflow-y: auto;
   flex-grow: 1;
-  padding-right: 5px;
+  padding-right: 0px;
 }
 
 #simple-toc ul {
