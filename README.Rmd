@@ -2,8 +2,6 @@
 output: 
     bookdown::github_document2:
         number_sections: true
-        toc: true
-        toc_depth: 3
     html_document:
         number_sections: true
         toc: true
