@@ -5,15 +5,15 @@ document.addEventListener("DOMContentLoaded", function() {
   }
   
   
-  // 1. Broadest possible search for headings to guarantee it finds something
-  const headings = document.querySelectorAll("h2, h3");
+  // Search for headings
+  const headings = document.querySelectorAll("main h1, main h2, main h3");
   
   if (headings.length === 0) {
     console.log("No headings found for TOC.");
     return;
   }
 
-  // 2. Inject the simplest possible HTML container
+  // Inject the simple HTML container
   const tocHTML = `
     <div id="simple-toc">
       <h5 style="margin-top:0; padding-bottom: 10px; border-bottom: 1px solid #ddd;">Contents</h5>
@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function() {
   `;
   document.body.insertAdjacentHTML('beforeend', tocHTML);
 
-  // 3. Build the nested list
+  // 3. Build nested list
   const tocNav = document.getElementById("simple-toc-nav");
   let ulLevel1 = document.createElement("ul");
   ulLevel1.className = "toc-level-1";
