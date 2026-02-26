@@ -34,3 +34,20 @@
 #simple-toc a:hover {
   text-decoration: underline;
 }
+
+/* Hide all nested sub-headings by default */
+#simple-toc ul.toc-level-2,
+#simple-toc ul.toc-level-3 {
+  display: none;
+}
+
+/* Expand the sub-headings only when the parent is active */
+#simple-toc li.active-li > ul {
+  display: block;
+}
+
+/* Make the currently viewed link stand out */
+#simple-toc a.active-link {
+  font-weight: 700;
+  color: #212529; /* Darker text for active link */
+}

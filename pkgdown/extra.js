@@ -93,4 +93,43 @@ document.addEventListener("DOMContentLoaded", function() {
   });
 
   tocNav.appendChild(rootUl);
+  
+  
+  // Scroll tracker
+  function onScroll() {
+    let currentActiveId = "";
+    
+    // Find which heading is currently closest to the top of the screen
+    headings.forEach(h => {
+      const rect = h.getBoundingClientRect();
+      if (rect.top < window.innerHeight / 2) { 
+        currentActiveId = h.id;
+      }
+    });
+
+    if (currentActiveId) {
+      // First, remove the active state from everything
+      tocNav.querySelectorAll("a").forEach(a => a.classList.remove("active-link"));
+      tocNav.querySelectorAll("li").forEach(li => li.classList.remove("active-li"));
+
+      // Find the link for the section we are currently viewing
+      const activeLink = tocNav.querySelector(`a[href="#${currentActiveId}"]`);
+      if (activeLink) {
+        activeLink.classList.add("active-link"); // Highlight the text
+        
+        // Walk upwards to expand all parent folders
+        let parent = activeLink.parentElement;
+        while (parent && parent.id !== "simple-toc") {
+          if (parent.tagName === "LI") {
+            parent.classList.add("active-li"); // Expands the list
+          }
+          parent = parent.parentElement;
+        }
+      }
+    }
+  }
+
+  // Listen for scrolling, and run it once on load to set the initial state
+  window.addEventListener("scroll", onScroll);
+  onScroll();
 });
