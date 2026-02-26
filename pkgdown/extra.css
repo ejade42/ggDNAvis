@@ -1,3 +1,7 @@
+main h1 img {
+  display: none !important;
+}
+
 #simple-toc {
   position: fixed;
   top: 100px;
