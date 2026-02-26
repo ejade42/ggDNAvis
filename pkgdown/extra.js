@@ -26,35 +26,71 @@ document.addEventListener("DOMContentLoaded", function() {
   `;
   document.body.insertAdjacentHTML('beforeend', tocHTML);
 
-  // 3. Build nested list
+
+  // Build nested list
   const tocNav = document.getElementById("simple-toc-nav");
-  let ulLevel1 = document.createElement("ul");
-  ulLevel1.className = "toc-level-1";
-  let currentH2Li = null;
-  let currentH3Ul = null;
+  let rootUl = document.createElement("ul");
+  rootUl.className = "toc-level-1";
+  
+  let currentH1Li = null; let currentH1Ul = null;
+  let currentH2Li = null; let currentH2Ul = null;
+  
+  const seenText = new Set();
 
   headings.forEach(h => {
-    if (!h.id) return; // Skip headings that pkgdown didn't give an ID to
+    if (!h.id || h.id === "links" || h.id === "license" || h.id === "citation" || h.id === "table-of-contents") return; 
+    if (h.closest('#toc, .toc, #TOC, nav')) return;
+
+    const cleanText = h.textContent.trim();
+    if (seenText.has(cleanText)) return;
+    seenText.add(cleanText); 
 
     let li = document.createElement("li");
     let a = document.createElement("a");
     a.href = "#" + h.id;
-    a.textContent = h.textContent;
+    a.textContent = cleanText;
     li.appendChild(a);
 
-    if (h.tagName === "H2") {
-      ulLevel1.appendChild(li);
-      currentH2Li = li;
-      currentH3Ul = null;
-    } else if (h.tagName === "H3" && currentH2Li) {
-      if (!currentH3Ul) {
-        currentH3Ul = document.createElement("ul");
-        currentH3Ul.className = "toc-level-2";
-        currentH2Li.appendChild(currentH3Ul);
+    // Cascading logic to nest H3 under H2, and H2 under H1
+    if (h.tagName === "H1") {
+      rootUl.appendChild(li);
+      currentH1Li = li;
+      currentH1Ul = null; 
+      currentH2Li = null; 
+      currentH2Ul = null;
+    } else if (h.tagName === "H2") {
+      if (currentH1Li) {
+        if (!currentH1Ul) {
+          currentH1Ul = document.createElement("ul");
+          currentH1Ul.className = "toc-level-2";
+          currentH1Li.appendChild(currentH1Ul);
+        }
+        currentH1Ul.appendChild(li);
+      } else {
+        rootUl.appendChild(li); // Fallback if no H1 exists yet
       }
-      currentH3Ul.appendChild(li);
+      currentH2Li = li;
+      currentH2Ul = null;
+    } else if (h.tagName === "H3") {
+      if (currentH2Li) {
+        if (!currentH2Ul) {
+          currentH2Ul = document.createElement("ul");
+          currentH2Ul.className = "toc-level-3";
+          currentH2Li.appendChild(currentH2Ul);
+        }
+        currentH2Ul.appendChild(li);
+      } else if (currentH1Li) {
+        if (!currentH1Ul) {
+          currentH1Ul = document.createElement("ul");
+          currentH1Ul.className = "toc-level-2";
+          currentH1Li.appendChild(currentH1Ul);
+        }
+        currentH1Ul.appendChild(li); // Fallback if no H2 exists
+      } else {
+        rootUl.appendChild(li);
+      }
     }
   });
 
-  tocNav.appendChild(ulLevel1);
+  tocNav.appendChild(rootUl);
 });
