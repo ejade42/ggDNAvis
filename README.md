@@ -60,6 +60,8 @@
 - [7 Advanced usage](#7-advanced-usage)
 - [8 References](#8-references)
 
+# ggDNAvis <a href="https://ejade42.github.io/ggDNAvis/"><img src="man/figures/logo.png" align="right" height="138" alt="ggDNAvis website" /></a>
+
 <!-- badges: start -->
 
 [![R-CMD-check (latest
@@ -71,8 +73,6 @@ downloads](https://cranlogs.r-pkg.org/badges/ggDNAvis)](https://cran.r-project.o
 [![CRAN total
 downloads](https://cranlogs.r-pkg.org/badges/grand-total/ggDNAvis)](https://cran.r-project.org/package=ggDNAvis)
 <!-- badges: end -->
-
-# ggDNAvis <a href="https://ejade42.github.io/ggDNAvis/"><img src="man/figures/logo.png" align="right" height="138" alt="ggDNAvis website" /></a>
 
 # 1 Introduction
 
@@ -1788,37 +1788,37 @@ visualise_single_sequence(
 
     ## ℹ Verbose monitoring enabled
 
-    ## ℹ (2026-02-26 16:56:25) visualise_single_sequence start
+    ## ℹ (2026-02-26 17:16:54) visualise_single_sequence start
 
-    ## ℹ (0.005 secs elapsed; 0.005 secs total) resolving aliases
+    ## ℹ (0.008 secs elapsed; 0.008 secs total) resolving aliases
 
-    ## ℹ (0.001 secs elapsed; 0.007 secs total) validating arguments
+    ## ℹ (0.002 secs elapsed; 0.010 secs total) validating arguments
 
-    ## ℹ (0.001 secs elapsed; 0.008 secs total) splitting input seq to sequence vector
+    ## ℹ (0.002 secs elapsed; 0.012 secs total) splitting input seq to sequence vector
 
-    ## ℹ (0.001 secs elapsed; 0.009 secs total) rasterising image data
+    ## ℹ (0.002 secs elapsed; 0.014 secs total) rasterising image data
 
-    ## ℹ (0.002 secs elapsed; 0.011 secs total) choosing rendering method
+    ## ℹ (0.003 secs elapsed; 0.017 secs total) choosing rendering method
 
-    ## ℹ (0.001 secs elapsed; 0.012 secs total) calculating tile sizes
+    ## ℹ (0.001 secs elapsed; 0.019 secs total) calculating tile sizes
 
-    ## ℹ (0.001 secs elapsed; 0.013 secs total) creating basic plot via geom_tile
+    ## ℹ (0.001 secs elapsed; 0.020 secs total) creating basic plot via geom_tile
 
-    ## ℹ (0.006 secs elapsed; 0.020 secs total) generating sequence text
+    ## ℹ (0.008 secs elapsed; 0.028 secs total) generating sequence text
 
-    ## ℹ (0.002 secs elapsed; 0.021 secs total) adding sequence text
+    ## ℹ (0.002 secs elapsed; 0.030 secs total) adding sequence text
 
-    ## ℹ (0.006 secs elapsed; 0.027 secs total) generating index annotations
+    ## ℹ (0.007 secs elapsed; 0.037 secs total) generating index annotations
 
-    ## ℹ (0.002 secs elapsed; 0.029 secs total) adding index annotations
+    ## ℹ (0.002 secs elapsed; 0.039 secs total) adding index annotations
 
-    ## ℹ (0.003 secs elapsed; 0.032 secs total) adding general plot themes
+    ## ℹ (0.003 secs elapsed; 0.042 secs total) adding general plot themes
 
-    ## ℹ (0.010 secs elapsed; 0.041 secs total) calculating margin
+    ## ℹ (0.010 secs elapsed; 0.052 secs total) calculating margin
 
-    ## ℹ (0.002 secs elapsed; 0.043 secs total) exporting image file
+    ## ℹ (0.002 secs elapsed; 0.054 secs total) exporting image file
 
-    ## ℹ (0.806 secs elapsed; 0.849 secs total) done
+    ## ℹ (0.789 secs elapsed; 0.843 secs total) done
 
 ``` r
 ## View image
@@ -1867,11 +1867,11 @@ visualise_single_sequence(
 
     ## ℹ Verbose monitoring enabled
 
-    ## ℹ (2026-02-26 16:56:25) visualise_single_sequence start
+    ## ℹ (2026-02-26 17:16:55) visualise_single_sequence start
 
-    ## ℹ (0.004 secs elapsed; 0.004 secs total) resolving aliases
+    ## ℹ (0.003 secs elapsed; 0.003 secs total) resolving aliases
 
-    ## ℹ (0.003 secs elapsed; 0.006 secs total) validating arguments
+    ## ℹ (0.002 secs elapsed; 0.005 secs total) validating arguments
 
     ## ℹ Automatically setting index_annotation_interval to 0 as index_annotation_size is 0
 
@@ -1881,26 +1881,26 @@ visualise_single_sequence(
     ## Warning: Disabling index annotations via index_annotation_interval = 0 or index_annotation_size = 0 overrides the index_annotation_always_last_base setting.
     ## If you want the last base in each line to be annotated but no other bases, set index_annotation_interval greater than line_wrapping.
 
-    ## ℹ (0.004 secs elapsed; 0.010 secs total) splitting input seq to sequence vector
+    ## ℹ (0.006 secs elapsed; 0.011 secs total) splitting input seq to sequence vector
 
-    ## ℹ (0.002 secs elapsed; 0.012 secs total) rasterising image data
+    ## ℹ (0.005 secs elapsed; 0.016 secs total) rasterising image data
 
-    ## ℹ (0.004 secs elapsed; 0.016 secs total) choosing rendering method
+    ## ℹ (0.005 secs elapsed; 0.020 secs total) choosing rendering method
 
     ## ℹ Automatically using geom_raster (much faster than geom_tile) as no sequence text, index annotations, or outlines are present.
 
     ## Warning: When using geom_raster, it is recommended to use a smaller pixels_per_base e.g. 10, as there is no text/outlines that would benefit from higher resolution.
     ## Current value: 100
 
-    ## ℹ (0.003 secs elapsed; 0.019 secs total) creating basic plot via geom_raster
+    ## ℹ (0.004 secs elapsed; 0.024 secs total) creating basic plot via geom_raster
 
-    ## ℹ (0.005 secs elapsed; 0.024 secs total) adding general plot themes
+    ## ℹ (0.006 secs elapsed; 0.030 secs total) adding general plot themes
 
-    ## ℹ (0.012 secs elapsed; 0.036 secs total) calculating margin
+    ## ℹ (0.020 secs elapsed; 0.050 secs total) calculating margin
 
-    ## ℹ (0.003 secs elapsed; 0.039 secs total) exporting image file
+    ## ℹ (0.003 secs elapsed; 0.052 secs total) exporting image file
 
-    ## ℹ (0.617 secs elapsed; 0.657 secs total) done
+    ## ℹ (0.723 secs elapsed; 0.775 secs total) done
 
 ``` r
 ## View image
@@ -1935,31 +1935,31 @@ visualise_single_sequence(
 
     ## ℹ Verbose monitoring enabled
 
-    ## ℹ (2026-02-26 16:56:26) visualise_single_sequence start
+    ## ℹ (2026-02-26 17:16:56) visualise_single_sequence start
 
-    ## ℹ (0.003 secs elapsed; 0.003 secs total) resolving aliases
+    ## ℹ (0.005 secs elapsed; 0.005 secs total) resolving aliases
 
-    ## ℹ (0.002 secs elapsed; 0.005 secs total) validating arguments
+    ## ℹ (0.002 secs elapsed; 0.007 secs total) validating arguments
 
-    ## ℹ (0.001 secs elapsed; 0.006 secs total) splitting input seq to sequence vector
+    ## ℹ (0.001 secs elapsed; 0.008 secs total) splitting input seq to sequence vector
 
-    ## ℹ (0.001 secs elapsed; 0.007 secs total) rasterising image data
+    ## ℹ (0.001 secs elapsed; 0.009 secs total) rasterising image data
 
-    ## ℹ (0.003 secs elapsed; 0.010 secs total) choosing rendering method
+    ## ℹ (0.003 secs elapsed; 0.012 secs total) choosing rendering method
 
     ## Warning: Forcing geom_raster via force_raster = TRUE will remove all sequence
     ## text, index annotations (though any inserted blank lines/spacers will remain),
     ## and box outlines.
 
-    ## ℹ (0.002 secs elapsed; 0.012 secs total) creating basic plot via geom_raster
+    ## ℹ (0.002 secs elapsed; 0.014 secs total) creating basic plot via geom_raster
 
-    ## ℹ (0.004 secs elapsed; 0.016 secs total) adding general plot themes
+    ## ℹ (0.005 secs elapsed; 0.019 secs total) adding general plot themes
 
-    ## ℹ (0.011 secs elapsed; 0.026 secs total) calculating margin
+    ## ℹ (0.011 secs elapsed; 0.030 secs total) calculating margin
 
-    ## ℹ (0.002 secs elapsed; 0.029 secs total) exporting image file
+    ## ℹ (0.002 secs elapsed; 0.032 secs total) exporting image file
 
-    ## ℹ (0.621 secs elapsed; 0.650 secs total) done
+    ## ℹ (0.335 secs elapsed; 0.367 secs total) done
 
 ``` r
 ## View image
@@ -1992,11 +1992,11 @@ visualise_single_sequence(
 
     ## ℹ Verbose monitoring enabled
 
-    ## ℹ (2026-02-26 16:56:27) visualise_single_sequence start
+    ## ℹ (2026-02-26 17:16:56) visualise_single_sequence start
 
     ## ℹ (0.004 secs elapsed; 0.004 secs total) resolving aliases
 
-    ## ℹ (0.002 secs elapsed; 0.006 secs total) validating arguments
+    ## ℹ (0.002 secs elapsed; 0.007 secs total) validating arguments
 
     ## Warning: Disabling index annotations via index_annotation_interval = 0 or index_annotation_size = 0 overrides the index_annotation_always_first_base setting.
     ## If you want the first base in each line to be annotated but no other bases, set index_annotation_interval greater than line_wrapping.
@@ -2006,21 +2006,21 @@ visualise_single_sequence(
 
     ## ℹ (0.003 secs elapsed; 0.010 secs total) splitting input seq to sequence vector
 
-    ## ℹ (0.007 secs elapsed; 0.017 secs total) rasterising image data
+    ## ℹ (0.006 secs elapsed; 0.016 secs total) rasterising image data
 
-    ## ℹ (0.005 secs elapsed; 0.022 secs total) choosing rendering method
+    ## ℹ (0.005 secs elapsed; 0.021 secs total) choosing rendering method
 
     ## ℹ Automatically using geom_raster (much faster than geom_tile) as no sequence text, index annotations, or outlines are present.
 
-    ## ℹ (0.004 secs elapsed; 0.026 secs total) creating basic plot via geom_raster
+    ## ℹ (0.004 secs elapsed; 0.025 secs total) creating basic plot via geom_raster
 
-    ## ℹ (0.006 secs elapsed; 0.032 secs total) adding general plot themes
+    ## ℹ (0.006 secs elapsed; 0.031 secs total) adding general plot themes
 
-    ## ℹ (0.013 secs elapsed; 0.045 secs total) calculating margin
+    ## ℹ (0.013 secs elapsed; 0.044 secs total) calculating margin
 
-    ## ℹ (0.003 secs elapsed; 0.048 secs total) exporting image file
+    ## ℹ (0.003 secs elapsed; 0.047 secs total) exporting image file
 
-    ## ℹ (0.312 secs elapsed; 0.361 secs total) done
+    ## ℹ (0.547 secs elapsed; 0.595 secs total) done
 
 ``` r
 ## View image
@@ -2918,11 +2918,11 @@ visualise_many_sequences(
 
     ## ℹ Verbose monitoring enabled
 
-    ## ℹ (2026-02-26 16:56:59) visualise_many_sequences start
+    ## ℹ (2026-02-26 17:17:29) visualise_many_sequences start
 
     ## ℹ (0.003 secs elapsed; 0.003 secs total) resolving aliases
 
-    ## ℹ (0.002 secs elapsed; 0.005 secs total) validating arguments
+    ## ℹ (0.001 secs elapsed; 0.004 secs total) validating arguments
 
     ## ℹ (0.005 secs elapsed; 0.010 secs total) inserting blank sequences at specified indices
 
@@ -2934,13 +2934,13 @@ visualise_many_sequences(
 
     ## ℹ (0.003 secs elapsed; 0.022 secs total) creating basic plot via geom_raster
 
-    ## ℹ (0.004 secs elapsed; 0.026 secs total) adding general plot themes
+    ## ℹ (0.005 secs elapsed; 0.027 secs total) adding general plot themes
 
-    ## ℹ (0.010 secs elapsed; 0.036 secs total) calculating margin
+    ## ℹ (0.010 secs elapsed; 0.037 secs total) calculating margin
 
-    ## ℹ (0.002 secs elapsed; 0.038 secs total) exporting image file
+    ## ℹ (0.002 secs elapsed; 0.040 secs total) exporting image file
 
-    ## ℹ (0.353 secs elapsed; 0.392 secs total) done
+    ## ℹ (0.448 secs elapsed; 0.488 secs total) done
 
 ``` r
 ## View image
@@ -2973,31 +2973,31 @@ visualise_many_sequences(
 
     ## ℹ Verbose monitoring enabled
 
-    ## ℹ (2026-02-26 16:57:00) visualise_many_sequences start
+    ## ℹ (2026-02-26 17:17:30) visualise_many_sequences start
 
     ## ℹ (0.006 secs elapsed; 0.006 secs total) resolving aliases
 
-    ## ℹ (0.002 secs elapsed; 0.007 secs total) validating arguments
+    ## ℹ (0.001 secs elapsed; 0.007 secs total) validating arguments
 
-    ## ℹ (0.001 secs elapsed; 0.008 secs total) inserting blank sequences at specified indices
+    ## ℹ (0.001 secs elapsed; 0.009 secs total) inserting blank sequences at specified indices
 
     ## ℹ (0.001 secs elapsed; 0.010 secs total) rasterising image data
 
-    ## ℹ (0.008 secs elapsed; 0.018 secs total) choosing rendering method
+    ## ℹ (0.009 secs elapsed; 0.019 secs total) choosing rendering method
 
     ## Warning: Forcing geom_raster via force_raster = TRUE will remove all sequence
     ## text, index annotations (though any inserted blank lines/spacers will remain),
     ## and box outlines.
 
-    ## ℹ (0.002 secs elapsed; 0.020 secs total) creating basic plot via geom_raster
+    ## ℹ (0.002 secs elapsed; 0.021 secs total) creating basic plot via geom_raster
 
-    ## ℹ (0.004 secs elapsed; 0.023 secs total) adding general plot themes
+    ## ℹ (0.004 secs elapsed; 0.024 secs total) adding general plot themes
 
-    ## ℹ (0.009 secs elapsed; 0.032 secs total) calculating margin
+    ## ℹ (0.010 secs elapsed; 0.034 secs total) calculating margin
 
-    ## ℹ (0.002 secs elapsed; 0.034 secs total) exporting image file
+    ## ℹ (0.002 secs elapsed; 0.036 secs total) exporting image file
 
-    ## ℹ (0.511 secs elapsed; 0.545 secs total) done
+    ## ℹ (0.593 secs elapsed; 0.629 secs total) done
 
 ``` r
 ## View image
