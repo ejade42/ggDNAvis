@@ -1,29 +1,29 @@
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
   const isHome = document.querySelector(".home") !== null;
   if (!isHome) return;
 
-  // Inject HTML - Notice the toggle is now a <button> instead of a <div>
-  const tocHTML = `
-    <div id="custom-toc-container">
-      <button id="custom-toc-toggle" title="Toggle Table of Contents">▶</button>
-      <div id="custom-toc-content">
+  // 1. Inject HTML structure (Open by default: no 'collapsed' class)
+  const html = `
+    <div id="toc-wrapper">
+      <button id="toc-toggle" title="Toggle Table of Contents">▶</button>
+      <div id="toc-resize-handle"></div>
+      <div id="toc-panel">
         <h5 style="margin-top:0;">Contents</h5>
-        <nav id="custom-toc-nav"></nav>
+        <nav id="toc-nav"></nav>
       </div>
     </div>
   `;
-  document.body.insertAdjacentHTML('beforeend', tocHTML);
+  document.body.insertAdjacentHTML('beforeend', html);
 
-  // Find headings (broadened search just in case pkgdown layout varies)
+  // 2. Generate Hierarchical TOC
   const headings = document.querySelectorAll(".home h2, .home h3, main h2, main h3");
-  const tocNav = document.getElementById("custom-toc-nav");
-  
+  const tocNav = document.getElementById("toc-nav");
+
   if (headings.length === 0) {
-    document.getElementById("custom-toc-container").style.display = 'none';
+    document.getElementById("toc-wrapper").style.display = 'none';
     return;
   }
 
-  // Build the list
   let ulLevel1 = document.createElement("ul");
   ulLevel1.className = "toc-level-1";
   let currentH2Li = null;
@@ -51,27 +51,48 @@ document.addEventListener("DOMContentLoaded", function() {
       currentH3Ul.appendChild(li);
     }
   });
-
   tocNav.appendChild(ulLevel1);
 
-  // Toggle Logic - Should now work flawlessly
-  const toggleBtn = document.getElementById("custom-toc-toggle");
-  const container = document.getElementById("custom-toc-container");
-  
-  toggleBtn.addEventListener("click", function() {
-    container.classList.toggle("collapsed");
-    toggleBtn.textContent = container.classList.contains("collapsed") ? "◀" : "▶";
+  // 3. Toggle Logic
+  const toggle = document.getElementById("toc-toggle");
+  const wrapper = document.getElementById("toc-wrapper");
+
+  toggle.addEventListener("click", function () {
+    wrapper.classList.toggle("collapsed");
+    toggle.textContent = wrapper.classList.contains("collapsed") ? "◀" : "▶";
   });
 
-  // Scrollspy Logic
-  const tocLinks = document.querySelectorAll('#custom-toc-nav a');
+  // 4. Resize Logic (Adapted from your script)
+  const handle = document.getElementById('toc-resize-handle');
+  const panel = document.getElementById('toc-panel');
+
+  function resizePanel(e) {
+    const newWidth = window.innerWidth - e.clientX;
+    // Set boundaries so it doesn't get too small or swallow the whole screen
+    if (newWidth > 150 && newWidth < 600) {
+      panel.style.width = `${newWidth}px`;
+    }
+  }
+
+  function stopResize() {
+    document.removeEventListener('mousemove', resizePanel);
+    document.removeEventListener('mouseup', stopResize);
+    document.body.style.userSelect = ""; // Re-enable text selection after drag
+  }
+
+  handle.addEventListener('mousedown', function (e) {
+    document.addEventListener('mousemove', resizePanel);
+    document.addEventListener('mouseup', stopResize);
+    document.body.style.userSelect = "none"; // Prevent highlighting text while dragging
+  });
+
+  // 5. Scrollspy Logic
+  const tocLinks = document.querySelectorAll('#toc-nav a');
   
   const updateScrollSpy = () => {
     let currentId = "";
-    
     headings.forEach(h => {
-      const rect = h.getBoundingClientRect();
-      if (rect.top <= 150) {
+      if (h.getBoundingClientRect().top <= 150) {
         currentId = h.id;
       }
     });

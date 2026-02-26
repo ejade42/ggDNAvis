@@ -1,89 +1,103 @@
-/* Prevent the extra scrollbar caused by off-screen elements */
+/* Prevent horizontal scrollbars when panel slides off screen */
 body {
-  overflow-x: hidden;
+  overflow-x: hidden; 
 }
 
-/* Custom Floating TOC Container - OPEN BY DEFAULT */
-#custom-toc-container {
+/* Wrapper mimicking your filter-wrapper */
+#toc-wrapper {
   position: fixed;
-  right: 0; /* 0 means it sits flush against the right edge (Open) */
   top: 100px;
-  width: 280px;
-  background: #ffffff;
-  border: 1px solid #dee2e6;
-  border-right: none;
-  border-radius: 8px 0 0 8px;
-  box-shadow: -3px 3px 10px rgba(0, 0, 0, 0.05);
-  transition: right 0.3s ease-in-out;
-  z-index: 9999; /* Extremely high z-index to stay above pkgdown elements */
+  right: 0;
+  z-index: 9999;
+  display: flex;
+  flex-direction: row; /* panel is on the right, handle on left edge */
+  transition: transform 0.3s ease;
 }
 
-/* The Collapsed State - Slides off screen using 'right' instead of 'transform' */
-#custom-toc-container.collapsed {
-  right: -280px;
+#toc-wrapper.collapsed {
+  transform: translateX(100%);
 }
 
-/* The Clickable Arrow Button */
-#custom-toc-toggle {
+/* Toggle button - Uses <button> so it's clickable, not highlightable */
+#toc-toggle {
   position: absolute;
-  left: -32px;
+  left: -32px; /* Hangs perfectly off the left edge */
   top: 20px;
   width: 32px;
   height: 40px;
-  background: #ffffff;
+  background-color: #ffffff;
   border: 1px solid #dee2e6;
   border-right: none;
-  border-radius: 8px 0 0 8px;
   cursor: pointer;
+  font-size: 14px;
+  border-radius: 8px 0 0 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
-  color: #555;
+  user-select: none;
   box-shadow: -3px 0px 5px rgba(0, 0, 0, 0.05);
-  z-index: 10000;
+  color: #555;
   padding: 0;
-  user-select: none; /* Stops the arrow from being highlighted as text */
 }
 
-#custom-toc-toggle:hover {
-  background: #f8f9fa;
+#toc-toggle:hover {
+  background-color: #f8f9fa;
 }
 
-/* Inner content styling */
-#custom-toc-content {
+/* Resize handle */
+#toc-resize-handle {
+  width: 5px;
+  cursor: ew-resize;
+  background-color: transparent;
+  z-index: 10000;
+}
+
+#toc-wrapper.collapsed #toc-resize-handle {
+  display: none;
+}
+
+/* Panel */
+#toc-panel {
+  width: 280px; /* Default width */
   padding: 15px;
-  max-height: 75vh;
+  background-color: #ffffff;
+  border: 1px solid #dee2e6;
+  border-right: none;
+  max-height: 80vh;
   overflow-y: auto;
+  border-radius: 0 0 0 8px;
+  box-shadow: -3px 3px 10px rgba(0, 0, 0, 0.05);
 }
 
-#custom-toc-content ul {
+/* TOC List Styling */
+#toc-panel ul {
   list-style-type: none;
   padding-left: 15px;
   font-size: 0.9em;
+  margin-bottom: 0;
 }
 
-#custom-toc-content .toc-level-1 {
+#toc-panel .toc-level-1 {
   padding-left: 0;
 }
 
-#custom-toc-content a {
+#toc-panel a {
   text-decoration: none;
   color: #0056b3;
   display: block;
   margin-bottom: 6px;
 }
 
-#custom-toc-content a:hover {
+#toc-panel a:hover {
   text-decoration: underline;
 }
 
 /* Scrollspy Active State */
-#custom-toc-content a.active {
-  color: #212529;
+#toc-panel a.active {
+  color: #212529; 
   font-weight: 600;
-  border-left: 3px solid #0056b3;
-  padding-left: 8px;
-  margin-left: -11px;
+  border-left: 3px solid #0056b3; 
+  padding-left: 8px; 
+  margin-left: -11px; 
   transition: all 0.2s ease-in-out;
 }
