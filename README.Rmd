@@ -20,9 +20,13 @@ csl: README_files/apa.csl
 [![CRAN total downloads](https://cranlogs.r-pkg.org/badges/grand-total/ggDNAvis)](https://cran.r-project.org/package=ggDNAvis)
 <!-- badges: end -->
 
-# ggDNAvis <a href="https://ejade42.github.io/ggDNAvis/"><img src="man/figures/logo.png" align="right" height="200" alt="ggDNAvis website" class="pkgdown-hide" /></a> {-}
+# ggDNAvis <a href="https://ejade42.github.io/ggDNAvis/"><img src="man/figures/logo.png" align="right" height="200" alt="ggDNAvis website" /></a> {- .unlisted}
+
+
 # Introduction
-## ggDNAvis introduction
+
+## General introduction
+
 ggDNAvis is an R package that uses ggplot2 to visualise genetic data of three main types:
 
 (1) a single DNA/RNA sequence split across multiple lines,
@@ -35,7 +39,7 @@ This is accomplished through main functions `visualise_single_sequence()`, `visu
 
 Additionally, ggDNAvis contains a built-in example dataset (`example_many_sequences`) and a set of colour palettes for DNA visualisation (`sequence_colour_palettes`).
 
-As of v1.0.0, aliases are now fully configured so either American or British spellings should work. "Colour" and "visualise" remain the spellings used throughout the code and documentation but "color", "col", and "visualize" should also work in all function and argument names (e.g. `visualize_single_sequence()`). If any American spellings don't work then please submit a bug report at https://github.com/ejade42/ggDNAvis/issues.
+As of v1.0.0, `aliases` are now fully configured so either American or British spellings should work. "Colour" and "visualise" remain the spellings used throughout the code and documentation but "color", "col", and "visualize" should also work in all function and argument names (e.g. `visualize_single_sequence()`). If any American spellings don't work then please submit a bug report at https://github.com/ejade42/ggDNAvis/issues.
 
 ## Installation
 The latest release of ggDNAvis is available from CRAN or via github releases. Alternatively, the latest in-development version can be installed directly from the github repository, but may have unexpected bugs.
