@@ -1,16 +1,16 @@
 #simple-toc {
   position: fixed;
   top: 100px;
-  right: 20px; /* 20px breathing room from the edge of the screen */
+  right: 0px;
   width: 250px;
-  background-color: #f8f9fa; /* Light grey so it stands out */
+  background-color: #f8f9fa;
   border: 1px solid #dee2e6;
   border-radius: 5px;
   padding: 15px;
-  z-index: 9999; /* Guarantees it sits on top of everything */
+  z-index: 9999;
   max-height: 80vh;
   overflow-y: auto;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Soft shadow */
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
 #simple-toc ul {
@@ -42,7 +42,7 @@
 }
 
 /* Expand the sub-headings only when the parent is active */
-#simple-toc li.active-li > ul {
+#simple-toc li.active-li ul {
   display: block;
 }
 
