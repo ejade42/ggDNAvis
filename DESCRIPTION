@@ -1,6 +1,6 @@
 Package: ggDNAvis
 Title: 'ggplot2'-Based Tools for Visualising DNA Sequences and Modifications
-Version: 0.3.2.9044
+Version: 0.3.2.9045
 Authors@R: 
     person(
         "Evelyn", "Jade", 
