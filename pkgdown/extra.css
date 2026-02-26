@@ -1,103 +1,36 @@
-/* Prevent horizontal scrollbars when panel slides off screen */
-body {
-  overflow-x: hidden; 
-}
-
-/* Wrapper mimicking your filter-wrapper */
-#toc-wrapper {
+#simple-toc {
   position: fixed;
   top: 100px;
-  right: 0;
-  z-index: 9999;
-  display: flex;
-  flex-direction: row; /* panel is on the right, handle on left edge */
-  transition: transform 0.3s ease;
-}
-
-#toc-wrapper.collapsed {
-  transform: translateX(100%);
-}
-
-/* Toggle button - Uses <button> so it's clickable, not highlightable */
-#toc-toggle {
-  position: absolute;
-  left: -32px; /* Hangs perfectly off the left edge */
-  top: 20px;
-  width: 32px;
-  height: 40px;
-  background-color: #ffffff;
+  right: 20px; /* 20px breathing room from the edge of the screen */
+  width: 250px;
+  background-color: #f8f9fa; /* Light grey so it stands out */
   border: 1px solid #dee2e6;
-  border-right: none;
-  cursor: pointer;
-  font-size: 14px;
-  border-radius: 8px 0 0 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  user-select: none;
-  box-shadow: -3px 0px 5px rgba(0, 0, 0, 0.05);
-  color: #555;
-  padding: 0;
-}
-
-#toc-toggle:hover {
-  background-color: #f8f9fa;
-}
-
-/* Resize handle */
-#toc-resize-handle {
-  width: 5px;
-  cursor: ew-resize;
-  background-color: transparent;
-  z-index: 10000;
-}
-
-#toc-wrapper.collapsed #toc-resize-handle {
-  display: none;
-}
-
-/* Panel */
-#toc-panel {
-  width: 280px; /* Default width */
+  border-radius: 5px;
   padding: 15px;
-  background-color: #ffffff;
-  border: 1px solid #dee2e6;
-  border-right: none;
+  z-index: 9999; /* Guarantees it sits on top of everything */
   max-height: 80vh;
   overflow-y: auto;
-  border-radius: 0 0 0 8px;
-  box-shadow: -3px 3px 10px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Soft shadow */
 }
 
-/* TOC List Styling */
-#toc-panel ul {
-  list-style-type: none;
+#simple-toc ul {
+  list-style: none;
   padding-left: 15px;
-  font-size: 0.9em;
   margin-bottom: 0;
+  font-size: 0.9em;
 }
 
-#toc-panel .toc-level-1 {
+#simple-toc .toc-level-1 {
   padding-left: 0;
 }
 
-#toc-panel a {
+#simple-toc a {
   text-decoration: none;
   color: #0056b3;
   display: block;
   margin-bottom: 6px;
 }
 
-#toc-panel a:hover {
+#simple-toc a:hover {
   text-decoration: underline;
-}
-
-/* Scrollspy Active State */
-#toc-panel a.active {
-  color: #212529; 
-  font-weight: 600;
-  border-left: 3px solid #0056b3; 
-  padding-left: 8px; 
-  margin-left: -11px; 
-  transition: all 0.2s ease-in-out;
 }
