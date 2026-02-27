@@ -62,9 +62,15 @@
 
 
 
+/* Hide the GitHub-only warning message from the pkgdown website */
+#github-only-warning {
+  display: none !important;
+}
 
 
 
+
+/* 1. Start defining code to hide toc*/
 #simple-toc {
   transition: all 0.3s ease; 
 }

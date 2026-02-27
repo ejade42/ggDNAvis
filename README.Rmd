@@ -21,6 +21,16 @@ csl: README_files/apa.csl
 <!-- badges: end -->
 
 
+
+<div id="github-only-warning">
+
+> **Important:** I strongly recommend reading this documentation on the [pkgdown documentation website](https://ejade42.github.io/ggDNAvis/) rather than on GitHub! 
+The website includes proper formatting, a dynamic table of contents, an embedded interactive GUI for the tools, full documentation and examples for all functions, and a much better reading experience.
+Bear in mind that GitHub always displays the latest version of the README (usually a dev version) while the main website is for the latest release version -- however, the [latest dev section of the website](https://ejade42.github.io/ggDNAvis/dev/) always matches the latest dev GitHub.
+
+</div>
+
+
 # Introduction
 
 ## General introduction

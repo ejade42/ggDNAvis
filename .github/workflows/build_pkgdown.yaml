@@ -117,6 +117,8 @@ jobs:
           ## Checkout latest release branch but overwrite _pkgdown.yml
           git checkout -B "release-${LATEST}" "origin/release/${LATEST}"
           cat _pkgdown_layout.yml _pkgdown_reference.yml > _pkgdown.yml
+          git checkout origin/main -- inst/CITATION pkgdown/extra.css pkgdown/extra.js || echo "Warning: Could not copy EXTRA and CITATION assets from main"
+          
           ## Inject interactive_app Rmd from main if missing
           if [ ! -f "vignettes/interactive_app.Rmd" ]; then
             echo "Injecting interactive_app.Rmd from main..."
@@ -144,6 +146,7 @@ jobs:
               ## Checkout prior release branch but overwrite _pkgdown.yml
               git checkout -f -B "release-${release}" "origin/release/${release}"
               cat _pkgdown_layout.yml _pkgdown_reference.yml > _pkgdown.yml
+              git checkout origin/main -- inst/CITATION pkgdown/extra.css pkgdown/extra.js || echo "Warning: Could not copy EXTRA and CITATION assets from main"
               
               ## Inject interactive_app Rmd from main if missing
               if [ ! -f "vignettes/interactive_app.Rmd" ]; then

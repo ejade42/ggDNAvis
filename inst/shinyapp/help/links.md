@@ -1,5 +1,5 @@
 [link_bugs]: https://github.com/ejade42/ggDNAvis/issues
-[link_citation]: https://github.com/ejade42/ggDNAvis
+[link_citation]: https://ejade42.github.io/ggDNAvis/authors.html#citation
 [link_documentation]: https://ejade42.github.io/ggDNAvis/
 [link_source]: https://github.com/ejade42/ggDNAvis
 [link_CRAN]: https://CRAN.R-project.org/package=ggDNAvis
