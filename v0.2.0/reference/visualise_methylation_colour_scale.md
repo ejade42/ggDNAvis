@@ -139,12 +139,12 @@ visualise_methylation_colour_scale(
     background_colour = "lightblue1",
     x_axis_title = "Methylation probability"
 )
-
+#> Error in visualise_methylation_colour_scale(low_colour = "white", high_colour = "black",     low_clamp = 0.3 * 255, high_clamp = 0.7 * 255, full_range = c(0,         255), background_colour = "lightblue1", x_axis_title = "Methylation probability"): Unrecognised arguments: x_axis_title
 
 ## Lower precision = colour banding
 visualise_methylation_colour_scale(
     precision = 10,
     do_x_ticks = FALSE
 )
-
+#> Error in visualise_methylation_colour_scale(precision = 10, do_x_ticks = FALSE): Unrecognised arguments: do_x_ticks
 ```
