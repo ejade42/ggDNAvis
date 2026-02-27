@@ -95,6 +95,18 @@ document.addEventListener("DOMContentLoaded", function() {
   tocNav.appendChild(rootUl);
   
   
+  
+  // Hide basic TOC from md
+  const firstList = document.querySelector("main ul");
+  if (firstList) {
+    const firstLink = firstList.querySelector("a");
+    if (firstLink && firstLink.getAttribute("href").startsWith("#")) {
+      firstList.style.display = "none";
+    }
+  }
+  
+  
+  
   // Scroll tracker
   function onScroll() {
     let currentActiveId = "";
