@@ -136,29 +136,25 @@ document.addEventListener("DOMContentLoaded", function() {
   
   
   // Code for toggling toc
-  const tocContainer = document.querySelector("nav#toc") || document.querySelector("#TOC");
+  const tocContainer = document.getElementById("simple-toc");
 
   if (tocContainer) {
-    // Create the toggle arrow button
     const arrowBtn = document.createElement("button");
     arrowBtn.id = "toc-arrow-btn";
     
-    // Start with a right-pointing arrow (assuming TOC is visible and on the right side)
+    // Since your TOC is on the right, pointing right means "push to the edge to hide"
     arrowBtn.innerHTML = "▶"; 
 
-    // Insert the button at the very beginning of the TOC
+    // Insert the button at the top
     tocContainer.prepend(arrowBtn);
 
-    // Add the click action
     arrowBtn.addEventListener("click", function() {
-      // Toggle the hidden class on and off
       tocContainer.classList.toggle("toc-hidden");
       
-      // Swap the arrow direction based on whether it is hidden
       if (tocContainer.classList.contains("toc-hidden")) {
-        arrowBtn.innerHTML = "◀"; // Point left to show it's collapsed and ready to expand
+        arrowBtn.innerHTML = "◀"; // Point left to show it can expand back out
       } else {
-        arrowBtn.innerHTML = "▶"; // Point right to show it's fully extended
+        arrowBtn.innerHTML = "▶"; // Point right to close
       }
     });
   }

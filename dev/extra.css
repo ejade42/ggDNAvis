@@ -61,42 +61,50 @@
 }
 
 
-/* 1. Anchor the TOC so the button stays inside it */
-nav#toc, #TOC {
-  position: relative;
-  transition: all 0.3s ease; /* Adds a nice smooth speed to the toggle */
+
+
+
+
+#simple-toc {
+  transition: all 0.3s ease; 
 }
 
-/* 2. Style the arrow and pin it to the top right */
+/* 2. Style the arrow and place it in the top right of the TOC box */
 #toc-arrow-btn {
   position: absolute;
-  top: 0px;    /* Adjust this if it sits too high/low */
-  right: 5px;  /* Pushes it to the right corner */
+  top: 10px;   
+  right: 10px;  
   background: none;
   border: none;
-  font-size: 18px;
+  font-size: 16px;
   cursor: pointer;
-  color: #666; /* Subtle grey */
+  color: #666; 
   z-index: 1050; 
 }
 
 #toc-arrow-btn:hover {
-  color: #000; /* Darkens when hovered */
+  color: #000; 
 }
 
-/* 3. The rule for when the TOC is hidden */
-.toc-hidden ul {
-  display: none !important; /* Hides all the actual links */
+/* 3. Hide the text and links when the toc-hidden class is active */
+.toc-hidden h5, 
+.toc-hidden #simple-toc-nav {
+  display: none !important; 
 }
 
-.toc-hidden h2, .toc-hidden h3 {
-  display: none !important; /* Hides the "Contents" title if there is one */
-}
-
+/* 4. Shrink the main box into a tiny square when hidden */
 .toc-hidden {
-  /* Shrinks the entire TOC container so it doesn't take up empty space */
-  min-width: 40px !important; 
   width: 40px !important;
-  background: transparent !important;
-  border: none !important;
+  height: 40px !important;
+  padding: 0 !important; /* Removes your 15px padding so it can shrink */
+  min-width: 0 !important;
+  overflow: hidden;
+}
+
+/* Re-center the arrow perfectly inside the tiny square */
+.toc-hidden #toc-arrow-btn {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  right: auto;
 }
