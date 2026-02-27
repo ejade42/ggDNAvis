@@ -98,6 +98,11 @@ jobs:
           git show origin/main:_pkgdown_main.yml > _pkgdown_layout.yml
           BASE_URL=$(yq -r '.url' _pkgdown_layout.yml)
           
+          echo; echo "Pre-processing CSS and citation information"
+          git show origin/main:inst/CITATION > inst/CITATION
+          git show origin/main:pkgdown/extra.css > pkgdown/extra.css
+          git show origin/main:pkgdown/extra.js > pkgdown/extra.js
+          
           ## Inject version menu
           VERSION_MENU=""
           for release in $RELEASES; do
