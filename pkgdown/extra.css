@@ -1,7 +1,7 @@
 #simple-toc {
   position: fixed;
   top: 100px;
-  right: 5px;
+  right: 10px;
   width: 250px;
   background-color: #f8f9fa;
   border: 1px solid #dee2e6;
@@ -58,4 +58,45 @@
 #simple-toc a.active-link {
   font-weight: 700;
   color: #212529; /* Darker text for active link */
+}
+
+
+/* 1. Anchor the TOC so the button stays inside it */
+nav#toc, #TOC {
+  position: relative;
+  transition: all 0.3s ease; /* Adds a nice smooth speed to the toggle */
+}
+
+/* 2. Style the arrow and pin it to the top right */
+#toc-arrow-btn {
+  position: absolute;
+  top: 0px;    /* Adjust this if it sits too high/low */
+  right: 5px;  /* Pushes it to the right corner */
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  color: #666; /* Subtle grey */
+  z-index: 1050; 
+}
+
+#toc-arrow-btn:hover {
+  color: #000; /* Darkens when hovered */
+}
+
+/* 3. The rule for when the TOC is hidden */
+.toc-hidden ul {
+  display: none !important; /* Hides all the actual links */
+}
+
+.toc-hidden h2, .toc-hidden h3 {
+  display: none !important; /* Hides the "Contents" title if there is one */
+}
+
+.toc-hidden {
+  /* Shrinks the entire TOC container so it doesn't take up empty space */
+  min-width: 40px !important; 
+  width: 40px !important;
+  background: transparent !important;
+  border: none !important;
 }
