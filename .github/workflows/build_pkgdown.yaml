@@ -98,11 +98,6 @@ jobs:
           git show origin/main:_pkgdown_main.yml > _pkgdown_layout.yml
           BASE_URL=$(yq -r '.url' _pkgdown_layout.yml)
           
-          echo; echo "Pre-processing CSS and citation information"
-          git show origin/main:inst/CITATION > inst/CITATION
-          git show origin/main:pkgdown/extra.css > pkgdown/extra.css
-          git show origin/main:pkgdown/extra.js > pkgdown/extra.js
-          
           ## Inject version menu
           VERSION_MENU=""
           for release in $RELEASES; do
@@ -122,6 +117,8 @@ jobs:
           ## Checkout latest release branch but overwrite _pkgdown.yml
           git checkout -B "release-${LATEST}" "origin/release/${LATEST}"
           cat _pkgdown_layout.yml _pkgdown_reference.yml > _pkgdown.yml
+          git checkout origin/main -- inst/CITATION pkgdown/extra.css pkgdown/extra.js || echo "Warning: Could not copy EXTRA and CITATION assets from main"
+          
           ## Inject interactive_app Rmd from main if missing
           if [ ! -f "vignettes/interactive_app.Rmd" ]; then
             echo "Injecting interactive_app.Rmd from main..."
@@ -149,6 +146,7 @@ jobs:
               ## Checkout prior release branch but overwrite _pkgdown.yml
               git checkout -f -B "release-${release}" "origin/release/${release}"
               cat _pkgdown_layout.yml _pkgdown_reference.yml > _pkgdown.yml
+              git checkout origin/main -- inst/CITATION pkgdown/extra.css pkgdown/extra.js || echo "Warning: Could not copy EXTRA and CITATION assets from main"
               
               ## Inject interactive_app Rmd from main if missing
               if [ ! -f "vignettes/interactive_app.Rmd" ]; then

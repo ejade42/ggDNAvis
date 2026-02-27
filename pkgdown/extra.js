@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function() {
   const path = window.location.pathname;
-  if (path.includes("/reference/") || path.includes("/articles/") || path.includes("/news/")) {
+  if (path.includes("/reference/") || path.includes("/articles/") || path.includes("/news/") || path.includes("LICENSE") || path.includes("authors.html")) {
     return; // Exits the script, so no TOC is built here
   }
   
