@@ -1,6 +1,6 @@
 Package: ggDNAvis
 Title: 'ggplot2'-Based Tools for Visualising DNA Sequences and Modifications
-Version: 0.3.2.9058
+Version: 0.3.2.9059
 Authors@R: 
     person(
         "Evelyn", "Jade", 
@@ -42,6 +42,6 @@ Depends:
     R (>= 3.5)
 LazyData: true
 Language: en-GB
-URL: https://ejade42.github.io/ggDNAvis/, https://github.com/ejade42/ggDNAvis 
+URL: https://ejade42.github.io/ggDNAvis/, https://github.com/ejade42/ggDNAvis, https://doi.org/10.64898/2026.03.02.708895
 BugReports: https://github.com/ejade42/ggDNAvis/issues
 VignetteBuilder: knitr
