@@ -12,14 +12,15 @@ Source:
 
 Jade E, Scotter E (2026). “ggDNAvis: a ggplot2-based R package for
 creating high-quality DNA sequence and modification visualisations.”
-*bioRxiv*. [doi:10.1101/XXXXXX](https://doi.org/10.1101/XXXXXX),
-<https://doi.org/10.1101/XXXXXX>.
+*bioRxiv*.
+[doi:10.64898/2026.03.02.708895](https://doi.org/10.64898/2026.03.02.708895),
+<https://doi.org/10.64898/2026.03.02.708895>.
 
     @Article{,
       title = {ggDNAvis: a ggplot2-based R package for creating high-quality DNA sequence and modification visualisations},
       author = {Evelyn Jade and Emma L. Scotter},
       journal = {bioRxiv},
       year = {2026},
-      doi = {10.1101/XXXXXX},
-      url = {https://doi.org/10.1101/XXXXXX},
+      doi = {10.64898/2026.03.02.708895},
+      url = {https://doi.org/10.64898/2026.03.02.708895},
     }
