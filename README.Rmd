@@ -2695,7 +2695,7 @@ For `visualise_methylation()`, `geom_raster()` is automatically used if:
 
 
 # Advanced usage
-As ggDNAvis visualisations can be returned as ggplots by setting `return = TRUE`, they can be added to and further modified using standard ggplot processing (e.g. adding new geoms). The modification reversing example just above is one example of this, but more are shown in the [ggDNAvis manuscript](`r citation("ggDNAvis")$url`) - not reproduced here for copyright safety. The code to generate all these advanced, composite visualisations is available in the [manuscript/ directory](https://github.com/ejade42/ggDNAvis/blob/main/manuscript) of the source code repo.
+As ggDNAvis visualisations can be returned as ggplots by setting `return = TRUE`, they can be added to and further modified using standard ggplot processing (e.g. adding new geoms). The modification reversing example just above is one example of this, but more are shown in the [ggDNAvis manuscript](`r citation("ggDNAvis")$url`) [@jadeGgdnavis2026] - not reproduced here for copyright safety. The code to generate all these advanced, composite visualisations is available in the [manuscript/ directory](https://github.com/ejade42/ggDNAvis/blob/main/manuscript) of the source code repo.
 
 The general principles of advanced usage are:
 
