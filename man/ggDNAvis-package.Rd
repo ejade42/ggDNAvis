@@ -8,13 +8,14 @@
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Uses 'ggplot2' to visualise either (a) a single DNA/RNA sequence split across multiple lines, (b) multiple DNA/RNA sequences, each occupying a whole line, or (c) base modifications such as DNA methylation called by modified bases models in Dorado or Guppy. Functions starting with visualise_<something>() are the main plotting functions, and functions starting with extract_<something>() are key helper functions for reading files and reformatting data. Source code is available at \url{https://github.com/ejade42/ggDNAvis} and a full non-expert user guide is available at \url{https://ejade42.github.io/ggDNAvis/}.
+Uses 'ggplot2' to visualise either (a) a single DNA/RNA sequence split across multiple lines, (b) multiple DNA/RNA sequences, each occupying a whole line, or (c) base modifications such as DNA methylation called by modified bases models in Dorado or Guppy. Functions starting with visualise_<>() are the main plotting functions, and functions starting with extract_and_sort_<>() are key helper functions for reading files and reformatting data. Source code is available at \url{https://github.com/ejade42/ggDNAvis}, a full non-expert user guide is available at \url{https://ejade42.github.io/ggDNAvis/}, and an interactive web-app version of the software is available at \url{https://ejade42.github.io/ggDNAvis/articles/interactive_app.html}.
 }
 \seealso{
 Useful links:
 \itemize{
   \item \url{https://ejade42.github.io/ggDNAvis/}
   \item \url{https://github.com/ejade42/ggDNAvis}
+  \item \doi{10.64898/2026.03.02.708895}
   \item Report bugs at \url{https://github.com/ejade42/ggDNAvis/issues}
 }
 
