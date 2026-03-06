@@ -112,14 +112,14 @@ view_image <- function(filename) {
 
 ## Set up file locations
 output_location <- "README_files/output/"
-display_location <- "https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/"
+display_location <- "https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/"
 knitr::opts_chunk$set(fig.path = output_location)
 
 ## Print current ggDNAvis version
 cat("Loaded ggDNAvis version is:", as.character(packageVersion("ggDNAvis")))
 ```
 
-    ## Loaded ggDNAvis version is: 1.0.0
+    ## Loaded ggDNAvis version is: 1.0.0.9000
 
 If you are working through the examples, use this setup chunk instead:
 
@@ -218,7 +218,7 @@ visualise_single_sequence(
 view_image(paste0(display_location, "summary_single_sequence.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/summary_single_sequence.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/summary_single_sequence.png)<!-- -->
 
 ## 2.2 Many sequences
 
@@ -271,7 +271,7 @@ visualise_many_sequences(
 view_image(paste0(display_location, "summary_many_sequences.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/summary_many_sequences.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/summary_many_sequences.png)<!-- -->
 
 ## 2.3 Methylation/modification
 
@@ -335,7 +335,7 @@ visualise_methylation(
 view_image(paste0(display_location, "summary_methylation_none.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/summary_methylation_none.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/summary_methylation_none.png)<!-- -->
 
 ### 2.3.1 Methylation showing sequence
 
@@ -378,7 +378,7 @@ visualise_methylation(
 view_image(paste0(display_location, "summary_methylation_sequence.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/summary_methylation_sequence.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/summary_methylation_sequence.png)<!-- -->
 
 ### 2.3.2 Methylation showing probabilities
 
@@ -423,7 +423,7 @@ visualise_methylation(
 view_image(paste0(display_location, "summary_methylation_probabilities.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/summary_methylation_probabilities.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/summary_methylation_probabilities.png)<!-- -->
 
 ### 2.3.3 Methylation showing probability integers
 
@@ -468,7 +468,7 @@ visualise_methylation(
 view_image(paste0(display_location, "summary_methylation_probability_integers.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/summary_methylation_probability_integers.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/summary_methylation_probability_integers.png)<!-- -->
 
 ### 2.3.4 Methylation scalebar
 
@@ -497,7 +497,7 @@ ggsave(paste0(output_location, "summary_methylation_scalebar.png"), scalebar, dp
 view_image(paste0(display_location, "summary_methylation_scalebar.png"))
 ```
 
-<img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/summary_methylation_scalebar.png" alt="" width="60%" style="display: block; margin: auto;" />
+<img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/summary_methylation_scalebar.png" alt="" width="60%" style="display: block; margin: auto;" />
 
 # 3 Loading data
 
@@ -1262,7 +1262,7 @@ sone_2019_f1_1_expanded_ggt_added <- "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGC
 visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added)
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/single_sequence_default-1.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_default-1.png)<!-- -->
 
 By default, `visualise_single_sequence()` will return a ggplot object.
 It can be useful to view this for instant debugging. However, it is not
@@ -1284,7 +1284,7 @@ visualise_single_sequence(
 view_image(paste0(display_location, "single_sequence_01.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/single_sequence_01.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_01.png)<!-- -->
 
 This is the typical single sequence visualisation produced by this
 package. However, almost every aspect of the visualisation is
@@ -1310,7 +1310,7 @@ visualise_single_sequence(
 view_image(paste0(display_location, "single_sequence_02.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/single_sequence_02.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_02.png)<!-- -->
 
 For all `visualise_` functions, the `render_device` argument can be used
 to control the rendering method. It is fed directly to
@@ -1355,7 +1355,7 @@ visualise_single_sequence(
 view_image(paste0(display_location, "single_sequence_03.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/single_sequence_03.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_03.png)<!-- -->
 
 Included in `ggDNAvis` are a set of colour palettes for sequence colours
 that can often be helpful. The default is
@@ -1380,7 +1380,7 @@ visualise_single_sequence(
 view_image(paste0(display_location, "single_sequence_04.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/single_sequence_04.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_04.png)<!-- -->
 
 ``` r
 ## Create image
@@ -1396,7 +1396,7 @@ visualise_single_sequence(
 view_image(paste0(display_location, "single_sequence_05.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/single_sequence_05.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_05.png)<!-- -->
 
 `bright_pale2` is the same but with a slightly lighter shade of green:
 
@@ -1414,7 +1414,7 @@ visualise_single_sequence(
 view_image(paste0(display_location, "single_sequence_06.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/single_sequence_06.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_06.png)<!-- -->
 
 The `bright_deep` palette works best with white text:
 
@@ -1432,7 +1432,7 @@ visualise_single_sequence(
 view_image(paste0(display_location, "single_sequence_07.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/single_sequence_07.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_07.png)<!-- -->
 
 The `sanger` palette is inspired by old-school Sanger sequencing
 readouts and works best with white text:
@@ -1452,7 +1452,7 @@ visualise_single_sequence(
 view_image(paste0(display_location, "single_sequence_08.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/single_sequence_08.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_08.png)<!-- -->
 
 The `accessible` palette is light and dark each of blue and green, which
 is the only 4-category qualitative colourblind-safe palette recommended
@@ -1473,7 +1473,7 @@ visualise_single_sequence(
 view_image(paste0(display_location, "single_sequence_09.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/single_sequence_09.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_09.png)<!-- -->
 
 ## 4.3 Layout customisation
 
@@ -1550,7 +1550,7 @@ visualise_single_sequence(
 view_image(paste0(display_location, "single_sequence_10.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/single_sequence_10.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_10.png)<!-- -->
 
 Setting spacing, margin, sequence text size, and index annotation
 interval all to 0 produces a no-frills visualisation of the sequence
@@ -1588,7 +1588,7 @@ visualise_single_sequence(
 view_image(paste0(display_location, "single_sequence_11.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/single_sequence_11.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_11.png)<!-- -->
 This produced a warning message as setting the margin to 0 clipped off
 the outlines of the outermost boxes. Either a slightly larger margin can
 be used:
@@ -1621,7 +1621,7 @@ visualise_single_sequence(
 view_image(paste0(display_location, "single_sequence_12.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/single_sequence_12.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_12.png)<!-- -->
 
 Or the outlines can be turned off:
 
@@ -1655,7 +1655,7 @@ visualise_single_sequence(
 view_image(paste0(display_location, "single_sequence_13.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/single_sequence_13.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_13.png)<!-- -->
 
 When changing line wrapping and annotation interval, divisibility is
 important. It is generally recommended to make the line wrapping length
@@ -1684,7 +1684,7 @@ visualise_single_sequence(
 view_image(paste0(display_location, "single_sequence_14.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/single_sequence_14.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_14.png)<!-- -->
 
 When setting spacing to 0, it is highly recommended to disable index
 annotations via `index_annotation_interval = 0`, otherwise there is
@@ -1713,7 +1713,7 @@ visualise_single_sequence(
 view_image(paste0(display_location, "single_sequence_15.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/single_sequence_15.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_15.png)<!-- -->
 
 ## 4.4 Performance
 
@@ -1742,44 +1742,44 @@ visualise_single_sequence(
 
     ## ℹ Verbose monitoring enabled
 
-    ## ℹ (2026-03-06 13:25:08) visualise_single_sequence start
+    ## ℹ (2026-03-06 14:42:01) visualise_single_sequence start
 
-    ## ℹ (0.005 secs elapsed; 0.005 secs total) resolving aliases
+    ## ℹ (0.004 secs elapsed; 0.004 secs total) resolving aliases
 
-    ## ℹ (0.001 secs elapsed; 0.006 secs total) validating arguments
+    ## ℹ (0.001 secs elapsed; 0.005 secs total) validating arguments
 
-    ## ℹ (0.001 secs elapsed; 0.008 secs total) splitting input seq to sequence vector
+    ## ℹ (0.001 secs elapsed; 0.006 secs total) splitting input seq to sequence vector
 
-    ## ℹ (0.001 secs elapsed; 0.009 secs total) rasterising image data
+    ## ℹ (0.001 secs elapsed; 0.007 secs total) rasterising image data
 
-    ## ℹ (0.002 secs elapsed; 0.011 secs total) choosing rendering method
+    ## ℹ (0.002 secs elapsed; 0.010 secs total) choosing rendering method
 
-    ## ℹ (0.001 secs elapsed; 0.012 secs total) calculating tile sizes
+    ## ℹ (0.001 secs elapsed; 0.011 secs total) calculating tile sizes
 
-    ## ℹ (0.001 secs elapsed; 0.013 secs total) creating basic plot via geom_tile
+    ## ℹ (0.001 secs elapsed; 0.012 secs total) creating basic plot via geom_tile
 
-    ## ℹ (0.006 secs elapsed; 0.019 secs total) generating sequence text
+    ## ℹ (0.006 secs elapsed; 0.018 secs total) generating sequence text
 
-    ## ℹ (0.001 secs elapsed; 0.021 secs total) adding sequence text
+    ## ℹ (0.001 secs elapsed; 0.019 secs total) adding sequence text
 
-    ## ℹ (0.006 secs elapsed; 0.027 secs total) generating index annotations
+    ## ℹ (0.006 secs elapsed; 0.025 secs total) generating index annotations
 
-    ## ℹ (0.002 secs elapsed; 0.029 secs total) adding index annotations
+    ## ℹ (0.002 secs elapsed; 0.027 secs total) adding index annotations
 
-    ## ℹ (0.003 secs elapsed; 0.032 secs total) adding general plot themes
+    ## ℹ (0.003 secs elapsed; 0.029 secs total) adding general plot themes
 
-    ## ℹ (0.009 secs elapsed; 0.041 secs total) calculating margin
+    ## ℹ (0.009 secs elapsed; 0.039 secs total) calculating margin
 
-    ## ℹ (0.002 secs elapsed; 0.043 secs total) exporting image file
+    ## ℹ (0.002 secs elapsed; 0.040 secs total) exporting image file
 
-    ## ℹ (0.690 secs elapsed; 0.733 secs total) done
+    ## ℹ (0.582 secs elapsed; 0.622 secs total) done
 
 ``` r
 ## View image
 view_image(paste0(display_location, "single_sequence_16.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/single_sequence_16.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_16.png)<!-- -->
 
 ### 4.4.2 Raster versus tile rendering
 
@@ -1821,11 +1821,11 @@ visualise_single_sequence(
 
     ## ℹ Verbose monitoring enabled
 
-    ## ℹ (2026-03-06 13:25:09) visualise_single_sequence start
+    ## ℹ (2026-03-06 14:42:02) visualise_single_sequence start
 
     ## ℹ (0.003 secs elapsed; 0.003 secs total) resolving aliases
 
-    ## ℹ (0.002 secs elapsed; 0.005 secs total) validating arguments
+    ## ℹ (0.002 secs elapsed; 0.004 secs total) validating arguments
 
     ## ℹ Automatically setting index_annotation_interval to 0 as index_annotation_size is 0
 
@@ -1835,33 +1835,33 @@ visualise_single_sequence(
     ## Warning: Disabling index annotations via index_annotation_interval = 0 or index_annotation_size = 0 overrides the index_annotation_always_last_base setting.
     ## If you want the last base in each line to be annotated but no other bases, set index_annotation_interval greater than line_wrapping.
 
-    ## ℹ (0.004 secs elapsed; 0.009 secs total) splitting input seq to sequence vector
+    ## ℹ (0.003 secs elapsed; 0.008 secs total) splitting input seq to sequence vector
 
-    ## ℹ (0.002 secs elapsed; 0.012 secs total) rasterising image data
+    ## ℹ (0.001 secs elapsed; 0.009 secs total) rasterising image data
 
-    ## ℹ (0.003 secs elapsed; 0.015 secs total) choosing rendering method
+    ## ℹ (0.003 secs elapsed; 0.012 secs total) choosing rendering method
 
     ## ℹ Automatically using geom_raster (much faster than geom_tile) as no sequence text, index annotations, or outlines are present.
 
     ## Warning: When using geom_raster, it is recommended to use a smaller pixels_per_base e.g. 10, as there is no text/outlines that would benefit from higher resolution.
     ## Current value: 100
 
-    ## ℹ (0.004 secs elapsed; 0.018 secs total) creating basic plot via geom_raster
+    ## ℹ (0.003 secs elapsed; 0.015 secs total) creating basic plot via geom_raster
 
-    ## ℹ (0.005 secs elapsed; 0.023 secs total) adding general plot themes
+    ## ℹ (0.004 secs elapsed; 0.019 secs total) adding general plot themes
 
-    ## ℹ (0.012 secs elapsed; 0.034 secs total) calculating margin
+    ## ℹ (0.010 secs elapsed; 0.029 secs total) calculating margin
 
-    ## ℹ (0.002 secs elapsed; 0.037 secs total) exporting image file
+    ## ℹ (0.002 secs elapsed; 0.031 secs total) exporting image file
 
-    ## ℹ (0.567 secs elapsed; 0.604 secs total) done
+    ## ℹ (0.925 secs elapsed; 0.956 secs total) done
 
 ``` r
 ## View image
 view_image(paste0(display_location, "single_sequence_17.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/single_sequence_17.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_17.png)<!-- -->
 
 An example of forcing rasterisation when there would otherwise be
 sequence text, index annotations, and outlines (thus producing a
@@ -1889,7 +1889,7 @@ visualise_single_sequence(
 
     ## ℹ Verbose monitoring enabled
 
-    ## ℹ (2026-03-06 13:25:10) visualise_single_sequence start
+    ## ℹ (2026-03-06 14:42:03) visualise_single_sequence start
 
     ## ℹ (0.003 secs elapsed; 0.003 secs total) resolving aliases
 
@@ -1899,7 +1899,7 @@ visualise_single_sequence(
 
     ## ℹ (0.001 secs elapsed; 0.006 secs total) rasterising image data
 
-    ## ℹ (0.002 secs elapsed; 0.009 secs total) choosing rendering method
+    ## ℹ (0.002 secs elapsed; 0.008 secs total) choosing rendering method
 
     ## Warning: Forcing geom_raster via force_raster = TRUE will remove all sequence
     ## text, index annotations (though any inserted blank lines/spacers will remain),
@@ -1907,20 +1907,20 @@ visualise_single_sequence(
 
     ## ℹ (0.001 secs elapsed; 0.010 secs total) creating basic plot via geom_raster
 
-    ## ℹ (0.004 secs elapsed; 0.014 secs total) adding general plot themes
+    ## ℹ (0.004 secs elapsed; 0.013 secs total) adding general plot themes
 
-    ## ℹ (0.010 secs elapsed; 0.023 secs total) calculating margin
+    ## ℹ (0.009 secs elapsed; 0.022 secs total) calculating margin
 
-    ## ℹ (0.002 secs elapsed; 0.025 secs total) exporting image file
+    ## ℹ (0.002 secs elapsed; 0.024 secs total) exporting image file
 
-    ## ℹ (0.289 secs elapsed; 0.315 secs total) done
+    ## ℹ (0.126 secs elapsed; 0.150 secs total) done
 
 ``` r
 ## View image
 view_image(paste0(display_location, "single_sequence_18.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/single_sequence_18.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_18.png)<!-- -->
 
 If sequence text, annotations, and outlines are all already off
 (i.e. `sequence_text_size = 0`, either `index_annotation_size = 0` or
@@ -1946,11 +1946,11 @@ visualise_single_sequence(
 
     ## ℹ Verbose monitoring enabled
 
-    ## ℹ (2026-03-06 13:25:10) visualise_single_sequence start
+    ## ℹ (2026-03-06 14:42:03) visualise_single_sequence start
 
-    ## ℹ (0.004 secs elapsed; 0.004 secs total) resolving aliases
+    ## ℹ (0.003 secs elapsed; 0.003 secs total) resolving aliases
 
-    ## ℹ (0.002 secs elapsed; 0.005 secs total) validating arguments
+    ## ℹ (0.001 secs elapsed; 0.004 secs total) validating arguments
 
     ## Warning: Disabling index annotations via index_annotation_interval = 0 or index_annotation_size = 0 overrides the index_annotation_always_first_base setting.
     ## If you want the first base in each line to be annotated but no other bases, set index_annotation_interval greater than line_wrapping.
@@ -1958,30 +1958,30 @@ visualise_single_sequence(
     ## Warning: Disabling index annotations via index_annotation_interval = 0 or index_annotation_size = 0 overrides the index_annotation_always_last_base setting.
     ## If you want the last base in each line to be annotated but no other bases, set index_annotation_interval greater than line_wrapping.
 
-    ## ℹ (0.003 secs elapsed; 0.008 secs total) splitting input seq to sequence vector
+    ## ℹ (0.002 secs elapsed; 0.006 secs total) splitting input seq to sequence vector
 
-    ## ℹ (0.011 secs elapsed; 0.019 secs total) rasterising image data
+    ## ℹ (0.005 secs elapsed; 0.011 secs total) rasterising image data
 
-    ## ℹ (0.005 secs elapsed; 0.024 secs total) choosing rendering method
+    ## ℹ (0.003 secs elapsed; 0.014 secs total) choosing rendering method
 
     ## ℹ Automatically using geom_raster (much faster than geom_tile) as no sequence text, index annotations, or outlines are present.
 
-    ## ℹ (0.004 secs elapsed; 0.028 secs total) creating basic plot via geom_raster
+    ## ℹ (0.003 secs elapsed; 0.017 secs total) creating basic plot via geom_raster
 
-    ## ℹ (0.006 secs elapsed; 0.034 secs total) adding general plot themes
+    ## ℹ (0.004 secs elapsed; 0.021 secs total) adding general plot themes
 
-    ## ℹ (0.014 secs elapsed; 0.048 secs total) calculating margin
+    ## ℹ (0.010 secs elapsed; 0.031 secs total) calculating margin
 
-    ## ℹ (0.019 secs elapsed; 0.068 secs total) exporting image file
+    ## ℹ (0.003 secs elapsed; 0.034 secs total) exporting image file
 
-    ## ℹ (0.205 secs elapsed; 0.272 secs total) done
+    ## ℹ (0.123 secs elapsed; 0.157 secs total) done
 
 ``` r
 ## View image
 view_image(paste0(display_location, "single_sequence_19.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/single_sequence_19.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_19.png)<!-- -->
 
 # 5 Visualising many DNA/RNA sequences
 
@@ -2102,7 +2102,7 @@ visualise_many_sequences(
 view_image(paste0(display_location, "many_sequences_01.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/many_sequences_01.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_01.png)<!-- -->
 
 ## 5.2 Sequence arrangement customisation
 
@@ -2166,7 +2166,7 @@ visualise_many_sequences(
 view_image(paste0(display_location, "many_sequences_02.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/many_sequences_02.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_02.png)<!-- -->
 
 Here the top large cluster is Family 1, containing individuals F1-1,
 F1-2, and F-3. These individuals contain 5, 2, and 3 reads respectively,
@@ -2201,7 +2201,7 @@ visualise_many_sequences(
 view_image(paste0(display_location, "many_sequences_03.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/many_sequences_03.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_03.png)<!-- -->
 
 Now we have a group for each individual, with sequences in ascending
 length order per individual, and one blank line between individuals.
@@ -2230,7 +2230,7 @@ visualise_many_sequences(
 view_image(paste0(display_location, "many_sequences_04.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/many_sequences_04.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_04.png)<!-- -->
 
 We can also turn off sorting entirely (keeping grouping off) with
 `sort_by = NA` to simply show all the reads in the order in which they
@@ -2259,7 +2259,7 @@ visualise_many_sequences(
 view_image(paste0(display_location, "many_sequences_05.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/many_sequences_05.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_05.png)<!-- -->
 
 It is also possible to keep grouping on while turning sorting off if
 desired:
@@ -2285,7 +2285,7 @@ visualise_many_sequences(
 view_image(paste0(display_location, "many_sequences_06.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/many_sequences_06.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_06.png)<!-- -->
 
 The grouping spacers can be set to 0 to sort within groups without
 visually separating them (but negative values don’t work - they produce
@@ -2323,7 +2323,7 @@ visualise_many_sequences(
 view_image(paste0(display_location, "many_sequences_07.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/many_sequences_07.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_07.png)<!-- -->
 
 Finally, all the same grouping and sorting logic can be used to extract
 any other column as a character vector, though of course if it isn’t DNA
@@ -2459,7 +2459,7 @@ visualise_many_sequences(
 view_image(paste0(display_location, "many_sequences_08.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/many_sequences_08.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_08.png)<!-- -->
 
 However, any numerical vector can be used as `index_annotation_lines` to
 specify which lines should be annotated. For each selected line, an
@@ -2487,7 +2487,7 @@ visualise_many_sequences(
 view_image(paste0(display_location, "many_sequences_09.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/many_sequences_09.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_09.png)<!-- -->
 
 To annotate below the final line of each family, we can look at the
 sequences vector:
@@ -2567,7 +2567,7 @@ visualise_many_sequences(
 view_image(paste0(display_location, "many_sequences_10.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/many_sequences_10.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_10.png)<!-- -->
 
 As with `visualise_single_sequence()`, the frequency of annotations
 along each line is controlled by `index_annotation_interval`.
@@ -2594,7 +2594,7 @@ visualise_many_sequences(
 view_image(paste0(display_location, "many_sequences_11.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/many_sequences_11.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_11.png)<!-- -->
 
 And doing the same but annotating until the end of the image regardless
 of when each sequence ends would look as follows:
@@ -2620,7 +2620,7 @@ visualise_many_sequences(
 view_image(paste0(display_location, "many_sequences_12.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/many_sequences_12.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_12.png)<!-- -->
 
 Customising the colour, size, and vertical position of annotations works
 exactly the same as `visualise_single_sequence()` via
@@ -2650,7 +2650,7 @@ visualise_many_sequences(
 view_image(paste0(display_location, "many_sequences_13.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/many_sequences_13.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_13.png)<!-- -->
 
 Finally, index annotations can of course also be turned completely off
 if desired. The ‘canonical’ way of doing this is by setting
@@ -2671,7 +2671,7 @@ visualise_many_sequences(
 view_image(paste0(display_location, "many_sequences_14.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/many_sequences_14.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_14.png)<!-- -->
 
 ``` r
 visualise_many_sequences(
@@ -2690,7 +2690,7 @@ visualise_many_sequences(
 view_image(paste0(display_location, "many_sequences_15.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/many_sequences_15.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_15.png)<!-- -->
 
 ``` r
 visualise_many_sequences(
@@ -2709,7 +2709,7 @@ visualise_many_sequences(
 view_image(paste0(display_location, "many_sequences_16.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/many_sequences_16.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_16.png)<!-- -->
 
 ## 5.4 Colour and layout customisation
 
@@ -2789,7 +2789,7 @@ visualize_many_sequences(
 view_image(paste0(display_location, "many_sequences_17.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/many_sequences_17.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_17.png)<!-- -->
 
 As with `visualise_single_sequence()`, text can be turned off, in which
 case it is sensible to reduce the resolution:
@@ -2826,7 +2826,7 @@ visualise_many_sequences(
 view_image(paste0(display_location, "many_sequences_18.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/many_sequences_18.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_18.png)<!-- -->
 Note that the margin/outline warning is produced whenever the margin is
 ≤0.25 and the outline linewidth is \>0. Getting the warning does not
 necessarily mean that the outlines are getting cut off (as this only
@@ -2872,36 +2872,36 @@ visualise_many_sequences(
 
     ## ℹ Verbose monitoring enabled
 
-    ## ℹ (2026-03-06 13:25:39) visualise_many_sequences start
+    ## ℹ (2026-03-06 14:42:32) visualise_many_sequences start
 
-    ## ℹ (0.002 secs elapsed; 0.002 secs total) resolving aliases
+    ## ℹ (0.003 secs elapsed; 0.003 secs total) resolving aliases
 
-    ## ℹ (0.001 secs elapsed; 0.004 secs total) validating arguments
+    ## ℹ (0.001 secs elapsed; 0.005 secs total) validating arguments
 
-    ## ℹ (0.004 secs elapsed; 0.008 secs total) inserting blank sequences at specified indices
+    ## ℹ (0.005 secs elapsed; 0.010 secs total) inserting blank sequences at specified indices
 
-    ## ℹ (0.001 secs elapsed; 0.009 secs total) rasterising image data
+    ## ℹ (0.002 secs elapsed; 0.011 secs total) rasterising image data
 
-    ## ℹ (0.007 secs elapsed; 0.016 secs total) choosing rendering method
+    ## ℹ (0.008 secs elapsed; 0.019 secs total) choosing rendering method
 
     ## ℹ Automatically using geom_raster (much faster than geom_tile) as no sequence text, index annotations, or outlines are present.
 
-    ## ℹ (0.002 secs elapsed; 0.018 secs total) creating basic plot via geom_raster
+    ## ℹ (0.003 secs elapsed; 0.022 secs total) creating basic plot via geom_raster
 
-    ## ℹ (0.004 secs elapsed; 0.022 secs total) adding general plot themes
+    ## ℹ (0.004 secs elapsed; 0.027 secs total) adding general plot themes
 
-    ## ℹ (0.009 secs elapsed; 0.032 secs total) calculating margin
+    ## ℹ (0.011 secs elapsed; 0.037 secs total) calculating margin
 
-    ## ℹ (0.002 secs elapsed; 0.034 secs total) exporting image file
+    ## ℹ (0.002 secs elapsed; 0.040 secs total) exporting image file
 
-    ## ℹ (0.268 secs elapsed; 0.301 secs total) done
+    ## ℹ (0.498 secs elapsed; 0.538 secs total) done
 
 ``` r
 ## View image
 view_image(paste0(display_location, "many_sequences_19.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/many_sequences_19.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_19.png)<!-- -->
 
 One important thing to note (which also applies to
 `visualise_methylation()`) is that if `force_raster` is set to `TRUE`,
@@ -2927,38 +2927,38 @@ visualise_many_sequences(
 
     ## ℹ Verbose monitoring enabled
 
-    ## ℹ (2026-03-06 13:25:40) visualise_many_sequences start
+    ## ℹ (2026-03-06 14:42:33) visualise_many_sequences start
 
-    ## ℹ (0.005 secs elapsed; 0.005 secs total) resolving aliases
+    ## ℹ (0.006 secs elapsed; 0.006 secs total) resolving aliases
 
-    ## ℹ (0.001 secs elapsed; 0.007 secs total) validating arguments
+    ## ℹ (0.002 secs elapsed; 0.008 secs total) validating arguments
 
-    ## ℹ (0.001 secs elapsed; 0.008 secs total) inserting blank sequences at specified indices
+    ## ℹ (0.001 secs elapsed; 0.009 secs total) inserting blank sequences at specified indices
 
-    ## ℹ (0.001 secs elapsed; 0.009 secs total) rasterising image data
+    ## ℹ (0.001 secs elapsed; 0.011 secs total) rasterising image data
 
-    ## ℹ (0.008 secs elapsed; 0.017 secs total) choosing rendering method
+    ## ℹ (0.009 secs elapsed; 0.019 secs total) choosing rendering method
 
     ## Warning: Forcing geom_raster via force_raster = TRUE will remove all sequence
     ## text, index annotations (though any inserted blank lines/spacers will remain),
     ## and box outlines.
 
-    ## ℹ (0.002 secs elapsed; 0.019 secs total) creating basic plot via geom_raster
+    ## ℹ (0.002 secs elapsed; 0.021 secs total) creating basic plot via geom_raster
 
-    ## ℹ (0.003 secs elapsed; 0.022 secs total) adding general plot themes
+    ## ℹ (0.004 secs elapsed; 0.025 secs total) adding general plot themes
 
-    ## ℹ (0.009 secs elapsed; 0.031 secs total) calculating margin
+    ## ℹ (0.010 secs elapsed; 0.035 secs total) calculating margin
 
-    ## ℹ (0.002 secs elapsed; 0.033 secs total) exporting image file
+    ## ℹ (0.002 secs elapsed; 0.037 secs total) exporting image file
 
-    ## ℹ (0.266 secs elapsed; 0.299 secs total) done
+    ## ℹ (0.251 secs elapsed; 0.288 secs total) done
 
 ``` r
 ## View image
 view_image(paste0(display_location, "many_sequences_20.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/many_sequences_20.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_20.png)<!-- -->
 
 # 6 Visualising DNA methylation/modification
 
@@ -3423,7 +3423,7 @@ visualise_methylation(
 view_image(paste0(display_location, "modification_01.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/modification_01.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_01.png)<!-- -->
 
 Here all the modification-assessed bases (Cs of CG dinucleotides) are
 coloured blue for low methylation probability and red for high
@@ -3451,7 +3451,7 @@ ggsave(paste0(output_location, "modification_01_scalebar.png"), scalebar, dpi = 
 view_image(paste0(display_location, "modification_01_scalebar.png"))
 ```
 
-<img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/modification_01_scalebar.png" alt="" width="60%" style="display: block; margin: auto;" />
+<img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_01_scalebar.png" alt="" width="60%" style="display: block; margin: auto;" />
 
 (Note that sometimes vertical white lines can appear in the scalebar,
 depending on the exact gradient precision, export dimensions, and dpi.
@@ -3526,7 +3526,7 @@ visualise_methylation(
 view_image(paste0(display_location, "modification_02.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/modification_02.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_02.png)<!-- -->
 
 Here there is no grouping by family, 3 blank lines between each
 participant, and sequences are sorted in ascending length order within
@@ -3585,7 +3585,7 @@ visualise_methylation(
 view_image(paste0(display_location, "modification_03.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/modification_03.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_03.png)<!-- -->
 
 ## 6.4 Sequence text customisation
 
@@ -3651,7 +3651,7 @@ visualise_methylation(
 view_image(paste0(display_location, "modification_04.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/modification_04.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_04.png)<!-- -->
 
 The default text size is 16, which is appropriate for sequence (1
 character per box) but is generally too large for probabilities (often
@@ -3678,7 +3678,7 @@ visualise_methylation(
 view_image(paste0(display_location, "modification_05.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/modification_05.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_05.png)<!-- -->
 
 A more sensible version with integers scaled to 0-1 (which is the
 default, but we will write the arguments explicitly for clarity) would
@@ -3704,7 +3704,7 @@ visualise_methylation(
 view_image(paste0(display_location, "modification_06.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/modification_06.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_06.png)<!-- -->
 
 If we instead wanted to see the integer scores from the original data we
 would turn off scaling and rounding:
@@ -3729,7 +3729,7 @@ visualise_methylation(
 view_image(paste0(display_location, "modification_07.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/modification_07.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_07.png)<!-- -->
 
 ## 6.5 Colour and layout customisation
 
@@ -3864,7 +3864,7 @@ visualise_methylation(
 view_image(paste0(display_location, "modification_08.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/modification_08.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_08.png)<!-- -->
 
 ``` r
 ## Create scalebar and save to object
@@ -3888,7 +3888,7 @@ ggsave(paste0(output_location, "modification_08_scalebar.png"), scalebar, dpi = 
 view_image(paste0(display_location, "modification_08_scalebar.png"))
 ```
 
-<img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/modification_08_scalebar.png" alt="" width="60%" style="display: block; margin: auto;" />
+<img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_08_scalebar.png" alt="" width="60%" style="display: block; margin: auto;" />
 
 One way this might be used in practice is for making a graphic in the
 “lollipop” style where methylated/modified CGs are black and unmodified
@@ -3934,7 +3934,7 @@ visualise_methylation(
 view_image(paste0(display_location, "modification_09.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/modification_09.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_09.png)<!-- -->
 
 ``` r
 ## Create scalebar and save to object
@@ -3952,7 +3952,7 @@ ggsave(paste0(output_location, "modification_09_scalebar.png"), scalebar, dpi = 
 view_image(paste0(display_location, "modification_09_scalebar.png"))
 ```
 
-<img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/modification_09_scalebar.png" alt="" width="60%" style="display: block; margin: auto;" />
+<img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_09_scalebar.png" alt="" width="60%" style="display: block; margin: auto;" />
 
 ## 6.6 Colour mapping customisation
 
@@ -4022,7 +4022,7 @@ visualise_methylation(
 view_image(paste0(display_location, "modification_10.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/modification_10.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_10.png)<!-- -->
 
 ``` r
 ## Create scalebar and save to object
@@ -4042,7 +4042,7 @@ ggsave(paste0(output_location, "modification_10_scalebar.png"), scalebar, dpi = 
 view_image(paste0(display_location, "modification_10_scalebar.png"))
 ```
 
-<img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/modification_10_scalebar.png" alt="" width="60%" style="display: block; margin: auto;" />
+<img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_10_scalebar.png" alt="" width="60%" style="display: block; margin: auto;" />
 
 The clamping arguments do not have to be integers. Clamping is
 implemented with `pmin()` and `pmax()` and relies on their default
@@ -4091,7 +4091,7 @@ visualise_methylation(
 view_image(paste0(display_location, "modification_11.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/modification_11.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_11.png)<!-- -->
 
 ``` r
 ## Create scalebar and save to object
@@ -4108,7 +4108,7 @@ ggsave(paste0(output_location, "modification_11_scalebar.png"), scalebar, dpi = 
 view_image(paste0(display_location, "modification_11_scalebar.png"))
 ```
 
-<img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/modification_11_scalebar.png" alt="" width="60%" style="display: block; margin: auto;" />
+<img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_11_scalebar.png" alt="" width="60%" style="display: block; margin: auto;" />
 
 The clamping does not need to be symmetrical. One use for this is if the
 data is skewed. For example, the methylation scores were randomly
@@ -4149,7 +4149,7 @@ visualise_methylation(
 view_image(paste0(display_location, "modification_12.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/modification_12.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_12.png)<!-- -->
 
 ``` r
 ## Create scalebar and save to object
@@ -4166,7 +4166,7 @@ ggsave(paste0(output_location, "modification_12_scalebar.png"), scalebar, dpi = 
 view_image(paste0(display_location, "modification_12_scalebar.png"))
 ```
 
-<img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/modification_12_scalebar.png" alt="" width="60%" style="display: block; margin: auto;" />
+<img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_12_scalebar.png" alt="" width="60%" style="display: block; margin: auto;" />
 
 ***IMPORTANT:** make sure that you provide the scalebar when presenting
 data, especially if clamping is used, otherwise the colours could be
@@ -4232,7 +4232,7 @@ ggsave(paste0(output_location, "modification_scalebar_alone_01.png"), scalebar, 
 view_image(paste0(display_location, "modification_scalebar_alone_01.png"))
 ```
 
-<img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/modification_scalebar_alone_01.png" alt="" width="60%" style="display: block; margin: auto;" />
+<img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_scalebar_alone_01.png" alt="" width="60%" style="display: block; margin: auto;" />
 
 Disabling axis ticks with intermediate precision gives the following:
 
@@ -4250,7 +4250,7 @@ ggsave(paste0(output_location, "modification_scalebar_alone_02.png"), scalebar, 
 view_image(paste0(display_location, "modification_scalebar_alone_02.png"))
 ```
 
-<img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/modification_scalebar_alone_02.png" alt="" width="60%" style="display: block; margin: auto;" />
+<img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_scalebar_alone_02.png" alt="" width="60%" style="display: block; margin: auto;" />
 
 If ticks are left on, they can be customised with `scale_x_continuous()`
 as per usual for a ggplot. Here is an example of the left side being the
@@ -4281,7 +4281,7 @@ ggsave(paste0(output_location, "modification_scalebar_alone_03.png"), scalebar, 
 view_image(paste0(display_location, "modification_scalebar_alone_03.png"))
 ```
 
-<img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/modification_scalebar_alone_03.png" alt="" width="20%" style="display: block; margin: auto;" />
+<img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_scalebar_alone_03.png" alt="" width="20%" style="display: block; margin: auto;" />
 
 And here is an example of a more sensible scalebar with top text:
 
@@ -4302,7 +4302,7 @@ ggsave(paste0(output_location, "modification_scalebar_alone_04.png"), scalebar, 
 view_image(paste0(display_location, "modification_scalebar_alone_04.png"))
 ```
 
-<img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/modification_scalebar_alone_04.png" alt="" width="60%" style="display: block; margin: auto;" />
+<img src="https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_scalebar_alone_04.png" alt="" width="60%" style="display: block; margin: auto;" />
 
 ## 6.8 Think about the offset!
 
@@ -4514,7 +4514,7 @@ ggsave(
 view_image(paste0(display_location, "modification_reversing_example.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/modification_reversing_example.png)<!-- -->
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_reversing_example.png)<!-- -->
 
 ## 6.9 Performance
 
