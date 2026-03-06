@@ -1,5 +1,7 @@
 # Changelog
 
+## ggDNAvis (development version)
+
 ## ggDNAvis 1.0.0
 
 This ***major*** release has enormous changes to pretty much every
