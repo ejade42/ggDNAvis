@@ -17,7 +17,7 @@ creating high-quality DNA sequence and modification visualisations.”
 <https://doi.org/10.64898/2026.03.02.708895>.
 
     @Article{,
-      title = {ggDNAvis: a ggplot2-based R package for creating high-quality DNA sequence and modification visualisations},
+      title = {{ggDNAvis}: a {ggplot2}-based {R} package for creating high-quality DNA sequence and modification visualisations},
       author = {Evelyn Jade and Emma L. Scotter},
       journal = {bioRxiv},
       year = {2026},
