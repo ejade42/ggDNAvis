@@ -4,11 +4,13 @@ Uses 'ggplot2' to visualise either (a) a single DNA/RNA sequence split
 across multiple lines, (b) multiple DNA/RNA sequences, each occupying a
 whole line, or (c) base modifications such as DNA methylation called by
 modified bases models in Dorado or Guppy. Functions starting with
-visualise\_\<something\>() are the main plotting functions, and
-functions starting with extract\_\<something\>() are key helper
-functions for reading files and reformatting data. Source code is
-available at <https://github.com/ejade42/ggDNAvis> and a full non-expert
-user guide is available at <https://ejade42.github.io/ggDNAvis/>.
+visualise\_\<\>() are the main plotting functions, and functions
+starting with extract_and_sort\_\<\>() are key helper functions for
+reading files and reformatting data. Source code is available at
+<https://github.com/ejade42/ggDNAvis>, a full non-expert user guide is
+available at <https://ejade42.github.io/ggDNAvis/>, and an interactive
+web-app version of the software is available at
+<https://ejade42.github.io/ggDNAvis/articles/interactive_app.html>.
 
 ## See also
 
@@ -17,6 +19,8 @@ Useful links:
 - <https://ejade42.github.io/ggDNAvis/>
 
 - <https://github.com/ejade42/ggDNAvis>
+
+- [doi:10.64898/2026.03.02.708895](https://doi.org/10.64898/2026.03.02.708895)
 
 - Report bugs at <https://github.com/ejade42/ggDNAvis/issues>
 
