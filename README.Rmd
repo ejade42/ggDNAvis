@@ -94,7 +94,7 @@ view_image <- function(filename) {
 
 ## Set up file locations
 output_location <- "README_files/output/"
-display_location <- "https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/"
+display_location <- "https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.0/README_files/output/"
 knitr::opts_chunk$set(fig.path = output_location)
 
 ## Print current ggDNAvis version
@@ -1290,7 +1290,7 @@ It takes the following arguments:
 
 - `sequence_dataframe`: The data to be processed
 - `sequence_variable`: The name of the column we are extracting. This doesn't actually have to be a sequence, it could be any information that we want to convert into a sorted vector spaced out with empty strings.
-- `grouping_levels`: How the data should be grouped. This is a named numerical vector stating which variables/columns should be used to group the data, and how many lines should be left between groups at each level. For example, the default `c("family" = 8, "individual" = 2)` means the top-level grouping is done by categories in the `"family"` column and there are 8 blank lines between each family, and the second-level gropuing is done by the `"individual"` column and there are 2 blank lines between individuals within the same family. This is implemented recursively, so any number of grouping variables can be used (or this can be set to `NA` to turn off grouping entirely).
+- `grouping_levels`: How the data should be grouped. This is a named numerical vector stating which variables/columns should be used to group the data, and how many lines should be left between groups at each level. For example, the default `c("family" = 8, "individual" = 2)` means the top-level grouping is done by categories in the `"family"` column and there are 8 blank lines between each family, and the second-level grouping is done by the `"individual"` column and there are 2 blank lines between individuals within the same family. This is implemented recursively, so any number of grouping variables can be used (or this can be set to `NA` to turn off grouping entirely).
 - `sort_by`: The name of the column used to sort sequences within the lowest-level groups. This is generally the sequence length (but doesn't have to be).
 - `desc_sort`: Whether the sequences should be sorted by the `sort_by` variable descending (`desc_sort = TRUE`) or (`desc_sort = FALSE`).
 
@@ -1901,7 +1901,7 @@ view_image(paste0(display_location, "modification_01_scalebar.png"))
 - `probabilities_colname`: The column probabilities should be extracted from.
 - `sequences_colname`: The column sequences should be extracted from.
 - `lengths_colname`: The column sequence lengths should be extracted from. All four of these just call `extract_and_sort_sequences()` to extract these columns, so they can technically be used to extract any three columns regardless of what they contain. However, if you are trying to extract and sort a non-DNA-information column, it would probably be more sensible to do that directly via `extract_and_sort_sequences()`.
-- `grouping_levels`: How the data should be grouped. This is a named numerical vector stating which variables/columns should be used to group the data, and how many lines should be left between groups at each level. For example, the default `c("family" = 8, "individual" = 2)` means the top-level grouping is done by categories in the `"family"` column and there are 8 blank lines between each family, and the second-level gropuing is done by the `"individual"` column and there are 2 blank lines between individuals within the same family. This is implemented recursively, so any number of grouping variables can be used (or this can be set to `NA` to turn off grouping entirely).
+- `grouping_levels`: How the data should be grouped. This is a named numerical vector stating which variables/columns should be used to group the data, and how many lines should be left between groups at each level. For example, the default `c("family" = 8, "individual" = 2)` means the top-level grouping is done by categories in the `"family"` column and there are 8 blank lines between each family, and the second-level grouping is done by the `"individual"` column and there are 2 blank lines between individuals within the same family. This is implemented recursively, so any number of grouping variables can be used (or this can be set to `NA` to turn off grouping entirely).
 - `sort_by`: The name of the column used to sort sequences within the lowest-level groups. This is generally the sequence length (but doesn't have to be).
 - `desc_sort`: Whether the sequences should be sorted by the `sort_by` variable descending (`desc_sort = TRUE`) or (`desc_sort = FALSE`).
 
@@ -2695,7 +2695,7 @@ For `visualise_methylation()`, `geom_raster()` is automatically used if:
 
 
 # Advanced usage
-As ggDNAvis visualisations can be returned as ggplots by setting `return = TRUE`, they can be added to and further modified using standard ggplot processing (e.g. adding new geoms). The modification reversing example just above is one example of this, but more are shown in the [ggDNAvis manuscript](`r citation("ggDNAvis")$url`) [@jadeGgdnavis2026] - not reproduced here for copyright safety. The code to generate all these advanced, composite visualisations is available in the [manuscript/ directory](https://github.com/ejade42/ggDNAvis/blob/main/manuscript) of the source code repo.
+As ggDNAvis visualisations can be returned as ggplots by setting `return = TRUE`, they can be added to and further modified using standard ggplot processing (e.g. adding new geoms). The modification reversing example just above is one example of this, but more are shown in the [ggDNAvis manuscript](`r citation("ggDNAvis")$url`) [@jadeGgdnavis2026] - not reproduced here for copyright safety. The code to generate all these advanced, composite visualisations is available in the [manuscript/ directory](https://github.com/ejade42/ggDNAvis/tree/v1.0.0/manuscript) of the source code repo.
 
 The general principles of advanced usage are:
 
