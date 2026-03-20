@@ -8,7 +8,7 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/ejade42/ggDNAvis/blob/release/v1.0.0/inst/CITATION)
+[`inst/CITATION`](https://github.com/ejade42/ggDNAvis/blob/main/inst/CITATION)
 
 Jade E, Scotter E (2026). “ggDNAvis: a ggplot2-based R package for
 creating high-quality DNA sequence and modification visualisations.”

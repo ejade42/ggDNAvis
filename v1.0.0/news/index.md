@@ -2,6 +2,8 @@
 
 ## ggDNAvis 1.0.0
 
+CRAN release: 2026-03-06
+
 This ***major*** release has enormous changes to pretty much every
 aspect of `ggDNAvis`. Expect code to break, but also for performance and
 features to be enhanced across the board.

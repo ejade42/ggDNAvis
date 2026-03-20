@@ -52,7 +52,7 @@ Later monitoring steps are performed by monitor()"><meta property="og:image" con
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Start performance monitoring (generic <code>ggDNAvis</code> helper)</h1>
-      <small class="dont-index">Source: <a href="https://github.com/ejade42/ggDNAvis/blob/release/v1.0.0/R/dna_tools.R" class="external-link"><code>R/dna_tools.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/ejade42/ggDNAvis/blob/main/R/dna_tools.R" class="external-link"><code>R/dna_tools.R</code></a></small>
       <div class="d-none name"><code>monitor_start.Rd</code></div>
     </div>
 
@@ -91,7 +91,7 @@ and returns the start time.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">## Initialise monitoring</span></span></span>
 <span class="r-in"><span><span class="va">start_time</span> <span class="op">&lt;-</span> <span class="fu">monitor_start</span><span class="op">(</span><span class="cn">TRUE</span>, <span class="st">"my_cool_function"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Verbose monitoring enabled</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> (2026-03-06 02:16:36) my_cool_function start</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> (2026-03-20 02:33:54) my_cool_function start</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Step 1</span></span></span>
 <span class="r-in"><span><span class="va">monitor_time</span> <span class="op">&lt;-</span> <span class="fu"><a href="monitor.html">monitor</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="va">start_time</span>, <span class="va">start_time</span>, <span class="st">"performing step 1"</span><span class="op">)</span></span></span>
@@ -100,12 +100,12 @@ and returns the start time.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Step 2</span></span></span>
 <span class="r-in"><span><span class="va">monitor_time</span> <span class="op">&lt;-</span> <span class="fu"><a href="monitor.html">monitor</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="va">start_time</span>, <span class="va">monitor_time</span>, <span class="st">"performing step 2"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> (0.003 secs elapsed; 0.006 secs total) performing step 2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> (0.003 secs elapsed; 0.007 secs total) performing step 2</span>
 <span class="r-in"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fl">10.5</span><span class="op">^</span><span class="fl">6</span> <span class="op"><a href="https://rdrr.io/r/base/Arithmetic.html" class="external-link">%%</a></span> <span class="fl">345789</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Step 3</span></span></span>
 <span class="r-in"><span><span class="va">monitor_time</span> <span class="op">&lt;-</span> <span class="fu"><a href="monitor.html">monitor</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="va">start_time</span>, <span class="va">monitor_time</span>, <span class="st">"performing step 3"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> (0.002 secs elapsed; 0.009 secs total) performing step 3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> (0.003 secs elapsed; 0.009 secs total) performing step 3</span>
 <span class="r-in"><span><span class="va">z</span> <span class="op">&lt;-</span> <span class="va">y</span> <span class="op">/</span> <span class="va">x</span><span class="op">^</span><span class="fl">2</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Conclude monitoring</span></span></span>
