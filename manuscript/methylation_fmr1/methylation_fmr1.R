@@ -1,8 +1,8 @@
 library(ggDNAvis)  ## v1.0.0
-library(ggplot2)   ## v4.0.1
-library(dplyr)     ## v1.2.0
-library(purrr)     ## v1.2.1
-library(magick)    ## v2.9.0
+library(ggplot2)   ## v4.0.3
+library(dplyr)     ## v1.2.1
+library(purrr)     ## v1.2.2
+library(magick)    ## v2.9.1
 library(ggtext)    ## v0.1.2
 
 participant_ids <- c("NA04026", "NA05131", "NA06905", "NA12878")
@@ -251,7 +251,7 @@ rm(list = c("canvas", "smooth", "binary", "smooth_scalebar", "binary_scalebar", 
 ## TEXT FIGURE
 ## -------------------------------------------------------------------------------------------
 ## Extract modification info, using wildtype alleles only
-title_spacing <- 2
+title_spacing <- 1
 participant_spacing <- 1
 vis_input <- extract_and_sort_methylation(
     filter(merged_data, participant_id == "NA12878"),
@@ -293,10 +293,10 @@ high_clamp <- 0.75*255
 ## Create annotation dataframes
 text_data_seq <- data.frame(
     x = 0,
-    y = 1 - ((c(title_line - 0.5, participant_lines)) / height),
+    y = 1 - ((c(title_line - 0.25, participant_lines)) / height),
     label = c("(a) Sequence text",
               c("NA12878")),
-    size = c(32.5, rep(27.5, times = 1))
+    size = c(25, rep(20, times = 1))
 )
 text_data_prob <- text_data_seq
 text_data_int  <- text_data_seq
