@@ -1,6 +1,6 @@
 Package: ggDNAvis
 Title: 'ggplot2'-Based Tools for Visualising DNA Sequences and Modifications
-Version: 1.0.0.9001
+Version: 1.0.0.9002
 Authors@R: 
     person(
         "Evelyn", "Jade", 
@@ -15,7 +15,6 @@ Imports:
     ggnewscale,
     ggplot2 (>= 4.0.0),
     grid,
-    magick,
     png,
     ragg,
     rlang,
@@ -26,12 +25,12 @@ Imports:
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.3
 Suggests: 
     bslib,
     colourpicker,
     jsonlite,
     knitr,
+    magick,
     markdown,
     rmarkdown,
     shiny,
@@ -45,3 +44,4 @@ Language: en-GB
 URL: https://ejade42.github.io/ggDNAvis/, https://github.com/ejade42/ggDNAvis, https://doi.org/10.64898/2026.03.02.708895
 BugReports: https://github.com/ejade42/ggDNAvis/issues
 VignetteBuilder: knitr
+Config/roxygen2/version: 8.0.0
