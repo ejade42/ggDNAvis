@@ -1,0 +1,116 @@
+#simple-toc {
+  position: fixed;
+  top: 100px;
+  right: 10px;
+  width: 250px;
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 5px;
+  padding: 15px;
+  z-index: 9999;
+  max-height: 80vh;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  
+  display: flex;
+  flex-direction: column;
+}
+
+#simple-toc-nav {
+  overflow-y: auto;
+  flex-grow: 1;
+  padding-right: 0px;
+}
+
+#simple-toc ul {
+  list-style: none;
+  padding-left: 15px;
+  margin-bottom: 0;
+  font-size: 0.9em;
+}
+
+#simple-toc .toc-level-1 {
+  padding-left: 0;
+}
+
+#simple-toc a {
+  text-decoration: none;
+  color: #0056b3;
+  display: block;
+  margin-bottom: 6px;
+}
+
+#simple-toc a:hover {
+  text-decoration: underline;
+}
+
+/* Hide all nested sub-headings by default */
+#simple-toc ul.toc-level-2,
+#simple-toc ul.toc-level-3 {
+  display: none;
+}
+
+/* Expand the sub-headings only when the parent is active */
+#simple-toc li.active-li ul {
+  display: block;
+}
+
+/* Make the currently viewed link stand out */
+#simple-toc a.active-link {
+  font-weight: 700;
+  color: #212529; /* Darker text for active link */
+}
+
+
+
+/* Hide the GitHub-only warning message from the pkgdown website */
+#github-only-warning {
+  display: none !important;
+}
+
+
+
+
+/* 1. Start defining code to hide toc*/
+#simple-toc {
+  transition: all 0.3s ease; 
+}
+
+/* 2. Style the arrow and place it in the top right of the TOC box */
+#toc-arrow-btn {
+  position: absolute;
+  top: 10px;   
+  right: 10px;  
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  color: #666; 
+  z-index: 1050; 
+}
+
+#toc-arrow-btn:hover {
+  color: #000; 
+}
+
+/* 3. Hide the text and links when the toc-hidden class is active */
+.toc-hidden h5, 
+.toc-hidden #simple-toc-nav {
+  display: none !important; 
+}
+
+/* 4. Shrink the main box into a tiny square when hidden */
+.toc-hidden {
+  width: 40px !important;
+  height: 40px !important;
+  padding: 0 !important; /* Removes your 15px padding so it can shrink */
+  min-width: 0 !important;
+  overflow: hidden;
+}
+
+/* Re-center the arrow perfectly inside the tiny square */
+.toc-hidden #toc-arrow-btn {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  right: auto;
+}
