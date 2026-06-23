@@ -13,7 +13,7 @@ Source:
 Jade E, Scotter E (2026). “ggDNAvis: a ggplot2-based R package for
 creating high-quality DNA sequence and modification visualisations.”
 *bioRxiv*.
-[doi:10.64898/2026.03.02.708895](https://doi.org/10.64898/2026.03.02.708895),
+[doi:10.64898/2026.03.02.708895](https://doi.org/10.64898/2026.03.02.708895).
 <https://doi.org/10.64898/2026.03.02.708895>.
 
     @Article{,

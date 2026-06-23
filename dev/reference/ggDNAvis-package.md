@@ -28,3 +28,8 @@ Useful links:
 
 **Maintainer**: Evelyn Jade <evelynjade42@gmail.com>
 ([ORCID](https://orcid.org/0009-0003-7761-5425)) \[copyright holder\]
+
+Authors:
+
+- Evelyn Jade <evelynjade42@gmail.com>
+  ([ORCID](https://orcid.org/0009-0003-7761-5425)) \[copyright holder\]

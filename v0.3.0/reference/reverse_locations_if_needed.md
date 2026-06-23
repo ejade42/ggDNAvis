@@ -35,6 +35,7 @@ and
   
 Forward sequence, with indices of Cs in CpGs numbered:  
 
+
     C C C A G G C G G C G G C G A C C G A
                 7     10    13      17
 
@@ -42,6 +43,7 @@ Forward sequence, with indices of Cs in CpGs numbered:
 17-18)  
   
 Reverse sequence, with indices of C in CpGs numbered:  
+
 
     T C G G T C G C C G C C G C C T G G G
       2       6     9     12

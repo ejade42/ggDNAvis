@@ -13,8 +13,8 @@
 <link rel="manifest" href="site.webmanifest">
 <!-- katex math --><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" integrity="sha384-7zkQWkzuo3B5mTepMUcHkMB5jZaolc2xDwL6VFqjFALcbeS9Ggm/Yr2r3Dy4lfFg" crossorigin="anonymous"></script><script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" integrity="sha384-43gviWU0YVjaDtb/GhzOouOXtZMP/7XUzwPTstBeZFe/+rCMvRwr4yROQP43s0Xk" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script><script src="katex-auto.js"></script><script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><link href="extra.css" rel="stylesheet">
 <script src="extra.js"></script><meta property="og:title" content="ggplot2-Based Tools for Visualising DNA Sequences and Modifications">
@@ -32,7 +32,7 @@
 
     <a class="navbar-brand me-2" href="index.html">ggDNAvis</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0.9002</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -540,7 +540,7 @@
 <col width="10%">
 <col width="10%">
 </colgroup>
-<thead><tr class="header">
+<thead><tr>
 <th align="left">family</th>
 <th align="left">individual</th>
 <th align="left">read</th>
@@ -553,7 +553,7 @@
 <th align="left">hydroxymethylation_probabilities</th>
 </tr></thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td align="left"><code>Family 1</code></td>
 <td align="left"><code>F1-1</code></td>
 <td align="left"><code>F1-1a</code></td>
@@ -565,7 +565,7 @@
 <td align="left"><code>3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99</code></td>
 <td align="left"><code>26,60,61,60,30,59,2,46,57,64,54,63,52,18,53,34,52,50,39,46,55,54,34</code></td>
 </tr>
-<tr class="even">
+<tr>
 <td align="left"><code>Family 1</code></td>
 <td align="left"><code>F1-1</code></td>
 <td align="left"><code>F1-1b</code></td>
@@ -577,7 +577,7 @@
 <td align="left"><code>3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60</code></td>
 <td align="left"><code>10,44,39,64,20,36,11,63,50,54,64,38,46,41,49,2</code></td>
 </tr>
-<tr class="odd">
+<tr>
 <td align="left"><code>Family 1</code></td>
 <td align="left"><code>F1-1</code></td>
 <td align="left"><code>F1-1c</code></td>
@@ -589,7 +589,7 @@
 <td align="left"><code>3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84</code></td>
 <td align="left"><code>40,63,58,55,60,56,64,56,64,47,46,17,55,52,64,33,63,64,47,37</code></td>
 </tr>
-<tr class="even">
+<tr>
 <td align="left"><code>Family 1</code></td>
 <td align="left"><code>F1-1</code></td>
 <td align="left"><code>F1-1d</code></td>
@@ -717,32 +717,32 @@
 <col width="25%">
 <col width="25%">
 </colgroup>
-<thead><tr class="header">
+<thead><tr>
 <th align="left">read</th>
 <th align="left">sequence</th>
 <th align="left">quality</th>
 <th align="left">sequence_length</th>
 </tr></thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td align="left"><code>F1-1a</code></td>
 <td align="left"><code>GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA</code></td>
 <td align="left"><code>)8@!9:/0/,0+-6?40,-I601:.';+5,@0.0%)!(20C*,2++*(00#/*+3;E-E)&lt;I5.5G*CB8501;I3'.8233'3&gt;&lt;:13)48F?09*&gt;?I90</code></td>
 <td align="left"><code>102</code></td>
 </tr>
-<tr class="even">
+<tr>
 <td align="left"><code>F1-1b</code></td>
 <td align="left"><code>GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA</code></td>
 <td align="left"><code>60-7,7943/*=5=)7&lt;53-I=G6/&amp;/7?8)&lt;$12"&gt;/2C;4:9F8:816E,6C3*,1-2139</code></td>
 <td align="left"><code>63</code></td>
 </tr>
-<tr class="odd">
+<tr>
 <td align="left"><code>F1-1c</code></td>
 <td align="left"><code>TCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCGCCGCCGCCGCCGCCGCC</code></td>
 <td align="left"><code>@9889C8&lt;&lt;*96;52!*86,227.&lt;I.8AI&lt;&gt;;2/391%D19*5@G=8&lt;7&lt;:!7+;:I:-!03&lt;0AI&gt;9?4!57I*-C#25FD24F;</code></td>
 <td align="left"><code>87</code></td>
 </tr>
-<tr class="even">
+<tr>
 <td align="left"><code>F1-1d</code></td>
 <td align="left"><code>GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA</code></td>
 <td align="left"><code>:&lt;*1D)89?27#8.3)9&lt;2G&lt;&gt;I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8&gt;0</code></td>
@@ -760,32 +760,32 @@
 <span><span class="co">## View first 4 rows</span></span>
 <span><span class="fu">print_table</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">metadata</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
-<thead><tr class="header">
+<thead><tr>
 <th align="left">family</th>
 <th align="left">individual</th>
 <th align="left">read</th>
 <th align="left">direction</th>
 </tr></thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td align="left"><code>Family 1</code></td>
 <td align="left"><code>F1-1</code></td>
 <td align="left"><code>F1-1a</code></td>
 <td align="left"><code>forward</code></td>
 </tr>
-<tr class="even">
+<tr>
 <td align="left"><code>Family 1</code></td>
 <td align="left"><code>F1-1</code></td>
 <td align="left"><code>F1-1b</code></td>
 <td align="left"><code>forward</code></td>
 </tr>
-<tr class="odd">
+<tr>
 <td align="left"><code>Family 1</code></td>
 <td align="left"><code>F1-1</code></td>
 <td align="left"><code>F1-1c</code></td>
 <td align="left"><code>reverse</code></td>
 </tr>
-<tr class="even">
+<tr>
 <td align="left"><code>Family 1</code></td>
 <td align="left"><code>F1-1</code></td>
 <td align="left"><code>F1-1d</code></td>
@@ -846,7 +846,7 @@
 <col width="11%">
 <col width="11%">
 </colgroup>
-<thead><tr class="header">
+<thead><tr>
 <th align="left">read</th>
 <th align="left">family</th>
 <th align="left">individual</th>
@@ -858,7 +858,7 @@
 <th align="left">forward_quality</th>
 </tr></thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td align="left"><code>F1-1a</code></td>
 <td align="left"><code>Family 1</code></td>
 <td align="left"><code>F1-1</code></td>
@@ -869,7 +869,7 @@
 <td align="left"><code>GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA</code></td>
 <td align="left"><code>)8@!9:/0/,0+-6?40,-I601:.';+5,@0.0%)!(20C*,2++*(00#/*+3;E-E)&lt;I5.5G*CB8501;I3'.8233'3&gt;&lt;:13)48F?09*&gt;?I90</code></td>
 </tr>
-<tr class="even">
+<tr>
 <td align="left"><code>F1-1b</code></td>
 <td align="left"><code>Family 1</code></td>
 <td align="left"><code>F1-1</code></td>
@@ -880,7 +880,7 @@
 <td align="left"><code>GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA</code></td>
 <td align="left"><code>60-7,7943/*=5=)7&lt;53-I=G6/&amp;/7?8)&lt;$12"&gt;/2C;4:9F8:816E,6C3*,1-2139</code></td>
 </tr>
-<tr class="odd">
+<tr>
 <td align="left"><code>F1-1c</code></td>
 <td align="left"><code>Family 1</code></td>
 <td align="left"><code>F1-1</code></td>
@@ -891,7 +891,7 @@
 <td align="left"><code>GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA</code></td>
 <td align="left"><code>;F42DF52#C-*I75!4?9&gt;IA0&lt;30!-:I:;+7!:&lt;7&lt;8=G@5*91D%193/2;&gt;&lt;IA8.I&lt;.722,68*!25;69*&lt;&lt;8C9889@</code></td>
 </tr>
-<tr class="even">
+<tr>
 <td align="left"><code>F1-1d</code></td>
 <td align="left"><code>Family 1</code></td>
 <td align="left"><code>F1-1</code></td>
@@ -923,7 +923,7 @@
 <col width="16%">
 <col width="16%">
 </colgroup>
-<thead><tr class="header">
+<thead><tr>
 <th align="left">family</th>
 <th align="left">individual</th>
 <th align="left">read</th>
@@ -932,7 +932,7 @@
 <th align="left">quality</th>
 </tr></thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td align="left"><code>Family 1</code></td>
 <td align="left"><code>F1-1</code></td>
 <td align="left"><code>F1-1a</code></td>
@@ -940,7 +940,7 @@
 <td align="left"><code>102</code></td>
 <td align="left"><code>)8@!9:/0/,0+-6?40,-I601:.';+5,@0.0%)!(20C*,2++*(00#/*+3;E-E)&lt;I5.5G*CB8501;I3'.8233'3&gt;&lt;:13)48F?09*&gt;?I90</code></td>
 </tr>
-<tr class="even">
+<tr>
 <td align="left"><code>Family 1</code></td>
 <td align="left"><code>F1-1</code></td>
 <td align="left"><code>F1-1b</code></td>
@@ -948,7 +948,7 @@
 <td align="left"><code>63</code></td>
 <td align="left"><code>60-7,7943/*=5=)7&lt;53-I=G6/&amp;/7?8)&lt;$12"&gt;/2C;4:9F8:816E,6C3*,1-2139</code></td>
 </tr>
-<tr class="odd">
+<tr>
 <td align="left"><code>Family 1</code></td>
 <td align="left"><code>F1-1</code></td>
 <td align="left"><code>F1-1c</code></td>
@@ -956,7 +956,7 @@
 <td align="left"><code>87</code></td>
 <td align="left"><code>;F42DF52#C-*I75!4?9&gt;IA0&lt;30!-:I:;+7!:&lt;7&lt;8=G@5*91D%193/2;&gt;&lt;IA8.I&lt;.722,68*!25;69*&lt;&lt;8C9889@</code></td>
 </tr>
-<tr class="even">
+<tr>
 <td align="left"><code>Family 1</code></td>
 <td align="left"><code>F1-1</code></td>
 <td align="left"><code>F1-1d</code></td>
@@ -978,7 +978,7 @@
 <col width="16%">
 <col width="16%">
 </colgroup>
-<thead><tr class="header">
+<thead><tr>
 <th align="left">family</th>
 <th align="left">individual</th>
 <th align="left">read</th>
@@ -987,7 +987,7 @@
 <th align="left">quality</th>
 </tr></thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td align="left"><code>Family 1</code></td>
 <td align="left"><code>F1-1</code></td>
 <td align="left"><code>F1-1a</code></td>
@@ -995,7 +995,7 @@
 <td align="left"><code>102</code></td>
 <td align="left"><code>)8@!9:/0/,0+-6?40,-I601:.';+5,@0.0%)!(20C*,2++*(00#/*+3;E-E)&lt;I5.5G*CB8501;I3'.8233'3&gt;&lt;:13)48F?09*&gt;?I90</code></td>
 </tr>
-<tr class="even">
+<tr>
 <td align="left"><code>Family 1</code></td>
 <td align="left"><code>F1-1</code></td>
 <td align="left"><code>F1-1b</code></td>
@@ -1003,7 +1003,7 @@
 <td align="left"><code>63</code></td>
 <td align="left"><code>60-7,7943/*=5=)7&lt;53-I=G6/&amp;/7?8)&lt;$12"&gt;/2C;4:9F8:816E,6C3*,1-2139</code></td>
 </tr>
-<tr class="odd">
+<tr>
 <td align="left"><code>Family 1</code></td>
 <td align="left"><code>F1-1</code></td>
 <td align="left"><code>F1-1c</code></td>
@@ -1011,7 +1011,7 @@
 <td align="left"><code>87</code></td>
 <td align="left"><code>;F42DF52#C-*I75!4?9&gt;IA0&lt;30!-:I:;+7!:&lt;7&lt;8=G@5*91D%193/2;&gt;&lt;IA8.I&lt;.722,68*!25;69*&lt;&lt;8C9889@</code></td>
 </tr>
-<tr class="even">
+<tr>
 <td align="left"><code>Family 1</code></td>
 <td align="left"><code>F1-1</code></td>
 <td align="left"><code>F1-1d</code></td>
@@ -1117,7 +1117,7 @@
 <col width="11%">
 <col width="11%">
 </colgroup>
-<thead><tr class="header">
+<thead><tr>
 <th align="left">read</th>
 <th align="left">sequence</th>
 <th align="left">sequence_length</th>
@@ -1129,7 +1129,7 @@
 <th align="left">C+m?_probabilities</th>
 </tr></thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td align="left"><code>F1-1a</code></td>
 <td align="left"><code>GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA</code></td>
 <td align="left"><code>102</code></td>
@@ -1140,7 +1140,7 @@
 <td align="left"><code>3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99</code></td>
 <td align="left"><code>29,159,155,159,220,163,2,59,170,131,177,139,72,235,75,214,73,68,48,59,81,77,41</code></td>
 </tr>
-<tr class="even">
+<tr>
 <td align="left"><code>F1-1b</code></td>
 <td align="left"><code>GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA</code></td>
 <td align="left"><code>63</code></td>
@@ -1151,7 +1151,7 @@
 <td align="left"><code>3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60</code></td>
 <td align="left"><code>10,56,207,134,233,212,12,116,68,78,129,46,194,51,66,253</code></td>
 </tr>
-<tr class="odd">
+<tr>
 <td align="left"><code>F1-1c</code></td>
 <td align="left"><code>TCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCGCCGCCGCCGCCGCCGCC</code></td>
 <td align="left"><code>87</code></td>
@@ -1162,7 +1162,7 @@
 <td align="left"><code>3,6,15,18,21,30,33,36,45,48,51,60,63,66,69,72,75,78,81,84</code></td>
 <td align="left"><code>45,192,126,129,39,129,183,79,19,195,62,124,173,128,84,159,80,165,141,206</code></td>
 </tr>
-<tr class="even">
+<tr>
 <td align="left"><code>F1-1d</code></td>
 <td align="left"><code>GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA</code></td>
 <td align="left"><code>81</code></td>
@@ -1185,32 +1185,32 @@
 <span><span class="co">## View first 4 rows</span></span>
 <span><span class="fu">print_table</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">metadata</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
-<thead><tr class="header">
+<thead><tr>
 <th align="left">family</th>
 <th align="left">individual</th>
 <th align="left">read</th>
 <th align="left">direction</th>
 </tr></thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td align="left"><code>Family 1</code></td>
 <td align="left"><code>F1-1</code></td>
 <td align="left"><code>F1-1a</code></td>
 <td align="left"><code>forward</code></td>
 </tr>
-<tr class="even">
+<tr>
 <td align="left"><code>Family 1</code></td>
 <td align="left"><code>F1-1</code></td>
 <td align="left"><code>F1-1b</code></td>
 <td align="left"><code>forward</code></td>
 </tr>
-<tr class="odd">
+<tr>
 <td align="left"><code>Family 1</code></td>
 <td align="left"><code>F1-1</code></td>
 <td align="left"><code>F1-1c</code></td>
 <td align="left"><code>reverse</code></td>
 </tr>
-<tr class="even">
+<tr>
 <td align="left"><code>Family 1</code></td>
 <td align="left"><code>F1-1</code></td>
 <td align="left"><code>F1-1d</code></td>
@@ -1249,7 +1249,7 @@
 <col width="5%">
 <col width="5%">
 </colgroup>
-<thead><tr class="header">
+<thead><tr>
 <th align="left">read</th>
 <th align="left">family</th>
 <th align="left">individual</th>
@@ -1270,7 +1270,7 @@
 <th align="left">forward_C+m?_probabilities</th>
 </tr></thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td align="left"><code>F1-1a</code></td>
 <td align="left"><code>Family 1</code></td>
 <td align="left"><code>F1-1</code></td>
@@ -1290,7 +1290,7 @@
 <td align="left"><code>3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99</code></td>
 <td align="left"><code>29,159,155,159,220,163,2,59,170,131,177,139,72,235,75,214,73,68,48,59,81,77,41</code></td>
 </tr>
-<tr class="even">
+<tr>
 <td align="left"><code>F1-1b</code></td>
 <td align="left"><code>Family 1</code></td>
 <td align="left"><code>F1-1</code></td>
@@ -1310,7 +1310,7 @@
 <td align="left"><code>3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60</code></td>
 <td align="left"><code>10,56,207,134,233,212,12,116,68,78,129,46,194,51,66,253</code></td>
 </tr>
-<tr class="odd">
+<tr>
 <td align="left"><code>F1-1c</code></td>
 <td align="left"><code>Family 1</code></td>
 <td align="left"><code>F1-1</code></td>
@@ -1330,7 +1330,7 @@
 <td align="left"><code>4,7,10,13,16,19,22,25,28,37,40,43,52,55,58,67,70,73,82,85</code></td>
 <td align="left"><code>206,141,165,80,159,84,128,173,124,62,195,19,79,183,129,39,129,126,192,45</code></td>
 </tr>
-<tr class="even">
+<tr>
 <td align="left"><code>F1-1d</code></td>
 <td align="left"><code>Family 1</code></td>
 <td align="left"><code>F1-1</code></td>
@@ -1412,7 +1412,7 @@
 <col width="5%">
 <col width="5%">
 </colgroup>
-<thead><tr class="header">
+<thead><tr>
 <th align="left">read</th>
 <th align="left">family</th>
 <th align="left">individual</th>
@@ -1433,7 +1433,7 @@
 <th align="left">forward_C+m?_probabilities</th>
 </tr></thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td align="left"><code>F1-1a</code></td>
 <td align="left"><code>Family 1</code></td>
 <td align="left"><code>F1-1</code></td>
@@ -1453,7 +1453,7 @@
 <td align="left"><code>3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99</code></td>
 <td align="left"><code>29,159,155,159,220,163,2,59,170,131,177,139,72,235,75,214,73,68,48,59,81,77,41</code></td>
 </tr>
-<tr class="even">
+<tr>
 <td align="left"><code>F1-1b</code></td>
 <td align="left"><code>Family 1</code></td>
 <td align="left"><code>F1-1</code></td>
@@ -1473,7 +1473,7 @@
 <td align="left"><code>3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60</code></td>
 <td align="left"><code>10,56,207,134,233,212,12,116,68,78,129,46,194,51,66,253</code></td>
 </tr>
-<tr class="odd">
+<tr>
 <td align="left"><code>F1-1c</code></td>
 <td align="left"><code>Family 1</code></td>
 <td align="left"><code>F1-1</code></td>
@@ -1493,7 +1493,7 @@
 <td align="left"><code>3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84</code></td>
 <td align="left"><code>206,141,165,80,159,84,128,173,124,62,195,19,79,183,129,39,129,126,192,45</code></td>
 </tr>
-<tr class="even">
+<tr>
 <td align="left"><code>F1-1d</code></td>
 <td align="left"><code>Family 1</code></td>
 <td align="left"><code>F1-1</code></td>
@@ -1539,7 +1539,7 @@
 <col width="10%">
 <col width="10%">
 </colgroup>
-<thead><tr class="header">
+<thead><tr>
 <th align="left">family</th>
 <th align="left">individual</th>
 <th align="left">read</th>
@@ -1552,7 +1552,7 @@
 <th align="left">hydroxymethylation_probabilities</th>
 </tr></thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td align="left"><code>Family 1</code></td>
 <td align="left"><code>F1-1</code></td>
 <td align="left"><code>F1-1a</code></td>
@@ -1564,7 +1564,7 @@
 <td align="left"><code>3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99</code></td>
 <td align="left"><code>26,60,61,60,30,59,2,46,57,64,54,63,52,18,53,34,52,50,39,46,55,54,34</code></td>
 </tr>
-<tr class="even">
+<tr>
 <td align="left"><code>Family 1</code></td>
 <td align="left"><code>F1-1</code></td>
 <td align="left"><code>F1-1b</code></td>
@@ -1576,7 +1576,7 @@
 <td align="left"><code>3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60</code></td>
 <td align="left"><code>10,44,39,64,20,36,11,63,50,54,64,38,46,41,49,2</code></td>
 </tr>
-<tr class="odd">
+<tr>
 <td align="left"><code>Family 1</code></td>
 <td align="left"><code>F1-1</code></td>
 <td align="left"><code>F1-1c</code></td>
@@ -1588,7 +1588,7 @@
 <td align="left"><code>3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84</code></td>
 <td align="left"><code>40,63,58,55,60,56,64,56,64,47,46,17,55,52,64,33,63,64,47,37</code></td>
 </tr>
-<tr class="even">
+<tr>
 <td align="left"><code>Family 1</code></td>
 <td align="left"><code>F1-1</code></td>
 <td align="left"><code>F1-1d</code></td>
@@ -1618,7 +1618,7 @@
 <col width="10%">
 <col width="10%">
 </colgroup>
-<thead><tr class="header">
+<thead><tr>
 <th align="left">family</th>
 <th align="left">individual</th>
 <th align="left">read</th>
@@ -1631,7 +1631,7 @@
 <th align="left">hydroxymethylation_probabilities</th>
 </tr></thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td align="left"><code>Family 1</code></td>
 <td align="left"><code>F1-1</code></td>
 <td align="left"><code>F1-1a</code></td>
@@ -1643,7 +1643,7 @@
 <td align="left"><code>3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99</code></td>
 <td align="left"><code>26,60,61,60,30,59,2,46,57,64,54,63,52,18,53,34,52,50,39,46,55,54,34</code></td>
 </tr>
-<tr class="even">
+<tr>
 <td align="left"><code>Family 1</code></td>
 <td align="left"><code>F1-1</code></td>
 <td align="left"><code>F1-1b</code></td>
@@ -1655,7 +1655,7 @@
 <td align="left"><code>3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60</code></td>
 <td align="left"><code>10,44,39,64,20,36,11,63,50,54,64,38,46,41,49,2</code></td>
 </tr>
-<tr class="odd">
+<tr>
 <td align="left"><code>Family 1</code></td>
 <td align="left"><code>F1-1</code></td>
 <td align="left"><code>F1-1c</code></td>
@@ -1667,7 +1667,7 @@
 <td align="left"><code>3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84</code></td>
 <td align="left"><code>40,63,58,55,60,56,64,56,64,47,46,17,55,52,64,33,63,64,47,37</code></td>
 </tr>
-<tr class="even">
+<tr>
 <td align="left"><code>Family 1</code></td>
 <td align="left"><code>F1-1</code></td>
 <td align="left"><code>F1-1d</code></td>
@@ -2311,7 +2311,7 @@
 <col width="16%">
 <col width="16%">
 </colgroup>
-<thead><tr class="header">
+<thead><tr>
 <th align="left">family</th>
 <th align="left">individual</th>
 <th align="left">read</th>
@@ -2320,7 +2320,7 @@
 <th align="left">quality</th>
 </tr></thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td align="left"><code>Family 1</code></td>
 <td align="left"><code>F1-1</code></td>
 <td align="left"><code>F1-1a</code></td>
@@ -2328,7 +2328,7 @@
 <td align="left"><code>102</code></td>
 <td align="left"><code>)8@!9:/0/,0+-6?40,-I601:.';+5,@0.0%)!(20C*,2++*(00#/*+3;E-E)&lt;I5.5G*CB8501;I3'.8233'3&gt;&lt;:13)48F?09*&gt;?I90</code></td>
 </tr>
-<tr class="even">
+<tr>
 <td align="left"><code>Family 1</code></td>
 <td align="left"><code>F1-1</code></td>
 <td align="left"><code>F1-1b</code></td>
@@ -2336,7 +2336,7 @@
 <td align="left"><code>63</code></td>
 <td align="left"><code>60-7,7943/*=5=)7&lt;53-I=G6/&amp;/7?8)&lt;$12"&gt;/2C;4:9F8:816E,6C3*,1-2139</code></td>
 </tr>
-<tr class="odd">
+<tr>
 <td align="left"><code>Family 1</code></td>
 <td align="left"><code>F1-1</code></td>
 <td align="left"><code>F1-1c</code></td>
@@ -2344,7 +2344,7 @@
 <td align="left"><code>87</code></td>
 <td align="left"><code>;F42DF52#C-*I75!4?9&gt;IA0&lt;30!-:I:;+7!:&lt;7&lt;8=G@5*91D%193/2;&gt;&lt;IA8.I&lt;.722,68*!25;69*&lt;&lt;8C9889@</code></td>
 </tr>
-<tr class="even">
+<tr>
 <td align="left"><code>Family 1</code></td>
 <td align="left"><code>F1-1</code></td>
 <td align="left"><code>F1-1d</code></td>
@@ -3088,7 +3088,7 @@
 <col width="10%">
 <col width="10%">
 </colgroup>
-<thead><tr class="header">
+<thead><tr>
 <th align="left">family</th>
 <th align="left">individual</th>
 <th align="left">read</th>
@@ -3101,7 +3101,7 @@
 <th align="left">hydroxymethylation_probabilities</th>
 </tr></thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td align="left"><code>Family 1</code></td>
 <td align="left"><code>F1-1</code></td>
 <td align="left"><code>F1-1a</code></td>
@@ -3113,7 +3113,7 @@
 <td align="left"><code>3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99</code></td>
 <td align="left"><code>26,60,61,60,30,59,2,46,57,64,54,63,52,18,53,34,52,50,39,46,55,54,34</code></td>
 </tr>
-<tr class="even">
+<tr>
 <td align="left"><code>Family 1</code></td>
 <td align="left"><code>F1-1</code></td>
 <td align="left"><code>F1-1b</code></td>
@@ -3125,7 +3125,7 @@
 <td align="left"><code>3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60</code></td>
 <td align="left"><code>10,44,39,64,20,36,11,63,50,54,64,38,46,41,49,2</code></td>
 </tr>
-<tr class="odd">
+<tr>
 <td align="left"><code>Family 1</code></td>
 <td align="left"><code>F1-1</code></td>
 <td align="left"><code>F1-1c</code></td>
@@ -3137,7 +3137,7 @@
 <td align="left"><code>3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84</code></td>
 <td align="left"><code>40,63,58,55,60,56,64,56,64,47,46,17,55,52,64,33,63,64,47,37</code></td>
 </tr>
-<tr class="even">
+<tr>
 <td align="left"><code>Family 1</code></td>
 <td align="left"><code>F1-1</code></td>
 <td align="left"><code>F1-1d</code></td>
