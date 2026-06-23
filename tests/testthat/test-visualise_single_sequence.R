@@ -6,6 +6,7 @@ acceptable_distortion <- fetch_acceptable_distortion(verbose = FALSE)
 
 ## Require magick package to run these tests
 testthat::skip_if_not_installed("magick")
+library(magick)
 
 test_that("single sequence visualisation works with standard conditions", {
     filename <- "sone_2019_f1_1_expanded_test_01"

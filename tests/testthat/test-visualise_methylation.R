@@ -4,6 +4,7 @@ acceptable_distortion <- fetch_acceptable_distortion(verbose = FALSE)
 
 ## Require magick package to run these tests
 testthat::skip_if_not_installed("magick")
+library(magick)
 
 test_that("methylation visualisation works as expected, all defaults", {
     filename <- "visualise_methylation_test_01"
