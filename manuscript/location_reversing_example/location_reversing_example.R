@@ -1,6 +1,6 @@
-library(ggDNAvis)  ## v1.0.0
-library(dplyr)     ## v1.1.4
-library(ggplot2)   ## v4.0.1
+library(ggDNAvis)  ## v1.0.1
+library(dplyr)     ## v1.2.1
+library(ggplot2)   ## v4.0.3
 
 ## Create random methylation probabilities
 set.seed(1234)
@@ -82,7 +82,7 @@ n <- length(input[[3]]) + length(lines_to_annotate)
 ## Create dataframe for titles
 titles <- data.frame(
     text = c("(a) Original sequences, both 5’–3’ (e.g. original reads):",
-             "(b) Reversed to be 3’–5’, offset 0:",
+             "(b) Inverted to be 3’–5’, offset 0:",
              "(c) Reverse-complemented to 5’–3’ of other strand, offset 0:",
              "(d) Reverse-complemented to 5’–3’ of other strand, offset 1:"),
     lines = lines_to_annotate - 1,
