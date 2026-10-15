@@ -26,11 +26,16 @@
 #' Calls [reverse_sequence_if_needed()] and [reverse_quality_if_needed()]
 #' to implement the reversing - see documentation for these functions for more details.
 #'
+#' Likewise, `"reverse_sequence"` and `"reverse_quality"` are created by
+#' reverse-complementing forward reads only. This can be useful for genes that
+#' are on the minus strand (i.e. "forward" relative to the gene is "reverse"
+#' relative to the reference genome).
+#'
 #' @param fastq_data `dataframe`. A dataframe contaning sequence and quality data, as produced by [read_fastq()].\cr\cr Must contain a read id column (must be called `"read"`), a sequence column (`"sequence"`), and a quality column (`"quality"`). Additional columns are fine and will simply be included unaltered in the merged dataframe.
 #' @param metadata `dataframe`. A dataframe containing metadata for each read in `fastq_data`.\cr\cr Must contain a `"read"` column identical to the column of the same name in `fastq_data`, containing unique read IDs (this is used to merge the dataframes). Must also contain a `"direction"` column of `"forward"` and `"reverse"` (e.g. `c("forward", "forward", "reverse")`) indicating the direction of each read.\cr\cr **Important:** Reverse reads will have their sequence and quality scores reversed such that every output read is now forward. These will be stored in columns called `"forward_sequence"` and `"forward_quality"`.\cr\cr See [reverse_sequence_if_needed()] and [reverse_quality_if_needed()] documentation for details of how the reversing is implemented.
 #' @param reverse_complement_mode `character`. Whether reverse-complemented sequences should be converted to DNA (i.e. A complements to T), RNA (i.e. A complements to U), or not complemented at all. Must be `"DNA"` (default), `"RNA"`, or `"reverse_only"` to reverse sequence order without complementing. *Only affects reverse-complemented sequences. Sequences that were forward to begin with are not altered.*\cr\cr Uses [reverse_complement()] via [reverse_sequence_if_needed()].
 #'
-#' @return `dataframe`. A merged dataframe containing all columns from the input dataframes, as well as forward versions of sequences and qualities.
+#' @return `dataframe`. A merged dataframe containing all columns from the input dataframes, as well as forward-ified and reverse-ified versions of sequences and qualities.
 #'
 #' @examples
 #' ## Locate files
@@ -95,6 +100,8 @@ merge_fastq_with_metadata <- function(fastq_data, metadata, reverse_complement_m
     merged_data <- merge(metadata, fastq_data, by = "read")
     merged_data$forward_sequence <- reverse_sequence_if_needed(merged_data$sequence, merged_data$direction, reverse_complement_mode)
     merged_data$forward_quality  <- reverse_quality_if_needed(merged_data$quality, merged_data$direction)
+    merged_data$reverse_sequence <- reverse_sequence_if_needed(merged_data$sequence, invert_direction_vector(merged_data$direction), reverse_complement_mode)
+    merged_data$reverse_quality  <- reverse_quality_if_needed(merged_data$quality, invert_direction_vector(merged_data$direction))
 
     return(merged_data)
 }
@@ -137,6 +144,13 @@ merge_fastq_with_metadata <- function(fastq_data, metadata, reverse_complement_m
 #' visualisation. The output columns are `"forward_sequence"`, `"forward_quality"`,
 #' `"forward_<modification_type>_locations"`, and `"forward_<modification_type>_probabilities"`.
 #'
+#' Likewise, `"reverse_sequence"`, `"reverse_quality"`,
+#' `"reverse_<modification_type>_locations"`, and `"reverse_<modification_type>_probabilities"`
+#' are created by
+#' reverse-complementing forward reads only. This can be useful for genes that
+#' are on the minus strand (i.e. "forward" relative to the gene is "reverse"
+#' relative to the reference genome).
+#'
 #' Calls [reverse_sequence_if_needed()], [reverse_quality_if_needed()],
 #' [reverse_locations_if_needed()], and [reverse_probabilities_if_needed()]
 #' to implement the reversing - see documentation for these functions for more details.
@@ -152,7 +166,7 @@ merge_fastq_with_metadata <- function(fastq_data, metadata, reverse_complement_m
 #' @param reversed_location_offset `integer`. How much modification locations should be shifted by. Defaults to `0`. This is important because if a CpG is assessed for methylation at the C, then reverse complementing it will give a methylation score at the G on the reverse-complemented strand. This is the most biologically accurate, but for visualising methylation it may be desired to shift the locations by 1 i.e. to correspond with the C in the reverse-complemented CpG rather than the G, which allows for consistent visualisation between forward and reverse strands. Setting (integer) values other than 0 or 1 will work, but may be biologically misleading so it is not recommended.\cr\cr **Highly recommended:** if considering using this option, read the [reverse_locations_if_needed()] documentation to fully understand how it works.
 #' @param reverse_complement_mode `character`. Whether reverse-complemented sequences should be converted to DNA (i.e. A complements to T), RNA (i.e. A complements to U), or not complemented at all. Must be `"DNA"` (default), `"RNA"`, or `"reverse_only"` to reverse sequence order without complementing. *Only affects reverse-complemented sequences. Sequences that were forward to begin with are not altered.*\cr\cr Uses [reverse_complement()] via [reverse_sequence_if_needed()].
 #'
-#' @return `dataframe`. A merged dataframe containing all columns from the input dataframes, as well as forward versions of sequences, qualities, modification locations, and modification probabilities (with separate locations and probabilities columns created for each modification type in the modification data).
+#' @return `dataframe`. A merged dataframe containing all columns from the input dataframes, as well as forward-ified and reverse-ified versions of sequences, qualities, modification locations, and modification probabilities (with separate locations and probabilities columns created for each modification type in the modification data).
 #'
 #' @examples
 #' ## Locate files
@@ -231,6 +245,8 @@ merge_methylation_with_metadata <- function(methylation_data, metadata, reversed
 
     ## Main function
     merged_data <- merge(metadata, methylation_data, by = "read")
+
+    ## Forward-ified
     merged_data$forward_sequence <- reverse_sequence_if_needed(merged_data$sequence, merged_data$direction, reverse_complement_mode)
     merged_data$forward_quality  <- reverse_quality_if_needed(merged_data$quality, merged_data$direction)
 
@@ -251,6 +267,31 @@ merge_methylation_with_metadata <- function(methylation_data, metadata, reversed
                 classes = "parameter_recommendation")
         }
         merged_data[, paste0("forward_", modification_type, "_probabilities")] <- reverse_probabilities_if_needed(pull(merged_data, paste0(modification_type, "_probabilities")), merged_data$direction)
+
+        first_loop <- FALSE
+    }
+
+    ## Reverse-ified
+    merged_data$reverse_sequence <- reverse_sequence_if_needed(merged_data$sequence, merged_data$direction, reverse_complement_mode)
+    merged_data$reverse_quality  <- reverse_quality_if_needed(merged_data$quality, merged_data$direction)
+
+    first_loop <- TRUE
+    for (modification_type in unique(string_to_vector(merged_data$modification_types, "character"))) {
+        if (!(paste0(modification_type, "_locations")) %in% colnames(merged_data)) {
+            abort(paste0("Modification type '", modification_type, "' is present in modification_types but there is no '", modification_type, "_locations' column."), class = "argument_value_or_type")
+        }
+        if (!(paste0(modification_type, "_probabilities")) %in% colnames(merged_data)) {
+            abort(paste0("Modification type '", modification_type, "' is present in modification_types but there is no '", modification_type, "_probabilities' column."), class = "argument_value_or_type")
+        }
+
+        if (first_loop) {
+            merged_data[, paste0("reverse_", modification_type, "_locations")] <- reverse_locations_if_needed(pull(merged_data, paste0(modification_type, "_locations")), invert_direction_vector(merged_data$direction), merged_data$sequence_length, offset = reversed_location_offset)
+        } else {
+            suppressWarnings(
+                merged_data[, paste0("reverse_", modification_type, "_locations")] <- reverse_locations_if_needed(pull(merged_data, paste0(modification_type, "_locations")), invert_direction_vector(merged_data$direction), merged_data$sequence_length, offset = reversed_location_offset),
+                classes = "parameter_recommendation")
+        }
+        merged_data[, paste0("reverse_", modification_type, "_probabilities")] <- reverse_probabilities_if_needed(pull(merged_data, paste0(modification_type, "_probabilities")), invert_direction_vector(merged_data$direction))
 
         first_loop <- FALSE
     }

@@ -6,7 +6,7 @@ test_that("merging fastq and metadata works", {
     fastq_data <- read_fastq(paste0(reference, "example_many_sequences_unmodified.fastq"))
     merged_data <- merge_fastq_with_metadata(fastq_data, metadata)
     expect_equal(nrow(merged_data), 23)
-    expect_equal(colnames(merged_data), c("read", "family", "individual", "direction", "sequence", "quality", "sequence_length","forward_sequence", "forward_quality"))
+    expect_equal(colnames(merged_data), c("read", "family", "individual", "direction", "sequence", "quality", "sequence_length","forward_sequence", "forward_quality", "reverse_sequence", "reverse_quality"))
     expect_equal(merged_data[3, "forward_sequence"], "TCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCGCCGCCGCCGCCGCCGCC")
 
     filename <- "example_many_sequences_unmodified_directional.fastq"
@@ -45,7 +45,7 @@ test_that("merging methylation and metadata works", {
     methylation_data <- read_modified_fastq(paste0(reference, "example_many_sequences.fastq"))
     merged_data <- merge_methylation_with_metadata(methylation_data, metadata, reversed_location_offset = 1)
     expect_equal(nrow(merged_data), 23)
-    expect_equal(colnames(merged_data), c("read", "family", "individual", "direction", "sequence", "sequence_length", "quality", "modification_types", "C+h?_locations", "C+h?_probabilities", "C+m?_locations", "C+m?_probabilities", "forward_sequence", "forward_quality", "forward_C+h?_locations", "forward_C+h?_probabilities", "forward_C+m?_locations", "forward_C+m?_probabilities"))
+    expect_equal(colnames(merged_data), c("read", "family", "individual", "direction", "sequence", "sequence_length", "quality", "modification_types", "C+h?_locations", "C+h?_probabilities", "C+m?_locations", "C+m?_probabilities", "forward_sequence", "forward_quality", "forward_C+h?_locations", "forward_C+h?_probabilities", "forward_C+m?_locations", "forward_C+m?_probabilities", "reverse_sequence", "reverse_quality", "reverse_C+h?_locations", "reverse_C+h?_probabilities", "reverse_C+m?_locations", "reverse_C+m?_probabilities"))
     expect_equal(merged_data[3, "forward_sequence"], "TCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCGCCGCCGCCGCCGCCGCC")
 
     filename <- "example_many_sequences_directional.fastq"
@@ -60,8 +60,8 @@ test_that("merging methylation and metadata works", {
 
 
     ## Check that using reverse_only works as expected, including producing warning with offset != 0
-    expect_warning(expect_warning(merged_data2 <- merge_methylation_with_metadata(methylation_data, metadata, reversed_location_offset = 2, reverse_complement_mode = "reverse_only"),
-                class = "parameter_recommendation"), class = "parameter_recommendation")
+    expect_warning(expect_warning(expect_warning(merged_data2 <- merge_methylation_with_metadata(methylation_data, metadata, reversed_location_offset = 2, reverse_complement_mode = "reverse_only"),
+                class = "parameter_recommendation"), class = "parameter_recommendation"), class = "parameter_recommendation")
     expect_equal(merged_data2[3, "forward_sequence"], "AGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGCGGCGGCGGCGGCGGCGG")
 
 
@@ -76,9 +76,9 @@ test_that("merging methylation and metadata works with altered modifications", {
     methylation_data <- read_modified_fastq(paste0(reference, "example_many_sequences_altered_modification.fastq"))
     merged_data <- merge_methylation_with_metadata(methylation_data, metadata)
     expect_equal(sum(is.na(merged_data$`forward_C+y?_locations`)), 22)
-    expect_equal(sum(is.na(merged_data)), 192)
-    expect_equal(sum(!is.na(merged_data)), 406)
-    expect_equal(colnames(merged_data), c("read", "family", "individual", "direction", "sequence", "sequence_length", "quality", "modification_types", "C+h?_locations", "C+h?_probabilities", "C+m?_locations", "C+m?_probabilities", "C+x?_locations", "C+x?_probabilities", "C+y?_locations", "C+y?_probabilities", "forward_sequence", "forward_quality", "forward_C+h?_locations", "forward_C+h?_probabilities", "forward_C+m?_locations", "forward_C+m?_probabilities", "forward_C+x?_locations", "forward_C+x?_probabilities", "forward_C+y?_locations", "forward_C+y?_probabilities"))
+    expect_equal(sum(is.na(merged_data)), 288)
+    expect_equal(sum(!is.na(merged_data)), 540)
+    expect_equal(colnames(merged_data), c("read", "family", "individual", "direction", "sequence", "sequence_length", "quality", "modification_types", "C+h?_locations", "C+h?_probabilities", "C+m?_locations", "C+m?_probabilities", "C+x?_locations", "C+x?_probabilities", "C+y?_locations", "C+y?_probabilities", "forward_sequence", "forward_quality", "forward_C+h?_locations", "forward_C+h?_probabilities", "forward_C+m?_locations", "forward_C+m?_probabilities", "forward_C+x?_locations", "forward_C+x?_probabilities", "forward_C+y?_locations", "forward_C+y?_probabilities", "reverse_sequence", "reverse_quality", "reverse_C+h?_locations", "reverse_C+h?_probabilities", "reverse_C+m?_locations", "reverse_C+m?_probabilities", "reverse_C+x?_locations", "reverse_C+x?_probabilities", "reverse_C+y?_locations", "reverse_C+y?_probabilities"))
 
     methylation_data_blanked <- read_modified_fastq(paste0(reference, "example_many_sequences_altered_with_blank_tags.fastq"))
     merged_data_blanked <- merge_methylation_with_metadata(methylation_data_blanked, metadata)
@@ -90,7 +90,11 @@ test_that("merging methylation and metadata works with altered modifications", {
                                               `forward_C+h?_locations` = "", `forward_C+h?_probabilities` = "",
                                               `forward_C+m?_locations` = "", `forward_C+m?_probabilities` = "",
                                               `forward_C+x?_locations` = "", `forward_C+x?_probabilities` = "",
-                                              `forward_C+y?_locations` = "", `forward_C+y?_probabilities` = "")),
+                                              `forward_C+y?_locations` = "", `forward_C+y?_probabilities` = "",
+                                              `reverse_C+h?_locations` = "", `reverse_C+h?_probabilities` = "",
+                                              `reverse_C+m?_locations` = "", `reverse_C+m?_probabilities` = "",
+                                              `reverse_C+x?_locations` = "", `reverse_C+x?_probabilities` = "",
+                                              `reverse_C+y?_locations` = "", `reverse_C+y?_probabilities` = "")),
                         !(modification_types)),
                  select(merged_data_blanked, !(modification_types)))
 })

@@ -21,7 +21,7 @@ merge_methylation_with_metadata(
 \item{reverse_complement_mode}{\code{character}. Whether reverse-complemented sequences should be converted to DNA (i.e. A complements to T), RNA (i.e. A complements to U), or not complemented at all. Must be \code{"DNA"} (default), \code{"RNA"}, or \code{"reverse_only"} to reverse sequence order without complementing. \emph{Only affects reverse-complemented sequences. Sequences that were forward to begin with are not altered.}\cr\cr Uses \code{\link[=reverse_complement]{reverse_complement()}} via \code{\link[=reverse_sequence_if_needed]{reverse_sequence_if_needed()}}.}
 }
 \value{
-\code{dataframe}. A merged dataframe containing all columns from the input dataframes, as well as forward versions of sequences, qualities, modification locations, and modification probabilities (with separate locations and probabilities columns created for each modification type in the modification data).
+\code{dataframe}. A merged dataframe containing all columns from the input dataframes, as well as forward-ified and reverse-ified versions of sequences, qualities, modification locations, and modification probabilities (with separate locations and probabilities columns created for each modification type in the modification data).
 }
 \description{
 Merge a dataframe of methylation/modification data (as produced by
@@ -54,6 +54,13 @@ reads will then be reversed-complemented and have modification information rever
 such that all reads are in the forward direction, ideal for consistent analysis or
 visualisation. The output columns are \code{"forward_sequence"}, \code{"forward_quality"},
 \code{"forward_<modification_type>_locations"}, and \code{"forward_<modification_type>_probabilities"}.
+
+Likewise, \code{"reverse_sequence"}, \code{"reverse_quality"},
+\code{"reverse_<modification_type>_locations"}, and \code{"reverse_<modification_type>_probabilities"}
+are created by
+reverse-complementing forward reads only. This can be useful for genes that
+are on the minus strand (i.e. "forward" relative to the gene is "reverse"
+relative to the reference genome).
 
 Calls \code{\link[=reverse_sequence_if_needed]{reverse_sequence_if_needed()}}, \code{\link[=reverse_quality_if_needed]{reverse_quality_if_needed()}},
 \code{\link[=reverse_locations_if_needed]{reverse_locations_if_needed()}}, and \code{\link[=reverse_probabilities_if_needed]{reverse_probabilities_if_needed()}}
