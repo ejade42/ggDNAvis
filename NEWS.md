@@ -1,10 +1,26 @@
 # ggDNAvis (development version)
 
+* ***BREAKING CHANGE:*** Removed `lengths_colname` as a mandatory argument to `extract_and_sort_methylation()`.
+
+    * This will cause an error in old code that provides the now-meaningless `lengths_colname` argument.
+    
+    * The returned list still contains `$lengths`, but this is now recalculated directly from the sequence lengths in `sequences_colname` / `$sequences` rather than read from the parent dataframe.
+    
+    * There may be behaviour changes in any cases where the lengths stored in the parent dataframe did not match the actual lengths of `sequences_colname` / `$sequences`.
+
+* Made `merge_fastq_with_metadata()` and `merge_methylation_with_metadata()` now create `"reverse_sequence"` (and quality, location, probability) columns as well as `"forward_sequence"` columns.
+
+    * This can be useful when dealing with genes on the minus strand, where the local `"forward"` direction relative to the gene is the global `"reverse"` direction relative to the reference genome.
+
+* Added `invert_direction_vector()` helper function.
+
+* Minor tweaks to reversing options manuscript figure.
+
 # ggDNAvis 1.0.1
 
-* Removed magick as a dependency and added it to suggests (required only for tests)
+* Removed magick as a dependency and added it to suggests (required only for tests).
 
-* Minor tweaks to methylation text manuscript figure
+* Minor tweaks to methylation text manuscript figure.
 
 # ggDNAvis 1.0.0
 

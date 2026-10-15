@@ -839,11 +839,18 @@ visualise_methylation_colour_scale <- function(
 #'
 #' Default arguments are set up to work with the included [`example_many_sequences`] data.
 #'
+#' ***IMPORTANT:*** `lengths_colname` has been removed as an argument as of
+#' ggDNAvis v1.1.0. If this function is newly causing errors,
+#' try removing all `lengths_colname` arguments.
+#' Output should be identical to before, as `$lengths` is still
+#' included in the output but is now recalculated based on the character
+#' lengths of `sequences_colname`. The only exception is if
+#' lengths in the parent dataframe did not match the actual sequence lengths.
+#'
 #' @param modification_data `dataframe`. A dataframe that must contain columns for methylation locations, methylation probabilities, sequence, and sequence length for each read. The former two should be condensed strings as produced by [vector_to_string()] e.g. `"1,2,3,4"`.\cr\cr See [`example_many_sequences`] for an example of a compatible dataframe.
 #' @param locations_colname `character`. The name of the column within the input dataframe that contains methylation/modification location information. Defaults to `"methylation_locations"`.\cr\cr Values within this column must be a comma-separated string representing a condensed numerical vector (e.g. `"3,6,9,12"`, produced via [vector_to_string()]) of the indices along the read at which modification was assessed. Indexing starts at 1.
 #' @param probabilities_colname `character`. The name of the column within the input dataframe that contains methylation/modification probability information. Defaults to `"methylation_probabilities"`.\cr\cr Values within this column must be a comma-separated string representing a condensed numerical vector (e.g. `"2,212,128,64"`, produced via [vector_to_string()]) of the probability of modification as an 8-bit (0-255) integer for each base where modification was assessed.
 #' @param sequences_colname `character`. The name of the column within the input dataframe that contains the actual sequences. Defaults to `"sequence"`.\cr\cr Values within this column must be the actual sequences (e.g. `"GGCGGA"`).
-#' @param lengths_colname `character`. The name of the column within the input dataframe that contains the length of each sequence. Defaults to `"sequence_length"`.\cr\cr Values within this column must be non-negative integers.
 #'
 #' @inheritParams extract_and_sort_sequences
 #' @inheritParams visualise_methylation
@@ -858,7 +865,6 @@ visualise_methylation_colour_scale <- function(
 #'     locations_colname = "methylation_locations",
 #'     probabilities_colname = "methylation_probabilities",
 #'     sequences_colname = "sequence",
-#'     lengths_colname = "sequence_length",
 #'     grouping_levels = c("family" = 8, "individual" = 2),
 #'     sort_by = "sequence_length",
 #'     desc_sort = TRUE
@@ -869,7 +875,6 @@ visualise_methylation_colour_scale <- function(
 #'     locations_colname = "hydroxymethylation_locations",
 #'     probabilities_colname = "hydroxymethylation_probabilities",
 #'     sequences_colname = "sequence",
-#'     lengths_colname = "sequence_length",
 #'     grouping_levels = c("family" = 8, "individual" = 2),
 #'     sort_by = "sequence_length",
 #'     desc_sort = TRUE
@@ -882,7 +887,6 @@ extract_and_sort_methylation <- function(
     locations_colname = "methylation_locations",
     probabilities_colname = "methylation_probabilities",
     sequences_colname = "sequence",
-    lengths_colname = "sequence_length",
     grouping_levels = c("family" = 8, "individual" = 2),
     sort_by = "sequence_length",
     desc_sort = TRUE
@@ -902,9 +906,9 @@ extract_and_sort_methylation <- function(
                                                 grouping_levels = grouping_levels, sort_by = sort_by, desc_sort = desc_sort)
     sequences <- extract_and_sort_sequences(modification_data, sequence_variable = sequences_colname,
                                             grouping_levels = grouping_levels, sort_by = sort_by, desc_sort = desc_sort)
-    lengths <- extract_and_sort_sequences(modification_data, sequence_variable = lengths_colname,
+    lengths <- extract_and_sort_sequences(modification_data, sequence_variable = sequences_colname,
                                           grouping_levels = grouping_levels, sort_by = sort_by, desc_sort = desc_sort) %>%
-        as.numeric() %>% replace_na(0)
+        nchar()
 
     output <- list(locations = locations, probabilities = probabilities, sequences = sequences, lengths = lengths)
     return(output)

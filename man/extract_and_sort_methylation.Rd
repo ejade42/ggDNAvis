@@ -11,7 +11,6 @@ extract_and_sort_methylation(
   locations_colname = "methylation_locations",
   probabilities_colname = "methylation_probabilities",
   sequences_colname = "sequence",
-  lengths_colname = "sequence_length",
   grouping_levels = c(family = 8, individual = 2),
   sort_by = "sequence_length",
   desc_sort = TRUE
@@ -27,8 +26,6 @@ extract_and_sort_methylation(
 \item{probabilities_colname}{\code{character}. The name of the column within the input dataframe that contains methylation/modification probability information. Defaults to \code{"methylation_probabilities"}.\cr\cr Values within this column must be a comma-separated string representing a condensed numerical vector (e.g. \code{"2,212,128,64"}, produced via \code{\link[=vector_to_string]{vector_to_string()}}) of the probability of modification as an 8-bit (0-255) integer for each base where modification was assessed.}
 
 \item{sequences_colname}{\code{character}. The name of the column within the input dataframe that contains the actual sequences. Defaults to \code{"sequence"}.\cr\cr Values within this column must be the actual sequences (e.g. \code{"GGCGGA"}).}
-
-\item{lengths_colname}{\code{character}. The name of the column within the input dataframe that contains the length of each sequence. Defaults to \code{"sequence_length"}.\cr\cr Values within this column must be non-negative integers.}
 
 \item{grouping_levels}{\verb{named character vector}. What variables should be used to define the groups/chunks, and how large a gap should be left between groups at that level. Set to \code{NA} to turn off grouping.\cr\cr Defaults to \code{c("family" = 8, "individual" = 2)}, meaning the highest-level groups are defined by the \code{family} column, and there is a gap of 8 between each family. Likewise the second-level groups (within each family) are defined by the \code{individual} column, and there is a gap of 2 between each individual.\cr\cr Any number of grouping variables and gaps can be given, as long as each grouping variable is a column within the dataframe. It is recommended that lower-level groups are more granular and subdivide higher-level groups (e.g. first divide into families, then into individuals within families). \cr\cr To change the order of groups within a level, make that column a factor with the order specified e.g. \code{example_many_sequences$family <- factor(example_many_sequences$family, levels = c("Family 2", "Family 3", "Family 1"))} to change the order to Family 2, Family 3, Family 1.}
 
@@ -57,6 +54,14 @@ a list of vectors stored in \verb{$locations}, \verb{$probabilities}, \verb{$seq
 These can then be used as input for \code{\link[=visualise_methylation]{visualise_methylation()}}.
 
 Default arguments are set up to work with the included \code{\link{example_many_sequences}} data.
+
+\emph{\strong{IMPORTANT:}} \code{lengths_colname} has been removed as an argument as of
+ggDNAvis v1.1.0. If this function is newly causing errors,
+try removing all \code{lengths_colname} arguments.
+Output should be identical to before, as \verb{$lengths} is still
+included in the output but is now recalculated based on the character
+lengths of \code{sequences_colname}. The only exception is if
+lengths in the parent dataframe did not match the actual sequence lengths.
 }
 \examples{
 ## See documentation for extract_and_sort_sequences()
@@ -66,7 +71,6 @@ extract_and_sort_methylation(
     locations_colname = "methylation_locations",
     probabilities_colname = "methylation_probabilities",
     sequences_colname = "sequence",
-    lengths_colname = "sequence_length",
     grouping_levels = c("family" = 8, "individual" = 2),
     sort_by = "sequence_length",
     desc_sort = TRUE
@@ -77,7 +81,6 @@ extract_and_sort_methylation(
     locations_colname = "hydroxymethylation_locations",
     probabilities_colname = "hydroxymethylation_probabilities",
     sequences_colname = "sequence",
-    lengths_colname = "sequence_length",
     grouping_levels = c("family" = 8, "individual" = 2),
     sort_by = "sequence_length",
     desc_sort = TRUE

@@ -55,8 +55,7 @@
         extract_and_sort_methylation = list(
             sequences_colname = list(default = "sequence", aliases = c("sequence_colname")),
             locations_colname = list(default = "methylation_locations", aliases = c("location_colname")),
-            probabilities_colname = list(default = "methylation_probabilities", aliases = c("probability_colname")),
-            lengths_colname = list(default = "sequence_length", aliases = c("length_colname"))
+            probabilities_colname = list(default = "methylation_probabilities", aliases = c("probability_colname"))
         ),
 
 

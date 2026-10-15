@@ -418,3 +418,13 @@ test_that("creating probabilities data rejects bad arguments", {
         expect_error(rasterise_probabilities(d$locations, d$probabilities, d$sequences, sequence_text_scaling = param), class = "argument_value_or_type")
     }
 })
+
+test_that("behaviour of removed lengths_colname argument is as expected", {
+    expect_error(d <- extract_methylation_from_dataframe(
+        example_many_sequences,
+        probabilities_colname = "methylation_probabilities",
+        locations_colname = "methylation_locations",
+        sequences_colname = "sequence",
+        lengths_colname = "sequence_length"
+    ), class = "unrecognised_argument")
+})
