@@ -20,7 +20,11 @@ reads will then be reversed-complemented and have quality scores reversed
 such that all reads are in the forward direction, ideal for consistent analysis or
 visualisation. The output columns are "forward_sequence" and "forward_quality".
 Calls reverse_sequence_if_needed() and reverse_quality_if_needed()
-to implement the reversing - see documentation for these functions for more details.'><meta property="og:description" content='Merge a dataframe of sequence and quality data (as produced by
+to implement the reversing - see documentation for these functions for more details.
+Likewise, "reverse_sequence" and "reverse_quality" are created by
+reverse-complementing forward reads only. This can be useful for genes that
+are on the minus strand (i.e. "forward" relative to the gene is "reverse"
+relative to the reference genome).'><meta property="og:description" content='Merge a dataframe of sequence and quality data (as produced by
 read_fastq() from an unmodified FASTQ file) with a dataframe of
 metadata, reverse-complementing sequences if required such that all
 reads are now in the forward direction.
@@ -41,7 +45,11 @@ reads will then be reversed-complemented and have quality scores reversed
 such that all reads are in the forward direction, ideal for consistent analysis or
 visualisation. The output columns are "forward_sequence" and "forward_quality".
 Calls reverse_sequence_if_needed() and reverse_quality_if_needed()
-to implement the reversing - see documentation for these functions for more details.'><meta property="og:image" content="https://ejade42.github.io/ggDNAvis/logo.png"><link rel="stylesheet" href="extra.css"><script src="extra.js"></script></head><body>
+to implement the reversing - see documentation for these functions for more details.
+Likewise, "reverse_sequence" and "reverse_quality" are created by
+reverse-complementing forward reads only. This can be useful for genes that
+are on the minus strand (i.e. "forward" relative to the gene is "reverse"
+relative to the reference genome).'><meta property="og:image" content="https://ejade42.github.io/ggDNAvis/logo.png"><link rel="stylesheet" href="extra.css"><script src="extra.js"></script></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -49,7 +57,7 @@ to implement the reversing - see documentation for these functions for more deta
 
     <a class="navbar-brand me-2" href="../index.html">ggDNAvis</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1.9004</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1.9006</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -114,6 +122,10 @@ such that all reads are in the forward direction, ideal for consistent analysis 
 visualisation. The output columns are <code>"forward_sequence"</code> and <code>"forward_quality"</code>.
 Calls <code><a href="reverse_sequence_if_needed.html">reverse_sequence_if_needed()</a></code> and <code><a href="reverse_quality_if_needed.html">reverse_quality_if_needed()</a></code>
 to implement the reversing - see documentation for these functions for more details.</p>
+<p>Likewise, <code>"reverse_sequence"</code> and <code>"reverse_quality"</code> are created by
+reverse-complementing forward reads only. This can be useful for genes that
+are on the minus strand (i.e. "forward" relative to the gene is "reverse"
+relative to the reference genome).</p>
     </div>
 
     <div class="section level2">
@@ -143,7 +155,7 @@ to implement the reversing - see documentation for these functions for more deta
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p><code>dataframe</code>. A merged dataframe containing all columns from the input dataframes, as well as forward versions of sequences and qualities.</p>
+    <p><code>dataframe</code>. A merged dataframe containing all columns from the input dataframes, as well as forward-ified and reverse-ified versions of sequences and qualities.</p>
     </div>
 
     <div class="section level2">
@@ -309,6 +321,54 @@ to implement the reversing - see documentation for these functions for more deta
 <span class="r-out co"><span class="r-pr">#&gt;</span> 21       ?2-#-2"1:(5(4&gt;!I)&gt;I,.?-+EG3IH4-.C:;570@2I;?D5#/;A7=&gt;?&lt;3?080::459*?8:3"&lt;2;I)C1400)6:3%19./);.I?35</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 22                      .85$#;!1F$8E:B+;7CI6@11/'65&lt;3,4G:8@GF1413:0)3CH1=44.%G=#2E67=?;9DF7358.;(I!74:1I4</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 23             5@&lt;733';9+3BB)=69,3!.2B*86'8E&gt;@3?!(36:&lt;002/4&gt;:1.43A!+;&lt;.3G*G8?0*991,B(C/"I9*1-86)8.;;5-0+=</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                          reverse_sequence</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  TCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCGCCGCCGCCGCCGCCGCC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                                         TCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                 TCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCGCCGCCGCCGCCGCCGCC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                       TCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5           TCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCGCCGCCGCC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                                         TCCGCCGCCTCCTCCTCCGCCGCCTCCTCCTCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7                                   TCCGCCGCCTCCTCCTCCGCCGCCTCCTCCTCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8                 TCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCGCCGCCGCCGCCGCCGCC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9                       TCCGCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10                   TCCGCCGCCTCCTCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCGCCGCCGCCGCCGCCGCC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11          TCCGCCGCCTCCTCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12                   TCCGCCGCCTCCTCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13                TCCGCCGCCTCCTCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14             TCCGCCGCCTCCTCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15       TCCGCCGCCACCACCGCCGCCACCACCGCCGCCACCACCGCCGCCACCACCGCCGCCACCACCGCCGCCACCACCGCCGCCACCACCGCCGCCGCC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16       TCCGCCGCCACCACCGCCGCCACCACCGCCGCCACCACCGCCGCCACCACCGCCGCCACCACCGCCGCCACCACCGCCGCCGCCGCCGCCGCCGCC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17          TCCGCCGCCACCACCGCCGCCACCACCGCCGCCACCACCGCCGCCACCACCGCCGCCACCACCGCCGCCACCACCGCCGCCGCCGCCGCCGCC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18             TCCGCCACCACCGCCGCCACCACCGCCGCCACCACCGCCGCCACCACCGCCGCCACCACCGCCGCCACCACCGCCGCCGCCGCCGCCGCC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19                TCCGCCGCCGCCGCCTCCTCCGCCGCCTCCTCCGCCGCCTCCTCCGCCGCCTCCTCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20       TCCGCCGCCACCACCGCCGCCACCACCGCCGCCACCACCGCCGCCACCACCGCCGCCACCACCGCCGCCACCACCGCCGCCGCCGCCGCCGCCGCC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21       TCCGCCGCCACCACCGCCGCCACCACCGCCGCCACCACCGCCGCCACCACCGCCGCCACCACCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22                      TCCGCCGCCGCCGCCACCACCGCCGCCACCACCGCCGCCACCACCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23             TCCGCCGCCGCCTCCTCCGCCGCCTCCTCCGCCGCCTCCTCCGCCGCCTCCTCCGCCGCCTCCTCCGCCGCCGCCGCCGCCGCCGCCGCC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                           reverse_quality</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  09I?&gt;*90?F84)31:&lt;&gt;3'3328.'3I;1058BC*G5.5I&lt;)E-E;3+*/#00(*++2,*C02(!)%0.0@,5+;'.:106I-,04?6-+0,/0/:9!@8)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                                         9312-1,*3C6,E618:8F9:4;C2/&gt;"21$&lt;)8?7/&amp;/6G=I-35&lt;7)=5=*/3497,7-06</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                 @9889C8&lt;&lt;*96;52!*86,227.&lt;I.8AI&lt;&gt;;2/391%D19*5@G=8&lt;7&lt;:!7+;:I:-!03&lt;0AI&gt;9?4!57I*-C#25FD24F;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                       0&gt;8/@+@.5%056//D4A0519D=1E0/5?3+/891)GF/#7?6%3-8-=.:+85?=.I&gt;&lt;G2&lt;9)3.8#72?98)D1*&lt;:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5           6&lt;749)6;/@02!.2'40*D79,15),5::=:@-!E7&amp;8?A=D/!#2:.26-57&amp;/I58(C035H&gt;H4,H:%3-;!00!-A6@?84-3E2*4;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                                         &lt;-!I79$A.)@@0:5/8&gt;C2,("*(&lt;7-6G4)&amp;.=1CC9I818C(,74:5(&lt;EE/.-")&lt;(6E</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7                                   !-;7.**';;7#*/5.B981:2)9E2&lt;77572-.5B4DB9:!,1?5-*59:&amp;3G4&lt;)?F&lt;:I5*#I'=F</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8                 406.8B566&amp;'9$?D0?1,F;5,8@.-7D0&amp;6:6/?*D@35=$;8+-=205&gt;9=713A!/:49:++1!9-,/8#3,B8-C&lt;62*.;?</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9                       /68&gt;.!E55!)161CG)&lt;,801)3C:&gt;=2I.6D;&lt;5+8";/*.&gt;"4!2=271/,:?)E)).#*0:(:42?73:3//5.64*</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10                   1;3*=4G5'+()0A659+2;3/!;34:%0E432(38@3+I?924C4E-4;*4&amp;*9-6A64&gt;66G5',I2&lt;962C121B@A/637</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11          &amp;1!=D46=1&lt;&lt;@,;?=#&gt;G&gt;1+00?A7&lt;&amp;83,5D"47;4+0:09+270,C&amp;:4#&gt;'5'2916%4/7I@&lt;;/735*04AC&lt;+&gt;*,/453I-/&lt;=</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12                   7;86&lt;&gt;H.)-1H+7I6.+39!4&gt;5=!F483+;5=-7.4!*821*6$I'DI):=+0?3-(&lt;7;.791062#H2.1&lt;*7145:&gt;1;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13                -$1(8480(&gt;,02C-6129G66:3.$5=EI:/)7&lt;.4B,+-)'?)3&lt;B11.4-5)2!1661)EB9.3&gt;"&lt;;&amp;8)1=::3#CE,83?7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14             2&gt;%AC6.?G=59+1=+EC?264?'B6$1@&lt;7D99-&gt;$18+*;1!@?8&gt;9645+23B/&lt;=*.6/6543BI494E84)1=9;/8=6+/,68@</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15       7);7-=464F1;7;(83B84.@79.&gt;,!&gt;?&gt;16;,6:=/@B;C:;63+/+;69;?@&amp;&gt;I'01!-3H%.,6;=-3=!A5'.-)9@?8*?346C&lt;2*/</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16       :C8E6789(=9%1.66A463B5/B8;A51=?=&lt;,8/461!058!6354!&lt;609I9@:7.E.38)7;@@6/C?D&amp;,*%D,I6&gt;6:4%9(1/7&gt;$&lt;C/</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17          /7B,215B48,:&gt;0%7;?;9.&lt;4"'7;3%:D4&gt;73;5!=&lt;756EC3I%!4'(.5A4@*&lt;4+F18=&amp;C&lt;%,&lt;2I2%69@/;10E4,&lt;9904I0:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18             854,=D3=2"@,21;;9=3"A&gt;I'7=A/1/0(:12/.'G@G;D534-4&gt;77451'8/+?B=06A+-;'*79027./I60@+257!421&gt;9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19                &lt;&lt;95G42/@E!1)A68,'%=60C4)3,;9C/;A8&lt;6!-(?83,,194*49G1-,:64E-?/!/,*07AA!G?-9=!(/-+6/@&gt;2/0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20       'D&lt;9;07/+#E-B9@;3D+3C1+%;/30$68!28)1:5.&lt;20C17*1=;3A.-)?,$35+&lt;F!1#+75!42243&gt;IF@*4970&lt;8;'$!+7"5,&lt;$</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21       53?I.;)/.91%3:6)0041C)I;2&lt;"3:8?*954::080?3&lt;?&gt;=7A;/#5D?;I2@075;:C.-4HI3GE+-?.,I&gt;)I!&gt;4(5(:1"2-#-2?</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22                      4I1:47!I(;.8537FD9;?=76E2#=G%.44=1HC3)0:3141FG@8:G4,3&lt;56'/11@6IC7;+B:E8$F1!;#$58.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23             =+0-5;;.8)68-1*9I"/C(B,199*0?8G*G3.&lt;;+!A34.1:&gt;4/200&lt;:63(!?3@&gt;E8'68*B2.!3,96=)BB3+9;'337&lt;@5</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Merge data reversing but not complementing sequences</span></span></span>
 <span class="r-in"><span><span class="fu">merge_fastq_with_metadata</span><span class="op">(</span></span></span>
@@ -460,6 +520,54 @@ to implement the reversing - see documentation for these functions for more deta
 <span class="r-out co"><span class="r-pr">#&gt;</span> 21       ?2-#-2"1:(5(4&gt;!I)&gt;I,.?-+EG3IH4-.C:;570@2I;?D5#/;A7=&gt;?&lt;3?080::459*?8:3"&lt;2;I)C1400)6:3%19./);.I?35</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 22                      .85$#;!1F$8E:B+;7CI6@11/'65&lt;3,4G:8@GF1413:0)3CH1=44.%G=#2E67=?;9DF7358.;(I!74:1I4</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 23             5@&lt;733';9+3BB)=69,3!.2B*86'8E&gt;@3?!(36:&lt;002/4&gt;:1.43A!+;&lt;.3G*G8?0*991,B(C/"I9*1-86)8.;;5-0+=</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                          reverse_sequence</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  AGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGCGGCGGCGGCGGCGGCGG</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                                         AGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGG</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                 TCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCGCCGCCGCCGCCGCCGCC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                       AGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGG</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5           TCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCGCCGCCGCC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                                         TCCGCCGCCTCCTCCTCCGCCGCCTCCTCCTCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7                                   AGGCGGCGGAGGAGGAGGCGGCGGAGGAGGAGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGG</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8                 AGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGCGGCGGCGGCGGCGGCGG</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9                       AGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGG</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10                   TCCGCCGCCTCCTCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCGCCGCCGCCGCCGCCGCC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11          AGGCGGCGGAGGAGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGG</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12                   TCCGCCGCCTCCTCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13                AGGCGGCGGAGGAGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGG</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14             TCCGCCGCCTCCTCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15       TCCGCCGCCACCACCGCCGCCACCACCGCCGCCACCACCGCCGCCACCACCGCCGCCACCACCGCCGCCACCACCGCCGCCACCACCGCCGCCGCC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16       TCCGCCGCCACCACCGCCGCCACCACCGCCGCCACCACCGCCGCCACCACCGCCGCCACCACCGCCGCCACCACCGCCGCCGCCGCCGCCGCCGCC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17          AGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGCGGCGGCGGCGG</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18             AGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGCGGCGGCGGCGG</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19                TCCGCCGCCGCCGCCTCCTCCGCCGCCTCCTCCGCCGCCTCCTCCGCCGCCTCCTCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20       AGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGCGGCGGCGGCGGCGG</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21       TCCGCCGCCACCACCGCCGCCACCACCGCCGCCACCACCGCCGCCACCACCGCCGCCACCACCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22                      AGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGG</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23             AGGCGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGCGGCGGCGGCGGCGGCGG</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                           reverse_quality</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  09I?&gt;*90?F84)31:&lt;&gt;3'3328.'3I;1058BC*G5.5I&lt;)E-E;3+*/#00(*++2,*C02(!)%0.0@,5+;'.:106I-,04?6-+0,/0/:9!@8)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                                         9312-1,*3C6,E618:8F9:4;C2/&gt;"21$&lt;)8?7/&amp;/6G=I-35&lt;7)=5=*/3497,7-06</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                 @9889C8&lt;&lt;*96;52!*86,227.&lt;I.8AI&lt;&gt;;2/391%D19*5@G=8&lt;7&lt;:!7+;:I:-!03&lt;0AI&gt;9?4!57I*-C#25FD24F;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                       0&gt;8/@+@.5%056//D4A0519D=1E0/5?3+/891)GF/#7?6%3-8-=.:+85?=.I&gt;&lt;G2&lt;9)3.8#72?98)D1*&lt;:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5           6&lt;749)6;/@02!.2'40*D79,15),5::=:@-!E7&amp;8?A=D/!#2:.26-57&amp;/I58(C035H&gt;H4,H:%3-;!00!-A6@?84-3E2*4;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                                         &lt;-!I79$A.)@@0:5/8&gt;C2,("*(&lt;7-6G4)&amp;.=1CC9I818C(,74:5(&lt;EE/.-")&lt;(6E</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7                                   !-;7.**';;7#*/5.B981:2)9E2&lt;77572-.5B4DB9:!,1?5-*59:&amp;3G4&lt;)?F&lt;:I5*#I'=F</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8                 406.8B566&amp;'9$?D0?1,F;5,8@.-7D0&amp;6:6/?*D@35=$;8+-=205&gt;9=713A!/:49:++1!9-,/8#3,B8-C&lt;62*.;?</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9                       /68&gt;.!E55!)161CG)&lt;,801)3C:&gt;=2I.6D;&lt;5+8";/*.&gt;"4!2=271/,:?)E)).#*0:(:42?73:3//5.64*</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10                   1;3*=4G5'+()0A659+2;3/!;34:%0E432(38@3+I?924C4E-4;*4&amp;*9-6A64&gt;66G5',I2&lt;962C121B@A/637</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11          &amp;1!=D46=1&lt;&lt;@,;?=#&gt;G&gt;1+00?A7&lt;&amp;83,5D"47;4+0:09+270,C&amp;:4#&gt;'5'2916%4/7I@&lt;;/735*04AC&lt;+&gt;*,/453I-/&lt;=</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12                   7;86&lt;&gt;H.)-1H+7I6.+39!4&gt;5=!F483+;5=-7.4!*821*6$I'DI):=+0?3-(&lt;7;.791062#H2.1&lt;*7145:&gt;1;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13                -$1(8480(&gt;,02C-6129G66:3.$5=EI:/)7&lt;.4B,+-)'?)3&lt;B11.4-5)2!1661)EB9.3&gt;"&lt;;&amp;8)1=::3#CE,83?7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14             2&gt;%AC6.?G=59+1=+EC?264?'B6$1@&lt;7D99-&gt;$18+*;1!@?8&gt;9645+23B/&lt;=*.6/6543BI494E84)1=9;/8=6+/,68@</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15       7);7-=464F1;7;(83B84.@79.&gt;,!&gt;?&gt;16;,6:=/@B;C:;63+/+;69;?@&amp;&gt;I'01!-3H%.,6;=-3=!A5'.-)9@?8*?346C&lt;2*/</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16       :C8E6789(=9%1.66A463B5/B8;A51=?=&lt;,8/461!058!6354!&lt;609I9@:7.E.38)7;@@6/C?D&amp;,*%D,I6&gt;6:4%9(1/7&gt;$&lt;C/</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17          /7B,215B48,:&gt;0%7;?;9.&lt;4"'7;3%:D4&gt;73;5!=&lt;756EC3I%!4'(.5A4@*&lt;4+F18=&amp;C&lt;%,&lt;2I2%69@/;10E4,&lt;9904I0:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18             854,=D3=2"@,21;;9=3"A&gt;I'7=A/1/0(:12/.'G@G;D534-4&gt;77451'8/+?B=06A+-;'*79027./I60@+257!421&gt;9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19                &lt;&lt;95G42/@E!1)A68,'%=60C4)3,;9C/;A8&lt;6!-(?83,,194*49G1-,:64E-?/!/,*07AA!G?-9=!(/-+6/@&gt;2/0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20       'D&lt;9;07/+#E-B9@;3D+3C1+%;/30$68!28)1:5.&lt;20C17*1=;3A.-)?,$35+&lt;F!1#+75!42243&gt;IF@*4970&lt;8;'$!+7"5,&lt;$</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21       53?I.;)/.91%3:6)0041C)I;2&lt;"3:8?*954::080?3&lt;?&gt;=7A;/#5D?;I2@075;:C.-4HI3GE+-?.,I&gt;)I!&gt;4(5(:1"2-#-2?</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22                      4I1:47!I(;.8537FD9;?=76E2#=G%.44=1HC3)0:3141FG@8:G4,3&lt;56'/11@6IC7;+B:E8$F1!;#$58.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23             =+0-5;;.8)68-1*9I"/C(B,199*0?8G*G3.&lt;;+!A34.1:&gt;4/200&lt;:63(!?3@&gt;E8'68*B2.!3,96=)BB3+9;'337&lt;@5</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

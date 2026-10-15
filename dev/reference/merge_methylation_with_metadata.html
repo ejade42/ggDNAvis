@@ -26,6 +26,12 @@ reads will then be reversed-complemented and have modification information rever
 such that all reads are in the forward direction, ideal for consistent analysis or
 visualisation. The output columns are &quot;forward_sequence&quot;, &quot;forward_quality&quot;,
 &quot;forward_&amp;lt;modification_type&amp;gt;_locations&quot;, and &quot;forward_&amp;lt;modification_type&amp;gt;_probabilities&quot;.
+Likewise, &quot;reverse_sequence&quot;, &quot;reverse_quality&quot;,
+&quot;reverse_&amp;lt;modification_type&amp;gt;_locations&quot;, and &quot;reverse_&amp;lt;modification_type&amp;gt;_probabilities&quot;
+are created by
+reverse-complementing forward reads only. This can be useful for genes that
+are on the minus strand (i.e. &quot;forward&quot; relative to the gene is &quot;reverse&quot;
+relative to the reference genome).
 Calls reverse_sequence_if_needed(), reverse_quality_if_needed(),
 reverse_locations_if_needed(), and reverse_probabilities_if_needed()
 to implement the reversing - see documentation for these functions for more details.
@@ -61,6 +67,12 @@ reads will then be reversed-complemented and have modification information rever
 such that all reads are in the forward direction, ideal for consistent analysis or
 visualisation. The output columns are &quot;forward_sequence&quot;, &quot;forward_quality&quot;,
 &quot;forward_&amp;lt;modification_type&amp;gt;_locations&quot;, and &quot;forward_&amp;lt;modification_type&amp;gt;_probabilities&quot;.
+Likewise, &quot;reverse_sequence&quot;, &quot;reverse_quality&quot;,
+&quot;reverse_&amp;lt;modification_type&amp;gt;_locations&quot;, and &quot;reverse_&amp;lt;modification_type&amp;gt;_probabilities&quot;
+are created by
+reverse-complementing forward reads only. This can be useful for genes that
+are on the minus strand (i.e. &quot;forward&quot; relative to the gene is &quot;reverse&quot;
+relative to the reference genome).
 Calls reverse_sequence_if_needed(), reverse_quality_if_needed(),
 reverse_locations_if_needed(), and reverse_probabilities_if_needed()
 to implement the reversing - see documentation for these functions for more details.
@@ -77,7 +89,7 @@ PLEASE READ THE reverse_locations_if_needed() DOCUMENTATION TO UNDERSTAND THE CH
 
     <a class="navbar-brand me-2" href="../index.html">ggDNAvis</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1.9004</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1.9006</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -147,6 +159,12 @@ reads will then be reversed-complemented and have modification information rever
 such that all reads are in the forward direction, ideal for consistent analysis or
 visualisation. The output columns are <code>"forward_sequence"</code>, <code>"forward_quality"</code>,
 <code>"forward_&lt;modification_type&gt;_locations"</code>, and <code>"forward_&lt;modification_type&gt;_probabilities"</code>.</p>
+<p>Likewise, <code>"reverse_sequence"</code>, <code>"reverse_quality"</code>,
+<code>"reverse_&lt;modification_type&gt;_locations"</code>, and <code>"reverse_&lt;modification_type&gt;_probabilities"</code>
+are created by
+reverse-complementing forward reads only. This can be useful for genes that
+are on the minus strand (i.e. "forward" relative to the gene is "reverse"
+relative to the reference genome).</p>
 <p>Calls <code><a href="reverse_sequence_if_needed.html">reverse_sequence_if_needed()</a></code>, <code><a href="reverse_quality_if_needed.html">reverse_quality_if_needed()</a></code>,
 <code><a href="reverse_locations_if_needed.html">reverse_locations_if_needed()</a></code>, and <code><a href="reverse_probabilities_if_needed.html">reverse_probabilities_if_needed()</a></code>
 to implement the reversing - see documentation for these functions for more details.
@@ -190,7 +208,7 @@ at guanines, which SAMtools can't account for. Symmetrically reversing CpGs via
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p><code>dataframe</code>. A merged dataframe containing all columns from the input dataframes, as well as forward versions of sequences, qualities, modification locations, and modification probabilities (with separate locations and probabilities columns created for each modification type in the modification data).</p>
+    <p><code>dataframe</code>. A merged dataframe containing all columns from the input dataframes, as well as forward-ified and reverse-ified versions of sequences, qualities, modification locations, and modification probabilities (with separate locations and probabilities columns created for each modification type in the modification data).</p>
     </div>
 
     <div class="section level2">
@@ -573,6 +591,150 @@ at guanines, which SAMtools can't account for. Symmetrically reversing CpGs via
 <span class="r-out co"><span class="r-pr">#&gt;</span> 21                              193,24,159,106,198,206,247,55,221,106,131,198,34,105,169,231,88,27,238,51,14</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 22                               109,86,70,169,200,112,237,69,168,97,239,188,150,208,225,190,128,252,142,224</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 23                                       161,156,9,65,198,255,245,191,174,63,155,146,13,95,228,100,132,45,49</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                          reverse_sequence</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                                         GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                 GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                       GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5           GGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                                         GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGAGGCGGCGGAGGAGGAGGCGGCGGA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7                                   GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGAGGCGGCGGAGGAGGAGGCGGCGGA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8                 GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9                       GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGCGGA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10                   GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11          GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12                   GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13                GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14             GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15       GGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16       GGCGGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17          GGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18             GGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19                GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGCGGCGGA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20       GGCGGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21       GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22                      GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGCGGCGGA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23             GGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGCGGA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                           reverse_quality</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  )8@!9:/0/,0+-6?40,-I601:.';+5,@0.0%)!(20C*,2++*(00#/*+3;E-E)&lt;I5.5G*CB8501;I3'.8233'3&gt;&lt;:13)48F?09*&gt;?I90</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                                         60-7,7943/*=5=)7&lt;53-I=G6/&amp;/7?8)&lt;$12"&gt;/2C;4:9F8:816E,6C3*,1-2139</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                 ;F42DF52#C-*I75!4?9&gt;IA0&lt;30!-:I:;+7!:&lt;7&lt;8=G@5*91D%193/2;&gt;&lt;IA8.I&lt;.722,68*!25;69*&lt;&lt;8C9889@</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                       :&lt;*1D)89?27#8.3)9&lt;2G&lt;&gt;I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8&gt;0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5           ;4*2E3-48?@6A-!00!;-3%:H,4H&gt;H530C(85I/&amp;75-62.:2#!/D=A?8&amp;7E!-@:=::5,)51,97D*04'2.!20@/;6)947&lt;6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                                         E6(&lt;)"-./EE&lt;(5:47,(C818I9CC1=.&amp;)4G6-7&lt;(*"(,2C&gt;8/5:0@@).A$97I!-&lt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7                                   F='I#*5I:&lt;F?)&lt;4G3&amp;:95*-5?1,!:9BD4B5.-27577&lt;2E9)2:189B.5/*#7;;'**.7;-!</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8                 ?;.*26&lt;C-8B,3#8/,-9!1++:94:/!A317=9&gt;502=-+8;$=53@D*?/6:6&amp;0D7-.@8,5;F,1?0D?$9'&amp;665B8.604</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9                       *46.5//3:37?24:(:0*#.))E)?:,/172=2!4"&gt;.*/;"8+5&lt;;D6.I2=&gt;:C3)108,&lt;)GC161)!55E!.&gt;86/</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10                   736/A@B121C269&lt;2I,'5G66&gt;46A6-9*&amp;4*;4-E4C429?I+3@83(234E0%:43;!/3;2+956A0)(+'5G4=*3;1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11          =&lt;/-I354/,*&gt;+&lt;CA40*537/;&lt;@I7/4%6192'5'&gt;#4:&amp;C,072+90:0+4;74"D5,38&amp;&lt;7A?00+1&gt;G&gt;#=?;,@&lt;&lt;1=64D=!1&amp;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12                   ;1&gt;:5417*&lt;1.2H#260197.;7&lt;(-3?0+=:)ID'I$6*128*!4.7-=5;+384F!=5&gt;4!93+.6I7+H1-).H&gt;&lt;68;7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13                7?38,EC#3::=1)8&amp;;&lt;"&gt;3.9BE)1661!2)5-4.11B&lt;3)?')-+,B4.&lt;7)/:IE=5$.3:66G9216-C20,&gt;(0848(1$-</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14             @86,/+6=8/;9=1)48E494IB3456/6.*=&lt;/B32+5469&gt;8?@!1;*+81$&gt;-99D7&lt;@1$6B'?462?CE+=1+95=G?.6CA%&gt;2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15       /*2&lt;C643?*8?@9)-.'5A!=3-=;6,.%H3-!10'I&gt;&amp;@?;96;+/+36;:C;B@/=:6,;61&gt;?&gt;!,&gt;.97@.48B38(;7;1F464=-7;)7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16       /C&lt;$&gt;7/1(9%4:6&gt;6I,D%*,&amp;D?C/6@@;7)83.E.7:@9I906&lt;!4536!850!164/8,&lt;=?=15A;8B/5B364A66.1%9=(9876E8C:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17          :0I4099&lt;,4E01;/@96%2I2&lt;,%&lt;C&amp;=81F+4&lt;*@4A5.('4!%I3CE657&lt;=!5;37&gt;4D:%3;7'"4&lt;.9;?;7%0&gt;:,84B512,B7/</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18             9&gt;124!752+@06I/.72097*';-+A60=B?+/8'15477&gt;4-435D;G@G'./21:(0/1/A=7'I&gt;A"3=9;;12,@"2=3D=,458</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19                0/2&gt;@/6+-/(!=9-?G!AA70*,/!/?-E46:,-1G94*491,,38?(-!6&lt;8A;/C9;,3)4C06=%',86A)1!E@/24G59&lt;&lt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20       $&lt;,5"7+!$';8&lt;0794*@FI&gt;34224!57+#1!F&lt;+53$,?)-.A3;=1*71C02&lt;.5:1)82!86$03/;%+1C3+D3;@9B-E#+/70;9&lt;D'</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21       ?2-#-2"1:(5(4&gt;!I)&gt;I,.?-+EG3IH4-.C:;570@2I;?D5#/;A7=&gt;?&lt;3?080::459*?8:3"&lt;2;I)C1400)6:3%19./);.I?35</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22                      .85$#;!1F$8E:B+;7CI6@11/'65&lt;3,4G:8@GF1413:0)3CH1=44.%G=#2E67=?;9DF7358.;(I!74:1I4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23             5@&lt;733';9+3BB)=69,3!.2B*86'8E&gt;@3?!(36:&lt;002/4&gt;:1.43A!+;&lt;.3G*G8?0*991,B(C/"I9*1-86)8.;;5-0+=</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                               reverse_C+h?_locations</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                4,7,16,19,22,31,34,37,46,49,52,61,64,67,76,79,82,85,88,91,94,97,100</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                                      4,7,16,19,22,31,34,37,40,43,46,49,52,55,58,61</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                          3,6,15,18,21,30,33,36,45,48,51,60,63,66,69,72,75,78,81,84</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                          4,7,16,19,22,31,34,37,46,49,52,55,58,61,64,67,70,73,76,79</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5                          3,6,15,18,21,30,33,36,45,48,51,60,63,66,75,78,81,84,87,90</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                                            3,6,18,21,33,36,39,42,45,48,51,54,57,60</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7                                      4,7,19,22,34,37,40,43,46,49,52,55,58,61,64,67</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8                          4,7,16,19,22,31,34,37,46,49,52,61,64,67,70,73,76,79,82,85</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9                    4,7,10,13,22,25,28,37,40,43,46,49,52,55,58,61,64,67,70,73,76,79</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10                            3,6,15,18,27,30,33,42,45,48,57,60,63,66,69,72,75,78,81</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 4,7,16,19,22,25,28,31,34,37,40,43,46,49,52,55,58,61,64,67,70,73,76,79,82,85,88,91</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12          3,6,15,18,21,24,27,30,33,36,39,42,45,48,51,54,57,60,63,66,69,72,75,78,81</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13       4,7,16,19,22,25,28,31,34,37,40,43,46,49,52,55,58,61,64,67,70,73,76,79,82,85</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14    3,6,15,18,21,24,27,30,33,36,39,42,45,48,51,54,57,60,63,66,69,72,75,78,81,84,87</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15                                  3,6,15,18,27,30,39,42,51,54,63,66,75,78,87,90,93</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16                            3,6,15,18,27,30,39,42,51,54,63,66,75,78,81,84,87,90,93</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17                               4,7,16,19,28,31,40,43,52,55,64,67,76,79,82,85,88,91</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18                                 4,13,16,25,28,37,40,49,52,61,64,73,76,79,82,85,88</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19                          3,6,9,12,21,24,33,36,45,48,57,60,63,66,69,72,75,78,81,84</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20                            4,7,16,19,28,31,40,43,52,55,64,67,76,79,82,85,88,91,94</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21                      3,6,15,18,27,30,39,42,51,54,63,66,69,72,75,78,81,84,87,90,93</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22                         4,7,10,13,22,25,34,37,46,49,52,55,58,61,64,67,70,73,76,79</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23                            4,7,10,19,22,31,34,43,46,55,58,67,70,73,76,79,82,85,88</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                             reverse_C+h?_probabilities</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                  34,54,55,46,39,50,52,34,53,18,52,63,54,64,57,46,2,59,30,60,61,60,26</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                                       2,49,41,46,38,64,54,50,63,11,36,20,64,39,44,10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                          37,47,64,63,33,64,52,55,17,46,47,64,56,64,56,60,55,58,63,40</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                            55,17,60,64,21,43,4,24,27,63,12,64,54,53,46,3,55,10,29,33</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5                           54,7,53,64,24,29,30,23,35,23,34,55,61,23,40,63,31,64,18,57</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                                              12,23,52,9,63,29,33,56,30,41,52,63,9,49</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7                                       64,64,48,52,64,14,1,19,48,41,28,51,13,20,44,27</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8                            5,63,49,60,59,64,56,4,64,29,59,62,21,64,20,62,28,59,10,55</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9                     20,138,4,102,92,8,52,86,84,46,80,42,159,0,61,3,46,32,19,45,63,62</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10                        20,111,79,1,238,1,142,35,80,40,21,126,47,112,21,71,103,43,80</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 49,86,10,83,11,58,104,109,1,82,47,130,36,93,19,92,79,56,90,3,57,35,36,42,4,220,1,68</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12      49,82,145,1,40,133,14,114,89,5,129,88,26,66,42,136,25,17,74,44,6,104,125,18,93</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13        4,188,6,28,60,112,3,209,21,72,0,67,106,7,67,49,112,55,95,50,5,84,28,130,3,17</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14  38,24,184,5,98,72,32,22,83,39,135,53,51,9,54,55,45,102,95,23,3,198,19,121,22,123,3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15                               103,74,17,32,114,0,93,133,6,77,116,2,51,112,11,157,59</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16                           22,63,13,16,88,54,55,26,86,133,7,170,15,68,29,41,30,89,61</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17                              225,13,3,76,65,158,3,33,178,5,139,1,93,62,74,26,195,11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18                                   73,2,19,95,0,87,124,43,78,65,104,10,0,10,165,13,9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19                       17,24,0,47,75,133,76,9,112,90,19,75,156,35,30,136,5,16,30,191</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20                           161,83,24,43,55,2,87,141,109,19,13,155,66,47,63,78,3,3,24</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21                 225,21,6,207,111,10,11,116,113,24,108,32,33,162,6,20,35,14,73,44,36</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22                          31,57,2,112,53,18,35,98,25,11,43,81,82,14,95,15,29,79,9,29</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23                            81,188,46,8,15,97,60,74,75,184,81,50,3,0,2,117,155,87,52</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                               reverse_C+m?_locations</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                4,7,16,19,22,31,34,37,46,49,52,61,64,67,76,79,82,85,88,91,94,97,100</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                                      4,7,16,19,22,31,34,37,40,43,46,49,52,55,58,61</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                          3,6,15,18,21,30,33,36,45,48,51,60,63,66,69,72,75,78,81,84</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                          4,7,16,19,22,31,34,37,46,49,52,55,58,61,64,67,70,73,76,79</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5                          3,6,15,18,21,30,33,36,45,48,51,60,63,66,75,78,81,84,87,90</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                                            3,6,18,21,33,36,39,42,45,48,51,54,57,60</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7                                      4,7,19,22,34,37,40,43,46,49,52,55,58,61,64,67</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8                          4,7,16,19,22,31,34,37,46,49,52,61,64,67,70,73,76,79,82,85</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9                    4,7,10,13,22,25,28,37,40,43,46,49,52,55,58,61,64,67,70,73,76,79</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10                            3,6,15,18,27,30,33,42,45,48,57,60,63,66,69,72,75,78,81</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 4,7,16,19,22,25,28,31,34,37,40,43,46,49,52,55,58,61,64,67,70,73,76,79,82,85,88,91</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12          3,6,15,18,21,24,27,30,33,36,39,42,45,48,51,54,57,60,63,66,69,72,75,78,81</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13       4,7,16,19,22,25,28,31,34,37,40,43,46,49,52,55,58,61,64,67,70,73,76,79,82,85</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14    3,6,15,18,21,24,27,30,33,36,39,42,45,48,51,54,57,60,63,66,69,72,75,78,81,84,87</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15                                  3,6,15,18,27,30,39,42,51,54,63,66,75,78,87,90,93</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16                            3,6,15,18,27,30,39,42,51,54,63,66,75,78,81,84,87,90,93</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17                               4,7,16,19,28,31,40,43,52,55,64,67,76,79,82,85,88,91</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18                                 4,13,16,25,28,37,40,49,52,61,64,73,76,79,82,85,88</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19                          3,6,9,12,21,24,33,36,45,48,57,60,63,66,69,72,75,78,81,84</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20                            4,7,16,19,28,31,40,43,52,55,64,67,76,79,82,85,88,91,94</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21                      3,6,15,18,27,30,39,42,51,54,63,66,69,72,75,78,81,84,87,90,93</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22                         4,7,10,13,22,25,34,37,46,49,52,55,58,61,64,67,70,73,76,79</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23                            4,7,10,19,22,31,34,43,46,55,58,67,70,73,76,79,82,85,88</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                   reverse_C+m?_probabilities</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                             41,77,81,59,48,68,73,214,75,235,72,139,177,131,170,59,2,163,220,159,155,159,29</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                                                    253,66,51,194,46,129,78,68,116,12,212,233,134,207,56,10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                                   45,192,126,129,39,129,183,79,19,195,62,124,173,128,84,159,80,165,141,206</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                                          82,18,98,132,23,200,4,228,31,144,13,130,79,180,61,4,81,11,221,216</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5                                         79,7,77,130,27,34,34,230,42,229,41,79,99,229,50,139,36,120,236,170</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                                                              242,26,182,10,111,33,40,83,34,52,71,144,9,189</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7                                                  127,128,64,72,124,240,254,234,190,203,31,71,241,233,56,31</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8                                250,144,189,160,91,123,83,251,128,222,161,152,232,119,233,108,32,162,245,81</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9                            193,83,205,19,110,163,22,57,110,147,110,142,96,255,153,252,60,217,21,58,112,147</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10                                       189,79,161,215,6,244,19,153,88,122,77,30,143,108,194,88,109,181,149</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 179,163,238,145,193,47,71,144,251,52,103,78,187,134,196,81,135,168,163,251,187,213,210,207,225,33,253,163</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12                  55,62,108,252,125,78,191,54,145,206,27,145,203,126,130,86,205,127,34,85,66,8,108,217,122</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13                 13,4,191,26,31,68,153,8,215,133,150,1,67,144,17,71,67,152,136,203,246,146,197,122,250,176</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14         193,155,62,243,105,167,209,178,73,116,72,188,200,234,109,94,88,68,139,209,129,7,204,96,194,91,191</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15                                           104,174,233,196,140,253,49,115,242,113,137,250,90,79,162,29,177</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16                                        225,187,235,168,48,109,94,87,39,101,220,51,213,89,104,49,50,37,104</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17                                              11,235,170,9,79,94,249,132,69,244,105,237,7,95,98,121,50,243</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18                                            168,249,213,84,117,142,1,196,124,186,151,241,255,181,33,190,51</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19                                      175,29,55,27,1,53,75,168,107,26,194,101,78,124,224,68,249,185,209,60</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20                                     48,146,198,193,106,175,93,5,137,144,235,43,166,187,189,176,241,251,49</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21                              14,51,238,27,88,231,169,105,34,198,131,106,221,55,247,206,198,106,159,24,193</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22                               224,142,252,128,190,225,208,150,188,239,97,168,69,237,112,200,169,70,86,109</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23                                       49,45,132,100,228,95,13,146,155,63,174,191,245,255,198,65,9,156,161</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Merge data with offset = 1</span></span></span>
 <span class="r-in"><span><span class="fu">merge_methylation_with_metadata</span><span class="op">(</span></span></span>
@@ -940,6 +1102,150 @@ at guanines, which SAMtools can't account for. Symmetrically reversing CpGs via
 <span class="r-out co"><span class="r-pr">#&gt;</span> 21                              193,24,159,106,198,206,247,55,221,106,131,198,34,105,169,231,88,27,238,51,14</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 22                               109,86,70,169,200,112,237,69,168,97,239,188,150,208,225,190,128,252,142,224</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 23                                       161,156,9,65,198,255,245,191,174,63,155,146,13,95,228,100,132,45,49</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                          reverse_sequence</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                                         GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                 GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                       GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5           GGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                                         GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGAGGCGGCGGAGGAGGAGGCGGCGGA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7                                   GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGAGGCGGCGGAGGAGGAGGCGGCGGA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8                 GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9                       GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGCGGA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10                   GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11          GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12                   GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13                GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14             GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15       GGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16       GGCGGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17          GGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18             GGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19                GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGCGGCGGA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20       GGCGGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21       GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22                      GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGCGGCGGA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23             GGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGCGGA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                           reverse_quality</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  )8@!9:/0/,0+-6?40,-I601:.';+5,@0.0%)!(20C*,2++*(00#/*+3;E-E)&lt;I5.5G*CB8501;I3'.8233'3&gt;&lt;:13)48F?09*&gt;?I90</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                                         60-7,7943/*=5=)7&lt;53-I=G6/&amp;/7?8)&lt;$12"&gt;/2C;4:9F8:816E,6C3*,1-2139</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                 ;F42DF52#C-*I75!4?9&gt;IA0&lt;30!-:I:;+7!:&lt;7&lt;8=G@5*91D%193/2;&gt;&lt;IA8.I&lt;.722,68*!25;69*&lt;&lt;8C9889@</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                       :&lt;*1D)89?27#8.3)9&lt;2G&lt;&gt;I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8&gt;0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5           ;4*2E3-48?@6A-!00!;-3%:H,4H&gt;H530C(85I/&amp;75-62.:2#!/D=A?8&amp;7E!-@:=::5,)51,97D*04'2.!20@/;6)947&lt;6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                                         E6(&lt;)"-./EE&lt;(5:47,(C818I9CC1=.&amp;)4G6-7&lt;(*"(,2C&gt;8/5:0@@).A$97I!-&lt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7                                   F='I#*5I:&lt;F?)&lt;4G3&amp;:95*-5?1,!:9BD4B5.-27577&lt;2E9)2:189B.5/*#7;;'**.7;-!</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8                 ?;.*26&lt;C-8B,3#8/,-9!1++:94:/!A317=9&gt;502=-+8;$=53@D*?/6:6&amp;0D7-.@8,5;F,1?0D?$9'&amp;665B8.604</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9                       *46.5//3:37?24:(:0*#.))E)?:,/172=2!4"&gt;.*/;"8+5&lt;;D6.I2=&gt;:C3)108,&lt;)GC161)!55E!.&gt;86/</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10                   736/A@B121C269&lt;2I,'5G66&gt;46A6-9*&amp;4*;4-E4C429?I+3@83(234E0%:43;!/3;2+956A0)(+'5G4=*3;1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11          =&lt;/-I354/,*&gt;+&lt;CA40*537/;&lt;@I7/4%6192'5'&gt;#4:&amp;C,072+90:0+4;74"D5,38&amp;&lt;7A?00+1&gt;G&gt;#=?;,@&lt;&lt;1=64D=!1&amp;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12                   ;1&gt;:5417*&lt;1.2H#260197.;7&lt;(-3?0+=:)ID'I$6*128*!4.7-=5;+384F!=5&gt;4!93+.6I7+H1-).H&gt;&lt;68;7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13                7?38,EC#3::=1)8&amp;;&lt;"&gt;3.9BE)1661!2)5-4.11B&lt;3)?')-+,B4.&lt;7)/:IE=5$.3:66G9216-C20,&gt;(0848(1$-</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14             @86,/+6=8/;9=1)48E494IB3456/6.*=&lt;/B32+5469&gt;8?@!1;*+81$&gt;-99D7&lt;@1$6B'?462?CE+=1+95=G?.6CA%&gt;2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15       /*2&lt;C643?*8?@9)-.'5A!=3-=;6,.%H3-!10'I&gt;&amp;@?;96;+/+36;:C;B@/=:6,;61&gt;?&gt;!,&gt;.97@.48B38(;7;1F464=-7;)7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16       /C&lt;$&gt;7/1(9%4:6&gt;6I,D%*,&amp;D?C/6@@;7)83.E.7:@9I906&lt;!4536!850!164/8,&lt;=?=15A;8B/5B364A66.1%9=(9876E8C:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17          :0I4099&lt;,4E01;/@96%2I2&lt;,%&lt;C&amp;=81F+4&lt;*@4A5.('4!%I3CE657&lt;=!5;37&gt;4D:%3;7'"4&lt;.9;?;7%0&gt;:,84B512,B7/</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18             9&gt;124!752+@06I/.72097*';-+A60=B?+/8'15477&gt;4-435D;G@G'./21:(0/1/A=7'I&gt;A"3=9;;12,@"2=3D=,458</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19                0/2&gt;@/6+-/(!=9-?G!AA70*,/!/?-E46:,-1G94*491,,38?(-!6&lt;8A;/C9;,3)4C06=%',86A)1!E@/24G59&lt;&lt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20       $&lt;,5"7+!$';8&lt;0794*@FI&gt;34224!57+#1!F&lt;+53$,?)-.A3;=1*71C02&lt;.5:1)82!86$03/;%+1C3+D3;@9B-E#+/70;9&lt;D'</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21       ?2-#-2"1:(5(4&gt;!I)&gt;I,.?-+EG3IH4-.C:;570@2I;?D5#/;A7=&gt;?&lt;3?080::459*?8:3"&lt;2;I)C1400)6:3%19./);.I?35</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22                      .85$#;!1F$8E:B+;7CI6@11/'65&lt;3,4G:8@GF1413:0)3CH1=44.%G=#2E67=?;9DF7358.;(I!74:1I4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23             5@&lt;733';9+3BB)=69,3!.2B*86'8E&gt;@3?!(36:&lt;002/4&gt;:1.43A!+;&lt;.3G*G8?0*991,B(C/"I9*1-86)8.;;5-0+=</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                               reverse_C+h?_locations</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                 3,6,15,18,21,30,33,36,45,48,51,60,63,66,75,78,81,84,87,90,93,96,99</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                                      3,6,15,18,21,30,33,36,39,42,45,48,51,54,57,60</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                          3,6,15,18,21,30,33,36,45,48,51,60,63,66,69,72,75,78,81,84</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                          3,6,15,18,21,30,33,36,45,48,51,54,57,60,63,66,69,72,75,78</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5                          3,6,15,18,21,30,33,36,45,48,51,60,63,66,75,78,81,84,87,90</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                                            3,6,18,21,33,36,39,42,45,48,51,54,57,60</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7                                      3,6,18,21,33,36,39,42,45,48,51,54,57,60,63,66</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8                          3,6,15,18,21,30,33,36,45,48,51,60,63,66,69,72,75,78,81,84</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9                     3,6,9,12,21,24,27,36,39,42,45,48,51,54,57,60,63,66,69,72,75,78</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10                            3,6,15,18,27,30,33,42,45,48,57,60,63,66,69,72,75,78,81</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 3,6,15,18,21,24,27,30,33,36,39,42,45,48,51,54,57,60,63,66,69,72,75,78,81,84,87,90</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12          3,6,15,18,21,24,27,30,33,36,39,42,45,48,51,54,57,60,63,66,69,72,75,78,81</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13       3,6,15,18,21,24,27,30,33,36,39,42,45,48,51,54,57,60,63,66,69,72,75,78,81,84</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14    3,6,15,18,21,24,27,30,33,36,39,42,45,48,51,54,57,60,63,66,69,72,75,78,81,84,87</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15                                  3,6,15,18,27,30,39,42,51,54,63,66,75,78,87,90,93</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16                            3,6,15,18,27,30,39,42,51,54,63,66,75,78,81,84,87,90,93</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17                               3,6,15,18,27,30,39,42,51,54,63,66,75,78,81,84,87,90</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18                                 3,12,15,24,27,36,39,48,51,60,63,72,75,78,81,84,87</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19                          3,6,9,12,21,24,33,36,45,48,57,60,63,66,69,72,75,78,81,84</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20                            3,6,15,18,27,30,39,42,51,54,63,66,75,78,81,84,87,90,93</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21                      3,6,15,18,27,30,39,42,51,54,63,66,69,72,75,78,81,84,87,90,93</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22                          3,6,9,12,21,24,33,36,45,48,51,54,57,60,63,66,69,72,75,78</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23                             3,6,9,18,21,30,33,42,45,54,57,66,69,72,75,78,81,84,87</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                             reverse_C+h?_probabilities</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                  34,54,55,46,39,50,52,34,53,18,52,63,54,64,57,46,2,59,30,60,61,60,26</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                                       2,49,41,46,38,64,54,50,63,11,36,20,64,39,44,10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                          37,47,64,63,33,64,52,55,17,46,47,64,56,64,56,60,55,58,63,40</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                            55,17,60,64,21,43,4,24,27,63,12,64,54,53,46,3,55,10,29,33</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5                           54,7,53,64,24,29,30,23,35,23,34,55,61,23,40,63,31,64,18,57</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                                              12,23,52,9,63,29,33,56,30,41,52,63,9,49</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7                                       64,64,48,52,64,14,1,19,48,41,28,51,13,20,44,27</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8                            5,63,49,60,59,64,56,4,64,29,59,62,21,64,20,62,28,59,10,55</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9                     20,138,4,102,92,8,52,86,84,46,80,42,159,0,61,3,46,32,19,45,63,62</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10                        20,111,79,1,238,1,142,35,80,40,21,126,47,112,21,71,103,43,80</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 49,86,10,83,11,58,104,109,1,82,47,130,36,93,19,92,79,56,90,3,57,35,36,42,4,220,1,68</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12      49,82,145,1,40,133,14,114,89,5,129,88,26,66,42,136,25,17,74,44,6,104,125,18,93</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13        4,188,6,28,60,112,3,209,21,72,0,67,106,7,67,49,112,55,95,50,5,84,28,130,3,17</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14  38,24,184,5,98,72,32,22,83,39,135,53,51,9,54,55,45,102,95,23,3,198,19,121,22,123,3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15                               103,74,17,32,114,0,93,133,6,77,116,2,51,112,11,157,59</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16                           22,63,13,16,88,54,55,26,86,133,7,170,15,68,29,41,30,89,61</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17                              225,13,3,76,65,158,3,33,178,5,139,1,93,62,74,26,195,11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18                                   73,2,19,95,0,87,124,43,78,65,104,10,0,10,165,13,9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19                       17,24,0,47,75,133,76,9,112,90,19,75,156,35,30,136,5,16,30,191</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20                           161,83,24,43,55,2,87,141,109,19,13,155,66,47,63,78,3,3,24</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21                 225,21,6,207,111,10,11,116,113,24,108,32,33,162,6,20,35,14,73,44,36</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22                          31,57,2,112,53,18,35,98,25,11,43,81,82,14,95,15,29,79,9,29</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23                            81,188,46,8,15,97,60,74,75,184,81,50,3,0,2,117,155,87,52</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                               reverse_C+m?_locations</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                 3,6,15,18,21,30,33,36,45,48,51,60,63,66,75,78,81,84,87,90,93,96,99</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                                      3,6,15,18,21,30,33,36,39,42,45,48,51,54,57,60</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                          3,6,15,18,21,30,33,36,45,48,51,60,63,66,69,72,75,78,81,84</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                          3,6,15,18,21,30,33,36,45,48,51,54,57,60,63,66,69,72,75,78</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5                          3,6,15,18,21,30,33,36,45,48,51,60,63,66,75,78,81,84,87,90</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                                            3,6,18,21,33,36,39,42,45,48,51,54,57,60</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7                                      3,6,18,21,33,36,39,42,45,48,51,54,57,60,63,66</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8                          3,6,15,18,21,30,33,36,45,48,51,60,63,66,69,72,75,78,81,84</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9                     3,6,9,12,21,24,27,36,39,42,45,48,51,54,57,60,63,66,69,72,75,78</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10                            3,6,15,18,27,30,33,42,45,48,57,60,63,66,69,72,75,78,81</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 3,6,15,18,21,24,27,30,33,36,39,42,45,48,51,54,57,60,63,66,69,72,75,78,81,84,87,90</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12          3,6,15,18,21,24,27,30,33,36,39,42,45,48,51,54,57,60,63,66,69,72,75,78,81</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13       3,6,15,18,21,24,27,30,33,36,39,42,45,48,51,54,57,60,63,66,69,72,75,78,81,84</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14    3,6,15,18,21,24,27,30,33,36,39,42,45,48,51,54,57,60,63,66,69,72,75,78,81,84,87</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15                                  3,6,15,18,27,30,39,42,51,54,63,66,75,78,87,90,93</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16                            3,6,15,18,27,30,39,42,51,54,63,66,75,78,81,84,87,90,93</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17                               3,6,15,18,27,30,39,42,51,54,63,66,75,78,81,84,87,90</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18                                 3,12,15,24,27,36,39,48,51,60,63,72,75,78,81,84,87</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19                          3,6,9,12,21,24,33,36,45,48,57,60,63,66,69,72,75,78,81,84</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20                            3,6,15,18,27,30,39,42,51,54,63,66,75,78,81,84,87,90,93</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21                      3,6,15,18,27,30,39,42,51,54,63,66,69,72,75,78,81,84,87,90,93</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22                          3,6,9,12,21,24,33,36,45,48,51,54,57,60,63,66,69,72,75,78</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23                             3,6,9,18,21,30,33,42,45,54,57,66,69,72,75,78,81,84,87</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                   reverse_C+m?_probabilities</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                             41,77,81,59,48,68,73,214,75,235,72,139,177,131,170,59,2,163,220,159,155,159,29</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                                                    253,66,51,194,46,129,78,68,116,12,212,233,134,207,56,10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                                   45,192,126,129,39,129,183,79,19,195,62,124,173,128,84,159,80,165,141,206</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                                          82,18,98,132,23,200,4,228,31,144,13,130,79,180,61,4,81,11,221,216</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5                                         79,7,77,130,27,34,34,230,42,229,41,79,99,229,50,139,36,120,236,170</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                                                              242,26,182,10,111,33,40,83,34,52,71,144,9,189</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7                                                  127,128,64,72,124,240,254,234,190,203,31,71,241,233,56,31</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8                                250,144,189,160,91,123,83,251,128,222,161,152,232,119,233,108,32,162,245,81</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9                            193,83,205,19,110,163,22,57,110,147,110,142,96,255,153,252,60,217,21,58,112,147</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10                                       189,79,161,215,6,244,19,153,88,122,77,30,143,108,194,88,109,181,149</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 179,163,238,145,193,47,71,144,251,52,103,78,187,134,196,81,135,168,163,251,187,213,210,207,225,33,253,163</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12                  55,62,108,252,125,78,191,54,145,206,27,145,203,126,130,86,205,127,34,85,66,8,108,217,122</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13                 13,4,191,26,31,68,153,8,215,133,150,1,67,144,17,71,67,152,136,203,246,146,197,122,250,176</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14         193,155,62,243,105,167,209,178,73,116,72,188,200,234,109,94,88,68,139,209,129,7,204,96,194,91,191</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15                                           104,174,233,196,140,253,49,115,242,113,137,250,90,79,162,29,177</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16                                        225,187,235,168,48,109,94,87,39,101,220,51,213,89,104,49,50,37,104</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17                                              11,235,170,9,79,94,249,132,69,244,105,237,7,95,98,121,50,243</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18                                            168,249,213,84,117,142,1,196,124,186,151,241,255,181,33,190,51</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19                                      175,29,55,27,1,53,75,168,107,26,194,101,78,124,224,68,249,185,209,60</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20                                     48,146,198,193,106,175,93,5,137,144,235,43,166,187,189,176,241,251,49</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21                              14,51,238,27,88,231,169,105,34,198,131,106,221,55,247,206,198,106,159,24,193</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22                               224,142,252,128,190,225,208,150,188,239,97,168,69,237,112,200,169,70,86,109</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23                                       49,45,132,100,228,95,13,146,155,63,174,191,245,255,198,65,9,156,161</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Merge data with offset = 1 but without complementing</span></span></span>
 <span class="r-in"><span><span class="fu">merge_methylation_with_metadata</span><span class="op">(</span></span></span>
@@ -1310,6 +1616,150 @@ at guanines, which SAMtools can't account for. Symmetrically reversing CpGs via
 <span class="r-out co"><span class="r-pr">#&gt;</span> 21                              193,24,159,106,198,206,247,55,221,106,131,198,34,105,169,231,88,27,238,51,14</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 22                               109,86,70,169,200,112,237,69,168,97,239,188,150,208,225,190,128,252,142,224</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 23                                       161,156,9,65,198,255,245,191,174,63,155,146,13,95,228,100,132,45,49</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                          reverse_sequence</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                                         GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                 CCGCCGCCGCCGCCGCCGCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                       GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5           CCGCCGCCGCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                                         CCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCTCCTCCTCCGCCGCCTCCTCCTCCGCCGCCT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7                                   GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGAGGCGGCGGAGGAGGAGGCGGCGGA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8                 GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9                       GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGCGGA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10                   CCGCCGCCGCCGCCGCCGCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCTCCTCCGCCGCCT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11          GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12                   CCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCTCCTCCGCCGCCT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13                GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14             CCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCTCCTCCGCCGCCT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15       CCGCCGCCGCCACCACCGCCGCCACCACCGCCGCCACCACCGCCGCCACCACCGCCGCCACCACCGCCGCCACCACCGCCGCCACCACCGCCGCCT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16       CCGCCGCCGCCGCCGCCGCCGCCACCACCGCCGCCACCACCGCCGCCACCACCGCCGCCACCACCGCCGCCACCACCGCCGCCACCACCGCCGCCT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17          GGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18             GGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19                CCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCTCCTCCGCCGCCTCCTCCGCCGCCTCCTCCGCCGCCTCCTCCGCCGCCGCCGCCT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20       GGCGGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21       CCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCACCACCGCCGCCACCACCGCCGCCACCACCGCCGCCACCACCGCCGCCACCACCGCCGCCT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22                      GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGTGGTGGCGGCGGCGGCGGA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23             GGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGAGGAGGCGGCGGCGGA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                           reverse_quality</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  )8@!9:/0/,0+-6?40,-I601:.';+5,@0.0%)!(20C*,2++*(00#/*+3;E-E)&lt;I5.5G*CB8501;I3'.8233'3&gt;&lt;:13)48F?09*&gt;?I90</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                                         60-7,7943/*=5=)7&lt;53-I=G6/&amp;/7?8)&lt;$12"&gt;/2C;4:9F8:816E,6C3*,1-2139</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                 ;F42DF52#C-*I75!4?9&gt;IA0&lt;30!-:I:;+7!:&lt;7&lt;8=G@5*91D%193/2;&gt;&lt;IA8.I&lt;.722,68*!25;69*&lt;&lt;8C9889@</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                       :&lt;*1D)89?27#8.3)9&lt;2G&lt;&gt;I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8&gt;0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5           ;4*2E3-48?@6A-!00!;-3%:H,4H&gt;H530C(85I/&amp;75-62.:2#!/D=A?8&amp;7E!-@:=::5,)51,97D*04'2.!20@/;6)947&lt;6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                                         E6(&lt;)"-./EE&lt;(5:47,(C818I9CC1=.&amp;)4G6-7&lt;(*"(,2C&gt;8/5:0@@).A$97I!-&lt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7                                   F='I#*5I:&lt;F?)&lt;4G3&amp;:95*-5?1,!:9BD4B5.-27577&lt;2E9)2:189B.5/*#7;;'**.7;-!</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8                 ?;.*26&lt;C-8B,3#8/,-9!1++:94:/!A317=9&gt;502=-+8;$=53@D*?/6:6&amp;0D7-.@8,5;F,1?0D?$9'&amp;665B8.604</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9                       *46.5//3:37?24:(:0*#.))E)?:,/172=2!4"&gt;.*/;"8+5&lt;;D6.I2=&gt;:C3)108,&lt;)GC161)!55E!.&gt;86/</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10                   736/A@B121C269&lt;2I,'5G66&gt;46A6-9*&amp;4*;4-E4C429?I+3@83(234E0%:43;!/3;2+956A0)(+'5G4=*3;1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11          =&lt;/-I354/,*&gt;+&lt;CA40*537/;&lt;@I7/4%6192'5'&gt;#4:&amp;C,072+90:0+4;74"D5,38&amp;&lt;7A?00+1&gt;G&gt;#=?;,@&lt;&lt;1=64D=!1&amp;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12                   ;1&gt;:5417*&lt;1.2H#260197.;7&lt;(-3?0+=:)ID'I$6*128*!4.7-=5;+384F!=5&gt;4!93+.6I7+H1-).H&gt;&lt;68;7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13                7?38,EC#3::=1)8&amp;;&lt;"&gt;3.9BE)1661!2)5-4.11B&lt;3)?')-+,B4.&lt;7)/:IE=5$.3:66G9216-C20,&gt;(0848(1$-</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14             @86,/+6=8/;9=1)48E494IB3456/6.*=&lt;/B32+5469&gt;8?@!1;*+81$&gt;-99D7&lt;@1$6B'?462?CE+=1+95=G?.6CA%&gt;2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15       /*2&lt;C643?*8?@9)-.'5A!=3-=;6,.%H3-!10'I&gt;&amp;@?;96;+/+36;:C;B@/=:6,;61&gt;?&gt;!,&gt;.97@.48B38(;7;1F464=-7;)7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16       /C&lt;$&gt;7/1(9%4:6&gt;6I,D%*,&amp;D?C/6@@;7)83.E.7:@9I906&lt;!4536!850!164/8,&lt;=?=15A;8B/5B364A66.1%9=(9876E8C:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17          :0I4099&lt;,4E01;/@96%2I2&lt;,%&lt;C&amp;=81F+4&lt;*@4A5.('4!%I3CE657&lt;=!5;37&gt;4D:%3;7'"4&lt;.9;?;7%0&gt;:,84B512,B7/</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18             9&gt;124!752+@06I/.72097*';-+A60=B?+/8'15477&gt;4-435D;G@G'./21:(0/1/A=7'I&gt;A"3=9;;12,@"2=3D=,458</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19                0/2&gt;@/6+-/(!=9-?G!AA70*,/!/?-E46:,-1G94*491,,38?(-!6&lt;8A;/C9;,3)4C06=%',86A)1!E@/24G59&lt;&lt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20       $&lt;,5"7+!$';8&lt;0794*@FI&gt;34224!57+#1!F&lt;+53$,?)-.A3;=1*71C02&lt;.5:1)82!86$03/;%+1C3+D3;@9B-E#+/70;9&lt;D'</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21       ?2-#-2"1:(5(4&gt;!I)&gt;I,.?-+EG3IH4-.C:;570@2I;?D5#/;A7=&gt;?&lt;3?080::459*?8:3"&lt;2;I)C1400)6:3%19./);.I?35</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22                      .85$#;!1F$8E:B+;7CI6@11/'65&lt;3,4G:8@GF1413:0)3CH1=44.%G=#2E67=?;9DF7358.;(I!74:1I4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23             5@&lt;733';9+3BB)=69,3!.2B*86'8E&gt;@3?!(36:&lt;002/4&gt;:1.43A!+;&lt;.3G*G8?0*991,B(C/"I9*1-86)8.;;5-0+=</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                               reverse_C+h?_locations</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                 3,6,15,18,21,30,33,36,45,48,51,60,63,66,75,78,81,84,87,90,93,96,99</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                                      3,6,15,18,21,30,33,36,39,42,45,48,51,54,57,60</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                          3,6,15,18,21,30,33,36,45,48,51,60,63,66,69,72,75,78,81,84</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                          3,6,15,18,21,30,33,36,45,48,51,54,57,60,63,66,69,72,75,78</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5                          3,6,15,18,21,30,33,36,45,48,51,60,63,66,75,78,81,84,87,90</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                                            3,6,18,21,33,36,39,42,45,48,51,54,57,60</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7                                      3,6,18,21,33,36,39,42,45,48,51,54,57,60,63,66</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8                          3,6,15,18,21,30,33,36,45,48,51,60,63,66,69,72,75,78,81,84</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9                     3,6,9,12,21,24,27,36,39,42,45,48,51,54,57,60,63,66,69,72,75,78</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10                            3,6,15,18,27,30,33,42,45,48,57,60,63,66,69,72,75,78,81</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 3,6,15,18,21,24,27,30,33,36,39,42,45,48,51,54,57,60,63,66,69,72,75,78,81,84,87,90</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12          3,6,15,18,21,24,27,30,33,36,39,42,45,48,51,54,57,60,63,66,69,72,75,78,81</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13       3,6,15,18,21,24,27,30,33,36,39,42,45,48,51,54,57,60,63,66,69,72,75,78,81,84</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14    3,6,15,18,21,24,27,30,33,36,39,42,45,48,51,54,57,60,63,66,69,72,75,78,81,84,87</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15                                  3,6,15,18,27,30,39,42,51,54,63,66,75,78,87,90,93</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16                            3,6,15,18,27,30,39,42,51,54,63,66,75,78,81,84,87,90,93</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17                               3,6,15,18,27,30,39,42,51,54,63,66,75,78,81,84,87,90</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18                                 3,12,15,24,27,36,39,48,51,60,63,72,75,78,81,84,87</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19                          3,6,9,12,21,24,33,36,45,48,57,60,63,66,69,72,75,78,81,84</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20                            3,6,15,18,27,30,39,42,51,54,63,66,75,78,81,84,87,90,93</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21                      3,6,15,18,27,30,39,42,51,54,63,66,69,72,75,78,81,84,87,90,93</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22                          3,6,9,12,21,24,33,36,45,48,51,54,57,60,63,66,69,72,75,78</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23                             3,6,9,18,21,30,33,42,45,54,57,66,69,72,75,78,81,84,87</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                             reverse_C+h?_probabilities</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                  34,54,55,46,39,50,52,34,53,18,52,63,54,64,57,46,2,59,30,60,61,60,26</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                                       2,49,41,46,38,64,54,50,63,11,36,20,64,39,44,10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                          37,47,64,63,33,64,52,55,17,46,47,64,56,64,56,60,55,58,63,40</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                            55,17,60,64,21,43,4,24,27,63,12,64,54,53,46,3,55,10,29,33</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5                           54,7,53,64,24,29,30,23,35,23,34,55,61,23,40,63,31,64,18,57</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                                              12,23,52,9,63,29,33,56,30,41,52,63,9,49</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7                                       64,64,48,52,64,14,1,19,48,41,28,51,13,20,44,27</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8                            5,63,49,60,59,64,56,4,64,29,59,62,21,64,20,62,28,59,10,55</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9                     20,138,4,102,92,8,52,86,84,46,80,42,159,0,61,3,46,32,19,45,63,62</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10                        20,111,79,1,238,1,142,35,80,40,21,126,47,112,21,71,103,43,80</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 49,86,10,83,11,58,104,109,1,82,47,130,36,93,19,92,79,56,90,3,57,35,36,42,4,220,1,68</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12      49,82,145,1,40,133,14,114,89,5,129,88,26,66,42,136,25,17,74,44,6,104,125,18,93</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13        4,188,6,28,60,112,3,209,21,72,0,67,106,7,67,49,112,55,95,50,5,84,28,130,3,17</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14  38,24,184,5,98,72,32,22,83,39,135,53,51,9,54,55,45,102,95,23,3,198,19,121,22,123,3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15                               103,74,17,32,114,0,93,133,6,77,116,2,51,112,11,157,59</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16                           22,63,13,16,88,54,55,26,86,133,7,170,15,68,29,41,30,89,61</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17                              225,13,3,76,65,158,3,33,178,5,139,1,93,62,74,26,195,11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18                                   73,2,19,95,0,87,124,43,78,65,104,10,0,10,165,13,9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19                       17,24,0,47,75,133,76,9,112,90,19,75,156,35,30,136,5,16,30,191</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20                           161,83,24,43,55,2,87,141,109,19,13,155,66,47,63,78,3,3,24</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21                 225,21,6,207,111,10,11,116,113,24,108,32,33,162,6,20,35,14,73,44,36</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22                          31,57,2,112,53,18,35,98,25,11,43,81,82,14,95,15,29,79,9,29</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23                            81,188,46,8,15,97,60,74,75,184,81,50,3,0,2,117,155,87,52</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                               reverse_C+m?_locations</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                 3,6,15,18,21,30,33,36,45,48,51,60,63,66,75,78,81,84,87,90,93,96,99</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                                      3,6,15,18,21,30,33,36,39,42,45,48,51,54,57,60</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                          3,6,15,18,21,30,33,36,45,48,51,60,63,66,69,72,75,78,81,84</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                          3,6,15,18,21,30,33,36,45,48,51,54,57,60,63,66,69,72,75,78</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5                          3,6,15,18,21,30,33,36,45,48,51,60,63,66,75,78,81,84,87,90</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                                            3,6,18,21,33,36,39,42,45,48,51,54,57,60</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7                                      3,6,18,21,33,36,39,42,45,48,51,54,57,60,63,66</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8                          3,6,15,18,21,30,33,36,45,48,51,60,63,66,69,72,75,78,81,84</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9                     3,6,9,12,21,24,27,36,39,42,45,48,51,54,57,60,63,66,69,72,75,78</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10                            3,6,15,18,27,30,33,42,45,48,57,60,63,66,69,72,75,78,81</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 3,6,15,18,21,24,27,30,33,36,39,42,45,48,51,54,57,60,63,66,69,72,75,78,81,84,87,90</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12          3,6,15,18,21,24,27,30,33,36,39,42,45,48,51,54,57,60,63,66,69,72,75,78,81</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13       3,6,15,18,21,24,27,30,33,36,39,42,45,48,51,54,57,60,63,66,69,72,75,78,81,84</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14    3,6,15,18,21,24,27,30,33,36,39,42,45,48,51,54,57,60,63,66,69,72,75,78,81,84,87</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15                                  3,6,15,18,27,30,39,42,51,54,63,66,75,78,87,90,93</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16                            3,6,15,18,27,30,39,42,51,54,63,66,75,78,81,84,87,90,93</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17                               3,6,15,18,27,30,39,42,51,54,63,66,75,78,81,84,87,90</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18                                 3,12,15,24,27,36,39,48,51,60,63,72,75,78,81,84,87</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19                          3,6,9,12,21,24,33,36,45,48,57,60,63,66,69,72,75,78,81,84</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20                            3,6,15,18,27,30,39,42,51,54,63,66,75,78,81,84,87,90,93</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21                      3,6,15,18,27,30,39,42,51,54,63,66,69,72,75,78,81,84,87,90,93</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22                          3,6,9,12,21,24,33,36,45,48,51,54,57,60,63,66,69,72,75,78</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23                             3,6,9,18,21,30,33,42,45,54,57,66,69,72,75,78,81,84,87</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                   reverse_C+m?_probabilities</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                             41,77,81,59,48,68,73,214,75,235,72,139,177,131,170,59,2,163,220,159,155,159,29</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                                                    253,66,51,194,46,129,78,68,116,12,212,233,134,207,56,10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                                   45,192,126,129,39,129,183,79,19,195,62,124,173,128,84,159,80,165,141,206</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                                          82,18,98,132,23,200,4,228,31,144,13,130,79,180,61,4,81,11,221,216</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5                                         79,7,77,130,27,34,34,230,42,229,41,79,99,229,50,139,36,120,236,170</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                                                              242,26,182,10,111,33,40,83,34,52,71,144,9,189</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7                                                  127,128,64,72,124,240,254,234,190,203,31,71,241,233,56,31</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8                                250,144,189,160,91,123,83,251,128,222,161,152,232,119,233,108,32,162,245,81</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9                            193,83,205,19,110,163,22,57,110,147,110,142,96,255,153,252,60,217,21,58,112,147</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10                                       189,79,161,215,6,244,19,153,88,122,77,30,143,108,194,88,109,181,149</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 179,163,238,145,193,47,71,144,251,52,103,78,187,134,196,81,135,168,163,251,187,213,210,207,225,33,253,163</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12                  55,62,108,252,125,78,191,54,145,206,27,145,203,126,130,86,205,127,34,85,66,8,108,217,122</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13                 13,4,191,26,31,68,153,8,215,133,150,1,67,144,17,71,67,152,136,203,246,146,197,122,250,176</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14         193,155,62,243,105,167,209,178,73,116,72,188,200,234,109,94,88,68,139,209,129,7,204,96,194,91,191</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15                                           104,174,233,196,140,253,49,115,242,113,137,250,90,79,162,29,177</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16                                        225,187,235,168,48,109,94,87,39,101,220,51,213,89,104,49,50,37,104</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17                                              11,235,170,9,79,94,249,132,69,244,105,237,7,95,98,121,50,243</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18                                            168,249,213,84,117,142,1,196,124,186,151,241,255,181,33,190,51</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19                                      175,29,55,27,1,53,75,168,107,26,194,101,78,124,224,68,249,185,209,60</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20                                     48,146,198,193,106,175,93,5,137,144,235,43,166,187,189,176,241,251,49</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21                              14,51,238,27,88,231,169,105,34,198,131,106,221,55,247,206,198,106,159,24,193</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22                               224,142,252,128,190,225,208,150,188,239,97,168,69,237,112,200,169,70,86,109</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23                                       49,45,132,100,228,95,13,146,155,63,174,191,245,255,198,65,9,156,161</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
