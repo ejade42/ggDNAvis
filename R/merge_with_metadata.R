@@ -621,3 +621,50 @@ reverse_probabilities_if_needed <- function(probabilities_vector, direction_vect
 }
 
 ## ----------------------------------------------------------------------------------------
+
+
+
+#' Invert direction vector ([merge_methylation_with_metadata()] helper)
+#'
+#' This function takes a vector of read directions
+#' (e.g. `c("reverse", "forward", "reverse", "reverse")`) and changes each value to be the opposite
+#' (i.e. `c("forward", "reverse", "forward", "forward"`). \cr\cr
+#'
+#' Not case-sensitive, but output is always lowercase.
+#'
+#' @param direction_vector `character vector`. A vector of read directions. Must contain only `"forward"` and `"reverse"`, but is not case sensitive.
+#'
+#' @return `character vector`. The same vector but with each value switched for its opposite.
+#'
+#' @examples
+#' invert_direction_vector(c("forward", "REveRse", "forWard"))
+#'
+#' @export
+invert_direction_vector <- function(direction_vector) {
+    ## Validate arguments
+    ## ---------------------------------------------------------------------
+    not_null_or_na <- list(direction_vector = direction_vector)
+    for (argument in names(not_null_or_na)) {
+        if (any(is.null(not_null_or_na[[argument]])) || any(is.na(not_null_or_na[[argument]]))) {bad_arg(argument, not_null_or_na, "must not be NULL or NA.")}
+    }
+    not_null_or_na <- NULL
+
+    char <- list(direction_vector = direction_vector)
+    for (argument in names(char)) {
+        if (!is.character(char[[argument]])) {bad_arg(argument, char, "must be of type character/string.")}
+    }
+    char <- NULL
+    ## ---------------------------------------------------------------------
+
+
+    ## Actual script
+    sapply(direction_vector, function(element) {
+        switch(
+            tolower(element),
+            "forward"="reverse",
+            "reverse"="forward",
+            abort(paste0("direction vector must contain only 'forward' and 'reverse' (not case sensitive).\nIllegal value: ", element), class = "argument_value_or_type")
+        )
+    }, USE.NAMES = FALSE)
+
+}

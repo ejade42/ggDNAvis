@@ -266,3 +266,19 @@ test_that("reversing probabilities fails", {
     expect_error(reverse_probabilities_if_needed("125,230,0,45", c("forward", "reverse")), class = "argument_value_or_type")
     expect_error(reverse_probabilities_if_needed(c("125,230,0,45", "6,5,230,0,142"), "forward"), class = "argument_value_or_type")
 })
+
+
+
+
+
+test_that("inverting direction vectors works", {
+    expect_equal(invert_direction_vector(c("forward", "REveRse", "forWard")),
+                 c("reverse", "forward", "reverse"))
+})
+
+test_that("inverting direction vectors fails", {
+    bad_param_value_for_direction <- list(1, 0, -1, 0.5, TRUE, FALSE, NA, NULL, c(1,2), c(1, NA), "forwar", "revers", "X", c("X", "forward"), c("forward", "X", "reverse"))
+    for (param in bad_param_value_for_direction) {
+        expect_error(invert_direction_vector(param), class = "argument_value_or_type")
+    }
+})
