@@ -5086,6 +5086,13 @@ they are available if needed)
   ([`visualise_many_sequences()`](https://ejade42.github.io/ggDNAvis/reference/visualise_many_sequences.md)
   helper)
 
+- [`invert_direction_vector()`](https://ejade42.github.io/ggDNAvis/reference/invert_direction_vector.md)
+  :
+
+  Invert direction vector
+  ([`merge_methylation_with_metadata()`](https://ejade42.github.io/ggDNAvis/reference/merge_methylation_with_metadata.md)
+  helper)
+
 - [`rasterise_index_annotations()`](https://ejade42.github.io/ggDNAvis/reference/rasterise_index_annotations.md)
   :
 

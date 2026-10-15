@@ -4,6 +4,8 @@
 
 ## ggDNAvis 1.0.1
 
+CRAN release: 2026-06-23
+
 - Removed magick as a dependency and added it to suggests (required only
   for tests)
 
