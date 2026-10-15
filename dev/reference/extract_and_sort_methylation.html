@@ -11,7 +11,14 @@ a character vector of such strings (e.g. c("3,6,9,12", "1,2,3,4")).
 This function calls extract_and_sort_sequences() on the relevant columns and returns
 a list of vectors stored in $locations, $probabilities, $sequences, and $lengths.
 These can then be used as input for visualise_methylation().
-Default arguments are set up to work with the included example_many_sequences data.'><meta property="og:description" content='extract_methylation_from_dataframe() is an alias for extract_and_sort_methylation() - see aliases.
+Default arguments are set up to work with the included example_many_sequences data.
+IMPORTANT: lengths_colname has been removed as an argument as of
+ggDNAvis v1.1.0. If this function is newly causing errors,
+try removing all lengths_colname arguments.
+Output should be identical to before, as $lengths is still
+included in the output but is now recalculated based on the character
+lengths of sequences_colname. The only exception is if
+lengths in the parent dataframe did not match the actual sequence lengths.'><meta property="og:description" content='extract_methylation_from_dataframe() is an alias for extract_and_sort_methylation() - see aliases.
 This function takes a dataframe that contains methylation information in the form of
 locations (indices along the read signifying bases at which modification probability
 was assessed) and  probabilities (the probability of modification at each assessed
@@ -23,7 +30,14 @@ a character vector of such strings (e.g. c("3,6,9,12", "1,2,3,4")).
 This function calls extract_and_sort_sequences() on the relevant columns and returns
 a list of vectors stored in $locations, $probabilities, $sequences, and $lengths.
 These can then be used as input for visualise_methylation().
-Default arguments are set up to work with the included example_many_sequences data.'><meta property="og:image" content="https://ejade42.github.io/ggDNAvis/logo.png"><link rel="stylesheet" href="extra.css"><script src="extra.js"></script></head><body>
+Default arguments are set up to work with the included example_many_sequences data.
+IMPORTANT: lengths_colname has been removed as an argument as of
+ggDNAvis v1.1.0. If this function is newly causing errors,
+try removing all lengths_colname arguments.
+Output should be identical to before, as $lengths is still
+included in the output but is now recalculated based on the character
+lengths of sequences_colname. The only exception is if
+lengths in the parent dataframe did not match the actual sequence lengths.'><meta property="og:image" content="https://ejade42.github.io/ggDNAvis/logo.png"><link rel="stylesheet" href="extra.css"><script src="extra.js"></script></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -31,7 +45,7 @@ Default arguments are set up to work with the included example_many_sequences da
 
     <a class="navbar-brand me-2" href="../index.html">ggDNAvis</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1.9006</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1.9007</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -87,6 +101,13 @@ a character vector of such strings (e.g. <code>c("3,6,9,12", "1,2,3,4")</code>).
 a list of vectors stored in <code>$locations</code>, <code>$probabilities</code>, <code>$sequences</code>, and <code>$lengths</code>.
 These can then be used as input for <code><a href="visualise_methylation.html">visualise_methylation()</a></code>.</p>
 <p>Default arguments are set up to work with the included <code><a href="example_many_sequences.html">example_many_sequences</a></code> data.</p>
+<p><em><strong>IMPORTANT:</strong></em> <code>lengths_colname</code> has been removed as an argument as of
+ggDNAvis v1.1.0. If this function is newly causing errors,
+try removing all <code>lengths_colname</code> arguments.
+Output should be identical to before, as <code>$lengths</code> is still
+included in the output but is now recalculated based on the character
+lengths of <code>sequences_colname</code>. The only exception is if
+lengths in the parent dataframe did not match the actual sequence lengths.</p>
     </div>
 
     <div class="section level2">
@@ -97,7 +118,6 @@ These can then be used as input for <code><a href="visualise_methylation.html">v
 <span>  locations_colname <span class="op">=</span> <span class="st">"methylation_locations"</span>,</span>
 <span>  probabilities_colname <span class="op">=</span> <span class="st">"methylation_probabilities"</span>,</span>
 <span>  sequences_colname <span class="op">=</span> <span class="st">"sequence"</span>,</span>
-<span>  lengths_colname <span class="op">=</span> <span class="st">"sequence_length"</span>,</span>
 <span>  grouping_levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>family <span class="op">=</span> <span class="fl">8</span>, individual <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span>
 <span>  sort_by <span class="op">=</span> <span class="st">"sequence_length"</span>,</span>
 <span>  desc_sort <span class="op">=</span> <span class="cn">TRUE</span></span>
@@ -128,10 +148,6 @@ These can then be used as input for <code><a href="visualise_methylation.html">v
 <dd><p><code>character</code>. The name of the column within the input dataframe that contains the actual sequences. Defaults to <code>"sequence"</code>.<br><br> Values within this column must be the actual sequences (e.g. <code>"GGCGGA"</code>).</p></dd>
 
 
-<dt id="arg-lengths-colname">lengths_colname<a class="anchor" aria-label="anchor" href="#arg-lengths-colname"></a></dt>
-<dd><p><code>character</code>. The name of the column within the input dataframe that contains the length of each sequence. Defaults to <code>"sequence_length"</code>.<br><br> Values within this column must be non-negative integers.</p></dd>
-
-
 <dt id="arg-grouping-levels">grouping_levels<a class="anchor" aria-label="anchor" href="#arg-grouping-levels"></a></dt>
 <dd><p><code>named character vector</code>. What variables should be used to define the groups/chunks, and how large a gap should be left between groups at that level. Set to <code>NA</code> to turn off grouping.<br><br> Defaults to <code>c("family" = 8, "individual" = 2)</code>, meaning the highest-level groups are defined by the <code>family</code> column, and there is a gap of 8 between each family. Likewise the second-level groups (within each family) are defined by the <code>individual</code> column, and there is a gap of 2 between each individual.<br><br> Any number of grouping variables and gaps can be given, as long as each grouping variable is a column within the dataframe. It is recommended that lower-level groups are more granular and subdivide higher-level groups (e.g. first divide into families, then into individuals within families). <br><br> To change the order of groups within a level, make that column a factor with the order specified e.g. <code>example_many_sequences$family &lt;- factor(example_many_sequences$family, levels = c("Family 2", "Family 3", "Family 1"))</code> to change the order to Family 2, Family 3, Family 1.</p></dd>
 
@@ -158,7 +174,6 @@ These can then be used as input for <code><a href="visualise_methylation.html">v
 <span class="r-in"><span>    locations_colname <span class="op">=</span> <span class="st">"methylation_locations"</span>,</span></span>
 <span class="r-in"><span>    probabilities_colname <span class="op">=</span> <span class="st">"methylation_probabilities"</span>,</span></span>
 <span class="r-in"><span>    sequences_colname <span class="op">=</span> <span class="st">"sequence"</span>,</span></span>
-<span class="r-in"><span>    lengths_colname <span class="op">=</span> <span class="st">"sequence_length"</span>,</span></span>
 <span class="r-in"><span>    grouping_levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"family"</span> <span class="op">=</span> <span class="fl">8</span>, <span class="st">"individual"</span> <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    sort_by <span class="op">=</span> <span class="st">"sequence_length"</span>,</span></span>
 <span class="r-in"><span>    desc_sort <span class="op">=</span> <span class="cn">TRUE</span></span></span>
@@ -333,7 +348,6 @@ These can then be used as input for <code><a href="visualise_methylation.html">v
 <span class="r-in"><span>    locations_colname <span class="op">=</span> <span class="st">"hydroxymethylation_locations"</span>,</span></span>
 <span class="r-in"><span>    probabilities_colname <span class="op">=</span> <span class="st">"hydroxymethylation_probabilities"</span>,</span></span>
 <span class="r-in"><span>    sequences_colname <span class="op">=</span> <span class="st">"sequence"</span>,</span></span>
-<span class="r-in"><span>    lengths_colname <span class="op">=</span> <span class="st">"sequence_length"</span>,</span></span>
 <span class="r-in"><span>    grouping_levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"family"</span> <span class="op">=</span> <span class="fl">8</span>, <span class="st">"individual"</span> <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    sort_by <span class="op">=</span> <span class="st">"sequence_length"</span>,</span></span>
 <span class="r-in"><span>    desc_sort <span class="op">=</span> <span class="cn">TRUE</span></span></span>

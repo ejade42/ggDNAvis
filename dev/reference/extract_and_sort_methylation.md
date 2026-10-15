@@ -27,6 +27,14 @@ Default arguments are set up to work with the included
 [`example_many_sequences`](https://ejade42.github.io/ggDNAvis/reference/example_many_sequences.md)
 data.
 
+***IMPORTANT:*** `lengths_colname` has been removed as an argument as of
+ggDNAvis v1.1.0. If this function is newly causing errors, try removing
+all `lengths_colname` arguments. Output should be identical to before,
+as `$lengths` is still included in the output but is now recalculated
+based on the character lengths of `sequences_colname`. The only
+exception is if lengths in the parent dataframe did not match the actual
+sequence lengths.
+
 ## Usage
 
 ``` r
@@ -36,7 +44,6 @@ extract_and_sort_methylation(
   locations_colname = "methylation_locations",
   probabilities_colname = "methylation_probabilities",
   sequences_colname = "sequence",
-  lengths_colname = "sequence_length",
   grouping_levels = c(family = 8, individual = 2),
   sort_by = "sequence_length",
   desc_sort = TRUE
@@ -100,14 +107,6 @@ extract_and_sort_methylation(
   Values within this column must be the actual sequences (e.g.
   `"GGCGGA"`).
 
-- lengths_colname:
-
-  `character`. The name of the column within the input dataframe that
-  contains the length of each sequence. Defaults to
-  `"sequence_length"`.  
-    
-  Values within this column must be non-negative integers.
-
 - grouping_levels:
 
   `named character vector`. What variables should be used to define the
@@ -163,7 +162,6 @@ extract_and_sort_methylation(
     locations_colname = "methylation_locations",
     probabilities_colname = "methylation_probabilities",
     sequences_colname = "sequence",
-    lengths_colname = "sequence_length",
     grouping_levels = c("family" = 8, "individual" = 2),
     sort_by = "sequence_length",
     desc_sort = TRUE
@@ -338,7 +336,6 @@ extract_and_sort_methylation(
     locations_colname = "hydroxymethylation_locations",
     probabilities_colname = "hydroxymethylation_probabilities",
     sequences_colname = "sequence",
-    lengths_colname = "sequence_length",
     grouping_levels = c("family" = 8, "individual" = 2),
     sort_by = "sequence_length",
     desc_sort = TRUE

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ggDNAvis</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1.9006</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1.9007</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -50,11 +50,23 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="ggdnavis-development-version">ggDNAvis (development version)<a class="anchor" aria-label="anchor" href="#ggdnavis-development-version"></a></h2>
-</div>
+<ul><li>
+<p><strong><em>BREAKING CHANGE:</em></strong> Removed <code>lengths_colname</code> as a mandatory argument to <code><a href="../reference/extract_and_sort_methylation.html">extract_and_sort_methylation()</a></code>.</p>
+<ul><li><p>This will cause an error in old code that provides the now-meaningless <code>lengths_colname</code> argument.</p></li>
+<li><p>The returned list still contains <code>$lengths</code>, but this is now recalculated directly from the sequence lengths in <code>sequences_colname</code> / <code>$sequences</code> rather than read from the parent dataframe.</p></li>
+<li><p>There may be behaviour changes in any cases where the lengths stored in the parent dataframe did not match the actual lengths of <code>sequences_colname</code> / <code>$sequences</code>.</p></li>
+</ul></li>
+<li>
+<p>Made <code><a href="../reference/merge_fastq_with_metadata.html">merge_fastq_with_metadata()</a></code> and <code><a href="../reference/merge_methylation_with_metadata.html">merge_methylation_with_metadata()</a></code> now create <code>"reverse_sequence"</code> (and quality, location, probability) columns as well as <code>"forward_sequence"</code> columns.</p>
+<ul><li>This can be useful when dealing with genes on the minus strand, where the local <code>"forward"</code> direction relative to the gene is the global <code>"reverse"</code> direction relative to the reference genome.</li>
+</ul></li>
+<li><p>Added <code><a href="../reference/invert_direction_vector.html">invert_direction_vector()</a></code> helper function.</p></li>
+<li><p>Minor tweaks to reversing options manuscript figure.</p></li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.0.1" id="ggdnavis-101">ggDNAvis 1.0.1<a class="anchor" aria-label="anchor" href="#ggdnavis-101"></a></h2><p class="text-muted">CRAN release: 2026-06-23</p>
-<ul><li><p>Removed magick as a dependency and added it to suggests (required only for tests)</p></li>
-<li><p>Minor tweaks to methylation text manuscript figure</p></li>
+<ul><li><p>Removed magick as a dependency and added it to suggests (required only for tests).</p></li>
+<li><p>Minor tweaks to methylation text manuscript figure.</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.0.0" id="ggdnavis-100">ggDNAvis 1.0.0<a class="anchor" aria-label="anchor" href="#ggdnavis-100"></a></h2><p class="text-muted">CRAN release: 2026-03-06</p>
