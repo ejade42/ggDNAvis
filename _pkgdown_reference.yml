@@ -72,6 +72,7 @@ reference:
   - convert_sequences_to_matrix
   - create_image_data
   - insert_at_indices
+  - invert_direction_vector
   - rasterise_index_annotations
   - rasterise_matrix
   - rasterise_probabilities
