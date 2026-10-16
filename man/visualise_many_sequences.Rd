@@ -143,9 +143,31 @@ image <- png::readPNG("example_vms_02.png")
 unlink("example_vms_02.png")
 grid::grid.newpage()
 grid::grid.raster(image)
-}
 
 ## By default (sanitise_sequences = TRUE), any
-non-ACGTU characters in provided sequences are removed.
+## non-ACGTU characters in provided sequences are removed.
+invalid_sequences <- c("ACGAT", "caug\%^7567XXX")
+visualise_many_sequences(
+    invalid_sequences,
+    sanitize_sequences = TRUE,
+    filename = "example_vms_03.png",
+    return = FALSE,
+    sequence_colours = sequence_colour_palettes$bright_pale,
+    sequence_text_colour = "white",
+    index_annotation_interval = 3,
+    index_annotation_lines = 1:51,
+    index_annotation_full_line = FALSE,
+    index_annotation_always_first_base = FALSE,
+    index_annotation_always_last_base = FALSE,
+    background_colour = "lightgrey",
+    outline_linewidth = 0,
+    margin = 0
+)
+## View exported image
+image <- png::readPNG("example_vms_03.png")
+unlink("example_vms_03.png")
+grid::grid.newpage()
+grid::grid.raster(image)
+}
 
 }
