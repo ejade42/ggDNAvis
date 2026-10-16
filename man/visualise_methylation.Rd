@@ -10,6 +10,7 @@ visualise_methylation(
   modification_probabilities,
   sequences,
   ...,
+  sanitise_sequences = TRUE,
   low_colour = "blue",
   high_colour = "red",
   low_clamp = 0,
@@ -56,6 +57,8 @@ visualise_methylation(
 \item{sequences}{\verb{character vector}. One character value for each sequence, storing the actual DNA sequence.}
 
 \item{...}{Used to recognise aliases e.g. American spellings or common misspellings - see \link{aliases}. If any American spellings do not work, please make a bug report at \url{https://github.com/ejade42/ggDNAvis/issues}.}
+
+\item{sanitise_sequences}{\code{logical}. Whether sequences should be automatically sanitisied (any non-\code{A}/\code{C}/\code{G}/\code{T}/\code{U} values removed, \code{TRUE}, default) or whether these invalid characters should cause an error (\code{FALSE}).}
 
 \item{low_colour}{\code{character}. The colour that should be used to represent minimum probability of methylation/modification (defaults to blue).}
 
@@ -189,6 +192,7 @@ visualise_methylation(
     methylation_info$locations,
     methylation_info$probabilities,
     methylation_info$sequences,
+    sanitise_sequences = TRUE,
     filename = "example_vm_02.png",
     return = FALSE,
     low_colour = "white",
@@ -219,6 +223,7 @@ visualise_methylation(
     methylation_info$locations,
     methylation_info$probabilities,
     methylation_info$sequences,
+    sanitise_sequences = TRUE,
     filename = "example_vm_03.png",
     return = FALSE,
     low_colour = "white",
@@ -251,6 +256,7 @@ visualise_methylation(
     methylation_info$locations,
     methylation_info$probabilities,
     methylation_info$sequences,
+    sanitise_sequences = TRUE,
     filename = "example_vm_04.png",
     return = FALSE,
     low_colour = "cyan",
@@ -284,6 +290,7 @@ visualise_methylation(
     methylation_info$locations,
     methylation_info$probabilities,
     methylation_info$sequences,
+    sanitise_sequences = TRUE,
     filename = "example_vm_05.png",
     return = FALSE,
     low_colour = "blue",

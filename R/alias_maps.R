@@ -30,6 +30,7 @@
 
         ## visualise_methylation.R
         visualise_methylation = list(
+            sanitise_sequences = list(default = TRUE, aliases = c("sanitize_sequences")),
             low_colour = list(default = "blue", aliases = c("low_color", "low_col")),
             high_colour = list(default = "red", aliases = c("high_color", "high_col")),
             background_colour = list(default = "white", aliases = c("background_color", "background_col")),
