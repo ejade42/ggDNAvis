@@ -13,7 +13,6 @@
 #' @importFrom tidyr replace_na drop_na
 #' @importFrom rlang abort warn
 #' @importFrom cli cli_alert_info
-#' @importFrom magick image_read image_compare
 ## usethis namespace: end
 NULL
 
@@ -28,7 +27,7 @@ fetch_acceptable_distortion <- function(verbose = TRUE) {
         ggplot2::theme_update(text = element_text(family = "Liberation Sans"))
     }
 
-    if (Sys.info()[["sysname"]] == "Darwin" && Sys.info()[["user"]] == "evelyn") {
+    if (Sys.info()[["sysname"]] == "Darwin" && Sys.info()[["user"]] %in% c("evelyn", "ejad042")) {
         if (verbose) {cli_alert_info("Evelyn's macbook detected, using extremely strict matching")}
         acceptable_distortion <- 0.000001
     } else if (Sys.getenv("NOT_CRAN") == "false" || Sys.getenv("GITHUB_ACTIONS") == "true") {

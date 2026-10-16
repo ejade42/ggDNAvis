@@ -8,7 +8,7 @@
 rasterise_matrix(image_matrix, drop_na = TRUE)
 }
 \arguments{
-\item{image_matrix}{\code{matrix}. A matrix (or anything that can be coerced to a matrix via \code{\link[base:matrix]{base::as.matrix()}}).}
+\item{image_matrix}{\code{matrix}. A matrix (or anything that can be coerced to a matrix via \code{\link[base:as.matrix]{base::as.matrix()}}).}
 
 \item{drop_na}{\code{logical}. A boolean specifying whether missing values should be dropped via \code{\link[tidyr:drop_na]{tidyr::drop_na()}} (\code{TRUE}, default) or kept (\code{FALSE}).}
 }

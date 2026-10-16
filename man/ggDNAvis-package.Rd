@@ -23,5 +23,10 @@ Useful links:
 \author{
 \strong{Maintainer}: Evelyn Jade \email{evelynjade42@gmail.com} (\href{https://orcid.org/0009-0003-7761-5425}{ORCID}) [copyright holder]
 
+Authors:
+\itemize{
+  \item Evelyn Jade \email{evelynjade42@gmail.com} (\href{https://orcid.org/0009-0003-7761-5425}{ORCID}) [copyright holder]
+}
+
 }
 \keyword{internal}

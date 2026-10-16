@@ -8,6 +8,7 @@
 visualise_many_sequences(
   sequences_vector,
   ...,
+  sanitise_sequences = TRUE,
   sequence_colours = sequence_colour_palettes$ggplot_style,
   background_colour = "white",
   margin = 0.5,
@@ -37,6 +38,8 @@ visualise_many_sequences(
 \item{sequences_vector}{\verb{character vector}. The sequences to visualise, often created from a dataframe via \code{\link[=extract_and_sort_sequences]{extract_and_sort_sequences()}}. E.g. \code{c("GGCGGC", "", "AGCTAGCTA")}.}
 
 \item{...}{Used to recognise aliases e.g. American spellings or common misspellings - see \link{aliases}. If any American spellings do not work, please make a bug report at \url{https://github.com/ejade42/ggDNAvis/issues}.}
+
+\item{sanitise_sequences}{\code{logical}. Whether sequences should be automatically sanitisied (any non-\code{A}/\code{C}/\code{G}/\code{T}/\code{U} values removed with a warning, \code{TRUE}, default) or whether these invalid characters should cause an error (\code{FALSE}).}
 
 \item{sequence_colours}{\verb{character vector}, length 4. A vector indicating which colours should be used for each base. In order: \code{c(A_colour, C_colour, G_colour, T/U_colour)}.\cr\cr Defaults to red, green, blue, purple in the default shades produced by ggplot with 4 colours, i.e. \code{c("#F8766D", "#7CAE00", "#00BFC4", "#C77CFF")}, accessed via \code{\link{sequence_colour_palettes}}\verb{$ggplot_style}.}
 
@@ -76,7 +79,7 @@ visualise_many_sequences(
 
 \item{filename}{\code{character}. Filename to which output should be saved. If set to \code{NA} (default), no file will be saved. Recommended to end with \code{".png"}, but can change if render device is changed.}
 
-\item{force_raster}{\code{logical}. Boolean specifying whether \code{\link[ggplot2:geom_tile]{ggplot2::geom_raster()}} should be used even if it will remove text and outlines. Defaults to \code{FALSE}.\cr\cr To make the detailed plots with box outlines, sequence text, and index annotations, \code{\link[ggplot2:geom_tile]{ggplot2::geom_tile()}} is used. However, \code{geom_tile} is slower for huge datasets, so there is an option to use \code{geom_raster} instead. \code{geom_raster} does not support box outlines, sequence text, or index annotations, but is much faster if only the colours are wanted.\cr\cr \code{geom_raster} is automatically used if it will not change the plot (i.e. if all extraneous elements are already off), but can be forced using this argument.}
+\item{force_raster}{\code{logical}. Boolean specifying whether \code{\link[ggplot2:geom_raster]{ggplot2::geom_raster()}} should be used even if it will remove text and outlines. Defaults to \code{FALSE}.\cr\cr To make the detailed plots with box outlines, sequence text, and index annotations, \code{\link[ggplot2:geom_tile]{ggplot2::geom_tile()}} is used. However, \code{geom_tile} is slower for huge datasets, so there is an option to use \code{geom_raster} instead. \code{geom_raster} does not support box outlines, sequence text, or index annotations, but is much faster if only the colours are wanted.\cr\cr \code{geom_raster} is automatically used if it will not change the plot (i.e. if all extraneous elements are already off), but can be forced using this argument.}
 
 \item{render_device}{\verb{function/character}. Device to use when rendering. See \code{\link[ggplot2:ggsave]{ggplot2::ggsave()}} documentation for options. Defaults to \code{\link[ragg:agg_png]{ragg::agg_png}}. Can be set to \code{NULL} to infer from file extension, but results may vary between systems.}
 
@@ -121,6 +124,7 @@ grid::grid.raster(image)
 ## Export while customising appearance
 visualise_many_sequences(
     sequences,
+    sanitise_sequences = TRUE,
     filename = "example_vms_02.png",
     return = FALSE,
     sequence_colours = sequence_colour_palettes$bright_pale,
@@ -137,6 +141,31 @@ visualise_many_sequences(
 ## View exported image
 image <- png::readPNG("example_vms_02.png")
 unlink("example_vms_02.png")
+grid::grid.newpage()
+grid::grid.raster(image)
+
+## By default (sanitise_sequences = TRUE), any
+## non-ACGTU characters in provided sequences are removed.
+invalid_sequences <- c("ACGAT", "caug\%^7567XXX")
+visualise_many_sequences(
+    invalid_sequences,
+    sanitize_sequences = TRUE,
+    filename = "example_vms_03.png",
+    return = FALSE,
+    sequence_colours = sequence_colour_palettes$bright_pale,
+    sequence_text_colour = "white",
+    index_annotation_interval = 3,
+    index_annotation_lines = 1:51,
+    index_annotation_full_line = FALSE,
+    index_annotation_always_first_base = FALSE,
+    index_annotation_always_last_base = FALSE,
+    background_colour = "lightgrey",
+    outline_linewidth = 0,
+    margin = 0
+)
+## View exported image
+image <- png::readPNG("example_vms_03.png")
+unlink("example_vms_03.png")
 grid::grid.newpage()
 grid::grid.raster(image)
 }

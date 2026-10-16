@@ -18,7 +18,7 @@ merge_fastq_with_metadata(
 \item{reverse_complement_mode}{\code{character}. Whether reverse-complemented sequences should be converted to DNA (i.e. A complements to T), RNA (i.e. A complements to U), or not complemented at all. Must be \code{"DNA"} (default), \code{"RNA"}, or \code{"reverse_only"} to reverse sequence order without complementing. \emph{Only affects reverse-complemented sequences. Sequences that were forward to begin with are not altered.}\cr\cr Uses \code{\link[=reverse_complement]{reverse_complement()}} via \code{\link[=reverse_sequence_if_needed]{reverse_sequence_if_needed()}}.}
 }
 \value{
-\code{dataframe}. A merged dataframe containing all columns from the input dataframes, as well as forward versions of sequences and qualities.
+\code{dataframe}. A merged dataframe containing all columns from the input dataframes, as well as forward-ified and reverse-ified versions of sequences and qualities.
 }
 \description{
 Merge a dataframe of sequence and quality data (as produced by
@@ -45,6 +45,11 @@ such that all reads are in the forward direction, ideal for consistent analysis 
 visualisation. The output columns are \code{"forward_sequence"} and \code{"forward_quality"}.
 Calls \code{\link[=reverse_sequence_if_needed]{reverse_sequence_if_needed()}} and \code{\link[=reverse_quality_if_needed]{reverse_quality_if_needed()}}
 to implement the reversing - see documentation for these functions for more details.
+
+Likewise, \code{"reverse_sequence"} and \code{"reverse_quality"} are created by
+reverse-complementing forward reads only. This can be useful for genes that
+are on the minus strand (i.e. "forward" relative to the gene is "reverse"
+relative to the reference genome).
 }
 \examples{
 ## Locate files

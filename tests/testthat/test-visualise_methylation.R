@@ -2,6 +2,9 @@ root <- "test_plot_images/"
 reference <- "reference_images/"
 acceptable_distortion <- fetch_acceptable_distortion(verbose = FALSE)
 
+## Require magick package to run these tests
+testthat::skip_if_not_installed("magick")
+library(magick)
 
 test_that("methylation visualisation works as expected, all defaults", {
     filename <- "visualise_methylation_test_01"
@@ -243,6 +246,23 @@ test_that("forcing first & last base annotation works, not full lines", {
                                        metric = "MAE"))$distortion, acceptable_distortion)
 })
 
+test_that("sequence sanitisation works", {
+    filename <- "visualise_methylation_test_25"
+    d <- list(
+        sequences = c("ACGAGacgau fdg 64375856456 76 %^@&%$^#&*(#$ ACGHAC", "HDJFIGY@*GYIEFHAGIGF*SUUD*&G@UIGB#IFG#I&*#FUIGS"),
+        locations = c("", "2,4"),
+        probabilities = c("", "3,197")
+    )
+    expect_warning(visualise_methylation(d$locations, d$probabilities, d$sequences, filename = paste0(root, filename, ".png"), sequence_text_type = "sequence", index_annotation_interval = 4, index_annotation_above = FALSE, index_annotation_lines = 2),
+                   class = "invalid_sequence_sanitised")
+    expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
+                                       image_read(paste0(reference, filename, ".png")),
+                                       metric = "MAE"))$distortion, acceptable_distortion)
+
+    ## turn sanitisation off here
+    expect_error(visualise_methylation(d$locations, d$probabilities, d$sequences, sequence_text_type = "sequence", index_annotation_interval = 4, index_annotation_above = FALSE, index_annotation_lines = 2, sanitize_sequences = FALSE), class = "argument_value_or_type")
+})
+
 test_that("argument validation rejects bad arguments for methylation visualisation", {
     d <- extract_methylation_from_dataframe(example_many_sequences)
 
@@ -310,6 +330,7 @@ test_that("argument validation rejects bad arguments for methylation visualisati
         expect_error(visualise_methylation(d$locations, d$probabilities, d$sequences, index_annotation_always_first_base = param), class = "argument_value_or_type")
         expect_error(visualise_methylation(d$locations, d$probabilities, d$sequences, index_annotation_always_last_base = param), class = "argument_value_or_type")
         expect_error(visualise_methylation(d$locations, d$probabilities, d$sequences, force_raster = param), class = "argument_value_or_type")
+        expect_error(visualise_methylation(d$locations, d$probabilities, d$sequences, sanitize_sequences = param), class = "argument_value_or_type")
     }
 
     bad_param_value_for_filename <- list(c("hi", "bye"), 1, TRUE, -1, 0, 1.5, -1.5, c("A", "B", "C", "D"), c(NA, NA), NULL)
@@ -414,4 +435,14 @@ test_that("creating probabilities data rejects bad arguments", {
         expect_error(rasterise_probabilities(d$locations, d$probabilities, d$sequences, sequence_text_rounding = param), class = "argument_value_or_type")
         expect_error(rasterise_probabilities(d$locations, d$probabilities, d$sequences, sequence_text_scaling = param), class = "argument_value_or_type")
     }
+})
+
+test_that("behaviour of removed lengths_colname argument is as expected", {
+    expect_error(d <- extract_methylation_from_dataframe(
+        example_many_sequences,
+        probabilities_colname = "methylation_probabilities",
+        locations_colname = "methylation_locations",
+        sequences_colname = "sequence",
+        lengths_colname = "sequence_length"
+    ), class = "unrecognised_argument")
 })

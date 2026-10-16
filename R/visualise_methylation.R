@@ -30,6 +30,7 @@
 #' @param modification_locations `character vector`. One character value for each sequence, storing a condensed string (e.g. `"3,6,9,12"`, produced via [vector_to_string()]) of the indices along the read at which modification was assessed. Indexing starts at 1.
 #' @param modification_probabilities `character vector`. One character value for each sequence, storing a condensed string (e.g. `"0,128,255,15"`, produced via [vector_to_string()]) of the probability of methylation/modification at each assessed base.\cr\cr Assumed to be Nanopore > SAM style modification stored as an 8-bit integer from 0 to 255, but changing other arguments could make this work on other scales.
 #' @param sequences `character vector`. One character value for each sequence, storing the actual DNA sequence.
+#' @param sanitise_sequences `logical`. Whether sequences should be automatically sanitisied (any non-`A`/`C`/`G`/`T`/`U` values removed with a warning, `TRUE`, default) or whether these invalid characters should cause an error (`FALSE`).
 #' @param low_colour `character`. The colour that should be used to represent minimum probability of methylation/modification (defaults to blue).
 #' @param high_colour `character`. The colour that should be used to represent maximum probability of methylation/modification (defaults to red).
 #' @param low_clamp `numeric`. The minimum probability below which all values are coloured `low_colour`. Defaults to `0` (i.e. no clamping). To specify a proportion probability in 8-bit form, multiply by 255 e.g. to low-clamp at 30% probability, set this to `0.3*255`.
@@ -102,6 +103,7 @@
 #'     methylation_info$locations,
 #'     methylation_info$probabilities,
 #'     methylation_info$sequences,
+#'     sanitise_sequences = TRUE,
 #'     filename = "example_vm_02.png",
 #'     return = FALSE,
 #'     low_colour = "white",
@@ -132,6 +134,7 @@
 #'     methylation_info$locations,
 #'     methylation_info$probabilities,
 #'     methylation_info$sequences,
+#'     sanitise_sequences = TRUE,
 #'     filename = "example_vm_03.png",
 #'     return = FALSE,
 #'     low_colour = "white",
@@ -164,6 +167,7 @@
 #'     methylation_info$locations,
 #'     methylation_info$probabilities,
 #'     methylation_info$sequences,
+#'     sanitise_sequences = TRUE,
 #'     filename = "example_vm_04.png",
 #'     return = FALSE,
 #'     low_colour = "cyan",
@@ -197,6 +201,7 @@
 #'     methylation_info$locations,
 #'     methylation_info$probabilities,
 #'     methylation_info$sequences,
+#'     sanitise_sequences = TRUE,
 #'     filename = "example_vm_05.png",
 #'     return = FALSE,
 #'     low_colour = "blue",
@@ -232,6 +237,7 @@ visualise_methylation <- function(
     modification_probabilities,
     sequences,
     ...,
+    sanitise_sequences = TRUE,
     low_colour = "blue",
     high_colour = "red",
     low_clamp = 0,
@@ -284,19 +290,19 @@ visualise_methylation <- function(
     ## Validate arguments
     ## ---------------------------------------------------------------------
     monitor_time <- monitor(monitor_performance, start_time, monitor_time, "validating arguments")
-    not_null <- list(modification_locations = modification_locations, modification_probabilities = modification_probabilities, sequences = sequences, background_colour = background_colour, other_bases_colour = other_bases_colour, low_colour = low_colour, high_colour = high_colour, low_clamp = low_clamp, high_clamp = high_clamp, sequence_text_type = sequence_text_type, sequence_text_rounding = sequence_text_rounding, sequence_text_colour = sequence_text_colour, sequence_text_size = sequence_text_size, index_annotation_colour = index_annotation_colour, index_annotation_size = index_annotation_size, index_annotation_interval = index_annotation_interval, index_annotations_above = index_annotations_above, index_annotation_vertical_position = index_annotation_vertical_position, index_annotation_full_line = index_annotation_full_line, index_annotation_always_first_base = index_annotation_always_first_base, index_annotation_always_last_base = index_annotation_always_last_base, outline_linewidth = outline_linewidth, outline_colour = outline_colour, outline_join = outline_join, modified_bases_outline_linewidth = modified_bases_outline_linewidth, modified_bases_outline_colour = modified_bases_outline_colour, modified_bases_outline_join = modified_bases_outline_join, other_bases_outline_linewidth = other_bases_outline_linewidth, other_bases_outline_colour = other_bases_outline_colour, other_bases_outline_join = other_bases_outline_join, margin = margin, return = return, force_raster = force_raster, filename = filename, pixels_per_base = pixels_per_base)
+    not_null <- list(sanitise_sequences = sanitise_sequences, modification_locations = modification_locations, modification_probabilities = modification_probabilities, sequences = sequences, background_colour = background_colour, other_bases_colour = other_bases_colour, low_colour = low_colour, high_colour = high_colour, low_clamp = low_clamp, high_clamp = high_clamp, sequence_text_type = sequence_text_type, sequence_text_rounding = sequence_text_rounding, sequence_text_colour = sequence_text_colour, sequence_text_size = sequence_text_size, index_annotation_colour = index_annotation_colour, index_annotation_size = index_annotation_size, index_annotation_interval = index_annotation_interval, index_annotations_above = index_annotations_above, index_annotation_vertical_position = index_annotation_vertical_position, index_annotation_full_line = index_annotation_full_line, index_annotation_always_first_base = index_annotation_always_first_base, index_annotation_always_last_base = index_annotation_always_last_base, outline_linewidth = outline_linewidth, outline_colour = outline_colour, outline_join = outline_join, modified_bases_outline_linewidth = modified_bases_outline_linewidth, modified_bases_outline_colour = modified_bases_outline_colour, modified_bases_outline_join = modified_bases_outline_join, other_bases_outline_linewidth = other_bases_outline_linewidth, other_bases_outline_colour = other_bases_outline_colour, other_bases_outline_join = other_bases_outline_join, margin = margin, return = return, force_raster = force_raster, filename = filename, pixels_per_base = pixels_per_base)
     for (argument in names(not_null)) {
         if (any(is.null(not_null[[argument]]))) {bad_arg(argument, not_null, "must not be NULL.")}
     }
     not_null <- NULL
 
-    length_1 <- list(background_colour = background_colour, other_bases_colour = other_bases_colour, low_colour = low_colour, high_colour = high_colour, low_clamp = low_clamp, high_clamp = high_clamp,sequence_text_type = sequence_text_type, sequence_text_rounding = sequence_text_rounding, sequence_text_colour = sequence_text_colour, sequence_text_size = sequence_text_size, index_annotation_colour = index_annotation_colour, index_annotation_size = index_annotation_size, index_annotation_interval = index_annotation_interval, index_annotations_above = index_annotations_above, index_annotation_vertical_position = index_annotation_vertical_position, index_annotation_full_line = index_annotation_full_line, index_annotation_always_first_base = index_annotation_always_first_base, index_annotation_always_last_base = index_annotation_always_last_base, outline_linewidth = outline_linewidth, outline_colour = outline_colour, outline_join = outline_join, modified_bases_outline_linewidth = modified_bases_outline_linewidth, modified_bases_outline_colour = modified_bases_outline_colour, modified_bases_outline_join = modified_bases_outline_join, other_bases_outline_linewidth = other_bases_outline_linewidth, other_bases_outline_colour = other_bases_outline_colour, other_bases_outline_join = other_bases_outline_join, margin = margin, return = return, force_raster = force_raster, filename = filename, pixels_per_base = pixels_per_base)
+    length_1 <- list(sanitise_sequences = sanitise_sequences, background_colour = background_colour, other_bases_colour = other_bases_colour, low_colour = low_colour, high_colour = high_colour, low_clamp = low_clamp, high_clamp = high_clamp,sequence_text_type = sequence_text_type, sequence_text_rounding = sequence_text_rounding, sequence_text_colour = sequence_text_colour, sequence_text_size = sequence_text_size, index_annotation_colour = index_annotation_colour, index_annotation_size = index_annotation_size, index_annotation_interval = index_annotation_interval, index_annotations_above = index_annotations_above, index_annotation_vertical_position = index_annotation_vertical_position, index_annotation_full_line = index_annotation_full_line, index_annotation_always_first_base = index_annotation_always_first_base, index_annotation_always_last_base = index_annotation_always_last_base, outline_linewidth = outline_linewidth, outline_colour = outline_colour, outline_join = outline_join, modified_bases_outline_linewidth = modified_bases_outline_linewidth, modified_bases_outline_colour = modified_bases_outline_colour, modified_bases_outline_join = modified_bases_outline_join, other_bases_outline_linewidth = other_bases_outline_linewidth, other_bases_outline_colour = other_bases_outline_colour, other_bases_outline_join = other_bases_outline_join, margin = margin, return = return, force_raster = force_raster, filename = filename, pixels_per_base = pixels_per_base)
     for (argument in names(length_1)) {
         if (length(length_1[[argument]]) != 1) {bad_arg(argument, length_1, "must have length 1.")}
     }
     length_1 <- NULL
 
-    not_na <- list(modification_locations = modification_locations, modification_probabilities = modification_probabilities, sequence = sequences, background_colour = background_colour, other_bases_colour = other_bases_colour, low_colour = low_colour, high_colour = high_colour, low_clamp = low_clamp, high_clamp = high_clamp, sequence_text_type = sequence_text_type, sequence_text_rounding = sequence_text_rounding, sequence_text_colour = sequence_text_colour, sequence_text_size = sequence_text_size, index_annotation_colour = index_annotation_colour, index_annotation_size = index_annotation_size, index_annotation_interval = index_annotation_interval, index_annotations_above = index_annotations_above, index_annotation_vertical_position = index_annotation_vertical_position, index_annotation_full_line = index_annotation_full_line, index_annotation_always_first_base = index_annotation_always_first_base, index_annotation_always_last_base = index_annotation_always_last_base, margin = margin, return = return, force_raster = force_raster, pixels_per_base = pixels_per_base)
+    not_na <- list(sanitise_sequences = sanitise_sequences, modification_locations = modification_locations, modification_probabilities = modification_probabilities, sequence = sequences, background_colour = background_colour, other_bases_colour = other_bases_colour, low_colour = low_colour, high_colour = high_colour, low_clamp = low_clamp, high_clamp = high_clamp, sequence_text_type = sequence_text_type, sequence_text_rounding = sequence_text_rounding, sequence_text_colour = sequence_text_colour, sequence_text_size = sequence_text_size, index_annotation_colour = index_annotation_colour, index_annotation_size = index_annotation_size, index_annotation_interval = index_annotation_interval, index_annotations_above = index_annotations_above, index_annotation_vertical_position = index_annotation_vertical_position, index_annotation_full_line = index_annotation_full_line, index_annotation_always_first_base = index_annotation_always_first_base, index_annotation_always_last_base = index_annotation_always_last_base, margin = margin, return = return, force_raster = force_raster, pixels_per_base = pixels_per_base)
     for (argument in names(not_na)) {
         if (any(is.na(not_na[[argument]]))) {bad_arg(argument, not_na, "must not be NA.")}
     }
@@ -337,7 +343,7 @@ visualise_methylation <- function(
     }
     non_neg_num <- NULL
 
-    bool <- list(return = return, index_annotations_above = index_annotations_above, index_annotation_full_line = index_annotation_full_line, index_annotation_always_first_base = index_annotation_always_first_base, index_annotation_always_last_base = index_annotation_always_last_base, force_raster = force_raster)
+    bool <- list(sanitise_sequences = sanitise_sequences, return = return, index_annotations_above = index_annotations_above, index_annotation_full_line = index_annotation_full_line, index_annotation_always_first_base = index_annotation_always_first_base, index_annotation_always_last_base = index_annotation_always_last_base, force_raster = force_raster)
     for (argument in names(bool)) {
         if (!is.logical(bool[[argument]]) || length(bool[[argument]]) != 1) {bad_arg(argument, bool, "must be a single logical/boolean value.")}
     }
@@ -356,6 +362,11 @@ visualise_methylation <- function(
     }
     string_to_vector_valid <- NULL
 
+
+    ## Sanitise sequences if the setting is on
+    if (sanitise_sequences) {sequences <- sanitise_sequences_vector(sequences)}
+
+    ## Now check all sequences are valid
     valid_seq <- list(sequences = sequences)
     for (argument in names(valid_seq)) {
         if (!is.character(valid_seq[[argument]])) {bad_arg(argument, valid_seq, "must be a character vector.")}
@@ -839,11 +850,18 @@ visualise_methylation_colour_scale <- function(
 #'
 #' Default arguments are set up to work with the included [`example_many_sequences`] data.
 #'
+#' ***IMPORTANT:*** `lengths_colname` has been removed as an argument as of
+#' ggDNAvis v1.1.0. If this function is newly causing errors,
+#' try removing all `lengths_colname` arguments.
+#' Output should be identical to before, as `$lengths` is still
+#' included in the output but is now recalculated based on the character
+#' lengths of `sequences_colname`. The only exception is if
+#' lengths in the parent dataframe did not match the actual sequence lengths.
+#'
 #' @param modification_data `dataframe`. A dataframe that must contain columns for methylation locations, methylation probabilities, sequence, and sequence length for each read. The former two should be condensed strings as produced by [vector_to_string()] e.g. `"1,2,3,4"`.\cr\cr See [`example_many_sequences`] for an example of a compatible dataframe.
 #' @param locations_colname `character`. The name of the column within the input dataframe that contains methylation/modification location information. Defaults to `"methylation_locations"`.\cr\cr Values within this column must be a comma-separated string representing a condensed numerical vector (e.g. `"3,6,9,12"`, produced via [vector_to_string()]) of the indices along the read at which modification was assessed. Indexing starts at 1.
 #' @param probabilities_colname `character`. The name of the column within the input dataframe that contains methylation/modification probability information. Defaults to `"methylation_probabilities"`.\cr\cr Values within this column must be a comma-separated string representing a condensed numerical vector (e.g. `"2,212,128,64"`, produced via [vector_to_string()]) of the probability of modification as an 8-bit (0-255) integer for each base where modification was assessed.
 #' @param sequences_colname `character`. The name of the column within the input dataframe that contains the actual sequences. Defaults to `"sequence"`.\cr\cr Values within this column must be the actual sequences (e.g. `"GGCGGA"`).
-#' @param lengths_colname `character`. The name of the column within the input dataframe that contains the length of each sequence. Defaults to `"sequence_length"`.\cr\cr Values within this column must be non-negative integers.
 #'
 #' @inheritParams extract_and_sort_sequences
 #' @inheritParams visualise_methylation
@@ -858,7 +876,6 @@ visualise_methylation_colour_scale <- function(
 #'     locations_colname = "methylation_locations",
 #'     probabilities_colname = "methylation_probabilities",
 #'     sequences_colname = "sequence",
-#'     lengths_colname = "sequence_length",
 #'     grouping_levels = c("family" = 8, "individual" = 2),
 #'     sort_by = "sequence_length",
 #'     desc_sort = TRUE
@@ -869,7 +886,6 @@ visualise_methylation_colour_scale <- function(
 #'     locations_colname = "hydroxymethylation_locations",
 #'     probabilities_colname = "hydroxymethylation_probabilities",
 #'     sequences_colname = "sequence",
-#'     lengths_colname = "sequence_length",
 #'     grouping_levels = c("family" = 8, "individual" = 2),
 #'     sort_by = "sequence_length",
 #'     desc_sort = TRUE
@@ -882,7 +898,6 @@ extract_and_sort_methylation <- function(
     locations_colname = "methylation_locations",
     probabilities_colname = "methylation_probabilities",
     sequences_colname = "sequence",
-    lengths_colname = "sequence_length",
     grouping_levels = c("family" = 8, "individual" = 2),
     sort_by = "sequence_length",
     desc_sort = TRUE
@@ -902,9 +917,9 @@ extract_and_sort_methylation <- function(
                                                 grouping_levels = grouping_levels, sort_by = sort_by, desc_sort = desc_sort)
     sequences <- extract_and_sort_sequences(modification_data, sequence_variable = sequences_colname,
                                             grouping_levels = grouping_levels, sort_by = sort_by, desc_sort = desc_sort)
-    lengths <- extract_and_sort_sequences(modification_data, sequence_variable = lengths_colname,
+    lengths <- extract_and_sort_sequences(modification_data, sequence_variable = sequences_colname,
                                           grouping_levels = grouping_levels, sort_by = sort_by, desc_sort = desc_sort) %>%
-        as.numeric() %>% replace_na(0)
+        nchar()
 
     output <- list(locations = locations, probabilities = probabilities, sequences = sequences, lengths = lengths)
     return(output)

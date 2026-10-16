@@ -4,6 +4,9 @@ root <- "test_plot_images/"
 reference <- "reference_images/"
 acceptable_distortion <- fetch_acceptable_distortion(verbose = FALSE)
 
+## Require magick package to run these tests
+testthat::skip_if_not_installed("magick")
+library(magick)
 
 test_that("single sequence visualisation works with standard conditions", {
     filename <- "sone_2019_f1_1_expanded_test_01"
@@ -350,6 +353,18 @@ test_that("forcing annotation on first and last bases works, interval 10", {
                                        metric = "MAE"))$distortion, acceptable_distortion)
 })
 
+test_that("sequence_sanitisation works", {
+    filename <- "sone_2019_f1_1_expanded_test_40"
+    expect_warning(visualise_single_sequence("SERXCTAVY&BD*UG^&#GYUAGDY*Sgfuysguwdfsuf", filename = paste0(root, filename, ".png"), index_annotation_above = F, pixels_per_base = 30),
+                   class = "invalid_sequence_sanitised")
+    expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
+                                       image_read(paste0(reference, filename, ".png")),
+                                       metric = "MAE"))$distortion, acceptable_distortion)
+
+    expect_error(visualise_single_sequence("SERXCTAVY&BD*UG^&#GYUAGDY*Sgfuysguwdfsuf", sanitize_sequence = F, index_annotation_above = F, pixels_per_base = 30),
+                 class = "argument_value_or_type")
+})
+
 ## Test fail cases/invalid arguments to main single sequence visualisation function
 test_that("single sequence visualisation fails when arguments are invalid", {
     bad_param_value_for_non_negative_num <- list("hi", -1, TRUE, c(1, 2), NA, NULL)
@@ -379,6 +394,7 @@ test_that("single sequence visualisation fails when arguments are invalid", {
 
     bad_param_value_for_logical <- list(1, 1.5, -1, "hi", c(TRUE, FALSE), NA, NULL)
     for (param in bad_param_value_for_logical) {
+        expect_error(visualise_single_sequence(sone_2019_f1_1_expanded, sanitise_sequence = param), class = "argument_value_or_type")
         expect_error(visualise_single_sequence(sone_2019_f1_1_expanded, index_annotations_above = param), class = "argument_value_or_type")
         expect_error(visualise_single_sequence(sone_2019_f1_1_expanded, index_annotation_always_first_base = param), class = "argument_value_or_type")
         expect_error(visualise_single_sequence(sone_2019_f1_1_expanded, index_annotation_always_last_base = param), class = "argument_value_or_type")

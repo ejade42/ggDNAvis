@@ -278,7 +278,7 @@ methylation_server <- function(id, user_tz) {
                 )
             }
 
-            validate_sequence(result$sequences, "Sequences vector for visualisation must contain only A/C/G/T/U and whitespace.")
+            #validate_sequence(result$sequences, "Sequences vector for visualisation must contain only A/C/G/T/U and whitespace.")
             return(result)
         })
 
