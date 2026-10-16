@@ -162,6 +162,7 @@ sequence <- "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCG
 ## Usually it's fine to leave most of these as defaults
 visualise_single_sequence(
     sequence = sequence,
+    sanitise_sequences = TRUE,
     sequence_colours = sequence_colour_palettes$bright_pale,
     background_colour = "white",
     line_wrapping = 60,
@@ -212,6 +213,7 @@ sequences_for_visualisation <- extract_and_sort_sequences(
 ## Usually it's fine to leave most of these as defaults
 visualise_many_sequences(
     sequences_vector = sequences_for_visualisation,
+    sanitise_sequences = TRUE,
     sequence_colours = sequence_colour_palettes$bright_deep,
     background_colour = "white",
     margin = 0.5,
@@ -269,6 +271,7 @@ visualise_methylation(
     modification_locations     = methylation_for_visualisation$locations,
     modification_probabilities = methylation_for_visualisation$probabilities,
     sequences                  = methylation_for_visualisation$sequences,
+    sanitise_sequences = TRUE,
     low_colour = "blue",
     high_colour = "red",
     low_clamp = 0.1*255,
@@ -308,6 +311,7 @@ visualise_methylation(
     modification_locations     = methylation_for_visualisation$locations,
     modification_probabilities = methylation_for_visualisation$probabilities,
     sequences                  = methylation_for_visualisation$sequences,
+    sanitise_sequences = TRUE,
     low_colour = "blue",
     high_colour = "red",
     low_clamp = 0.1*255,
@@ -349,6 +353,7 @@ visualise_methylation(
     modification_locations     = methylation_for_visualisation$locations,
     modification_probabilities = methylation_for_visualisation$probabilities,
     sequences                  = methylation_for_visualisation$sequences,
+    sanitise_sequences = TRUE,
     low_colour = "blue",
     high_colour = "red",
     low_clamp = 0.1*255,
@@ -391,6 +396,7 @@ visualise_methylation(
     modification_locations     = methylation_for_visualisation$locations,
     modification_probabilities = methylation_for_visualisation$probabilities,
     sequences                  = methylation_for_visualisation$sequences,
+    sanitise_sequences = TRUE,
     low_colour = "blue",
     high_colour = "red",
     low_clamp = 0.1*255,
@@ -1235,7 +1241,28 @@ view_image(paste0(display_location, "single_sequence_19.png"))
 ```
 
 
+## Sequence sanitisation
+By default (as of v1.1.0), invalid characters passed to the `sequence` argument will now be removed with a warning rather than causing an error. To force invalid characters to stop execution with an error, the `sanitise_sequences` argument (with American and/or singular argument aliases) can be set to `FALSE` (default value is `TRUE`):
+```{r}
+## Create image - will work with a warning
+visualise_single_sequence(
+    "ACGT x%67Hk#$%&^*",
+    filename = paste0(output_location, "single_sequence_20.png"),
+    return = FALSE
+)
 
+## View image
+view_image(paste0(display_location, "single_sequence_20.png"))
+```
+```{r, error = TRUE}
+## Create image - will fail with an error
+visualise_single_sequence(
+    "ACGT x%67Hk#$%&^*",
+    sanitise_sequences = FALSE
+)
+```
+
+This works identically for `visualise_many_sequences()` and `visualise_methylation()` and will not be reiterated individually in the examples for them.
 
 
 # Visualising many DNA/RNA sequences

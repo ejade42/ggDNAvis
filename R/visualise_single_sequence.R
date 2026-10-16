@@ -212,11 +212,11 @@ visualise_single_sequence <- function(
     ## Accept NA as NULL for render_device
     if (is.atomic(render_device) && any(is.na(render_device))) {render_device <- NULL}
 
-    ## Strip whitespace from sequence
-    sequence <- gsub("\\s+", "", sequence)
-
     ## Sanitise if selected
     if (sanitise_sequences) {sequence <- sanitise_sequences_vector(sequence)}
+
+    ## Strip whitespace from sequence even if sanitisation is off
+    sequence <- gsub("\\s+", "", sequence)
     ## ---------------------------------------------------------------------
 
 
