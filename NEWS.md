@@ -1,4 +1,4 @@
-# ggDNAvis (development version)
+# ggDNAvis 1.1.0
 
 * ***BREAKING CHANGE:*** Removed `lengths_colname` as a mandatory argument to `extract_and_sort_methylation()`.
 
