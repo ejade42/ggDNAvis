@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ggDNAvis</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1.9014</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1.9015</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -57,7 +57,7 @@
 <li><p>There may be behaviour changes in any cases where the lengths stored in the parent dataframe did not match the actual lengths of <code>sequences_colname</code> / <code>$sequences</code>.</p></li>
 </ul></li>
 <li>
-<p>Made <code><a href="../reference/merge_fastq_with_metadata.html">merge_fastq_with_metadata()</a></code> and <code><a href="../reference/merge_methylation_with_metadata.html">merge_methylation_with_metadata()</a></code> now create <code>"reverse_sequence"</code> (and quality, location, probability) columns as well as <code>"forward_sequence"</code> columns.</p>
+<p>Made <code><a href="../reference/merge_fastq_with_metadata.html">merge_fastq_with_metadata()</a></code> and <code><a href="../reference/merge_methylation_with_metadata.html">merge_methylation_with_metadata()</a></code> now create <code>reverse_sequence</code> (and <code>_quality</code>, <code>_locations</code>, <code>_probabilities</code>) columns as well as <code>forward_sequence</code> etc columns.</p>
 <ul><li>This can be useful when dealing with genes on the minus strand, where the local <code>"forward"</code> direction relative to the gene is the global <code>"reverse"</code> direction relative to the reference genome.</li>
 </ul></li>
 <li>

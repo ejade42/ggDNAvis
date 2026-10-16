@@ -22,8 +22,8 @@
   [`merge_fastq_with_metadata()`](https://ejade42.github.io/ggDNAvis/reference/merge_fastq_with_metadata.md)
   and
   [`merge_methylation_with_metadata()`](https://ejade42.github.io/ggDNAvis/reference/merge_methylation_with_metadata.md)
-  now create `"reverse_sequence"` (and quality, location, probability)
-  columns as well as `"forward_sequence"` columns.
+  now create `reverse_sequence` (and `_quality`, `_locations`,
+  `_probabilities`) columns as well as `forward_sequence` etc columns.
 
   - This can be useful when dealing with genes on the minus strand,
     where the local `"forward"` direction relative to the gene is the
