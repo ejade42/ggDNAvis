@@ -45,7 +45,7 @@ monitor(monitor_performance, start_time, previous_time, message)
 ## Initialise monitoring
 start_time <- monitor_start(TRUE, "my_cool_function")
 #> ℹ Verbose monitoring enabled
-#> ℹ (2026-10-15 05:18:02) my_cool_function start
+#> ℹ (2026-10-16 05:09:45) my_cool_function start
 
 ## Step 1
 monitor_time <- monitor(TRUE, start_time, start_time, "performing step 1")
@@ -59,10 +59,10 @@ y <- 10.5^6 %% 345789
 
 ## Step 3
 monitor_time <- monitor(TRUE, start_time, monitor_time, "performing step 3")
-#> ℹ (0.003 secs elapsed; 0.010 secs total) performing step 3
+#> ℹ (0.003 secs elapsed; 0.009 secs total) performing step 3
 z <- y / x^2
 
 ## Conclude monitoring
 monitor_time <- monitor(TRUE, start_time, monitor_time, "done")
-#> ℹ (0.003 secs elapsed; 0.013 secs total) done
+#> ℹ (0.003 secs elapsed; 0.012 secs total) done
 ```

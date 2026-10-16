@@ -34,6 +34,7 @@ this function."><meta property="og:image" content="https://ejade42.github.io/ggD
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-version" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Version</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-version"><li><a class="dropdown-item" href="https://ejade42.github.io/ggDNAvis/">Latest release</a></li>
     <li><a class="dropdown-item" href="https://ejade42.github.io/ggDNAvis/dev/">Latest dev</a></li>
+    <li><a class="dropdown-item" href="https://ejade42.github.io/ggDNAvis/v1.1.0/">v1.1.0</a></li>
     <li><a class="dropdown-item" href="https://ejade42.github.io/ggDNAvis/v1.0.1/">v1.0.1</a></li>
     <li><a class="dropdown-item" href="https://ejade42.github.io/ggDNAvis/v1.0.0/">v1.0.0</a></li>
     <li><a class="dropdown-item" href="https://ejade42.github.io/ggDNAvis/v0.3.2/">v0.3.2</a></li>
@@ -100,7 +101,7 @@ this function.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">## Initialise monitoring</span></span></span>
 <span class="r-in"><span><span class="va">start_time</span> <span class="op">&lt;-</span> <span class="fu"><a href="monitor_start.html">monitor_start</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="st">"my_cool_function"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Verbose monitoring enabled</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> (2026-10-15 05:18:02) my_cool_function start</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> (2026-10-16 05:09:45) my_cool_function start</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Step 1</span></span></span>
 <span class="r-in"><span><span class="va">monitor_time</span> <span class="op">&lt;-</span> <span class="fu">monitor</span><span class="op">(</span><span class="cn">TRUE</span>, <span class="va">start_time</span>, <span class="va">start_time</span>, <span class="st">"performing step 1"</span><span class="op">)</span></span></span>
@@ -114,12 +115,12 @@ this function.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Step 3</span></span></span>
 <span class="r-in"><span><span class="va">monitor_time</span> <span class="op">&lt;-</span> <span class="fu">monitor</span><span class="op">(</span><span class="cn">TRUE</span>, <span class="va">start_time</span>, <span class="va">monitor_time</span>, <span class="st">"performing step 3"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> (0.003 secs elapsed; 0.010 secs total) performing step 3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> (0.003 secs elapsed; 0.009 secs total) performing step 3</span>
 <span class="r-in"><span><span class="va">z</span> <span class="op">&lt;-</span> <span class="va">y</span> <span class="op">/</span> <span class="va">x</span><span class="op">^</span><span class="fl">2</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Conclude monitoring</span></span></span>
 <span class="r-in"><span><span class="va">monitor_time</span> <span class="op">&lt;-</span> <span class="fu">monitor</span><span class="op">(</span><span class="cn">TRUE</span>, <span class="va">start_time</span>, <span class="va">monitor_time</span>, <span class="st">"done"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> (0.003 secs elapsed; 0.013 secs total) done</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> (0.003 secs elapsed; 0.012 secs total) done</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
