@@ -577,20 +577,20 @@ test_that("rasterising index annotations fails when needed", {
 
 ## Test sequence sanitisation
 test_that("sequence sanitisation works", {
-    expect_warning(expect_equal(sanitise_sequences(c("ACGTA 5%h", "uXuG", "UcA67UcT")),
+    expect_warning(expect_equal(sanitise_sequences_vector(c("ACGTA 5%h", "uXuG", "UcA67UcT")),
                                 c("ACGTA", "uuG", "UcAUcT")), class = "invalid_sequence_sanitised")
-    expect_equal(sanitize_sequences(c("ACGTA 5%h", "uXuG", "UcA67UcT"), warn_on_removal = F),
+    expect_equal(sanitize_sequences_vector(c("ACGTA 5%h", "uXuG", "UcA67UcT"), warn_on_removal = F),
                  c("ACGTA", "uuG", "UcAUcT"))
 })
 
 test_that("sequence sanitisation fails", {
     bad_param_value_for_bool <- list("X", 1, c(TRUE, FALSE), list(TRUE, FALSE), NA, NULL, -1)
     for (param in bad_param_value_for_bool) {
-        expect_error(sanitize_sequences("AGCTA", warn_on_removal = param), class = "argument_value_or_type")
+        expect_error(sanitize_sequences_vector("AGCTA", warn_on_removal = param), class = "argument_value_or_type")
     }
 
     bad_param_value_for_char <- list(list("x"), TRUE, NA, NULL, 1, 0.5, -1)
     for (param in bad_param_value_for_char) {
-        expect_error(sanitize_sequences(param), class = "argument_value_or_type")
+        expect_error(sanitize_sequences_vector(param), class = "argument_value_or_type")
     }
 })

@@ -11,6 +11,10 @@
 * Made `merge_fastq_with_metadata()` and `merge_methylation_with_metadata()` now create `"reverse_sequence"` (and quality, location, probability) columns as well as `"forward_sequence"` columns.
 
     * This can be useful when dealing with genes on the minus strand, where the local `"forward"` direction relative to the gene is the global `"reverse"` direction relative to the reference genome.
+    
+* Added `sanitise_sequences` (and aliases for American and singular spellings) Boolean argument to `visualise_single_sequence()`, `visualise_many_sequences()`, and `visualise_methylation()`.
+
+    * This removes non-`ACGTU` characters (case insensitive) with a warning, whereas previously invalid characters gave an error.
 
 * Added `invert_direction_vector()` and `sanitise_sequences_vector()` helper functions.
 

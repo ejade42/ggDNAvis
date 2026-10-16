@@ -701,7 +701,7 @@ sanitise_sequences_vector <- function(sequences, warn_on_removal = TRUE) {
     ## Actual function
     removed <- paste0(gsub("[ACGTU]", "", sequences, ignore.case = TRUE), collapse = "")
     if (nchar(removed) > 0) {
-        if (warn_on_removal) {warn(paste0("Invalid sequence characters removed: ", removed, ""), class = "invalid_sequence_sanitised")}
+        if (warn_on_removal) {warn(paste0("Invalid sequence characters removed: '", removed, "'"), class = "invalid_sequence_sanitised")}
         sequences <- gsub("[^ACGTU]", "", sequences, ignore.case = TRUE)
     }
     return(sequences)

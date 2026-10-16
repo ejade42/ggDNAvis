@@ -8,6 +8,7 @@
 visualise_single_sequence(
   sequence,
   ...,
+  sanitise_sequences = TRUE,
   sequence_colours = sequence_colour_palettes$ggplot_style,
   background_colour = "white",
   line_wrapping = 75,
@@ -37,6 +38,8 @@ visualise_single_sequence(
 \item{sequence}{\code{character}. A DNA or RNA sequence to visualise e.g. \code{"AAATGCTGC"}.}
 
 \item{...}{Used to recognise aliases e.g. American spellings or common misspellings - see \link{aliases}. If any American spellings do not work, please make a bug report at \url{https://github.com/ejade42/ggDNAvis/issues}.}
+
+\item{sanitise_sequences}{\code{logical}. Whether sequences should be automatically sanitisied (any non-\code{A}/\code{C}/\code{G}/\code{T}/\code{U} values removed with a warning, \code{TRUE}, default) or whether these invalid characters should cause an error (\code{FALSE}).}
 
 \item{sequence_colours}{\verb{character vector}, length 4. A vector indicating which colours should be used for each base. In order: \code{c(A_colour, C_colour, G_colour, T/U_colour)}.\cr\cr Defaults to red, green, blue, purple in the default shades produced by ggplot with 4 colours, i.e. \code{c("#F8766D", "#7CAE00", "#00BFC4", "#C77CFF")}, accessed via \code{\link{sequence_colour_palettes}}\verb{$ggplot_style}.}
 

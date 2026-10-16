@@ -58,7 +58,7 @@ visualise_methylation(
 
 \item{...}{Used to recognise aliases e.g. American spellings or common misspellings - see \link{aliases}. If any American spellings do not work, please make a bug report at \url{https://github.com/ejade42/ggDNAvis/issues}.}
 
-\item{sanitise_sequences}{\code{logical}. Whether sequences should be automatically sanitisied (any non-\code{A}/\code{C}/\code{G}/\code{T}/\code{U} values removed, \code{TRUE}, default) or whether these invalid characters should cause an error (\code{FALSE}).}
+\item{sanitise_sequences}{\code{logical}. Whether sequences should be automatically sanitisied (any non-\code{A}/\code{C}/\code{G}/\code{T}/\code{U} values removed with a warning, \code{TRUE}, default) or whether these invalid characters should cause an error (\code{FALSE}).}
 
 \item{low_colour}{\code{character}. The colour that should be used to represent minimum probability of methylation/modification (defaults to blue).}
 
