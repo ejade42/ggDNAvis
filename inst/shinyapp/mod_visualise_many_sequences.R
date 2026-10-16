@@ -157,7 +157,7 @@ many_sequences_server <- function(id, user_tz) {
             }
 
             ## Validate and return sequences vector
-            validate_sequence(sequences, "Sequences vector for visualisation must contain only A/C/G/T/U and whitespace.")
+            #validate_sequence(sequences, "Sequences vector for visualisation must contain only A/C/G/T/U and whitespace.")
             return(sequences)
         })
 

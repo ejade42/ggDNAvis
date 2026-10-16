@@ -15,6 +15,12 @@
 * Added `sanitise_sequences` (and aliases for American and singular spellings) Boolean argument to `visualise_single_sequence()`, `visualise_many_sequences()`, and `visualise_methylation()`.
 
     * This removes non-`ACGTU` characters (case insensitive) with a warning, whereas previously invalid characters gave an error.
+    
+    * Therefore, removed sequence validation from the Shiny app. 
+    Invalid characters will now be automatically removed. 
+    Didn't bother adding an option to set `sanitise_sequences = FALSE` from the 
+    webapp because that doesn't seem very useful and anyone who needs fine control 
+    and error detection is almost certainly using the R package anyway.
 
 * Added `invert_direction_vector()` and `sanitise_sequences_vector()` helper functions.
 

@@ -102,7 +102,7 @@ single_sequence_server <- function(id, user_tz) {
                 sequence <- paste(lines[!grepl("^>", lines)], collapse = "\n")
             }
 
-            validate_sequence(sequence, "Input must contain only A/C/G/T/U and whitespace (not counting FASTA header lines).")
+            #validate_sequence(sequence, "Input must contain only A/C/G/T/U and whitespace (not counting FASTA header lines).")
             return(sequence)
         })
 
