@@ -1,13 +1,67 @@
 # Changelog
 
+## ggDNAvis 1.1.0
+
+- ***BREAKING CHANGE:*** Removed `lengths_colname` as a mandatory
+  argument to
+  [`extract_and_sort_methylation()`](https://ejade42.github.io/ggDNAvis/reference/extract_and_sort_methylation.md).
+
+  - This will cause an error in old code that provides the
+    now-meaningless `lengths_colname` argument.
+
+  - The returned list still contains `$lengths`, but this is now
+    recalculated directly from the sequence lengths in
+    `sequences_colname` / `$sequences` rather than read from the parent
+    dataframe.
+
+  - There may be behaviour changes in any cases where the lengths stored
+    in the parent dataframe did not match the actual lengths of
+    `sequences_colname` / `$sequences`.
+
+- Made
+  [`merge_fastq_with_metadata()`](https://ejade42.github.io/ggDNAvis/reference/merge_fastq_with_metadata.md)
+  and
+  [`merge_methylation_with_metadata()`](https://ejade42.github.io/ggDNAvis/reference/merge_methylation_with_metadata.md)
+  now create `reverse_sequence` (and `_quality`, `_locations`,
+  `_probabilities`) columns as well as `forward_sequence` etc columns.
+
+  - This can be useful when dealing with genes on the minus strand,
+    where the local `"forward"` direction relative to the gene is the
+    global `"reverse"` direction relative to the reference genome.
+
+- Added `sanitise_sequences` (and aliases for American and singular
+  spellings) Boolean argument to
+  [`visualise_single_sequence()`](https://ejade42.github.io/ggDNAvis/reference/visualise_single_sequence.md),
+  [`visualise_many_sequences()`](https://ejade42.github.io/ggDNAvis/reference/visualise_many_sequences.md),
+  and
+  [`visualise_methylation()`](https://ejade42.github.io/ggDNAvis/reference/visualise_methylation.md).
+
+  - This removes non-`ACGTU` characters (case insensitive) with a
+    warning, whereas previously invalid characters gave an error.
+
+  - Therefore, removed sequence validation from the Shiny app. Invalid
+    characters will now be automatically removed. Didn’t bother adding
+    an option to set `sanitise_sequences = FALSE` from the webapp
+    because that doesn’t seem very useful and anyone who needs fine
+    control and error detection is almost certainly using the R package
+    anyway.
+
+- Added
+  [`invert_direction_vector()`](https://ejade42.github.io/ggDNAvis/reference/invert_direction_vector.md)
+  and
+  [`sanitise_sequences_vector()`](https://ejade42.github.io/ggDNAvis/reference/sanitise_sequences_vector.md)
+  helper functions.
+
+- Minor tweaks to reversing options manuscript figure.
+
 ## ggDNAvis 1.0.1
 
 CRAN release: 2026-06-23
 
 - Removed magick as a dependency and added it to suggests (required only
-  for tests)
+  for tests).
 
-- Minor tweaks to methylation text manuscript figure
+- Minor tweaks to methylation text manuscript figure.
 
 ## ggDNAvis 1.0.0
 

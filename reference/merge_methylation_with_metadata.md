@@ -40,6 +40,13 @@ columns are `"forward_sequence"`, `"forward_quality"`,
 `"forward_<modification_type>_locations"`, and
 `"forward_<modification_type>_probabilities"`.
 
+Likewise, `"reverse_sequence"`, `"reverse_quality"`,
+`"reverse_<modification_type>_locations"`, and
+`"reverse_<modification_type>_probabilities"` are created by
+reverse-complementing forward reads only. This can be useful for genes
+that are on the minus strand (i.e. "forward" relative to the gene is
+"reverse" relative to the reference genome).
+
 Calls
 [`reverse_sequence_if_needed()`](https://ejade42.github.io/ggDNAvis/reference/reverse_sequence_if_needed.md),
 [`reverse_quality_if_needed()`](https://ejade42.github.io/ggDNAvis/reference/reverse_quality_if_needed.md),
@@ -153,10 +160,10 @@ merge_methylation_with_metadata(
 ## Value
 
 `dataframe`. A merged dataframe containing all columns from the input
-dataframes, as well as forward versions of sequences, qualities,
-modification locations, and modification probabilities (with separate
-locations and probabilities columns created for each modification type
-in the modification data).
+dataframes, as well as forward-ified and reverse-ified versions of
+sequences, qualities, modification locations, and modification
+probabilities (with separate locations and probabilities columns created
+for each modification type in the modification data).
 
 ## Examples
 

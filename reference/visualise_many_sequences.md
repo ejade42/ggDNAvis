@@ -18,6 +18,7 @@ exported are configurable.
 visualise_many_sequences(
   sequences_vector,
   ...,
+  sanitise_sequences = TRUE,
   sequence_colours = sequence_colour_palettes$ggplot_style,
   background_colour = "white",
   margin = 0.5,
@@ -60,6 +61,13 @@ visualise_many_sequences(
   [aliases](https://ejade42.github.io/ggDNAvis/reference/ggDNAvis_aliases.md).
   If any American spellings do not work, please make a bug report at
   <https://github.com/ejade42/ggDNAvis/issues>.
+
+- sanitise_sequences:
+
+  `logical`. Whether sequences should be automatically sanitisied (any
+  non-`A`/`C`/`G`/`T`/`U` values removed with a warning, `TRUE`,
+  default) or whether these invalid characters should cause an error
+  (`FALSE`).
 
 - sequence_colours:
 
@@ -286,6 +294,7 @@ grid::grid.raster(image)
 ## Export while customising appearance
 visualise_many_sequences(
     sequences,
+    sanitise_sequences = TRUE,
     filename = "example_vms_02.png",
     return = FALSE,
     sequence_colours = sequence_colour_palettes$bright_pale,
@@ -302,6 +311,37 @@ visualise_many_sequences(
 ## View exported image
 image <- png::readPNG("example_vms_02.png")
 unlink("example_vms_02.png")
+grid::grid.newpage()
+grid::grid.raster(image)
+
+
+## By default (sanitise_sequences = TRUE), any
+## non-ACGTU characters in provided sequences are removed.
+invalid_sequences <- c("ACGAT", "caug%^7567XXX")
+visualise_many_sequences(
+    invalid_sequences,
+    sanitize_sequences = TRUE,
+    filename = "example_vms_03.png",
+    return = FALSE,
+    sequence_colours = sequence_colour_palettes$bright_pale,
+    sequence_text_colour = "white",
+    index_annotation_interval = 3,
+    index_annotation_lines = 1:51,
+    index_annotation_full_line = FALSE,
+    index_annotation_always_first_base = FALSE,
+    index_annotation_always_last_base = FALSE,
+    background_colour = "lightgrey",
+    outline_linewidth = 0,
+    margin = 0
+)
+#> ℹ Automatically removing out-of-range values of index_annotation_lines.
+#> Length of input sequences vector: 2
+#> Index lines before: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51
+#> Index lines after: 1, 2
+#> Warning: Invalid sequence characters removed: '%^7567XXX'
+## View exported image
+image <- png::readPNG("example_vms_03.png")
+unlink("example_vms_03.png")
 grid::grid.newpage()
 grid::grid.raster(image)
 

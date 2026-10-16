@@ -33,6 +33,11 @@ and
 to implement the reversing - see documentation for these functions for
 more details.
 
+Likewise, `"reverse_sequence"` and `"reverse_quality"` are created by
+reverse-complementing forward reads only. This can be useful for genes
+that are on the minus strand (i.e. "forward" relative to the gene is
+"reverse" relative to the reference genome).
+
 ## Usage
 
 ``` r
@@ -96,7 +101,8 @@ merge_fastq_with_metadata(
 ## Value
 
 `dataframe`. A merged dataframe containing all columns from the input
-dataframes, as well as forward versions of sequences and qualities.
+dataframes, as well as forward-ified and reverse-ified versions of
+sequences and qualities.
 
 ## Examples
 

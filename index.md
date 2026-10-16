@@ -100,7 +100,7 @@ view_image <- function(filename) {
 
 ## Set up file locations
 output_location <- "README_files/output/"
-display_location <- "https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/"
+display_location <- "https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/"
 knitr::opts_chunk$set(fig.path = output_location)
 
 ## Print current ggDNAvis version
@@ -108,7 +108,7 @@ cat("Loaded ggDNAvis version is:", as.character(packageVersion("ggDNAvis")))
 ```
 
 ``` R
-## Loaded ggDNAvis version is: 1.0.1
+## Loaded ggDNAvis version is: 1.0.1.9012
 ```
 
 If you are working through the examples, use this setup chunk instead:
@@ -183,6 +183,7 @@ sequence <- "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCG
 ## Usually it's fine to leave most of these as defaults
 visualise_single_sequence(
     sequence = sequence,
+    sanitise_sequences = TRUE,
     sequence_colours = sequence_colour_palettes$bright_pale,
     background_colour = "white",
     line_wrapping = 60,
@@ -212,7 +213,7 @@ visualise_single_sequence(
 view_image(paste0(display_location, "summary_single_sequence.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/summary_single_sequence.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/summary_single_sequence.png)
 
 ## 2.2 Many sequences
 
@@ -237,6 +238,7 @@ sequences_for_visualisation <- extract_and_sort_sequences(
 ## Usually it's fine to leave most of these as defaults
 visualise_many_sequences(
     sequences_vector = sequences_for_visualisation,
+    sanitise_sequences = TRUE,
     sequence_colours = sequence_colour_palettes$bright_deep,
     background_colour = "white",
     margin = 0.5,
@@ -266,7 +268,7 @@ visualise_many_sequences(
 view_image(paste0(display_location, "summary_many_sequences.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/summary_many_sequences.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/summary_many_sequences.png)
 
 ## 2.3 Methylation/modification
 
@@ -287,7 +289,6 @@ methylation_for_visualisation <- extract_and_sort_methylation(
     modification_data = merged_modification_data,
     locations_colname = "forward_C+m?_locations",
     probabilities_colname = "forward_C+m?_probabilities",
-    lengths_colname = "sequence_length",
     grouping_levels = c("family" = 8, "individual" = 2),
     sort_by = "sequence_length",
     desc_sort = TRUE
@@ -299,6 +300,7 @@ visualise_methylation(
     modification_locations     = methylation_for_visualisation$locations,
     modification_probabilities = methylation_for_visualisation$probabilities,
     sequences                  = methylation_for_visualisation$sequences,
+    sanitise_sequences = TRUE,
     low_colour = "blue",
     high_colour = "red",
     low_clamp = 0.1*255,
@@ -331,7 +333,7 @@ visualise_methylation(
 view_image(paste0(display_location, "summary_methylation_none.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/summary_methylation_none.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/summary_methylation_none.png)
 
 ### 2.3.1 Methylation showing sequence
 
@@ -342,6 +344,7 @@ visualise_methylation(
     modification_locations     = methylation_for_visualisation$locations,
     modification_probabilities = methylation_for_visualisation$probabilities,
     sequences                  = methylation_for_visualisation$sequences,
+    sanitise_sequences = TRUE,
     low_colour = "blue",
     high_colour = "red",
     low_clamp = 0.1*255,
@@ -375,7 +378,7 @@ visualise_methylation(
 view_image(paste0(display_location, "summary_methylation_sequence.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/summary_methylation_sequence.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/summary_methylation_sequence.png)
 
 ### 2.3.2 Methylation showing probabilities
 
@@ -386,6 +389,7 @@ visualise_methylation(
     modification_locations     = methylation_for_visualisation$locations,
     modification_probabilities = methylation_for_visualisation$probabilities,
     sequences                  = methylation_for_visualisation$sequences,
+    sanitise_sequences = TRUE,
     low_colour = "blue",
     high_colour = "red",
     low_clamp = 0.1*255,
@@ -421,7 +425,7 @@ visualise_methylation(
 view_image(paste0(display_location, "summary_methylation_probabilities.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/summary_methylation_probabilities.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/summary_methylation_probabilities.png)
 
 ### 2.3.3 Methylation showing probability integers
 
@@ -432,6 +436,7 @@ visualise_methylation(
     modification_locations     = methylation_for_visualisation$locations,
     modification_probabilities = methylation_for_visualisation$probabilities,
     sequences                  = methylation_for_visualisation$sequences,
+    sanitise_sequences = TRUE,
     low_colour = "blue",
     high_colour = "red",
     low_clamp = 0.1*255,
@@ -467,7 +472,7 @@ visualise_methylation(
 view_image(paste0(display_location, "summary_methylation_probability_integers.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/summary_methylation_probability_integers.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/summary_methylation_probability_integers.png)
 
 ### 2.3.4 Methylation scalebar
 
@@ -497,7 +502,7 @@ ggsave(paste0(output_location, "summary_methylation_scalebar.png"), scalebar, dp
 view_image(paste0(display_location, "summary_methylation_scalebar.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/summary_methylation_scalebar.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/summary_methylation_scalebar.png)
 
 # 3 Loading data
 
@@ -752,9 +757,9 @@ setting `calculate_length = TRUE`. However, we can see that some of the
 sequences (e.g. F1-1c) are reversed. This occurs when the read is of
 the - strand at the biochemical level.
 
-To convert reverse reads to their forward equivalents, and incorporate
-additional data such as the participant and family to which each read
-belongs, we will make use of a metadata file located at
+To convert reverse reads to their forward equivalents (and vice versa),
+and incorporate additional data such as the participant and family to
+which each read belongs, we will make use of a metadata file located at
 `inst/extdata/example_many_sequences_metadata.csv`.
 
 Depending on how the FASTQ was created, the read IDs may be prefixed
@@ -832,7 +837,12 @@ columns, we can use
 to combine the metadata and the fastq data. Crucially, this function
 uses the `direction` column of the metadata to determine which reads are
 reverse, and reverse-complements these reverse reads only to produce a
-new column containing the forward version of all reads.
+new column containing the forward version of all reads. Likewise,
+forward reads only are reverse-complemented to produce another new
+column containing the reverse version of all reads - this can be useful
+for genes on the minus strand, where the local “forward” direction
+relative to the gene is actually the global “reverse” direction relative
+to the reference genome.
 
 Note that there are three options for how to manage these reverse reads:
 
@@ -860,16 +870,16 @@ merged_fastq_data <- merge_fastq_with_metadata(fastq_data, metadata)
 print_table(head(merged_fastq_data, 4))
 ```
 
-| read | family | individual | direction | sequence | quality | sequence_length | forward_sequence | forward_quality |
-|:---|:---|:---|:---|:---|:---|:---|:---|:---|
-| `F1-1a` | `Family 1` | `F1-1` | `forward` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `)8@!9:/0/,0+-6?40,-I601:.';+5,@0.0%)!(20C*,2++*(00#/*+3;E-E)<I5.5G*CB8501;I3'.8233'3><:13)48F?09*>?I90` | `102` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `)8@!9:/0/,0+-6?40,-I601:.';+5,@0.0%)!(20C*,2++*(00#/*+3;E-E)<I5.5G*CB8501;I3'.8233'3><:13)48F?09*>?I90` |
-| `F1-1b` | `Family 1` | `F1-1` | `forward` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `60-7,7943/*=5=)7<53-I=G6/&/7?8)<$12">/2C;4:9F8:816E,6C3*,1-2139` | `63` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `60-7,7943/*=5=)7<53-I=G6/&/7?8)<$12">/2C;4:9F8:816E,6C3*,1-2139` |
-| `F1-1c` | `Family 1` | `F1-1` | `reverse` | `TCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCGCCGCCGCCGCCGCCGCC` | `@9889C8<<*96;52!*86,227.<I.8AI<>;2/391%D19*5@G=8<7<:!7+;:I:-!03<0AI>9?4!57I*-C#25FD24F;` | `87` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `;F42DF52#C-*I75!4?9>IA0<30!-:I:;+7!:<7<8=G@5*91D%193/2;><IA8.I<.722,68*!25;69*<<8C9889@` |
-| `F1-1d` | `Family 1` | `F1-1` | `forward` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `:<*1D)89?27#8.3)9<2G<>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8>0` | `81` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `:<*1D)89?27#8.3)9<2G<>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8>0` |
+| read | family | individual | direction | sequence | quality | sequence_length | forward_sequence | forward_quality | reverse_sequence | reverse_quality |
+|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|
+| `F1-1a` | `Family 1` | `F1-1` | `forward` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `)8@!9:/0/,0+-6?40,-I601:.';+5,@0.0%)!(20C*,2++*(00#/*+3;E-E)<I5.5G*CB8501;I3'.8233'3><:13)48F?09*>?I90` | `102` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `)8@!9:/0/,0+-6?40,-I601:.';+5,@0.0%)!(20C*,2++*(00#/*+3;E-E)<I5.5G*CB8501;I3'.8233'3><:13)48F?09*>?I90` | `TCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCGCCGCCGCCGCCGCCGCC` | `09I?>*90?F84)31:<>3'3328.'3I;1058BC*G5.5I<)E-E;3+*/#00(*++2,*C02(!)%0.0@,5+;'.:106I-,04?6-+0,/0/:9!@8)` |
+| `F1-1b` | `Family 1` | `F1-1` | `forward` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `60-7,7943/*=5=)7<53-I=G6/&/7?8)<$12">/2C;4:9F8:816E,6C3*,1-2139` | `63` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `60-7,7943/*=5=)7<53-I=G6/&/7?8)<$12">/2C;4:9F8:816E,6C3*,1-2139` | `TCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCC` | `9312-1,*3C6,E618:8F9:4;C2/>"21$<)8?7/&/6G=I-35<7)=5=*/3497,7-06` |
+| `F1-1c` | `Family 1` | `F1-1` | `reverse` | `TCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCGCCGCCGCCGCCGCCGCC` | `@9889C8<<*96;52!*86,227.<I.8AI<>;2/391%D19*5@G=8<7<:!7+;:I:-!03<0AI>9?4!57I*-C#25FD24F;` | `87` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `;F42DF52#C-*I75!4?9>IA0<30!-:I:;+7!:<7<8=G@5*91D%193/2;><IA8.I<.722,68*!25;69*<<8C9889@` | `TCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCGCCGCCGCCGCCGCCGCC` | `@9889C8<<*96;52!*86,227.<I.8AI<>;2/391%D19*5@G=8<7<:!7+;:I:-!03<0AI>9?4!57I*-C#25FD24F;` |
+| `F1-1d` | `Family 1` | `F1-1` | `forward` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `:<*1D)89?27#8.3)9<2G<>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8>0` | `81` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `:<*1D)89?27#8.3)9<2G<>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8>0` | `TCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCC` | `0>8/@+@.5%056//D4A0519D=1E0/5?3+/891)GF/#7?6%3-8-=.:+85?=.I><G2<9)3.8#72?98)D1*<:` |
 
-Now we have a `forward_sequence` column (scroll to the right if you
-can’t see it!). We can now reformat this data to be exactly the same as
-the included `example_many_sequences` data:
+Now we have a `forward_sequence` and `reverse_sequence` column (scroll
+to the right if you can’t see them!). We can now reformat this data to
+be exactly the same as the included `example_many_sequences` data:
 
 ``` r
 
@@ -1130,18 +1140,18 @@ merged_methylation_data <- merge_methylation_with_metadata(methylation_data, met
 print_table(head(merged_methylation_data, 4))
 ```
 
-| read | family | individual | direction | sequence | sequence_length | quality | modification_types | C+h?\_locations | C+h?\_probabilities | C+m?\_locations | C+m?\_probabilities | forward_sequence | forward_quality | forward_C+h?\_locations | forward_C+h?\_probabilities | forward_C+m?\_locations | forward_C+m?\_probabilities |
-|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|
-| `F1-1a` | `Family 1` | `F1-1` | `forward` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `102` | `)8@!9:/0/,0+-6?40,-I601:.';+5,@0.0%)!(20C*,2++*(00#/*+3;E-E)<I5.5G*CB8501;I3'.8233'3><:13)48F?09*>?I90` | `C+h?,C+m?` | `3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99` | `26,60,61,60,30,59,2,46,57,64,54,63,52,18,53,34,52,50,39,46,55,54,34` | `3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99` | `29,159,155,159,220,163,2,59,170,131,177,139,72,235,75,214,73,68,48,59,81,77,41` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `)8@!9:/0/,0+-6?40,-I601:.';+5,@0.0%)!(20C*,2++*(00#/*+3;E-E)<I5.5G*CB8501;I3'.8233'3><:13)48F?09*>?I90` | `3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99` | `26,60,61,60,30,59,2,46,57,64,54,63,52,18,53,34,52,50,39,46,55,54,34` | `3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99` | `29,159,155,159,220,163,2,59,170,131,177,139,72,235,75,214,73,68,48,59,81,77,41` |
-| `F1-1b` | `Family 1` | `F1-1` | `forward` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `63` | `60-7,7943/*=5=)7<53-I=G6/&/7?8)<$12">/2C;4:9F8:816E,6C3*,1-2139` | `C+h?,C+m?` | `3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60` | `10,44,39,64,20,36,11,63,50,54,64,38,46,41,49,2` | `3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60` | `10,56,207,134,233,212,12,116,68,78,129,46,194,51,66,253` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `60-7,7943/*=5=)7<53-I=G6/&/7?8)<$12">/2C;4:9F8:816E,6C3*,1-2139` | `3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60` | `10,44,39,64,20,36,11,63,50,54,64,38,46,41,49,2` | `3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60` | `10,56,207,134,233,212,12,116,68,78,129,46,194,51,66,253` |
-| `F1-1c` | `Family 1` | `F1-1` | `reverse` | `TCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCGCCGCCGCCGCCGCCGCC` | `87` | `@9889C8<<*96;52!*86,227.<I.8AI<>;2/391%D19*5@G=8<7<:!7+;:I:-!03<0AI>9?4!57I*-C#25FD24F;` | `C+h?,C+m?` | `3,6,15,18,21,30,33,36,45,48,51,60,63,66,69,72,75,78,81,84` | `37,47,64,63,33,64,52,55,17,46,47,64,56,64,56,60,55,58,63,40` | `3,6,15,18,21,30,33,36,45,48,51,60,63,66,69,72,75,78,81,84` | `45,192,126,129,39,129,183,79,19,195,62,124,173,128,84,159,80,165,141,206` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `;F42DF52#C-*I75!4?9>IA0<30!-:I:;+7!:<7<8=G@5*91D%193/2;><IA8.I<.722,68*!25;69*<<8C9889@` | `4,7,10,13,16,19,22,25,28,37,40,43,52,55,58,67,70,73,82,85` | `40,63,58,55,60,56,64,56,64,47,46,17,55,52,64,33,63,64,47,37` | `4,7,10,13,16,19,22,25,28,37,40,43,52,55,58,67,70,73,82,85` | `206,141,165,80,159,84,128,173,124,62,195,19,79,183,129,39,129,126,192,45` |
-| `F1-1d` | `Family 1` | `F1-1` | `forward` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `81` | `:<*1D)89?27#8.3)9<2G<>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8>0` | `C+h?,C+m?` | `3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78` | `33,29,10,55,3,46,53,54,64,12,63,27,24,4,43,21,64,60,17,55` | `3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78` | `216,221,11,81,4,61,180,79,130,13,144,31,228,4,200,23,132,98,18,82` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `:<*1D)89?27#8.3)9<2G<>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8>0` | `3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78` | `33,29,10,55,3,46,53,54,64,12,63,27,24,4,43,21,64,60,17,55` | `3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78` | `216,221,11,81,4,61,180,79,130,13,144,31,228,4,200,23,132,98,18,82` |
+| read | family | individual | direction | sequence | sequence_length | quality | modification_types | C+h?\_locations | C+h?\_probabilities | C+m?\_locations | C+m?\_probabilities | forward_sequence | forward_quality | forward_C+h?\_locations | forward_C+h?\_probabilities | forward_C+m?\_locations | forward_C+m?\_probabilities | reverse_sequence | reverse_quality | reverse_C+h?\_locations | reverse_C+h?\_probabilities | reverse_C+m?\_locations | reverse_C+m?\_probabilities |
+|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|
+| `F1-1a` | `Family 1` | `F1-1` | `forward` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `102` | `)8@!9:/0/,0+-6?40,-I601:.';+5,@0.0%)!(20C*,2++*(00#/*+3;E-E)<I5.5G*CB8501;I3'.8233'3><:13)48F?09*>?I90` | `C+h?,C+m?` | `3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99` | `26,60,61,60,30,59,2,46,57,64,54,63,52,18,53,34,52,50,39,46,55,54,34` | `3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99` | `29,159,155,159,220,163,2,59,170,131,177,139,72,235,75,214,73,68,48,59,81,77,41` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `)8@!9:/0/,0+-6?40,-I601:.';+5,@0.0%)!(20C*,2++*(00#/*+3;E-E)<I5.5G*CB8501;I3'.8233'3><:13)48F?09*>?I90` | `3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99` | `26,60,61,60,30,59,2,46,57,64,54,63,52,18,53,34,52,50,39,46,55,54,34` | `3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99` | `29,159,155,159,220,163,2,59,170,131,177,139,72,235,75,214,73,68,48,59,81,77,41` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `)8@!9:/0/,0+-6?40,-I601:.';+5,@0.0%)!(20C*,2++*(00#/*+3;E-E)<I5.5G*CB8501;I3'.8233'3><:13)48F?09*>?I90` | `4,7,16,19,22,31,34,37,46,49,52,61,64,67,76,79,82,85,88,91,94,97,100` | `34,54,55,46,39,50,52,34,53,18,52,63,54,64,57,46,2,59,30,60,61,60,26` | `4,7,16,19,22,31,34,37,46,49,52,61,64,67,76,79,82,85,88,91,94,97,100` | `41,77,81,59,48,68,73,214,75,235,72,139,177,131,170,59,2,163,220,159,155,159,29` |
+| `F1-1b` | `Family 1` | `F1-1` | `forward` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `63` | `60-7,7943/*=5=)7<53-I=G6/&/7?8)<$12">/2C;4:9F8:816E,6C3*,1-2139` | `C+h?,C+m?` | `3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60` | `10,44,39,64,20,36,11,63,50,54,64,38,46,41,49,2` | `3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60` | `10,56,207,134,233,212,12,116,68,78,129,46,194,51,66,253` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `60-7,7943/*=5=)7<53-I=G6/&/7?8)<$12">/2C;4:9F8:816E,6C3*,1-2139` | `3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60` | `10,44,39,64,20,36,11,63,50,54,64,38,46,41,49,2` | `3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60` | `10,56,207,134,233,212,12,116,68,78,129,46,194,51,66,253` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `60-7,7943/*=5=)7<53-I=G6/&/7?8)<$12">/2C;4:9F8:816E,6C3*,1-2139` | `4,7,16,19,22,31,34,37,40,43,46,49,52,55,58,61` | `2,49,41,46,38,64,54,50,63,11,36,20,64,39,44,10` | `4,7,16,19,22,31,34,37,40,43,46,49,52,55,58,61` | `253,66,51,194,46,129,78,68,116,12,212,233,134,207,56,10` |
+| `F1-1c` | `Family 1` | `F1-1` | `reverse` | `TCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCGCCGCCGCCGCCGCCGCC` | `87` | `@9889C8<<*96;52!*86,227.<I.8AI<>;2/391%D19*5@G=8<7<:!7+;:I:-!03<0AI>9?4!57I*-C#25FD24F;` | `C+h?,C+m?` | `3,6,15,18,21,30,33,36,45,48,51,60,63,66,69,72,75,78,81,84` | `37,47,64,63,33,64,52,55,17,46,47,64,56,64,56,60,55,58,63,40` | `3,6,15,18,21,30,33,36,45,48,51,60,63,66,69,72,75,78,81,84` | `45,192,126,129,39,129,183,79,19,195,62,124,173,128,84,159,80,165,141,206` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `;F42DF52#C-*I75!4?9>IA0<30!-:I:;+7!:<7<8=G@5*91D%193/2;><IA8.I<.722,68*!25;69*<<8C9889@` | `4,7,10,13,16,19,22,25,28,37,40,43,52,55,58,67,70,73,82,85` | `40,63,58,55,60,56,64,56,64,47,46,17,55,52,64,33,63,64,47,37` | `4,7,10,13,16,19,22,25,28,37,40,43,52,55,58,67,70,73,82,85` | `206,141,165,80,159,84,128,173,124,62,195,19,79,183,129,39,129,126,192,45` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `;F42DF52#C-*I75!4?9>IA0<30!-:I:;+7!:<7<8=G@5*91D%193/2;><IA8.I<.722,68*!25;69*<<8C9889@` | `3,6,15,18,21,30,33,36,45,48,51,60,63,66,69,72,75,78,81,84` | `37,47,64,63,33,64,52,55,17,46,47,64,56,64,56,60,55,58,63,40` | `3,6,15,18,21,30,33,36,45,48,51,60,63,66,69,72,75,78,81,84` | `45,192,126,129,39,129,183,79,19,195,62,124,173,128,84,159,80,165,141,206` |
+| `F1-1d` | `Family 1` | `F1-1` | `forward` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `81` | `:<*1D)89?27#8.3)9<2G<>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8>0` | `C+h?,C+m?` | `3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78` | `33,29,10,55,3,46,53,54,64,12,63,27,24,4,43,21,64,60,17,55` | `3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78` | `216,221,11,81,4,61,180,79,130,13,144,31,228,4,200,23,132,98,18,82` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `:<*1D)89?27#8.3)9<2G<>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8>0` | `3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78` | `33,29,10,55,3,46,53,54,64,12,63,27,24,4,43,21,64,60,17,55` | `3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78` | `216,221,11,81,4,61,180,79,130,13,144,31,228,4,200,23,132,98,18,82` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `:<*1D)89?27#8.3)9<2G<>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8>0` | `4,7,16,19,22,31,34,37,46,49,52,55,58,61,64,67,70,73,76,79` | `55,17,60,64,21,43,4,24,27,63,12,64,54,53,46,3,55,10,29,33` | `4,7,16,19,22,31,34,37,46,49,52,55,58,61,64,67,70,73,76,79` | `82,18,98,132,23,200,4,228,31,144,13,130,79,180,61,4,81,11,221,216` |
 
-The merged methylation data contains `forward_` rows for sequence and
-quality, as before, but also for hydroxymethylation and methylation
-locations and probabilities. However, looking at the modification
-locations columns (scroll right on the table), we can see that the
-indices assessed for modification are 4, 7, 10 etc for sequence
+The merged methylation data contains `forward_` and `reverse_` columns
+for sequence and quality, as before, but also for hydroxymethylation and
+methylation locations and probabilities. However, looking at the
+modification locations columns (scroll right on the table), we can see
+that the indices assessed for modification are 4, 7, 10 etc for sequence
 `"GGCGGCGGCGGC..."`. This is because the actual biochemical modification
 was on the Cs on the reverse strand, corresponding to Gs on the forward
 strand according to Watson-Crick base pairing. For many purposes, it may
@@ -1211,12 +1221,12 @@ merged_methylation_data <- merge_methylation_with_metadata(
 print_table(head(merged_methylation_data, 4))
 ```
 
-| read | family | individual | direction | sequence | sequence_length | quality | modification_types | C+h?\_locations | C+h?\_probabilities | C+m?\_locations | C+m?\_probabilities | forward_sequence | forward_quality | forward_C+h?\_locations | forward_C+h?\_probabilities | forward_C+m?\_locations | forward_C+m?\_probabilities |
-|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|
-| `F1-1a` | `Family 1` | `F1-1` | `forward` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `102` | `)8@!9:/0/,0+-6?40,-I601:.';+5,@0.0%)!(20C*,2++*(00#/*+3;E-E)<I5.5G*CB8501;I3'.8233'3><:13)48F?09*>?I90` | `C+h?,C+m?` | `3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99` | `26,60,61,60,30,59,2,46,57,64,54,63,52,18,53,34,52,50,39,46,55,54,34` | `3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99` | `29,159,155,159,220,163,2,59,170,131,177,139,72,235,75,214,73,68,48,59,81,77,41` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `)8@!9:/0/,0+-6?40,-I601:.';+5,@0.0%)!(20C*,2++*(00#/*+3;E-E)<I5.5G*CB8501;I3'.8233'3><:13)48F?09*>?I90` | `3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99` | `26,60,61,60,30,59,2,46,57,64,54,63,52,18,53,34,52,50,39,46,55,54,34` | `3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99` | `29,159,155,159,220,163,2,59,170,131,177,139,72,235,75,214,73,68,48,59,81,77,41` |
-| `F1-1b` | `Family 1` | `F1-1` | `forward` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `63` | `60-7,7943/*=5=)7<53-I=G6/&/7?8)<$12">/2C;4:9F8:816E,6C3*,1-2139` | `C+h?,C+m?` | `3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60` | `10,44,39,64,20,36,11,63,50,54,64,38,46,41,49,2` | `3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60` | `10,56,207,134,233,212,12,116,68,78,129,46,194,51,66,253` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `60-7,7943/*=5=)7<53-I=G6/&/7?8)<$12">/2C;4:9F8:816E,6C3*,1-2139` | `3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60` | `10,44,39,64,20,36,11,63,50,54,64,38,46,41,49,2` | `3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60` | `10,56,207,134,233,212,12,116,68,78,129,46,194,51,66,253` |
-| `F1-1c` | `Family 1` | `F1-1` | `reverse` | `TCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCGCCGCCGCCGCCGCCGCC` | `87` | `@9889C8<<*96;52!*86,227.<I.8AI<>;2/391%D19*5@G=8<7<:!7+;:I:-!03<0AI>9?4!57I*-C#25FD24F;` | `C+h?,C+m?` | `3,6,15,18,21,30,33,36,45,48,51,60,63,66,69,72,75,78,81,84` | `37,47,64,63,33,64,52,55,17,46,47,64,56,64,56,60,55,58,63,40` | `3,6,15,18,21,30,33,36,45,48,51,60,63,66,69,72,75,78,81,84` | `45,192,126,129,39,129,183,79,19,195,62,124,173,128,84,159,80,165,141,206` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `;F42DF52#C-*I75!4?9>IA0<30!-:I:;+7!:<7<8=G@5*91D%193/2;><IA8.I<.722,68*!25;69*<<8C9889@` | `3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84` | `40,63,58,55,60,56,64,56,64,47,46,17,55,52,64,33,63,64,47,37` | `3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84` | `206,141,165,80,159,84,128,173,124,62,195,19,79,183,129,39,129,126,192,45` |
-| `F1-1d` | `Family 1` | `F1-1` | `forward` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `81` | `:<*1D)89?27#8.3)9<2G<>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8>0` | `C+h?,C+m?` | `3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78` | `33,29,10,55,3,46,53,54,64,12,63,27,24,4,43,21,64,60,17,55` | `3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78` | `216,221,11,81,4,61,180,79,130,13,144,31,228,4,200,23,132,98,18,82` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `:<*1D)89?27#8.3)9<2G<>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8>0` | `3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78` | `33,29,10,55,3,46,53,54,64,12,63,27,24,4,43,21,64,60,17,55` | `3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78` | `216,221,11,81,4,61,180,79,130,13,144,31,228,4,200,23,132,98,18,82` |
+| read | family | individual | direction | sequence | sequence_length | quality | modification_types | C+h?\_locations | C+h?\_probabilities | C+m?\_locations | C+m?\_probabilities | forward_sequence | forward_quality | forward_C+h?\_locations | forward_C+h?\_probabilities | forward_C+m?\_locations | forward_C+m?\_probabilities | reverse_sequence | reverse_quality | reverse_C+h?\_locations | reverse_C+h?\_probabilities | reverse_C+m?\_locations | reverse_C+m?\_probabilities |
+|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|
+| `F1-1a` | `Family 1` | `F1-1` | `forward` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `102` | `)8@!9:/0/,0+-6?40,-I601:.';+5,@0.0%)!(20C*,2++*(00#/*+3;E-E)<I5.5G*CB8501;I3'.8233'3><:13)48F?09*>?I90` | `C+h?,C+m?` | `3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99` | `26,60,61,60,30,59,2,46,57,64,54,63,52,18,53,34,52,50,39,46,55,54,34` | `3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99` | `29,159,155,159,220,163,2,59,170,131,177,139,72,235,75,214,73,68,48,59,81,77,41` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `)8@!9:/0/,0+-6?40,-I601:.';+5,@0.0%)!(20C*,2++*(00#/*+3;E-E)<I5.5G*CB8501;I3'.8233'3><:13)48F?09*>?I90` | `3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99` | `26,60,61,60,30,59,2,46,57,64,54,63,52,18,53,34,52,50,39,46,55,54,34` | `3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84,87,96,99` | `29,159,155,159,220,163,2,59,170,131,177,139,72,235,75,214,73,68,48,59,81,77,41` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `)8@!9:/0/,0+-6?40,-I601:.';+5,@0.0%)!(20C*,2++*(00#/*+3;E-E)<I5.5G*CB8501;I3'.8233'3><:13)48F?09*>?I90` | `3,6,15,18,21,30,33,36,45,48,51,60,63,66,75,78,81,84,87,90,93,96,99` | `34,54,55,46,39,50,52,34,53,18,52,63,54,64,57,46,2,59,30,60,61,60,26` | `3,6,15,18,21,30,33,36,45,48,51,60,63,66,75,78,81,84,87,90,93,96,99` | `41,77,81,59,48,68,73,214,75,235,72,139,177,131,170,59,2,163,220,159,155,159,29` |
+| `F1-1b` | `Family 1` | `F1-1` | `forward` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `63` | `60-7,7943/*=5=)7<53-I=G6/&/7?8)<$12">/2C;4:9F8:816E,6C3*,1-2139` | `C+h?,C+m?` | `3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60` | `10,44,39,64,20,36,11,63,50,54,64,38,46,41,49,2` | `3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60` | `10,56,207,134,233,212,12,116,68,78,129,46,194,51,66,253` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `60-7,7943/*=5=)7<53-I=G6/&/7?8)<$12">/2C;4:9F8:816E,6C3*,1-2139` | `3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60` | `10,44,39,64,20,36,11,63,50,54,64,38,46,41,49,2` | `3,6,9,12,15,18,21,24,27,30,33,42,45,48,57,60` | `10,56,207,134,233,212,12,116,68,78,129,46,194,51,66,253` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `60-7,7943/*=5=)7<53-I=G6/&/7?8)<$12">/2C;4:9F8:816E,6C3*,1-2139` | `3,6,15,18,21,30,33,36,39,42,45,48,51,54,57,60` | `2,49,41,46,38,64,54,50,63,11,36,20,64,39,44,10` | `3,6,15,18,21,30,33,36,39,42,45,48,51,54,57,60` | `253,66,51,194,46,129,78,68,116,12,212,233,134,207,56,10` |
+| `F1-1c` | `Family 1` | `F1-1` | `reverse` | `TCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCGCCGCCGCCGCCGCCGCC` | `87` | `@9889C8<<*96;52!*86,227.<I.8AI<>;2/391%D19*5@G=8<7<:!7+;:I:-!03<0AI>9?4!57I*-C#25FD24F;` | `C+h?,C+m?` | `3,6,15,18,21,30,33,36,45,48,51,60,63,66,69,72,75,78,81,84` | `37,47,64,63,33,64,52,55,17,46,47,64,56,64,56,60,55,58,63,40` | `3,6,15,18,21,30,33,36,45,48,51,60,63,66,69,72,75,78,81,84` | `45,192,126,129,39,129,183,79,19,195,62,124,173,128,84,159,80,165,141,206` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `;F42DF52#C-*I75!4?9>IA0<30!-:I:;+7!:<7<8=G@5*91D%193/2;><IA8.I<.722,68*!25;69*<<8C9889@` | `3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84` | `40,63,58,55,60,56,64,56,64,47,46,17,55,52,64,33,63,64,47,37` | `3,6,9,12,15,18,21,24,27,36,39,42,51,54,57,66,69,72,81,84` | `206,141,165,80,159,84,128,173,124,62,195,19,79,183,129,39,129,126,192,45` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `;F42DF52#C-*I75!4?9>IA0<30!-:I:;+7!:<7<8=G@5*91D%193/2;><IA8.I<.722,68*!25;69*<<8C9889@` | `3,6,15,18,21,30,33,36,45,48,51,60,63,66,69,72,75,78,81,84` | `37,47,64,63,33,64,52,55,17,46,47,64,56,64,56,60,55,58,63,40` | `3,6,15,18,21,30,33,36,45,48,51,60,63,66,69,72,75,78,81,84` | `45,192,126,129,39,129,183,79,19,195,62,124,173,128,84,159,80,165,141,206` |
+| `F1-1d` | `Family 1` | `F1-1` | `forward` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `81` | `:<*1D)89?27#8.3)9<2G<>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8>0` | `C+h?,C+m?` | `3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78` | `33,29,10,55,3,46,53,54,64,12,63,27,24,4,43,21,64,60,17,55` | `3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78` | `216,221,11,81,4,61,180,79,130,13,144,31,228,4,200,23,132,98,18,82` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `:<*1D)89?27#8.3)9<2G<>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8>0` | `3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78` | `33,29,10,55,3,46,53,54,64,12,63,27,24,4,43,21,64,60,17,55` | `3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78` | `216,221,11,81,4,61,180,79,130,13,144,31,228,4,200,23,132,98,18,82` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `:<*1D)89?27#8.3)9<2G<>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8>0` | `3,6,15,18,21,30,33,36,45,48,51,54,57,60,63,66,69,72,75,78` | `55,17,60,64,21,43,4,24,27,63,12,64,54,53,46,3,55,10,29,33` | `3,6,15,18,21,30,33,36,45,48,51,54,57,60,63,66,69,72,75,78` | `82,18,98,132,23,200,4,228,31,144,13,130,79,180,61,4,81,11,221,216` |
 
 Now, looking at the methylation and hydroxymethylation locations we see
 that the forward-version locations are 3, 6, 9, 12…, corresponding to
@@ -1290,9 +1300,9 @@ output_fastq <- write_modified_fastq(
     sequence_colname = "sequence",
     quality_colname = "quality",
     locations_colnames = c("hydroxymethylation_locations",
-                        "methylation_locations"),
+                           "methylation_locations"),
     probabilities_colnames = c("hydroxymethylation_probabilities",
-                            "methylation_probabilities"),
+                               "methylation_probabilities"),
     modification_prefixes = c("C+h?", "C+m?")
 )
 
@@ -1352,7 +1362,7 @@ sone_2019_f1_1_expanded_ggt_added <- "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGC
 visualise_single_sequence(sone_2019_f1_1_expanded_ggt_added)
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/single_sequence_default-1.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_default-1.png)
 
 By default,
 [`visualise_single_sequence()`](https://ejade42.github.io/ggDNAvis/reference/visualise_single_sequence.md)
@@ -1377,7 +1387,7 @@ visualise_single_sequence(
 view_image(paste0(display_location, "single_sequence_01.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/single_sequence_01.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_01.png)
 
 This is the typical single sequence visualisation produced by this
 package. However, almost every aspect of the visualisation is
@@ -1405,7 +1415,7 @@ visualise_single_sequence(
 view_image(paste0(display_location, "single_sequence_02.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/single_sequence_02.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_02.png)
 
 For all `visualise_` functions, the `render_device` argument can be used
 to control the rendering method. It is fed directly to
@@ -1452,7 +1462,7 @@ visualise_single_sequence(
 view_image(paste0(display_location, "single_sequence_03.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/single_sequence_03.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_03.png)
 
 Included in `ggDNAvis` are a set of colour palettes for sequence colours
 that can often be helpful. The default is
@@ -1478,7 +1488,7 @@ visualise_single_sequence(
 view_image(paste0(display_location, "single_sequence_04.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/single_sequence_04.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_04.png)
 
 ``` r
 
@@ -1495,7 +1505,7 @@ visualise_single_sequence(
 view_image(paste0(display_location, "single_sequence_05.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/single_sequence_05.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_05.png)
 
 `bright_pale2` is the same but with a slightly lighter shade of green:
 
@@ -1514,7 +1524,7 @@ visualise_single_sequence(
 view_image(paste0(display_location, "single_sequence_06.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/single_sequence_06.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_06.png)
 
 The `bright_deep` palette works best with white text:
 
@@ -1533,7 +1543,7 @@ visualise_single_sequence(
 view_image(paste0(display_location, "single_sequence_07.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/single_sequence_07.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_07.png)
 
 The `sanger` palette is inspired by old-school Sanger sequencing
 readouts and works best with white text:
@@ -1554,7 +1564,7 @@ visualise_single_sequence(
 view_image(paste0(display_location, "single_sequence_08.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/single_sequence_08.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_08.png)
 
 The `accessible` palette is light and dark each of blue and green, which
 is the only 4-category qualitative colourblind-safe palette recommended
@@ -1576,7 +1586,7 @@ visualise_single_sequence(
 view_image(paste0(display_location, "single_sequence_09.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/single_sequence_09.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_09.png)
 
 ## 4.3 Layout customisation
 
@@ -1654,7 +1664,7 @@ visualise_single_sequence(
 view_image(paste0(display_location, "single_sequence_10.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/single_sequence_10.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_10.png)
 
 Setting spacing, margin, sequence text size, and index annotation
 interval all to 0 produces a no-frills visualisation of the sequence
@@ -1696,7 +1706,7 @@ visualise_single_sequence(
 view_image(paste0(display_location, "single_sequence_11.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/single_sequence_11.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_11.png)
 This produced a warning message as setting the margin to 0 clipped off
 the outlines of the outermost boxes. Either a slightly larger margin can
 be used:
@@ -1733,7 +1743,7 @@ visualise_single_sequence(
 view_image(paste0(display_location, "single_sequence_12.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/single_sequence_12.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_12.png)
 
 Or the outlines can be turned off:
 
@@ -1771,7 +1781,7 @@ visualise_single_sequence(
 view_image(paste0(display_location, "single_sequence_13.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/single_sequence_13.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_13.png)
 
 When changing line wrapping and annotation interval, divisibility is
 important. It is generally recommended to make the line wrapping length
@@ -1801,7 +1811,7 @@ visualise_single_sequence(
 view_image(paste0(display_location, "single_sequence_14.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/single_sequence_14.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_14.png)
 
 When setting spacing to 0, it is highly recommended to disable index
 annotations via `index_annotation_interval = 0`, otherwise there is
@@ -1834,7 +1844,7 @@ visualise_single_sequence(
 view_image(paste0(display_location, "single_sequence_15.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/single_sequence_15.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_15.png)
 
 ## 4.4 Performance
 
@@ -1865,37 +1875,37 @@ visualise_single_sequence(
 ``` R
 ## ℹ Verbose monitoring enabled
 
-## ℹ (2026-06-23 15:29:21) visualise_single_sequence start
+## ℹ (2026-10-16 16:59:14) visualise_single_sequence start
 
-## ℹ (0.003 secs elapsed; 0.003 secs total) resolving aliases
+## ℹ (0.028 secs elapsed; 0.028 secs total) resolving aliases
 
-## ℹ (0.001 secs elapsed; 0.004 secs total) validating arguments
+## ℹ (0.001 secs elapsed; 0.029 secs total) validating arguments
 
-## ℹ (0.001 secs elapsed; 0.004 secs total) splitting input seq to sequence vector
+## ℹ (0.001 secs elapsed; 0.030 secs total) splitting input seq to sequence vector
 
-## ℹ (0.002 secs elapsed; 0.007 secs total) rasterising image data
+## ℹ (0.001 secs elapsed; 0.030 secs total) rasterising image data
 
-## ℹ (0.002 secs elapsed; 0.009 secs total) choosing rendering method
+## ℹ (0.002 secs elapsed; 0.032 secs total) choosing rendering method
 
-## ℹ (0.001 secs elapsed; 0.009 secs total) calculating tile sizes
+## ℹ (0.001 secs elapsed; 0.033 secs total) calculating tile sizes
 
-## ℹ (0.001 secs elapsed; 0.010 secs total) creating basic plot via geom_tile
+## ℹ (0.001 secs elapsed; 0.033 secs total) creating basic plot via geom_tile
 
-## ℹ (0.004 secs elapsed; 0.014 secs total) generating sequence text
+## ℹ (0.004 secs elapsed; 0.037 secs total) generating sequence text
 
-## ℹ (0.001 secs elapsed; 0.014 secs total) adding sequence text
+## ℹ (0.001 secs elapsed; 0.038 secs total) adding sequence text
 
-## ℹ (0.002 secs elapsed; 0.016 secs total) generating index annotations
+## ℹ (0.002 secs elapsed; 0.040 secs total) generating index annotations
 
-## ℹ (0.001 secs elapsed; 0.017 secs total) adding index annotations
+## ℹ (0.001 secs elapsed; 0.040 secs total) adding index annotations
 
-## ℹ (0.002 secs elapsed; 0.018 secs total) adding general plot themes
+## ℹ (0.001 secs elapsed; 0.042 secs total) adding general plot themes
 
-## ℹ (0.006 secs elapsed; 0.024 secs total) calculating margin
+## ℹ (0.006 secs elapsed; 0.048 secs total) calculating margin
 
-## ℹ (0.001 secs elapsed; 0.025 secs total) exporting image file
+## ℹ (0.001 secs elapsed; 0.049 secs total) exporting image file
 
-## ℹ (0.336 secs elapsed; 0.361 secs total) done
+## ℹ (0.320 secs elapsed; 0.369 secs total) done
 ```
 
 ``` r
@@ -1904,7 +1914,7 @@ visualise_single_sequence(
 view_image(paste0(display_location, "single_sequence_16.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/single_sequence_16.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_16.png)
 
 ### 4.4.2 Raster versus tile rendering
 
@@ -1956,11 +1966,11 @@ visualise_single_sequence(
 ``` R
 ## ℹ Verbose monitoring enabled
 
-## ℹ (2026-06-23 15:29:21) visualise_single_sequence start
+## ℹ (2026-10-16 16:59:14) visualise_single_sequence start
 
-## ℹ (0.001 secs elapsed; 0.001 secs total) resolving aliases
+## ℹ (0.012 secs elapsed; 0.012 secs total) resolving aliases
 
-## ℹ (0.001 secs elapsed; 0.002 secs total) validating arguments
+## ℹ (0.001 secs elapsed; 0.012 secs total) validating arguments
 
 ## ℹ Automatically setting index_annotation_interval to 0 as index_annotation_size is 0
 
@@ -1970,26 +1980,26 @@ visualise_single_sequence(
 ## Warning: Disabling index annotations via index_annotation_interval = 0 or index_annotation_size = 0 overrides the index_annotation_always_last_base setting.
 ## If you want the last base in each line to be annotated but no other bases, set index_annotation_interval greater than line_wrapping.
 
-## ℹ (0.002 secs elapsed; 0.004 secs total) splitting input seq to sequence vector
+## ℹ (0.002 secs elapsed; 0.014 secs total) splitting input seq to sequence vector
 
-## ℹ (0.001 secs elapsed; 0.004 secs total) rasterising image data
+## ℹ (0.001 secs elapsed; 0.015 secs total) rasterising image data
 
-## ℹ (0.002 secs elapsed; 0.006 secs total) choosing rendering method
+## ℹ (0.002 secs elapsed; 0.017 secs total) choosing rendering method
 
 ## ℹ Automatically using geom_raster (much faster than geom_tile) as no sequence text, index annotations, or outlines are present.
 
 ## Warning: When using geom_raster, it is recommended to use a smaller pixels_per_base e.g. 10, as there is no text/outlines that would benefit from higher resolution.
 ## Current value: 100
 
-## ℹ (0.002 secs elapsed; 0.008 secs total) creating basic plot via geom_raster
+## ℹ (0.002 secs elapsed; 0.019 secs total) creating basic plot via geom_raster
 
-## ℹ (0.003 secs elapsed; 0.011 secs total) adding general plot themes
+## ℹ (0.003 secs elapsed; 0.021 secs total) adding general plot themes
 
-## ℹ (0.007 secs elapsed; 0.018 secs total) calculating margin
+## ℹ (0.007 secs elapsed; 0.029 secs total) calculating margin
 
-## ℹ (0.001 secs elapsed; 0.019 secs total) exporting image file
+## ℹ (0.001 secs elapsed; 0.030 secs total) exporting image file
 
-## ℹ (0.371 secs elapsed; 0.390 secs total) done
+## ℹ (0.328 secs elapsed; 0.358 secs total) done
 ```
 
 ``` r
@@ -1998,7 +2008,7 @@ visualise_single_sequence(
 view_image(paste0(display_location, "single_sequence_17.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/single_sequence_17.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_17.png)
 
 An example of forcing rasterisation when there would otherwise be
 sequence text, index annotations, and outlines (thus producing a
@@ -2028,9 +2038,9 @@ visualise_single_sequence(
 ``` R
 ## ℹ Verbose monitoring enabled
 
-## ℹ (2026-06-23 15:29:22) visualise_single_sequence start
+## ℹ (2026-10-16 16:59:15) visualise_single_sequence start
 
-## ℹ (0.002 secs elapsed; 0.002 secs total) resolving aliases
+## ℹ (0.001 secs elapsed; 0.001 secs total) resolving aliases
 
 ## ℹ (0.001 secs elapsed; 0.002 secs total) validating arguments
 
@@ -2038,21 +2048,21 @@ visualise_single_sequence(
 
 ## ℹ (0.001 secs elapsed; 0.003 secs total) rasterising image data
 
-## ℹ (0.001 secs elapsed; 0.005 secs total) choosing rendering method
+## ℹ (0.001 secs elapsed; 0.004 secs total) choosing rendering method
 
 ## Warning: Forcing geom_raster via force_raster = TRUE will remove all sequence
 ## text, index annotations (though any inserted blank lines/spacers will remain),
 ## and box outlines.
 
-## ℹ (0.001 secs elapsed; 0.006 secs total) creating basic plot via geom_raster
+## ℹ (0.001 secs elapsed; 0.005 secs total) creating basic plot via geom_raster
 
-## ℹ (0.002 secs elapsed; 0.008 secs total) adding general plot themes
+## ℹ (0.002 secs elapsed; 0.007 secs total) adding general plot themes
 
-## ℹ (0.006 secs elapsed; 0.014 secs total) calculating margin
+## ℹ (0.006 secs elapsed; 0.013 secs total) calculating margin
 
-## ℹ (0.001 secs elapsed; 0.015 secs total) exporting image file
+## ℹ (0.001 secs elapsed; 0.014 secs total) exporting image file
 
-## ℹ (0.096 secs elapsed; 0.111 secs total) done
+## ℹ (0.124 secs elapsed; 0.138 secs total) done
 ```
 
 ``` r
@@ -2061,7 +2071,7 @@ visualise_single_sequence(
 view_image(paste0(display_location, "single_sequence_18.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/single_sequence_18.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_18.png)
 
 If sequence text, annotations, and outlines are all already off
 (i.e. `sequence_text_size = 0`, either `index_annotation_size = 0` or
@@ -2089,11 +2099,11 @@ visualise_single_sequence(
 ``` R
 ## ℹ Verbose monitoring enabled
 
-## ℹ (2026-06-23 15:29:22) visualise_single_sequence start
+## ℹ (2026-10-16 16:59:15) visualise_single_sequence start
 
-## ℹ (0.002 secs elapsed; 0.002 secs total) resolving aliases
+## ℹ (0.003 secs elapsed; 0.003 secs total) resolving aliases
 
-## ℹ (0.001 secs elapsed; 0.002 secs total) validating arguments
+## ℹ (0.001 secs elapsed; 0.004 secs total) validating arguments
 
 ## Warning: Disabling index annotations via index_annotation_interval = 0 or index_annotation_size = 0 overrides the index_annotation_always_first_base setting.
 ## If you want the first base in each line to be annotated but no other bases, set index_annotation_interval greater than line_wrapping.
@@ -2101,23 +2111,23 @@ visualise_single_sequence(
 ## Warning: Disabling index annotations via index_annotation_interval = 0 or index_annotation_size = 0 overrides the index_annotation_always_last_base setting.
 ## If you want the last base in each line to be annotated but no other bases, set index_annotation_interval greater than line_wrapping.
 
-## ℹ (0.001 secs elapsed; 0.004 secs total) splitting input seq to sequence vector
+## ℹ (0.002 secs elapsed; 0.006 secs total) splitting input seq to sequence vector
 
-## ℹ (0.001 secs elapsed; 0.004 secs total) rasterising image data
+## ℹ (0.001 secs elapsed; 0.007 secs total) rasterising image data
 
-## ℹ (0.002 secs elapsed; 0.006 secs total) choosing rendering method
+## ℹ (0.003 secs elapsed; 0.010 secs total) choosing rendering method
 
 ## ℹ Automatically using geom_raster (much faster than geom_tile) as no sequence text, index annotations, or outlines are present.
 
-## ℹ (0.004 secs elapsed; 0.010 secs total) creating basic plot via geom_raster
+## ℹ (0.002 secs elapsed; 0.012 secs total) creating basic plot via geom_raster
 
-## ℹ (0.003 secs elapsed; 0.013 secs total) adding general plot themes
+## ℹ (0.004 secs elapsed; 0.016 secs total) adding general plot themes
 
-## ℹ (0.007 secs elapsed; 0.020 secs total) calculating margin
+## ℹ (0.009 secs elapsed; 0.024 secs total) calculating margin
 
-## ℹ (0.001 secs elapsed; 0.021 secs total) exporting image file
+## ℹ (0.002 secs elapsed; 0.026 secs total) exporting image file
 
-## ℹ (0.099 secs elapsed; 0.120 secs total) done
+## ℹ (0.158 secs elapsed; 0.183 secs total) done
 ```
 
 ``` r
@@ -2126,7 +2136,59 @@ visualise_single_sequence(
 view_image(paste0(display_location, "single_sequence_19.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/single_sequence_19.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_19.png)
+
+## 4.5 Sequence sanitisation
+
+By default (as of v1.1.0), invalid characters passed to the `sequence`
+argument will now be removed with a warning rather than causing an
+error. To force invalid characters to stop execution with an error, the
+`sanitise_sequences` argument (with American and/or singular argument
+aliases) can be set to `FALSE` (default value is `TRUE`):
+
+``` r
+
+## Create image - will work with a warning
+visualise_single_sequence(
+    "ACGT x%67Hk#$%&^*",
+    filename = paste0(output_location, "single_sequence_20.png"),
+    return = FALSE
+)
+```
+
+``` R
+## Warning: Invalid sequence characters removed: ' x%67Hk#$%&^*'
+```
+
+``` r
+
+## View image
+view_image(paste0(display_location, "single_sequence_20.png"))
+```
+
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_20.png)
+
+``` r
+
+## Create image - will fail with an error
+visualise_single_sequence(
+    "ACGT x%67Hk#$%&^*",
+    sanitise_sequences = FALSE
+)
+```
+
+``` R
+## Error in `convert_base_to_number()` at ggDNAvis/R/dna_tools.R:666:13:
+## ! Argument 'base' must be one of A/C/G/T/U to convert to number.
+## Current class: character
+## Current value: X
+```
+
+This works identically for
+[`visualise_many_sequences()`](https://ejade42.github.io/ggDNAvis/reference/visualise_many_sequences.md)
+and
+[`visualise_methylation()`](https://ejade42.github.io/ggDNAvis/reference/visualise_methylation.md)
+and will not be reiterated individually in the examples for them.
 
 # 5 Visualising many DNA/RNA sequences
 
@@ -2257,7 +2319,7 @@ visualise_many_sequences(
 view_image(paste0(display_location, "many_sequences_01.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/many_sequences_01.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_01.png)
 
 ## 5.2 Sequence arrangement customisation
 
@@ -2324,7 +2386,7 @@ visualise_many_sequences(
 view_image(paste0(display_location, "many_sequences_02.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/many_sequences_02.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_02.png)
 
 Here the top large cluster is Family 1, containing individuals F1-1,
 F1-2, and F-3. These individuals contain 5, 2, and 3 reads respectively,
@@ -2360,7 +2422,7 @@ visualise_many_sequences(
 view_image(paste0(display_location, "many_sequences_03.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/many_sequences_03.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_03.png)
 
 Now we have a group for each individual, with sequences in ascending
 length order per individual, and one blank line between individuals.
@@ -2390,7 +2452,7 @@ visualise_many_sequences(
 view_image(paste0(display_location, "many_sequences_04.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/many_sequences_04.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_04.png)
 
 We can also turn off sorting entirely (keeping grouping off) with
 `sort_by = NA` to simply show all the reads in the order in which they
@@ -2420,7 +2482,7 @@ visualise_many_sequences(
 view_image(paste0(display_location, "many_sequences_05.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/many_sequences_05.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_05.png)
 
 It is also possible to keep grouping on while turning sorting off if
 desired:
@@ -2447,7 +2509,7 @@ visualise_many_sequences(
 view_image(paste0(display_location, "many_sequences_06.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/many_sequences_06.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_06.png)
 
 The grouping spacers can be set to 0 to sort within groups without
 visually separating them (but negative values don’t work - they produce
@@ -2486,7 +2548,7 @@ visualise_many_sequences(
 view_image(paste0(display_location, "many_sequences_07.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/many_sequences_07.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_07.png)
 
 Finally, all the same grouping and sorting logic can be used to extract
 any other column as a character vector, though of course if it isn’t DNA
@@ -2635,7 +2697,7 @@ visualise_many_sequences(
 view_image(paste0(display_location, "many_sequences_08.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/many_sequences_08.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_08.png)
 
 However, any numerical vector can be used as `index_annotation_lines` to
 specify which lines should be annotated. For each selected line, an
@@ -2664,7 +2726,7 @@ visualise_many_sequences(
 view_image(paste0(display_location, "many_sequences_09.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/many_sequences_09.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_09.png)
 
 To annotate below the final line of each family, we can look at the
 sequences vector:
@@ -2748,7 +2810,7 @@ visualise_many_sequences(
 view_image(paste0(display_location, "many_sequences_10.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/many_sequences_10.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_10.png)
 
 As with
 [`visualise_single_sequence()`](https://ejade42.github.io/ggDNAvis/reference/visualise_single_sequence.md),
@@ -2778,7 +2840,7 @@ visualise_many_sequences(
 view_image(paste0(display_location, "many_sequences_11.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/many_sequences_11.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_11.png)
 
 And doing the same but annotating until the end of the image regardless
 of when each sequence ends would look as follows:
@@ -2805,7 +2867,7 @@ visualise_many_sequences(
 view_image(paste0(display_location, "many_sequences_12.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/many_sequences_12.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_12.png)
 
 Customising the colour, size, and vertical position of annotations works
 exactly the same as
@@ -2837,7 +2899,7 @@ visualise_many_sequences(
 view_image(paste0(display_location, "many_sequences_13.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/many_sequences_13.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_13.png)
 
 Finally, index annotations can of course also be turned completely off
 if desired. The ‘canonical’ way of doing this is by setting
@@ -2859,7 +2921,7 @@ visualise_many_sequences(
 view_image(paste0(display_location, "many_sequences_14.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/many_sequences_14.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_14.png)
 
 ``` r
 
@@ -2882,7 +2944,7 @@ visualise_many_sequences(
 view_image(paste0(display_location, "many_sequences_15.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/many_sequences_15.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_15.png)
 
 ``` r
 
@@ -2905,7 +2967,7 @@ visualise_many_sequences(
 view_image(paste0(display_location, "many_sequences_16.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/many_sequences_16.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_16.png)
 
 ## 5.4 Colour and layout customisation
 
@@ -2991,7 +3053,7 @@ visualize_many_sequences(
 view_image(paste0(display_location, "many_sequences_17.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/many_sequences_17.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_17.png)
 
 As with
 [`visualise_single_sequence()`](https://ejade42.github.io/ggDNAvis/reference/visualise_single_sequence.md),
@@ -3034,7 +3096,7 @@ visualise_many_sequences(
 view_image(paste0(display_location, "many_sequences_18.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/many_sequences_18.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_18.png)
 Note that the margin/outline warning is produced whenever the margin is
 ≤0.25 and the outline linewidth is \>0. Getting the warning does not
 necessarily mean that the outlines are getting cut off (as this only
@@ -3089,29 +3151,29 @@ visualise_many_sequences(
 ``` R
 ## ℹ Verbose monitoring enabled
 
-## ℹ (2026-06-23 15:29:38) visualise_many_sequences start
+## ℹ (2026-10-16 16:59:32) visualise_many_sequences start
 
 ## ℹ (0.002 secs elapsed; 0.002 secs total) resolving aliases
 
-## ℹ (0.001 secs elapsed; 0.002 secs total) validating arguments
+## ℹ (0.001 secs elapsed; 0.003 secs total) validating arguments
 
-## ℹ (0.001 secs elapsed; 0.003 secs total) inserting blank sequences at specified indices
+## ℹ (0.001 secs elapsed; 0.004 secs total) inserting blank sequences at specified indices
 
-## ℹ (0.001 secs elapsed; 0.003 secs total) rasterising image data
+## ℹ (0.001 secs elapsed; 0.005 secs total) rasterising image data
 
-## ℹ (0.003 secs elapsed; 0.007 secs total) choosing rendering method
+## ℹ (0.004 secs elapsed; 0.009 secs total) choosing rendering method
 
 ## ℹ Automatically using geom_raster (much faster than geom_tile) as no sequence text, index annotations, or outlines are present.
 
-## ℹ (0.001 secs elapsed; 0.008 secs total) creating basic plot via geom_raster
+## ℹ (0.002 secs elapsed; 0.011 secs total) creating basic plot via geom_raster
 
-## ℹ (0.002 secs elapsed; 0.010 secs total) adding general plot themes
+## ℹ (0.003 secs elapsed; 0.014 secs total) adding general plot themes
 
-## ℹ (0.010 secs elapsed; 0.020 secs total) calculating margin
+## ℹ (0.007 secs elapsed; 0.020 secs total) calculating margin
 
-## ℹ (0.002 secs elapsed; 0.022 secs total) exporting image file
+## ℹ (0.001 secs elapsed; 0.022 secs total) exporting image file
 
-## ℹ (0.125 secs elapsed; 0.147 secs total) done
+## ℹ (0.223 secs elapsed; 0.245 secs total) done
 ```
 
 ``` r
@@ -3120,7 +3182,7 @@ visualise_many_sequences(
 view_image(paste0(display_location, "many_sequences_19.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/many_sequences_19.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_19.png)
 
 One important thing to note (which also applies to
 [`visualise_methylation()`](https://ejade42.github.io/ggDNAvis/reference/visualise_methylation.md))
@@ -3150,31 +3212,31 @@ visualise_many_sequences(
 ``` R
 ## ℹ Verbose monitoring enabled
 
-## ℹ (2026-06-23 15:29:38) visualise_many_sequences start
+## ℹ (2026-10-16 16:59:32) visualise_many_sequences start
 
-## ℹ (0.001 secs elapsed; 0.001 secs total) resolving aliases
+## ℹ (0.002 secs elapsed; 0.002 secs total) resolving aliases
 
-## ℹ (0.001 secs elapsed; 0.002 secs total) validating arguments
+## ℹ (0.001 secs elapsed; 0.003 secs total) validating arguments
 
-## ℹ (0.001 secs elapsed; 0.003 secs total) inserting blank sequences at specified indices
+## ℹ (0.001 secs elapsed; 0.005 secs total) inserting blank sequences at specified indices
 
-## ℹ (0.001 secs elapsed; 0.003 secs total) rasterising image data
+## ℹ (0.001 secs elapsed; 0.006 secs total) rasterising image data
 
-## ℹ (0.004 secs elapsed; 0.007 secs total) choosing rendering method
+## ℹ (0.006 secs elapsed; 0.011 secs total) choosing rendering method
 
 ## Warning: Forcing geom_raster via force_raster = TRUE will remove all sequence
 ## text, index annotations (though any inserted blank lines/spacers will remain),
 ## and box outlines.
 
-## ℹ (0.001 secs elapsed; 0.008 secs total) creating basic plot via geom_raster
+## ℹ (0.001 secs elapsed; 0.012 secs total) creating basic plot via geom_raster
 
-## ℹ (0.002 secs elapsed; 0.010 secs total) adding general plot themes
+## ℹ (0.003 secs elapsed; 0.016 secs total) adding general plot themes
 
-## ℹ (0.009 secs elapsed; 0.019 secs total) calculating margin
+## ℹ (0.008 secs elapsed; 0.023 secs total) calculating margin
 
-## ℹ (0.002 secs elapsed; 0.021 secs total) exporting image file
+## ℹ (0.001 secs elapsed; 0.024 secs total) exporting image file
 
-## ℹ (0.159 secs elapsed; 0.180 secs total) done
+## ℹ (0.257 secs elapsed; 0.281 secs total) done
 ```
 
 ``` r
@@ -3183,7 +3245,7 @@ visualise_many_sequences(
 view_image(paste0(display_location, "many_sequences_20.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/many_sequences_20.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/many_sequences_20.png)
 
 # 6 Visualising DNA methylation/modification
 
@@ -3263,7 +3325,6 @@ methylation_data_for_visualisation <- extract_and_sort_methylation(
     locations_colname = "methylation_locations",
     probabilities_colname = "methylation_probabilities",
     sequences_colname = "sequence",
-    lengths_colname = "sequence_length",
     grouping_levels = c("family" = 8, "individual" = 2),
     sort_by = "sequence_length",
     desc_sort = TRUE
@@ -3458,7 +3519,6 @@ hydroxymethylation_data_for_visualisation <- extract_and_sort_methylation(
     locations_colname = "hydroxymethylation_locations",
     probabilities_colname = "hydroxymethylation_probabilities",
     sequences_colname = "sequence",
-    lengths_colname = "sequence_length",
     grouping_levels = c("family" = 8, "individual" = 2),
     sort_by = "sequence_length",
     desc_sort = TRUE
@@ -3662,7 +3722,7 @@ visualise_methylation(
 view_image(paste0(display_location, "modification_01.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/modification_01.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_01.png)
 
 Here all the modification-assessed bases (Cs of CG dinucleotides) are
 coloured blue for low methylation probability and red for high
@@ -3693,7 +3753,7 @@ ggsave(paste0(output_location, "modification_01_scalebar.png"), scalebar, dpi = 
 view_image(paste0(display_location, "modification_01_scalebar.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/modification_01_scalebar.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_01_scalebar.png)
 
 (Note that sometimes vertical white lines can appear in the scalebar,
 depending on the exact gradient precision, export dimensions, and dpi.
@@ -3718,14 +3778,6 @@ arguments:
 - `probabilities_colname`: The column probabilities should be extracted
   from.
 - `sequences_colname`: The column sequences should be extracted from.
-- `lengths_colname`: The column sequence lengths should be extracted
-  from. All four of these just call
-  [`extract_and_sort_sequences()`](https://ejade42.github.io/ggDNAvis/reference/extract_and_sort_sequences.md)
-  to extract these columns, so they can technically be used to extract
-  any three columns regardless of what they contain. However, if you are
-  trying to extract and sort a non-DNA-information column, it would
-  probably be more sensible to do that directly via
-  [`extract_and_sort_sequences()`](https://ejade42.github.io/ggDNAvis/reference/extract_and_sort_sequences.md).
 - `grouping_levels`: How the data should be grouped. This is a named
   numerical vector stating which variables/columns should be used to
   group the data, and how many lines should be left between groups at
@@ -3753,7 +3805,6 @@ methylation_data_for_visualisation <- extract_and_sort_methylation(
     locations_colname = "methylation_locations",
     probabilities_colname = "methylation_probabilities",
     sequences_colname = "sequence",
-    lengths_colname = "sequence_length",
     grouping_levels = c("individual" = 3),
     sort_by = "sequence_length",
     desc_sort = FALSE
@@ -3772,7 +3823,7 @@ visualise_methylation(
 view_image(paste0(display_location, "modification_02.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/modification_02.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_02.png)
 
 Here there is no grouping by family, 3 blank lines between each
 participant, and sequences are sorted in ascending length order within
@@ -3834,7 +3885,7 @@ visualise_methylation(
 view_image(paste0(display_location, "modification_03.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/modification_03.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_03.png)
 
 ## 6.4 Sequence text customisation
 
@@ -3905,7 +3956,7 @@ visualise_methylation(
 view_image(paste0(display_location, "modification_04.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/modification_04.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_04.png)
 
 The default text size is 16, which is appropriate for sequence (1
 character per box) but is generally too large for probabilities (often
@@ -3936,7 +3987,7 @@ visualise_methylation(
 view_image(paste0(display_location, "modification_05.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/modification_05.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_05.png)
 
 A more sensible version with integers scaled to 0-1 (which is the
 default, but we will write the arguments explicitly for clarity) would
@@ -3963,7 +4014,7 @@ visualise_methylation(
 view_image(paste0(display_location, "modification_06.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/modification_06.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_06.png)
 
 If we instead wanted to see the integer scores from the original data we
 would turn off scaling and rounding:
@@ -3989,7 +4040,7 @@ visualise_methylation(
 view_image(paste0(display_location, "modification_07.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/modification_07.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_07.png)
 
 ## 6.5 Colour and layout customisation
 
@@ -4099,7 +4150,6 @@ methylation_data_for_visualisation <- extract_and_sort_methylation(
     locations_colname = "methylation_locations",
     probabilities_colname = "methylation_probabilities",
     sequences_colname = "sequence",
-    lengths_colname = "sequence_length",
     grouping_levels = c("family" = 6, 
                         "individual" = 2),
     sort_by = "sequence_length",
@@ -4131,7 +4181,7 @@ visualise_methylation(
 view_image(paste0(display_location, "modification_08.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/modification_08.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_08.png)
 
 ``` r
 
@@ -4156,7 +4206,7 @@ ggsave(paste0(output_location, "modification_08_scalebar.png"), scalebar, dpi = 
 view_image(paste0(display_location, "modification_08_scalebar.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/modification_08_scalebar.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_08_scalebar.png)
 
 One way this might be used in practice is for making a graphic in the
 “lollipop” style where methylated/modified CGs are black and unmodified
@@ -4170,7 +4220,6 @@ methylation_data_for_visualisation <- extract_and_sort_methylation(
     locations_colname = "methylation_locations",
     probabilities_colname = "methylation_probabilities",
     sequences_colname = "sequence",
-    lengths_colname = "sequence_length",
     grouping_levels = c("family" = 6, 
                         "individual" = 2),
     sort_by = "sequence_length",
@@ -4206,7 +4255,7 @@ visualise_methylation(
 view_image(paste0(display_location, "modification_09.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/modification_09.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_09.png)
 
 ``` r
 
@@ -4225,7 +4274,7 @@ ggsave(paste0(output_location, "modification_09_scalebar.png"), scalebar, dpi = 
 view_image(paste0(display_location, "modification_09_scalebar.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/modification_09_scalebar.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_09_scalebar.png)
 
 ## 6.6 Colour mapping customisation
 
@@ -4262,7 +4311,6 @@ methylation_data_for_visualisation <- extract_and_sort_methylation(
     locations_colname = "methylation_locations",
     probabilities_colname = "methylation_probabilities",
     sequences_colname = "sequence",
-    lengths_colname = "sequence_length",
     grouping_levels = c("family" = 6, 
                         "individual" = 2),
     sort_by = "sequence_length",
@@ -4300,7 +4348,7 @@ visualise_methylation(
 view_image(paste0(display_location, "modification_10.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/modification_10.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_10.png)
 
 ``` r
 
@@ -4321,7 +4369,7 @@ ggsave(paste0(output_location, "modification_10_scalebar.png"), scalebar, dpi = 
 view_image(paste0(display_location, "modification_10_scalebar.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/modification_10_scalebar.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_10_scalebar.png)
 
 The clamping arguments do not have to be integers. Clamping is
 implemented with [`pmin()`](https://rdrr.io/r/base/Extremes.html) and
@@ -4348,7 +4396,6 @@ methylation_data_for_visualisation <- extract_and_sort_methylation(
     locations_colname = "methylation_locations",
     probabilities_colname = "methylation_probabilities",
     sequences_colname = "sequence",
-    lengths_colname = "sequence_length",
     grouping_levels = c("family" = 6, 
                         "individual" = 2),
     sort_by = "sequence_length",
@@ -4372,7 +4419,7 @@ visualise_methylation(
 view_image(paste0(display_location, "modification_11.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/modification_11.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_11.png)
 
 ``` r
 
@@ -4390,7 +4437,7 @@ ggsave(paste0(output_location, "modification_11_scalebar.png"), scalebar, dpi = 
 view_image(paste0(display_location, "modification_11_scalebar.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/modification_11_scalebar.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_11_scalebar.png)
 
 The clamping does not need to be symmetrical. One use for this is if the
 data is skewed. For example, the methylation scores were randomly
@@ -4408,7 +4455,6 @@ hydroxymethylation_data_for_visualisation <- extract_and_sort_methylation(
     locations_colname = "hydroxymethylation_locations",
     probabilities_colname = "hydroxymethylation_probabilities",
     sequences_colname = "sequence",
-    lengths_colname = "sequence_length",
     grouping_levels = c("family" = 6, 
                         "individual" = 2),
     sort_by = "sequence_length",
@@ -4432,7 +4478,7 @@ visualise_methylation(
 view_image(paste0(display_location, "modification_12.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/modification_12.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_12.png)
 
 ``` r
 
@@ -4450,7 +4496,7 @@ ggsave(paste0(output_location, "modification_12_scalebar.png"), scalebar, dpi = 
 view_image(paste0(display_location, "modification_12_scalebar.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/modification_12_scalebar.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_12_scalebar.png)
 
 ***IMPORTANT:** make sure that you provide the scalebar when presenting
 data, especially if clamping is used, otherwise the colours could be
@@ -4518,7 +4564,7 @@ ggsave(paste0(output_location, "modification_scalebar_alone_01.png"), scalebar, 
 view_image(paste0(display_location, "modification_scalebar_alone_01.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/modification_scalebar_alone_01.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_scalebar_alone_01.png)
 
 Disabling axis ticks with intermediate precision gives the following:
 
@@ -4537,7 +4583,7 @@ ggsave(paste0(output_location, "modification_scalebar_alone_02.png"), scalebar, 
 view_image(paste0(display_location, "modification_scalebar_alone_02.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/modification_scalebar_alone_02.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_scalebar_alone_02.png)
 
 If ticks are left on, they can be customised with
 [`scale_x_continuous()`](https://ggplot2.tidyverse.org/reference/scale_continuous.html)
@@ -4570,7 +4616,7 @@ ggsave(paste0(output_location, "modification_scalebar_alone_03.png"), scalebar, 
 view_image(paste0(display_location, "modification_scalebar_alone_03.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/modification_scalebar_alone_03.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_scalebar_alone_03.png)
 
 And here is an example of a more sensible scalebar with top text:
 
@@ -4592,7 +4638,7 @@ ggsave(paste0(output_location, "modification_scalebar_alone_04.png"), scalebar, 
 view_image(paste0(display_location, "modification_scalebar_alone_04.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/modification_scalebar_alone_04.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_scalebar_alone_04.png)
 
 ## 6.8 Think about the offset!
 
@@ -4718,7 +4764,6 @@ vectors_for_plotting <- lapply(dataframes, function(x) {
         locations_colname = "methylation_locations",
         probabilities_colname = "methylation_probabilities",
         sequences_colname = "sequence",
-        lengths_colname = "sequence_length",
         grouping_levels = NA,
         sort_by = NA
     )
@@ -4809,7 +4854,7 @@ ggsave(
 view_image(paste0(display_location, "modification_reversing_example.png"))
 ```
 
-![](https://raw.githubusercontent.com/ejade42/ggDNAvis/v1.0.1/README_files/output/modification_reversing_example.png)
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/modification_reversing_example.png)
 
 ## 6.9 Performance
 

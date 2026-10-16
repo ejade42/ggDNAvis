@@ -15,6 +15,7 @@ pixels per square when exported are configurable.
 visualise_single_sequence(
   sequence,
   ...,
+  sanitise_sequences = TRUE,
   sequence_colours = sequence_colour_palettes$ggplot_style,
   background_colour = "white",
   line_wrapping = 75,
@@ -54,6 +55,13 @@ visualise_single_sequence(
   [aliases](https://ejade42.github.io/ggDNAvis/reference/ggDNAvis_aliases.md).
   If any American spellings do not work, please make a bug report at
   <https://github.com/ejade42/ggDNAvis/issues>.
+
+- sanitise_sequences:
+
+  `logical`. Whether sequences should be automatically sanitisied (any
+  non-`A`/`C`/`G`/`T`/`U` values removed with a warning, `TRUE`,
+  default) or whether these invalid characters should cause an error
+  (`FALSE`).
 
 - sequence_colours:
 

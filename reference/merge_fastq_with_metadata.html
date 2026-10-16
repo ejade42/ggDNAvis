@@ -20,7 +20,11 @@ reads will then be reversed-complemented and have quality scores reversed
 such that all reads are in the forward direction, ideal for consistent analysis or
 visualisation. The output columns are "forward_sequence" and "forward_quality".
 Calls reverse_sequence_if_needed() and reverse_quality_if_needed()
-to implement the reversing - see documentation for these functions for more details.'><meta property="og:description" content='Merge a dataframe of sequence and quality data (as produced by
+to implement the reversing - see documentation for these functions for more details.
+Likewise, "reverse_sequence" and "reverse_quality" are created by
+reverse-complementing forward reads only. This can be useful for genes that
+are on the minus strand (i.e. "forward" relative to the gene is "reverse"
+relative to the reference genome).'><meta property="og:description" content='Merge a dataframe of sequence and quality data (as produced by
 read_fastq() from an unmodified FASTQ file) with a dataframe of
 metadata, reverse-complementing sequences if required such that all
 reads are now in the forward direction.
@@ -41,7 +45,11 @@ reads will then be reversed-complemented and have quality scores reversed
 such that all reads are in the forward direction, ideal for consistent analysis or
 visualisation. The output columns are "forward_sequence" and "forward_quality".
 Calls reverse_sequence_if_needed() and reverse_quality_if_needed()
-to implement the reversing - see documentation for these functions for more details.'><meta property="og:image" content="https://ejade42.github.io/ggDNAvis/logo.png"><link rel="stylesheet" href="extra.css"><script src="extra.js"></script></head><body>
+to implement the reversing - see documentation for these functions for more details.
+Likewise, "reverse_sequence" and "reverse_quality" are created by
+reverse-complementing forward reads only. This can be useful for genes that
+are on the minus strand (i.e. "forward" relative to the gene is "reverse"
+relative to the reference genome).'><meta property="og:image" content="https://ejade42.github.io/ggDNAvis/logo.png"><link rel="stylesheet" href="extra.css"><script src="extra.js"></script></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -49,7 +57,7 @@ to implement the reversing - see documentation for these functions for more deta
 
     <a class="navbar-brand me-2" href="../index.html">ggDNAvis</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -68,6 +76,7 @@ to implement the reversing - see documentation for these functions for more deta
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-version" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Version</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-version"><li><a class="dropdown-item" href="https://ejade42.github.io/ggDNAvis/">Latest release</a></li>
     <li><a class="dropdown-item" href="https://ejade42.github.io/ggDNAvis/dev/">Latest dev</a></li>
+    <li><a class="dropdown-item" href="https://ejade42.github.io/ggDNAvis/v1.1.0/">v1.1.0</a></li>
     <li><a class="dropdown-item" href="https://ejade42.github.io/ggDNAvis/v1.0.1/">v1.0.1</a></li>
     <li><a class="dropdown-item" href="https://ejade42.github.io/ggDNAvis/v1.0.0/">v1.0.0</a></li>
     <li><a class="dropdown-item" href="https://ejade42.github.io/ggDNAvis/v0.3.2/">v0.3.2</a></li>
@@ -87,7 +96,7 @@ to implement the reversing - see documentation for these functions for more deta
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Merge FASTQ data with metadata</h1>
-      <small class="dont-index">Source: <a href="https://github.com/ejade42/ggDNAvis/blob/main/R/merge_with_metadata.R" class="external-link"><code>R/merge_with_metadata.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/ejade42/ggDNAvis/blob/release/v1.1.0/R/merge_with_metadata.R" class="external-link"><code>R/merge_with_metadata.R</code></a></small>
       <div class="d-none name"><code>merge_fastq_with_metadata.Rd</code></div>
     </div>
 
@@ -114,6 +123,10 @@ such that all reads are in the forward direction, ideal for consistent analysis 
 visualisation. The output columns are <code>"forward_sequence"</code> and <code>"forward_quality"</code>.
 Calls <code><a href="reverse_sequence_if_needed.html">reverse_sequence_if_needed()</a></code> and <code><a href="reverse_quality_if_needed.html">reverse_quality_if_needed()</a></code>
 to implement the reversing - see documentation for these functions for more details.</p>
+<p>Likewise, <code>"reverse_sequence"</code> and <code>"reverse_quality"</code> are created by
+reverse-complementing forward reads only. This can be useful for genes that
+are on the minus strand (i.e. "forward" relative to the gene is "reverse"
+relative to the reference genome).</p>
     </div>
 
     <div class="section level2">
@@ -143,7 +156,7 @@ to implement the reversing - see documentation for these functions for more deta
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p><code>dataframe</code>. A merged dataframe containing all columns from the input dataframes, as well as forward versions of sequences and qualities.</p>
+    <p><code>dataframe</code>. A merged dataframe containing all columns from the input dataframes, as well as forward-ified and reverse-ified versions of sequences and qualities.</p>
     </div>
 
     <div class="section level2">

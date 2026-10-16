@@ -42,6 +42,7 @@ visualise_methylation(
   modification_probabilities,
   sequences,
   ...,
+  sanitise_sequences = TRUE,
   low_colour = "blue",
   high_colour = "red",
   low_clamp = 0,
@@ -115,6 +116,13 @@ visualise_methylation(
   [aliases](https://ejade42.github.io/ggDNAvis/reference/ggDNAvis_aliases.md).
   If any American spellings do not work, please make a bug report at
   <https://github.com/ejade42/ggDNAvis/issues>.
+
+- sanitise_sequences:
+
+  `logical`. Whether sequences should be automatically sanitisied (any
+  non-`A`/`C`/`G`/`T`/`U` values removed with a warning, `TRUE`,
+  default) or whether these invalid characters should cause an error
+  (`FALSE`).
 
 - low_colour:
 
@@ -441,6 +449,7 @@ visualise_methylation(
     methylation_info$locations,
     methylation_info$probabilities,
     methylation_info$sequences,
+    sanitise_sequences = TRUE,
     filename = "example_vm_02.png",
     return = FALSE,
     low_colour = "white",
@@ -472,6 +481,7 @@ visualise_methylation(
     methylation_info$locations,
     methylation_info$probabilities,
     methylation_info$sequences,
+    sanitise_sequences = TRUE,
     filename = "example_vm_03.png",
     return = FALSE,
     low_colour = "white",
@@ -505,6 +515,7 @@ visualise_methylation(
     methylation_info$locations,
     methylation_info$probabilities,
     methylation_info$sequences,
+    sanitise_sequences = TRUE,
     filename = "example_vm_04.png",
     return = FALSE,
     low_colour = "cyan",
@@ -539,6 +550,7 @@ visualise_methylation(
     methylation_info$locations,
     methylation_info$probabilities,
     methylation_info$sequences,
+    sanitise_sequences = TRUE,
     filename = "example_vm_05.png",
     return = FALSE,
     low_colour = "blue",

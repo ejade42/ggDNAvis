@@ -5,10 +5,10 @@ Toggle navigation
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/pkgdown/favicon/favicon-96x96.png)
 ggDNAvis interactive suite
 
-- [Instructions](_w_6a04e87537484cffaac155f0792d63d5/#tab-8081-1)
-- [Single sequence](_w_6a04e87537484cffaac155f0792d63d5/#tab-8081-2)
-- [Multiple sequences](_w_6a04e87537484cffaac155f0792d63d5/#tab-8081-3)
-- [Methylation/modification](_w_6a04e87537484cffaac155f0792d63d5/#tab-8081-4)
+- [Instructions](_w_218bbd834278417794784ee0b06823a1/#tab-5021-1)
+- [Single sequence](_w_218bbd834278417794784ee0b06823a1/#tab-5021-2)
+- [Multiple sequences](_w_218bbd834278417794784ee0b06823a1/#tab-5021-3)
+- [Methylation/modification](_w_218bbd834278417794784ee0b06823a1/#tab-5021-4)
 - [ Citation](https://ejade42.github.io/ggDNAvis/authors.html#citation)
 - [ Source](https://github.com/ejade42/ggDNAvis)
 - [ Documentation](https://ejade42.github.io/ggDNAvis/)
@@ -76,8 +76,8 @@ Settings
 
 Input
 
-- [Text input](_w_6a04e87537484cffaac155f0792d63d5/#tab-5764-1)
-- [Upload](_w_6a04e87537484cffaac155f0792d63d5/#tab-5764-2)
+- [Text input](_w_218bbd834278417794784ee0b06823a1/#tab-9174-1)
+- [Upload](_w_218bbd834278417794784ee0b06823a1/#tab-9174-2)
 
 Sequence to visualise:
 
@@ -85,7 +85,7 @@ Upload FASTA/text:
 
 Browse...
 
-[ View file requirements](_w_6a04e87537484cffaac155f0792d63d5/#)
+[ View file requirements](_w_218bbd834278417794784ee0b06823a1/#)
 
 Layout
 
@@ -154,12 +154,12 @@ Import settings
 
 Browse...
 
-[ Export settings](_w_6a04e87537484cffaac155f0792d63d5/)
+[ Export settings](_w_218bbd834278417794784ee0b06823a1/)
 
 Export sequence text input value (will override current value when
 imported)
 
-[ Download image](_w_6a04e87537484cffaac155f0792d63d5/)
+[ Download image](_w_218bbd834278417794784ee0b06823a1/)
 
 ![](data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdib3g9IjAgMCAxNiAxNiIgY2xhc3M9ImJpIGJpLWNoZXZyb24tbGVmdCBjb2xsYXBzZS1pY29uIiBzdHlsZT0iZmlsbDpjdXJyZW50Q29sb3I7IiBhcmlhLWhpZGRlbj0idHJ1ZSIgcm9sZT0iaW1nIj48cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0xMS4zNTQgMS42NDZhLjUuNSAwIDAgMSAwIC43MDhMNS43MDcgOGw1LjY0NyA1LjY0NmEuNS41IDAgMCAxLS43MDguNzA4bC02LTZhLjUuNSAwIDAgMSAwLS43MDhsNi02YS41LjUgMCAwIDEgLjcwOCAweiIgLz48L3N2Zz4=)
 
@@ -167,12 +167,12 @@ Settings
 
 Input
 
-- [Text input](_w_6a04e87537484cffaac155f0792d63d5/#tab-7942-1)
-- [Upload](_w_6a04e87537484cffaac155f0792d63d5/#tab-7942-2)
+- [Text input](_w_218bbd834278417794784ee0b06823a1/#tab-2078-1)
+- [Upload](_w_218bbd834278417794784ee0b06823a1/#tab-2078-2)
 
 Space-separated sequences to visualise:
 
-[ View input requirements](_w_6a04e87537484cffaac155f0792d63d5/#)
+[ View input requirements](_w_218bbd834278417794784ee0b06823a1/#)
 
 Upload FASTQ:
 
@@ -182,7 +182,7 @@ Upload metadata CSV:
 
 Browse...
 
-[ View file requirements](_w_6a04e87537484cffaac155f0792d63d5/#)
+[ View file requirements](_w_218bbd834278417794784ee0b06823a1/#)
 
 Layout
 
@@ -255,12 +255,12 @@ Import settings
 
 Browse...
 
-[ Export settings](_w_6a04e87537484cffaac155f0792d63d5/)
+[ Export settings](_w_218bbd834278417794784ee0b06823a1/)
 
 Export sequence text input value (will override current value when
 imported)
 
-[ Download image](_w_6a04e87537484cffaac155f0792d63d5/)
+[ Download image](_w_218bbd834278417794784ee0b06823a1/)
 
 ![](data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdib3g9IjAgMCAxNiAxNiIgY2xhc3M9ImJpIGJpLWNoZXZyb24tbGVmdCBjb2xsYXBzZS1pY29uIiBzdHlsZT0iZmlsbDpjdXJyZW50Q29sb3I7IiBhcmlhLWhpZGRlbj0idHJ1ZSIgcm9sZT0iaW1nIj48cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0xMS4zNTQgMS42NDZhLjUuNSAwIDAgMSAwIC43MDhMNS43MDcgOGw1LjY0NyA1LjY0NmEuNS41IDAgMCAxLS43MDguNzA4bC02LTZhLjUuNSAwIDAgMSAwLS43MDhsNi02YS41LjUgMCAwIDEgLjcwOCAweiIgLz48L3N2Zz4=)
 
@@ -268,8 +268,8 @@ Settings
 
 Input
 
-- [Text input](_w_6a04e87537484cffaac155f0792d63d5/#tab-1403-1)
-- [Upload](_w_6a04e87537484cffaac155f0792d63d5/#tab-1403-2)
+- [Text input](_w_218bbd834278417794784ee0b06823a1/#tab-4590-1)
+- [Upload](_w_218bbd834278417794784ee0b06823a1/#tab-4590-2)
 
 Space-separated sequences to visualise:
 
@@ -277,7 +277,7 @@ Space-separated lists of modification locations:
 
 Space-separated lists of modification probabilities
 
-[ View input requirements](_w_6a04e87537484cffaac155f0792d63d5/#)
+[ View input requirements](_w_218bbd834278417794784ee0b06823a1/#)
 
 Upload modified FASTQ:
 
@@ -287,7 +287,7 @@ Upload metadata CSV:
 
 Browse...
 
-[ View file requirements](_w_6a04e87537484cffaac155f0792d63d5/#)
+[ View file requirements](_w_218bbd834278417794784ee0b06823a1/#)
 
 Layout
 
@@ -296,7 +296,7 @@ Low probability clamping value:
 High probability clamping value:
 
 [ View probability clamping
-explanation](_w_6a04e87537484cffaac155f0792d63d5/#)
+explanation](_w_218bbd834278417794784ee0b06823a1/#)
 
 Margin:
 
@@ -317,9 +317,9 @@ Sequence text colour:
 Index annotation colour:
 
 - [Unified outline
-  colour](_w_6a04e87537484cffaac155f0792d63d5/#tab-1103-1)
+  colour](_w_218bbd834278417794784ee0b06823a1/#tab-6749-1)
 - [Split outline
-  colours](_w_6a04e87537484cffaac155f0792d63d5/#tab-1103-2)
+  colours](_w_218bbd834278417794784ee0b06823a1/#tab-6749-2)
 
 Outline colour:
 
@@ -356,7 +356,7 @@ Minimum value for scaling probabilities:
 Maximum value for scaling probabilities:
 
 [ View probability scaling
-explanation](_w_6a04e87537484cffaac155f0792d63d5/#)
+explanation](_w_218bbd834278417794784ee0b06823a1/#)
 
 Index annotations
 
@@ -379,9 +379,9 @@ Always annotate last base
 Outlines
 
 - [Unified outline
-  style](_w_6a04e87537484cffaac155f0792d63d5/#tab-7197-1)
+  style](_w_218bbd834278417794784ee0b06823a1/#tab-6476-1)
 - [Split outline
-  styles](_w_6a04e87537484cffaac155f0792d63d5/#tab-7197-2)
+  styles](_w_218bbd834278417794784ee0b06823a1/#tab-6476-2)
 
 Outline thickness:
 
@@ -435,12 +435,12 @@ Import settings
 
 Browse...
 
-[ Export settings](_w_6a04e87537484cffaac155f0792d63d5/)
+[ Export settings](_w_218bbd834278417794784ee0b06823a1/)
 
 Export sequence / locations / probabilities text input value (will
 override current value when imported)
 
-[ Download main image](_w_6a04e87537484cffaac155f0792d63d5/) [ Download
-scalebar](_w_6a04e87537484cffaac155f0792d63d5/)
+[ Download main image](_w_218bbd834278417794784ee0b06823a1/) [ Download
+scalebar](_w_218bbd834278417794784ee0b06823a1/)
 
 ![](data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdib3g9IjAgMCAxNiAxNiIgY2xhc3M9ImJpIGJpLWNoZXZyb24tbGVmdCBjb2xsYXBzZS1pY29uIiBzdHlsZT0iZmlsbDpjdXJyZW50Q29sb3I7IiBhcmlhLWhpZGRlbj0idHJ1ZSIgcm9sZT0iaW1nIj48cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0xMS4zNTQgMS42NDZhLjUuNSAwIDAgMSAwIC43MDhMNS43MDcgOGw1LjY0NyA1LjY0NmEuNS41IDAgMCAxLS43MDguNzA4bC02LTZhLjUuNSAwIDAgMSAwLS43MDhsNi02YS41LjUgMCAwIDEgLjcwOCAweiIgLz48L3N2Zz4=)

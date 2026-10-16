@@ -89,6 +89,11 @@ Small, widely used helper functions
 
   Reverse complement a DNA/RNA sequence (generic `ggDNAvis` helper)
 
+- [`sanitise_sequences_vector()`](https://ejade42.github.io/ggDNAvis/reference/sanitise_sequences_vector.md)
+  :
+
+  Sanitise a sequence vector (generic `ggDNAvis` helper)
+
 - [`debug_join_vector_num()`](https://ejade42.github.io/ggDNAvis/reference/debug_join_vector_num.md)
   :
 
@@ -189,6 +194,13 @@ they are available if needed)
 
   Insert blank items at specified indices in a vector
   ([`visualise_many_sequences()`](https://ejade42.github.io/ggDNAvis/reference/visualise_many_sequences.md)
+  helper)
+
+- [`invert_direction_vector()`](https://ejade42.github.io/ggDNAvis/reference/invert_direction_vector.md)
+  :
+
+  Invert direction vector
+  ([`merge_methylation_with_metadata()`](https://ejade42.github.io/ggDNAvis/reference/merge_methylation_with_metadata.md)
   helper)
 
 - [`rasterise_index_annotations()`](https://ejade42.github.io/ggDNAvis/reference/rasterise_index_annotations.md)
