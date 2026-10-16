@@ -12,7 +12,7 @@
 
     * This can be useful when dealing with genes on the minus strand, where the local `"forward"` direction relative to the gene is the global `"reverse"` direction relative to the reference genome.
 
-* Added `invert_direction_vector()` helper function.
+* Added `invert_direction_vector()` and `sanitise_sequences_vector()` helper functions.
 
 * Minor tweaks to reversing options manuscript figure.
 

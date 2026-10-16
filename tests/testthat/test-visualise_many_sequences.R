@@ -261,6 +261,19 @@ test_that("forcing first & last base annotation works, not full lines", {
                                        metric = "MAE"))$distortion, acceptable_distortion)
 })
 
+test_that("sequence sanitisation works", {
+    filename <- "visualise_many_sequences_test_29"
+    sequences <- c("ACGAGacgau fdg 64375856456 76 %^@&%$^#&*(#$ ACGHAC", "HDJFIGY@*GYIEFHAGIGF*SUUD*&G@UIGB#IFG#I&*#FUIGS")
+    expect_warning(visualise_many_sequences(sequences, filename = paste0(root, filename, ".png"), index_annotation_interval = 4, index_annotation_above = FALSE, index_annotation_lines = 2),
+                   class = "invalid_sequence_sanitised")
+    expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
+                                       image_read(paste0(reference, filename, ".png")),
+                                       metric = "MAE"))$distortion, acceptable_distortion)
+
+    ## turn sanitisation off here
+    expect_error(visualise_many_sequences(sequences, index_annotation_interval = 4, index_annotation_above = FALSE, index_annotation_lines = 2, sanitize_sequences = FALSE), class = "argument_value_or_type")
+})
+
 ## Test fail cases/invalid arguments to main multiple sequence visualisation function
 test_that("single sequence visualisation fails when arguments are invalid", {
     bad_param_value_for_num <- list("hi", TRUE, NA, NULL)
@@ -294,6 +307,7 @@ test_that("single sequence visualisation fails when arguments are invalid", {
     bad_param_value_for_logical <- list(1, 1.5, -1, "hi", c(TRUE, FALSE), NA, NULL)
     for (param in bad_param_value_for_logical) {
         expect_error(visualise_many_sequences(sequence_vector_1, return = param), class = "argument_value_or_type")
+        expect_error(visualise_many_sequences(sequence_vector_1, sanitize_sequences = param), class = "argument_value_or_type")
         expect_error(visualise_many_sequences(sequence_vector_1, index_annotations_above = param), class = "argument_value_or_type")
         expect_error(visualise_many_sequences(sequence_vector_1, index_annotation_full_line = param), class = "argument_value_or_type")
         expect_error(visualise_many_sequences(sequence_vector_1, index_annotation_always_first_base = param), class = "argument_value_or_type")

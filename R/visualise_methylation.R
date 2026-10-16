@@ -364,9 +364,7 @@ visualise_methylation <- function(
 
 
     ## Sanitise sequences if the setting is on
-    if (sanitise_sequences) {
-        sequences <- gsub("[^ACGTU]", "", sequences, ignore.case = TRUE)
-    }
+    if (sanitise_sequences) {sequences <- sanitise_sequences_vector(sequences)}
 
     ## Now check all sequences are valid
     valid_seq <- list(sequences = sequences)

@@ -253,7 +253,8 @@ test_that("sequence sanitisation works", {
         locations = c("", "2,4"),
         probabilities = c("", "3,197")
     )
-    visualise_methylation(d$locations, d$probabilities, d$sequences, filename = paste0(root, filename, ".png"), sequence_text_type = "sequence", index_annotation_interval = 4, index_annotation_above = FALSE, index_annotation_lines = 2)
+    expect_warning(visualise_methylation(d$locations, d$probabilities, d$sequences, filename = paste0(root, filename, ".png"), sequence_text_type = "sequence", index_annotation_interval = 4, index_annotation_above = FALSE, index_annotation_lines = 2),
+                   class = "invalid_sequence_sanitised")
     expect_lt(attributes(image_compare(image_read(paste0(root, filename, ".png")),
                                        image_read(paste0(reference, filename, ".png")),
                                        metric = "MAE"))$distortion, acceptable_distortion)

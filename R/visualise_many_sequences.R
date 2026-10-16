@@ -43,6 +43,7 @@
 #' ## Export while customising appearance
 #' visualise_many_sequences(
 #'     sequences,
+#'     sanitise_sequences = TRUE,
 #'     filename = "example_vms_02.png",
 #'     return = FALSE,
 #'     sequence_colours = sequence_colour_palettes$bright_pale,
@@ -63,10 +64,14 @@
 #' grid::grid.raster(image)
 #' }
 #'
+#' ## By default (sanitise_sequences = TRUE), any
+#' non-ACGTU characters in provided sequences are removed.
+#'
 #' @export
 visualise_many_sequences <- function(
     sequences_vector,
     ...,
+    sanitise_sequences = TRUE,
     sequence_colours = sequence_colour_palettes$ggplot_style,
     background_colour = "white",
     margin = 0.5,
@@ -106,19 +111,19 @@ visualise_many_sequences <- function(
     ## Validate arguments
     ## ---------------------------------------------------------------------
     monitor_time <- monitor(monitor_performance, start_time, monitor_time, "validating arguments")
-    not_null <- list(sequences_vector = sequences_vector, sequence_colours = sequence_colours, background_colour = background_colour, margin = margin, sequence_text_colour = sequence_text_colour, sequence_text_size = sequence_text_size, index_annotation_colour = index_annotation_colour, index_annotation_size = index_annotation_size, index_annotation_interval = index_annotation_interval, index_annotations_above = index_annotations_above, index_annotation_vertical_position = index_annotation_vertical_position, index_annotation_full_line = index_annotation_full_line, index_annotation_always_first_base = index_annotation_always_first_base, index_annotation_always_last_base = index_annotation_always_last_base, outline_colour = outline_colour, outline_linewidth = outline_linewidth, outline_join = outline_join, return = return, force_raster = force_raster, filename = filename, pixels_per_base = pixels_per_base)
+    not_null <- list(sanitise_sequences = sanitise_sequences, sequences_vector = sequences_vector, sequence_colours = sequence_colours, background_colour = background_colour, margin = margin, sequence_text_colour = sequence_text_colour, sequence_text_size = sequence_text_size, index_annotation_colour = index_annotation_colour, index_annotation_size = index_annotation_size, index_annotation_interval = index_annotation_interval, index_annotations_above = index_annotations_above, index_annotation_vertical_position = index_annotation_vertical_position, index_annotation_full_line = index_annotation_full_line, index_annotation_always_first_base = index_annotation_always_first_base, index_annotation_always_last_base = index_annotation_always_last_base, outline_colour = outline_colour, outline_linewidth = outline_linewidth, outline_join = outline_join, return = return, force_raster = force_raster, filename = filename, pixels_per_base = pixels_per_base)
     for (argument in names(not_null)) {
         if (any(is.null(not_null[[argument]]))) {bad_arg(argument, not_null, "must not be NULL.")}
     }
     not_null <- NULL
 
-    length_1 <- list(background_colour = background_colour, margin = margin, sequence_text_colour = sequence_text_colour, sequence_text_size = sequence_text_size, index_annotation_colour = index_annotation_colour, index_annotation_size = index_annotation_size, index_annotation_interval = index_annotation_interval, index_annotations_above = index_annotations_above, index_annotation_vertical_position = index_annotation_vertical_position, index_annotation_full_line = index_annotation_full_line, index_annotation_always_first_base = index_annotation_always_first_base, index_annotation_always_last_base = index_annotation_always_last_base, outline_colour = outline_colour, outline_linewidth = outline_linewidth, outline_join = outline_join, return = return, filename = filename, force_raster = force_raster, pixels_per_base = pixels_per_base)
+    length_1 <- list(sanitise_sequences = sanitise_sequences, background_colour = background_colour, margin = margin, sequence_text_colour = sequence_text_colour, sequence_text_size = sequence_text_size, index_annotation_colour = index_annotation_colour, index_annotation_size = index_annotation_size, index_annotation_interval = index_annotation_interval, index_annotations_above = index_annotations_above, index_annotation_vertical_position = index_annotation_vertical_position, index_annotation_full_line = index_annotation_full_line, index_annotation_always_first_base = index_annotation_always_first_base, index_annotation_always_last_base = index_annotation_always_last_base, outline_colour = outline_colour, outline_linewidth = outline_linewidth, outline_join = outline_join, return = return, filename = filename, force_raster = force_raster, pixels_per_base = pixels_per_base)
     for (argument in names(length_1)) {
         if (length(length_1[[argument]]) != 1) {bad_arg(argument, length_1, "must have length 1.")}
     }
     length_1 <- NULL
 
-    not_na <- list(sequences_vector = sequences_vector, sequence_colours = sequence_colours, background_colour = background_colour, margin = margin, sequence_text_colour = sequence_text_colour, sequence_text_size = sequence_text_size, index_annotation_colour = index_annotation_colour, index_annotation_size = index_annotation_size, index_annotation_interval = index_annotation_interval, index_annotations_above = index_annotations_above, index_annotation_vertical_position = index_annotation_vertical_position, index_annotation_full_line = index_annotation_full_line, index_annotation_always_first_base = index_annotation_always_first_base, index_annotation_always_last_base = index_annotation_always_last_base, outline_colour = outline_colour, outline_linewidth = outline_linewidth, outline_join = outline_join, return = return, force_raster = force_raster, pixels_per_base = pixels_per_base)
+    not_na <- list(sanitise_sequences = sanitise_sequences, sequences_vector = sequences_vector, sequence_colours = sequence_colours, background_colour = background_colour, margin = margin, sequence_text_colour = sequence_text_colour, sequence_text_size = sequence_text_size, index_annotation_colour = index_annotation_colour, index_annotation_size = index_annotation_size, index_annotation_interval = index_annotation_interval, index_annotations_above = index_annotations_above, index_annotation_vertical_position = index_annotation_vertical_position, index_annotation_full_line = index_annotation_full_line, index_annotation_always_first_base = index_annotation_always_first_base, index_annotation_always_last_base = index_annotation_always_last_base, outline_colour = outline_colour, outline_linewidth = outline_linewidth, outline_join = outline_join, return = return, force_raster = force_raster, pixels_per_base = pixels_per_base)
     for (argument in names(not_na)) {
         if (any(is.na(not_na[[argument]]))) {bad_arg(argument, not_na, "must not be NA.")}
     }
@@ -157,7 +162,7 @@ visualise_many_sequences <- function(
     }
     pos <- NULL
 
-    bools <- list(return = return, index_annotations_above = index_annotations_above, index_annotation_full_line = index_annotation_full_line, index_annotation_always_first_base = index_annotation_always_first_base, index_annotation_always_last_base = index_annotation_always_last_base, force_raster = force_raster)
+    bools <- list(sanitise_sequences = sanitise_sequences, return = return, index_annotations_above = index_annotations_above, index_annotation_full_line = index_annotation_full_line, index_annotation_always_first_base = index_annotation_always_first_base, index_annotation_always_last_base = index_annotation_always_last_base, force_raster = force_raster)
     for (argument in names(bools)) {
         if (!is.logical(bools[[argument]])) {bad_arg(argument, bools, "must be logical/boolean.")}
     }
@@ -205,6 +210,17 @@ visualise_many_sequences <- function(
         cli_alert_info(paste0("Automatically removing out-of-range values of index_annotation_lines.\nLength of input sequences vector: ", length(sequences_vector), "\nIndex lines before: ", paste(index_annotation_lines, collapse = ", "), "\nIndex lines after: ", paste(inrange_index_annotation_lines, collapse = ", ")), class = "sanitising_index_annotation_lines")
         index_annotation_lines <- inrange_index_annotation_lines
     }
+
+    ## Sanitise sequences if the setting is on
+    if (sanitise_sequences) {sequences_vector <- sanitise_sequences_vector(sequences_vector)}
+
+    ## Now check all sequences are valid
+    valid_seq <- list(sequences_vector = sequences_vector)
+    for (argument in names(valid_seq)) {
+        if (!is.character(valid_seq[[argument]])) {bad_arg(argument, valid_seq, "must be a character vector.")}
+        if (any(!(toupper(strsplit(paste(sequences_vector, collapse = ""), "")[[1]]) %in% c("A", "C", "G", "T", "U")))) {bad_arg(argument, valid_seq, "must consist only of A/C/G/T/U.")}
+    }
+    valid_seq <- NULL
     ## ---------------------------------------------------------------------
 
 

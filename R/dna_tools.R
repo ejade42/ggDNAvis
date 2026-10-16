@@ -673,6 +673,41 @@ convert_sequence_to_numbers <- function(sequence, length = NA) {
 }
 
 
+#' Sanitise a sequence vector (generic `ggDNAvis` helper)
+#'
+#' @description
+#' `sanitize_sequences_vector()` is an alias for `sanitise_sequences_vector()` - see [aliases].
+#'
+#' Takes a character vector of sequences, and removes any
+#' non-`ACGTU` characters (case insensitive).
+#'
+#' @param sequences `character vector`. A character vector, e.g. `c("ACGTA 5%h", "uXuG", "UcA67UcT")`, from which any non-`ACGTU` characters will be removed.
+#' @param warn_on_removal `logical`. Whether a warning should be shown when characters are removed. Default: `TRUE`.
+#'
+#' @examples
+#' sanitise_sequences_vector(c("ACGTA 5%h", "uXuG", "UcA67UcT"))
+#' sanitise_sequences_vector(c("ACGTA 5%h", "uXuG", "UcA67UcT"), warn_on_removal = FALSE)
+#'
+#' @export
+sanitise_sequences_vector <- function(sequences, warn_on_removal = TRUE) {
+    ## Validate arguments
+    if (!is.character(sequences)) {
+        bad_arg("sequences", list(sequences = sequences), "must be a character vector.")
+    }
+    if (any(is.na(warn_on_removal)) || any(is.null(warn_on_removal)) || !is.logical(warn_on_removal) || length(warn_on_removal) != 1) {
+        bad_arg("warn_on_removal", list(warn_on_removal = warn_on_removal), "must be a single logical/Boolean value.")
+    }
+
+    ## Actual function
+    removed <- paste0(gsub("[ACGTU]", "", sequences, ignore.case = TRUE), collapse = "")
+    if (nchar(removed) > 0) {
+        if (warn_on_removal) {warn(paste0("Invalid sequence characters removed: ", removed, ""), class = "invalid_sequence_sanitised")}
+        sequences <- gsub("[^ACGTU]", "", sequences, ignore.case = TRUE)
+    }
+    return(sequences)
+}
+
+
 
 #' Rasterise a vector of sequences into a numerical dataframe for ggplotting (generic `ggDNAvis` helper)
 #'
@@ -1177,3 +1212,8 @@ rasterize_matrix <- rasterise_matrix
 #' @usage NULL
 #' @export
 rasterize_index_annotations <- rasterise_index_annotations
+
+#' @rdname sanitise_sequences_vector
+#' @usage NULL
+#' @export
+sanitize_sequences_vector <- sanitise_sequences_vector

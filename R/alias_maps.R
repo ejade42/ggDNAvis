@@ -16,6 +16,7 @@
 
         ## visualise_many_sequences.R
         visualise_many_sequences = list(
+            sanitise_sequences = list(default = TRUE, aliases = c("sanitize_sequences", "sanitize_sequence", "sanitise_sequence")),
             sequence_colours = list(default = sequence_colour_palettes$ggplot_style, aliases = c("sequence_colors", "sequence_cols")),
             background_colour = list(default = "white", aliases = c("background_color", "background_col")),
             sequence_text_colour = list(default = "black", aliases = c("sequence_text_color", "sequence_text_col")),
@@ -30,7 +31,7 @@
 
         ## visualise_methylation.R
         visualise_methylation = list(
-            sanitise_sequences = list(default = TRUE, aliases = c("sanitize_sequences")),
+            sanitise_sequences = list(default = TRUE, aliases = c("sanitize_sequences", "sanitize_sequence", "sanitise_sequence")),
             low_colour = list(default = "blue", aliases = c("low_color", "low_col")),
             high_colour = list(default = "red", aliases = c("high_color", "high_col")),
             background_colour = list(default = "white", aliases = c("background_color", "background_col")),
@@ -62,6 +63,7 @@
 
         ## visualise_single_sequence.R
         visualise_single_sequence = list(
+            sanitise_sequences = list(default = TRUE, aliases = c("sanitize_sequences", "sanitize_sequence", "sanitise_sequence")),
             sequence_colours = list(default = sequence_colour_palettes$ggplot_style, aliases = c("sequence_colors", "sequence_cols")),
             background_colour = list(default = "white", aliases = c("background_color", "background_col")),
             sequence_text_colour = list(default = "black", aliases = c("sequence_text_color", "sequence_text_col")),

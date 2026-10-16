@@ -50,6 +50,7 @@ reference:
   - string_to_vector
   - vector_to_string
   - reverse_complement
+  - sanitise_sequences_vector
   - debug_join_vector_num
   - debug_join_vector_str
   - bad_arg
