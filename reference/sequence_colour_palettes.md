@@ -79,7 +79,11 @@ visualise_single_sequence(
     sequence_colours = sequence_colour_palettes$ggplot_style,
     index_annotation_interval = 0
 )
-#> Error in get(argument, envir = target_env): object 'sanitise_sequences' not found
+#> Warning: Disabling index annotations via index_annotation_interval = 0 or index_annotation_size = 0 overrides the index_annotation_always_first_base setting.
+#> If you want the first base in each line to be annotated but no other bases, set index_annotation_interval greater than line_wrapping.
+#> Warning: Disabling index annotations via index_annotation_interval = 0 or index_annotation_size = 0 overrides the index_annotation_always_last_base setting.
+#> If you want the last base in each line to be annotated but no other bases, set index_annotation_interval greater than line_wrapping.
+
 
 ## bright_pale:
 visualise_single_sequence(
@@ -87,7 +91,11 @@ visualise_single_sequence(
     sequence_colours = sequence_colour_palettes$bright_pale,
     index_annotation_interval = 0
 )
-#> Error in get(argument, envir = target_env): object 'sanitise_sequences' not found
+#> Warning: Disabling index annotations via index_annotation_interval = 0 or index_annotation_size = 0 overrides the index_annotation_always_first_base setting.
+#> If you want the first base in each line to be annotated but no other bases, set index_annotation_interval greater than line_wrapping.
+#> Warning: Disabling index annotations via index_annotation_interval = 0 or index_annotation_size = 0 overrides the index_annotation_always_last_base setting.
+#> If you want the last base in each line to be annotated but no other bases, set index_annotation_interval greater than line_wrapping.
+
 
 ## bright_pale2:
 visualise_single_sequence(
@@ -95,7 +103,11 @@ visualise_single_sequence(
     sequence_colours = sequence_colour_palettes$bright_pale2,
     index_annotation_interval = 0
 )
-#> Error in get(argument, envir = target_env): object 'sanitise_sequences' not found
+#> Warning: Disabling index annotations via index_annotation_interval = 0 or index_annotation_size = 0 overrides the index_annotation_always_first_base setting.
+#> If you want the first base in each line to be annotated but no other bases, set index_annotation_interval greater than line_wrapping.
+#> Warning: Disabling index annotations via index_annotation_interval = 0 or index_annotation_size = 0 overrides the index_annotation_always_last_base setting.
+#> If you want the last base in each line to be annotated but no other bases, set index_annotation_interval greater than line_wrapping.
+
 
 ## bright_deep:
 visualise_single_sequence(
@@ -104,7 +116,11 @@ visualise_single_sequence(
     sequence_text_colour = "white",
     index_annotation_interval = 0
 )
-#> Error in get(argument, envir = target_env): object 'sanitise_sequences' not found
+#> Warning: Disabling index annotations via index_annotation_interval = 0 or index_annotation_size = 0 overrides the index_annotation_always_first_base setting.
+#> If you want the first base in each line to be annotated but no other bases, set index_annotation_interval greater than line_wrapping.
+#> Warning: Disabling index annotations via index_annotation_interval = 0 or index_annotation_size = 0 overrides the index_annotation_always_last_base setting.
+#> If you want the last base in each line to be annotated but no other bases, set index_annotation_interval greater than line_wrapping.
+
 
 ## sanger:
 visualise_single_sequence(
@@ -113,7 +129,11 @@ visualise_single_sequence(
     sequence_text_colour = "white",
     index_annotation_interval = 0
 )
-#> Error in get(argument, envir = target_env): object 'sanitise_sequences' not found
+#> Warning: Disabling index annotations via index_annotation_interval = 0 or index_annotation_size = 0 overrides the index_annotation_always_first_base setting.
+#> If you want the first base in each line to be annotated but no other bases, set index_annotation_interval greater than line_wrapping.
+#> Warning: Disabling index annotations via index_annotation_interval = 0 or index_annotation_size = 0 overrides the index_annotation_always_last_base setting.
+#> If you want the last base in each line to be annotated but no other bases, set index_annotation_interval greater than line_wrapping.
+
 
 ## accessible:
 visualise_single_sequence(
@@ -122,6 +142,10 @@ visualise_single_sequence(
     sequence_text_colour = "black",
     index_annotation_interval = 0
 )
-#> Error in get(argument, envir = target_env): object 'sanitise_sequences' not found
+#> Warning: Disabling index annotations via index_annotation_interval = 0 or index_annotation_size = 0 overrides the index_annotation_always_first_base setting.
+#> If you want the first base in each line to be annotated but no other bases, set index_annotation_interval greater than line_wrapping.
+#> Warning: Disabling index annotations via index_annotation_interval = 0 or index_annotation_size = 0 overrides the index_annotation_always_last_base setting.
+#> If you want the last base in each line to be annotated but no other bases, set index_annotation_interval greater than line_wrapping.
+
 
 ```

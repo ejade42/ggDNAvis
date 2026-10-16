@@ -30,7 +30,7 @@ sanitise_sequences_vector(sequences, warn_on_removal = TRUE)
 
 ``` r
 sanitise_sequences_vector(c("ACGTA 5%h", "uXuG", "UcA67UcT"))
-#> Warning: Invalid sequence characters removed:  5%hX67
+#> Warning: Invalid sequence characters removed: ' 5%hX67'
 #> [1] "ACGTA"  "uuG"    "UcAUcT"
 sanitise_sequences_vector(c("ACGTA 5%h", "uXuG", "UcA67UcT"), warn_on_removal = FALSE)
 #> [1] "ACGTA"  "uuG"    "UcAUcT"

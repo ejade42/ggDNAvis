@@ -120,8 +120,9 @@ visualise_methylation(
 - sanitise_sequences:
 
   `logical`. Whether sequences should be automatically sanitisied (any
-  non-`A`/`C`/`G`/`T`/`U` values removed, `TRUE`, default) or whether
-  these invalid characters should cause an error (`FALSE`).
+  non-`A`/`C`/`G`/`T`/`U` values removed with a warning, `TRUE`,
+  default) or whether these invalid characters should cause an error
+  (`FALSE`).
 
 - low_colour:
 

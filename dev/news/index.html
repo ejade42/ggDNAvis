@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ggDNAvis</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1.9011</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1.9012</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -59,6 +59,10 @@
 <li>
 <p>Made <code><a href="../reference/merge_fastq_with_metadata.html">merge_fastq_with_metadata()</a></code> and <code><a href="../reference/merge_methylation_with_metadata.html">merge_methylation_with_metadata()</a></code> now create <code>"reverse_sequence"</code> (and quality, location, probability) columns as well as <code>"forward_sequence"</code> columns.</p>
 <ul><li>This can be useful when dealing with genes on the minus strand, where the local <code>"forward"</code> direction relative to the gene is the global <code>"reverse"</code> direction relative to the reference genome.</li>
+</ul></li>
+<li>
+<p>Added <code>sanitise_sequences</code> (and aliases for American and singular spellings) Boolean argument to <code><a href="../reference/visualise_single_sequence.html">visualise_single_sequence()</a></code>, <code><a href="../reference/visualise_many_sequences.html">visualise_many_sequences()</a></code>, and <code><a href="../reference/visualise_methylation.html">visualise_methylation()</a></code>.</p>
+<ul><li>This removes non-<code>ACGTU</code> characters (case insensitive) with a warning, whereas previously invalid characters gave an error.</li>
 </ul></li>
 <li><p>Added <code><a href="../reference/invert_direction_vector.html">invert_direction_vector()</a></code> and <code><a href="../reference/sanitise_sequences_vector.html">sanitise_sequences_vector()</a></code> helper functions.</p></li>
 <li><p>Minor tweaks to reversing options manuscript figure.</p></li>

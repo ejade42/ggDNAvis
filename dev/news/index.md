@@ -29,6 +29,16 @@
     where the local `"forward"` direction relative to the gene is the
     global `"reverse"` direction relative to the reference genome.
 
+- Added `sanitise_sequences` (and aliases for American and singular
+  spellings) Boolean argument to
+  [`visualise_single_sequence()`](https://ejade42.github.io/ggDNAvis/reference/visualise_single_sequence.md),
+  [`visualise_many_sequences()`](https://ejade42.github.io/ggDNAvis/reference/visualise_many_sequences.md),
+  and
+  [`visualise_methylation()`](https://ejade42.github.io/ggDNAvis/reference/visualise_methylation.md).
+
+  - This removes non-`ACGTU` characters (case insensitive) with a
+    warning, whereas previously invalid characters gave an error.
+
 - Added
   [`invert_direction_vector()`](https://ejade42.github.io/ggDNAvis/reference/invert_direction_vector.md)
   and

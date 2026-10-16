@@ -15,6 +15,7 @@ pixels per square when exported are configurable.
 visualise_single_sequence(
   sequence,
   ...,
+  sanitise_sequences = TRUE,
   sequence_colours = sequence_colour_palettes$ggplot_style,
   background_colour = "white",
   line_wrapping = 75,
@@ -54,6 +55,13 @@ visualise_single_sequence(
   [aliases](https://ejade42.github.io/ggDNAvis/reference/ggDNAvis_aliases.md).
   If any American spellings do not work, please make a bug report at
   <https://github.com/ejade42/ggDNAvis/issues>.
+
+- sanitise_sequences:
+
+  `logical`. Whether sequences should be automatically sanitisied (any
+  non-`A`/`C`/`G`/`T`/`U` values removed with a warning, `TRUE`,
+  default) or whether these invalid characters should cause an error
+  (`FALSE`).
 
 - sequence_colours:
 
@@ -258,7 +266,7 @@ sequence <- paste(c(rep("GGC", 72), rep("GGAGGAGGCGGC", 15)), collapse = "")
 ## Visualise with all defaults
 ## This looks ugly because it isn't at the right scale/aspect ratio
 visualise_single_sequence(sequence)
-#> Error in get(argument, envir = target_env): object 'sanitise_sequences' not found
+
 
 ## Export with all defaults rather than returning
 visualise_single_sequence(
@@ -266,14 +274,12 @@ visualise_single_sequence(
     filename = "example_vss_01.png",
     return = FALSE
 )
-#> Error in get(argument, envir = target_env): object 'sanitise_sequences' not found
 ## View exported image
 image <- png::readPNG("example_vss_01.png")
-#> Error in png::readPNG("example_vss_01.png"): unable to open example_vss_01.png
 unlink("example_vss_01.png")
 grid::grid.newpage()
 grid::grid.raster(image)
-#> Error in UseMethod("as.raster"): no applicable method for 'as.raster' applied to an object of class "function"
+
 
 ## Export while customising appearance
 visualise_single_sequence(
@@ -291,13 +297,11 @@ visualise_single_sequence(
     index_annotation_always_last_base = FALSE,
     margin = 0
 )
-#> Error in get(argument, envir = target_env): object 'sanitise_sequences' not found
 ## View exported image
 image <- png::readPNG("example_vss_02.png")
-#> Error in png::readPNG("example_vss_02.png"): unable to open example_vss_02.png
 unlink("example_vss_02.png")
 grid::grid.newpage()
 grid::grid.raster(image)
-#> Error in UseMethod("as.raster"): no applicable method for 'as.raster' applied to an object of class "function"
+
 # }
 ```

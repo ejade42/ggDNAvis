@@ -65,8 +65,9 @@ visualise_many_sequences(
 - sanitise_sequences:
 
   `logical`. Whether sequences should be automatically sanitisied (any
-  non-`A`/`C`/`G`/`T`/`U` values removed, `TRUE`, default) or whether
-  these invalid characters should cause an error (`FALSE`).
+  non-`A`/`C`/`G`/`T`/`U` values removed with a warning, `TRUE`,
+  default) or whether these invalid characters should cause an error
+  (`FALSE`).
 
 - sequence_colours:
 
@@ -337,7 +338,7 @@ visualise_many_sequences(
 #> Length of input sequences vector: 2
 #> Index lines before: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51
 #> Index lines after: 1, 2
-#> Warning: Invalid sequence characters removed: %^7567XXX
+#> Warning: Invalid sequence characters removed: '%^7567XXX'
 ## View exported image
 image <- png::readPNG("example_vms_03.png")
 unlink("example_vms_03.png")
