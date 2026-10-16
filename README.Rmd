@@ -60,7 +60,7 @@ install.packages("ggDNAvis")
 devtools::install_github("ejade42/ggDNAvis")
 
 ## Specific version from github
-devtools::install_github("ejade42/ggDNAvis", ref = "v1.0.1")
+devtools::install_github("ejade42/ggDNAvis", ref = "v1.1.0")
 ```
 
 Throughout this manual, only `ggDNAvis`, `dplyr`, and `ggplot2` are loaded. The following chunk provides setup for rendering this README page and should NOT be copied verbatim. If you are trying to work through the examples, use the alternative setup chunk below.
