@@ -108,7 +108,7 @@ cat("Loaded ggDNAvis version is:", as.character(packageVersion("ggDNAvis")))
 ```
 
 ``` R
-## Loaded ggDNAvis version is: 1.0.1.9007
+## Loaded ggDNAvis version is: 1.0.1.9012
 ```
 
 If you are working through the examples, use this setup chunk instead:
@@ -183,6 +183,7 @@ sequence <- "GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCG
 ## Usually it's fine to leave most of these as defaults
 visualise_single_sequence(
     sequence = sequence,
+    sanitise_sequences = TRUE,
     sequence_colours = sequence_colour_palettes$bright_pale,
     background_colour = "white",
     line_wrapping = 60,
@@ -237,6 +238,7 @@ sequences_for_visualisation <- extract_and_sort_sequences(
 ## Usually it's fine to leave most of these as defaults
 visualise_many_sequences(
     sequences_vector = sequences_for_visualisation,
+    sanitise_sequences = TRUE,
     sequence_colours = sequence_colour_palettes$bright_deep,
     background_colour = "white",
     margin = 0.5,
@@ -298,6 +300,7 @@ visualise_methylation(
     modification_locations     = methylation_for_visualisation$locations,
     modification_probabilities = methylation_for_visualisation$probabilities,
     sequences                  = methylation_for_visualisation$sequences,
+    sanitise_sequences = TRUE,
     low_colour = "blue",
     high_colour = "red",
     low_clamp = 0.1*255,
@@ -341,6 +344,7 @@ visualise_methylation(
     modification_locations     = methylation_for_visualisation$locations,
     modification_probabilities = methylation_for_visualisation$probabilities,
     sequences                  = methylation_for_visualisation$sequences,
+    sanitise_sequences = TRUE,
     low_colour = "blue",
     high_colour = "red",
     low_clamp = 0.1*255,
@@ -385,6 +389,7 @@ visualise_methylation(
     modification_locations     = methylation_for_visualisation$locations,
     modification_probabilities = methylation_for_visualisation$probabilities,
     sequences                  = methylation_for_visualisation$sequences,
+    sanitise_sequences = TRUE,
     low_colour = "blue",
     high_colour = "red",
     low_clamp = 0.1*255,
@@ -431,6 +436,7 @@ visualise_methylation(
     modification_locations     = methylation_for_visualisation$locations,
     modification_probabilities = methylation_for_visualisation$probabilities,
     sequences                  = methylation_for_visualisation$sequences,
+    sanitise_sequences = TRUE,
     low_colour = "blue",
     high_colour = "red",
     low_clamp = 0.1*255,
@@ -1141,8 +1147,8 @@ print_table(head(merged_methylation_data, 4))
 | `F1-1c` | `Family 1` | `F1-1` | `reverse` | `TCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCTCCTCCGCCGCCGCCGCCGCCGCCGCCGCCGCC` | `87` | `@9889C8<<*96;52!*86,227.<I.8AI<>;2/391%D19*5@G=8<7<:!7+;:I:-!03<0AI>9?4!57I*-C#25FD24F;` | `C+h?,C+m?` | `3,6,15,18,21,30,33,36,45,48,51,60,63,66,69,72,75,78,81,84` | `37,47,64,63,33,64,52,55,17,46,47,64,56,64,56,60,55,58,63,40` | `3,6,15,18,21,30,33,36,45,48,51,60,63,66,69,72,75,78,81,84` | `45,192,126,129,39,129,183,79,19,195,62,124,173,128,84,159,80,165,141,206` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `;F42DF52#C-*I75!4?9>IA0<30!-:I:;+7!:<7<8=G@5*91D%193/2;><IA8.I<.722,68*!25;69*<<8C9889@` | `4,7,10,13,16,19,22,25,28,37,40,43,52,55,58,67,70,73,82,85` | `40,63,58,55,60,56,64,56,64,47,46,17,55,52,64,33,63,64,47,37` | `4,7,10,13,16,19,22,25,28,37,40,43,52,55,58,67,70,73,82,85` | `206,141,165,80,159,84,128,173,124,62,195,19,79,183,129,39,129,126,192,45` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `;F42DF52#C-*I75!4?9>IA0<30!-:I:;+7!:<7<8=G@5*91D%193/2;><IA8.I<.722,68*!25;69*<<8C9889@` | `3,6,15,18,21,30,33,36,45,48,51,60,63,66,69,72,75,78,81,84` | `37,47,64,63,33,64,52,55,17,46,47,64,56,64,56,60,55,58,63,40` | `3,6,15,18,21,30,33,36,45,48,51,60,63,66,69,72,75,78,81,84` | `45,192,126,129,39,129,183,79,19,195,62,124,173,128,84,159,80,165,141,206` |
 | `F1-1d` | `Family 1` | `F1-1` | `forward` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `81` | `:<*1D)89?27#8.3)9<2G<>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8>0` | `C+h?,C+m?` | `3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78` | `33,29,10,55,3,46,53,54,64,12,63,27,24,4,43,21,64,60,17,55` | `3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78` | `216,221,11,81,4,61,180,79,130,13,144,31,228,4,200,23,132,98,18,82` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `:<*1D)89?27#8.3)9<2G<>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8>0` | `3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78` | `33,29,10,55,3,46,53,54,64,12,63,27,24,4,43,21,64,60,17,55` | `3,6,9,12,15,18,21,24,27,30,33,36,45,48,51,60,63,66,75,78` | `216,221,11,81,4,61,180,79,130,13,144,31,228,4,200,23,132,98,18,82` | `GGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGCGGAGGAGGCGGCGGA` | `:<*1D)89?27#8.3)9<2G<>I.=?58+:.=-8-3%6?7#/FG)198/+3?5/0E1=D9150A4D//650%5.@+@/8>0` | `4,7,16,19,22,31,34,37,46,49,52,55,58,61,64,67,70,73,76,79` | `55,17,60,64,21,43,4,24,27,63,12,64,54,53,46,3,55,10,29,33` | `4,7,16,19,22,31,34,37,46,49,52,55,58,61,64,67,70,73,76,79` | `82,18,98,132,23,200,4,228,31,144,13,130,79,180,61,4,81,11,221,216` |
 
-The merged methylation data contains `forward_` and `reverse_` rows for
-sequence and quality, as before, but also for hydroxymethylation and
+The merged methylation data contains `forward_` and `reverse_` columns
+for sequence and quality, as before, but also for hydroxymethylation and
 methylation locations and probabilities. However, looking at the
 modification locations columns (scroll right on the table), we can see
 that the indices assessed for modification are 4, 7, 10 etc for sequence
@@ -1869,37 +1875,37 @@ visualise_single_sequence(
 ``` R
 ## ℹ Verbose monitoring enabled
 
-## ℹ (2026-10-16 15:04:19) visualise_single_sequence start
+## ℹ (2026-10-16 16:59:14) visualise_single_sequence start
 
-## ℹ (0.004 secs elapsed; 0.004 secs total) resolving aliases
+## ℹ (0.028 secs elapsed; 0.028 secs total) resolving aliases
 
-## ℹ (0.001 secs elapsed; 0.005 secs total) validating arguments
+## ℹ (0.001 secs elapsed; 0.029 secs total) validating arguments
 
-## ℹ (0.001 secs elapsed; 0.005 secs total) splitting input seq to sequence vector
+## ℹ (0.001 secs elapsed; 0.030 secs total) splitting input seq to sequence vector
 
-## ℹ (0.001 secs elapsed; 0.006 secs total) rasterising image data
+## ℹ (0.001 secs elapsed; 0.030 secs total) rasterising image data
 
-## ℹ (0.001 secs elapsed; 0.007 secs total) choosing rendering method
+## ℹ (0.002 secs elapsed; 0.032 secs total) choosing rendering method
 
-## ℹ (0.001 secs elapsed; 0.008 secs total) calculating tile sizes
+## ℹ (0.001 secs elapsed; 0.033 secs total) calculating tile sizes
 
-## ℹ (0.001 secs elapsed; 0.008 secs total) creating basic plot via geom_tile
+## ℹ (0.001 secs elapsed; 0.033 secs total) creating basic plot via geom_tile
 
-## ℹ (0.004 secs elapsed; 0.012 secs total) generating sequence text
+## ℹ (0.004 secs elapsed; 0.037 secs total) generating sequence text
 
-## ℹ (0.001 secs elapsed; 0.013 secs total) adding sequence text
+## ℹ (0.001 secs elapsed; 0.038 secs total) adding sequence text
 
-## ℹ (0.001 secs elapsed; 0.014 secs total) generating index annotations
+## ℹ (0.002 secs elapsed; 0.040 secs total) generating index annotations
 
-## ℹ (0.001 secs elapsed; 0.015 secs total) adding index annotations
+## ℹ (0.001 secs elapsed; 0.040 secs total) adding index annotations
 
-## ℹ (0.002 secs elapsed; 0.016 secs total) adding general plot themes
+## ℹ (0.001 secs elapsed; 0.042 secs total) adding general plot themes
 
-## ℹ (0.005 secs elapsed; 0.022 secs total) calculating margin
+## ℹ (0.006 secs elapsed; 0.048 secs total) calculating margin
 
-## ℹ (0.001 secs elapsed; 0.023 secs total) exporting image file
+## ℹ (0.001 secs elapsed; 0.049 secs total) exporting image file
 
-## ℹ (0.307 secs elapsed; 0.330 secs total) done
+## ℹ (0.320 secs elapsed; 0.369 secs total) done
 ```
 
 ``` r
@@ -1960,11 +1966,11 @@ visualise_single_sequence(
 ``` R
 ## ℹ Verbose monitoring enabled
 
-## ℹ (2026-10-16 15:04:19) visualise_single_sequence start
+## ℹ (2026-10-16 16:59:14) visualise_single_sequence start
 
-## ℹ (0.002 secs elapsed; 0.002 secs total) resolving aliases
+## ℹ (0.012 secs elapsed; 0.012 secs total) resolving aliases
 
-## ℹ (0.001 secs elapsed; 0.002 secs total) validating arguments
+## ℹ (0.001 secs elapsed; 0.012 secs total) validating arguments
 
 ## ℹ Automatically setting index_annotation_interval to 0 as index_annotation_size is 0
 
@@ -1974,26 +1980,26 @@ visualise_single_sequence(
 ## Warning: Disabling index annotations via index_annotation_interval = 0 or index_annotation_size = 0 overrides the index_annotation_always_last_base setting.
 ## If you want the last base in each line to be annotated but no other bases, set index_annotation_interval greater than line_wrapping.
 
-## ℹ (0.002 secs elapsed; 0.004 secs total) splitting input seq to sequence vector
+## ℹ (0.002 secs elapsed; 0.014 secs total) splitting input seq to sequence vector
 
-## ℹ (0.001 secs elapsed; 0.004 secs total) rasterising image data
+## ℹ (0.001 secs elapsed; 0.015 secs total) rasterising image data
 
-## ℹ (0.001 secs elapsed; 0.006 secs total) choosing rendering method
+## ℹ (0.002 secs elapsed; 0.017 secs total) choosing rendering method
 
 ## ℹ Automatically using geom_raster (much faster than geom_tile) as no sequence text, index annotations, or outlines are present.
 
 ## Warning: When using geom_raster, it is recommended to use a smaller pixels_per_base e.g. 10, as there is no text/outlines that would benefit from higher resolution.
 ## Current value: 100
 
-## ℹ (0.001 secs elapsed; 0.007 secs total) creating basic plot via geom_raster
+## ℹ (0.002 secs elapsed; 0.019 secs total) creating basic plot via geom_raster
 
-## ℹ (0.002 secs elapsed; 0.009 secs total) adding general plot themes
+## ℹ (0.003 secs elapsed; 0.021 secs total) adding general plot themes
 
-## ℹ (0.006 secs elapsed; 0.015 secs total) calculating margin
+## ℹ (0.007 secs elapsed; 0.029 secs total) calculating margin
 
-## ℹ (0.003 secs elapsed; 0.018 secs total) exporting image file
+## ℹ (0.001 secs elapsed; 0.030 secs total) exporting image file
 
-## ℹ (0.290 secs elapsed; 0.308 secs total) done
+## ℹ (0.328 secs elapsed; 0.358 secs total) done
 ```
 
 ``` r
@@ -2032,13 +2038,13 @@ visualise_single_sequence(
 ``` R
 ## ℹ Verbose monitoring enabled
 
-## ℹ (2026-10-16 15:04:19) visualise_single_sequence start
+## ℹ (2026-10-16 16:59:15) visualise_single_sequence start
 
 ## ℹ (0.001 secs elapsed; 0.001 secs total) resolving aliases
 
 ## ℹ (0.001 secs elapsed; 0.002 secs total) validating arguments
 
-## ℹ (0.001 secs elapsed; 0.002 secs total) splitting input seq to sequence vector
+## ℹ (0.001 secs elapsed; 0.003 secs total) splitting input seq to sequence vector
 
 ## ℹ (0.001 secs elapsed; 0.003 secs total) rasterising image data
 
@@ -2052,11 +2058,11 @@ visualise_single_sequence(
 
 ## ℹ (0.002 secs elapsed; 0.007 secs total) adding general plot themes
 
-## ℹ (0.005 secs elapsed; 0.013 secs total) calculating margin
+## ℹ (0.006 secs elapsed; 0.013 secs total) calculating margin
 
 ## ℹ (0.001 secs elapsed; 0.014 secs total) exporting image file
 
-## ℹ (0.130 secs elapsed; 0.144 secs total) done
+## ℹ (0.124 secs elapsed; 0.138 secs total) done
 ```
 
 ``` r
@@ -2093,11 +2099,11 @@ visualise_single_sequence(
 ``` R
 ## ℹ Verbose monitoring enabled
 
-## ℹ (2026-10-16 15:04:19) visualise_single_sequence start
+## ℹ (2026-10-16 16:59:15) visualise_single_sequence start
 
-## ℹ (0.002 secs elapsed; 0.002 secs total) resolving aliases
+## ℹ (0.003 secs elapsed; 0.003 secs total) resolving aliases
 
-## ℹ (0.001 secs elapsed; 0.003 secs total) validating arguments
+## ℹ (0.001 secs elapsed; 0.004 secs total) validating arguments
 
 ## Warning: Disabling index annotations via index_annotation_interval = 0 or index_annotation_size = 0 overrides the index_annotation_always_first_base setting.
 ## If you want the first base in each line to be annotated but no other bases, set index_annotation_interval greater than line_wrapping.
@@ -2105,23 +2111,23 @@ visualise_single_sequence(
 ## Warning: Disabling index annotations via index_annotation_interval = 0 or index_annotation_size = 0 overrides the index_annotation_always_last_base setting.
 ## If you want the last base in each line to be annotated but no other bases, set index_annotation_interval greater than line_wrapping.
 
-## ℹ (0.001 secs elapsed; 0.005 secs total) splitting input seq to sequence vector
+## ℹ (0.002 secs elapsed; 0.006 secs total) splitting input seq to sequence vector
 
-## ℹ (0.001 secs elapsed; 0.005 secs total) rasterising image data
+## ℹ (0.001 secs elapsed; 0.007 secs total) rasterising image data
 
-## ℹ (0.002 secs elapsed; 0.007 secs total) choosing rendering method
+## ℹ (0.003 secs elapsed; 0.010 secs total) choosing rendering method
 
 ## ℹ Automatically using geom_raster (much faster than geom_tile) as no sequence text, index annotations, or outlines are present.
 
-## ℹ (0.002 secs elapsed; 0.009 secs total) creating basic plot via geom_raster
+## ℹ (0.002 secs elapsed; 0.012 secs total) creating basic plot via geom_raster
 
-## ℹ (0.003 secs elapsed; 0.012 secs total) adding general plot themes
+## ℹ (0.004 secs elapsed; 0.016 secs total) adding general plot themes
 
-## ℹ (0.008 secs elapsed; 0.020 secs total) calculating margin
+## ℹ (0.009 secs elapsed; 0.024 secs total) calculating margin
 
-## ℹ (0.001 secs elapsed; 0.021 secs total) exporting image file
+## ℹ (0.002 secs elapsed; 0.026 secs total) exporting image file
 
-## ℹ (0.110 secs elapsed; 0.131 secs total) done
+## ℹ (0.158 secs elapsed; 0.183 secs total) done
 ```
 
 ``` r
@@ -2131,6 +2137,58 @@ view_image(paste0(display_location, "single_sequence_19.png"))
 ```
 
 ![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_19.png)
+
+## 4.5 Sequence sanitisation
+
+By default (as of v1.1.0), invalid characters passed to the `sequence`
+argument will now be removed with a warning rather than causing an
+error. To force invalid characters to stop execution with an error, the
+`sanitise_sequences` argument (with American and/or singular argument
+aliases) can be set to `FALSE` (default value is `TRUE`):
+
+``` r
+
+## Create image - will work with a warning
+visualise_single_sequence(
+    "ACGT x%67Hk#$%&^*",
+    filename = paste0(output_location, "single_sequence_20.png"),
+    return = FALSE
+)
+```
+
+``` R
+## Warning: Invalid sequence characters removed: ' x%67Hk#$%&^*'
+```
+
+``` r
+
+## View image
+view_image(paste0(display_location, "single_sequence_20.png"))
+```
+
+![](https://raw.githubusercontent.com/ejade42/ggDNAvis/main/README_files/output/single_sequence_20.png)
+
+``` r
+
+## Create image - will fail with an error
+visualise_single_sequence(
+    "ACGT x%67Hk#$%&^*",
+    sanitise_sequences = FALSE
+)
+```
+
+``` R
+## Error in `convert_base_to_number()` at ggDNAvis/R/dna_tools.R:666:13:
+## ! Argument 'base' must be one of A/C/G/T/U to convert to number.
+## Current class: character
+## Current value: X
+```
+
+This works identically for
+[`visualise_many_sequences()`](https://ejade42.github.io/ggDNAvis/reference/visualise_many_sequences.md)
+and
+[`visualise_methylation()`](https://ejade42.github.io/ggDNAvis/reference/visualise_methylation.md)
+and will not be reiterated individually in the examples for them.
 
 # 5 Visualising many DNA/RNA sequences
 
@@ -3093,29 +3151,29 @@ visualise_many_sequences(
 ``` R
 ## ℹ Verbose monitoring enabled
 
-## ℹ (2026-10-16 15:04:36) visualise_many_sequences start
+## ℹ (2026-10-16 16:59:32) visualise_many_sequences start
 
 ## ℹ (0.002 secs elapsed; 0.002 secs total) resolving aliases
 
 ## ℹ (0.001 secs elapsed; 0.003 secs total) validating arguments
 
-## ℹ (0.001 secs elapsed; 0.003 secs total) inserting blank sequences at specified indices
+## ℹ (0.001 secs elapsed; 0.004 secs total) inserting blank sequences at specified indices
 
-## ℹ (0.001 secs elapsed; 0.004 secs total) rasterising image data
+## ℹ (0.001 secs elapsed; 0.005 secs total) rasterising image data
 
-## ℹ (0.004 secs elapsed; 0.008 secs total) choosing rendering method
+## ℹ (0.004 secs elapsed; 0.009 secs total) choosing rendering method
 
 ## ℹ Automatically using geom_raster (much faster than geom_tile) as no sequence text, index annotations, or outlines are present.
 
-## ℹ (0.001 secs elapsed; 0.009 secs total) creating basic plot via geom_raster
+## ℹ (0.002 secs elapsed; 0.011 secs total) creating basic plot via geom_raster
 
-## ℹ (0.004 secs elapsed; 0.013 secs total) adding general plot themes
+## ℹ (0.003 secs elapsed; 0.014 secs total) adding general plot themes
 
-## ℹ (0.009 secs elapsed; 0.022 secs total) calculating margin
+## ℹ (0.007 secs elapsed; 0.020 secs total) calculating margin
 
-## ℹ (0.001 secs elapsed; 0.023 secs total) exporting image file
+## ℹ (0.001 secs elapsed; 0.022 secs total) exporting image file
 
-## ℹ (0.165 secs elapsed; 0.188 secs total) done
+## ℹ (0.223 secs elapsed; 0.245 secs total) done
 ```
 
 ``` r
@@ -3154,31 +3212,31 @@ visualise_many_sequences(
 ``` R
 ## ℹ Verbose monitoring enabled
 
-## ℹ (2026-10-16 15:04:36) visualise_many_sequences start
+## ℹ (2026-10-16 16:59:32) visualise_many_sequences start
 
 ## ℹ (0.002 secs elapsed; 0.002 secs total) resolving aliases
 
 ## ℹ (0.001 secs elapsed; 0.003 secs total) validating arguments
 
-## ℹ (0.001 secs elapsed; 0.004 secs total) inserting blank sequences at specified indices
+## ℹ (0.001 secs elapsed; 0.005 secs total) inserting blank sequences at specified indices
 
-## ℹ (0.001 secs elapsed; 0.005 secs total) rasterising image data
+## ℹ (0.001 secs elapsed; 0.006 secs total) rasterising image data
 
-## ℹ (0.005 secs elapsed; 0.010 secs total) choosing rendering method
+## ℹ (0.006 secs elapsed; 0.011 secs total) choosing rendering method
 
 ## Warning: Forcing geom_raster via force_raster = TRUE will remove all sequence
 ## text, index annotations (though any inserted blank lines/spacers will remain),
 ## and box outlines.
 
-## ℹ (0.001 secs elapsed; 0.011 secs total) creating basic plot via geom_raster
+## ℹ (0.001 secs elapsed; 0.012 secs total) creating basic plot via geom_raster
 
-## ℹ (0.003 secs elapsed; 0.013 secs total) adding general plot themes
+## ℹ (0.003 secs elapsed; 0.016 secs total) adding general plot themes
 
-## ℹ (0.011 secs elapsed; 0.025 secs total) calculating margin
+## ℹ (0.008 secs elapsed; 0.023 secs total) calculating margin
 
-## ℹ (0.002 secs elapsed; 0.026 secs total) exporting image file
+## ℹ (0.001 secs elapsed; 0.024 secs total) exporting image file
 
-## ℹ (0.183 secs elapsed; 0.209 secs total) done
+## ℹ (0.257 secs elapsed; 0.281 secs total) done
 ```
 
 ``` r
