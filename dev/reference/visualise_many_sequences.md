@@ -18,6 +18,7 @@ exported are configurable.
 visualise_many_sequences(
   sequences_vector,
   ...,
+  sanitise_sequences = TRUE,
   sequence_colours = sequence_colour_palettes$ggplot_style,
   background_colour = "white",
   margin = 0.5,
@@ -60,6 +61,12 @@ visualise_many_sequences(
   [aliases](https://ejade42.github.io/ggDNAvis/reference/ggDNAvis_aliases.md).
   If any American spellings do not work, please make a bug report at
   <https://github.com/ejade42/ggDNAvis/issues>.
+
+- sanitise_sequences:
+
+  `logical`. Whether sequences should be automatically sanitisied (any
+  non-`A`/`C`/`G`/`T`/`U` values removed, `TRUE`, default) or whether
+  these invalid characters should cause an error (`FALSE`).
 
 - sequence_colours:
 
@@ -259,51 +266,3 @@ if `return = FALSE`. It is often more useful to use
 exported at the correct aspect ratio.
 
 ## Examples
-
-``` r
-# \donttest{
-## Create sequences vector
-sequences <- extract_and_sort_sequences(example_many_sequences)
-
-## Visualise example_many_sequences with all defaults
-## This looks ugly because it isn't at the right scale/aspect ratio
-visualise_many_sequences(sequences)
-
-
-## Export with all defaults rather than returning
-visualise_many_sequences(
-    sequences,
-    filename = "example_vms_01.png",
-    return = FALSE
-)
-## View exported image
-image <- png::readPNG("example_vms_01.png")
-unlink("example_vms_01.png")
-grid::grid.newpage()
-grid::grid.raster(image)
-
-
-## Export while customising appearance
-visualise_many_sequences(
-    sequences,
-    filename = "example_vms_02.png",
-    return = FALSE,
-    sequence_colours = sequence_colour_palettes$bright_pale,
-    sequence_text_colour = "white",
-    index_annotation_interval = 3,
-    index_annotation_lines = 1:51,
-    index_annotation_full_line = FALSE,
-    index_annotation_always_first_base = FALSE,
-    index_annotation_always_last_base = FALSE,
-    background_colour = "lightgrey",
-    outline_linewidth = 0,
-    margin = 0
-)
-## View exported image
-image <- png::readPNG("example_vms_02.png")
-unlink("example_vms_02.png")
-grid::grid.newpage()
-grid::grid.raster(image)
-
-# }
-```

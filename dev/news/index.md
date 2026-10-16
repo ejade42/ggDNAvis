@@ -31,7 +31,9 @@
 
 - Added
   [`invert_direction_vector()`](https://ejade42.github.io/ggDNAvis/reference/invert_direction_vector.md)
-  helper function.
+  and
+  [`sanitise_sequences_vector()`](https://ejade42.github.io/ggDNAvis/reference/sanitise_sequences_vector.md)
+  helper functions.
 
 - Minor tweaks to reversing options manuscript figure.
 

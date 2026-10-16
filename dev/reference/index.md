@@ -89,6 +89,11 @@ Small, widely used helper functions
 
   Reverse complement a DNA/RNA sequence (generic `ggDNAvis` helper)
 
+- [`sanitise_sequences_vector()`](https://ejade42.github.io/ggDNAvis/reference/sanitise_sequences_vector.md)
+  :
+
+  Sanitise a sequence vector (generic `ggDNAvis` helper)
+
 - [`debug_join_vector_num()`](https://ejade42.github.io/ggDNAvis/reference/debug_join_vector_num.md)
   :
 
