@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ggDNAvis</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1.9013</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1.9014</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -62,7 +62,8 @@
 </ul></li>
 <li>
 <p>Added <code>sanitise_sequences</code> (and aliases for American and singular spellings) Boolean argument to <code><a href="../reference/visualise_single_sequence.html">visualise_single_sequence()</a></code>, <code><a href="../reference/visualise_many_sequences.html">visualise_many_sequences()</a></code>, and <code><a href="../reference/visualise_methylation.html">visualise_methylation()</a></code>.</p>
-<ul><li>This removes non-<code>ACGTU</code> characters (case insensitive) with a warning, whereas previously invalid characters gave an error.</li>
+<ul><li><p>This removes non-<code>ACGTU</code> characters (case insensitive) with a warning, whereas previously invalid characters gave an error.</p></li>
+<li><p>Therefore, removed sequence validation from the Shiny app. Invalid characters will now be automatically removed. Didn’t bother adding an option to set <code>sanitise_sequences = FALSE</code> from the webapp because that doesn’t seem very useful and anyone who needs fine control and error detection is almost certainly using the R package anyway.</p></li>
 </ul></li>
 <li><p>Added <code><a href="../reference/invert_direction_vector.html">invert_direction_vector()</a></code> and <code><a href="../reference/sanitise_sequences_vector.html">sanitise_sequences_vector()</a></code> helper functions.</p></li>
 <li><p>Minor tweaks to reversing options manuscript figure.</p></li>

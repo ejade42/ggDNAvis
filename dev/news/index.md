@@ -39,6 +39,13 @@
   - This removes non-`ACGTU` characters (case insensitive) with a
     warning, whereas previously invalid characters gave an error.
 
+  - Therefore, removed sequence validation from the Shiny app. Invalid
+    characters will now be automatically removed. Didn’t bother adding
+    an option to set `sanitise_sequences = FALSE` from the webapp
+    because that doesn’t seem very useful and anyone who needs fine
+    control and error detection is almost certainly using the R package
+    anyway.
+
 - Added
   [`invert_direction_vector()`](https://ejade42.github.io/ggDNAvis/reference/invert_direction_vector.md)
   and
